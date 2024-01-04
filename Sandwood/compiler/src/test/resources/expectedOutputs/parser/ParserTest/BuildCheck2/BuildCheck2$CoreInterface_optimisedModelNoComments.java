@@ -1,0 +1,46 @@
+package macaron;
+
+interface BuildCheck2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+	public boolean get$deploy_action_certainty();
+	public void set$deploy_action_certainty(boolean calculationVariable$value);
+	public boolean get$deploy_command_certainty();
+	public void set$deploy_command_certainty(boolean calculationVariable$value);
+	public boolean get$deploy_kws_certainty();
+	public void set$deploy_kws_certainty(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample12();
+	public void set$fixedFlag$sample12(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample16();
+	public void set$fixedFlag$sample16(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample21();
+	public void set$fixedFlag$sample21(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample26();
+	public void set$fixedFlag$sample26(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample31();
+	public void set$fixedFlag$sample31(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample35();
+	public void set$fixedFlag$sample35(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample40();
+	public void set$fixedFlag$sample40(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample45();
+	public void set$fixedFlag$sample45(boolean calculationVariable$value);
+	public double get$logProbability$deploy_action_certainty();
+	public double get$logProbability$deploy_command_certainty();
+	public double get$logProbability$deploy_kws_certainty();
+	public double get$p_deploy_action();
+	public void set$p_deploy_action(double calculationVariable$value);
+	public double get$p_deploy_command();
+	public void set$p_deploy_command(double calculationVariable$value);
+	public double get$p_deploy_kws();
+	public void set$p_deploy_kws(double calculationVariable$value);
+	public double get$p_release_workflow_trigger_deploy_action();
+	public void set$p_release_workflow_trigger_deploy_action(double calculationVariable$value);
+	public double get$p_release_workflow_trigger_deploy_command();
+	public void set$p_release_workflow_trigger_deploy_command(double calculationVariable$value);
+	public double get$p_step_uses_secrets_deploy_action();
+	public void set$p_step_uses_secrets_deploy_action(double calculationVariable$value);
+	public double get$p_step_uses_secrets_deploy_command();
+	public void set$p_step_uses_secrets_deploy_command(double calculationVariable$value);
+	public double get$p_tested_deploy_action();
+	public void set$p_tested_deploy_action(double calculationVariable$value);
+	public void logEvidenceGeneration();
+}

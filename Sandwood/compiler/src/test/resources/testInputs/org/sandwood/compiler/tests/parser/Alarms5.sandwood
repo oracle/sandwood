@@ -1,0 +1,50 @@
+package alarms;
+
+/*
+ * person(john).
+ * person(mary).
+ * 
+ * 0.7::burglary.
+ * 0.01::earthquake(heavy); 0.19::earthquake(mild); 0.8::earthquake(none).
+ * 
+ * 0.90::alarm :-   burglary, earthquake(heavy).
+ * 0.85::alarm :-   burglary, earthquake(mild).
+ * 0.80::alarm :-   burglary, earthquake(none).
+ * 0.10::alarm :- \+burglary, earthquake(mild).
+ * 0.30::alarm :- \+burglary, earthquake(heavy).
+ * 
+ * 0.8::calls(X) :- alarm, person(X).
+ * 0.1::calls(X) :- \+alarm, person(X).
+ * 
+ * evidence(calls(john),true).
+ * evidence(calls(mary),true).
+ * 
+ * query(burglary).
+ * query(earthquake(_)).
+ */
+
+public model Alarms5() {
+	double[] p_burglary = {0.3, 0.7};
+	double[] p_earthquakes = {0.01, 0.19, 0.8};
+	double[][] p_alarm = {{0.3, 0.1, 0.0},{0.9, 0.85, 0.8}};
+	
+	int earthquake = categorical(p_earthquakes).sample();
+	int burglary = categorical(p_burglary).sample();
+	
+	boolean alarm = bernoulli(p_alarm[burglary][earthquake]).sample();
+	
+	boolean johnCalls;
+	boolean maryCalls;
+	if(alarm) {
+		Bernoulli alarmCall = bernoulli(0.8);
+		johnCalls = alarmCall.sample();
+		maryCalls = alarmCall.sample();
+	} else {
+		Bernoulli noAlarmCall = bernoulli(0.1);
+		johnCalls = noAlarmCall.sample();
+		maryCalls = noAlarmCall.sample();
+	}
+	
+	johnCalls.observe(true);
+	maryCalls.observe(true);
+}
