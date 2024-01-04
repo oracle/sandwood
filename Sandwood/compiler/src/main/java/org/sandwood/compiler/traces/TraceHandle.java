@@ -100,8 +100,11 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
             if(d.argPos != od.argPos) {
                 switch(d.task.getType()) {
                     case GET:
-                        return -Integer.compare(d.argPos, od.argPos); // As the index is after the array value, but
-                        // needs computing first we reverse the order for gets.
+                        /*
+                         * As the index is after the array value, but needs computing first we reverse the order for
+                         * gets.
+                         */
+                        return -Integer.compare(d.argPos, od.argPos);
                     default:
                         return Integer.compare(d.argPos, od.argPos);
                 }
@@ -142,8 +145,6 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
     public TraceHandle subTrace(TraceHandle prefix) {
         int traceSize = size();
         int prefixSize = prefix.size();
-        if(traceSize < prefixSize)
-            throw new CompilerException("Prefixed trace is not a subtrace of this trace.");
         for(int i = 0; i < prefixSize; i++) {
             if(!t.get(i).equals(prefix.get(i)))
                 throw new CompilerException("Prefixed trace is not a subtrace of this trace.");

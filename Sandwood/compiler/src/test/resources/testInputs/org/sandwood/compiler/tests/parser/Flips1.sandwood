@@ -1,0 +1,23 @@
+package coinFlips;
+
+/*
+ * % Probabilistic facts:
+ * 0.5::heads1.
+ * 0.6::heads2.
+ *
+ * % Rules:
+ * twoHeads :- heads1, heads2.
+ *
+ * % Queries:
+ * query(heads1).
+ * query(heads2).
+ * query(twoHeads).
+ */
+
+public model Flips1() {
+	double heads1 = 0.5;
+	double heads2 = 0.6;
+	boolean coin1 = bernoulli(heads1).sample();
+	boolean coin2 = bernoulli(heads2).sample();
+	boolean twoHeads = coin1 && coin2;
+}

@@ -1,0 +1,63 @@
+package macaron;
+
+/**
+ * :- use_module('src/macaron/slsa_analyzer/checks/problog_predicates.py').
+ *
+ * A :: ci_parsed :- ci_parsed_check(A).
+ * B :: deploy_action :- deploy_action_check(B).
+ * C :: deploy_command :- deploy_command_check(C).
+ * D :: deploy_kws :- deploy_kws_check(D).
+ * E :: release_workflow_trigger_deploy_command :- release_workflow_trigger_deploy_command_check(E).
+ * F :: release_workflow_trigger_deploy_action :- release_workflow_trigger_deploy_action_check(F).
+ * G :: tested_deploy_action :- tested_deploy_action_check(G).
+ * H :: publishing_workflow_deploy_command :- publishing_workflow_deploy_command_check(H).
+ * I :: publishing_workflow_deploy_action :- publishing_workflow_deploy_action_check(I).
+ * J :: step_uses_secrets_deploy_action :- step_uses_secrets_deploy_action_check(J).
+ * K :: step_uses_secrets_deploy_command :- step_uses_secrets_deploy_command_check(K).
+ *
+ * 0.8 :: deploy_action_certainty :- deploy_action.
+ * 0.10 :: deploy_action_certainty :- tested_deploy_action.
+ * 0.85 :: deploy_action_certainty :- release_workflow_trigger_deploy_action.
+ * %0.95 :: deploy_action_certainty :- publishing_workflow_deploy_action.
+ * 0.65 :: deploy_action_certainty :- step_uses_secrets_deploy_action.
+ *
+ * 0.75 :: deploy_command_certainty :- deploy_command.
+ * 0.85 :: deploy_command_certainty :- release_workflow_trigger_deploy_command.
+ * %0.95 :: deploy_command_certainty :- publishing_workflow_deploy_command.
+ * 0.65 :: deploy_command_certainty :- step_uses_secrets_deploy_command.
+ *
+ * 0.70 :: deploy_kws_certainty :- deploy_kws.
+ *
+ * query(deploy_command_certainty).
+ * query(deploy_action_certainty).
+ * query(deploy_kws_certainty).
+ */
+ 
+// All the arguments have either the value 0, or a constant, so it might be better to change 
+// them to booleans and place the constants in the model where they could be inferred.
+//
+// The probabilities are also not independent for example if p_deploy_action is 0 
+// release_workflow_trigger_deploy_action_check will also be 0. This could also be 
+// added to the model.
+//
+// Simplified version of the first model.
+public model BuildCheck2(double p_deploy_action, 
+                         double p_deploy_command, 
+                         double p_deploy_kws, 
+                         double p_release_workflow_trigger_deploy_command,
+                         double p_release_workflow_trigger_deploy_action,
+                         double p_tested_deploy_action,
+                         double p_step_uses_secrets_deploy_action,
+                         double p_step_uses_secrets_deploy_command) 
+{
+  boolean deploy_action_certainty = bernoulli(0.8 * p_deploy_action).sample() ||
+                                    bernoulli(0.1 * p_tested_deploy_action).sample() ||
+                                    bernoulli(0.85 * p_release_workflow_trigger_deploy_action).sample() ||
+                                    bernoulli(0.65 * p_step_uses_secrets_deploy_action).sample();
+
+  boolean deploy_command_certainty = bernoulli(0.75 * p_deploy_command).sample() ||
+                                     bernoulli(0.85 * p_release_workflow_trigger_deploy_command).sample() ||
+                                     bernoulli(0.65 * p_step_uses_secrets_deploy_command).sample();
+
+  boolean deploy_kws_certainty = bernoulli(0.7 * p_deploy_kws).sample();
+}

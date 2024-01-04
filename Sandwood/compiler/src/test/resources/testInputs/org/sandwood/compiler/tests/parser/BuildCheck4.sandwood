@@ -1,0 +1,105 @@
+package macaron;
+
+/**
+ * :- use_module('src/macaron/slsa_analyzer/checks/problog_predicates.py').
+ *
+ * A :: ci_parsed :- ci_parsed_check(A).
+ * B :: deploy_action :- deploy_action_check(B).
+ * C :: deploy_command :- deploy_command_check(C).
+ * D :: deploy_kws :- deploy_kws_check(D).
+ * E :: release_workflow_trigger_deploy_command :- release_workflow_trigger_deploy_command_check(E).
+ * F :: release_workflow_trigger_deploy_action :- release_workflow_trigger_deploy_action_check(F).
+ * G :: tested_deploy_action :- tested_deploy_action_check(G).
+ * H :: publishing_workflow_deploy_command :- publishing_workflow_deploy_command_check(H).
+ * I :: publishing_workflow_deploy_action :- publishing_workflow_deploy_action_check(I).
+ * J :: step_uses_secrets_deploy_action :- step_uses_secrets_deploy_action_check(J).
+ * K :: step_uses_secrets_deploy_command :- step_uses_secrets_deploy_command_check(K).
+ *
+ * 0.8 :: deploy_action_certainty :- deploy_action.
+ * 0.10 :: deploy_action_certainty :- tested_deploy_action.
+ * 0.85 :: deploy_action_certainty :- release_workflow_trigger_deploy_action.
+ * %0.95 :: deploy_action_certainty :- publishing_workflow_deploy_action.
+ * 0.65 :: deploy_action_certainty :- step_uses_secrets_deploy_action.
+ *
+ * 0.75 :: deploy_command_certainty :- deploy_command.
+ * 0.85 :: deploy_command_certainty :- release_workflow_trigger_deploy_command.
+ * %0.95 :: deploy_command_certainty :- publishing_workflow_deploy_command.
+ * 0.65 :: deploy_command_certainty :- step_uses_secrets_deploy_command.
+ *
+ * 0.70 :: deploy_kws_certainty :- deploy_kws.
+ *
+ * query(deploy_command_certainty).
+ * query(deploy_action_certainty).
+ * query(deploy_kws_certainty).
+ */
+
+//Version where the probabilities hard coded in Python are brought into the model.
+//The constants will be multiplied together within the model, and could be multiplied 
+//by us, but ultimately they should be inferred.
+ 
+// The probabilities are also not independent for example if p_deploy_action is 0 
+// release_workflow_trigger_deploy_action_check will also be 0. This could also be 
+// added to the model.
+
+
+// Simplified version of the second model.
+
+public model BuildCheck4(boolean ci_parsed,
+                         boolean deploy_action, 
+                         boolean deploy_command, 
+                         boolean deploy_kws, 
+                         boolean release_workflow_trigger_deploy,
+                         boolean invalid_trigger,
+                         boolean tested_deploy_action,
+                         boolean step_uses_secrets_deploy) 
+{
+  //Calculate deploy_action_certainty
+  boolean deploy_action_certainty;
+  if(ci_parsed) {
+    if(deploy_action) {
+      double p_deploy_action = 0.8*0.9;
+      double p_tested_deploy_action = tested_deploy_action ? 0.1 * 0.9 : 0.0;
+      double p_release_workflow_trigger_deploy = release_workflow_trigger_deploy ?
+                                                 (invalid_trigger ? 0.75*0.85 : 0.9*0.85) :
+                                                 0.0;
+      double p_step_uses_secrets = step_uses_secrets_deploy ? 0.65*0.9 : 0.0;
+
+      deploy_action_certainty = bernoulli(p_deploy_action).sample() ||
+                                bernoulli(p_tested_deploy_action).sample() ||
+                                bernoulli(p_release_workflow_trigger_deploy).sample() ||
+                                bernoulli(p_step_uses_secrets).sample();
+    } else {
+      deploy_action_certainty = false;
+    }
+  } else {
+    deploy_action_certainty = false;
+  }
+
+  //Calculate deploy_command_certainty
+  boolean deploy_command_certainty;
+  if(ci_parsed) {
+    if(deploy_command) {
+      double p_deploy_command = 0.75*0.8;
+      double p_release_workflow_trigger_deploy = release_workflow_trigger_deploy ?
+                                                       (invalid_trigger ? 0.75*0.85 : 0.9*0.85) :
+                                                       0.0;
+      double p_step_uses_secrets = step_uses_secrets_deploy ? 0.65*0.9 : 0.0;
+
+      deploy_command_certainty = bernoulli(p_deploy_command).sample() ||
+                                 bernoulli(p_release_workflow_trigger_deploy).sample() ||
+                                 bernoulli(p_step_uses_secrets).sample();
+    } else {
+      deploy_command_certainty = false;
+    }
+  } else {
+    deploy_command_certainty = false;
+  }
+
+  //Calculate deploy_kws_certainty
+  boolean deploy_kws_certainty;
+  if(ci_parsed && deploy_kws) {
+    double p_deploy_kws = 0.7*0.4;
+    deploy_kws_certainty = bernoulli(p_deploy_kws).sample();
+  } else
+    deploy_kws_certainty = false;
+}

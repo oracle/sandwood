@@ -1,0 +1,37 @@
+package alarms;
+
+/*
+ * 0.7::burglary.
+ * 0.2::earthquake.
+ * 
+ * 0.9::alarm :- burglary, earthquake.
+ * 0.8::alarm :- burglary, \+earthquake.
+ * 0.1::alarm :- \+burglary, earthquake.
+ * 
+ * evidence(alarm,true).
+ */
+
+public model Alarms2() {
+	double p_burglary = 0.7;
+	double p_earthquake = 0.2;
+	
+	boolean earthquake = bernoulli(p_earthquake).sample();
+	boolean burglary = bernoulli(p_burglary).sample();
+	
+	boolean alarm;
+	if(burglary) {
+		if(earthquake) {
+			alarm = bernoulli(0.9).sample();
+		} else {
+			alarm = bernoulli(0.8).sample();
+		}
+	} else {
+		if(earthquake) {
+			alarm = bernoulli(0.1).sample();
+		} else {
+			alarm = false;
+		}
+	}
+	
+	alarm.observe(true);
+}

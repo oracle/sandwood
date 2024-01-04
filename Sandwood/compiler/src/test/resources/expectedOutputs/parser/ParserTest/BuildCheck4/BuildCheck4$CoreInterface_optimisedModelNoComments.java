@@ -1,0 +1,46 @@
+package macaron;
+
+interface BuildCheck4$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+	public boolean get$ci_parsed();
+	public void set$ci_parsed(boolean calculationVariable$value);
+	public boolean get$deploy_action();
+	public void set$deploy_action(boolean calculationVariable$value);
+	public boolean get$deploy_action_certainty();
+	public void set$deploy_action_certainty(boolean calculationVariable$value);
+	public boolean get$deploy_command();
+	public void set$deploy_command(boolean calculationVariable$value);
+	public boolean get$deploy_command_certainty();
+	public void set$deploy_command_certainty(boolean calculationVariable$value);
+	public boolean get$deploy_kws();
+	public void set$deploy_kws(boolean calculationVariable$value);
+	public boolean get$deploy_kws_certainty();
+	public void set$deploy_kws_certainty(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample104();
+	public void set$fixedFlag$sample104(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample44();
+	public void set$fixedFlag$sample44(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample46();
+	public void set$fixedFlag$sample46(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample49();
+	public void set$fixedFlag$sample49(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample52();
+	public void set$fixedFlag$sample52(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample86();
+	public void set$fixedFlag$sample86(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample88();
+	public void set$fixedFlag$sample88(boolean calculationVariable$value);
+	public boolean get$fixedFlag$sample91();
+	public void set$fixedFlag$sample91(boolean calculationVariable$value);
+	public boolean get$invalid_trigger();
+	public void set$invalid_trigger(boolean calculationVariable$value);
+	public double get$logProbability$deploy_action_certainty();
+	public double get$logProbability$deploy_command_certainty();
+	public double get$logProbability$deploy_kws_certainty();
+	public boolean get$release_workflow_trigger_deploy();
+	public void set$release_workflow_trigger_deploy(boolean calculationVariable$value);
+	public boolean get$step_uses_secrets_deploy();
+	public void set$step_uses_secrets_deploy(boolean calculationVariable$value);
+	public boolean get$tested_deploy_action();
+	public void set$tested_deploy_action(boolean calculationVariable$value);
+	public void logEvidenceGeneration();
+}
