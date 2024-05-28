@@ -35,17 +35,17 @@ public class Flip2CoinsMK11 extends Model {
         public void setFixed(boolean fixed) {
             synchronized(model) {
                 system$c.set$fixedFlag$sample15(fixed);
-                system$c.set$fixedFlag$sample20(fixed);
+                system$c.set$fixedFlag$sample28(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
             boolean fixedFlag$sample15 = system$c.get$fixedFlag$sample15();
-            boolean fixedFlag$sample20 = system$c.get$fixedFlag$sample20();
-            if(fixedFlag$sample15 && fixedFlag$sample20)
+            boolean fixedFlag$sample28 = system$c.get$fixedFlag$sample28();
+            if(fixedFlag$sample15 && fixedFlag$sample28)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample15 || fixedFlag$sample20)
+            else if(fixedFlag$sample15 || fixedFlag$sample28)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -79,18 +79,18 @@ public class Flip2CoinsMK11 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample36(fixed);
-                system$c.set$fixedFlag$sample53(fixed);
+                system$c.set$fixedFlag$sample57(fixed);
+                system$c.set$fixedFlag$sample87(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample36 = system$c.get$fixedFlag$sample36();
-            boolean fixedFlag$sample53 = system$c.get$fixedFlag$sample53();
-            if(fixedFlag$sample36 && fixedFlag$sample53)
+            boolean fixedFlag$sample57 = system$c.get$fixedFlag$sample57();
+            boolean fixedFlag$sample87 = system$c.get$fixedFlag$sample87();
+            if(fixedFlag$sample57 && fixedFlag$sample87)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample36 || fixedFlag$sample53)
+            else if(fixedFlag$sample57 || fixedFlag$sample87)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -256,11 +256,11 @@ public class Flip2CoinsMK11 extends Model {
         //Set fixed flags
         if(bias.isSet()){
             newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15());
-            newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
+            newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
         }
         if(flips.isSet()){
-            newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
-            newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
+            newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
+            newCore.set$fixedFlag$sample87(oldCore.get$fixedFlag$sample87());
         }
     }
 

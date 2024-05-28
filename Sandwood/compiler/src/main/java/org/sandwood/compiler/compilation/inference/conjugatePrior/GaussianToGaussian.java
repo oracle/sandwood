@@ -64,6 +64,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -522,11 +523,14 @@ public class GaussianToGaussian
                         case ADDITION:
                         case COPY:
                         case DIVISION:
-                        case IF_ASSIGNMENT:
                         case MULTIPLICATION:
                         case NEGATE:
                         case REDUCTION_RETURN:
                         case SUBTRACTION:
+                            break;
+                        case IF_ASSIGNMENT:
+                            if(d.argPos == 0)
+                                return false;
                             break;
                         case GET:
                             if(d.argPos == 1)
@@ -588,11 +592,11 @@ public class GaussianToGaussian
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleStartIR(GaussianToGaussianData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
+    protected void getPerConsumerStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
+    protected void getPerConsumerEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
@@ -610,8 +614,7 @@ public class GaussianToGaussian
 
     @Override
     protected void addDistributionProbabilities(GaussianToGaussianData funcData, CompilationContext compilationCtx) {
-        throw new CompilerException(
-                "Unable to merge distributions in Gaussian Gaussian inference. This is a bug in Sandwood.");
+        throw new CompilerException("Unable to merge distributions in Gaussian Gaussian inference.");
     }
 
     @Override
@@ -629,4 +632,11 @@ public class GaussianToGaussian
     @Override
     protected void getPerDistributedSampleEndIR(GaussianToGaussianData funcData, DistributionSampleTask<?, ?> s,
             TreeBuilderInfo info, CompilationContext compilationCtx) {}
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, GaussianToGaussianData funcData,
+            TreeBuilderInfo info, CompilationContext compilationCtx) {
+        throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
+    }
 }

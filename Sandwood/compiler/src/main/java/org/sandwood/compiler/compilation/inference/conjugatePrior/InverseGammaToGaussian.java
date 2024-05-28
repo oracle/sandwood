@@ -44,6 +44,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.InverseGamm
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -211,7 +212,10 @@ public class InverseGammaToGaussian extends
                     DFType type = d.task.getType();
                     switch(type) {
                         case COPY:
+                            break;
                         case IF_ASSIGNMENT:
+                            if(d.argPos == 1)
+                                return false;
                             break;
                         case DIVISION: {
                             // division can only be used if the value is the denominator and the numerator is 1.
@@ -285,11 +289,11 @@ public class InverseGammaToGaussian extends
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleStartIR(InverseGammaToGaussianData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
+    protected void getPerConsumerStartIR(InverseGammaToGaussianData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleEndIR(InverseGammaToGaussianData funcData, TreeBuilderInfo info,
+    protected void getPerConsumerEndIR(InverseGammaToGaussianData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
@@ -326,4 +330,11 @@ public class InverseGammaToGaussian extends
     @Override
     protected void getPerDistributedSampleEndIR(InverseGammaToGaussianData funcData, DistributionSampleTask<?, ?> s,
             TreeBuilderInfo info, CompilationContext compilationCtx) {}
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, InverseGammaToGaussianData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
+        throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
+    }
 }

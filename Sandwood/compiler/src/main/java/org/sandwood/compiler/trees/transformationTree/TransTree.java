@@ -356,7 +356,11 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
 
     public VariableTracking getVariableTracking() {
         VariableTrackingVisitor v = new VariableTrackingVisitor();
-        v.visit(this);
+        try {
+            v.visit(this);
+        } catch (CompilerException e) {
+            throw new CompilerException(e.getMessage() + "\n" + toString());
+        }
         return v.getVariableTrackingData();
     }
 
@@ -367,9 +371,25 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     public VariableTracking getVariableTracking(Set<TransTree<?>> additionalTrees,
             Set<VariableDescription<?>> knownGlobals) {
         VariableTrackingVisitor v = new VariableTrackingVisitor(knownGlobals);
-        v.visit(this);
-        for(TransTree<?> t:additionalTrees)
-            v.visit(t);
+        try {
+            v.visit(this);
+        } catch (CompilerException e) {
+            // Catch the exception and add the tree that was being generated that caused it.
+            throw new CompilerException(e.getMessage() + "\n" + toString());
+        }
+        for(TransTree<?> t:additionalTrees) {
+            try {
+                v.visit(t);
+            } catch (CompilerException e) {
+                // Catch the exception and add the trees that were being generated that caused it.
+                String msg = e.getMessage() + "\n" + toString();
+                for(TransTree<?> t2:additionalTrees) {
+                    msg = msg + "\n\n=======\n\n" + t2.toString();
+                    if(t==t2)
+                        throw new CompilerException(msg);
+                }
+            }
+        }
         return v.getVariableTrackingData();
     }
 

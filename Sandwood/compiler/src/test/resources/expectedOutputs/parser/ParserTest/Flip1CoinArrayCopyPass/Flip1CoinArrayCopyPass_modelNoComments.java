@@ -69,13 +69,13 @@ public class Flip1CoinArrayCopyPass extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
+                system$c.set$fixedFlag$sample29(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample21())
+            if(system$c.get$fixedFlag$sample29())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -219,7 +219,7 @@ public class Flip1CoinArrayCopyPass extends Model {
         if(bias.isSet())
             newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
+            newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29());
     }
 
     /**

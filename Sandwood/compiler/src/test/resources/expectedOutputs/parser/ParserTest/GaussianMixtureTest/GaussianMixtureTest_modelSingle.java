@@ -34,13 +34,13 @@ public class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample23(fixed);
+                system$c.set$fixedFlag$sample37(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample23())
+            if(system$c.get$fixedFlag$sample37())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample20(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -104,13 +104,13 @@ public class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample34(fixed);
+                system$c.set$fixedFlag$sample55(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample34())
+            if(system$c.get$fixedFlag$sample55())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -139,13 +139,13 @@ public class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample49(fixed);
+                system$c.set$fixedFlag$sample77(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample49())
+            if(system$c.get$fixedFlag$sample77())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -272,13 +272,13 @@ public class GaussianMixtureTest extends Model {
 
         //Set fixed flags
         if(mu.isSet())
-            newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
+            newCore.set$fixedFlag$sample37(oldCore.get$fixedFlag$sample37());
         if(phi.isSet())
-            newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
+            newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
         if(sigma.isSet())
-            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
+            newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
         if(x.isSet())
-            newCore.set$fixedFlag$sample49(oldCore.get$fixedFlag$sample49());
+            newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
     }
 
     /**

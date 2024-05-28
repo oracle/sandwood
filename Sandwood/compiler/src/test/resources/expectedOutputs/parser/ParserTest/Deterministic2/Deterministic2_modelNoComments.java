@@ -33,13 +33,13 @@ public class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample36(fixed);
+                system$c.set$fixedFlag$sample58(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample36())
+            if(system$c.get$fixedFlag$sample58())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample36(fixed);
+                system$c.set$fixedFlag$sample58(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample36())
+            if(system$c.get$fixedFlag$sample58())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -104,13 +104,13 @@ public class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample49(fixed);
+                system$c.set$fixedFlag$sample78(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample49())
+            if(system$c.get$fixedFlag$sample78())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -144,13 +144,13 @@ public class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample18(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample18())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -282,11 +282,11 @@ public class Deterministic2 extends Model {
 
         //Set fixed flags
         if(a.isSet())
-            newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
+            newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample49(oldCore.get$fixedFlag$sample49());
+            newCore.set$fixedFlag$sample78(oldCore.get$fixedFlag$sample78());
         if(m.isSet())
-            newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
+            newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
     }
 
     /**

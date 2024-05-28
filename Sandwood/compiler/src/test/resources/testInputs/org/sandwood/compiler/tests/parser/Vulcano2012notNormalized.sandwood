@@ -33,7 +33,7 @@ model Vulcano2012notNormalized(int noProducts, int T, int s, int[][] ObsSales, i
     arrivals[t]= poisson(lambda[t]).sample();
     }
 
-    int[][] Sales = new int[T][noProducts];
+    int[][] Sales = new int[T][];
 
     for (int t:[0..T)){
         // for each period t calculate choice probabilities and sales

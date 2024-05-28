@@ -11,17 +11,17 @@ interface RaggedArray5$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for d.
 	public void set$d(double[] cv$value);
 
-	// Getter for fixedFlag$sample35.
-	public boolean get$fixedFlag$sample35();
+	// Getter for fixedFlag$sample42.
+	public boolean get$fixedFlag$sample42();
 
-	// Setter for fixedFlag$sample35.
-	public void set$fixedFlag$sample35(boolean cv$value);
+	// Setter for fixedFlag$sample42.
+	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample44.
-	public boolean get$fixedFlag$sample44();
+	// Getter for fixedFlag$sample58.
+	public boolean get$fixedFlag$sample58();
 
-	// Setter for fixedFlag$sample44.
-	public void set$fixedFlag$sample44(boolean cv$value);
+	// Setter for fixedFlag$sample58.
+	public void set$fixedFlag$sample58(boolean cv$value);
 
 	// Getter for length$obs_measured.
 	public int get$length$obs_measured();

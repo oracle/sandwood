@@ -139,13 +139,13 @@ public class LinearRegressionWrongNameFail extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample31(fixed);
+                system$c.set$fixedFlag$sample38(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample31())
+            if(system$c.get$fixedFlag$sample38())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -285,7 +285,7 @@ public class LinearRegressionWrongNameFail extends Model {
         if(variance.isSet())
             newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
         if(y.isSet())
-            newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31());
+            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
     }
 
     /**

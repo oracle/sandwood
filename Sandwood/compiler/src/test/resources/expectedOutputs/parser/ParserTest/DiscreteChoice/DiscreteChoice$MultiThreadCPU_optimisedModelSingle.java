@@ -9,22 +9,22 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private int[] ObsChoices;
 	private int[] choices;
 	private double[] exped;
-	private boolean fixedFlag$sample19 = false;
-	private boolean fixedFlag$sample49 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample49 = false;
-	private boolean[] guard$sample19put43$global;
+	private boolean fixedFlag$sample27 = false;
+	private boolean fixedFlag$sample81 = false;
+	private boolean fixedProbFlag$sample27 = false;
+	private boolean fixedProbFlag$sample81 = false;
+	private boolean[] guard$sample27put68$global;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$choices;
 	private double logProbability$exped;
 	private double logProbability$prob;
-	private double[] logProbability$sample19;
+	private double[] logProbability$sample27;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double logProbability$var17;
-	private double logProbability$var42;
-	private double logProbability$var47;
+	private double logProbability$var25;
+	private double logProbability$var67;
+	private double logProbability$var79;
 	private int noObs;
 	private int noProducts;
 	private double[] prob;
@@ -68,8 +68,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		choices = cv$value;
 		setFlag$choices = true;
 		
-		// Unset the fixed probability flag for sample 49 as it depends on choices.
-		fixedProbFlag$sample49 = false;
+		// Unset the fixed probability flag for sample 81 as it depends on choices.
+		fixedProbFlag$sample81 = false;
 	}
 
 	// Getter for exped.
@@ -78,50 +78,50 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		return exped;
 	}
 
-	// Getter for fixedFlag$sample19.
+	// Getter for fixedFlag$sample27.
 	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
+	public final boolean get$fixedFlag$sample27() {
+		return fixedFlag$sample27;
 	}
 
-	// Setter for fixedFlag$sample19.
+	// Setter for fixedFlag$sample27.
 	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
+	public final void set$fixedFlag$sample27(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
 		// need to be updated.
-		fixedFlag$sample19 = cv$value;
+		fixedFlag$sample27 = cv$value;
 		
-		// Should the probability of sample 19 be set to fixed. This will only every change
+		// Should the probability of sample 27 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample19" with its value "cv$value".
-		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
+		// Substituted "fixedFlag$sample27" with its value "cv$value".
+		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 		
-		// Should the probability of sample 49 be set to fixed. This will only every change
+		// Should the probability of sample 81 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample19" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		// Substituted "fixedFlag$sample27" with its value "cv$value".
+		fixedProbFlag$sample81 = (cv$value && fixedProbFlag$sample81);
 	}
 
-	// Getter for fixedFlag$sample49.
+	// Getter for fixedFlag$sample81.
 	@Override
-	public final boolean get$fixedFlag$sample49() {
-		return fixedFlag$sample49;
+	public final boolean get$fixedFlag$sample81() {
+		return fixedFlag$sample81;
 	}
 
-	// Setter for fixedFlag$sample49.
+	// Setter for fixedFlag$sample81.
 	@Override
-	public final void set$fixedFlag$sample49(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample49 including if probabilities
+	public final void set$fixedFlag$sample81(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample81 including if probabilities
 		// need to be updated.
-		fixedFlag$sample49 = cv$value;
+		fixedFlag$sample81 = cv$value;
 		
-		// Should the probability of sample 49 be set to fixed. This will only every change
+		// Should the probability of sample 81 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample49" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		// Substituted "fixedFlag$sample81" with its value "cv$value".
+		fixedProbFlag$sample81 = (cv$value && fixedProbFlag$sample81);
 	}
 
 	// Getter for logProbability$$evidence.
@@ -218,23 +218,23 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		ut = cv$value;
 		setFlag$ut = true;
 		
-		// Unset the fixed probability flag for sample 19 as it depends on ut.
-		fixedProbFlag$sample19 = false;
+		// Unset the fixed probability flag for sample 27 as it depends on ut.
+		fixedProbFlag$sample27 = false;
 		
-		// Unset the fixed probability flag for sample 49 as it depends on ut.
-		fixedProbFlag$sample49 = false;
+		// Unset the fixed probability flag for sample 81 as it depends on ut.
+		fixedProbFlag$sample81 = false;
 	}
 
-	// Calculate the probability of the samples represented by sample19 using sampled
+	// Calculate the probability of the samples represented by sample27 using sampled
 	// values.
-	private final void logProbabilityValue$sample19() {
-		// Determine if we need to calculate the values for sample task 19 or if we should
+	private final void logProbabilityValue$sample27() {
+		// Determine if we need to calculate the values for sample task 27 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample19) {
+		if(!fixedProbFlag$sample27) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var12 = 1; i$var12 < noProducts; i$var12 += 1) {
+			for(int i$var20 = 1; i$var20 < noProducts; i$var20 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -258,23 +258,23 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[i$var12] / 3.1622776601683795)) - 1.151292546497023);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[i$var20] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample19[(i$var12 - 1)] = cv$distributionAccumulator;
+				logProbability$sample27[(i$var20 - 1)] = cv$distributionAccumulator;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 19 and consumer double[] 26.
+				// Looking for a path between Sample 27 and consumer double[] 41.
 				// 
 				// Update the variable probability
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
 				
-				// Looking for a path between Sample 19 and consumer double 34.
+				// Looking for a path between Sample 27 and consumer double 52.
 				// 
 				// Update the variable probability
 				logProbability$sum = (logProbability$sum + cv$distributionAccumulator);
@@ -282,7 +282,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Update the variable probability
 				logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
 			}
-			logProbability$var17 = cv$sampleAccumulator;
+			logProbability$var25 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -302,7 +302,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample19)
+			if(fixedFlag$sample27)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -311,26 +311,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample19 = fixedFlag$sample19;
+			fixedProbFlag$sample27 = fixedFlag$sample27;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			for(int i$var12 = 1; i$var12 < noProducts; i$var12 += 1) {
-				double cv$sampleValue = logProbability$sample19[(i$var12 - 1)];
+			for(int i$var20 = 1; i$var20 < noProducts; i$var20 += 1) {
+				double cv$sampleValue = logProbability$sample27[(i$var20 - 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 19 and consumer double[] 26.
+				// Looking for a path between Sample 27 and consumer double[] 41.
 				// 
 				// Update the variable probability
 				logProbability$exped = (logProbability$exped + cv$sampleValue);
 				
-				// Looking for a path between Sample 19 and consumer double 34.
+				// Looking for a path between Sample 27 and consumer double 52.
 				// 
 				// Update the variable probability
 				logProbability$sum = (logProbability$sum + cv$sampleValue);
@@ -338,7 +338,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Update the variable probability
 				logProbability$prob = (logProbability$prob + cv$sampleValue);
 			}
-			logProbability$var17 = cv$rvAccumulator;
+			logProbability$var25 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$ut = (logProbability$ut + cv$rvAccumulator);
@@ -348,23 +348,23 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample19)
+			if(fixedFlag$sample27)
 				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample49 using sampled
+	// Calculate the probability of the samples represented by sample81 using sampled
 	// values.
-	private final void logProbabilityValue$sample49() {
-		// Determine if we need to calculate the values for sample task 49 or if we should
+	private final void logProbabilityValue$sample81() {
+		// Determine if we need to calculate the values for sample task 81 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample49) {
+		if(!fixedProbFlag$sample81) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var46 = 0; var46 < noObs; var46 += 1) {
+			for(int var78 = 0; var78 < noObs; var78 += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = choices[var46];
+				int cv$sampleValue = choices[var78];
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -381,10 +381,10 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < prob.length))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var42 = cv$sampleAccumulator;
+			logProbability$var67 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var47 = cv$sampleAccumulator;
+			logProbability$var79 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -410,34 +410,34 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedFlag$sample19);
+			fixedProbFlag$sample81 = (fixedFlag$sample81 && fixedFlag$sample27);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var42 = logProbability$var47;
+			logProbability$var67 = logProbability$var79;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$choices = (logProbability$choices + logProbability$var47);
+			logProbability$choices = (logProbability$choices + logProbability$var79);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var47);
+			logProbability$$model = (logProbability$$model + logProbability$var79);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var47);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var79);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 19 drawn from Gaussian 17. Inference was performed using Metropolis-Hastings.
-	private final void sample19(int i$var12) {
+	// by sample task 27 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
+	private final void sample27(int i$var20) {
 		// The original value of the sample
-		double cv$originalValue = ut[i$var12];
+		double cv$originalValue = ut[i$var20];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -459,17 +459,17 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var16" with its value "10.0".
+			// Substituted "cv$temp$1$var24" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			
-			// Processing sample task 49 of consumer random variable null.
-			for(int var46 = 0; var46 < noObs; var46 += 1)
+			// Processing sample task 81 of consumer random variable null.
+			for(int var78 = 0; var78 < noObs; var78 += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 49 with the current configuration.
+				// Recorded the probability of reaching sample task 81 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
@@ -480,7 +480,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
-				cv$accumulatedProbabilities = ((((0.0 <= choices[var46]) && (choices[var46] < prob.length))?Math.log(prob[choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= choices[var78]) && (choices[var78] < prob.length))?Math.log(prob[choices[var78]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -492,18 +492,18 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// Update Sample and intermediate values
-		ut[i$var12] = cv$proposedValue;
+		ut[i$var20] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
 		// 
-		// Looking for a path between Sample 19 and consumer double[] 26.
+		// Looking for a path between Sample 27 and consumer double[] 41.
 		// 
-		// Substituted "i$var23" with its value "i$var12".
-		exped[i$var12] = Math.exp(ut[i$var12]);
+		// Substituted "i$var38" with its value "i$var20".
+		exped[i$var20] = Math.exp(ut[i$var20]);
 		
 		// Guards to ensure that sum is only updated when there is a valid path.
 		// 
-		// Looking for a path between Sample 19 and consumer double 34.
+		// Looking for a path between Sample 27 and consumer double 52.
 		// 
 		// Reduction of array exped
 		// 
@@ -513,78 +513,78 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		double reduceVar$sum$8 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction372Index = 0; cv$reduction372Index < noProducts; cv$reduction372Index += 1)
+		for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// j's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction372Index]);
+			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction47Index]);
 		
 		// Write out the new sample value.
 		sum = reduceVar$sum$8;
-		for(int i$var38 = 0; i$var38 < noProducts; i$var38 += 1)
+		for(int i$var63 = 0; i$var63 < noProducts; i$var63 += 1)
 			// Set the flags to false
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			guard$sample19put43$global[i$var38] = false;
+			guard$sample27put68$global[i$var63] = false;
 		
 		// Set the flags to false
 		// 
 		// Guard to check that at most one copy of the code is executed for a given random
 		// variable instance.
 		// 
-		// Substituted "i$var38" with its value "i$var12".
-		guard$sample19put43$global[i$var12] = false;
-		for(int i$var38 = 0; i$var38 < noProducts; i$var38 += 1) {
+		// Substituted "i$var63" with its value "i$var20".
+		guard$sample27put68$global[i$var20] = false;
+		for(int i$var63 = 0; i$var63 < noProducts; i$var63 += 1) {
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			if(!guard$sample19put43$global[i$var38]) {
+			if(!guard$sample27put68$global[i$var63]) {
 				// The body will execute, so should not be executed again
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample19put43$global[i$var38] = true;
+				guard$sample27put68$global[i$var63] = true;
 				
 				// sum's comment
 				// Write out the new sample value.
-				prob[i$var38] = (exped[i$var38] / reduceVar$sum$8);
+				prob[i$var63] = (exped[i$var63] / reduceVar$sum$8);
 			}
 		}
 		
-		// Substituted "i$var23" with its value "i$var12".
+		// Substituted "i$var38" with its value "i$var20".
 		// 
-		// Substituted "i$var38" with its value "i$var12".
-		if(!guard$sample19put43$global[i$var12]) {
+		// Substituted "i$var63" with its value "i$var20".
+		if(!guard$sample27put68$global[i$var20]) {
 			// The body will execute, so should not be executed again
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
-			// Substituted "i$var38" with its value "i$var12".
-			guard$sample19put43$global[i$var12] = true;
+			// Substituted "i$var63" with its value "i$var20".
+			guard$sample27put68$global[i$var20] = true;
 			
-			// Substituted "i$var38" with its value "i$var12".
+			// Substituted "i$var63" with its value "i$var20".
 			// 
 			// sum's comment
 			// Write out the new sample value.
-			prob[i$var12] = (exped[i$var12] / reduceVar$sum$8);
+			prob[i$var20] = (exped[i$var20] / reduceVar$sum$8);
 		}
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var16" with its value "10.0".
+		// Substituted "cv$temp$1$var24" with its value "10.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
-		// Processing sample task 49 of consumer random variable null.
-		for(int var46 = 0; var46 < noObs; var46 += 1)
+		// Processing sample task 81 of consumer random variable null.
+		for(int var78 = 0; var78 < noObs; var78 += 1)
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 49 with the current configuration.
+			// Recorded the probability of reaching sample task 81 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
@@ -595,7 +595,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// inputs.
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
-			cv$accumulatedProbabilities = ((((0.0 <= choices[var46]) && (choices[var46] < prob.length))?Math.log(prob[choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((0.0 <= choices[var78]) && (choices[var78] < prob.length))?Math.log(prob[choices[var78]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -615,18 +615,18 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Set the sample value
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			ut[i$var12] = cv$originalValue;
+			ut[i$var20] = cv$originalValue;
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 19 and consumer double[] 26.
+			// Looking for a path between Sample 27 and consumer double[] 41.
 			// 
-			// Substituted "i$var23" with its value "i$var12".
-			exped[i$var12] = Math.exp(ut[i$var12]);
+			// Substituted "i$var38" with its value "i$var20".
+			exped[i$var20] = Math.exp(ut[i$var20]);
 			
 			// Guards to ensure that sum is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 19 and consumer double 34.
+			// Looking for a path between Sample 27 and consumer double 52.
 			// 
 			// Reduction of array exped
 			// 
@@ -636,64 +636,64 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$10 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction480Index = 0; cv$reduction480Index < noProducts; cv$reduction480Index += 1)
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction480Index]);
+				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction47Index]);
 			
 			// Write out the new sample value.
 			sum = reduceVar$sum$10;
-			for(int i$var38 = 0; i$var38 < noProducts; i$var38 += 1)
+			for(int i$var63 = 0; i$var63 < noProducts; i$var63 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample19put43$global[i$var38] = false;
+				guard$sample27put68$global[i$var63] = false;
 			
 			// Set the flags to false
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
-			// Substituted "i$var38" with its value "i$var12".
-			guard$sample19put43$global[i$var12] = false;
-			for(int i$var38 = 0; i$var38 < noProducts; i$var38 += 1) {
+			// Substituted "i$var63" with its value "i$var20".
+			guard$sample27put68$global[i$var20] = false;
+			for(int i$var63 = 0; i$var63 < noProducts; i$var63 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample19put43$global[i$var38]) {
+				if(!guard$sample27put68$global[i$var63]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample19put43$global[i$var38] = true;
+					guard$sample27put68$global[i$var63] = true;
 					
 					// sum's comment
 					// Write out the new sample value.
-					prob[i$var38] = (exped[i$var38] / reduceVar$sum$10);
+					prob[i$var63] = (exped[i$var63] / reduceVar$sum$10);
 				}
 			}
 			
-			// Substituted "i$var23" with its value "i$var12".
+			// Substituted "i$var38" with its value "i$var20".
 			// 
-			// Substituted "i$var38" with its value "i$var12".
-			if(!guard$sample19put43$global[i$var12]) {
+			// Substituted "i$var63" with its value "i$var20".
+			if(!guard$sample27put68$global[i$var20]) {
 				// The body will execute, so should not be executed again
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
-				// Substituted "i$var38" with its value "i$var12".
-				guard$sample19put43$global[i$var12] = true;
+				// Substituted "i$var63" with its value "i$var20".
+				guard$sample27put68$global[i$var20] = true;
 				
-				// Substituted "i$var38" with its value "i$var12".
+				// Substituted "i$var63" with its value "i$var20".
 				// 
 				// sum's comment
 				// Write out the new sample value.
-				prob[i$var12] = (exped[i$var12] / reduceVar$sum$10);
+				prob[i$var20] = (exped[i$var20] / reduceVar$sum$10);
 			}
 		}
 	}
@@ -703,15 +703,15 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for guard$sample19put43$global
+		// Constructor for guard$sample27put68$global
 		// 
 		// Allocate scratch space.
 		// 
-		// Allocation of guard$sample19put43$global for single threaded execution
+		// Allocation of guard$sample27put68$global for single threaded execution
 		// 
 		// Calculate the largest index of i that is possible and allocate an array to hold
 		// the guard for each of these.
-		guard$sample19put43$global = new boolean[Math.max(0, noProducts)];
+		guard$sample27put68$global = new boolean[Math.max(0, noProducts)];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -733,8 +733,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Constructor for choices
 			choices = new int[noObs];
 		
-		// Constructor for logProbability$sample19
-		logProbability$sample19 = new double[(noProducts - 1)];
+		// Constructor for logProbability$sample27
+		logProbability$sample27 = new double[(noProducts - 1)];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -744,26 +744,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample19) {
+		if(!fixedFlag$sample27) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var20, int forEnd$i$var20, int threadID$i$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int i$var20 = forStart$i$var20; i$var20 < forEnd$i$var20; i$var20 += 1)
+							ut[i$var20] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var23, int forEnd$i$var23, int threadID$i$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var23 = forStart$i$var23; i$var23 < forEnd$i$var23; i$var23 += 1)
-							exped[i$var23] = Math.exp(ut[i$var23]);
+						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+							exped[i$var38] = Math.exp(ut[i$var38]);
 				}
 			);
 			
@@ -775,40 +775,40 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$11 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction32Index = 0; cv$reduction32Index < noProducts; cv$reduction32Index += 1)
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction32Index]);
+				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction47Index]);
 			sum = reduceVar$sum$11;
 			
-			// Alternative value for reduceVar$sum$11 to make it effectively final.
+			// Alternative name for reduceVar$sum$11 to make it effectively final.
 			double reduceVar$sum$11$1 = reduceVar$sum$11;
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var63, int forEnd$i$var63, int threadID$i$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+						for(int i$var63 = forStart$i$var63; i$var63 < forEnd$i$var63; i$var63 += 1)
 							// Substituted "sum" with its value "reduceVar$sum$11".
-							prob[i$var38] = (exped[i$var38] / reduceVar$sum$11$1);
+							prob[i$var63] = (exped[i$var63] / reduceVar$sum$11$1);
 				}
 			);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample49)
+		if(!fixedFlag$sample81)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noObs, 1,
-				(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var78, int forEnd$var78, int threadID$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1)
-							choices[var46] = DistributionSampling.sampleCategorical(RNG$1, prob);
+						for(int var78 = forStart$var78; var78 < forEnd$var78; var78 += 1)
+							choices[var78] = DistributionSampling.sampleCategorical(RNG$1, prob);
 				}
 			);
 
@@ -819,26 +819,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample19) {
+		if(!fixedFlag$sample27) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var20, int forEnd$i$var20, int threadID$i$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int i$var20 = forStart$i$var20; i$var20 < forEnd$i$var20; i$var20 += 1)
+							ut[i$var20] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var23, int forEnd$i$var23, int threadID$i$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var23 = forStart$i$var23; i$var23 < forEnd$i$var23; i$var23 += 1)
-							exped[i$var23] = Math.exp(ut[i$var23]);
+						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+							exped[i$var38] = Math.exp(ut[i$var38]);
 				}
 			);
 			
@@ -850,26 +850,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$13 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction32Index = 0; cv$reduction32Index < noProducts; cv$reduction32Index += 1)
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction32Index]);
+				reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction47Index]);
 			sum = reduceVar$sum$13;
 			
-			// Alternative value for reduceVar$sum$13 to make it effectively final.
+			// Alternative name for reduceVar$sum$13 to make it effectively final.
 			double reduceVar$sum$13$1 = reduceVar$sum$13;
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var63, int forEnd$i$var63, int threadID$i$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+						for(int i$var63 = forStart$i$var63; i$var63 < forEnd$i$var63; i$var63 += 1)
 							// Substituted "sum" with its value "reduceVar$sum$13".
-							prob[i$var38] = (exped[i$var38] / reduceVar$sum$13$1);
+							prob[i$var63] = (exped[i$var63] / reduceVar$sum$13$1);
 				}
 			);
 		}
@@ -880,26 +880,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample19) {
+		if(!fixedFlag$sample27) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var20, int forEnd$i$var20, int threadID$i$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int i$var20 = forStart$i$var20; i$var20 < forEnd$i$var20; i$var20 += 1)
+							ut[i$var20] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var23, int forEnd$i$var23, int threadID$i$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var23 = forStart$i$var23; i$var23 < forEnd$i$var23; i$var23 += 1)
-							exped[i$var23] = Math.exp(ut[i$var23]);
+						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+							exped[i$var38] = Math.exp(ut[i$var38]);
 				}
 			);
 			
@@ -911,26 +911,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$12 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction32Index = 0; cv$reduction32Index < noProducts; cv$reduction32Index += 1)
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction32Index]);
+				reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction47Index]);
 			sum = reduceVar$sum$12;
 			
-			// Alternative value for reduceVar$sum$12 to make it effectively final.
+			// Alternative name for reduceVar$sum$12 to make it effectively final.
 			double reduceVar$sum$12$1 = reduceVar$sum$12;
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var63, int forEnd$i$var63, int threadID$i$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+						for(int i$var63 = forStart$i$var63; i$var63 < forEnd$i$var63; i$var63 += 1)
 							// Substituted "sum" with its value "reduceVar$sum$12".
-							prob[i$var38] = (exped[i$var38] / reduceVar$sum$12$1);
+							prob[i$var63] = (exped[i$var63] / reduceVar$sum$12$1);
 				}
 			);
 		}
@@ -940,16 +940,16 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(!fixedFlag$sample19) {
+		if(!fixedFlag$sample27) {
 			// Infer the samples in chronological order.
 			if(system$gibbsForward) {
-				for(int i$var12 = 1; i$var12 < noProducts; i$var12 += 1)
-					sample19(i$var12);
+				for(int i$var20 = 1; i$var20 < noProducts; i$var20 += 1)
+					sample27(i$var20);
 			}
 			// Infer the samples in reverse chronological order.
 			else {
-				for(int i$var12 = (noProducts - 1); i$var12 >= 1; i$var12 -= 1)
-					sample19(i$var12);
+				for(int i$var20 = (noProducts - 1); i$var20 >= 1; i$var20 -= 1)
+					sample27(i$var20);
 			}
 		}
 		
@@ -974,19 +974,19 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$ut = 0.0;
+		logProbability$var25 = 0.0;
 		logProbability$prob = 0.0;
+		logProbability$sum = 0.0;
 		logProbability$exped = 0.0;
-		if(!fixedProbFlag$sample19) {
-			for(int i$var12 = 1; i$var12 < noProducts; i$var12 += 1)
-				logProbability$sample19[(i$var12 - 1)] = 0.0;
+		logProbability$ut = 0.0;
+		if(!fixedProbFlag$sample27) {
+			for(int i$var20 = 1; i$var20 < noProducts; i$var20 += 1)
+				logProbability$sample27[(i$var20 - 1)] = 0.0;
 		}
-		logProbability$var42 = 0.0;
+		logProbability$var67 = 0.0;
 		logProbability$choices = 0.0;
-		if(!fixedProbFlag$sample49)
-			logProbability$var47 = 0.0;
+		if(!fixedProbFlag$sample81)
+			logProbability$var79 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -1006,9 +1006,9 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample19)
-			logProbabilityValue$sample19();
-		logProbabilityValue$sample49();
+		if(fixedFlag$sample27)
+			logProbabilityValue$sample27();
+		logProbabilityValue$sample81();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1026,8 +1026,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample19();
-		logProbabilityValue$sample49();
+		logProbabilityValue$sample27();
+		logProbabilityValue$sample81();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1044,8 +1044,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample19();
-		logProbabilityValue$sample49();
+		logProbabilityValue$sample27();
+		logProbabilityValue$sample81();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1054,26 +1054,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample19) {
+		if(!fixedFlag$sample27) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var20, int forEnd$i$var20, int threadID$i$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int i$var20 = forStart$i$var20; i$var20 < forEnd$i$var20; i$var20 += 1)
+							ut[i$var20] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var23, int forEnd$i$var23, int threadID$i$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var23 = forStart$i$var23; i$var23 < forEnd$i$var23; i$var23 += 1)
-							exped[i$var23] = Math.exp(ut[i$var23]);
+						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+							exped[i$var38] = Math.exp(ut[i$var38]);
 				}
 			);
 			
@@ -1085,26 +1085,26 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$14 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction32Index = 0; cv$reduction32Index < noProducts; cv$reduction32Index += 1)
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$14 = (reduceVar$sum$14 + exped[cv$reduction32Index]);
+				reduceVar$sum$14 = (reduceVar$sum$14 + exped[cv$reduction47Index]);
 			sum = reduceVar$sum$14;
 			
-			// Alternative value for reduceVar$sum$14 to make it effectively final.
+			// Alternative name for reduceVar$sum$14 to make it effectively final.
 			double reduceVar$sum$14$1 = reduceVar$sum$14;
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var63, int forEnd$i$var63, int threadID$i$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+						for(int i$var63 = forStart$i$var63; i$var63 < forEnd$i$var63; i$var63 += 1)
 							// Substituted "sum" with its value "reduceVar$sum$14".
-							prob[i$var38] = (exped[i$var38] / reduceVar$sum$14$1);
+							prob[i$var63] = (exped[i$var63] / reduceVar$sum$14$1);
 				}
 			);
 		}
@@ -1134,12 +1134,12 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		if(setFlag$ut) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var23, int forEnd$i$var23, int threadID$i$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var23 = forStart$i$var23; i$var23 < forEnd$i$var23; i$var23 += 1)
-							exped[i$var23] = Math.exp(ut[i$var23]);
+						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+							exped[i$var38] = Math.exp(ut[i$var38]);
 				}
 			);
 			
@@ -1151,28 +1151,28 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$15 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction32Index = 0; cv$reduction32Index < noProducts; cv$reduction32Index += 1)
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noProducts; cv$reduction47Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction32Index]);
+				reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction47Index]);
 			sum = reduceVar$sum$15;
 			
-			// Alternative value for reduceVar$sum$15 to make it effectively final.
+			// Alternative name for reduceVar$sum$15 to make it effectively final.
 			double reduceVar$sum$15$1 = reduceVar$sum$15;
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var38, int forEnd$i$var38, int threadID$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var63, int forEnd$i$var63, int threadID$i$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var38 = forStart$i$var38; i$var38 < forEnd$i$var38; i$var38 += 1)
+						for(int i$var63 = forStart$i$var63; i$var63 < forEnd$i$var63; i$var63 += 1)
 							// Substituted "sum" with its value "reduceVar$sum$15".
-							prob[i$var38] = (exped[i$var38] / reduceVar$sum$15$1);
+							prob[i$var63] = (exped[i$var63] / reduceVar$sum$15$1);
 				}
 			);
 		}

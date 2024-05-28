@@ -137,14 +137,15 @@ public class Sandwood {
 
     @SuppressWarnings("unchecked")
     public static <A extends Variable<A>, B extends NumberVariable<B>> A ifElseAssignment(BooleanVariable guard,
-            A ifValue, A elseValue, Location location) {
+            A ifValue, A elseValue, IfScope ifScope, Location location) {
         Type<A> type = ifValue.getType();
         if(type instanceof VariableType.NumberType) {
             return (A) ((NumberType<B>) type)
-                    .getInstance(new IfElseNumberAssignmentTask<>(guard, (B) ifValue, (B) elseValue, location));
+                    .getInstance(new IfElseNumberAssignmentTask<>(guard, (B) ifValue, (B) elseValue, 
+                            ifScope, location));
         } else if(type instanceof VariableType.BooleanType) {
             return (A) ((BooleanType) type).getInstance(new IfElseAssignmentTask<>(guard, (BooleanVariable) ifValue,
-                    (BooleanVariable) elseValue, location));
+                    (BooleanVariable) elseValue, ifScope, location));
         } else
             throw new CompilerException("Unexpected type " + type);
     }
@@ -161,7 +162,7 @@ public class Sandwood {
         IntVariable elseValue = elseValueLambda.body();
         ScopeStack.popScope(elseScope);
 
-        return IntVariable.intVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue, location));
+        return IntVariable.intVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
     }
 
     public static DoubleVariable ifElseLambdaAssignment(BooleanVariable guard, IfElseAssignmentDouble ifValueLambda,
@@ -176,7 +177,7 @@ public class Sandwood {
         DoubleVariable elseValue = elseValueLambda.body();
         ScopeStack.popScope(elseScope);
 
-        return DoubleVariable.doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue, location));
+        return DoubleVariable.doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
     }
 
     public static DoubleVariable ifElseLambdaAssignment(BooleanVariable guard, IfElseAssignmentInt ifValueLambda,
@@ -192,7 +193,7 @@ public class Sandwood {
         ScopeStack.popScope(elseScope);
 
         return DoubleVariable.doubleVariable(
-                new IfElseNumberAssignmentTask<>(guard, ifValue.castToDouble(location), elseValue, location));
+                new IfElseNumberAssignmentTask<>(guard, ifValue.castToDouble(location), elseValue, ifScope, location));
     }
 
     public static DoubleVariable ifElseLambdaAssignment(BooleanVariable guard, IfElseAssignmentDouble ifValueLambda,
@@ -208,7 +209,7 @@ public class Sandwood {
         ScopeStack.popScope(elseScope);
 
         return DoubleVariable
-                .doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue.castToDouble(), location));
+                .doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue.castToDouble(), ifScope, location));
     }
 
     public static BooleanVariable ifElseLambdaAssignment(BooleanVariable guard, IfElseAssignmentBoolean ifValueLambda,
@@ -223,7 +224,7 @@ public class Sandwood {
         BooleanVariable elseValue = elseValueLambda.body();
         ScopeStack.popScope(elseScope);
 
-        return BooleanVariable.booleanVariable(new IfElseAssignmentTask<>(guard, ifValue, elseValue, location));
+        return BooleanVariable.booleanVariable(new IfElseAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
     }
 
     public static IfScope ifScope(BooleanVariable guard) {

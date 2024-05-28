@@ -11,6 +11,7 @@ package org.sandwood.compiler.dataflowGraph.scopes;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.Id;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
@@ -18,10 +19,20 @@ public class ElseScope extends Id implements Scope {
 
     private final Scope scope;
     public final IfScope ifScope;
+    private final BooleanVariable scopeCondition;
 
     public ElseScope(Scope scope, IfScope ifScope) {
         this.scope = scope;
         this.ifScope = ifScope;
+        if(ifScope.guard==null)
+            scopeCondition = null;
+        else {
+            BooleanVariable scopeCondition = scope.getScopeCondition();
+            if(scopeCondition == null)
+                this.scopeCondition = scopeCondition;
+            else
+                this.scopeCondition = ifScope.guard.negate().and(scopeCondition);
+        }
     }
 
     @Override // TODO work out what the correct value for this should be.
@@ -63,6 +74,11 @@ public class ElseScope extends Id implements Scope {
     public IRTreeVoid getScopeTree(ScopeTracking scopeTracking, IRTreeVoid tree, boolean reverseScopes,
             CompilationContext compilationCtx) {
         return IRTree.nop();
+    }
+
+    @Override
+    public BooleanVariable getScopeCondition() {
+        return scopeCondition;
     }
 
     @Override

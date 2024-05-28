@@ -8,11 +8,11 @@ interface UniformBernoulli$CoreInterface extends org.sandwood.runtime.internal.m
 	// Getter for b.
 	public double get$b();
 
-	// Getter for fixedFlag$sample16.
-	public boolean get$fixedFlag$sample16();
+	// Getter for fixedFlag$sample23.
+	public boolean get$fixedFlag$sample23();
 
-	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
+	// Setter for fixedFlag$sample23.
+	public void set$fixedFlag$sample23(boolean cv$value);
 
 	// Getter for fixedFlag$sample8.
 	public boolean get$fixedFlag$sample8();

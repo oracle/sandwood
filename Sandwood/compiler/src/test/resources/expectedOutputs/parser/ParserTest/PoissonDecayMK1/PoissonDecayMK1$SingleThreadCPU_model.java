@@ -12,16 +12,16 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private int[] decay;
 	private int[] decayDetected;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample16 = false;
+	private boolean fixedFlag$sample23 = false;
 	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample16 = false;
+	private boolean fixedProbFlag$sample23 = false;
 	private int length$decayDetected;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$decay;
 	private double logProbability$poisson;
 	private double logProbability$rate;
-	private double logProbability$var14;
+	private double logProbability$var21;
 	private double logProbability$var7;
 	private double rate;
 	private int samples;
@@ -72,8 +72,8 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		decay = cv$value;
 		setFlag$decay = true;
 		
-		// Unset the fixed probability flag for sample 16 as it depends on decay.
-		fixedProbFlag$sample16 = false;
+		// Unset the fixed probability flag for sample 23 as it depends on decay.
+		fixedProbFlag$sample23 = false;
 	}
 
 	// Getter for decayDetected.
@@ -107,27 +107,27 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// the flag to false.
 		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
 		
-		// Should the probability of sample 16 be set to fixed. This will only every change
+		// Should the probability of sample 23 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample16 = (fixedFlag$sample10 && fixedProbFlag$sample16);
+		fixedProbFlag$sample23 = (fixedFlag$sample10 && fixedProbFlag$sample23);
 	}
 
-	// Getter for fixedFlag$sample16.
+	// Getter for fixedFlag$sample23.
 	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
 	}
 
-	// Setter for fixedFlag$sample16.
+	// Setter for fixedFlag$sample23.
 	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample23 including if probabilities
 		// need to be updated.
-		fixedFlag$sample16 = cv$value;
+		fixedFlag$sample23 = cv$value;
 		
-		// Should the probability of sample 16 be set to fixed. This will only every change
+		// Should the probability of sample 23 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedProbFlag$sample16);
+		fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedProbFlag$sample23);
 	}
 
 	// Getter for length$decayDetected.
@@ -188,8 +188,8 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// Unset the fixed probability flag for sample 10 as it depends on rate.
 		fixedProbFlag$sample10 = false;
 		
-		// Unset the fixed probability flag for sample 16 as it depends on rate.
-		fixedProbFlag$sample16 = false;
+		// Unset the fixed probability flag for sample 23 as it depends on rate.
+		fixedProbFlag$sample23 = false;
 	}
 
 	// Getter for samples.
@@ -292,19 +292,19 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample16 using sampled
+	// Calculate the probability of the samples represented by sample23 using sampled
 	// values.
-	private final void logProbabilityValue$sample16() {
-		// Determine if we need to calculate the values for sample task 16 or if we should
+	private final void logProbabilityValue$sample23() {
+		// Determine if we need to calculate the values for sample task 23 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample16) {
+		if(!fixedProbFlag$sample23) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var13 = 0; var13 < samples; var13 += 1) {
+			for(int var20 = 0; var20 < samples; var20 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -312,7 +312,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = decay[var13];
+					int cv$sampleValue = decay[var20];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
@@ -352,7 +352,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			logProbability$poisson = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var14 = cv$sampleAccumulator;
+			logProbability$var21 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$decay = (logProbability$decay + cv$accumulator);
@@ -363,7 +363,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample10);
+			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample10);
 		}
 		// Using cached values.
 		else {
@@ -371,7 +371,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var14;
+			double cv$sampleValue = logProbability$var21;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$poisson = cv$rvAccumulator;
@@ -398,12 +398,12 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			// Processing random variable 9.
 			{
 				{
-					// Processing sample task 16 of consumer random variable poisson.
+					// Processing sample task 23 of consumer random variable poisson.
 					{
-						for(int var13 = 0; var13 < samples; var13 += 1) {
+						for(int var20 = 0; var20 < samples; var20 += 1) {
 							// Add the value of a sample from consuming random variable poisson to the inference
 							// state.
-							cv$sum = (cv$sum + decay[var13]);
+							cv$sum = (cv$sum + decay[var20]);
 							cv$count = (cv$count + 1);
 						}
 					}
@@ -438,9 +438,9 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample10)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		for(int var13 = 0; var13 < samples; var13 += 1) {
-			if(!fixedFlag$sample16)
-				decay[var13] = DistributionSampling.samplePoisson(RNG$, rate);
+		for(int var20 = 0; var20 < samples; var20 += 1) {
+			if(!fixedFlag$sample23)
+				decay[var20] = DistributionSampling.samplePoisson(RNG$, rate);
 		}
 	}
 
@@ -500,8 +500,8 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			logProbability$rate = 0.0;
 		logProbability$poisson = 0.0;
 		logProbability$decay = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$var14 = 0.0;
+		if(!fixedProbFlag$sample23)
+			logProbability$var21 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -523,7 +523,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -542,7 +542,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -560,7 +560,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then

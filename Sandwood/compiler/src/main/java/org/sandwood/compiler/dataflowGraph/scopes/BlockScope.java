@@ -11,6 +11,7 @@ package org.sandwood.compiler.dataflowGraph.scopes;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.Id;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
@@ -42,6 +43,11 @@ public class BlockScope extends Id implements Scope {
     @Override
     public String getDescription() {
         return "Block " + id();
+    }
+
+    @Override
+    public BooleanVariable getScopeCondition() {
+        return scope.getScopeCondition();
     }
 
     @Override

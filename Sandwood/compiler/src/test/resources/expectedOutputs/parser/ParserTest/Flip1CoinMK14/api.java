@@ -5,6 +5,7 @@ import static org.sandwood.compiler.dataflowGraph.Math.*;
 import static org.sandwood.compiler.dataflowGraph.Number.*;
 import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;
 
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;
@@ -45,7 +46,7 @@ public class Flip1CoinMK14 extends GeneratedAPIBuilder {
         $IfElseMods1 $if1 = new $IfElseMods1();
         $IfElseMods1 $else1 = new $IfElseMods1();
         BooleanVariable guard$1 = guard1;
-        ifElse(guard$1, () -> {
+        IfScope ifScope$1 = ifElse(guard$1, () -> {
             $if1.bias = b;
         }, () -> {
             ArrayVariable<DoubleVariable> c = Variable.arrayVariable(location(19, 30, 19, 32), VariableType.DoubleVariable, intVariable(1, location(19, 31, 19, 31)));
@@ -56,7 +57,7 @@ public class Flip1CoinMK14 extends GeneratedAPIBuilder {
             $else1.bias = c.get(intVariable(0, location(21, 16, 21, 16)), location(21, 15, 21, 17));
 
         });
-        bias = ifElseAssignment(guard$1, $if1.bias, $else1.bias, location(16, 5, 16, 14));
+        bias = ifElseAssignment(guard$1, $if1.bias, $else1.bias, ifScope$1, location(16, 5, 16, 14));
         bias.setAlias("bias");
         bias.setLocation(location(15, 12, 15, 15));
 

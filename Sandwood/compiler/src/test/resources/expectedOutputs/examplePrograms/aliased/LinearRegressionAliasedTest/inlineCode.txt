@@ -5,49 +5,75 @@ int kInit = 7;
 double[][] xMeasured = new double[n][];
 double var6 = 1.0;
 double[] t = new double[kInit];
-for(int var10=0; var10 < kInit; var10 += 1) {
-	t[var10] = var6;
+int var8 = 0;
+int var9 = 1;
+for(int var17=var8; var17 < kInit; var17 += var9) {
+	boolean var16 = var8 >= kInit && !var9 == 0 && true;
+	t[var17] = var6;
 }
 xMeasured[0] = t;
-double var14 = 4.0;
+double var22 = 4.0;
 double[] t = new double[kInit];
-for(int var18=0; var18 < kInit; var18 += 1) {
-	t[var18] = var14;
+int var24 = 0;
+int var25 = 1;
+for(int var33=var24; var33 < kInit; var33 += var25) {
+	boolean var32 = var24 >= kInit && !var25 == 0 && true;
+	t[var33] = var22;
 }
 xMeasured[1] = t;
-double var22 = 3.5;
+double var38 = 3.5;
 double[] yMeasured = new double[n];
-for(int var26=0; var26 < n; var26 += 1) {
-	yMeasured[var26] = var22;
+int var40 = 0;
+int var41 = 1;
+for(int var49=var40; var49 < n; var49 += var41) {
+	boolean var48 = var40 >= n && !var41 == 0 && true;
+	yMeasured[var49] = var38;
 }
 int k = xMeasured[0].length;
 double[] y = new double[xMeasured.length];
 double[][] x = new double[xMeasured.length][];
-Gaussian var37 = new Gaussian(0.0, 10.0);
+Gaussian var60 = new Gaussian(0.0, 10.0);
 double[] weights = new double[k];
-for(int var41=0; var41 < k; var41 += 1) {
-	weights[var41] = var37.sample();
+int var62 = 0;
+int var63 = 1;
+for(int var71=var62; var71 < k; var71 += var63) {
+	boolean var70 = var62 >= k && !var63 == 0 && true;
+	weights[var71] = var60.sample();
 }
 double bias = new Gaussian(0.0, 10.0).sample();
 double tau = new Inverse Gamma(3.0, 1.0).sample();
-for(int i=0; i < xMeasured.length; i += 1) {
+int var82 = 0;
+int var83 = xMeasured.length;
+int var84 = 1;
+for(int i=var82; i < var83; i += var84) {
+	boolean var91 = var82 >= var83 && !var84 == 0 && true;
 	Uniform uniform = new Uniform(l, u);
-	double[] var57 = new double[k];
-	for(int var60=0; var60 < k; var60 += 1) {
-		var57[var60] = uniform.sample();
+	double[] var94 = new double[k];
+	int var95 = 0;
+	int var96 = 1;
+	for(int var103=var95; var103 < k; var103 += var96) {
+		boolean var102 = var95 >= k && !var96 == 0 && var91;
+		var94[var103] = uniform.sample();
 	}
-	x[i] = var57;
+	x[i] = var94;
 }
-for(int i=0; i < xMeasured.length; i += 1) {
+int var107 = 0;
+int var108 = xMeasured.length;
+int var109 = 1;
+for(int i=var107; i < var108; i += var109) {
+	boolean var116 = var107 >= var108 && !var109 == 0 && true;
 	double[] phi = new double[k];
-	for(int j=0; j < k; j += 1) {
+	int var119 = 0;
+	int var120 = 1;
+	for(int j=var119; j < k; j += var120) {
+		boolean var126 = var119 >= k && !var120 == 0 && var116;
 		phi[j] = weights[j] * x[i][j];
 	}
-	double var83 = reduce(phi, 0, phi.length, 0.0) (double var80, double var81) -> {
-		double var82 = var80 + var81;
+	double var141 = reduce(phi, 0, phi.length, 0.0) (double var138, double var139) -> {
+		double var140 = var138 + var139;
 	}
-	return var82;
-	y[i] = new Gaussian(var83 + bias, tau).sample();
+	return var140;
+	y[i] = new Gaussian(var141 + bias, tau).sample();
 }
 x.observe(xMeasured);
 y.observe(yMeasured);

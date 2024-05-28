@@ -10,6 +10,8 @@ package org.sandwood.compiler.dataflowGraph.scopes;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ScopeTracking;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
 /**
@@ -60,6 +62,16 @@ public class GlobalScope implements Scope {
     @Override
     public ScopeType getScopeType() {
         return ScopeType.GLOBAL;
+    }
+    
+    @Override
+    public BooleanVariable getScopeCondition() {
+        //This is created every time it is accessed to prevent links between runs via a static object.
+        //TODO create it every time a the construction of a DAG starts.
+        ScopeStack.pushScope(this);
+        BooleanVariable scopeCondition = Variable.booleanVariable(true);
+        ScopeStack.popScope(this);
+        return scopeCondition;
     }
 
     @Override

@@ -34,13 +34,13 @@ public class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample29(fixed);
+                system$c.set$fixedFlag$sample36(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample29())
+            if(system$c.get$fixedFlag$sample36())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample41(fixed);
+                system$c.set$fixedFlag$sample55(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample41())
+            if(system$c.get$fixedFlag$sample55())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -104,13 +104,13 @@ public class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample76(fixed);
+                system$c.set$fixedFlag$sample111(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample76())
+            if(system$c.get$fixedFlag$sample111())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -145,18 +145,18 @@ public class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample22(fixed);
-                system$c.set$fixedFlag$sample41(fixed);
+                system$c.set$fixedFlag$sample29(fixed);
+                system$c.set$fixedFlag$sample55(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample22 = system$c.get$fixedFlag$sample22();
-            boolean fixedFlag$sample41 = system$c.get$fixedFlag$sample41();
-            if(fixedFlag$sample22 && fixedFlag$sample41)
+            boolean fixedFlag$sample29 = system$c.get$fixedFlag$sample29();
+            boolean fixedFlag$sample55 = system$c.get$fixedFlag$sample55();
+            if(fixedFlag$sample29 && fixedFlag$sample55)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample22 || fixedFlag$sample41)
+            else if(fixedFlag$sample29 || fixedFlag$sample55)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -185,13 +185,13 @@ public class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample35(fixed);
+                system$c.set$fixedFlag$sample42(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample35())
+            if(system$c.get$fixedFlag$sample42())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -220,13 +220,13 @@ public class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample22(fixed);
+                system$c.set$fixedFlag$sample29(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample22())
+            if(system$c.get$fixedFlag$sample29())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -412,15 +412,15 @@ public class DiscreteChoiceRandCoeff extends Model {
 
         //Set fixed flags
         if(b.isSet())
-            newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29());
+            newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
         if(beta.isSet())
-            newCore.set$fixedFlag$sample41(oldCore.get$fixedFlag$sample41());
+            newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
         if(choices.isSet())
-            newCore.set$fixedFlag$sample76(oldCore.get$fixedFlag$sample76());
+            newCore.set$fixedFlag$sample111(oldCore.get$fixedFlag$sample111());
         if(sigma.isSet())
-            newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
+            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
         if(ut.isSet())
-            newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
+            newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29());
     }
 
     /**

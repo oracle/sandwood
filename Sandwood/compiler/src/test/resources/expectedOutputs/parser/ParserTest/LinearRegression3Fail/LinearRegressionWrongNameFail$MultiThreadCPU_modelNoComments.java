@@ -10,20 +10,20 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	private boolean fixedFlag$sample14 = false;
 	private boolean fixedFlag$sample18 = false;
 	private boolean fixedFlag$sample22 = false;
-	private boolean fixedFlag$sample31 = false;
+	private boolean fixedFlag$sample38 = false;
 	private boolean fixedProbFlag$sample14 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample22 = false;
-	private boolean fixedProbFlag$sample31 = false;
+	private boolean fixedProbFlag$sample38 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double[] logProbability$sample31;
+	private double[] logProbability$sample38;
 	private double logProbability$var10;
 	private double logProbability$var14;
 	private double logProbability$var18;
-	private double[] logProbability$var27;
+	private double[] logProbability$var34;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -47,7 +47,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$b0(double cv$value) {
 		b0 = cv$value;
 		fixedProbFlag$sample14 = false;
-		fixedProbFlag$sample31 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$b1(double cv$value) {
 		b1 = cv$value;
 		fixedProbFlag$sample18 = false;
-		fixedProbFlag$sample31 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -71,7 +71,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$fixedFlag$sample14(boolean cv$value) {
 		fixedFlag$sample14 = cv$value;
 		fixedProbFlag$sample14 = (fixedFlag$sample14 && fixedProbFlag$sample14);
-		fixedProbFlag$sample31 = (fixedFlag$sample14 && fixedProbFlag$sample31);
+		fixedProbFlag$sample38 = (fixedFlag$sample14 && fixedProbFlag$sample38);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$fixedFlag$sample18(boolean cv$value) {
 		fixedFlag$sample18 = cv$value;
 		fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedProbFlag$sample18);
-		fixedProbFlag$sample31 = (fixedFlag$sample18 && fixedProbFlag$sample31);
+		fixedProbFlag$sample38 = (fixedFlag$sample18 && fixedProbFlag$sample38);
 	}
 
 	@Override
@@ -95,18 +95,18 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$fixedFlag$sample22(boolean cv$value) {
 		fixedFlag$sample22 = cv$value;
 		fixedProbFlag$sample22 = (fixedFlag$sample22 && fixedProbFlag$sample22);
-		fixedProbFlag$sample31 = (fixedFlag$sample22 && fixedProbFlag$sample31);
+		fixedProbFlag$sample38 = (fixedFlag$sample22 && fixedProbFlag$sample38);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample31() {
-		return fixedFlag$sample31;
+	public final boolean get$fixedFlag$sample38() {
+		return fixedFlag$sample38;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
-		fixedFlag$sample31 = cv$value;
-		fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedProbFlag$sample31);
+	public final void set$fixedFlag$sample38(boolean cv$value) {
+		fixedFlag$sample38 = cv$value;
+		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
 	}
 
 	@Override
@@ -153,7 +153,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$variance(double cv$value) {
 		variance = cv$value;
 		fixedProbFlag$sample22 = false;
-		fixedProbFlag$sample31 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -175,7 +175,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	public final void set$y(double[] cv$value) {
 		y = cv$value;
 		setFlag$y = true;
-		fixedProbFlag$sample31 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -341,8 +341,8 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		}
 	}
 
-	private final void logProbabilityValue$sample31() {
-		if(!fixedProbFlag$sample31) {
+	private final void logProbabilityValue$sample38() {
+		if(!fixedProbFlag$sample38) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -352,8 +352,8 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 					double cv$sampleValue = y[i];
 					{
 						{
-							double var26 = (b0 + (b1 * x[i]));
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var26) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
+							double var33 = (b0 + (b1 * x[i]));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var33) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -373,21 +373,21 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 				double cv$sampleProbability = cv$distributionAccumulator;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var27[((i - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample31[((i - 0) / 1)] = cv$sampleProbability;
+				logProbability$var34[((i - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$sample38[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample31 = (((fixedFlag$sample31 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample22);
+			fixedProbFlag$sample38 = (((fixedFlag$sample38 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample22);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample31[((i - 0) / 1)];
+				double cv$sampleValue = logProbability$sample38[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var27[((i - 0) / 1)] = cv$rvAccumulator;
+				logProbability$var34[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -454,9 +454,9 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			{
 				{
 					for(int i = 0; i < noSamples; i += 1) {
-						double cv$var27$mu = (b0 + (b1 * x[i]));
-						double cv$var27$diff = (cv$var27$mu - y[i]);
-						cv$sum = (cv$sum + (cv$var27$diff * cv$var27$diff));
+						double cv$var34$mu = (b0 + (b1 * x[i]));
+						double cv$var34$diff = (cv$var34$mu - y[i]);
+						cv$sum = (cv$sum + (cv$var34$diff * cv$var34$diff));
 						cv$count = (cv$count + 1);
 					}
 				}
@@ -476,10 +476,10 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			}
 		}
 		{
-			logProbability$var27 = new double[((((x.length - 1) - 0) / 1) + 1)];
+			logProbability$var34 = new double[((((x.length - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample31 = new double[((((x.length - 1) - 0) / 1) + 1)];
+			logProbability$sample38 = new double[((((x.length - 1) - 0) / 1) + 1)];
 		}
 	}
 
@@ -494,7 +494,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		parallelFor(RNG$, 0, noSamples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample31)
+						if(!fixedFlag$sample38)
 							y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$1)) + (b0 + (b1 * x[i])));
 					}
 			}
@@ -559,11 +559,11 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		if(!fixedProbFlag$sample22)
 			logProbability$variance = 0.0;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var27[((i - 0) / 1)] = 0.0;
+			logProbability$var34[((i - 0) / 1)] = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample31) {
+		if(!fixedProbFlag$sample38) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample31[((i - 0) / 1)] = 0.0;
+				logProbability$sample38[((i - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -581,7 +581,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			logProbabilityValue$sample18();
 		if(fixedFlag$sample22)
 			logProbabilityValue$sample22();
-		logProbabilityValue$sample31();
+		logProbabilityValue$sample38();
 	}
 
 	@Override
@@ -590,7 +590,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample22();
-		logProbabilityValue$sample31();
+		logProbabilityValue$sample38();
 	}
 
 	@Override
@@ -599,7 +599,7 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample22();
-		logProbabilityValue$sample31();
+		logProbabilityValue$sample38();
 	}
 
 	@Override

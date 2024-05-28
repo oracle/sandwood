@@ -19,6 +19,7 @@ import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.trees.Tree;
@@ -30,6 +31,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 public abstract class ReductionScopeBase<A extends Variable<A>> extends Id implements Scope {
 
     private final Scope scope;
+    private final BooleanVariable scopeCondition;
     public final ArrayVariable<A> array;
     public final IntVariable start;
     public final IntVariable end;
@@ -45,6 +47,7 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         i = rs.i;
         j = rs.j;
         returnVar = rs.returnVar;
+        scopeCondition = rs.getScopeCondition();
     }
     
     public ReductionScopeBase(IntVariable start, IntVariable end, ArrayVariable<A> array, Variable<A> emptyValue) {
@@ -53,6 +56,11 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         this.array = array;
         this.emptyValue = emptyValue;
         scope = ScopeStack.getCurrentScope();
+        BooleanVariable scopeCondition = scope.getScopeCondition();
+        if(scopeCondition == null)
+            this.scopeCondition = scopeCondition;
+        else
+            this.scopeCondition = start.lessThan(end).and(scopeCondition);
     }
 
     @Override
@@ -175,6 +183,11 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
     @Override
     public Scope getEnclosingScope() {
         return scope;
+    }
+
+    @Override
+    public BooleanVariable getScopeCondition() {
+        return scopeCondition;
     }
 
     @Override

@@ -71,6 +71,7 @@ public class SandwoodParser
    classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.Number.*;\n"));
    classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;\n"));
    classBuilder.add(tokenMap("\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.scopes.IfScope;\n"));
    classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;\n"));
    classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;\n"));
    classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;\n"));
@@ -2536,7 +2537,7 @@ void VariableAssignment(List<TokenMap> sb):
       VarDesc varDesc = unsetVars.peek().remove(id.source.image);
       if(varDesc==null)
           throw new SandwoodModelException("Assignment to \"" + id.source.image + "\" but this value has either " +
-              "already been assigned to in this code path, or has not been declared as an unset variable.", id.source);
+              "already been assigned to in this code path, or has not been declared as a variable.", id.source);
       else
           //Leave the name, but remove the varDesc so the test will fail in future.
           unsetVars.peek().put(id.source.image, null);
@@ -2585,7 +2586,7 @@ private void IfStatement(List<TokenMap> sb):
   cb = ")"
   {
     ifElseTokens.add(tokenMap(";\n" + indent()));
-    ifElseTokens.add(tokenMap("ifElse(guard$" + id +", () -> {\n"));
+    ifElseTokens.add(tokenMap("IfScope ifScope$" + id + " = ifElse(guard$" + id +", () -> {\n"));
     indent++;
 
     // record the set of variables available to set.
@@ -2648,7 +2649,7 @@ private void IfStatement(List<TokenMap> sb):
         //Set the mergings
         sb.add(tokenMap("\n" + indent() + (conditionalTag.isEmpty()?"":"$" + conditionalTag.peek() + ".") + assigned +
         " = ifElseAssignment(guard$" + id + ", " + "$if" + id + "." + assigned + ", " + "$else" + id + "." + assigned +
-        ", " + location(t, cb) + ");\n", t, cb));
+        ", ifScope$" + id + ", " + location(t, cb) + ");\n", t, cb));
 
         //Set the aliases
         if(conditionalTag.isEmpty()) {

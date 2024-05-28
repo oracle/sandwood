@@ -1138,10 +1138,15 @@ public class SubstituteKnownValuesTransformer extends Transformer {
      *         writing to this variable.
      */
     private TransTreeVoid nextWrittenTo(TransTreeVoid tree, VariableDescription<?> desc) {
-        // Get the parent sequential trees. Because sequential nodes merge into each
-        // other so that they are never directly embedded in each other all we don't
-        // need to look any deeper to find all the statements that can execute with
-        // the named variable in scope.
+        /*
+         * Get the parent sequential trees. Because sequential nodes merge into each other so that they are never
+         * directly embedded in each other we don't need to look any deeper to find all the statements that can execute
+         * with the named variable in scope.
+         */
+        // Return null if this initialisation is not in a sequential tree.
+        if(parents.isEmpty())
+            return null;
+        
         TransSequential ts = parents.peek();
         List<TransTreeVoid> trees = ts.getTrees();
         // A flag to say if we have passed the point that the variable is currently

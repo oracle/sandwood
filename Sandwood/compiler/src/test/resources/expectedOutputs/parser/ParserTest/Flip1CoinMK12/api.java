@@ -5,6 +5,7 @@ import static org.sandwood.compiler.dataflowGraph.Math.*;
 import static org.sandwood.compiler.dataflowGraph.Number.*;
 import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;
 
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;
@@ -46,23 +47,23 @@ public class Flip1CoinMK12 extends GeneratedAPIBuilder {
         $IfElseMods1 $if1 = new $IfElseMods1();
         $IfElseMods1 $else1 = new $IfElseMods1();
         BooleanVariable guard$1 = guard1;
-        ifElse(guard$1, () -> {
+        IfScope ifScope$1 = ifElse(guard$1, () -> {
             $if1.bias = beta(doubleVariable(1.0, location(16, 19, 16, 21)), intVariable(1, location(16, 24, 16, 24)), location(16, 14, 16, 25)).sample(location(16, 27, 16, 34));
         }, () -> {
             $IfElseMods2 $if2 = new $IfElseMods2();
             $IfElseMods2 $else2 = new $IfElseMods2();
             BooleanVariable guard$2 = guard2.lessThanEqual(intVariable(2, location(18, 22, 18, 22)), location(18, 19, 18, 20));
-            ifElse(guard$2, () -> {
+            IfScope ifScope$2 = ifElse(guard$2, () -> {
                 $if2.bias = beta(doubleVariable(1.0, location(19, 25, 19, 27)), intVariable(1, location(19, 30, 19, 30)), location(19, 20, 19, 31)).sample(location(19, 33, 19, 40)).divide(intVariable(2, location(19, 42, 19, 42)), location(19, 41, 19, 41));
 
             }, () -> {
                 $else2.bias = beta(doubleVariable(1.0, location(21, 25, 21, 27)), intVariable(1, location(21, 30, 21, 30)), location(21, 20, 21, 31)).sample(location(21, 33, 21, 40)).divide(intVariable(3, location(21, 42, 21, 42)), location(21, 41, 21, 41));
             });
-            $else1.bias = ifElseAssignment(guard$2, $if2.bias, $else2.bias, location(18, 9, 18, 23));
+            $else1.bias = ifElseAssignment(guard$2, $if2.bias, $else2.bias, ifScope$2, location(18, 9, 18, 23));
 
 
         });
-        bias = ifElseAssignment(guard$1, $if1.bias, $else1.bias, location(15, 5, 15, 14));
+        bias = ifElseAssignment(guard$1, $if1.bias, $else1.bias, ifScope$1, location(15, 5, 15, 14));
         bias.setAlias("bias");
         bias.setLocation(location(14, 12, 14, 15));
 

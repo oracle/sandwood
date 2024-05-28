@@ -5,6 +5,7 @@ import static org.sandwood.compiler.dataflowGraph.Math.*;
 import static org.sandwood.compiler.dataflowGraph.Number.*;
 import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;
 
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;
@@ -37,7 +38,7 @@ public class Vulcano2012basicDG extends GeneratedAPIBuilder {
         numTimeSteps.setLocation(location(20, 8, 20, 19));
 
         BooleanVariable guard$1 = numTimeSteps.greaterThan(intVariable(0, location(21, 22, 21, 22)), location(21, 20, 21, 20));
-        ifElse(guard$1, () -> {
+        IfScope ifScope$1 = ifElse(guard$1, () -> {
             IntVariable numProducts = avail.get(intVariable(0, location(22, 31, 22, 31)), location(22, 30, 22, 32)).length(location(22, 34, 22, 39));
             numProducts.setAlias("numProducts");
             numProducts.setLocation(location(22, 11, 22, 21));
@@ -119,7 +120,7 @@ public class Vulcano2012basicDG extends GeneratedAPIBuilder {
                     j.setAlias("j");
                     j.setLocation(location(56, 18, 56, 18));
                     BooleanVariable guard$2 = avail.get(t, location(57, 21, 57, 23)).get(j, location(57, 24, 57, 26));
-                    ifElse(guard$2, () -> {
+                    IfScope ifScope$2 = ifElse(guard$2, () -> {
                         weekly_ut.put(j, expedNorm.get(j, location(58, 40, 58, 42)), location(58, 25, 58, 42));
                     }, () -> {
                         weekly_ut.put(j, doubleVariable(0.0, location(60, 31, 60, 33)), location(60, 25, 60, 33));

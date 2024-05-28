@@ -12,11 +12,11 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	private boolean fixedFlag$sample14 = false;
 	private boolean fixedFlag$sample18 = false;
 	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample33 = false;
+	private boolean fixedFlag$sample40 = false;
 	private boolean fixedProbFlag$sample14 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample33 = false;
+	private boolean fixedProbFlag$sample40 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
@@ -25,8 +25,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$var14;
 	private double logProbability$var19;
 	private double logProbability$var20;
-	private double logProbability$var29;
-	private double logProbability$var30;
+	private double logProbability$var36;
+	private double logProbability$var37;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -57,8 +57,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Unset the fixed probability flag for sample 14 as it depends on b0.
 		fixedProbFlag$sample14 = false;
 		
-		// Unset the fixed probability flag for sample 33 as it depends on b0.
-		fixedProbFlag$sample33 = false;
+		// Unset the fixed probability flag for sample 40 as it depends on b0.
+		fixedProbFlag$sample40 = false;
 	}
 
 	// Getter for b1.
@@ -77,8 +77,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Unset the fixed probability flag for sample 18 as it depends on b1.
 		fixedProbFlag$sample18 = false;
 		
-		// Unset the fixed probability flag for sample 33 as it depends on b1.
-		fixedProbFlag$sample33 = false;
+		// Unset the fixed probability flag for sample 40 as it depends on b1.
+		fixedProbFlag$sample40 = false;
 	}
 
 	// Getter for fixedFlag$sample14.
@@ -100,11 +100,11 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Substituted "fixedFlag$sample14" with its value "cv$value".
 		fixedProbFlag$sample14 = (cv$value && fixedProbFlag$sample14);
 		
-		// Should the probability of sample 33 be set to fixed. This will only every change
+		// Should the probability of sample 40 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample14" with its value "cv$value".
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	// Getter for fixedFlag$sample18.
@@ -126,11 +126,11 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Substituted "fixedFlag$sample18" with its value "cv$value".
 		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
 		
-		// Should the probability of sample 33 be set to fixed. This will only every change
+		// Should the probability of sample 40 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample18" with its value "cv$value".
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	// Getter for fixedFlag$sample23.
@@ -152,31 +152,31 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Substituted "fixedFlag$sample23" with its value "cv$value".
 		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
 		
-		// Should the probability of sample 33 be set to fixed. This will only every change
+		// Should the probability of sample 40 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample23" with its value "cv$value".
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
-	// Getter for fixedFlag$sample33.
+	// Getter for fixedFlag$sample40.
 	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
+	public final boolean get$fixedFlag$sample40() {
+		return fixedFlag$sample40;
 	}
 
-	// Setter for fixedFlag$sample33.
+	// Setter for fixedFlag$sample40.
 	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample33 including if probabilities
+	public final void set$fixedFlag$sample40(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample40 including if probabilities
 		// need to be updated.
-		fixedFlag$sample33 = cv$value;
+		fixedFlag$sample40 = cv$value;
 		
-		// Should the probability of sample 33 be set to fixed. This will only every change
+		// Should the probability of sample 40 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample33" with its value "cv$value".
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		// Substituted "fixedFlag$sample40" with its value "cv$value".
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	// Getter for logProbability$$evidence.
@@ -237,8 +237,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Unset the fixed probability flag for sample 23 as it depends on variance.
 		fixedProbFlag$sample23 = false;
 		
-		// Unset the fixed probability flag for sample 33 as it depends on variance.
-		fixedProbFlag$sample33 = false;
+		// Unset the fixed probability flag for sample 40 as it depends on variance.
+		fixedProbFlag$sample40 = false;
 	}
 
 	// Getter for x.
@@ -270,8 +270,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 33 as it depends on y.
-		fixedProbFlag$sample33 = false;
+		// Unset the fixed probability flag for sample 40 as it depends on y.
+		fixedProbFlag$sample40 = false;
 	}
 
 	// Getter for yMeasured.
@@ -597,12 +597,12 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample33 using sampled
+	// Calculate the probability of the samples represented by sample40 using sampled
 	// values.
-	private final void logProbabilityValue$sample33() {
-		// Determine if we need to calculate the values for sample task 33 or if we should
+	private final void logProbabilityValue$sample40() {
+		// Determine if we need to calculate the values for sample task 40 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample33) {
+		if(!fixedProbFlag$sample40) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
@@ -623,7 +623,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance)))) - (Math.log(variance) * 0.5));
-			logProbability$var29 = cv$sampleAccumulator;
+			logProbability$var36 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			// 
@@ -631,7 +631,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$var30 = cv$sampleAccumulator;
+			logProbability$var37 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -657,26 +657,26 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample33 = (((fixedFlag$sample33 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample23);
+			fixedProbFlag$sample40 = (((fixedFlag$sample40 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample23);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var29 = logProbability$var30;
+			logProbability$var36 = logProbability$var37;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$y = (logProbability$y + logProbability$var30);
+			logProbability$y = (logProbability$y + logProbability$var37);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var30);
+			logProbability$$model = (logProbability$$model + logProbability$var37);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var30);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var37);
 		}
 	}
 
@@ -697,11 +697,11 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// State for the value of sigma once we find it.
 		double cv$sigmaValue = 1.0;
 		
-		// Processing random variable 29.
+		// Processing random variable 36.
 		for(int i = 0; i < noSamples; i += 1) {
-			// Processing sample task 33 of consumer random variable null.
-			// Record the value of a sample generated by a consuming sample 33 of random variable
-			// var29.
+			// Processing sample task 40 of consumer random variable null.
+			// Record the value of a sample generated by a consuming sample 40 of random variable
+			// var36.
 			// 
 			// Add the denominator squared to the sample denominator
 			// 
@@ -749,9 +749,9 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// State for the value of sigma once we find it.
 		double cv$sigmaValue = 1.0;
 		
-		// Processing random variable 29.
+		// Processing random variable 36.
 		for(int i = 0; i < noSamples; i += 1) {
-			// Processing sample task 33 of consumer random variable null.
+			// Processing sample task 40 of consumer random variable null.
 			// Variable declaration of cv$denominator moved.
 			// Declaration comment was:
 			// State for tracking the changes that happen to the sampled value between it being
@@ -762,8 +762,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			// consumed and it being produced.
 			double cv$denominator = x[i];
 			
-			// Record the value of a sample generated by a consuming sample 33 of random variable
-			// var29.
+			// Record the value of a sample generated by a consuming sample 40 of random variable
+			// var36.
 			// 
 			// Add the denominator squared to the sample denominator
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
@@ -799,18 +799,18 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Variable to record how many samples have been included in this calculation.
 		int cv$count = 0;
 		
-		// Processing random variable 29.
+		// Processing random variable 36.
 		for(int i = 0; i < noSamples; i += 1) {
-			// Processing sample task 33 of consumer random variable null.
-			// Consume sample task 33 from random variable var29.
+			// Processing sample task 40 of consumer random variable null.
+			// Consume sample task 40 from random variable var36.
 			// 
 			// The difference between the mean parameter and the value sampled from the Gaussian.
 			// 
-			// The mean parameter for Gaussian var29.
-			double cv$var29$diff = ((b0 + (b1 * x[i])) - y[i]);
+			// The mean parameter for Gaussian var36.
+			double cv$var36$diff = ((b0 + (b1 * x[i])) - y[i]);
 			
 			// Include this sample by adding the square of the difference to the sum.
-			cv$sum = (cv$sum + (cv$var29$diff * cv$var29$diff));
+			cv$sum = (cv$sum + (cv$var36$diff * cv$var36$diff));
 			
 			// Increment the number of samples in the calculation.
 			cv$count = (cv$count + 1);
@@ -849,7 +849,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33) {
+		if(!fixedFlag$sample40) {
 			for(int i = 0; i < noSamples; i += 1)
 				y[i] = (((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + b0) + (b1 * x[i]));
 		}
@@ -932,10 +932,10 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample23)
 			logProbability$var20 = 0.0;
-		logProbability$var29 = 0.0;
+		logProbability$var36 = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample33)
-			logProbability$var30 = 0.0;
+		if(!fixedProbFlag$sample40)
+			logProbability$var37 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -961,7 +961,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			logProbabilityValue$sample18();
 		if(fixedFlag$sample23)
 			logProbabilityValue$sample23();
-		logProbabilityValue$sample33();
+		logProbabilityValue$sample40();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -982,7 +982,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample23();
-		logProbabilityValue$sample33();
+		logProbabilityValue$sample40();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1002,7 +1002,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample23();
-		logProbabilityValue$sample33();
+		logProbabilityValue$sample40();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then

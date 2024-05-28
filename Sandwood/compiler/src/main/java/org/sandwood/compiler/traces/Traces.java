@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,28 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 
 public abstract class Traces {
+    public static class SplitConditionalTraces {
+        // Map from branch points -> sink points -> traces to the sink.
+        public final Map<ProducingDataflowTask<?>, Map<DataflowTaskArgDesc, Set<TraceHandle>>> sinkToConditional = new HashMap<>();
+        // Map from branch points -> source -> set of traces.
+        public final Map<DataflowTaskArgDesc, Map<SampleTask<?,?>, Set<TraceHandle>>> conditionalToSource = new HashMap<>();
+
+        public void addSinkToConditional(TraceHandle t) {
+            ProducingDataflowTask<?> sink = t.peek().task;
+            DataflowTaskArgDesc d = t.get(0);
+            Map<DataflowTaskArgDesc, Set<TraceHandle>> m = sinkToConditional.computeIfAbsent(sink,
+                    k -> new LinkedHashMap<>());
+            m.computeIfAbsent(d, k -> new LinkedHashSet<>()).add(t);
+
+            conditionalToSource.computeIfAbsent(d, k -> new LinkedHashMap<>());
+        }
+
+        public void addConditionalToSource(DataflowTaskArgDesc d, SampleTask<?,?> source, TraceHandle t) {
+            Map<SampleTask<?,?>, Set<TraceHandle>> m = conditionalToSource.get(d);
+            m.computeIfAbsent(source, k -> new LinkedHashSet<>()).add(t);
+        }
+    }
+
     // TODO make SampleTraceDesc a generic class.
     public static class SampleTraceDesc {
         public final TraceHandle traceToSampleVariable;
@@ -54,21 +77,27 @@ public abstract class Traces {
         private final SampleTask<?, ?> task;
         private final Map<Variable<?>, Set<TraceHandle>> traces = new HashMap<>();
         private final Map<Variable<?>, Set<ArrayVariable<?>>> requiredArrays = new HashMap<>();
+        private final Set<Variable<?>> observedVariables = new HashSet<>();
 
         public IntermediateDesc(SampleTask<?, ?> task) {
             this.task = task;
         }
 
-        public void addVariables(Set<Variable<?>> vs, TraceHandle h) {
+        public void addVariables(Set<Variable<?>> vs, TraceHandle h, DataflowTaskArgDesc changePoint) {
             assert (h.get(0).task == task);
-
+            
+            boolean observed = h.peek().task.getOutput().isObserved();
+            int recordObserved = 0;
+            
             // Populate a map that will be used to work out how much of the trace to copy
-            // across.
+            // across and record the index where variables start being observed. 
             Map<DataflowTask<?>, Integer> index = new HashMap<>();
             int size = h.size();
             for(int i = 0; i < size; i++) {
                 DataflowTaskArgDesc d = h.get(i);
                 index.put(d.task, i);
+                if(d == changePoint)
+                    recordObserved = i;
             }
 
             // A set used to record all arrays met.
@@ -79,7 +108,7 @@ public abstract class Traces {
                 Trace trace = new Trace();
                 ProducingDataflowTask<?> t = v.getParent();
                 Integer pos = index.get(t);
-
+                
                 // Add any puts to array tasks before the passed trace is reached
                 while(pos == null) {
                     assert (t.getType() == DFType.PUT);
@@ -89,6 +118,9 @@ public abstract class Traces {
                     t = pt.value.getParent();
                     pos = index.get(t);
                 }
+                
+                if(observed && recordObserved <= pos)
+                    observedVariables.add(v);
 
                 // copy the rest of the trace
                 for(int i = pos; i >= 0; i--) {
@@ -126,6 +158,10 @@ public abstract class Traces {
 
         public Set<ArrayVariable<?>> getRequiredArrays(Variable<?> v) {
             return requiredArrays.get(v);
+        }
+        
+        public boolean observedVariable(Variable<?> v) {
+            return observedVariables.contains(v);
         }
     }
 
@@ -250,7 +286,7 @@ public abstract class Traces {
      * @param rv
      * @return
      */
-    public abstract List<TraceHandle> getIntermediateVariableTraces(RandomVariable<?, ?> rv);
+    public abstract List<TraceHandle> getSampleVariableTraces(RandomVariable<?, ?> rv);
 
     public abstract IntermediateDesc getIntermediates(SampleTask<?, ?> sample);
 
@@ -342,6 +378,49 @@ public abstract class Traces {
      * @return A set containing all the tasks in the graph.
      */
     public abstract Set<DataflowTask<?>> getAllTasks();
+
+    /**
+     * A method to return the set of named variables that are both observed and read as arguments to random variables.
+     * 
+     * @return The set of named variables that are both observed and read as arguments to random variables.
+     */
+    public abstract Set<Variable<?>> getReadObservedVariables();
+
+    /**
+     * A method to return a set containing any traces to conditionals in which the guard is dependent on the provided
+     * SampleTask.
+     * 
+     * @param sampleTask The sample task the guard depends on.
+     * @return The set of traces to guards from the sample task.
+     */
+    public abstract Map<ProducingDataflowTask<?>, Set<TraceHandle>> getTracesToConditionals(
+            SampleTask<?, ?> sampleTask);
+
+    /**
+     * A method that returns the traces that depend on the value of a given conditional task. Currently these tasks are
+     * conditional assignment and array assignment. Array assignment is required as an array can have multiple puts.
+     * 
+     * @param task The task the trace must pass through.
+     * @return The set of traces that pass through this task, but do not go via the guard. These are split into the
+     *         trace before and after the task, and the task description for the trace.
+     */
+    public abstract SplitConditionalTraces getSplitConditionalTraces(ProducingDataflowTask<?> task);
+
+    /**
+     * Method to return a map between observed sink variables and the set of traces from observed variables to the first
+     * non deterministic conditional point.
+     * 
+     * @return The map from observed sink variables to the set of traces from non deterministic traces to the observed
+     *         sink.
+     */
+    public abstract Map<Variable<?>, Set<TraceHandle>> getObservedConditionTraces();
+
+    /**
+     * A method to get the set of model generated variables whose value is fixed by either direct or later observations.
+     * 
+     * @return The set of values whose inputs need to be constructed.
+     */
+    public abstract Set<Variable<?>> getEvidenceVariables();
 
     // Recursive method to construct the cross product of the sets in each of the
     // argument positions.

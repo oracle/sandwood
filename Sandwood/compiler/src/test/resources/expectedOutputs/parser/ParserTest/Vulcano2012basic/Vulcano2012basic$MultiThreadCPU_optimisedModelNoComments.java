@@ -13,15 +13,15 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private int[] arrivals;
 	private double denom;
 	private double[] exped;
-	private boolean fixedFlag$sample25 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedFlag$sample61 = false;
-	private boolean fixedFlag$sample86 = false;
-	private boolean fixedProbFlag$sample25 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean fixedProbFlag$sample61 = false;
-	private boolean fixedProbFlag$sample86 = false;
-	private boolean[][] guard$sample25gaussian85$global;
+	private boolean fixedFlag$sample137 = false;
+	private boolean fixedFlag$sample32 = false;
+	private boolean fixedFlag$sample77 = false;
+	private boolean fixedFlag$sample92 = false;
+	private boolean fixedProbFlag$sample137 = false;
+	private boolean fixedProbFlag$sample32 = false;
+	private boolean fixedProbFlag$sample77 = false;
+	private boolean fixedProbFlag$sample92 = false;
+	private boolean[][] guard$sample32gaussian136$global;
 	private double[] lambda;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -30,16 +30,16 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private double logProbability$denom;
 	private double logProbability$exped;
 	private double logProbability$lambda;
-	private double[] logProbability$sample25;
-	private double[] logProbability$sample61;
-	private double[][] logProbability$sample86;
+	private double[][] logProbability$sample137;
+	private double[] logProbability$sample32;
+	private double[] logProbability$sample92;
 	private double logProbability$sum;
 	private double logProbability$ut;
+	private double[][] logProbability$var132;
 	private double logProbability$var18;
-	private double logProbability$var45;
-	private double logProbability$var50;
-	private double[] logProbability$var57;
-	private double[][] logProbability$var81;
+	private double logProbability$var62;
+	private double logProbability$var74;
+	private double[] logProbability$var88;
 	private int noProducts;
 	private int s;
 	private boolean setFlag$Sales = false;
@@ -83,7 +83,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$Sales(double[][] cv$value) {
 		Sales = cv$value;
 		setFlag$Sales = true;
-		fixedProbFlag$sample86 = false;
+		fixedProbFlag$sample137 = false;
 	}
 
 	@Override
@@ -105,8 +105,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
 		setFlag$arrivals = true;
-		fixedProbFlag$sample61 = false;
-		fixedProbFlag$sample86 = false;
+		fixedProbFlag$sample92 = false;
+		fixedProbFlag$sample137 = false;
 	}
 
 	@Override
@@ -120,50 +120,50 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample25() {
-		return fixedFlag$sample25;
+	public final boolean get$fixedFlag$sample137() {
+		return fixedFlag$sample137;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample25(boolean cv$value) {
-		fixedFlag$sample25 = cv$value;
-		fixedProbFlag$sample25 = (cv$value && fixedProbFlag$sample25);
-		fixedProbFlag$sample86 = (cv$value && fixedProbFlag$sample86);
+	public final void set$fixedFlag$sample137(boolean cv$value) {
+		fixedFlag$sample137 = cv$value;
+		fixedProbFlag$sample137 = (cv$value && fixedProbFlag$sample137);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
+	public final boolean get$fixedFlag$sample32() {
+		return fixedFlag$sample32;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		fixedFlag$sample53 = cv$value;
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-		fixedProbFlag$sample61 = (cv$value && fixedProbFlag$sample61);
+	public final void set$fixedFlag$sample32(boolean cv$value) {
+		fixedFlag$sample32 = cv$value;
+		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
+		fixedProbFlag$sample137 = (cv$value && fixedProbFlag$sample137);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample61() {
-		return fixedFlag$sample61;
+	public final boolean get$fixedFlag$sample77() {
+		return fixedFlag$sample77;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample61(boolean cv$value) {
-		fixedFlag$sample61 = cv$value;
-		fixedProbFlag$sample61 = (cv$value && fixedProbFlag$sample61);
-		fixedProbFlag$sample86 = (cv$value && fixedProbFlag$sample86);
+	public final void set$fixedFlag$sample77(boolean cv$value) {
+		fixedFlag$sample77 = cv$value;
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
+		fixedProbFlag$sample92 = (cv$value && fixedProbFlag$sample92);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample86() {
-		return fixedFlag$sample86;
+	public final boolean get$fixedFlag$sample92() {
+		return fixedFlag$sample92;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample86(boolean cv$value) {
-		fixedFlag$sample86 = cv$value;
-		fixedProbFlag$sample86 = (cv$value && fixedProbFlag$sample86);
+	public final void set$fixedFlag$sample92(boolean cv$value) {
+		fixedFlag$sample92 = cv$value;
+		fixedProbFlag$sample92 = (cv$value && fixedProbFlag$sample92);
+		fixedProbFlag$sample137 = (cv$value && fixedProbFlag$sample137);
 	}
 
 	@Override
@@ -175,8 +175,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
 		setFlag$lambda = true;
-		fixedProbFlag$sample53 = false;
-		fixedProbFlag$sample61 = false;
+		fixedProbFlag$sample77 = false;
+		fixedProbFlag$sample92 = false;
 	}
 
 	@Override
@@ -258,17 +258,47 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
 		setFlag$ut = true;
-		fixedProbFlag$sample25 = false;
-		fixedProbFlag$sample86 = false;
+		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample137 = false;
 	}
 
-	private final void logProbabilityValue$sample25() {
-		if(!fixedProbFlag$sample25) {
+	private final void logProbabilityValue$sample137() {
+		if(!fixedProbFlag$sample137) {
+			double cv$accumulator = 0.0;
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+					double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - (((exped[j$var123] * Avail[t$var113][j$var123]) / denom) * arrivals[t$var113])) / 0.4472135954999579)) + 0.8047189562170501);
+					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
+					logProbability$var132[t$var113][j$var123] = cv$distributionAccumulator;
+					logProbability$sample137[t$var113][j$var123] = cv$distributionAccumulator;
+				}
+			}
+			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample137 = ((fixedFlag$sample137 && fixedFlag$sample32) && fixedFlag$sample92);
+		} else {
+			double cv$accumulator = 0.0;
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+					double cv$rvAccumulator = logProbability$sample137[t$var113][j$var123];
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var132[t$var113][j$var123] = cv$rvAccumulator;
+				}
+			}
+			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample32() {
+		if(!fixedProbFlag$sample32) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var22 = 0; var22 < noProducts; var22 += 1) {
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var22] / 3.1622776601683795)) - 1.151292546497023);
+			for(int var29 = 0; var29 < noProducts; var29 += 1) {
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var29] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
-				logProbability$sample25[var22] = cv$distributionAccumulator;
+				logProbability$sample32[var29] = cv$distributionAccumulator;
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
 				logProbability$sum = (logProbability$sum + cv$distributionAccumulator);
 				logProbability$denom = (logProbability$denom + cv$distributionAccumulator);
@@ -276,13 +306,13 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			logProbability$var18 = cv$sampleAccumulator;
 			logProbability$ut = (logProbability$ut + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample25)
+			if(fixedFlag$sample32)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample25 = fixedFlag$sample25;
+			fixedProbFlag$sample32 = fixedFlag$sample32;
 		} else {
 			double cv$rvAccumulator = 0.0;
-			for(int var22 = 0; var22 < noProducts; var22 += 1) {
-				double cv$sampleValue = logProbability$sample25[var22];
+			for(int var29 = 0; var29 < noProducts; var29 += 1) {
+				double cv$sampleValue = logProbability$sample32[var29];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				logProbability$exped = (logProbability$exped + cv$sampleValue);
 				logProbability$sum = (logProbability$sum + cv$sampleValue);
@@ -291,92 +321,62 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			logProbability$var18 = cv$rvAccumulator;
 			logProbability$ut = (logProbability$ut + cv$rvAccumulator);
 			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
-			if(fixedFlag$sample25)
+			if(fixedFlag$sample32)
 				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample53() {
-		if(!fixedProbFlag$sample53) {
+	private final void logProbabilityValue$sample77() {
+		if(!fixedProbFlag$sample77) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var49 = 0; var49 < T; var49 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGamma(lambda[var49], 10.0, 10.0));
-			logProbability$var45 = cv$sampleAccumulator;
-			logProbability$var50 = cv$sampleAccumulator;
+			for(int var73 = 0; var73 < T; var73 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGamma(lambda[var73], 10.0, 10.0));
+			logProbability$var62 = cv$sampleAccumulator;
+			logProbability$var74 = cv$sampleAccumulator;
 			logProbability$lambda = (logProbability$lambda + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample53)
+			if(fixedFlag$sample77)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample53 = fixedFlag$sample53;
+			fixedProbFlag$sample77 = fixedFlag$sample77;
 		} else {
-			logProbability$var45 = logProbability$var50;
-			logProbability$lambda = (logProbability$lambda + logProbability$var50);
-			logProbability$$model = (logProbability$$model + logProbability$var50);
-			if(fixedFlag$sample53)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var50);
+			logProbability$var62 = logProbability$var74;
+			logProbability$lambda = (logProbability$lambda + logProbability$var74);
+			logProbability$$model = (logProbability$$model + logProbability$var74);
+			if(fixedFlag$sample77)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var74);
 		}
 	}
 
-	private final void logProbabilityValue$sample61() {
-		if(!fixedProbFlag$sample61) {
+	private final void logProbabilityValue$sample92() {
+		if(!fixedProbFlag$sample92) {
 			double cv$accumulator = 0.0;
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityPoisson(arrivals[t$var55], lambda[t$var55]);
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityPoisson(arrivals[t$var86], lambda[t$var86]);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var57[t$var55] = cv$distributionAccumulator;
-				logProbability$sample61[t$var55] = cv$distributionAccumulator;
+				logProbability$var88[t$var86] = cv$distributionAccumulator;
+				logProbability$sample92[t$var86] = cv$distributionAccumulator;
 			}
 			logProbability$arrivals = (logProbability$arrivals + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample61)
+			if(fixedFlag$sample92)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedFlag$sample53);
+			fixedProbFlag$sample92 = (fixedFlag$sample92 && fixedFlag$sample77);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-				double cv$rvAccumulator = logProbability$sample61[t$var55];
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+				double cv$rvAccumulator = logProbability$sample92[t$var86];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var57[t$var55] = cv$rvAccumulator;
+				logProbability$var88[t$var86] = cv$rvAccumulator;
 			}
 			logProbability$arrivals = (logProbability$arrivals + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample61)
+			if(fixedFlag$sample92)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample86() {
-		if(!fixedProbFlag$sample86) {
-			double cv$accumulator = 0.0;
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-					double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68])) / 0.4472135954999579)) + 0.8047189562170501);
-					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					logProbability$var81[t$var68][j$var72] = cv$distributionAccumulator;
-					logProbability$sample86[t$var68][j$var72] = cv$distributionAccumulator;
-				}
-			}
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample86 = ((fixedFlag$sample86 && fixedFlag$sample25) && fixedFlag$sample61);
-		} else {
-			double cv$accumulator = 0.0;
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-					double cv$rvAccumulator = logProbability$sample86[t$var68][j$var72];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var81[t$var68][j$var72] = cv$rvAccumulator;
-				}
-			}
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void sample25(int var22) {
-		double cv$originalValue = ut[var22];
+	private final void sample32(int var29) {
+		double cv$originalValue = ut[var29];
 		double cv$originalProbability;
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
@@ -384,85 +384,85 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-					guard$sample25gaussian85$global[t$var68][j$var72] = false;
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+					guard$sample32gaussian136$global[t$var113][j$var123] = false;
 			}
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-				guard$sample25gaussian85$global[t$var68][var22] = false;
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+				guard$sample32gaussian136$global[t$var113][var29] = false;
 			double reduceVar$sum$9 = 0.0;
-			for(int cv$reduction518Index = 0; cv$reduction518Index < var22; cv$reduction518Index += 1)
-				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
-			for(int cv$reduction518Index = (var22 + 1); cv$reduction518Index < noProducts; cv$reduction518Index += 1)
-				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
+			for(int cv$reduction825Index = 0; cv$reduction825Index < var29; cv$reduction825Index += 1)
+				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction825Index]);
+			for(int cv$reduction825Index = (var29 + 1); cv$reduction825Index < noProducts; cv$reduction825Index += 1)
+				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction825Index]);
 			reduceVar$sum$9 = (Math.exp(cv$originalValue) + reduceVar$sum$9);
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-					if(!guard$sample25gaussian85$global[t$var68][j$var72]) {
-						guard$sample25gaussian85$global[t$var68][j$var72] = true;
-						cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - (((exped[j$var72] * Avail[t$var68][j$var72]) / (reduceVar$sum$9 / s)) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+					if(!guard$sample32gaussian136$global[t$var113][j$var123]) {
+						guard$sample32gaussian136$global[t$var113][j$var123] = true;
+						cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - (((exped[j$var123] * Avail[t$var113][j$var123]) / (reduceVar$sum$9 / s)) * arrivals[t$var113])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 					}
 				}
 			}
-			double traceTempVariable$var73$7_3 = Math.exp(cv$originalValue);
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				if(!guard$sample25gaussian85$global[t$var68][var22])
-					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][var22] - (((traceTempVariable$var73$7_3 * Avail[t$var68][var22]) / denom) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+			double traceTempVariable$var124$7_3 = Math.exp(cv$originalValue);
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				if(!guard$sample32gaussian136$global[t$var113][var29])
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var113][var29] - (((traceTempVariable$var124$7_3 * Avail[t$var113][var29]) / denom) * arrivals[t$var113])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		ut[var22] = cv$proposedValue;
-		exped[var22] = Math.exp(ut[var22]);
+		ut[var29] = cv$proposedValue;
+		exped[var29] = Math.exp(ut[var29]);
 		double reduceVar$sum$8 = 0.0;
-		for(int cv$reduction461Index = 0; cv$reduction461Index < noProducts; cv$reduction461Index += 1)
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction461Index]);
+		for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction52Index]);
 		sum = reduceVar$sum$8;
 		denom = (reduceVar$sum$8 / s);
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-				guard$sample25gaussian85$global[t$var68][j$var72] = false;
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				guard$sample32gaussian136$global[t$var113][j$var123] = false;
 		}
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-			guard$sample25gaussian85$global[t$var68][var22] = false;
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+			guard$sample32gaussian136$global[t$var113][var29] = false;
 		double reduceVar$sum$9 = 0.0;
-		for(int cv$reduction518Index = 0; cv$reduction518Index < var22; cv$reduction518Index += 1)
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
-		for(int cv$reduction518Index = (var22 + 1); cv$reduction518Index < noProducts; cv$reduction518Index += 1)
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
+		for(int cv$reduction825Index = 0; cv$reduction825Index < var29; cv$reduction825Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction825Index]);
+		for(int cv$reduction825Index = (var29 + 1); cv$reduction825Index < noProducts; cv$reduction825Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction825Index]);
 		reduceVar$sum$9 = (Math.exp(cv$proposedValue) + reduceVar$sum$9);
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-				if(!guard$sample25gaussian85$global[t$var68][j$var72]) {
-					guard$sample25gaussian85$global[t$var68][j$var72] = true;
-					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - (((exped[j$var72] * Avail[t$var68][j$var72]) / (reduceVar$sum$9 / s)) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+				if(!guard$sample32gaussian136$global[t$var113][j$var123]) {
+					guard$sample32gaussian136$global[t$var113][j$var123] = true;
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - (((exped[j$var123] * Avail[t$var113][j$var123]) / (reduceVar$sum$9 / s)) * arrivals[t$var113])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 				}
 			}
 		}
-		double traceTempVariable$var73$7_3 = Math.exp(cv$proposedValue);
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-			if(!guard$sample25gaussian85$global[t$var68][var22]) {
-				guard$sample25gaussian85$global[t$var68][var22] = true;
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][var22] - (((traceTempVariable$var73$7_3 * Avail[t$var68][var22]) / denom) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+		double traceTempVariable$var124$7_3 = Math.exp(cv$proposedValue);
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+			if(!guard$sample32gaussian136$global[t$var113][var29]) {
+				guard$sample32gaussian136$global[t$var113][var29] = true;
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var113][var29] - (((traceTempVariable$var124$7_3 * Avail[t$var113][var29]) / denom) * arrivals[t$var113])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 		}
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
-			ut[var22] = cv$originalValue;
-			exped[var22] = Math.exp(ut[var22]);
+			ut[var29] = cv$originalValue;
+			exped[var29] = Math.exp(ut[var29]);
 			double reduceVar$sum$10 = 0.0;
-			for(int cv$reduction571Index = 0; cv$reduction571Index < noProducts; cv$reduction571Index += 1)
-				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction571Index]);
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction52Index]);
 			sum = reduceVar$sum$10;
 			denom = (reduceVar$sum$10 / s);
 		}
 	}
 
-	private final void sample53(int var49, int threadID$cv$var49, Rng RNG$) {
-		lambda[var49] = Conjugates.sampleConjugateGammaPoisson(RNG$, 10.0, 10.0, arrivals[var49], 1);
+	private final void sample77(int var73, int threadID$cv$var73, Rng RNG$) {
+		lambda[var73] = Conjugates.sampleConjugateGammaPoisson(RNG$, 10.0, 10.0, arrivals[var73], 1);
 	}
 
-	private final void sample61(int t$var55, int threadID$cv$t$var55, Rng RNG$) {
-		int cv$originalValue = arrivals[t$var55];
+	private final void sample92(int t$var86, int threadID$cv$t$var86, Rng RNG$) {
+		int cv$originalValue = arrivals[t$var86];
 		double cv$originalProbability;
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 1.0))
@@ -471,25 +471,25 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
 		int cv$proposedValue = (cv$originalValue + (int)cv$offset);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var55]);
-			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var55][j$var72] - (((exped[j$var72] * Avail[t$var55][j$var72]) / denom) * cv$originalValue)) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var86]);
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var86][j$var123] - (((exped[j$var123] * Avail[t$var86][j$var123]) / denom) * cv$originalValue)) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		arrivals[t$var55] = cv$proposedValue;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$proposedValue, lambda[t$var55]);
-		for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var55][j$var72] - (((exped[j$var72] * Avail[t$var55][j$var72]) / denom) * cv$proposedValue)) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+		arrivals[t$var86] = cv$proposedValue;
+		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$proposedValue, lambda[t$var86]);
+		for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var86][j$var123] - (((exped[j$var123] * Avail[t$var86][j$var123]) / denom) * cv$proposedValue)) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
-			arrivals[t$var55] = cv$originalValue;
+			arrivals[t$var86] = cv$originalValue;
 	}
 
 	@Override
 	public final void allocateScratch() {
-		int cv$max_j$var72 = 0;
+		int cv$max_j$var123 = 0;
 		if((0 < T))
-			cv$max_j$var72 = Math.max(0, noProducts);
-		guard$sample25gaussian85$global = new boolean[Math.max(0, T)][cv$max_j$var72];
+			cv$max_j$var123 = Math.max(0, noProducts);
+		guard$sample32gaussian136$global = new boolean[Math.max(0, T)][cv$max_j$var123];
 	}
 
 	@Override
@@ -503,70 +503,71 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			arrivals = new int[T];
 		if(!setFlag$Sales) {
 			Sales = new double[T][];
-			for(int var63 = 0; var63 < T; var63 += 1)
-				Sales[var63] = new double[noProducts];
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-				Sales[t$var68] = new double[noProducts];
+			for(int var101 = 0; var101 < T; var101 += 1)
+				Sales[var101] = new double[noProducts];
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+				Sales[t$var113] = new double[noProducts];
 		}
-		logProbability$sample25 = new double[noProducts];
-		logProbability$var57 = new double[T];
-		logProbability$sample61 = new double[T];
-		logProbability$var81 = new double[T][];
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-			logProbability$var81[t$var68] = new double[noProducts];
-		logProbability$sample86 = new double[T][];
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-			logProbability$sample86[t$var68] = new double[noProducts];
+		logProbability$sample32 = new double[noProducts];
+		logProbability$var88 = new double[T];
+		logProbability$sample92 = new double[T];
+		logProbability$var132 = new double[T][];
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+			logProbability$var132[t$var113] = new double[noProducts];
+		logProbability$sample137 = new double[T][];
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+			logProbability$sample137[t$var113] = new double[noProducts];
 		allocateScratch();
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample25) {
+		if(!fixedFlag$sample32) {
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							ut[var29] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$j$var28, int forEnd$j$var28, int threadID$j$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var28 = forStart$j$var28; j$var28 < forEnd$j$var28; j$var28 += 1)
-							exped[j$var28] = Math.exp(ut[j$var28]);
+				(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
+							exped[j$var42] = Math.exp(ut[j$var42]);
 				}
 			);
 			double reduceVar$sum$11 = 0.0;
-			for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1)
-				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction38Index]);
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction52Index]);
 			sum = reduceVar$sum$11;
 			denom = (reduceVar$sum$11 / s);
 		}
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample77)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
-							lambda[var49] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
+				(int forStart$var73, int forEnd$var73, int threadID$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var73 = forStart$var73; var73 < forEnd$var73; var73 += 1)
+							lambda[var73] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample92)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$t$var55, int forEnd$t$var55, int threadID$t$var55, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int t$var55 = forStart$t$var55; t$var55 < forEnd$t$var55; t$var55 += 1)
-							arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var55]);
+				(int forStart$t$var86, int forEnd$t$var86, int threadID$t$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int t$var86 = forStart$t$var86; t$var86 < forEnd$t$var86; t$var86 += 1)
+							arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var86]);
 				}
 			);
 
-		if(!fixedFlag$sample86)
+		if(!fixedFlag$sample137)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$index$t$var68, int forEnd$index$t$var68, int threadID$index$t$var68, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$t$var68 = forStart$index$t$var68; index$t$var68 < forEnd$index$t$var68; index$t$var68 += 1) {
-							int t$var68 = index$t$var68;
-							double[] weekly_sales = Sales[t$var68];
+				(int forStart$index$t$var113, int forEnd$index$t$var113, int threadID$index$t$var113, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$t$var113 = forStart$index$t$var113; index$t$var113 < forEnd$index$t$var113; index$t$var113 += 1) {
+							int t$var113 = index$t$var113;
+							int threadID$t$var113 = threadID$index$t$var113;
+							double[] weekly_sales = Sales[t$var113];
 							parallelFor(RNG$1, 0, noProducts, 1,
-								(int forStart$j$var72, int forEnd$j$var72, int threadID$j$var72, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var72 = forStart$j$var72; j$var72 < forEnd$j$var72; j$var72 += 1)
-											weekly_sales[j$var72] = ((DistributionSampling.sampleGaussian(RNG$2) * 0.4472135954999579) + (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]));
+								(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+											weekly_sales[j$var123] = ((DistributionSampling.sampleGaussian(RNG$2) * 0.4472135954999579) + (((exped[j$var123] * Avail[t$var113][j$var123]) / denom) * arrivals[t$var113]));
 								}
 							);
 						}
@@ -577,38 +578,38 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample25) {
+		if(!fixedFlag$sample32) {
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							ut[var29] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$j$var28, int forEnd$j$var28, int threadID$j$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var28 = forStart$j$var28; j$var28 < forEnd$j$var28; j$var28 += 1)
-							exped[j$var28] = Math.exp(ut[j$var28]);
+				(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
+							exped[j$var42] = Math.exp(ut[j$var42]);
 				}
 			);
 			double reduceVar$sum$13 = 0.0;
-			for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1)
-				reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction38Index]);
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+				reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction52Index]);
 			sum = reduceVar$sum$13;
 			denom = (reduceVar$sum$13 / s);
 		}
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample77)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
-							lambda[var49] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
+				(int forStart$var73, int forEnd$var73, int threadID$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var73 = forStart$var73; var73 < forEnd$var73; var73 += 1)
+							lambda[var73] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample92)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$t$var55, int forEnd$t$var55, int threadID$t$var55, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int t$var55 = forStart$t$var55; t$var55 < forEnd$t$var55; t$var55 += 1)
-							arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var55]);
+				(int forStart$t$var86, int forEnd$t$var86, int threadID$t$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int t$var86 = forStart$t$var86; t$var86 < forEnd$t$var86; t$var86 += 1)
+							arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var86]);
 				}
 			);
 
@@ -616,38 +617,38 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample25) {
+		if(!fixedFlag$sample32) {
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							ut[var29] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$j$var28, int forEnd$j$var28, int threadID$j$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var28 = forStart$j$var28; j$var28 < forEnd$j$var28; j$var28 += 1)
-							exped[j$var28] = Math.exp(ut[j$var28]);
+				(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
+							exped[j$var42] = Math.exp(ut[j$var42]);
 				}
 			);
 			double reduceVar$sum$12 = 0.0;
-			for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1)
-				reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction38Index]);
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+				reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction52Index]);
 			sum = reduceVar$sum$12;
 			denom = (reduceVar$sum$12 / s);
 		}
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample77)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
-							lambda[var49] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
+				(int forStart$var73, int forEnd$var73, int threadID$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var73 = forStart$var73; var73 < forEnd$var73; var73 += 1)
+							lambda[var73] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample92)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$t$var55, int forEnd$t$var55, int threadID$t$var55, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int t$var55 = forStart$t$var55; t$var55 < forEnd$t$var55; t$var55 += 1)
-							arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var55]);
+				(int forStart$t$var86, int forEnd$t$var86, int threadID$t$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int t$var86 = forStart$t$var86; t$var86 < forEnd$t$var86; t$var86 += 1)
+							arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var86]);
 				}
 			);
 
@@ -656,46 +657,46 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample25) {
-				for(int var22 = 0; var22 < noProducts; var22 += 1)
-					sample25(var22);
+			if(!fixedFlag$sample32) {
+				for(int var29 = 0; var29 < noProducts; var29 += 1)
+					sample32(var29);
 			}
-			if(!fixedFlag$sample53)
+			if(!fixedFlag$sample77)
 				parallelFor(RNG$, 0, T, 1,
-					(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
-								sample53(var49, threadID$var49, RNG$1);
+					(int forStart$var73, int forEnd$var73, int threadID$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var73 = forStart$var73; var73 < forEnd$var73; var73 += 1)
+								sample77(var73, threadID$var73, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample61)
+			if(!fixedFlag$sample92)
 				parallelFor(RNG$, 0, T, 1,
-					(int forStart$t$var55, int forEnd$t$var55, int threadID$t$var55, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int t$var55 = forStart$t$var55; t$var55 < forEnd$t$var55; t$var55 += 1)
-								sample61(t$var55, threadID$t$var55, RNG$1);
+					(int forStart$t$var86, int forEnd$t$var86, int threadID$t$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int t$var86 = forStart$t$var86; t$var86 < forEnd$t$var86; t$var86 += 1)
+								sample92(t$var86, threadID$t$var86, RNG$1);
 					}
 				);
 
 		} else {
-			if(!fixedFlag$sample61)
+			if(!fixedFlag$sample92)
 				parallelFor(RNG$, 0, T, 1,
-					(int forStart$t$var55, int forEnd$t$var55, int threadID$t$var55, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int t$var55 = forStart$t$var55; t$var55 < forEnd$t$var55; t$var55 += 1)
-								sample61(t$var55, threadID$t$var55, RNG$1);
+					(int forStart$t$var86, int forEnd$t$var86, int threadID$t$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int t$var86 = forStart$t$var86; t$var86 < forEnd$t$var86; t$var86 += 1)
+								sample92(t$var86, threadID$t$var86, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample53)
+			if(!fixedFlag$sample77)
 				parallelFor(RNG$, 0, T, 1,
-					(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
-								sample53(var49, threadID$var49, RNG$1);
+					(int forStart$var73, int forEnd$var73, int threadID$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var73 = forStart$var73; var73 < forEnd$var73; var73 += 1)
+								sample77(var73, threadID$var73, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample25) {
-				for(int var22 = (noProducts - 1); var22 >= 0; var22 -= 1)
-					sample25(var22);
+			if(!fixedFlag$sample32) {
+				for(int var29 = (noProducts - 1); var29 >= 0; var29 -= 1)
+					sample32(var29);
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
@@ -709,33 +710,33 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbability$$evidence = 0.0;
 		logProbability$var18 = 0.0;
 		logProbability$sum = 0.0;
-		logProbability$ut = 0.0;
 		logProbability$denom = 0.0;
 		logProbability$exped = 0.0;
-		if(!fixedProbFlag$sample25) {
-			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				logProbability$sample25[var22] = 0.0;
+		logProbability$ut = 0.0;
+		if(!fixedProbFlag$sample32) {
+			for(int var29 = 0; var29 < noProducts; var29 += 1)
+				logProbability$sample32[var29] = 0.0;
 		}
-		logProbability$var45 = 0.0;
+		logProbability$var62 = 0.0;
 		logProbability$lambda = 0.0;
-		if(!fixedProbFlag$sample53)
-			logProbability$var50 = 0.0;
-		for(int t$var55 = 0; t$var55 < T; t$var55 += 1)
-			logProbability$var57[t$var55] = 0.0;
+		if(!fixedProbFlag$sample77)
+			logProbability$var74 = 0.0;
+		for(int t$var86 = 0; t$var86 < T; t$var86 += 1)
+			logProbability$var88[t$var86] = 0.0;
 		logProbability$arrivals = 0.0;
-		if(!fixedProbFlag$sample61) {
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1)
-				logProbability$sample61[t$var55] = 0.0;
+		if(!fixedProbFlag$sample92) {
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1)
+				logProbability$sample92[t$var86] = 0.0;
 		}
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-				logProbability$var81[t$var68][j$var72] = 0.0;
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				logProbability$var132[t$var113][j$var123] = 0.0;
 		}
 		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample86) {
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-					logProbability$sample86[t$var68][j$var72] = 0.0;
+		if(!fixedProbFlag$sample137) {
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+					logProbability$sample137[t$var113][j$var123] = 0.0;
 			}
 		}
 	}
@@ -748,67 +749,67 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample25)
-			logProbabilityValue$sample25();
-		if(fixedFlag$sample53)
-			logProbabilityValue$sample53();
-		if(fixedFlag$sample61)
-			logProbabilityValue$sample61();
-		logProbabilityValue$sample86();
+		if(fixedFlag$sample32)
+			logProbabilityValue$sample32();
+		if(fixedFlag$sample77)
+			logProbabilityValue$sample77();
+		if(fixedFlag$sample92)
+			logProbabilityValue$sample92();
+		logProbabilityValue$sample137();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample25();
-		logProbabilityValue$sample53();
-		logProbabilityValue$sample61();
-		logProbabilityValue$sample86();
+		logProbabilityValue$sample32();
+		logProbabilityValue$sample77();
+		logProbabilityValue$sample92();
+		logProbabilityValue$sample137();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample25();
-		logProbabilityValue$sample53();
-		logProbabilityValue$sample61();
-		logProbabilityValue$sample86();
+		logProbabilityValue$sample32();
+		logProbabilityValue$sample77();
+		logProbabilityValue$sample92();
+		logProbabilityValue$sample137();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample25) {
+		if(!fixedFlag$sample32) {
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							ut[var29] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$j$var28, int forEnd$j$var28, int threadID$j$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var28 = forStart$j$var28; j$var28 < forEnd$j$var28; j$var28 += 1)
-							exped[j$var28] = Math.exp(ut[j$var28]);
+				(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
+							exped[j$var42] = Math.exp(ut[j$var42]);
 				}
 			);
 			double reduceVar$sum$14 = 0.0;
-			for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1)
-				reduceVar$sum$14 = (reduceVar$sum$14 + exped[cv$reduction38Index]);
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+				reduceVar$sum$14 = (reduceVar$sum$14 + exped[cv$reduction52Index]);
 			sum = reduceVar$sum$14;
 			denom = (reduceVar$sum$14 / s);
 		}
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample77)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
-							lambda[var49] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
+				(int forStart$var73, int forEnd$var73, int threadID$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var73 = forStart$var73; var73 < forEnd$var73; var73 += 1)
+							lambda[var73] = DistributionSampling.sampleGamma(RNG$1, 10.0, 10.0);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample92)
 			parallelFor(RNG$, 0, T, 1,
-				(int forStart$t$var55, int forEnd$t$var55, int threadID$t$var55, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int t$var55 = forStart$t$var55; t$var55 < forEnd$t$var55; t$var55 += 1)
-							arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var55]);
+				(int forStart$t$var86, int forEnd$t$var86, int threadID$t$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int t$var86 = forStart$t$var86; t$var86 < forEnd$t$var86; t$var86 += 1)
+							arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$1, lambda[t$var86]);
 				}
 			);
 
@@ -831,14 +832,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void setIntermediates() {
 		if(setFlag$ut) {
 			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$j$var28, int forEnd$j$var28, int threadID$j$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var28 = forStart$j$var28; j$var28 < forEnd$j$var28; j$var28 += 1)
-							exped[j$var28] = Math.exp(ut[j$var28]);
+				(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
+							exped[j$var42] = Math.exp(ut[j$var42]);
 				}
 			);
 			double reduceVar$sum$15 = 0.0;
-			for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1)
-				reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction38Index]);
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1)
+				reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction52Index]);
 			sum = reduceVar$sum$15;
 			denom = (reduceVar$sum$15 / s);
 		}

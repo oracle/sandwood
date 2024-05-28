@@ -7,73 +7,130 @@ int var6 = 1;
 int[] document = new int[var6];
 int var8 = 0;
 int var9 = 1;
-for(int var10=var8; var10 < var6; var10 += var9) {
-	document[var10] = var5;
+for(int var17=var8; var17 < var6; var17 += var9) {
+	boolean var10 = true;
+	boolean var11 = var8 >= var6;
+	int var12 = 0;
+	boolean var13 = var9 == var12;
+	boolean var14 = !var13;
+	boolean var15 = var11 && var14;
+	boolean var16 = var15 && var10;
+	document[var17] = var5;
 }
-int var12 = 0;
-documents[var12] = document;
-int var14 = 8;
-int var15 = 4;
-int[] document = new int[var15];
-int var17 = 0;
-int var18 = 1;
-for(int var19=var17; var19 < var15; var19 += var18) {
-	document[var19] = var14;
-}
-int var21 = 1;
-documents[var21] = document;
-double var23 = 0.1;
-double[] alpha = new double[noTopics];
+int var19 = 0;
+boolean var20 = true;
+documents[var19] = document;
+int var22 = 8;
+int var23 = 4;
+int[] document = new int[var23];
 int var25 = 0;
 int var26 = 1;
-for(int var27=var25; var27 < noTopics; var27 += var26) {
-	alpha[var27] = var23;
+for(int var34=var25; var34 < var23; var34 += var26) {
+	boolean var27 = true;
+	boolean var28 = var25 >= var23;
+	int var29 = 0;
+	boolean var30 = var26 == var29;
+	boolean var31 = !var30;
+	boolean var32 = var28 && var31;
+	boolean var33 = var32 && var27;
+	document[var34] = var22;
 }
-double var29 = 0.1;
+int var36 = 1;
+boolean var37 = true;
+documents[var36] = document;
+double var39 = 0.1;
+double[] alpha = new double[noTopics];
+int var41 = 0;
+int var42 = 1;
+for(int var50=var41; var50 < noTopics; var50 += var42) {
+	boolean var43 = true;
+	boolean var44 = var41 >= noTopics;
+	int var45 = 0;
+	boolean var46 = var42 == var45;
+	boolean var47 = !var46;
+	boolean var48 = var44 && var47;
+	boolean var49 = var48 && var43;
+	alpha[var50] = var39;
+}
+double var52 = 0.1;
 double[] beta = new double[noTopics];
-int var31 = 0;
-int var32 = 1;
-for(int var33=var31; var33 < noTopics; var33 += var32) {
-	beta[var33] = var29;
+int var54 = 0;
+int var55 = 1;
+for(int var63=var54; var63 < noTopics; var63 += var55) {
+	boolean var56 = true;
+	boolean var57 = var54 >= noTopics;
+	int var58 = 0;
+	boolean var59 = var55 == var58;
+	boolean var60 = !var59;
+	boolean var61 = var57 && var60;
+	boolean var62 = var61 && var56;
+	beta[var63] = var52;
 }
-Dirichlet var35 = new Dirichlet(beta);
+Dirichlet var65 = new Dirichlet(beta);
 double[][] phi = new double[noTopics][];
-int var37 = 0;
-int var38 = 1;
-for(int var39=var37; var39 < noTopics; var39 += var38) {
-	double[] var40 = var35.sample();
-	phi[var39] = var40;
+int var67 = 0;
+int var68 = 1;
+for(int var76=var67; var76 < noTopics; var76 += var68) {
+	boolean var69 = true;
+	boolean var70 = var67 >= noTopics;
+	int var71 = 0;
+	boolean var72 = var68 == var71;
+	boolean var73 = !var72;
+	boolean var74 = var70 && var73;
+	boolean var75 = var74 && var69;
+	double[] var77 = var65.sample();
+	phi[var76] = var77;
 }
-Dirichlet var42 = new Dirichlet(alpha);
-int var43 = documents.length;
-double[][] theta = new double[var43][];
-int var45 = 0;
-int var46 = 1;
-for(int var47=var45; var47 < var43; var47 += var46) {
-	double[] var48 = var42.sample();
-	theta[var47] = var48;
+Dirichlet var79 = new Dirichlet(alpha);
+int var80 = documents.length;
+double[][] theta = new double[var80][];
+int var82 = 0;
+int var83 = 1;
+for(int var91=var82; var91 < var80; var91 += var83) {
+	boolean var84 = true;
+	boolean var85 = var82 >= var80;
+	int var86 = 0;
+	boolean var87 = var83 == var86;
+	boolean var88 = !var87;
+	boolean var89 = var85 && var88;
+	boolean var90 = var89 && var84;
+	double[] var92 = var79.sample();
+	theta[var91] = var92;
 }
-int var50 = documents.length;
-int[][] w = new int[var50][];
-int var52 = 0;
-int var53 = documents.length;
-int var54 = 1;
-for(int i=var52; i < var53; i += var54) {
-	int[] var56 = documents[i];
-	int var57 = var56.length;
-	int[] t = new int[var57];
-	int var59 = 0;
-	int[] var60 = documents[i];
-	int var61 = var60.length;
-	int var62 = 1;
-	for(int j=var59; j < var61; j += var62) {
-		double[] var64 = theta[i];
-		Categorical var65 = new Categorical(var64);
-		int z = var65.sample();
-		double[] var67 = phi[z];
-		Categorical var68 = new Categorical(var67);
-		int var69 = var68.sample();
-		t[j] = var69;
+int var94 = documents.length;
+int[][] w = new int[var94][];
+int var96 = 0;
+int var97 = documents.length;
+int var98 = 1;
+for(int i=var96; i < var97; i += var98) {
+	boolean var99 = true;
+	boolean var100 = var96 >= var97;
+	int var101 = 0;
+	boolean var102 = var98 == var101;
+	boolean var103 = !var102;
+	boolean var104 = var100 && var103;
+	boolean var105 = var104 && var99;
+	int[] var107 = documents[i];
+	int var108 = var107.length;
+	int[] t = new int[var108];
+	int var110 = 0;
+	int[] var111 = documents[i];
+	int var112 = var111.length;
+	int var113 = 1;
+	for(int j=var110; j < var112; j += var113) {
+		boolean var114 = var110 >= var112;
+		int var115 = 0;
+		boolean var116 = var113 == var115;
+		boolean var117 = !var116;
+		boolean var118 = var114 && var117;
+		boolean var119 = var118 && var105;
+		double[] var121 = theta[i];
+		Categorical var122 = new Categorical(var121);
+		int z = var122.sample();
+		double[] var124 = phi[z];
+		Categorical var125 = new Categorical(var124);
+		int var126 = var125.sample();
+		t[j] = var126;
 	}
 	w[i] = t;
 }

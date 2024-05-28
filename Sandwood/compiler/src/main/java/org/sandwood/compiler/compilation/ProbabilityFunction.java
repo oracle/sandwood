@@ -56,6 +56,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.VariableNames;
@@ -63,6 +64,7 @@ import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.Traces;
 import org.sandwood.compiler.traces.Traces.IntermediateDesc;
 import org.sandwood.compiler.traces.Traces.SampleTraceDesc;
+import org.sandwood.compiler.traces.Traces.SplitConditionalTraces;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
 import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
@@ -349,7 +351,7 @@ public class ProbabilityFunction {
         // Add side effect to clear the flag if a dependency given the ability to changed
         IRTreeVoid restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
                 "Should the probability of sample " + sampleTask.id()
-                        + " be set to fixed. This will only every change the flag to false.");
+                + " be set to fixed. This will only every change the flag to false.");
         compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
         
         // Add side effect to clear the flag if a dependency is changed.
@@ -374,7 +376,7 @@ public class ProbabilityFunction {
                 // Add side effect to clear the flag if a dependency given the ability to changed
                 restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
                         "Should the probability of sample " + sampleTask.id()
-                                + " be set to fixed. This will only every change the flag to false.");
+                        + " be set to fixed. This will only every change the flag to false.");
                 compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
                 // Add side effect to clear the flag if a dependency is changed.
@@ -444,7 +446,7 @@ public class ProbabilityFunction {
         IRTreeVoid mergeResult = ifElse(
                 mergeGuard, generateValues, "Determine if we need to calculate the values for sample task "
                         + sampleTask.id() + " or if we should just use cached values.",
-                repopulateValues, "Using cached values.");
+                        repopulateValues, "Using cached values.");
 
         // And place the subtree in a void function.
         VariableDescription<?> taskName = sampleTask.getUniqueVarDesc();
@@ -452,7 +454,7 @@ public class ProbabilityFunction {
                 .createFunctionName(useDistributions ? VariableNames.logProbabilityDistributionName(taskName)
                         : VariableNames.logProbabilityValueName(taskName));
         String comment = "Calculate the probability of the samples represented by " + sampleTask.getUniqueVarDesc()
-                + (useDistributions ? " using probability distributions." : " using sampled values.");
+        + (useDistributions ? " using probability distributions." : " using sampled values.");
         SampleFunctionClass functionClass = useDistributions ? SampleFunctionClass.LOG_PROBABILITY_DISTRIBUTIONS
                 : SampleFunctionClass.LOG_PROBABILITY_VALUE;
         compilationCtx.addFunction(functionClass, sampleTask,
@@ -581,7 +583,7 @@ public class ProbabilityFunction {
                 .construct(
                         sampleTask, distributionTraces, "Look for paths between the variable and the sample task "
                                 + sampleTask.id() + " including any distribution values.",
-                        Tree.NoComment, compilationCtx);
+                                Tree.NoComment, compilationCtx);
         a = a.addConstraint(traceHandle);
 
         VariableDescription<A> sampleVariableName = VariableNames.calcVarName("sampleValue", sampleTask.getOutputType(),
@@ -610,6 +612,8 @@ public class ProbabilityFunction {
         a = a.applyAllDistributedArguments();
 
         IRTreeReturn<A> sampleValue = load(sampleVariableName);
+        VariableDescription<DoubleVariable> weightedProbability = VariableNames.calcVarName("weightedProbability",
+                VariableType.DoubleVariable, true);
         a.addTree(0, (TreeBuilderInfo info) -> {
 
             // Calculate the probability of the value in current. If this happens inside an
@@ -618,12 +622,57 @@ public class ProbabilityFunction {
                     sampleValue, true, compilationCtx);
 
             // Store the value of the function call, so the function call is only made once.
-            VariableDescription<DoubleVariable> weightedProbability = VariableNames.calcVarName("weightedProbability",
-                    VariableType.DoubleVariable, true);
             compilationCtx.addTreeToScope(sampleTaskScope,
                     initializeVariable(weightedProbability, addDD(log(info.probability), sampleProbability),
                             "Store the value of the function call, so the function call is only made once."));
+        });
 
+        // Check if any of the traces from here lead to a conditional that might not be true. If it does the current
+        // value could not be set in the model so the probability needs to be set to log(0) aka -infinity.
+        Map<ProducingDataflowTask<?>, Set<TraceHandle>> conditionalTraces = compilationCtx.traces.getTracesToConditionals(sampleTask);
+        for(ProducingDataflowTask<?> p:conditionalTraces.keySet()) {
+            //Construct a scope constructor at the conditional
+            Set<TraceHandle> ts = conditionalTraces.get(p);
+            Set<TraceHandle> subTraces = new HashSet<>();
+            for(TraceHandle t:ts)
+                subTraces.add(t.subTrace(traceHandle));
+            ScopeConstructor b = a.addConstraints(subTraces);
+
+            SplitConditionalTraces scts = compilationCtx.traces.getSplitConditionalTraces(p);
+            for(ProducingDataflowTask<?> sinkTask:scts.sinkToConditional.keySet()) {
+                Variable<?> sink = sinkTask.getOutput();
+                if(sink.isObserved()) {
+                    for(DataflowTaskArgDesc taskDesc:scts.sinkToConditional.get(sinkTask).keySet()) {
+                        if(scts.conditionalToSource.get(taskDesc).isEmpty()) {
+                            for(TraceHandle sinkToConditional:scts.sinkToConditional.get(sinkTask).get(taskDesc)) {
+                                // If this point is reached the trace is between an observed value and a constant.
+                                // Add a constraint to ensure that the observed value can be reached.
+
+                                // At this point the trace to the source will always be empty so there is no concern 
+                                // about duplicate split traces.
+                                ScopeConstructor c = b.addConstraint(sinkToConditional);
+
+                                c.addTree(2, (TreeBuilderInfo info) -> {
+                                    IRTreeReturn<?> current = sink.getForwardIR(compilationCtx);
+                                    int index = sinkToConditional.size() - 1;
+                                    BackTraceInfo backTraceInfo = new BackTraceInfo();
+                                    while(index >= 0) {
+                                        DataflowTaskArgDesc currentDesc = sinkToConditional.get(index--);
+                                        current = currentDesc.task.getInverseIR(currentDesc.argPos, current, backTraceInfo,
+                                                compilationCtx);
+                                    }
+                                    
+                                    constructObservationTest(weightedProbability, taskDesc, current, compilationCtx);
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Merge the resulting weighted probability into the accumulators.
+        a.addTree(0, (TreeBuilderInfo info) -> {
             compilationCtx.addTreeToScope(sampleTaskScope,
                     TreeUtils.lseAdd(load(disAccumulator), load(weightedProbability), disAccumulator,
                             "Add the probability of this sample task to the distribution accumulator."));
@@ -643,6 +692,17 @@ public class ProbabilityFunction {
         compilationCtx.addTreeToScope(sampleTaskScope, normalise);
 
         return load(disAccumulator);
+    }
+
+    private static <A extends ScalarVariable<A>, B extends ScalarVariable<B>> void constructObservationTest(VariableDescription<DoubleVariable> varDesc,
+            DataflowTaskArgDesc taskDesc, IRTreeReturn<?> observedValue, CompilationContext compilationCtx) {
+        A inputVar = (A)taskDesc.task.getInput(taskDesc.argPos);
+        IRTreeReturn<A> expected = inputVar.getForwardIR(compilationCtx);
+        IRTreeReturn<BooleanVariable> guard = IRTree.negateBoolean(IRTree.eq((IRTreeReturn<B>)observedValue, expected));
+        IRTreeVoid condition = IRTree.ifElse(guard,
+                IRTree.store(varDesc, IRTree.constant(Double.NEGATIVE_INFINITY), Tree.NoComment),
+                "If the observed value does not match the provided value the probability of generating this random variable is zero");
+        compilationCtx.addTreeToScope(taskDesc.task.scope(), condition);
     }
 
     private static Set<Set<TraceHandle>> findDistributionTraces(SampleTask<?, ?> sTask,

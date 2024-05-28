@@ -9,33 +9,34 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[][] current_metric_mean;
 	private double[][] current_metric_valid_bias;
 	private double[][] current_metric_var;
-	private double[][] cv$distributionAccumulator$var56;
-	private double[] cv$var21$countGlobal;
-	private double[][] cv$var27$countGlobal;
-	private double[][] cv$var44$stateProbabilityGlobal;
-	private double[][] cv$var57$stateProbabilityGlobal;
-	private double[][] distribution$sample50;
-	private double[][][] distribution$sample63;
-	private boolean fixedFlag$sample111 = false;
-	private boolean fixedFlag$sample126 = false;
-	private boolean fixedFlag$sample161 = false;
-	private boolean fixedFlag$sample173 = false;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample30 = false;
-	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample63 = false;
-	private boolean fixedFlag$sample96 = false;
-	private boolean fixedProbFlag$sample111 = false;
-	private boolean fixedProbFlag$sample126 = false;
-	private boolean fixedProbFlag$sample161 = false;
-	private boolean fixedProbFlag$sample173 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample30 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample63 = false;
-	private boolean fixedProbFlag$sample96 = false;
-	private boolean[][][][] guard$sample50gaussian172$global;
-	private boolean[][][][] guard$sample63gaussian172$global;
+	private double[][] cv$distributionAccumulator$var83;
+	private double[][] cv$var245$stateProbabilityGlobal;
+	private double[] cv$var28$countGlobal;
+	private double[][] cv$var41$countGlobal;
+	private double[][] cv$var65$stateProbabilityGlobal;
+	private double[][] cv$var84$stateProbabilityGlobal;
+	private double[][] distribution$sample71;
+	private double[][][] distribution$sample90;
+	private boolean fixedFlag$sample150 = false;
+	private boolean fixedFlag$sample178 = false;
+	private boolean fixedFlag$sample206 = false;
+	private boolean fixedFlag$sample260 = false;
+	private boolean fixedFlag$sample275 = false;
+	private boolean fixedFlag$sample31 = false;
+	private boolean fixedFlag$sample44 = false;
+	private boolean fixedFlag$sample71 = false;
+	private boolean fixedFlag$sample90 = false;
+	private boolean fixedProbFlag$sample150 = false;
+	private boolean fixedProbFlag$sample178 = false;
+	private boolean fixedProbFlag$sample206 = false;
+	private boolean fixedProbFlag$sample260 = false;
+	private boolean fixedProbFlag$sample275 = false;
+	private boolean fixedProbFlag$sample31 = false;
+	private boolean fixedProbFlag$sample44 = false;
+	private boolean fixedProbFlag$sample71 = false;
+	private boolean fixedProbFlag$sample90 = false;
+	private boolean[][][][] guard$sample71gaussian274$global;
+	private boolean[][][][] guard$sample90gaussian274$global;
 	private double[] initialStateDistribution;
 	private int[][] length$metric;
 	private double logProbability$$evidence;
@@ -48,24 +49,24 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$metric_g;
 	private double logProbability$metric_valid_g;
 	private double logProbability$metric_valid_inner;
-	private double[][][] logProbability$sample161;
-	private double[][][] logProbability$sample173;
-	private double[] logProbability$sample50;
-	private double[][] logProbability$sample63;
+	private double[][][] logProbability$sample260;
+	private double[][][] logProbability$sample275;
+	private double[] logProbability$sample71;
+	private double[][] logProbability$sample90;
 	private double logProbability$st;
-	private double logProbability$var101;
-	private double logProbability$var106;
-	private double logProbability$var115;
-	private double[][][] logProbability$var145;
-	private double[][][] logProbability$var155;
-	private double logProbability$var20;
-	private double logProbability$var22;
+	private double logProbability$var119;
+	private double logProbability$var141;
+	private double logProbability$var146;
+	private double logProbability$var168;
+	private double logProbability$var173;
+	private double logProbability$var195;
+	private double[][][] logProbability$var244;
+	private double[][][] logProbability$var257;
 	private double logProbability$var27;
-	private double[] logProbability$var43;
-	private double[][] logProbability$var56;
-	private double logProbability$var78;
-	private double logProbability$var87;
-	private double logProbability$var92;
+	private double logProbability$var29;
+	private double logProbability$var41;
+	private double[] logProbability$var64;
+	private double[][] logProbability$var83;
 	private double[][] m;
 	private int max_metric;
 	private double[][][] metric;
@@ -100,8 +101,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$current_metric_mean(double[][] cv$value) {
 		current_metric_mean = cv$value;
 		setFlag$current_metric_mean = true;
-		fixedProbFlag$sample96 = false;
-		fixedProbFlag$sample173 = false;
+		fixedProbFlag$sample150 = false;
+		fixedProbFlag$sample275 = false;
 	}
 
 	@Override
@@ -113,8 +114,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$current_metric_valid_bias(double[][] cv$value) {
 		current_metric_valid_bias = cv$value;
 		setFlag$current_metric_valid_bias = true;
-		fixedProbFlag$sample126 = false;
-		fixedProbFlag$sample161 = false;
+		fixedProbFlag$sample206 = false;
+		fixedProbFlag$sample260 = false;
 	}
 
 	@Override
@@ -126,117 +127,117 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$current_metric_var(double[][] cv$value) {
 		current_metric_var = cv$value;
 		setFlag$current_metric_var = true;
-		fixedProbFlag$sample111 = false;
-		fixedProbFlag$sample173 = false;
+		fixedProbFlag$sample178 = false;
+		fixedProbFlag$sample275 = false;
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample111() {
-		return fixedFlag$sample111;
+	public final boolean get$fixedFlag$sample150() {
+		return fixedFlag$sample150;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample111(boolean cv$value) {
-		fixedFlag$sample111 = cv$value;
-		fixedProbFlag$sample111 = (cv$value && fixedProbFlag$sample111);
-		fixedProbFlag$sample173 = (cv$value && fixedProbFlag$sample173);
+	public final void set$fixedFlag$sample150(boolean cv$value) {
+		fixedFlag$sample150 = cv$value;
+		fixedProbFlag$sample150 = (cv$value && fixedProbFlag$sample150);
+		fixedProbFlag$sample275 = (cv$value && fixedProbFlag$sample275);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample126() {
-		return fixedFlag$sample126;
+	public final boolean get$fixedFlag$sample178() {
+		return fixedFlag$sample178;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample126(boolean cv$value) {
-		fixedFlag$sample126 = cv$value;
-		fixedProbFlag$sample126 = (cv$value && fixedProbFlag$sample126);
-		fixedProbFlag$sample161 = (cv$value && fixedProbFlag$sample161);
+	public final void set$fixedFlag$sample178(boolean cv$value) {
+		fixedFlag$sample178 = cv$value;
+		fixedProbFlag$sample178 = (cv$value && fixedProbFlag$sample178);
+		fixedProbFlag$sample275 = (cv$value && fixedProbFlag$sample275);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample161() {
-		return fixedFlag$sample161;
+	public final boolean get$fixedFlag$sample206() {
+		return fixedFlag$sample206;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample161(boolean cv$value) {
-		fixedFlag$sample161 = cv$value;
-		fixedProbFlag$sample161 = (cv$value && fixedProbFlag$sample161);
+	public final void set$fixedFlag$sample206(boolean cv$value) {
+		fixedFlag$sample206 = cv$value;
+		fixedProbFlag$sample206 = (cv$value && fixedProbFlag$sample206);
+		fixedProbFlag$sample260 = (cv$value && fixedProbFlag$sample260);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample173() {
-		return fixedFlag$sample173;
+	public final boolean get$fixedFlag$sample260() {
+		return fixedFlag$sample260;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample173(boolean cv$value) {
-		fixedFlag$sample173 = cv$value;
-		fixedProbFlag$sample173 = (cv$value && fixedProbFlag$sample173);
+	public final void set$fixedFlag$sample260(boolean cv$value) {
+		fixedFlag$sample260 = cv$value;
+		fixedProbFlag$sample260 = (cv$value && fixedProbFlag$sample260);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample24() {
-		return fixedFlag$sample24;
+	public final boolean get$fixedFlag$sample275() {
+		return fixedFlag$sample275;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
-		fixedFlag$sample24 = cv$value;
-		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
-		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
+	public final void set$fixedFlag$sample275(boolean cv$value) {
+		fixedFlag$sample275 = cv$value;
+		fixedProbFlag$sample275 = (cv$value && fixedProbFlag$sample275);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample30() {
-		return fixedFlag$sample30;
+	public final boolean get$fixedFlag$sample31() {
+		return fixedFlag$sample31;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample30(boolean cv$value) {
-		fixedFlag$sample30 = cv$value;
-		fixedProbFlag$sample30 = (cv$value && fixedProbFlag$sample30);
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+	public final void set$fixedFlag$sample31(boolean cv$value) {
+		fixedFlag$sample31 = cv$value;
+		fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
+		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample50() {
-		return fixedFlag$sample50;
+	public final boolean get$fixedFlag$sample44() {
+		return fixedFlag$sample44;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample50(boolean cv$value) {
-		fixedFlag$sample50 = cv$value;
-		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
-		fixedProbFlag$sample161 = (cv$value && fixedProbFlag$sample161);
-		fixedProbFlag$sample173 = (cv$value && fixedProbFlag$sample173);
+	public final void set$fixedFlag$sample44(boolean cv$value) {
+		fixedFlag$sample44 = cv$value;
+		fixedProbFlag$sample44 = (cv$value && fixedProbFlag$sample44);
+		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample63() {
-		return fixedFlag$sample63;
+	public final boolean get$fixedFlag$sample71() {
+		return fixedFlag$sample71;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample63(boolean cv$value) {
-		fixedFlag$sample63 = cv$value;
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
-		fixedProbFlag$sample161 = (cv$value && fixedProbFlag$sample161);
-		fixedProbFlag$sample173 = (cv$value && fixedProbFlag$sample173);
+	public final void set$fixedFlag$sample71(boolean cv$value) {
+		fixedFlag$sample71 = cv$value;
+		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
+		fixedProbFlag$sample260 = (cv$value && fixedProbFlag$sample260);
+		fixedProbFlag$sample275 = (cv$value && fixedProbFlag$sample275);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample96() {
-		return fixedFlag$sample96;
+	public final boolean get$fixedFlag$sample90() {
+		return fixedFlag$sample90;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample96(boolean cv$value) {
-		fixedFlag$sample96 = cv$value;
-		fixedProbFlag$sample96 = (cv$value && fixedProbFlag$sample96);
-		fixedProbFlag$sample173 = (cv$value && fixedProbFlag$sample173);
+	public final void set$fixedFlag$sample90(boolean cv$value) {
+		fixedFlag$sample90 = cv$value;
+		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
+		fixedProbFlag$sample260 = (cv$value && fixedProbFlag$sample260);
+		fixedProbFlag$sample275 = (cv$value && fixedProbFlag$sample275);
 	}
 
 	@Override
@@ -248,8 +249,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$initialStateDistribution(double[] cv$value) {
 		initialStateDistribution = cv$value;
 		setFlag$initialStateDistribution = true;
-		fixedProbFlag$sample24 = false;
-		fixedProbFlag$sample50 = false;
+		fixedProbFlag$sample31 = false;
+		fixedProbFlag$sample71 = false;
 	}
 
 	@Override
@@ -321,8 +322,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
-		fixedProbFlag$sample30 = false;
-		fixedProbFlag$sample63 = false;
+		fixedProbFlag$sample44 = false;
+		fixedProbFlag$sample90 = false;
 	}
 
 	@Override
@@ -354,7 +355,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$metric_g(double[][][] cv$value) {
 		metric_g = cv$value;
 		setFlag$metric_g = true;
-		fixedProbFlag$sample173 = false;
+		fixedProbFlag$sample275 = false;
 	}
 
 	@Override
@@ -407,10 +408,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
-		fixedProbFlag$sample50 = false;
-		fixedProbFlag$sample63 = false;
-		fixedProbFlag$sample161 = false;
-		fixedProbFlag$sample173 = false;
+		fixedProbFlag$sample71 = false;
+		fixedProbFlag$sample90 = false;
+		fixedProbFlag$sample260 = false;
+		fixedProbFlag$sample275 = false;
 	}
 
 	@Override
@@ -418,26 +419,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		return v;
 	}
 
-	private final void logProbabilityDistribution$sample161() {
-		if(!fixedProbFlag$sample161) {
+	private final void logProbabilityDistribution$sample260() {
+		if(!fixedProbFlag$sample260) {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						double cv$probabilityReached = 0.0;
-						boolean cv$sampleValue = metric_valid_g[sample$var120][server][timeStep$var140];
-						if((0 == timeStep$var140)) {
-							if(fixedFlag$sample50) {
-								int var114 = st[sample$var120][0];
-								if(((0 <= var114) && (var114 < noStates))) {
-									cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var120][0]]);
+						boolean cv$sampleValue = metric_valid_g[sample$var207][server][timeStep$var239];
+						if((0 == timeStep$var239)) {
+							if(fixedFlag$sample71) {
+								int var194 = st[sample$var207][0];
+								if(((0 <= var194) && (var194 < noStates))) {
+									cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var207][0]]);
 									cv$probabilityReached = 1.0;
 								}
 							} else {
-								for(int index$sample50$4 = 0; index$sample50$4 < noStates; index$sample50$4 += 1) {
-									double cv$probabilitySample50Value5 = distribution$sample50[sample$var120][index$sample50$4];
-									double cv$weightedProbability = (Math.log(cv$probabilitySample50Value5) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][index$sample50$4]));
+								for(int index$sample71$4 = 0; index$sample71$4 < noStates; index$sample71$4 += 1) {
+									double cv$probabilitySample71Value5 = distribution$sample71[sample$var207][index$sample71$4];
+									double cv$weightedProbability = (Math.log(cv$probabilitySample71Value5) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][index$sample71$4]));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -446,15 +447,15 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										else
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 									}
-									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample50Value5);
+									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample71Value5);
 								}
 							}
 						}
-						if((1 <= timeStep$var140)) {
-							if(fixedFlag$sample63) {
-								int var114 = st[sample$var120][timeStep$var140];
-								if(((0 <= var114) && (var114 < noStates))) {
-									double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var120][timeStep$var140]]);
+						if((1 <= timeStep$var239)) {
+							if(fixedFlag$sample90) {
+								int var194 = st[sample$var207][timeStep$var239];
+								if(((0 <= var194) && (var194 < noStates))) {
+									double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var207][timeStep$var239]]);
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -466,9 +467,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									cv$probabilityReached = (cv$probabilityReached + 1.0);
 								}
 							} else {
-								for(int index$sample63$13 = 0; index$sample63$13 < noStates; index$sample63$13 += 1) {
-									double cv$probabilitySample63Value14 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][index$sample63$13];
-									double cv$weightedProbability = (Math.log(cv$probabilitySample63Value14) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][index$sample63$13]));
+								for(int index$sample90$13 = 0; index$sample90$13 < noStates; index$sample90$13 += 1) {
+									double cv$probabilitySample90Value14 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][index$sample90$13];
+									double cv$weightedProbability = (Math.log(cv$probabilitySample90Value14) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][index$sample90$13]));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -477,7 +478,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										else
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 									}
-									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample63Value14);
+									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample90Value14);
 								}
 							}
 						}
@@ -486,25 +487,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						else
 							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var145[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
-						logProbability$sample161[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
+						logProbability$var244[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
+						logProbability$sample260[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
+						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample161 = (((fixedFlag$sample161 && fixedFlag$sample50) && fixedFlag$sample63) && fixedFlag$sample126);
+			fixedProbFlag$sample260 = (((fixedFlag$sample260 && fixedFlag$sample71) && fixedFlag$sample90) && fixedFlag$sample206);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						double cv$sampleValue = logProbability$sample161[sample$var120][server][timeStep$var140];
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						double cv$sampleValue = logProbability$sample260[sample$var207][server][timeStep$var239];
 						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var145[sample$var120][server][timeStep$var140] = cv$sampleValue;
+						logProbability$var244[sample$var207][server][timeStep$var239] = cv$sampleValue;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 					}
 				}
 			}
@@ -514,31 +517,31 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	private final void logProbabilityDistribution$sample173() {
-		if(!fixedProbFlag$sample173) {
+	private final void logProbabilityDistribution$sample275() {
+		if(!fixedProbFlag$sample275) {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						if(metric_valid_g[sample$var120][server][timeStep$var140]) {
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						if(metric_valid_g[sample$var207][server][timeStep$var239]) {
 							double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 							double cv$probabilityReached = 0.0;
-							double cv$sampleValue = metric_g[sample$var120][server][timeStep$var140];
-							if(((0 == timeStep$var140) && metric_valid_g[sample$var120][server][0])) {
-								if(fixedFlag$sample50) {
-									if((0 <= st[sample$var120][0])) {
-										int var86 = st[sample$var120][0];
-										if(((0 <= var86) && (var86 < noStates))) {
-											double var154 = current_metric_var[server][st[sample$var120][0]];
-											cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var120][0]]) / Math.sqrt(var154))) - (Math.log(var154) * 0.5));
+							double cv$sampleValue = metric_g[sample$var207][server][timeStep$var239];
+							if(((0 == timeStep$var239) && metric_valid_g[sample$var207][server][0])) {
+								if(fixedFlag$sample71) {
+									if((0 <= st[sample$var207][0])) {
+										int var140 = st[sample$var207][0];
+										if(((0 <= var140) && (var140 < noStates))) {
+											double var256 = current_metric_var[server][st[sample$var207][0]];
+											cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var207][0]]) / Math.sqrt(var256))) - (Math.log(var256) * 0.5));
 											cv$probabilityReached = 1.0;
 										}
 									}
 								} else {
-									for(int index$sample50$4 = 0; index$sample50$4 < noStates; index$sample50$4 += 1) {
-										double cv$probabilitySample50Value5 = distribution$sample50[sample$var120][index$sample50$4];
-										double var154 = current_metric_var[server][index$sample50$4];
-										double cv$weightedProbability = ((Math.log(cv$probabilitySample50Value5) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample50$4]) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
+									for(int index$sample71$4 = 0; index$sample71$4 < noStates; index$sample71$4 += 1) {
+										double cv$probabilitySample71Value5 = distribution$sample71[sample$var207][index$sample71$4];
+										double var256 = current_metric_var[server][index$sample71$4];
+										double cv$weightedProbability = ((Math.log(cv$probabilitySample71Value5) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample71$4]) / Math.sqrt(var256)))) - (Math.log(var256) * 0.5));
 										if((cv$weightedProbability < cv$distributionAccumulator))
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 										else {
@@ -547,17 +550,17 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											else
 												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 										}
-										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample50Value5);
+										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample71Value5);
 									}
 								}
 							}
-							if((1 <= timeStep$var140)) {
-								if(fixedFlag$sample63) {
-									if((0 <= st[sample$var120][timeStep$var140])) {
-										int var86 = st[sample$var120][timeStep$var140];
-										if(((0 <= var86) && (var86 < noStates))) {
-											double var154 = current_metric_var[server][st[sample$var120][timeStep$var140]];
-											double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var120][timeStep$var140]]) / Math.sqrt(var154))) - (Math.log(var154) * 0.5));
+							if((1 <= timeStep$var239)) {
+								if(fixedFlag$sample90) {
+									if((0 <= st[sample$var207][timeStep$var239])) {
+										int var140 = st[sample$var207][timeStep$var239];
+										if(((0 <= var140) && (var140 < noStates))) {
+											double var256 = current_metric_var[server][st[sample$var207][timeStep$var239]];
+											double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var207][timeStep$var239]]) / Math.sqrt(var256))) - (Math.log(var256) * 0.5));
 											if((cv$weightedProbability < cv$distributionAccumulator))
 												cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 											else {
@@ -570,10 +573,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										}
 									}
 								} else {
-									for(int index$sample63$49 = 0; index$sample63$49 < noStates; index$sample63$49 += 1) {
-										double cv$probabilitySample63Value50 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][index$sample63$49];
-										double var154 = current_metric_var[server][index$sample63$49];
-										double cv$weightedProbability = ((Math.log(cv$probabilitySample63Value50) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample63$49]) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
+									for(int index$sample90$49 = 0; index$sample90$49 < noStates; index$sample90$49 += 1) {
+										double cv$probabilitySample90Value50 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][index$sample90$49];
+										double var256 = current_metric_var[server][index$sample90$49];
+										double cv$weightedProbability = ((Math.log(cv$probabilitySample90Value50) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample90$49]) / Math.sqrt(var256)))) - (Math.log(var256) * 0.5));
 										if((cv$weightedProbability < cv$distributionAccumulator))
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 										else {
@@ -582,7 +585,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											else
 												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 										}
-										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample63Value50);
+										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample90Value50);
 									}
 								}
 							}
@@ -591,8 +594,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							else
 								cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 							cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-							logProbability$var155[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
-							logProbability$sample173[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
+							logProbability$var257[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
+							logProbability$sample275[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
 						}
 					}
 				}
@@ -600,16 +603,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample173 = ((((fixedFlag$sample173 && fixedFlag$sample50) && fixedFlag$sample63) && fixedFlag$sample96) && fixedFlag$sample111);
+			fixedProbFlag$sample275 = ((((fixedFlag$sample275 && fixedFlag$sample71) && fixedFlag$sample90) && fixedFlag$sample150) && fixedFlag$sample178);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						if(metric_valid_g[sample$var120][server][timeStep$var140]) {
-							double cv$rvAccumulator = logProbability$sample173[sample$var120][server][timeStep$var140];
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						if(metric_valid_g[sample$var207][server][timeStep$var239]) {
+							double cv$rvAccumulator = logProbability$sample275[sample$var207][server][timeStep$var239];
 							cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-							logProbability$var155[sample$var120][server][timeStep$var140] = cv$rvAccumulator;
+							logProbability$var257[sample$var207][server][timeStep$var239] = cv$rvAccumulator;
 						}
 					}
 				}
@@ -620,59 +623,59 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	private final void logProbabilityDistribution$sample50() {
-		if(!fixedProbFlag$sample50) {
-			if(fixedFlag$sample50) {
+	private final void logProbabilityDistribution$sample71() {
+		if(!fixedProbFlag$sample71) {
+			if(fixedFlag$sample71) {
 				double cv$accumulator = 0.0;
-				for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-					int cv$sampleValue = st[sample$var32][0];
+				for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+					int cv$sampleValue = st[sample$var53][0];
 					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < initialStateDistribution.length))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					logProbability$var43[sample$var32] = cv$distributionAccumulator;
-					logProbability$sample50[sample$var32] = cv$distributionAccumulator;
+					logProbability$var64[sample$var53] = cv$distributionAccumulator;
+					logProbability$sample71[sample$var53] = cv$distributionAccumulator;
 				}
 				logProbability$st = (logProbability$st + cv$accumulator);
 				logProbability$$model = (logProbability$$model + cv$accumulator);
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				fixedProbFlag$sample50 = fixedFlag$sample24;
+				fixedProbFlag$sample71 = fixedFlag$sample31;
 			}
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				double cv$rvAccumulator = logProbability$sample50[sample$var32];
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				double cv$rvAccumulator = logProbability$sample71[sample$var53];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var43[sample$var32] = cv$rvAccumulator;
+				logProbability$var64[sample$var53] = cv$rvAccumulator;
 			}
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample71)
 				logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample71)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityDistribution$sample63() {
-		if(!fixedProbFlag$sample63) {
-			if(fixedFlag$sample63) {
+	private final void logProbabilityDistribution$sample90() {
+		if(!fixedProbFlag$sample90) {
+			if(fixedFlag$sample90) {
 				double cv$accumulator = 0.0;
-				for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-					for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
+				for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+					for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						double cv$probabilityReached = 0.0;
-						int cv$sampleValue = st[sample$var32][timeStep$var49];
-						if((1 == timeStep$var49)) {
-							if(fixedFlag$sample50) {
-								int var26 = st[sample$var32][0];
-								if(((0 <= var26) && (var26 < noStates))) {
-									double[] var55 = m[st[sample$var32][0]];
-									cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+						int cv$sampleValue = st[sample$var53][timeStep$var76];
+						if((1 == timeStep$var76)) {
+							if(fixedFlag$sample71) {
+								int var40 = st[sample$var53][0];
+								if(((0 <= var40) && (var40 < noStates))) {
+									double[] var82 = m[st[sample$var53][0]];
+									cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var82.length))?Math.log(var82[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 									cv$probabilityReached = 1.0;
 								}
 							} else {
-								for(int index$sample50$6 = 0; index$sample50$6 < noStates; index$sample50$6 += 1) {
-									double cv$probabilitySample50Value7 = distribution$sample50[sample$var32][index$sample50$6];
-									double[] var55 = m[index$sample50$6];
-									double cv$weightedProbability = (Math.log(cv$probabilitySample50Value7) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								for(int index$sample71$6 = 0; index$sample71$6 < noStates; index$sample71$6 += 1) {
+									double cv$probabilitySample71Value7 = distribution$sample71[sample$var53][index$sample71$6];
+									double[] var82 = m[index$sample71$6];
+									double cv$weightedProbability = (Math.log(cv$probabilitySample71Value7) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var82.length))?Math.log(var82[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -681,15 +684,15 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										else
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 									}
-									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample50Value7);
+									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample71Value7);
 								}
 							}
 						}
-						if((2 <= timeStep$var49)) {
-							int var26 = st[sample$var32][(timeStep$var49 - 1)];
-							if(((0 <= var26) && (var26 < noStates))) {
-								double[] var55 = m[st[sample$var32][(timeStep$var49 - 1)]];
-								double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+						if((2 <= timeStep$var76)) {
+							int var40 = st[sample$var53][(timeStep$var76 - 1)];
+							if(((0 <= var40) && (var40 < noStates))) {
+								double[] var82 = m[st[sample$var53][(timeStep$var76 - 1)]];
+								double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var82.length))?Math.log(var82[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -706,105 +709,132 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						else
 							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var56[sample$var32][(timeStep$var49 - 1)] = cv$distributionAccumulator;
-						logProbability$sample63[sample$var32][(timeStep$var49 - 1)] = cv$distributionAccumulator;
+						logProbability$var83[sample$var53][(timeStep$var76 - 1)] = cv$distributionAccumulator;
+						logProbability$sample90[sample$var53][(timeStep$var76 - 1)] = cv$distributionAccumulator;
 					}
 				}
 				logProbability$st = (logProbability$st + cv$accumulator);
 				logProbability$$model = (logProbability$$model + cv$accumulator);
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				fixedProbFlag$sample63 = (fixedFlag$sample30 && fixedFlag$sample50);
+				fixedProbFlag$sample90 = (fixedFlag$sample44 && fixedFlag$sample71);
 			}
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-					double cv$rvAccumulator = logProbability$sample63[sample$var32][(timeStep$var49 - 1)];
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
+					double cv$rvAccumulator = logProbability$sample90[sample$var53][(timeStep$var76 - 1)];
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var56[sample$var32][(timeStep$var49 - 1)] = cv$rvAccumulator;
+					logProbability$var83[sample$var53][(timeStep$var76 - 1)] = cv$rvAccumulator;
 				}
 			}
-			if(fixedFlag$sample63)
+			if(fixedFlag$sample90)
 				logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample63)
+			if(fixedFlag$sample90)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample111() {
-		if(!fixedProbFlag$sample111) {
+	private final void logProbabilityValue$sample150() {
+		if(!fixedProbFlag$sample150) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var96 = 0; var96 < noServers; var96 += 1) {
-				for(int var100 = 0; var100 < noStates; var100 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(current_metric_var[var96][var100], 1.0, 1.0));
+			for(int var130 = 0; var130 < noServers; var130 += 1) {
+				for(int var140 = 0; var140 < noStates; var140 += 1) {
+					double cv$sampleValue = current_metric_mean[var130][var140];
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY));
+				}
 			}
-			logProbability$var92 = cv$sampleAccumulator;
-			logProbability$var101 = cv$sampleAccumulator;
+			logProbability$var119 = cv$sampleAccumulator;
+			logProbability$var141 = cv$sampleAccumulator;
+			logProbability$current_metric_mean = (logProbability$current_metric_mean + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			if(fixedFlag$sample150)
+				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample150 = fixedFlag$sample150;
+		} else {
+			logProbability$var119 = logProbability$var141;
+			logProbability$current_metric_mean = (logProbability$current_metric_mean + logProbability$var141);
+			logProbability$$model = (logProbability$$model + logProbability$var141);
+			if(fixedFlag$sample150)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var141);
+		}
+	}
+
+	private final void logProbabilityValue$sample178() {
+		if(!fixedProbFlag$sample178) {
+			double cv$sampleAccumulator = 0.0;
+			for(int var157 = 0; var157 < noServers; var157 += 1) {
+				for(int var167 = 0; var167 < noStates; var167 += 1)
+					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(current_metric_var[var157][var167], 1.0, 1.0));
+			}
+			logProbability$var146 = cv$sampleAccumulator;
+			logProbability$var168 = cv$sampleAccumulator;
 			logProbability$current_metric_var = (logProbability$current_metric_var + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample111)
+			if(fixedFlag$sample178)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample111 = fixedFlag$sample111;
+			fixedProbFlag$sample178 = fixedFlag$sample178;
 		} else {
-			logProbability$var92 = logProbability$var101;
-			logProbability$current_metric_var = (logProbability$current_metric_var + logProbability$var101);
-			logProbability$$model = (logProbability$$model + logProbability$var101);
-			if(fixedFlag$sample111)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var101);
+			logProbability$var146 = logProbability$var168;
+			logProbability$current_metric_var = (logProbability$current_metric_var + logProbability$var168);
+			logProbability$$model = (logProbability$$model + logProbability$var168);
+			if(fixedFlag$sample178)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var168);
 		}
 	}
 
-	private final void logProbabilityValue$sample126() {
-		if(!fixedProbFlag$sample126) {
+	private final void logProbabilityValue$sample206() {
+		if(!fixedProbFlag$sample206) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var110 = 0; var110 < noServers; var110 += 1) {
-				for(int var114 = 0; var114 < noStates; var114 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(current_metric_valid_bias[var110][var114], 1.0, 1.0));
+			for(int var184 = 0; var184 < noServers; var184 += 1) {
+				for(int var194 = 0; var194 < noStates; var194 += 1)
+					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(current_metric_valid_bias[var184][var194], 1.0, 1.0));
 			}
-			logProbability$var106 = cv$sampleAccumulator;
-			logProbability$var115 = cv$sampleAccumulator;
+			logProbability$var173 = cv$sampleAccumulator;
+			logProbability$var195 = cv$sampleAccumulator;
 			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample126)
+			if(fixedFlag$sample206)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample126 = fixedFlag$sample126;
+			fixedProbFlag$sample206 = fixedFlag$sample206;
 		} else {
-			logProbability$var106 = logProbability$var115;
-			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + logProbability$var115);
-			logProbability$$model = (logProbability$$model + logProbability$var115);
-			if(fixedFlag$sample126)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var115);
+			logProbability$var173 = logProbability$var195;
+			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + logProbability$var195);
+			logProbability$$model = (logProbability$$model + logProbability$var195);
+			if(fixedFlag$sample206)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var195);
 		}
 	}
 
-	private final void logProbabilityValue$sample161() {
-		if(!fixedProbFlag$sample161) {
+	private final void logProbabilityValue$sample260() {
+		if(!fixedProbFlag$sample260) {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var120][server][timeStep$var140], current_metric_valid_bias[server][st[sample$var120][timeStep$var140]]);
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var207][server][timeStep$var239], current_metric_valid_bias[server][st[sample$var207][timeStep$var239]]);
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var145[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
-						logProbability$sample161[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
+						logProbability$var244[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
+						logProbability$sample260[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
+						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample161 = (((fixedFlag$sample161 && fixedFlag$sample50) && fixedFlag$sample63) && fixedFlag$sample126);
+			fixedProbFlag$sample260 = (((fixedFlag$sample260 && fixedFlag$sample71) && fixedFlag$sample90) && fixedFlag$sample206);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						double cv$sampleValue = logProbability$sample161[sample$var120][server][timeStep$var140];
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						double cv$sampleValue = logProbability$sample260[sample$var207][server][timeStep$var239];
 						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var145[sample$var120][server][timeStep$var140] = cv$sampleValue;
+						logProbability$var244[sample$var207][server][timeStep$var239] = cv$sampleValue;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 					}
 				}
 			}
@@ -814,18 +844,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	private final void logProbabilityValue$sample173() {
-		if(!fixedProbFlag$sample173) {
+	private final void logProbabilityValue$sample275() {
+		if(!fixedProbFlag$sample275) {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						if(metric_valid_g[sample$var120][server][timeStep$var140]) {
-							double var154 = current_metric_var[server][st[sample$var120][timeStep$var140]];
-							double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][server][timeStep$var140] - current_metric_mean[server][st[sample$var120][timeStep$var140]]) / Math.sqrt(var154))) - (Math.log(var154) * 0.5));
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						if(metric_valid_g[sample$var207][server][timeStep$var239]) {
+							double var256 = current_metric_var[server][st[sample$var207][timeStep$var239]];
+							double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][server][timeStep$var239] - current_metric_mean[server][st[sample$var207][timeStep$var239]]) / Math.sqrt(var256))) - (Math.log(var256) * 0.5));
 							cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-							logProbability$var155[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
-							logProbability$sample173[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
+							logProbability$var257[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
+							logProbability$sample275[sample$var207][server][timeStep$var239] = cv$distributionAccumulator;
 						}
 					}
 				}
@@ -833,16 +863,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample173 = ((((fixedFlag$sample173 && fixedFlag$sample50) && fixedFlag$sample63) && fixedFlag$sample96) && fixedFlag$sample111);
+			fixedProbFlag$sample275 = ((((fixedFlag$sample275 && fixedFlag$sample71) && fixedFlag$sample90) && fixedFlag$sample150) && fixedFlag$sample178);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-						if(metric_valid_g[sample$var120][server][timeStep$var140]) {
-							double cv$rvAccumulator = logProbability$sample173[sample$var120][server][timeStep$var140];
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+						if(metric_valid_g[sample$var207][server][timeStep$var239]) {
+							double cv$rvAccumulator = logProbability$sample275[sample$var207][server][timeStep$var239];
 							cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-							logProbability$var155[sample$var120][server][timeStep$var140] = cv$rvAccumulator;
+							logProbability$var257[sample$var207][server][timeStep$var239] = cv$rvAccumulator;
 						}
 					}
 				}
@@ -853,150 +883,126 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	private final void logProbabilityValue$sample24() {
-		if(!fixedProbFlag$sample24) {
+	private final void logProbabilityValue$sample31() {
+		if(!fixedProbFlag$sample31) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(initialStateDistribution, v);
-			logProbability$var20 = cv$distributionAccumulator;
+			logProbability$var27 = cv$distributionAccumulator;
 			logProbability$initialStateDistribution = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample24)
+			if(fixedFlag$sample31)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample24 = fixedFlag$sample24;
+			fixedProbFlag$sample31 = fixedFlag$sample31;
 		} else {
-			logProbability$var20 = logProbability$initialStateDistribution;
+			logProbability$var27 = logProbability$initialStateDistribution;
 			logProbability$$model = (logProbability$$model + logProbability$initialStateDistribution);
-			if(fixedFlag$sample24)
+			if(fixedFlag$sample31)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$initialStateDistribution);
 		}
 	}
 
-	private final void logProbabilityValue$sample30() {
-		if(!fixedProbFlag$sample30) {
+	private final void logProbabilityValue$sample44() {
+		if(!fixedProbFlag$sample44) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var26 = 0; var26 < noStates; var26 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var26], v));
-			logProbability$var22 = cv$sampleAccumulator;
-			logProbability$var27 = cv$sampleAccumulator;
+			for(int var40 = 0; var40 < noStates; var40 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var40], v));
+			logProbability$var29 = cv$sampleAccumulator;
+			logProbability$var41 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample30)
+			if(fixedFlag$sample44)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample30 = fixedFlag$sample30;
+			fixedProbFlag$sample44 = fixedFlag$sample44;
 		} else {
-			logProbability$var22 = logProbability$var27;
-			logProbability$m = (logProbability$m + logProbability$var27);
-			logProbability$$model = (logProbability$$model + logProbability$var27);
-			if(fixedFlag$sample30)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var27);
+			logProbability$var29 = logProbability$var41;
+			logProbability$m = (logProbability$m + logProbability$var41);
+			logProbability$$model = (logProbability$$model + logProbability$var41);
+			if(fixedFlag$sample44)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var41);
 		}
 	}
 
-	private final void logProbabilityValue$sample50() {
-		if(!fixedProbFlag$sample50) {
+	private final void logProbabilityValue$sample71() {
+		if(!fixedProbFlag$sample71) {
 			double cv$accumulator = 0.0;
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				int cv$sampleValue = st[sample$var32][0];
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				int cv$sampleValue = st[sample$var53][0];
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < initialStateDistribution.length))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var43[sample$var32] = cv$distributionAccumulator;
-				logProbability$sample50[sample$var32] = cv$distributionAccumulator;
+				logProbability$var64[sample$var53] = cv$distributionAccumulator;
+				logProbability$sample71[sample$var53] = cv$distributionAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample71)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample24);
+			fixedProbFlag$sample71 = (fixedFlag$sample71 && fixedFlag$sample31);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				double cv$rvAccumulator = logProbability$sample50[sample$var32];
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				double cv$rvAccumulator = logProbability$sample71[sample$var53];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var43[sample$var32] = cv$rvAccumulator;
+				logProbability$var64[sample$var53] = cv$rvAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample71)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample63() {
-		if(!fixedProbFlag$sample63) {
+	private final void logProbabilityValue$sample90() {
+		if(!fixedProbFlag$sample90) {
 			double cv$accumulator = 0.0;
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-					int cv$sampleValue = st[sample$var32][timeStep$var49];
-					double[] var55 = m[st[sample$var32][(timeStep$var49 - 1)]];
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
+					int cv$sampleValue = st[sample$var53][timeStep$var76];
+					double[] var82 = m[st[sample$var53][(timeStep$var76 - 1)]];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var82.length))?Math.log(var82[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					logProbability$var56[sample$var32][(timeStep$var49 - 1)] = cv$distributionAccumulator;
-					logProbability$sample63[sample$var32][(timeStep$var49 - 1)] = cv$distributionAccumulator;
+					logProbability$var83[sample$var53][(timeStep$var76 - 1)] = cv$distributionAccumulator;
+					logProbability$sample90[sample$var53][(timeStep$var76 - 1)] = cv$distributionAccumulator;
 				}
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample63)
+			if(fixedFlag$sample90)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample63 = ((fixedFlag$sample63 && fixedFlag$sample30) && fixedFlag$sample50);
+			fixedProbFlag$sample90 = ((fixedFlag$sample90 && fixedFlag$sample44) && fixedFlag$sample71);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-					double cv$rvAccumulator = logProbability$sample63[sample$var32][(timeStep$var49 - 1)];
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
+					double cv$rvAccumulator = logProbability$sample90[sample$var53][(timeStep$var76 - 1)];
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var56[sample$var32][(timeStep$var49 - 1)] = cv$rvAccumulator;
+					logProbability$var83[sample$var53][(timeStep$var76 - 1)] = cv$rvAccumulator;
 				}
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample63)
+			if(fixedFlag$sample90)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample96() {
-		if(!fixedProbFlag$sample96) {
-			double cv$sampleAccumulator = 0.0;
-			for(int var82 = 0; var82 < noServers; var82 += 1) {
-				for(int var86 = 0; var86 < noStates; var86 += 1) {
-					double cv$sampleValue = current_metric_mean[var82][var86];
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY));
-				}
-			}
-			logProbability$var78 = cv$sampleAccumulator;
-			logProbability$var87 = cv$sampleAccumulator;
-			logProbability$current_metric_mean = (logProbability$current_metric_mean + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample96)
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample96 = fixedFlag$sample96;
-		} else {
-			logProbability$var78 = logProbability$var87;
-			logProbability$current_metric_mean = (logProbability$current_metric_mean + logProbability$var87);
-			logProbability$$model = (logProbability$$model + logProbability$var87);
-			if(fixedFlag$sample96)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var87);
-		}
-	}
-
-	private final void sample111(int var96, int var100, int threadID$cv$var100, Rng RNG$) {
-		double cv$originalValue = current_metric_var[var96][var100];
+	private final void sample150(int var130, int var140, int threadID$cv$var140, Rng RNG$) {
+		double cv$originalValue = current_metric_mean[var130][var140];
 		double cv$originalProbability;
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-				if((metric_valid_g[sample$var120][var96][0] && (0 < length$metric[sample$var120][0]))) {
-					if(fixedFlag$sample50) {
-						if((var100 == st[sample$var120][0])) {
+			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+				if((metric_valid_g[sample$var207][var130][0] && (0 < length$metric[sample$var207][0]))) {
+					if(fixedFlag$sample71) {
+						if((var140 == st[sample$var207][0])) {
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var86 = st[sample$var120][0];
-							if(((0 <= var86) && (var86 < noStates))) {
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][st[sample$var120][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+							int var167 = st[sample$var207][0];
+							if(((0 <= var167) && (var167 < noStates))) {
+								double cv$temp$3$var256 = current_metric_var[var130][st[sample$var207][0]];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][0] - cv$originalValue) / Math.sqrt(cv$temp$3$var256))) - (Math.log(cv$temp$3$var256) * 0.5));
 								cv$consumerDistributionProbabilityAccumulator = 0.0;
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1010,9 +1016,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							}
 						}
 					} else {
-						double cv$probabilitySample50Value7 = distribution$sample50[sample$var120][var100];
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample50Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][var100]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
-						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample50Value7), 0.0);
+						double cv$probabilitySample71Value7 = distribution$sample71[sample$var207][var140];
+						double var256 = current_metric_var[var130][var140];
+						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample71Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][0] - cv$originalValue) / Math.sqrt(var256)))) - (Math.log(var256) * 0.5));
+						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample71Value7), 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
 							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
 						else {
@@ -1024,16 +1031,17 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				}
 			}
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-				for(int timeStep$var140 = 1; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-					if(metric_valid_g[sample$var120][var96][timeStep$var140]) {
-						if(fixedFlag$sample63) {
-							if((var100 == st[sample$var120][timeStep$var140])) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+				for(int timeStep$var239 = 1; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+					if(metric_valid_g[sample$var207][var130][timeStep$var239]) {
+						if(fixedFlag$sample90) {
+							if((var140 == st[sample$var207][timeStep$var239])) {
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
-								int var86 = st[sample$var120][timeStep$var140];
-								if(((0 <= var86) && (var86 < noStates))) {
-									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][st[sample$var120][timeStep$var140]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+								int var167 = st[sample$var207][timeStep$var239];
+								if(((0 <= var167) && (var167 < noStates))) {
+									double cv$temp$21$var256 = current_metric_var[var130][st[sample$var207][timeStep$var239]];
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][timeStep$var239] - cv$originalValue) / Math.sqrt(cv$temp$21$var256))) - (Math.log(cv$temp$21$var256) * 0.5));
 									cv$consumerDistributionProbabilityAccumulator = 0.0;
 								}
 								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1047,9 +1055,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								}
 							}
 						} else {
-							double cv$probabilitySample63Value19 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][var100];
-							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample63Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][var100]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
-							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample63Value19), 0.0);
+							double cv$probabilitySample90Value19 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][var140];
+							double var256 = current_metric_var[var130][var140];
+							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample90Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][timeStep$var239] - cv$originalValue) / Math.sqrt(var256)))) - (Math.log(var256) * 0.5));
+							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample90Value19), 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
 								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
 							else {
@@ -1064,17 +1073,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		current_metric_var[var96][var100] = cv$proposedValue;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			if((metric_valid_g[sample$var120][var96][0] && (0 < length$metric[sample$var120][0]))) {
-				if(fixedFlag$sample50) {
-					if((var100 == st[sample$var120][0])) {
+		current_metric_mean[var130][var140] = cv$proposedValue;
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			if((metric_valid_g[sample$var207][var130][0] && (0 < length$metric[sample$var207][0]))) {
+				if(fixedFlag$sample71) {
+					if((var140 == st[sample$var207][0])) {
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-						int var86 = st[sample$var120][0];
-						if(((0 <= var86) && (var86 < noStates))) {
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][st[sample$var120][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+						int var167 = st[sample$var207][0];
+						if(((0 <= var167) && (var167 < noStates))) {
+							double cv$temp$3$var256 = current_metric_var[var130][st[sample$var207][0]];
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][0] - cv$proposedValue) / Math.sqrt(cv$temp$3$var256))) - (Math.log(cv$temp$3$var256) * 0.5));
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1088,9 +1098,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						}
 					}
 				} else {
-					double cv$probabilitySample50Value7 = distribution$sample50[sample$var120][var100];
-					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample50Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][var100]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
-					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample50Value7), 0.0);
+					double cv$probabilitySample71Value7 = distribution$sample71[sample$var207][var140];
+					double var256 = current_metric_var[var130][var140];
+					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample71Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][0] - cv$proposedValue) / Math.sqrt(var256)))) - (Math.log(var256) * 0.5));
+					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample71Value7), 0.0);
 					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
 						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
 					else {
@@ -1102,16 +1113,17 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				}
 			}
 		}
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			for(int timeStep$var140 = 1; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-				if(metric_valid_g[sample$var120][var96][timeStep$var140]) {
-					if(fixedFlag$sample63) {
-						if((var100 == st[sample$var120][timeStep$var140])) {
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			for(int timeStep$var239 = 1; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+				if(metric_valid_g[sample$var207][var130][timeStep$var239]) {
+					if(fixedFlag$sample90) {
+						if((var140 == st[sample$var207][timeStep$var239])) {
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var86 = st[sample$var120][timeStep$var140];
-							if(((0 <= var86) && (var86 < noStates))) {
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][st[sample$var120][timeStep$var140]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+							int var167 = st[sample$var207][timeStep$var239];
+							if(((0 <= var167) && (var167 < noStates))) {
+								double cv$temp$21$var256 = current_metric_var[var130][st[sample$var207][timeStep$var239]];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][timeStep$var239] - cv$proposedValue) / Math.sqrt(cv$temp$21$var256))) - (Math.log(cv$temp$21$var256) * 0.5));
 								cv$consumerDistributionProbabilityAccumulator = 0.0;
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1125,9 +1137,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							}
 						}
 					} else {
-						double cv$probabilitySample63Value19 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][var100];
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample63Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][var100]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
-						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample63Value19), 0.0);
+						double cv$probabilitySample90Value19 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][var140];
+						double var256 = current_metric_var[var130][var140];
+						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample90Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var130][timeStep$var239] - cv$proposedValue) / Math.sqrt(var256)))) - (Math.log(var256) * 0.5));
+						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample90Value19), 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
 							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
 						else {
@@ -1141,123 +1154,290 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 		}
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
-			current_metric_var[var96][var100] = cv$originalValue;
+			current_metric_mean[var130][var140] = cv$originalValue;
 	}
 
-	private final void sample126(int var110, int var114, int threadID$cv$var114, Rng RNG$) {
-		double cv$sum = 0.0;
-		double cv$count = 0.0;
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			if((0 < length$metric[sample$var120][0])) {
-				if(fixedFlag$sample50) {
-					if((var114 == st[sample$var120][0])) {
-						cv$count = (cv$count + 1.0);
-						if(metric_valid_g[sample$var120][var110][0])
-							cv$sum = (cv$sum + 1.0);
-					}
-				} else {
-					double cv$probabilitySample50Value7 = distribution$sample50[sample$var120][var114];
-					cv$count = (cv$count + cv$probabilitySample50Value7);
-					if(metric_valid_g[sample$var120][var110][0])
-						cv$sum = (cv$sum + cv$probabilitySample50Value7);
-				}
-			}
-		}
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			for(int timeStep$var140 = 1; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-				if(fixedFlag$sample63) {
-					if((var114 == st[sample$var120][timeStep$var140])) {
-						cv$count = (cv$count + 1.0);
-						if(metric_valid_g[sample$var120][var110][timeStep$var140])
-							cv$sum = (cv$sum + 1.0);
-					}
-				} else {
-					double cv$probabilitySample63Value19 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][var114];
-					cv$count = (cv$count + cv$probabilitySample63Value19);
-					if(metric_valid_g[sample$var120][var110][timeStep$var140])
-						cv$sum = (cv$sum + cv$probabilitySample63Value19);
-				}
-			}
-		}
-		current_metric_valid_bias[var110][var114] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
-	private final void sample24() {
-		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-			cv$var21$countGlobal[cv$loopIndex] = 0.0;
-		if(fixedFlag$sample50) {
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1)
-				cv$var21$countGlobal[st[sample$var32][0]] = (cv$var21$countGlobal[st[sample$var32][0]] + 1.0);
-		} else {
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-					cv$var21$countGlobal[cv$loopIndex] = (cv$var21$countGlobal[cv$loopIndex] + distribution$sample50[sample$var32][cv$loopIndex]);
-			}
-		}
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var21$countGlobal, initialStateDistribution);
-	}
-
-	private final void sample30(int var26, int threadID$cv$var26, Rng RNG$) {
-		double[] cv$countLocal = cv$var27$countGlobal[threadID$cv$var26];
-		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		if(fixedFlag$sample63) {
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				if((1 < length$metric[sample$var32][0])) {
-					if(fixedFlag$sample50) {
-						if((var26 == st[sample$var32][0]))
-							cv$countLocal[st[sample$var32][1]] = (cv$countLocal[st[sample$var32][1]] + 1.0);
-					} else
-						cv$countLocal[st[sample$var32][1]] = (cv$countLocal[st[sample$var32][1]] + distribution$sample50[sample$var32][var26]);
-				}
-			}
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int timeStep$var49 = 2; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-					if((var26 == st[sample$var32][(timeStep$var49 - 1)]))
-						cv$countLocal[st[sample$var32][timeStep$var49]] = (cv$countLocal[st[sample$var32][timeStep$var49]] + 1.0);
-				}
-			}
-		} else {
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				if((1 < length$metric[sample$var32][0])) {
-					if(fixedFlag$sample50) {
-						if((var26 == st[sample$var32][0])) {
-							for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-								cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample63[sample$var32][0][cv$loopIndex]);
+	private final void sample178(int var157, int var167, int threadID$cv$var167, Rng RNG$) {
+		double cv$originalValue = current_metric_var[var157][var167];
+		double cv$originalProbability;
+		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+				if((metric_valid_g[sample$var207][var157][0] && (0 < length$metric[sample$var207][0]))) {
+					if(fixedFlag$sample71) {
+						if((var167 == st[sample$var207][0])) {
+							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+							double cv$consumerDistributionProbabilityAccumulator = 1.0;
+							int var140 = st[sample$var207][0];
+							if(((0 <= var140) && (var140 < noStates))) {
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][0] - current_metric_mean[var157][st[sample$var207][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+								cv$consumerDistributionProbabilityAccumulator = 0.0;
+							}
+							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+							else {
+								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+								else
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+							}
 						}
 					} else {
-						double cv$distributionProbability = distribution$sample50[sample$var32][var26];
-						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample63[sample$var32][0][cv$loopIndex] * cv$distributionProbability));
+						double cv$probabilitySample71Value7 = distribution$sample71[sample$var207][var167];
+						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample71Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][0] - current_metric_mean[var157][var167]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample71Value7), 0.0);
+						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+						else {
+							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+							else
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+						}
 					}
 				}
 			}
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-					int index$timeStep$52 = (timeStep$var49 - 1);
-					if((1 <= index$timeStep$52)) {
-						double cv$distributionProbability = distribution$sample63[sample$var32][(index$timeStep$52 - 1)][var26];
-						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample63[sample$var32][(timeStep$var49 - 1)][cv$loopIndex] * cv$distributionProbability));
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+				for(int timeStep$var239 = 1; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+					if(metric_valid_g[sample$var207][var157][timeStep$var239]) {
+						if(fixedFlag$sample90) {
+							if((var167 == st[sample$var207][timeStep$var239])) {
+								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+								double cv$consumerDistributionProbabilityAccumulator = 1.0;
+								int var140 = st[sample$var207][timeStep$var239];
+								if(((0 <= var140) && (var140 < noStates))) {
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][timeStep$var239] - current_metric_mean[var157][st[sample$var207][timeStep$var239]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+									cv$consumerDistributionProbabilityAccumulator = 0.0;
+								}
+								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+								if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+								else {
+									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+										cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+									else
+										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+								}
+							}
+						} else {
+							double cv$probabilitySample90Value19 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][var167];
+							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample90Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][timeStep$var239] - current_metric_mean[var157][var167]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample90Value19), 0.0);
+							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+							else {
+								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+								else
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+							}
+						}
+					}
+				}
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		current_metric_var[var157][var167] = cv$proposedValue;
+		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			if((metric_valid_g[sample$var207][var157][0] && (0 < length$metric[sample$var207][0]))) {
+				if(fixedFlag$sample71) {
+					if((var167 == st[sample$var207][0])) {
+						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+						double cv$consumerDistributionProbabilityAccumulator = 1.0;
+						int var140 = st[sample$var207][0];
+						if(((0 <= var140) && (var140 < noStates))) {
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][0] - current_metric_mean[var157][st[sample$var207][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+							cv$consumerDistributionProbabilityAccumulator = 0.0;
+						}
+						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+						else {
+							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+							else
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+						}
+					}
+				} else {
+					double cv$probabilitySample71Value7 = distribution$sample71[sample$var207][var167];
+					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample71Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][0] - current_metric_mean[var157][var167]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample71Value7), 0.0);
+					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+					else {
+						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+						else
+							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 		}
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var26]);
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			for(int timeStep$var239 = 1; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+				if(metric_valid_g[sample$var207][var157][timeStep$var239]) {
+					if(fixedFlag$sample90) {
+						if((var167 == st[sample$var207][timeStep$var239])) {
+							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+							double cv$consumerDistributionProbabilityAccumulator = 1.0;
+							int var140 = st[sample$var207][timeStep$var239];
+							if(((0 <= var140) && (var140 < noStates))) {
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][timeStep$var239] - current_metric_mean[var157][st[sample$var207][timeStep$var239]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+								cv$consumerDistributionProbabilityAccumulator = 0.0;
+							}
+							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+							else {
+								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+								else
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+							}
+						}
+					} else {
+						double cv$probabilitySample90Value19 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][var167];
+						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample90Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var207][var157][timeStep$var239] - current_metric_mean[var157][var167]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample90Value19), 0.0);
+						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+						else {
+							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+							else
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+						}
+					}
+				}
+			}
+		}
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+			current_metric_var[var157][var167] = cv$originalValue;
 	}
 
-	private final void sample50(int sample$var32, int threadID$cv$sample$var32, Rng RNG$) {
+	private final void sample206(int var184, int var194, int threadID$cv$var194, Rng RNG$) {
+		double cv$sum = 0.0;
+		double cv$count = 0.0;
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			if((0 < length$metric[sample$var207][0])) {
+				if(fixedFlag$sample71) {
+					if((var194 == st[sample$var207][0])) {
+						cv$count = (cv$count + 1.0);
+						if(metric_valid_g[sample$var207][var184][0])
+							cv$sum = (cv$sum + 1.0);
+					}
+				} else {
+					double cv$probabilitySample71Value7 = distribution$sample71[sample$var207][var194];
+					cv$count = (cv$count + cv$probabilitySample71Value7);
+					if(metric_valid_g[sample$var207][var184][0])
+						cv$sum = (cv$sum + cv$probabilitySample71Value7);
+				}
+			}
+		}
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			for(int timeStep$var239 = 1; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1) {
+				if(fixedFlag$sample90) {
+					if((var194 == st[sample$var207][timeStep$var239])) {
+						cv$count = (cv$count + 1.0);
+						if(metric_valid_g[sample$var207][var184][timeStep$var239])
+							cv$sum = (cv$sum + 1.0);
+					}
+				} else {
+					double cv$probabilitySample90Value19 = distribution$sample90[sample$var207][(timeStep$var239 - 1)][var194];
+					cv$count = (cv$count + cv$probabilitySample90Value19);
+					if(metric_valid_g[sample$var207][var184][timeStep$var239])
+						cv$sum = (cv$sum + cv$probabilitySample90Value19);
+				}
+			}
+		}
+		current_metric_valid_bias[var184][var194] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	private final void sample260(int sample$var207, int server, int timeStep$var239, int threadID$cv$timeStep$var239, Rng RNG$) {}
+
+	private final void sample31() {
+		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+			cv$var28$countGlobal[cv$loopIndex] = 0.0;
+		if(fixedFlag$sample71) {
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1)
+				cv$var28$countGlobal[st[sample$var53][0]] = (cv$var28$countGlobal[st[sample$var53][0]] + 1.0);
+		} else {
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+					cv$var28$countGlobal[cv$loopIndex] = (cv$var28$countGlobal[cv$loopIndex] + distribution$sample71[sample$var53][cv$loopIndex]);
+			}
+		}
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, initialStateDistribution);
+	}
+
+	private final void sample44(int var40, int threadID$cv$var40, Rng RNG$) {
+		double[] cv$countLocal = cv$var41$countGlobal[threadID$cv$var40];
+		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+			cv$countLocal[cv$loopIndex] = 0.0;
+		if(fixedFlag$sample90) {
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				if((1 < length$metric[sample$var53][0])) {
+					if(fixedFlag$sample71) {
+						if((var40 == st[sample$var53][0]))
+							cv$countLocal[st[sample$var53][1]] = (cv$countLocal[st[sample$var53][1]] + 1.0);
+					} else
+						cv$countLocal[st[sample$var53][1]] = (cv$countLocal[st[sample$var53][1]] + distribution$sample71[sample$var53][var40]);
+				}
+			}
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int timeStep$var76 = 2; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
+					if((var40 == st[sample$var53][(timeStep$var76 - 1)]))
+						cv$countLocal[st[sample$var53][timeStep$var76]] = (cv$countLocal[st[sample$var53][timeStep$var76]] + 1.0);
+				}
+			}
+		} else {
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				if((1 < length$metric[sample$var53][0])) {
+					if(fixedFlag$sample71) {
+						if((var40 == st[sample$var53][0])) {
+							for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+								cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample90[sample$var53][0][cv$loopIndex]);
+						}
+					} else {
+						double cv$distributionProbability = distribution$sample71[sample$var53][var40];
+						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample90[sample$var53][0][cv$loopIndex] * cv$distributionProbability));
+					}
+				}
+			}
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
+					int index$timeStep$52 = (timeStep$var76 - 1);
+					if((1 <= index$timeStep$52)) {
+						double cv$distributionProbability = distribution$sample90[sample$var53][(index$timeStep$52 - 1)][var40];
+						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample90[sample$var53][(timeStep$var76 - 1)][cv$loopIndex] * cv$distributionProbability));
+					}
+				}
+			}
+		}
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var40]);
+	}
+
+	private final void sample71(int sample$var53, int threadID$cv$sample$var53, Rng RNG$) {
 		int cv$noStates = Math.max(0, noStates);
-		double[] cv$stateProbabilityLocal = cv$var44$stateProbabilityGlobal[threadID$cv$sample$var32];
+		double[] cv$stateProbabilityLocal = cv$var65$stateProbabilityGlobal[threadID$cv$sample$var53];
 		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$accumulatedDistributionProbabilities = 0.0;
 			double cv$accumulatedProbabilities = ((cv$valuePos < initialStateDistribution.length)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
-			if((fixedFlag$sample63 && (1 < length$metric[sample$var32][0]))) {
+			if((fixedFlag$sample90 && (1 < length$metric[sample$var53][0]))) {
 				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 				double cv$consumerDistributionProbabilityAccumulator = 1.0;
 				if((cv$valuePos < noStates)) {
-					double[] cv$temp$1$var55 = m[cv$valuePos];
-					cv$accumulatedConsumerProbabilities = (((0.0 <= st[sample$var32][1]) && (st[sample$var32][1] < cv$temp$1$var55.length))?Math.log(cv$temp$1$var55[st[sample$var32][1]]):Double.NEGATIVE_INFINITY);
+					double[] cv$temp$1$var82 = m[cv$valuePos];
+					cv$accumulatedConsumerProbabilities = (((0.0 <= st[sample$var53][1]) && (st[sample$var53][1] < cv$temp$1$var82.length))?Math.log(cv$temp$1$var82[st[sample$var53][1]]):Double.NEGATIVE_INFINITY);
 					cv$consumerDistributionProbabilityAccumulator = 0.0;
 				}
 				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1270,12 +1450,12 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 				}
 			}
-			if((0 < length$metric[sample$var32][0])) {
+			if((0 < length$metric[sample$var53][0])) {
 				for(int server = 0; server < noServers; server += 1) {
 					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;
 					if((cv$valuePos < noStates)) {
-						cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][0], current_metric_valid_bias[server][cv$valuePos]);
+						cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var53][server][0], current_metric_valid_bias[server][cv$valuePos]);
 						cv$consumerDistributionProbabilityAccumulator = 0.0;
 					}
 					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1288,17 +1468,23 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 					}
 				}
-				boolean[][][] guard$sample50gaussian172 = guard$sample50gaussian172$global[threadID$cv$sample$var32];
-				for(int server = 0; server < noServers; server += 1)
-					guard$sample50gaussian172[sample$var32][server][0] = false;
+				boolean[][][] guard$sample71gaussian274 = guard$sample71gaussian274$global[threadID$cv$sample$var53];
 				for(int server = 0; server < noServers; server += 1) {
-					if(!guard$sample50gaussian172[sample$var32][server][0]) {
-						guard$sample50gaussian172[sample$var32][server][0] = true;
+					if(metric_valid_g[sample$var53][server][0])
+						guard$sample71gaussian274[sample$var53][server][0] = false;
+				}
+				for(int server = 0; server < noServers; server += 1) {
+					if(metric_valid_g[sample$var53][server][0])
+						guard$sample71gaussian274[sample$var53][server][0] = false;
+				}
+				for(int server = 0; server < noServers; server += 1) {
+					if((metric_valid_g[sample$var53][server][0] && !guard$sample71gaussian274[sample$var53][server][0])) {
+						guard$sample71gaussian274[sample$var53][server][0] = true;
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-						if((metric_valid_g[sample$var32][server][0] && (cv$valuePos < noStates))) {
-							double cv$temp$4$var154 = current_metric_var[server][cv$valuePos];
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$4$var154))) - (Math.log(cv$temp$4$var154) * 0.5));
+						if((cv$valuePos < noStates)) {
+							double cv$temp$4$var256 = current_metric_var[server][cv$valuePos];
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$4$var256))) - (Math.log(cv$temp$4$var256) * 0.5));
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1313,13 +1499,13 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				}
 				for(int server = 0; server < noServers; server += 1) {
-					if(!guard$sample50gaussian172[sample$var32][server][0]) {
-						guard$sample50gaussian172[sample$var32][server][0] = true;
+					if((metric_valid_g[sample$var53][server][0] && !guard$sample71gaussian274[sample$var53][server][0])) {
+						guard$sample71gaussian274[sample$var53][server][0] = true;
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-						if((metric_valid_g[sample$var32][server][0] && (cv$valuePos < noStates))) {
-							double cv$temp$12$var154 = current_metric_var[server][cv$valuePos];
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$12$var154))) - (Math.log(cv$temp$12$var154) * 0.5));
+						if((cv$valuePos < noStates)) {
+							double cv$temp$12$var256 = current_metric_var[server][cv$valuePos];
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$12$var256))) - (Math.log(cv$temp$12$var256) * 0.5));
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1334,8 +1520,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				}
 			}
-			if((!fixedFlag$sample63 && (1 < length$metric[sample$var32][0]))) {
-				double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var56[threadID$cv$sample$var32];
+			if((!fixedFlag$sample90 && (1 < length$metric[sample$var53][0]))) {
+				double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var83[threadID$cv$sample$var53];
 				for(int cv$i = 0; cv$i < noStates; cv$i += 1)
 					cv$accumulatedConsumerDistributions[cv$i] = 0.0;
 				double cv$reachedDistributionProbability = 0.0;
@@ -1343,7 +1529,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					cv$reachedDistributionProbability = 1.0;
 					DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, 1.0, m[cv$valuePos]);
 				}
-				double[] cv$sampleDistribution = distribution$sample63[sample$var32][0];
+				double[] cv$sampleDistribution = distribution$sample90[sample$var53][0];
 				double cv$overlap = 0.0;
 				for(int cv$i = 0; cv$i < noStates; cv$i += 1) {
 					double cv$normalisedDistValue = (cv$accumulatedConsumerDistributions[cv$i] / cv$reachedDistributionProbability);
@@ -1357,7 +1543,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 			cv$stateProbabilityLocal[cv$valuePos] = (cv$accumulatedProbabilities + cv$accumulatedDistributionProbabilities);
 		}
-		double[] cv$localProbability = distribution$sample50[sample$var32];
+		double[] cv$localProbability = distribution$sample71[sample$var53];
 		double cv$logSum;
 		double cv$lseMax = cv$stateProbabilityLocal[0];
 		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
@@ -1384,49 +1570,49 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
-	private final void sample63(int sample$var32, int timeStep$var49, int threadID$cv$sample$var32, Rng RNG$) {
+	private final void sample90(int sample$var53, int timeStep$var76, int threadID$cv$sample$var53, Rng RNG$) {
 		int cv$noStates = 0;
-		if((1 == timeStep$var49)) {
-			if(fixedFlag$sample50) {
-				int var26 = st[sample$var32][0];
-				if(((0 <= var26) && (var26 < noStates)))
+		if((1 == timeStep$var76)) {
+			if(fixedFlag$sample71) {
+				int var40 = st[sample$var53][0];
+				if(((0 <= var40) && (var40 < noStates)))
 					cv$noStates = Math.max(0, noStates);
 			} else {
 				if((0 < noStates))
 					cv$noStates = noStates;
 			}
 		}
-		if(fixedFlag$sample63) {
-			if((2 <= timeStep$var49)) {
-				int var26 = st[sample$var32][(timeStep$var49 - 1)];
-				if(((0 <= var26) && (var26 < noStates)))
+		if(fixedFlag$sample90) {
+			if((2 <= timeStep$var76)) {
+				int var40 = st[sample$var53][(timeStep$var76 - 1)];
+				if(((0 <= var40) && (var40 < noStates)))
 					cv$noStates = Math.max(cv$noStates, noStates);
 			}
 		} else {
 			if((0 < noStates)) {
-				int index$timeStep$14 = (timeStep$var49 - 1);
-				if(((1 <= index$timeStep$14) && !(index$timeStep$14 == timeStep$var49)))
+				int index$timeStep$14 = (timeStep$var76 - 1);
+				if(((1 <= index$timeStep$14) && !(index$timeStep$14 == timeStep$var76)))
 					cv$noStates = Math.max(cv$noStates, noStates);
 			}
 		}
-		double[] cv$stateProbabilityLocal = cv$var57$stateProbabilityGlobal[threadID$cv$sample$var32];
+		double[] cv$stateProbabilityLocal = cv$var84$stateProbabilityGlobal[threadID$cv$sample$var53];
 		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
-			if((1 == timeStep$var49)) {
-				if(fixedFlag$sample50) {
-					int var26 = st[sample$var32][0];
-					if(((0 <= var26) && (var26 < noStates))) {
+			if((1 == timeStep$var76)) {
+				if(fixedFlag$sample71) {
+					int var40 = st[sample$var53][0];
+					if(((0 <= var40) && (var40 < noStates))) {
 						cv$reachedDistributionSourceRV = 1.0;
-						double[] cv$temp$0$var55 = m[st[sample$var32][0]];
-						double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var55.length)?Math.log(cv$temp$0$var55[cv$valuePos]):Double.NEGATIVE_INFINITY);
-						if((1 < length$metric[sample$var32][0])) {
+						double[] cv$temp$0$var82 = m[st[sample$var53][0]];
+						double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var82.length)?Math.log(cv$temp$0$var82[cv$valuePos]):Double.NEGATIVE_INFINITY);
+						if((1 < length$metric[sample$var53][0])) {
 							for(int server = 0; server < noServers; server += 1) {
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								if((cv$valuePos < noStates)) {
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][1], current_metric_valid_bias[server][cv$valuePos]);
+									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var53][server][1], current_metric_valid_bias[server][cv$valuePos]);
 									cv$consumerDistributionProbabilityAccumulator = 0.0;
 								}
 								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1439,17 +1625,23 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 								}
 							}
-							boolean[][][] guard$sample63gaussian172 = guard$sample63gaussian172$global[threadID$cv$sample$var32];
-							for(int server = 0; server < noServers; server += 1)
-								guard$sample63gaussian172[sample$var32][server][1] = false;
+							boolean[][][] guard$sample90gaussian274 = guard$sample90gaussian274$global[threadID$cv$sample$var53];
 							for(int server = 0; server < noServers; server += 1) {
-								if(!guard$sample63gaussian172[sample$var32][server][1]) {
-									guard$sample63gaussian172[sample$var32][server][1] = true;
+								if(metric_valid_g[sample$var53][server][1])
+									guard$sample90gaussian274[sample$var53][server][1] = false;
+							}
+							for(int server = 0; server < noServers; server += 1) {
+								if(metric_valid_g[sample$var53][server][1])
+									guard$sample90gaussian274[sample$var53][server][1] = false;
+							}
+							for(int server = 0; server < noServers; server += 1) {
+								if((metric_valid_g[sample$var53][server][1] && !guard$sample90gaussian274[sample$var53][server][1])) {
+									guard$sample90gaussian274[sample$var53][server][1] = true;
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
-									if((metric_valid_g[sample$var32][server][1] && (cv$valuePos < noStates))) {
-										double cv$temp$11$var154 = current_metric_var[server][cv$valuePos];
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$11$var154))) - (Math.log(cv$temp$11$var154) * 0.5));
+									if((cv$valuePos < noStates)) {
+										double cv$temp$11$var256 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$11$var256))) - (Math.log(cv$temp$11$var256) * 0.5));
 										cv$consumerDistributionProbabilityAccumulator = 0.0;
 									}
 									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1464,13 +1656,13 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								}
 							}
 							for(int server = 0; server < noServers; server += 1) {
-								if(!guard$sample63gaussian172[sample$var32][server][1]) {
-									guard$sample63gaussian172[sample$var32][server][1] = true;
+								if((metric_valid_g[sample$var53][server][1] && !guard$sample90gaussian274[sample$var53][server][1])) {
+									guard$sample90gaussian274[sample$var53][server][1] = true;
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
-									if((metric_valid_g[sample$var32][server][1] && (cv$valuePos < noStates))) {
-										double cv$temp$43$var154 = current_metric_var[server][cv$valuePos];
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$43$var154))) - (Math.log(cv$temp$43$var154) * 0.5));
+									if((cv$valuePos < noStates)) {
+										double cv$temp$43$var256 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$43$var256))) - (Math.log(cv$temp$43$var256) * 0.5));
 										cv$consumerDistributionProbabilityAccumulator = 0.0;
 									}
 									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1488,17 +1680,17 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						cv$stateProbabilityValue = cv$accumulatedProbabilities;
 					}
 				} else {
-					for(int index$sample50$26 = 0; index$sample50$26 < noStates; index$sample50$26 += 1) {
-						double cv$probabilitySample50Value27 = distribution$sample50[sample$var32][index$sample50$26];
-						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample50Value27);
-						double[] cv$temp$1$var55 = m[index$sample50$26];
-						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample50Value27) + ((cv$valuePos < cv$temp$1$var55.length)?Math.log(cv$temp$1$var55[cv$valuePos]):Double.NEGATIVE_INFINITY));
-						if((1 < length$metric[sample$var32][0])) {
+					for(int index$sample71$26 = 0; index$sample71$26 < noStates; index$sample71$26 += 1) {
+						double cv$probabilitySample71Value27 = distribution$sample71[sample$var53][index$sample71$26];
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample71Value27);
+						double[] cv$temp$1$var82 = m[index$sample71$26];
+						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample71Value27) + ((cv$valuePos < cv$temp$1$var82.length)?Math.log(cv$temp$1$var82[cv$valuePos]):Double.NEGATIVE_INFINITY));
+						if((1 < length$metric[sample$var53][0])) {
 							for(int server = 0; server < noServers; server += 1) {
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								if((cv$valuePos < noStates)) {
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][1], current_metric_valid_bias[server][cv$valuePos]);
+									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var53][server][1], current_metric_valid_bias[server][cv$valuePos]);
 									cv$consumerDistributionProbabilityAccumulator = 0.0;
 								}
 								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1511,17 +1703,23 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 								}
 							}
-							boolean[][][] guard$sample63gaussian172 = guard$sample63gaussian172$global[threadID$cv$sample$var32];
-							for(int server = 0; server < noServers; server += 1)
-								guard$sample63gaussian172[sample$var32][server][1] = false;
+							boolean[][][] guard$sample90gaussian274 = guard$sample90gaussian274$global[threadID$cv$sample$var53];
 							for(int server = 0; server < noServers; server += 1) {
-								if(!guard$sample63gaussian172[sample$var32][server][1]) {
-									guard$sample63gaussian172[sample$var32][server][1] = true;
+								if(metric_valid_g[sample$var53][server][1])
+									guard$sample90gaussian274[sample$var53][server][1] = false;
+							}
+							for(int server = 0; server < noServers; server += 1) {
+								if(metric_valid_g[sample$var53][server][1])
+									guard$sample90gaussian274[sample$var53][server][1] = false;
+							}
+							for(int server = 0; server < noServers; server += 1) {
+								if((metric_valid_g[sample$var53][server][1] && !guard$sample90gaussian274[sample$var53][server][1])) {
+									guard$sample90gaussian274[sample$var53][server][1] = true;
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
-									if((metric_valid_g[sample$var32][server][1] && (cv$valuePos < noStates))) {
-										double cv$temp$19$var154 = current_metric_var[server][cv$valuePos];
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$19$var154))) - (Math.log(cv$temp$19$var154) * 0.5));
+									if((cv$valuePos < noStates)) {
+										double cv$temp$19$var256 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$19$var256))) - (Math.log(cv$temp$19$var256) * 0.5));
 										cv$consumerDistributionProbabilityAccumulator = 0.0;
 									}
 									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1536,13 +1734,13 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								}
 							}
 							for(int server = 0; server < noServers; server += 1) {
-								if(!guard$sample63gaussian172[sample$var32][server][1]) {
-									guard$sample63gaussian172[sample$var32][server][1] = true;
+								if((metric_valid_g[sample$var53][server][1] && !guard$sample90gaussian274[sample$var53][server][1])) {
+									guard$sample90gaussian274[sample$var53][server][1] = true;
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
-									if((metric_valid_g[sample$var32][server][1] && (cv$valuePos < noStates))) {
-										double cv$temp$51$var154 = current_metric_var[server][cv$valuePos];
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$51$var154))) - (Math.log(cv$temp$51$var154) * 0.5));
+									if((cv$valuePos < noStates)) {
+										double cv$temp$51$var256 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$51$var256))) - (Math.log(cv$temp$51$var256) * 0.5));
 										cv$consumerDistributionProbabilityAccumulator = 0.0;
 									}
 									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1568,18 +1766,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				}
 			}
-			int index$timeStep$34 = (timeStep$var49 - 1);
-			if(((1 <= index$timeStep$34) && !(index$timeStep$34 == timeStep$var49))) {
-				for(int index$sample63$35 = 0; index$sample63$35 < noStates; index$sample63$35 += 1) {
-					double cv$probabilitySample63Value36 = distribution$sample63[sample$var32][(index$timeStep$34 - 1)][index$sample63$35];
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample63Value36);
-					double[] cv$temp$3$var55 = m[index$sample63$35];
-					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample63Value36) + ((cv$valuePos < cv$temp$3$var55.length)?Math.log(cv$temp$3$var55[cv$valuePos]):Double.NEGATIVE_INFINITY));
+			int index$timeStep$34 = (timeStep$var76 - 1);
+			if(((1 <= index$timeStep$34) && !(index$timeStep$34 == timeStep$var76))) {
+				for(int index$sample90$35 = 0; index$sample90$35 < noStates; index$sample90$35 += 1) {
+					double cv$probabilitySample90Value36 = distribution$sample90[sample$var53][(index$timeStep$34 - 1)][index$sample90$35];
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample90Value36);
+					double[] cv$temp$3$var82 = m[index$sample90$35];
+					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample90Value36) + ((cv$valuePos < cv$temp$3$var82.length)?Math.log(cv$temp$3$var82[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					for(int server = 0; server < noServers; server += 1) {
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						if((cv$valuePos < noStates)) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][timeStep$var49], current_metric_valid_bias[server][cv$valuePos]);
+							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var53][server][timeStep$var76], current_metric_valid_bias[server][cv$valuePos]);
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1592,17 +1790,23 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 						}
 					}
-					boolean[][][] guard$sample63gaussian172 = guard$sample63gaussian172$global[threadID$cv$sample$var32];
-					for(int server = 0; server < noServers; server += 1)
-						guard$sample63gaussian172[sample$var32][server][timeStep$var49] = false;
+					boolean[][][] guard$sample90gaussian274 = guard$sample90gaussian274$global[threadID$cv$sample$var53];
 					for(int server = 0; server < noServers; server += 1) {
-						if(!guard$sample63gaussian172[sample$var32][server][timeStep$var49]) {
-							guard$sample63gaussian172[sample$var32][server][timeStep$var49] = true;
+						if(metric_valid_g[sample$var53][server][timeStep$var76])
+							guard$sample90gaussian274[sample$var53][server][timeStep$var76] = false;
+					}
+					for(int server = 0; server < noServers; server += 1) {
+						if(metric_valid_g[sample$var53][server][timeStep$var76])
+							guard$sample90gaussian274[sample$var53][server][timeStep$var76] = false;
+					}
+					for(int server = 0; server < noServers; server += 1) {
+						if((metric_valid_g[sample$var53][server][timeStep$var76] && !guard$sample90gaussian274[sample$var53][server][timeStep$var76])) {
+							guard$sample90gaussian274[sample$var53][server][timeStep$var76] = true;
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							if((metric_valid_g[sample$var32][server][timeStep$var49] && (cv$valuePos < noStates))) {
-								double cv$temp$35$var154 = current_metric_var[server][cv$valuePos];
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$35$var154))) - (Math.log(cv$temp$35$var154) * 0.5));
+							if((cv$valuePos < noStates)) {
+								double cv$temp$35$var256 = current_metric_var[server][cv$valuePos];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][timeStep$var76] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$35$var256))) - (Math.log(cv$temp$35$var256) * 0.5));
 								cv$consumerDistributionProbabilityAccumulator = 0.0;
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1617,13 +1821,13 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						}
 					}
 					for(int server = 0; server < noServers; server += 1) {
-						if(!guard$sample63gaussian172[sample$var32][server][timeStep$var49]) {
-							guard$sample63gaussian172[sample$var32][server][timeStep$var49] = true;
+						if((metric_valid_g[sample$var53][server][timeStep$var76] && !guard$sample90gaussian274[sample$var53][server][timeStep$var76])) {
+							guard$sample90gaussian274[sample$var53][server][timeStep$var76] = true;
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							if((metric_valid_g[sample$var32][server][timeStep$var49] && (cv$valuePos < noStates))) {
-								double cv$temp$67$var154 = current_metric_var[server][cv$valuePos];
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$67$var154))) - (Math.log(cv$temp$67$var154) * 0.5));
+							if((cv$valuePos < noStates)) {
+								double cv$temp$67$var256 = current_metric_var[server][cv$valuePos];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var53][server][timeStep$var76] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$67$var256))) - (Math.log(cv$temp$67$var256) * 0.5));
 								cv$consumerDistributionProbabilityAccumulator = 0.0;
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1647,33 +1851,33 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				}
 			}
-			int index$timeStep$269_3 = (timeStep$var49 + 1);
-			if((index$timeStep$269_3 < length$metric[sample$var32][0])) {
-				double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var56[threadID$cv$sample$var32];
+			int index$timeStep$269_3 = (timeStep$var76 + 1);
+			if((index$timeStep$269_3 < length$metric[sample$var53][0])) {
+				double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var83[threadID$cv$sample$var53];
 				for(int cv$i = 0; cv$i < noStates; cv$i += 1)
 					cv$accumulatedConsumerDistributions[cv$i] = 0.0;
 				double cv$reachedDistributionProbability = 0.0;
 				if((cv$valuePos < noStates)) {
 					double scopeVariable$reachedSourceProbability = 0.0;
-					if((1 == timeStep$var49)) {
-						if(fixedFlag$sample50) {
-							int index$var26$280_1 = st[sample$var32][0];
-							if(((0 <= index$var26$280_1) && (index$var26$280_1 < noStates)))
+					if((1 == timeStep$var76)) {
+						if(fixedFlag$sample71) {
+							int index$var40$280_1 = st[sample$var53][0];
+							if(((0 <= index$var40$280_1) && (index$var40$280_1 < noStates)))
 								scopeVariable$reachedSourceProbability = 1.0;
 						} else {
-							for(int index$sample50$276 = 0; index$sample50$276 < noStates; index$sample50$276 += 1)
-								scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample50[sample$var32][index$sample50$276]);
+							for(int index$sample71$276 = 0; index$sample71$276 < noStates; index$sample71$276 += 1)
+								scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample71[sample$var53][index$sample71$276]);
 						}
 					}
-					int index$timeStep$284 = (timeStep$var49 - 1);
-					if((((1 <= index$timeStep$284) && !(index$timeStep$284 == timeStep$var49)) && !(index$timeStep$284 == index$timeStep$269_3))) {
-						for(int index$sample63$285 = 0; index$sample63$285 < noStates; index$sample63$285 += 1)
-							scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample63[sample$var32][(index$timeStep$284 - 1)][index$sample63$285]);
+					int index$timeStep$284 = (timeStep$var76 - 1);
+					if((((1 <= index$timeStep$284) && !(index$timeStep$284 == timeStep$var76)) && !(index$timeStep$284 == index$timeStep$269_3))) {
+						for(int index$sample90$285 = 0; index$sample90$285 < noStates; index$sample90$285 += 1)
+							scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample90[sample$var53][(index$timeStep$284 - 1)][index$sample90$285]);
 					}
 					cv$reachedDistributionProbability = scopeVariable$reachedSourceProbability;
 					DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, scopeVariable$reachedSourceProbability, m[cv$valuePos]);
 				}
-				double[] cv$sampleDistribution = distribution$sample63[sample$var32][(index$timeStep$269_3 - 1)];
+				double[] cv$sampleDistribution = distribution$sample90[sample$var53][(index$timeStep$269_3 - 1)];
 				double cv$overlap = 0.0;
 				for(int cv$i = 0; cv$i < noStates; cv$i += 1) {
 					double cv$normalisedDistValue = (cv$accumulatedConsumerDistributions[cv$i] / cv$reachedDistributionProbability);
@@ -1687,7 +1891,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 			cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue + cv$accumulatedDistributionProbabilities) - Math.log(cv$reachedDistributionSourceRV));
 		}
-		double[] cv$localProbability = distribution$sample63[sample$var32][(timeStep$var49 - 1)];
+		double[] cv$localProbability = distribution$sample90[sample$var53][(timeStep$var76 - 1)];
 		double cv$logSum;
 		double cv$lseMax = cv$stateProbabilityLocal[0];
 		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
@@ -1714,235 +1918,68 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
-	private final void sample96(int var82, int var86, int threadID$cv$var86, Rng RNG$) {
-		double cv$originalValue = current_metric_mean[var82][var86];
-		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		{
-			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-				if((metric_valid_g[sample$var120][var82][0] && (0 < length$metric[sample$var120][0]))) {
-					if(fixedFlag$sample50) {
-						if((var86 == st[sample$var120][0])) {
-							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var100 = st[sample$var120][0];
-							if(((0 <= var100) && (var100 < noStates))) {
-								double cv$temp$3$var154 = current_metric_var[var82][st[sample$var120][0]];
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$3$var154))) - (Math.log(cv$temp$3$var154) * 0.5));
-								cv$consumerDistributionProbabilityAccumulator = 0.0;
-							}
-							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-							else {
-								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-								else
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-							}
-						}
-					} else {
-						double cv$probabilitySample50Value7 = distribution$sample50[sample$var120][var86];
-						double var154 = current_metric_var[var82][var86];
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample50Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
-						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample50Value7), 0.0);
-						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-						else {
-							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-							else
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-						}
-					}
-				}
-			}
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-				for(int timeStep$var140 = 1; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-					if(metric_valid_g[sample$var120][var82][timeStep$var140]) {
-						if(fixedFlag$sample63) {
-							if((var86 == st[sample$var120][timeStep$var140])) {
-								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-								double cv$consumerDistributionProbabilityAccumulator = 1.0;
-								int var100 = st[sample$var120][timeStep$var140];
-								if(((0 <= var100) && (var100 < noStates))) {
-									double cv$temp$21$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
-									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$21$var154))) - (Math.log(cv$temp$21$var154) * 0.5));
-									cv$consumerDistributionProbabilityAccumulator = 0.0;
-								}
-								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-								if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-								else {
-									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-									else
-										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-								}
-							}
-						} else {
-							double cv$probabilitySample63Value19 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][var86];
-							double var154 = current_metric_var[var82][var86];
-							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample63Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
-							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample63Value19), 0.0);
-							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-							else {
-								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-								else
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-							}
-						}
-					}
-				}
-			}
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		current_metric_mean[var82][var86] = cv$proposedValue;
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			if((metric_valid_g[sample$var120][var82][0] && (0 < length$metric[sample$var120][0]))) {
-				if(fixedFlag$sample50) {
-					if((var86 == st[sample$var120][0])) {
-						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-						int var100 = st[sample$var120][0];
-						if(((0 <= var100) && (var100 < noStates))) {
-							double cv$temp$3$var154 = current_metric_var[var82][st[sample$var120][0]];
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$3$var154))) - (Math.log(cv$temp$3$var154) * 0.5));
-							cv$consumerDistributionProbabilityAccumulator = 0.0;
-						}
-						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-						else {
-							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-							else
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-						}
-					}
-				} else {
-					double cv$probabilitySample50Value7 = distribution$sample50[sample$var120][var86];
-					double var154 = current_metric_var[var82][var86];
-					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample50Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
-					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample50Value7), 0.0);
-					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-					else {
-						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-						else
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-					}
-				}
-			}
-		}
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			for(int timeStep$var140 = 1; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
-				if(metric_valid_g[sample$var120][var82][timeStep$var140]) {
-					if(fixedFlag$sample63) {
-						if((var86 == st[sample$var120][timeStep$var140])) {
-							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var100 = st[sample$var120][timeStep$var140];
-							if(((0 <= var100) && (var100 < noStates))) {
-								double cv$temp$21$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$21$var154))) - (Math.log(cv$temp$21$var154) * 0.5));
-								cv$consumerDistributionProbabilityAccumulator = 0.0;
-							}
-							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-							else {
-								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-								else
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-							}
-						}
-					} else {
-						double cv$probabilitySample63Value19 = distribution$sample63[sample$var120][(timeStep$var140 - 1)][var86];
-						double var154 = current_metric_var[var82][var86];
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample63Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
-						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample63Value19), 0.0);
-						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-						else {
-							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-							else
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-						}
-					}
-				}
-			}
-		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
-			current_metric_mean[var82][var86] = cv$originalValue;
-	}
-
 	@Override
 	public final void allocateScratch() {
-		cv$var21$countGlobal = new double[Math.max(0, noStates)];
+		cv$var28$countGlobal = new double[Math.max(0, noStates)];
 		{
 			int cv$max = 0;
 			if((0 < noStates))
 				cv$max = noStates;
 			int cv$threadCount = threadCount();
-			cv$var27$countGlobal = new double[cv$threadCount][];
+			cv$var41$countGlobal = new double[cv$threadCount][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var27$countGlobal[cv$index] = new double[cv$max];
+				cv$var41$countGlobal[cv$index] = new double[cv$max];
 		}
 		{
 			int cv$threadCount = threadCount();
-			cv$distributionAccumulator$var56 = new double[cv$threadCount][];
+			cv$distributionAccumulator$var83 = new double[cv$threadCount][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$distributionAccumulator$var56[cv$index] = new double[noStates];
+				cv$distributionAccumulator$var83[cv$index] = new double[noStates];
 		}
 		{
 			int cv$threadCount = threadCount();
-			cv$var44$stateProbabilityGlobal = new double[cv$threadCount][];
+			cv$var65$stateProbabilityGlobal = new double[cv$threadCount][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var44$stateProbabilityGlobal[cv$index] = new double[noStates];
+				cv$var65$stateProbabilityGlobal[cv$index] = new double[noStates];
 		}
 		{
 			int cv$max_server = 0;
-			int cv$max_timeStep$var140 = 0;
-			for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+			int cv$max_timeStep$var239 = 0;
+			for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 				if((0 < length$metric[0].length))
-					cv$max_timeStep$var140 = Math.max(cv$max_timeStep$var140, length$metric[sample$var120][0]);
+					cv$max_timeStep$var239 = Math.max(cv$max_timeStep$var239, length$metric[sample$var207][0]);
 				cv$max_server = Math.max(cv$max_server, length$metric[0].length);
 			}
-			int cv$max_sample$var120 = length$metric.length;
+			int cv$max_sample$var207 = length$metric.length;
 			int cv$threadCount = threadCount();
-			guard$sample50gaussian172$global = new boolean[cv$threadCount][][][];
+			guard$sample71gaussian274$global = new boolean[cv$threadCount][][][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				guard$sample50gaussian172$global[cv$index] = new boolean[cv$max_sample$var120][cv$max_server][cv$max_timeStep$var140];
+				guard$sample71gaussian274$global[cv$index] = new boolean[cv$max_sample$var207][cv$max_server][cv$max_timeStep$var239];
 		}
 		{
 			int cv$threadCount = threadCount();
-			cv$var57$stateProbabilityGlobal = new double[cv$threadCount][];
+			cv$var84$stateProbabilityGlobal = new double[cv$threadCount][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var57$stateProbabilityGlobal[cv$index] = new double[noStates];
+				cv$var84$stateProbabilityGlobal[cv$index] = new double[noStates];
 		}
-		int cv$max_server = 0;
-		int cv$max_timeStep$var140 = 0;
-		for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
-			if((0 < length$metric[0].length))
-				cv$max_timeStep$var140 = Math.max(cv$max_timeStep$var140, length$metric[sample$var120][0]);
-			cv$max_server = Math.max(cv$max_server, length$metric[0].length);
+		{
+			int cv$max_server = 0;
+			int cv$max_timeStep$var239 = 0;
+			for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
+				if((0 < length$metric[0].length))
+					cv$max_timeStep$var239 = Math.max(cv$max_timeStep$var239, length$metric[sample$var207][0]);
+				cv$max_server = Math.max(cv$max_server, length$metric[0].length);
+			}
+			int cv$max_sample$var207 = length$metric.length;
+			int cv$threadCount = threadCount();
+			guard$sample90gaussian274$global = new boolean[cv$threadCount][][][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				guard$sample90gaussian274$global[cv$index] = new boolean[cv$max_sample$var207][cv$max_server][cv$max_timeStep$var239];
 		}
-		int cv$max_sample$var120 = length$metric.length;
 		int cv$threadCount = threadCount();
-		guard$sample63gaussian172$global = new boolean[cv$threadCount][][][];
+		cv$var245$stateProbabilityGlobal = new double[cv$threadCount][];
 		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			guard$sample63gaussian172$global[cv$index] = new boolean[cv$max_sample$var120][cv$max_server][cv$max_timeStep$var140];
+			cv$var245$stateProbabilityGlobal[cv$index] = new double[2];
 	}
 
 	@Override
@@ -1952,160 +1989,160 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			initialStateDistribution = new double[noStates];
 		if(!setFlag$m) {
 			m = new double[noStates][];
-			for(int var26 = 0; var26 < noStates; var26 += 1)
-				m[var26] = new double[noStates];
+			for(int var40 = 0; var40 < noStates; var40 += 1)
+				m[var40] = new double[noStates];
 		}
 		if(!setFlag$st) {
 			st = new int[length$metric.length][];
-			for(int sample$var32 = 0; sample$var32 < length$metric.length; sample$var32 += 1)
-				st[sample$var32] = new int[length$metric[sample$var32][0]];
+			for(int sample$var53 = 0; sample$var53 < length$metric.length; sample$var53 += 1)
+				st[sample$var53] = new int[length$metric[sample$var53][0]];
 		}
 		if(!setFlag$metric_g) {
 			metric_g = new double[length$metric.length][][];
-			for(int var67 = 0; var67 < length$metric.length; var67 += 1)
-				metric_g[var67] = new double[length$metric[0].length][];
-			for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+			for(int var101 = 0; var101 < length$metric.length; var101 += 1)
+				metric_g[var101] = new double[length$metric[0].length][];
+			for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 				for(int server = 0; server < length$metric[0].length; server += 1)
-					metric_g[sample$var120][server] = new double[length$metric[sample$var120][0]];
+					metric_g[sample$var207][server] = new double[length$metric[sample$var207][0]];
 			}
 		}
 		if(!setFlag$metric_valid_g) {
 			metric_valid_g = new boolean[length$metric.length][][];
-			for(int var73 = 0; var73 < length$metric.length; var73 += 1)
-				metric_valid_g[var73] = new boolean[length$metric[0].length][];
-			for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+			for(int var114 = 0; var114 < length$metric.length; var114 += 1)
+				metric_valid_g[var114] = new boolean[length$metric[0].length][];
+			for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 				for(int server = 0; server < length$metric[0].length; server += 1)
-					metric_valid_g[sample$var120][server] = new boolean[length$metric[sample$var120][0]];
+					metric_valid_g[sample$var207][server] = new boolean[length$metric[sample$var207][0]];
 			}
 		}
 		if(!setFlag$current_metric_mean) {
 			current_metric_mean = new double[length$metric[0].length][];
-			for(int var82 = 0; var82 < length$metric[0].length; var82 += 1)
-				current_metric_mean[var82] = new double[noStates];
+			for(int var130 = 0; var130 < length$metric[0].length; var130 += 1)
+				current_metric_mean[var130] = new double[noStates];
 		}
 		if(!setFlag$current_metric_var) {
 			current_metric_var = new double[length$metric[0].length][];
-			for(int var96 = 0; var96 < length$metric[0].length; var96 += 1)
-				current_metric_var[var96] = new double[noStates];
+			for(int var157 = 0; var157 < length$metric[0].length; var157 += 1)
+				current_metric_var[var157] = new double[noStates];
 		}
 		if(!setFlag$current_metric_valid_bias) {
 			current_metric_valid_bias = new double[length$metric[0].length][];
-			for(int var110 = 0; var110 < length$metric[0].length; var110 += 1)
-				current_metric_valid_bias[var110] = new double[noStates];
+			for(int var184 = 0; var184 < length$metric[0].length; var184 += 1)
+				current_metric_valid_bias[var184] = new double[noStates];
 		}
-		distribution$sample50 = new double[length$metric.length][];
-		for(int sample$var32 = 0; sample$var32 < length$metric.length; sample$var32 += 1)
-			distribution$sample50[sample$var32] = new double[noStates];
-		distribution$sample63 = new double[length$metric.length][][];
-		for(int sample$var32 = 0; sample$var32 < length$metric.length; sample$var32 += 1) {
-			double[][] subarray$0 = new double[(length$metric[sample$var32][0] - 1)][];
-			distribution$sample63[sample$var32] = subarray$0;
-			for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-				subarray$0[(timeStep$var49 - 1)] = new double[noStates];
+		distribution$sample71 = new double[length$metric.length][];
+		for(int sample$var53 = 0; sample$var53 < length$metric.length; sample$var53 += 1)
+			distribution$sample71[sample$var53] = new double[noStates];
+		distribution$sample90 = new double[length$metric.length][][];
+		for(int sample$var53 = 0; sample$var53 < length$metric.length; sample$var53 += 1) {
+			double[][] subarray$0 = new double[(length$metric[sample$var53][0] - 1)][];
+			distribution$sample90[sample$var53] = subarray$0;
+			for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+				subarray$0[(timeStep$var76 - 1)] = new double[noStates];
 		}
-		logProbability$var43 = new double[length$metric.length];
-		logProbability$sample50 = new double[length$metric.length];
-		logProbability$var56 = new double[length$metric.length][];
-		for(int sample$var32 = 0; sample$var32 < length$metric.length; sample$var32 += 1)
-			logProbability$var56[sample$var32] = new double[(length$metric[sample$var32][0] - 1)];
-		logProbability$sample63 = new double[length$metric.length][];
-		for(int sample$var32 = 0; sample$var32 < length$metric.length; sample$var32 += 1)
-			logProbability$sample63[sample$var32] = new double[(length$metric[sample$var32][0] - 1)];
-		logProbability$var145 = new double[length$metric.length][][];
-		for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+		logProbability$var64 = new double[length$metric.length];
+		logProbability$sample71 = new double[length$metric.length];
+		logProbability$var83 = new double[length$metric.length][];
+		for(int sample$var53 = 0; sample$var53 < length$metric.length; sample$var53 += 1)
+			logProbability$var83[sample$var53] = new double[(length$metric[sample$var53][0] - 1)];
+		logProbability$sample90 = new double[length$metric.length][];
+		for(int sample$var53 = 0; sample$var53 < length$metric.length; sample$var53 += 1)
+			logProbability$sample90[sample$var53] = new double[(length$metric[sample$var53][0] - 1)];
+		logProbability$var244 = new double[length$metric.length][][];
+		for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 			double[][] subarray$0 = new double[length$metric[0].length][];
-			logProbability$var145[sample$var120] = subarray$0;
+			logProbability$var244[sample$var207] = subarray$0;
 			for(int server = 0; server < length$metric[0].length; server += 1)
-				subarray$0[server] = new double[length$metric[sample$var120][0]];
+				subarray$0[server] = new double[length$metric[sample$var207][0]];
 		}
-		logProbability$sample161 = new double[length$metric.length][][];
-		for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+		logProbability$sample260 = new double[length$metric.length][][];
+		for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 			double[][] subarray$0 = new double[length$metric[0].length][];
-			logProbability$sample161[sample$var120] = subarray$0;
+			logProbability$sample260[sample$var207] = subarray$0;
 			for(int server = 0; server < length$metric[0].length; server += 1)
-				subarray$0[server] = new double[length$metric[sample$var120][0]];
+				subarray$0[server] = new double[length$metric[sample$var207][0]];
 		}
-		logProbability$var155 = new double[length$metric.length][][];
-		for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+		logProbability$var257 = new double[length$metric.length][][];
+		for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 			double[][] subarray$0 = new double[length$metric[0].length][];
-			logProbability$var155[sample$var120] = subarray$0;
+			logProbability$var257[sample$var207] = subarray$0;
 			for(int server = 0; server < length$metric[0].length; server += 1)
-				subarray$0[server] = new double[length$metric[sample$var120][0]];
+				subarray$0[server] = new double[length$metric[sample$var207][0]];
 		}
-		logProbability$sample173 = new double[length$metric.length][][];
-		for(int sample$var120 = 0; sample$var120 < length$metric.length; sample$var120 += 1) {
+		logProbability$sample275 = new double[length$metric.length][][];
+		for(int sample$var207 = 0; sample$var207 < length$metric.length; sample$var207 += 1) {
 			double[][] subarray$0 = new double[length$metric[0].length][];
-			logProbability$sample173[sample$var120] = subarray$0;
+			logProbability$sample275[sample$var207] = subarray$0;
 			for(int server = 0; server < length$metric[0].length; server += 1)
-				subarray$0[server] = new double[length$metric[sample$var120][0]];
+				subarray$0[server] = new double[length$metric[sample$var207][0]];
 		}
 		allocateScratch();
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample31)
 			DistributionSampling.sampleDirichlet(RNG$, v, initialStateDistribution);
-		if(!fixedFlag$sample30)
+		if(!fixedFlag$sample44)
 			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var26]);
+				(int forStart$var40, int forEnd$var40, int threadID$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var40 = forStart$var40; var40 < forEnd$var40; var40 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var40]);
 				}
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$sample$var32, int forEnd$sample$var32, int threadID$sample$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int sample$var32 = forStart$sample$var32; sample$var32 < forEnd$sample$var32; sample$var32 += 1) {
-						if(!fixedFlag$sample50)
-							st[sample$var32][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution);
-						if(!fixedFlag$sample63) {
-							int[] var50 = st[sample$var32];
-							for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-								var50[timeStep$var49] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var32][(timeStep$var49 - 1)]]);
+			(int forStart$sample$var53, int forEnd$sample$var53, int threadID$sample$var53, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample$var53 = forStart$sample$var53; sample$var53 < forEnd$sample$var53; sample$var53 += 1) {
+						if(!fixedFlag$sample71)
+							st[sample$var53][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution);
+						if(!fixedFlag$sample90) {
+							int[] var77 = st[sample$var53];
+							for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+								var77[timeStep$var76] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var53][(timeStep$var76 - 1)]]);
 						}
 					}
 			}
 		);
-		if(!fixedFlag$sample96)
+		if(!fixedFlag$sample150)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1) {
-							double[] var83 = current_metric_mean[var82];
+				(int forStart$var130, int forEnd$var130, int threadID$var130, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var130 = forStart$var130; var130 < forEnd$var130; var130 += 1) {
+							double[] var131 = current_metric_mean[var130];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+								(int forStart$var140, int forEnd$var140, int threadID$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var140 = forStart$var140; var140 < forEnd$var140; var140 += 1)
+											var131[var140] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample111)
+		if(!fixedFlag$sample178)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var96, int forEnd$var96, int threadID$var96, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var96 = forStart$var96; var96 < forEnd$var96; var96 += 1) {
-							double[] var97 = current_metric_var[var96];
+				(int forStart$var157, int forEnd$var157, int threadID$var157, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var157 = forStart$var157; var157 < forEnd$var157; var157 += 1) {
+							double[] var158 = current_metric_var[var157];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var100, int forEnd$var100, int threadID$var100, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var100 = forStart$var100; var100 < forEnd$var100; var100 += 1)
-											var97[var100] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
+								(int forStart$var167, int forEnd$var167, int threadID$var167, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var167 = forStart$var167; var167 < forEnd$var167; var167 += 1)
+											var158[var167] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample126)
+		if(!fixedFlag$sample206)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var110, int forEnd$var110, int threadID$var110, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var110 = forStart$var110; var110 < forEnd$var110; var110 += 1) {
-							double[] var111 = current_metric_valid_bias[var110];
+				(int forStart$var184, int forEnd$var184, int threadID$var184, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var184 = forStart$var184; var184 < forEnd$var184; var184 += 1) {
+							double[] var185 = current_metric_valid_bias[var184];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var114, int forEnd$var114, int threadID$var114, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var114 = forStart$var114; var114 < forEnd$var114; var114 += 1)
-											var111[var114] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								(int forStart$var194, int forEnd$var194, int threadID$var194, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var194 = forStart$var194; var194 < forEnd$var194; var194 += 1)
+											var185[var194] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 								}
 							);
 						}
@@ -2113,24 +2150,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$index$sample$var120, int forEnd$index$sample$var120, int threadID$index$sample$var120, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int index$sample$var120 = forStart$index$sample$var120; index$sample$var120 < forEnd$index$sample$var120; index$sample$var120 += 1) {
-						int sample$var120 = index$sample$var120;
-						boolean[][] var135 = metric_valid_g[sample$var120];
-						double[][] var131 = metric_g[sample$var120];
+			(int forStart$index$sample$var207, int forEnd$index$sample$var207, int threadID$index$sample$var207, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$sample$var207 = forStart$index$sample$var207; index$sample$var207 < forEnd$index$sample$var207; index$sample$var207 += 1) {
+						int sample$var207 = index$sample$var207;
+						int threadID$sample$var207 = threadID$index$sample$var207;
+						boolean[][] var228 = metric_valid_g[sample$var207];
+						double[][] var224 = metric_g[sample$var207];
 						parallelFor(RNG$1, 0, noServers, 1,
 							(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
 										int server = index$server;
-										boolean[] metric_valid_inner = metric_valid_g[sample$var120][server];
-										double[] metric_inner = var131[server];
-										parallelFor(RNG$2, 0, length$metric[sample$var120][0], 1,
-											(int forStart$timeStep$var140, int forEnd$timeStep$var140, int threadID$timeStep$var140, org.sandwood.random.internal.Rng RNG$3) -> { 
-												for(int timeStep$var140 = forStart$timeStep$var140; timeStep$var140 < forEnd$timeStep$var140; timeStep$var140 += 1) {
-														if(!fixedFlag$sample161)
-															metric_valid_inner[timeStep$var140] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var120][timeStep$var140]]);
-														if((var135[server][timeStep$var140] && !fixedFlag$sample173))
-															metric_inner[timeStep$var140] = ((Math.sqrt(current_metric_var[server][st[sample$var120][timeStep$var140]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var120][timeStep$var140]]);
+										int threadID$server = threadID$index$server;
+										boolean[] metric_valid_inner = metric_valid_g[sample$var207][server];
+										double[] metric_inner = var224[server];
+										parallelFor(RNG$2, 0, length$metric[sample$var207][0], 1,
+											(int forStart$timeStep$var239, int forEnd$timeStep$var239, int threadID$timeStep$var239, org.sandwood.random.internal.Rng RNG$3) -> { 
+												for(int timeStep$var239 = forStart$timeStep$var239; timeStep$var239 < forEnd$timeStep$var239; timeStep$var239 += 1) {
+														if(!fixedFlag$sample260)
+															metric_valid_inner[timeStep$var239] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var207][timeStep$var239]]);
+														if((var228[server][timeStep$var239] && (!fixedFlag$sample260 || !fixedFlag$sample275)))
+															metric_inner[timeStep$var239] = ((Math.sqrt(current_metric_var[server][st[sample$var207][timeStep$var239]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var207][timeStep$var239]]);
 													}
 											}
 										);
@@ -2144,104 +2183,129 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample31)
 			DistributionSampling.sampleDirichlet(RNG$, v, initialStateDistribution);
-		if(!fixedFlag$sample30)
+		if(!fixedFlag$sample44)
 			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var26]);
+				(int forStart$var40, int forEnd$var40, int threadID$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var40 = forStart$var40; var40 < forEnd$var40; var40 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var40]);
 				}
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$sample$var32, int forEnd$sample$var32, int threadID$sample$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int sample$var32 = forStart$sample$var32; sample$var32 < forEnd$sample$var32; sample$var32 += 1) {
-						if(!fixedFlag$sample50) {
-							double[] cv$distribution$sample50 = distribution$sample50[sample$var32];
-							for(int index$var43 = 0; index$var43 < noStates; index$var43 += 1)
-								cv$distribution$sample50[index$var43] = ((index$var43 < initialStateDistribution.length)?initialStateDistribution[index$var43]:0.0);
+			(int forStart$sample$var53, int forEnd$sample$var53, int threadID$sample$var53, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample$var53 = forStart$sample$var53; sample$var53 < forEnd$sample$var53; sample$var53 += 1) {
+						if(!fixedFlag$sample71) {
+							double[] cv$distribution$sample71 = distribution$sample71[sample$var53];
+							for(int index$var64 = 0; index$var64 < noStates; index$var64 += 1)
+								cv$distribution$sample71[index$var64] = ((index$var64 < initialStateDistribution.length)?initialStateDistribution[index$var64]:0.0);
 						}
-						if(!fixedFlag$sample63) {
-							for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-								double[] cv$distribution$sample63 = distribution$sample63[sample$var32][(timeStep$var49 - 1)];
-								for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-									cv$distribution$sample63[index$var56] = 0.0;
-								if((1 == timeStep$var49)) {
-									if(fixedFlag$sample50) {
-										int var26 = st[sample$var32][0];
-										if(((0 <= var26) && (var26 < noStates))) {
-											double[] var55 = m[st[sample$var32][0]];
-											for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-												cv$distribution$sample63[index$var56] = (cv$distribution$sample63[index$var56] + ((index$var56 < var55.length)?var55[index$var56]:0.0));
+						if(!fixedFlag$sample90) {
+							for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1) {
+								double[] cv$distribution$sample90 = distribution$sample90[sample$var53][(timeStep$var76 - 1)];
+								for(int index$var83 = 0; index$var83 < noStates; index$var83 += 1)
+									cv$distribution$sample90[index$var83] = 0.0;
+								if((1 == timeStep$var76)) {
+									if(fixedFlag$sample71) {
+										int var40 = st[sample$var53][0];
+										if(((0 <= var40) && (var40 < noStates))) {
+											double[] var82 = m[st[sample$var53][0]];
+											for(int index$var83 = 0; index$var83 < noStates; index$var83 += 1)
+												cv$distribution$sample90[index$var83] = (cv$distribution$sample90[index$var83] + ((index$var83 < var82.length)?var82[index$var83]:0.0));
 										}
 									} else {
-										for(int index$sample50$3 = 0; index$sample50$3 < noStates; index$sample50$3 += 1) {
-											double cv$probabilitySample50Value4 = distribution$sample50[sample$var32][index$sample50$3];
-											double[] var55 = m[index$sample50$3];
-											for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-												cv$distribution$sample63[index$var56] = (cv$distribution$sample63[index$var56] + (cv$probabilitySample50Value4 * ((index$var56 < var55.length)?var55[index$var56]:0.0)));
+										for(int index$sample71$3 = 0; index$sample71$3 < noStates; index$sample71$3 += 1) {
+											double cv$probabilitySample71Value4 = distribution$sample71[sample$var53][index$sample71$3];
+											double[] var82 = m[index$sample71$3];
+											for(int index$var83 = 0; index$var83 < noStates; index$var83 += 1)
+												cv$distribution$sample90[index$var83] = (cv$distribution$sample90[index$var83] + (cv$probabilitySample71Value4 * ((index$var83 < var82.length)?var82[index$var83]:0.0)));
 										}
 									}
 								}
-								int index$timeStep$11 = (timeStep$var49 - 1);
+								int index$timeStep$11 = (timeStep$var76 - 1);
 								if((1 <= index$timeStep$11)) {
-									for(int index$sample63$12 = 0; index$sample63$12 < noStates; index$sample63$12 += 1) {
-										double cv$probabilitySample63Value13 = distribution$sample63[sample$var32][(index$timeStep$11 - 1)][index$sample63$12];
-										double[] var55 = m[index$sample63$12];
-										for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-											cv$distribution$sample63[index$var56] = (cv$distribution$sample63[index$var56] + (cv$probabilitySample63Value13 * ((index$var56 < var55.length)?var55[index$var56]:0.0)));
+									for(int index$sample90$12 = 0; index$sample90$12 < noStates; index$sample90$12 += 1) {
+										double cv$probabilitySample90Value13 = distribution$sample90[sample$var53][(index$timeStep$11 - 1)][index$sample90$12];
+										double[] var82 = m[index$sample90$12];
+										for(int index$var83 = 0; index$var83 < noStates; index$var83 += 1)
+											cv$distribution$sample90[index$var83] = (cv$distribution$sample90[index$var83] + (cv$probabilitySample90Value13 * ((index$var83 < var82.length)?var82[index$var83]:0.0)));
 									}
 								}
-								double cv$var56$sum = 0.0;
-								for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-									cv$var56$sum = (cv$var56$sum + cv$distribution$sample63[index$var56]);
-								for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-									cv$distribution$sample63[index$var56] = (cv$distribution$sample63[index$var56] / cv$var56$sum);
+								double cv$var83$sum = 0.0;
+								for(int index$var83 = 0; index$var83 < noStates; index$var83 += 1)
+									cv$var83$sum = (cv$var83$sum + cv$distribution$sample90[index$var83]);
+								for(int index$var83 = 0; index$var83 < noStates; index$var83 += 1)
+									cv$distribution$sample90[index$var83] = (cv$distribution$sample90[index$var83] / cv$var83$sum);
 							}
 						}
 					}
 			}
 		);
-		if(!fixedFlag$sample96)
+		if(!fixedFlag$sample150)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1) {
-							double[] var83 = current_metric_mean[var82];
+				(int forStart$var130, int forEnd$var130, int threadID$var130, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var130 = forStart$var130; var130 < forEnd$var130; var130 += 1) {
+							double[] var131 = current_metric_mean[var130];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+								(int forStart$var140, int forEnd$var140, int threadID$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var140 = forStart$var140; var140 < forEnd$var140; var140 += 1)
+											var131[var140] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample111)
+		if(!fixedFlag$sample178)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var96, int forEnd$var96, int threadID$var96, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var96 = forStart$var96; var96 < forEnd$var96; var96 += 1) {
-							double[] var97 = current_metric_var[var96];
+				(int forStart$var157, int forEnd$var157, int threadID$var157, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var157 = forStart$var157; var157 < forEnd$var157; var157 += 1) {
+							double[] var158 = current_metric_var[var157];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var100, int forEnd$var100, int threadID$var100, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var100 = forStart$var100; var100 < forEnd$var100; var100 += 1)
-											var97[var100] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
+								(int forStart$var167, int forEnd$var167, int threadID$var167, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var167 = forStart$var167; var167 < forEnd$var167; var167 += 1)
+											var158[var167] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample126)
+		if(!fixedFlag$sample206)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var110, int forEnd$var110, int threadID$var110, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var110 = forStart$var110; var110 < forEnd$var110; var110 += 1) {
-							double[] var111 = current_metric_valid_bias[var110];
+				(int forStart$var184, int forEnd$var184, int threadID$var184, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var184 = forStart$var184; var184 < forEnd$var184; var184 += 1) {
+							double[] var185 = current_metric_valid_bias[var184];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var114, int forEnd$var114, int threadID$var114, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var114 = forStart$var114; var114 < forEnd$var114; var114 += 1)
-											var111[var114] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								(int forStart$var194, int forEnd$var194, int threadID$var194, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var194 = forStart$var194; var194 < forEnd$var194; var194 += 1)
+											var185[var194] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								}
+							);
+						}
+				}
+			);
+
+		if(!fixedFlag$sample260)
+			parallelFor(RNG$, 0, noSamples, 1,
+				(int forStart$index$sample$var207, int forEnd$index$sample$var207, int threadID$index$sample$var207, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$sample$var207 = forStart$index$sample$var207; index$sample$var207 < forEnd$index$sample$var207; index$sample$var207 += 1) {
+							int sample$var207 = index$sample$var207;
+							int threadID$sample$var207 = threadID$index$sample$var207;
+							parallelFor(RNG$1, 0, noServers, 1,
+								(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
+											int server = index$server;
+											int threadID$server = threadID$index$server;
+											boolean[] metric_valid_inner = metric_valid_g[sample$var207][server];
+											parallelFor(RNG$2, 0, length$metric[sample$var207][0], 1,
+												(int forStart$timeStep$var239, int forEnd$timeStep$var239, int threadID$timeStep$var239, org.sandwood.random.internal.Rng RNG$3) -> { 
+													for(int timeStep$var239 = forStart$timeStep$var239; timeStep$var239 < forEnd$timeStep$var239; timeStep$var239 += 1)
+															metric_valid_inner[timeStep$var239] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var207][timeStep$var239]]);
+												}
+											);
+										}
 								}
 							);
 						}
@@ -2252,68 +2316,93 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample31)
 			DistributionSampling.sampleDirichlet(RNG$, v, initialStateDistribution);
-		if(!fixedFlag$sample30)
+		if(!fixedFlag$sample44)
 			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var26]);
+				(int forStart$var40, int forEnd$var40, int threadID$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var40 = forStart$var40; var40 < forEnd$var40; var40 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var40]);
 				}
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$sample$var32, int forEnd$sample$var32, int threadID$sample$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int sample$var32 = forStart$sample$var32; sample$var32 < forEnd$sample$var32; sample$var32 += 1) {
-						if(!fixedFlag$sample50)
-							st[sample$var32][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution);
-						if(!fixedFlag$sample63) {
-							int[] var50 = st[sample$var32];
-							for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-								var50[timeStep$var49] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var32][(timeStep$var49 - 1)]]);
+			(int forStart$sample$var53, int forEnd$sample$var53, int threadID$sample$var53, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample$var53 = forStart$sample$var53; sample$var53 < forEnd$sample$var53; sample$var53 += 1) {
+						if(!fixedFlag$sample71)
+							st[sample$var53][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution);
+						if(!fixedFlag$sample90) {
+							int[] var77 = st[sample$var53];
+							for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+								var77[timeStep$var76] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var53][(timeStep$var76 - 1)]]);
 						}
 					}
 			}
 		);
-		if(!fixedFlag$sample96)
+		if(!fixedFlag$sample150)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1) {
-							double[] var83 = current_metric_mean[var82];
+				(int forStart$var130, int forEnd$var130, int threadID$var130, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var130 = forStart$var130; var130 < forEnd$var130; var130 += 1) {
+							double[] var131 = current_metric_mean[var130];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+								(int forStart$var140, int forEnd$var140, int threadID$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var140 = forStart$var140; var140 < forEnd$var140; var140 += 1)
+											var131[var140] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample111)
+		if(!fixedFlag$sample178)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var96, int forEnd$var96, int threadID$var96, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var96 = forStart$var96; var96 < forEnd$var96; var96 += 1) {
-							double[] var97 = current_metric_var[var96];
+				(int forStart$var157, int forEnd$var157, int threadID$var157, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var157 = forStart$var157; var157 < forEnd$var157; var157 += 1) {
+							double[] var158 = current_metric_var[var157];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var100, int forEnd$var100, int threadID$var100, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var100 = forStart$var100; var100 < forEnd$var100; var100 += 1)
-											var97[var100] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
+								(int forStart$var167, int forEnd$var167, int threadID$var167, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var167 = forStart$var167; var167 < forEnd$var167; var167 += 1)
+											var158[var167] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample126)
+		if(!fixedFlag$sample206)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var110, int forEnd$var110, int threadID$var110, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var110 = forStart$var110; var110 < forEnd$var110; var110 += 1) {
-							double[] var111 = current_metric_valid_bias[var110];
+				(int forStart$var184, int forEnd$var184, int threadID$var184, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var184 = forStart$var184; var184 < forEnd$var184; var184 += 1) {
+							double[] var185 = current_metric_valid_bias[var184];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var114, int forEnd$var114, int threadID$var114, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var114 = forStart$var114; var114 < forEnd$var114; var114 += 1)
-											var111[var114] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								(int forStart$var194, int forEnd$var194, int threadID$var194, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var194 = forStart$var194; var194 < forEnd$var194; var194 += 1)
+											var185[var194] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								}
+							);
+						}
+				}
+			);
+
+		if(!fixedFlag$sample260)
+			parallelFor(RNG$, 0, noSamples, 1,
+				(int forStart$index$sample$var207, int forEnd$index$sample$var207, int threadID$index$sample$var207, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$sample$var207 = forStart$index$sample$var207; index$sample$var207 < forEnd$index$sample$var207; index$sample$var207 += 1) {
+							int sample$var207 = index$sample$var207;
+							int threadID$sample$var207 = threadID$index$sample$var207;
+							parallelFor(RNG$1, 0, noServers, 1,
+								(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
+											int server = index$server;
+											int threadID$server = threadID$index$server;
+											boolean[] metric_valid_inner = metric_valid_g[sample$var207][server];
+											parallelFor(RNG$2, 0, length$metric[sample$var207][0], 1,
+												(int forStart$timeStep$var239, int forEnd$timeStep$var239, int threadID$timeStep$var239, org.sandwood.random.internal.Rng RNG$3) -> { 
+													for(int timeStep$var239 = forStart$timeStep$var239; timeStep$var239 < forEnd$timeStep$var239; timeStep$var239 += 1)
+															metric_valid_inner[timeStep$var239] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var207][timeStep$var239]]);
+												}
+											);
+										}
 								}
 							);
 						}
@@ -2325,67 +2414,94 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample24)
-				sample24();
-			if(!fixedFlag$sample30)
+			if(!fixedFlag$sample31)
+				sample31();
+			if(!fixedFlag$sample44)
 				parallelFor(RNG$, 0, noStates, 1,
-					(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-								sample30(var26, threadID$var26, RNG$1);
+					(int forStart$var40, int forEnd$var40, int threadID$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var40 = forStart$var40; var40 < forEnd$var40; var40 += 1)
+								sample44(var40, threadID$var40, RNG$1);
 					}
 				);
 
 			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$sample$var32, int forEnd$sample$var32, int threadID$sample$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int sample$var32 = forStart$sample$var32; sample$var32 < forEnd$sample$var32; sample$var32 += 1) {
-							if(!fixedFlag$sample50)
-								sample50(sample$var32, threadID$sample$var32, RNG$1);
-							if(!fixedFlag$sample63) {
-								for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-									sample63(sample$var32, timeStep$var49, threadID$sample$var32, RNG$1);
+				(int forStart$sample$var53, int forEnd$sample$var53, int threadID$sample$var53, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int sample$var53 = forStart$sample$var53; sample$var53 < forEnd$sample$var53; sample$var53 += 1) {
+							if(!fixedFlag$sample71)
+								sample71(sample$var53, threadID$sample$var53, RNG$1);
+							if(!fixedFlag$sample90) {
+								for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+									sample90(sample$var53, timeStep$var76, threadID$sample$var53, RNG$1);
 							}
 						}
 				}
 			);
-			if(!fixedFlag$sample96)
+			if(!fixedFlag$sample150)
 				parallelFor(RNG$, 0, noServers, 1,
-					(int forStart$index$var82, int forEnd$index$var82, int threadID$index$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$var82 = forStart$index$var82; index$var82 < forEnd$index$var82; index$var82 += 1) {
-								int var82 = index$var82;
+					(int forStart$index$var130, int forEnd$index$var130, int threadID$index$var130, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$var130 = forStart$index$var130; index$var130 < forEnd$index$var130; index$var130 += 1) {
+								int var130 = index$var130;
+								int threadID$var130 = threadID$index$var130;
 								parallelFor(RNG$1, 0, noStates, 1,
-									(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-												sample96(var82, var86, threadID$var86, RNG$2);
+									(int forStart$var140, int forEnd$var140, int threadID$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int var140 = forStart$var140; var140 < forEnd$var140; var140 += 1)
+												sample150(var130, var140, threadID$var140, RNG$2);
 									}
 								);
 							}
 					}
 				);
 
-			if(!fixedFlag$sample111)
+			if(!fixedFlag$sample178)
 				parallelFor(RNG$, 0, noServers, 1,
-					(int forStart$index$var96, int forEnd$index$var96, int threadID$index$var96, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$var96 = forStart$index$var96; index$var96 < forEnd$index$var96; index$var96 += 1) {
-								int var96 = index$var96;
+					(int forStart$index$var157, int forEnd$index$var157, int threadID$index$var157, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$var157 = forStart$index$var157; index$var157 < forEnd$index$var157; index$var157 += 1) {
+								int var157 = index$var157;
+								int threadID$var157 = threadID$index$var157;
 								parallelFor(RNG$1, 0, noStates, 1,
-									(int forStart$var100, int forEnd$var100, int threadID$var100, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int var100 = forStart$var100; var100 < forEnd$var100; var100 += 1)
-												sample111(var96, var100, threadID$var100, RNG$2);
+									(int forStart$var167, int forEnd$var167, int threadID$var167, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int var167 = forStart$var167; var167 < forEnd$var167; var167 += 1)
+												sample178(var157, var167, threadID$var167, RNG$2);
 									}
 								);
 							}
 					}
 				);
 
-			if(!fixedFlag$sample126)
+			if(!fixedFlag$sample206)
 				parallelFor(RNG$, 0, noServers, 1,
-					(int forStart$index$var110, int forEnd$index$var110, int threadID$index$var110, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$var110 = forStart$index$var110; index$var110 < forEnd$index$var110; index$var110 += 1) {
-								int var110 = index$var110;
+					(int forStart$index$var184, int forEnd$index$var184, int threadID$index$var184, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$var184 = forStart$index$var184; index$var184 < forEnd$index$var184; index$var184 += 1) {
+								int var184 = index$var184;
+								int threadID$var184 = threadID$index$var184;
 								parallelFor(RNG$1, 0, noStates, 1,
-									(int forStart$var114, int forEnd$var114, int threadID$var114, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int var114 = forStart$var114; var114 < forEnd$var114; var114 += 1)
-												sample126(var110, var114, threadID$var114, RNG$2);
+									(int forStart$var194, int forEnd$var194, int threadID$var194, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int var194 = forStart$var194; var194 < forEnd$var194; var194 += 1)
+												sample206(var184, var194, threadID$var194, RNG$2);
+									}
+								);
+							}
+					}
+				);
+
+			if(!fixedFlag$sample260)
+				parallelFor(RNG$, 0, noSamples, 1,
+					(int forStart$index$sample$var207, int forEnd$index$sample$var207, int threadID$index$sample$var207, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$sample$var207 = forStart$index$sample$var207; index$sample$var207 < forEnd$index$sample$var207; index$sample$var207 += 1) {
+								int sample$var207 = index$sample$var207;
+								int threadID$sample$var207 = threadID$index$sample$var207;
+								parallelFor(RNG$1, 0, noServers, 1,
+									(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
+												int server = index$server;
+												int threadID$server = threadID$index$server;
+												parallelFor(RNG$2, 0, length$metric[sample$var207][0], 1,
+													(int forStart$timeStep$var239, int forEnd$timeStep$var239, int threadID$timeStep$var239, org.sandwood.random.internal.Rng RNG$3) -> { 
+														for(int timeStep$var239 = forStart$timeStep$var239; timeStep$var239 < forEnd$timeStep$var239; timeStep$var239 += 1)
+																sample260(sample$var207, server, timeStep$var239, threadID$timeStep$var239, RNG$3);
+													}
+												);
+											}
 									}
 								);
 							}
@@ -2393,45 +2509,72 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				);
 
 		} else {
-			if(!fixedFlag$sample126)
-				parallelFor(RNG$, 0, noServers, 1,
-					(int forStart$index$var110, int forEnd$index$var110, int threadID$index$var110, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$var110 = forStart$index$var110; index$var110 < forEnd$index$var110; index$var110 += 1) {
-								int var110 = index$var110;
-								parallelFor(RNG$1, 0, noStates, 1,
-									(int forStart$var114, int forEnd$var114, int threadID$var114, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int var114 = forStart$var114; var114 < forEnd$var114; var114 += 1)
-												sample126(var110, var114, threadID$var114, RNG$2);
+			if(!fixedFlag$sample260)
+				parallelFor(RNG$, 0, noSamples, 1,
+					(int forStart$index$sample$var207, int forEnd$index$sample$var207, int threadID$index$sample$var207, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$sample$var207 = forStart$index$sample$var207; index$sample$var207 < forEnd$index$sample$var207; index$sample$var207 += 1) {
+								int sample$var207 = index$sample$var207;
+								int threadID$sample$var207 = threadID$index$sample$var207;
+								parallelFor(RNG$1, 0, noServers, 1,
+									(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
+												int server = index$server;
+												int threadID$server = threadID$index$server;
+												parallelFor(RNG$2, 0, length$metric[sample$var207][0], 1,
+													(int forStart$timeStep$var239, int forEnd$timeStep$var239, int threadID$timeStep$var239, org.sandwood.random.internal.Rng RNG$3) -> { 
+														for(int timeStep$var239 = forStart$timeStep$var239; timeStep$var239 < forEnd$timeStep$var239; timeStep$var239 += 1)
+																sample260(sample$var207, server, timeStep$var239, threadID$timeStep$var239, RNG$3);
+													}
+												);
+											}
 									}
 								);
 							}
 					}
 				);
 
-			if(!fixedFlag$sample111)
+			if(!fixedFlag$sample206)
 				parallelFor(RNG$, 0, noServers, 1,
-					(int forStart$index$var96, int forEnd$index$var96, int threadID$index$var96, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$var96 = forStart$index$var96; index$var96 < forEnd$index$var96; index$var96 += 1) {
-								int var96 = index$var96;
+					(int forStart$index$var184, int forEnd$index$var184, int threadID$index$var184, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$var184 = forStart$index$var184; index$var184 < forEnd$index$var184; index$var184 += 1) {
+								int var184 = index$var184;
+								int threadID$var184 = threadID$index$var184;
 								parallelFor(RNG$1, 0, noStates, 1,
-									(int forStart$var100, int forEnd$var100, int threadID$var100, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int var100 = forStart$var100; var100 < forEnd$var100; var100 += 1)
-												sample111(var96, var100, threadID$var100, RNG$2);
+									(int forStart$var194, int forEnd$var194, int threadID$var194, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int var194 = forStart$var194; var194 < forEnd$var194; var194 += 1)
+												sample206(var184, var194, threadID$var194, RNG$2);
 									}
 								);
 							}
 					}
 				);
 
-			if(!fixedFlag$sample96)
+			if(!fixedFlag$sample178)
 				parallelFor(RNG$, 0, noServers, 1,
-					(int forStart$index$var82, int forEnd$index$var82, int threadID$index$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$var82 = forStart$index$var82; index$var82 < forEnd$index$var82; index$var82 += 1) {
-								int var82 = index$var82;
+					(int forStart$index$var157, int forEnd$index$var157, int threadID$index$var157, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$var157 = forStart$index$var157; index$var157 < forEnd$index$var157; index$var157 += 1) {
+								int var157 = index$var157;
+								int threadID$var157 = threadID$index$var157;
 								parallelFor(RNG$1, 0, noStates, 1,
-									(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-												sample96(var82, var86, threadID$var86, RNG$2);
+									(int forStart$var167, int forEnd$var167, int threadID$var167, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int var167 = forStart$var167; var167 < forEnd$var167; var167 += 1)
+												sample178(var157, var167, threadID$var167, RNG$2);
+									}
+								);
+							}
+					}
+				);
+
+			if(!fixedFlag$sample150)
+				parallelFor(RNG$, 0, noServers, 1,
+					(int forStart$index$var130, int forEnd$index$var130, int threadID$index$var130, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$var130 = forStart$index$var130; index$var130 < forEnd$index$var130; index$var130 += 1) {
+								int var130 = index$var130;
+								int threadID$var130 = threadID$index$var130;
+								parallelFor(RNG$1, 0, noStates, 1,
+									(int forStart$var140, int forEnd$var140, int threadID$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int var140 = forStart$var140; var140 < forEnd$var140; var140 += 1)
+												sample150(var130, var140, threadID$var140, RNG$2);
 									}
 								);
 							}
@@ -2439,27 +2582,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				);
 
 			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$sample$var32, int forEnd$sample$var32, int threadID$sample$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int sample$var32 = forStart$sample$var32; sample$var32 < forEnd$sample$var32; sample$var32 += 1) {
-							if(!fixedFlag$sample63) {
-								for(int timeStep$var49 = (length$metric[sample$var32][0] - 1); timeStep$var49 >= 1; timeStep$var49 -= 1)
-									sample63(sample$var32, timeStep$var49, threadID$sample$var32, RNG$1);
+				(int forStart$sample$var53, int forEnd$sample$var53, int threadID$sample$var53, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int sample$var53 = forStart$sample$var53; sample$var53 < forEnd$sample$var53; sample$var53 += 1) {
+							if(!fixedFlag$sample90) {
+								for(int timeStep$var76 = (length$metric[sample$var53][0] - 1); timeStep$var76 >= 1; timeStep$var76 -= 1)
+									sample90(sample$var53, timeStep$var76, threadID$sample$var53, RNG$1);
 							}
-							if(!fixedFlag$sample50)
-								sample50(sample$var32, threadID$sample$var32, RNG$1);
+							if(!fixedFlag$sample71)
+								sample71(sample$var53, threadID$sample$var53, RNG$1);
 						}
 				}
 			);
-			if(!fixedFlag$sample30)
+			if(!fixedFlag$sample44)
 				parallelFor(RNG$, 0, noStates, 1,
-					(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-								sample30(var26, threadID$var26, RNG$1);
+					(int forStart$var40, int forEnd$var40, int threadID$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var40 = forStart$var40; var40 < forEnd$var40; var40 += 1)
+								sample44(var40, threadID$var40, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample24)
-				sample24();
+			if(!fixedFlag$sample31)
+				sample31();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -2468,9 +2611,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void initializeConstants() {
 		noSamples = length$metric.length;
 		parallelFor(RNG$, 0, noStates, 1,
-			(int forStart$var17, int forEnd$var17, int threadID$var17, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var17 = forStart$var17; var17 < forEnd$var17; var17 += 1)
-						v[var17] = 0.1;
+			(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
+						v[var24] = 0.1;
 			}
 		);
 		noServers = length$metric[0].length;
@@ -2479,70 +2622,70 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var20 = 0.0;
-		if(!fixedProbFlag$sample24)
+		logProbability$var27 = 0.0;
+		if(!fixedProbFlag$sample31)
 			logProbability$initialStateDistribution = 0.0;
-		logProbability$var22 = 0.0;
+		logProbability$var29 = 0.0;
 		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample30)
-			logProbability$var27 = 0.0;
-		for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1)
-			logProbability$var43[sample$var32] = 0.0;
+		if(!fixedProbFlag$sample44)
+			logProbability$var41 = 0.0;
+		for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1)
+			logProbability$var64[sample$var53] = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample50) {
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1)
-				logProbability$sample50[sample$var32] = 0.0;
+		if(!fixedProbFlag$sample71) {
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1)
+				logProbability$sample71[sample$var53] = 0.0;
 		}
-		for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-			for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-				logProbability$var56[sample$var32][(timeStep$var49 - 1)] = 0.0;
+		for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+			for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+				logProbability$var83[sample$var53][(timeStep$var76 - 1)] = 0.0;
 		}
-		if(!fixedProbFlag$sample63) {
-			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-					logProbability$sample63[sample$var32][(timeStep$var49 - 1)] = 0.0;
+		if(!fixedProbFlag$sample90) {
+			for(int sample$var53 = 0; sample$var53 < noSamples; sample$var53 += 1) {
+				for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+					logProbability$sample90[sample$var53][(timeStep$var76 - 1)] = 0.0;
 			}
 		}
-		logProbability$var78 = 0.0;
+		logProbability$var119 = 0.0;
 		logProbability$current_metric_mean = 0.0;
-		if(!fixedProbFlag$sample96)
-			logProbability$var87 = 0.0;
-		logProbability$var92 = 0.0;
+		if(!fixedProbFlag$sample150)
+			logProbability$var141 = 0.0;
+		logProbability$var146 = 0.0;
 		logProbability$current_metric_var = 0.0;
-		if(!fixedProbFlag$sample111)
-			logProbability$var101 = 0.0;
-		logProbability$var106 = 0.0;
+		if(!fixedProbFlag$sample178)
+			logProbability$var168 = 0.0;
+		logProbability$var173 = 0.0;
 		logProbability$current_metric_valid_bias = 0.0;
-		if(!fixedProbFlag$sample126)
-			logProbability$var115 = 0.0;
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+		if(!fixedProbFlag$sample206)
+			logProbability$var195 = 0.0;
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 			for(int server = 0; server < noServers; server += 1) {
-				for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1)
-					logProbability$var145[sample$var120][server][timeStep$var140] = 0.0;
-			}
-		}
-		logProbability$metric_valid_inner = 0.0;
-		logProbability$metric_valid_g = 0.0;
-		if(!fixedProbFlag$sample161) {
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1)
-						logProbability$sample161[sample$var120][server][timeStep$var140] = 0.0;
-				}
-			}
-		}
-		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
-			for(int server = 0; server < noServers; server += 1) {
-				for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1)
-					logProbability$var155[sample$var120][server][timeStep$var140] = 0.0;
+				for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1)
+					logProbability$var244[sample$var207][server][timeStep$var239] = 0.0;
 			}
 		}
 		logProbability$metric_g = 0.0;
-		if(!fixedProbFlag$sample173) {
-			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
+		logProbability$metric_valid_inner = 0.0;
+		logProbability$metric_valid_g = 0.0;
+		if(!fixedProbFlag$sample260) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1)
-						logProbability$sample173[sample$var120][server][timeStep$var140] = 0.0;
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1)
+						logProbability$sample260[sample$var207][server][timeStep$var239] = 0.0;
+				}
+			}
+		}
+		for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+			for(int server = 0; server < noServers; server += 1) {
+				for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1)
+					logProbability$var257[sample$var207][server][timeStep$var239] = 0.0;
+			}
+		}
+		if(!fixedProbFlag$sample275) {
+			for(int sample$var207 = 0; sample$var207 < noSamples; sample$var207 += 1) {
+				for(int server = 0; server < noServers; server += 1) {
+					for(int timeStep$var239 = 0; timeStep$var239 < length$metric[sample$var207][0]; timeStep$var239 += 1)
+						logProbability$sample275[sample$var207][server][timeStep$var239] = 0.0;
 				}
 			}
 		}
@@ -2556,112 +2699,112 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample24)
-			logProbabilityValue$sample24();
-		if(fixedFlag$sample30)
-			logProbabilityValue$sample30();
-		if(fixedFlag$sample96)
-			logProbabilityValue$sample96();
-		if(fixedFlag$sample111)
-			logProbabilityValue$sample111();
-		if(fixedFlag$sample126)
-			logProbabilityValue$sample126();
-		logProbabilityValue$sample161();
-		logProbabilityValue$sample173();
+		if(fixedFlag$sample31)
+			logProbabilityValue$sample31();
+		if(fixedFlag$sample44)
+			logProbabilityValue$sample44();
+		if(fixedFlag$sample150)
+			logProbabilityValue$sample150();
+		if(fixedFlag$sample178)
+			logProbabilityValue$sample178();
+		if(fixedFlag$sample206)
+			logProbabilityValue$sample206();
+		logProbabilityValue$sample260();
+		logProbabilityValue$sample275();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample24();
-		logProbabilityValue$sample30();
-		logProbabilityDistribution$sample50();
-		logProbabilityDistribution$sample63();
-		logProbabilityValue$sample96();
-		logProbabilityValue$sample111();
-		logProbabilityValue$sample126();
-		logProbabilityDistribution$sample161();
-		logProbabilityDistribution$sample173();
+		logProbabilityValue$sample31();
+		logProbabilityValue$sample44();
+		logProbabilityDistribution$sample71();
+		logProbabilityDistribution$sample90();
+		logProbabilityValue$sample150();
+		logProbabilityValue$sample178();
+		logProbabilityValue$sample206();
+		logProbabilityDistribution$sample260();
+		logProbabilityDistribution$sample275();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample24();
-		logProbabilityValue$sample30();
-		logProbabilityValue$sample50();
-		logProbabilityValue$sample63();
-		logProbabilityValue$sample96();
-		logProbabilityValue$sample111();
-		logProbabilityValue$sample126();
-		logProbabilityValue$sample161();
-		logProbabilityValue$sample173();
+		logProbabilityValue$sample31();
+		logProbabilityValue$sample44();
+		logProbabilityValue$sample71();
+		logProbabilityValue$sample90();
+		logProbabilityValue$sample150();
+		logProbabilityValue$sample178();
+		logProbabilityValue$sample206();
+		logProbabilityValue$sample260();
+		logProbabilityValue$sample275();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample31)
 			DistributionSampling.sampleDirichlet(RNG$, v, initialStateDistribution);
-		if(!fixedFlag$sample30)
+		if(!fixedFlag$sample44)
 			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var26]);
+				(int forStart$var40, int forEnd$var40, int threadID$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var40 = forStart$var40; var40 < forEnd$var40; var40 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var40]);
 				}
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$sample$var32, int forEnd$sample$var32, int threadID$sample$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int sample$var32 = forStart$sample$var32; sample$var32 < forEnd$sample$var32; sample$var32 += 1) {
-						if(!fixedFlag$sample50)
-							st[sample$var32][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution);
-						if(!fixedFlag$sample63) {
-							int[] var50 = st[sample$var32];
-							for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1)
-								var50[timeStep$var49] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var32][(timeStep$var49 - 1)]]);
+			(int forStart$sample$var53, int forEnd$sample$var53, int threadID$sample$var53, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample$var53 = forStart$sample$var53; sample$var53 < forEnd$sample$var53; sample$var53 += 1) {
+						if(!fixedFlag$sample71)
+							st[sample$var53][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution);
+						if(!fixedFlag$sample90) {
+							int[] var77 = st[sample$var53];
+							for(int timeStep$var76 = 1; timeStep$var76 < length$metric[sample$var53][0]; timeStep$var76 += 1)
+								var77[timeStep$var76] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var53][(timeStep$var76 - 1)]]);
 						}
 					}
 			}
 		);
-		if(!fixedFlag$sample96)
+		if(!fixedFlag$sample150)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1) {
-							double[] var83 = current_metric_mean[var82];
+				(int forStart$var130, int forEnd$var130, int threadID$var130, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var130 = forStart$var130; var130 < forEnd$var130; var130 += 1) {
+							double[] var131 = current_metric_mean[var130];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+								(int forStart$var140, int forEnd$var140, int threadID$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var140 = forStart$var140; var140 < forEnd$var140; var140 += 1)
+											var131[var140] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample111)
+		if(!fixedFlag$sample178)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var96, int forEnd$var96, int threadID$var96, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var96 = forStart$var96; var96 < forEnd$var96; var96 += 1) {
-							double[] var97 = current_metric_var[var96];
+				(int forStart$var157, int forEnd$var157, int threadID$var157, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var157 = forStart$var157; var157 < forEnd$var157; var157 += 1) {
+							double[] var158 = current_metric_var[var157];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var100, int forEnd$var100, int threadID$var100, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var100 = forStart$var100; var100 < forEnd$var100; var100 += 1)
-											var97[var100] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
+								(int forStart$var167, int forEnd$var167, int threadID$var167, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var167 = forStart$var167; var167 < forEnd$var167; var167 += 1)
+											var158[var167] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 								}
 							);
 						}
 				}
 			);
 
-		if(!fixedFlag$sample126)
+		if(!fixedFlag$sample206)
 			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var110, int forEnd$var110, int threadID$var110, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var110 = forStart$var110; var110 < forEnd$var110; var110 += 1) {
-							double[] var111 = current_metric_valid_bias[var110];
+				(int forStart$var184, int forEnd$var184, int threadID$var184, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var184 = forStart$var184; var184 < forEnd$var184; var184 += 1) {
+							double[] var185 = current_metric_valid_bias[var184];
 							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var114, int forEnd$var114, int threadID$var114, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int var114 = forStart$var114; var114 < forEnd$var114; var114 += 1)
-											var111[var114] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								(int forStart$var194, int forEnd$var194, int threadID$var194, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int var194 = forStart$var194; var194 < forEnd$var194; var194 += 1)
+											var185[var194] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 								}
 							);
 						}

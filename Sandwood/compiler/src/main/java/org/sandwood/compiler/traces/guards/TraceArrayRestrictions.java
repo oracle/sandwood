@@ -11,6 +11,7 @@ package org.sandwood.compiler.traces.guards;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.ReductionScope;
-import org.sandwood.compiler.dataflowGraph.scopes.ReductionScopeCopied;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
@@ -53,6 +53,16 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
 public class TraceArrayRestrictions {
+    
+    /**
+     * A comparator for comparing scopes.
+     */
+    private static final Comparator<Scope> scopeCmp = new Comparator<Scope>() {
+        @Override
+        public int compare(Scope s1, Scope s2) {
+            return s1.id() - s2.id();
+        }
+     };
 
     /**
      * Class to record the scopes that we should add and remove when we reach this dataflow task;
@@ -61,7 +71,7 @@ public class TraceArrayRestrictions {
         /**
          * Set containing the scopes to construct.
          */
-        private final Set<ForTask> toConstruct = new HashSet<>();
+        private final Set<Scope> toConstruct = new HashSet<>();
 
         /**
          * A set of for loops whose indexes are used by this task.
@@ -69,12 +79,12 @@ public class TraceArrayRestrictions {
         private final Set<ForTask> toUse = new HashSet<>();
 
         /**
-         * A set of for loops that are already constructed for the end point of the trace and should be added to the
+         * A set of scopes that are already constructed for the end point of the trace and should be added to the
          * substitutions at this time, so that this and future tasks make use of them.
          */
-        private final Set<ForTask> toSubstitute = new HashSet<>();
+        private final Set<Scope> toSubstitute = new HashSet<>();
 
-        public void addConstructLoops(Collection<ForTask> scopes) {
+        public void addConstructScopes(Collection<Scope> scopes) {
             toConstruct.addAll(scopes);
         }
 
@@ -82,7 +92,7 @@ public class TraceArrayRestrictions {
             toUse.addAll(scopes);
         }
 
-        public Set<ForTask> getConstructScopes() {
+        public Set<Scope> getConstructScopes() {
             return toConstruct;
         }
 
@@ -90,7 +100,7 @@ public class TraceArrayRestrictions {
             return toUse;
         }
 
-        public Set<ForTask> getSubstituteScopes() {
+        public Set<Scope> getSubstituteScopes() {
             return toSubstitute;
         }
 
@@ -120,7 +130,7 @@ public class TraceArrayRestrictions {
         /**
          * A list of scopes to construct once the trace is constructed
          */
-        final List<ForTask> finalLoops = new ArrayList<>();
+        final List<Scope> finalScopes = new ArrayList<>();
 
         /**
          * A set containing all the put tasks that are paired.
@@ -135,16 +145,16 @@ public class TraceArrayRestrictions {
         /**
          * The preconstructed scopes for the start of the trace
          */
-        final Map<ForTask, IntVariable> existingStartScopes;
+        final Map<Scope, IntVariable> existingStartScopes;
 
         /**
          * The preconstructed scopes for the end of the trace;
          */
-        final Map<ForTask, IntVariable> existingEndLoops;
+        final Map<Scope, IntVariable> existingEndScopes;
 
         /**
-         * Set of all the scopes that have already been constructed, so if created again will have to be duplicates.
-         * This exists purely to make the generated code easier to read, we could just make all new scopes duplicates.
+         * Set of all the loops that have already been constructed, so if created again will have to be duplicates. This
+         * exists purely to make the generated code easier to read, we could just make all new loops duplicates.
          */
         final Set<ForTask> existingScopes;
 
@@ -177,7 +187,7 @@ public class TraceArrayRestrictions {
                 boolean passValues) {
             this.trace = trace;
             this.existingStartScopes = Collections.unmodifiableMap(existingStartScopes);
-            this.existingEndLoops = Collections.unmodifiableMap(existingEndScopes);
+            this.existingEndScopes = Collections.unmodifiableMap(existingEndScopes);
             this.existingScopes = new HashSet<>(existingScopes);
             this.globalID = globalID;
             this.passValues = passValues;
@@ -332,10 +342,10 @@ public class TraceArrayRestrictions {
 
         int size = traceHandle.size();
 
-        Set<ForTask> existingStartLoops = new HashSet<>(data.existingStartScopes.keySet());
+        Set<Scope> existingStartScope = new HashSet<>(data.existingStartScopes.keySet());
         {
-            Set<ForTask> existingPutLoops = new HashSet<>(existingStartLoops);
-            Set<ForTask> existingGetLoops = new HashSet<>(existingStartLoops);
+            Set<Scope> existingPutScopes = new HashSet<>(existingStartScope);
+            Set<Scope> existingGetScopes = new HashSet<>(existingStartScope);
 
             for(int i = 0; i < size; i++) {
                 DataflowTaskArgDesc d = traceHandle.get(i);
@@ -349,38 +359,40 @@ public class TraceArrayRestrictions {
                             data.scopeData.put(gt, s);
 
                             // Calculated the scopes used by this index.
+                            Set<Scope> requiredScopes = new HashSet<>();
                             Set<ForTask> indexLoops = getRequiredLoops(gt.index);
-                            indexLoops.addAll(getGuardScopes(gt.scope()));
+                            indexLoops.addAll(getGuardScopes(gt.scope(), requiredScopes));
+                            requiredScopes.addAll(indexLoops);
 
                             // Add the required scopes to set of used scopes
                             s.addUseScopes(indexLoops);
 
                             // Remove all the loops that are already constructed.
-                            indexLoops.removeAll(existingGetLoops);
-                            s.addConstructLoops(indexLoops);
+                            requiredScopes.removeAll(existingGetScopes);
+                            s.addConstructScopes(requiredScopes);
 
                             // remove no longer available start scopes.
-                            Set<ForTask> newStartLoops = new HashSet<>();
-                            for(ForTask ft:existingStartLoops)
-                                if(existingGetLoops.contains(ft))
-                                    newStartLoops.add(ft);
-                            existingStartLoops = newStartLoops;
+                            Set<Scope> newStartScope = new HashSet<>();
+                            for(Scope scope:existingStartScope)
+                                if(existingGetScopes.contains(scope))
+                                    newStartScope.add(scope);
+                            existingStartScope = newStartScope;
 
-                            // update the set of put loops removing any that are
+                            // update the set of put scope removing any that are
                             // not in the scope of the array as these could have
                             // changed since the last put.
-                            Set<ForTask> newPutLoops = new HashSet<>();
+                            Set<Scope> newPutScopes = new HashSet<>();
                             Scope vScope = gt.array.scope();
                             while(GlobalScope.scope != vScope) {
-                                if(existingPutLoops.contains(vScope))
-                                    newPutLoops.add((ForTask) vScope);
+                                if(existingPutScopes.contains(vScope))
+                                    newPutScopes.add(vScope);
                                 vScope = vScope.getEnclosingScope();
                             }
-                            existingPutLoops = newPutLoops;
+                            existingPutScopes = newPutScopes;
 
                             // Update the running state
-                            existingGetLoops.addAll(indexLoops);
-                            existingPutLoops.addAll(indexLoops);
+                            existingGetScopes.addAll(requiredScopes);
+                            existingPutScopes.addAll(requiredScopes);
                         }
                         break;
                     }
@@ -392,39 +404,41 @@ public class TraceArrayRestrictions {
                         data.scopeData.put(ri, s);
 
                         // Calculated the scopes used by this input.
-                        Set<ForTask> boundLoops = getRequiredLoops(ri.start);
-                        boundLoops.addAll(getRequiredLoops(ri.end));
-                        boundLoops.addAll(getGuardScopes(ri.scope()));
+                        Set<Scope> requiredScopes = new HashSet<>();
+                        Set<ForTask> indexScopes = getRequiredLoops(ri.start);
+                        indexScopes.addAll(getRequiredLoops(ri.end));
+                        indexScopes.addAll(getGuardScopes(ri.scope(), requiredScopes));
+                        requiredScopes.addAll(indexScopes);
 
                         // Add the required scopes to set of used scopes
-                        s.addUseScopes(boundLoops);
+                        s.addUseScopes(indexScopes);
 
-                        // Remove all the loops that are already constructed.
-                        boundLoops.removeAll(existingGetLoops);
-                        s.addConstructLoops(boundLoops);
+                        // Remove all the scopes that are already constructed.
+                        requiredScopes.removeAll(existingGetScopes);
+                        s.addConstructScopes(requiredScopes);
 
                         // remove no longer available start scopes.
-                        Set<ForTask> newStartLoops = new HashSet<>();
-                        for(ForTask ft:existingStartLoops)
-                            if(existingGetLoops.contains(ft))
-                                newStartLoops.add(ft);
-                        existingStartLoops = newStartLoops;
+                        Set<Scope> newStartLoops = new HashSet<>();
+                        for(Scope scope:existingStartScope)
+                            if(existingGetScopes.contains(scope))
+                                newStartLoops.add(scope);
+                        existingStartScope = newStartLoops;
 
                         // update the set of put loops removing any that are
                         // not in the scope of the array as these could have
                         // changed since the last put.
-                        Set<ForTask> newPutLoops = new HashSet<>();
+                        Set<Scope> newPutScopes = new HashSet<>();
                         Scope vScope = ri.array.scope();
                         while(GlobalScope.scope != vScope) {
-                            if(existingPutLoops.contains(vScope))
-                                newPutLoops.add((ForTask) vScope);
+                            if(existingPutScopes.contains(vScope))
+                                newPutScopes.add(vScope);
                             vScope = vScope.getEnclosingScope();
                         }
-                        existingPutLoops = newPutLoops;
+                        existingPutScopes = newPutScopes;
 
                         // Update the running state
-                        existingGetLoops.addAll(boundLoops);
-                        existingPutLoops.addAll(boundLoops);
+                        existingGetScopes.addAll(requiredScopes);
+                        existingPutScopes.addAll(requiredScopes);
                         break;
                     }
 
@@ -442,44 +456,44 @@ public class TraceArrayRestrictions {
                             data.scopeData.put(pt, s);
 
                             // Calculated the scopes used by this index.
+                            Set<Scope> requiredScopes = new HashSet<>();
                             Set<ForTask> indexLoops = getRequiredLoops(pt.index);
-                            indexLoops.addAll(getGuardScopes(pt.scope()));
+                            indexLoops.addAll(getGuardScopes(pt.scope(), requiredScopes));
+                            requiredScopes.addAll(indexLoops);
 
+                            // Add the index scopes to set of used scopes
+                            s.addUseScopes(indexLoops);
+
+                            // Calculate the scopes for the value
                             Set<ForTask> valueLoops;
                             if(data.passValues && !pt.value.getType().isArray()) {
                                 valueLoops = getRequiredLoops(pt.value);
                                 valueLoops.removeAll(indexLoops);
-                            } else
-                                valueLoops = Collections.emptySet();
+                                s.addUseScopes(valueLoops);
+                                requiredScopes.addAll(valueLoops);
+                            }
 
-                            // Add the required scopes to set of used scopes
-                            s.addUseScopes(indexLoops);
-                            s.addUseScopes(valueLoops);
+                            // Remove existing scopes leaving only the scopes that need to be constructed.
+                            requiredScopes.removeAll(existingPutScopes);
 
-                            // Remove existing loops leaving only the loops that need to be constructed.
-                            indexLoops.removeAll(existingPutLoops);
-                            valueLoops.removeAll(existingPutLoops);
+                            s.addConstructScopes(requiredScopes);
+                            existingPutScopes.addAll(requiredScopes);
 
-                            s.addConstructLoops(indexLoops);
-                            s.addConstructLoops(valueLoops);
-                            existingPutLoops.addAll(indexLoops);
-                            existingPutLoops.addAll(valueLoops);
-
-                            // Remove from the current get scopes set all the scopes
-                            // that the array is visible in as these scopes could
-                            // have changed.
-                            //
-                            // The put task has to include all the scopes
-                            // that could be used by the get task as the only way to
-                            // get data out of a loop is to place it in an array.
+                            /*
+                             * Remove from the current get scopes set all the scopes that the array is visible in as
+                             * these scopes could have changed.
+                             * 
+                             * The put task has to include all the scopes that could be used by the get task as the only
+                             * way to get data out of a loop is to place it in an array.
+                             */
                             Scope scope = pt.array.scope();
-                            Set<ForTask> newGetLoops = new HashSet<>();
+                            Set<Scope> newGetScopes = new HashSet<>();
                             while(GlobalScope.scope != scope) {
-                                if(existingGetLoops.contains(scope) || valueLoops.contains(scope))
-                                    newGetLoops.add((ForTask) scope);
+                                if(requiredScopes.contains(scope) || existingGetScopes.contains(scope))
+                                    newGetScopes.add(scope);
                                 scope = scope.getEnclosingScope();
                             }
-                            existingGetLoops = newGetLoops;
+                            existingGetScopes = newGetScopes;
                         }
                         break;
                     }
@@ -488,14 +502,16 @@ public class TraceArrayRestrictions {
                         ScopeChanges s = new ScopeChanges();
                         data.scopeData.put(ifElseTask, s);
 
+                        Set<Scope> requiredScopes = new HashSet<>();
                         Set<ForTask> guardLoops = getRequiredLoops(ifElseTask.guard);
-                        guardLoops.addAll(getGuardScopes(ifElseTask.scope()));
+                        guardLoops.addAll(getGuardScopes(ifElseTask.scope(), requiredScopes));
+                        requiredScopes.addAll(guardLoops);
                         s.addUseScopes(guardLoops);
 
-                        guardLoops.removeAll(existingPutLoops);
-                        s.addConstructLoops(guardLoops);
-                        existingPutLoops.addAll(guardLoops);
-                        existingGetLoops.addAll(guardLoops);
+                        requiredScopes.removeAll(existingPutScopes);
+                        s.addConstructScopes(requiredScopes);
+                        existingPutScopes.addAll(requiredScopes);
+                        existingGetScopes.addAll(requiredScopes);
 
                         break;
                     }
@@ -507,15 +523,27 @@ public class TraceArrayRestrictions {
 
         // If we are moving to the fixed scopes, not away from them, the trace needs to
         // be evaluated in reverse to exclude the fixed scopes.
-        Set<ForTask> existingEndLoops = new HashSet<>(data.existingEndLoops.keySet());
+        Set<Scope> existingEndScope = new HashSet<>(data.existingEndScopes.keySet());
 
         // Get the set of scopes that should be constructed by the end.
-        Set<ForTask> constructEndLoops = new HashSet<>();
+        Set<Scope> constructEndScopes = new HashSet<>();
         if(!traceHandle.isEmpty()) {
             Scope s = traceHandle.peek().task.scope();
             while(s != null) {
-                if(s.getScopeType() == ScopeType.FOR && !existingEndLoops.contains(s))
-                    constructEndLoops.add((ForTask) s);
+                if(!existingEndScope.contains(s)) {
+                    switch(s.getScopeType()) {
+                        case ELSE:
+                        case FOR:
+                        case IF:
+                            constructEndScopes.add(s);
+                            break;
+                        case BLOCK:
+                        case COMMENT:
+                        case GLOBAL:
+                        case REDUCE:
+                            break;
+                    }
+                }
                 s = s.getEnclosingScope();
             }
         }
@@ -530,15 +558,14 @@ public class TraceArrayRestrictions {
                     if(s != null) {
                         // Remove from the construction and substitution any end scopes that
                         // have already been constructed.
-                        for(ForTask t:existingEndLoops) {
-                            if(s.toUse.contains(t)) {
-                                s.toConstruct.remove(t);
+                        for(Scope t:existingEndScope) {
+                            s.toConstruct.remove(t);
+                            if(s.toUse.contains(t))
                                 s.toSubstitute.add(t);
-                            }
                         }
 
                         // Remove constructed scopes from the set that need to be constructed.
-                        constructEndLoops.removeAll(s.getConstructScopes());
+                        constructEndScopes.removeAll(s.getConstructScopes());
                     }
                     break;
                 }
@@ -548,15 +575,14 @@ public class TraceArrayRestrictions {
                     // Moving between scopes only happens with a put get pairing, if there is no
                     // corresponding get the trace cannot move between scopes.
                     if(data.usedPuts.containsKey(pt)) {
-                        // Calculate all the loops that are now out of scope as they may have changed.
+                        // Calculate all the scopes that are now out of scope as they may have changed.
                         // In practice this is the same as used scopes up to vScope because of the
                         // constraints on put indexes.
-                        Set<ForTask> outOfScopeLoops = new HashSet<>();
+                        Set<Scope> outOfScopeScopess = new HashSet<>();
                         Scope vScope = pt.array.scope();
                         Scope ptScope = pt.scope();
                         while(ptScope != vScope) {
-                            if(ptScope.getScopeType() == ScopeType.FOR)
-                                outOfScopeLoops.add((ForTask) ptScope);
+                            outOfScopeScopess.add(ptScope);
                             ptScope = ptScope.getEnclosingScope();
                         }
 
@@ -564,21 +590,21 @@ public class TraceArrayRestrictions {
                         ScopeChanges s = data.scopeData.get(d.task);
                         while(vScope != GlobalScope.scope) {
                             if(s.toConstruct.contains(vScope))
-                                constructEndLoops.remove(vScope);
+                                constructEndScopes.remove(vScope);
                             vScope = vScope.getEnclosingScope();
                         }
 
                         // Remove scopes that are used in an earlier iteration, as the
                         // value of the scope may have changed, so a new scope should
                         // now be created in the earlier steps.
-                        existingEndLoops.removeAll(outOfScopeLoops);
+                        existingEndScope.removeAll(outOfScopeScopess);
                         // Versions of these scopes constructed after this point
                         // are not necessarily in the correct iteration, so duplicates
                         // need to be constructed, and this is where we mark this.
-                        for(ForTask t:outOfScopeLoops) {
-                            if(constructEndLoops.contains(t)) {
-                                constructEndLoops.remove(t);
-                                data.finalLoops.add(t);
+                        for(Scope t:outOfScopeScopess) {
+                            if(constructEndScopes.contains(t)) {
+                                constructEndScopes.remove(t);
+                                data.finalScopes.add(t);
                             }
                         }
                     }
@@ -590,23 +616,25 @@ public class TraceArrayRestrictions {
         }
 
         // Construct any end scopes that have not been constructed already.
-        constructEndLoops.removeAll(existingStartLoops);
-        data.finalLoops.addAll(constructEndLoops);
-        Collections.sort(data.finalLoops);
+        constructEndScopes.removeAll(existingStartScope);
+        data.finalScopes.addAll(constructEndScopes);
+        Collections.sort(data.finalScopes, scopeCmp);
     }
 
-    private static Set<ForTask> getGuardScopes(Scope scope) {
+    private static Set<ForTask> getGuardScopes(Scope scope, Set<Scope> guardScopes) {
         Set<ForTask> toReturn = new HashSet<>();
         while(scope != GlobalScope.scope) {
             switch(scope.getScopeType()) {
                 case ELSE: {
                     ElseScope elseScope = (ElseScope) scope;
                     toReturn.addAll(getRequiredLoops(elseScope.ifScope.guard));
+                    guardScopes.add(scope);
                     break;
                 }
                 case IF: {
                     IfScope ifScope = (IfScope) scope;
                     toReturn.addAll(getRequiredLoops(ifScope.guard));
+                    guardScopes.add(ifScope);
                     break;
                 }
                 default:
@@ -773,8 +801,7 @@ public class TraceArrayRestrictions {
         // moment.
         Substitutions originalSubstitutions = target.getSubstitutions(position);
 
-        Map<ForTask, IntVariable> forScopeSubstitutions = new HashMap<>(data.existingStartScopes);
-        Map<ReductionScope<?>, ReductionScopeCopied<?>> reductionScopeSubs = new HashMap<>();
+        Map<Scope, IntVariable> scopeSubstitutions = new HashMap<>(data.existingStartScopes);
 
         // A map from dataflow tasks to put task indexes that were calculated earlier.
         Map<DataflowTask<?>, IRTreeReturn<IntVariable>> putIndexes = new HashMap<>();
@@ -791,7 +818,7 @@ public class TraceArrayRestrictions {
 
                         // Construct the environment
                         ScopeChanges s = data.scopeData.get(gt);
-                        innerScope = constructEnvironment(gt, data, forScopeSubstitutions, reductionScopeSubs,
+                        innerScope = constructEnvironment(gt, data, scopeSubstitutions,
                                 innerScope, compilationCtx);
 
                         // If there is a put to go with this get a guard will be needed
@@ -805,7 +832,7 @@ public class TraceArrayRestrictions {
 
                         target = target.insertScope(innerScope, compilationCtx);
 
-                        removeSubstitutions(s, forScopeSubstitutions, reductionScopeSubs, compilationCtx);
+                        removeSubstitutions(s, scopeSubstitutions, compilationCtx);
                     }
 
                     break;
@@ -817,12 +844,12 @@ public class TraceArrayRestrictions {
                     if(task != null) {
                         // Construct the value of the put index
                         ScopeChanges s = data.scopeData.get(pt);
-                        innerScope = constructEnvironment(pt, data, forScopeSubstitutions, reductionScopeSubs,
+                        innerScope = constructEnvironment(pt, data, scopeSubstitutions,
                                 innerScope, compilationCtx);
 
                         if(data.storeSubstitutions.contains(pt))
                             target = target.addSubstitutions(position, pt, constructSubstituions(originalSubstitutions,
-                                    varSubstitutions, forScopeSubstitutions, reductionScopeSubs));
+                                    varSubstitutions, scopeSubstitutions));
 
                         // Construct all the values that the put value will depend on. This is required
                         // in the case that the intermediate also depends on the values being updated,
@@ -853,13 +880,13 @@ public class TraceArrayRestrictions {
                         // corresponding get.
                         putIndexes.put(task, putIndex);
 
-                        removeSubstitutions(s, forScopeSubstitutions, reductionScopeSubs, compilationCtx);
+                        removeSubstitutions(s, scopeSubstitutions, compilationCtx);
                     } else {
                         // No restrictions are required, but the status of the scopes at the point this
                         // is reached should be recorded.
                         if(data.storeSubstitutions.contains(pt))
                             target = target.addSubstitutions(position, pt, constructSubstituions(originalSubstitutions,
-                                    varSubstitutions, forScopeSubstitutions, reductionScopeSubs));
+                                    varSubstitutions, scopeSubstitutions));
                     }
                     break;
                 }
@@ -868,7 +895,7 @@ public class TraceArrayRestrictions {
                     ReductionInput<?> ri = (ReductionInput<?>) d.task;
 
                     // Construct the environment
-                    innerScope = constructEnvironment(ri, data, forScopeSubstitutions, reductionScopeSubs, innerScope,
+                    innerScope = constructEnvironment(ri, data, scopeSubstitutions, innerScope,
                             compilationCtx);
                     IRTreeReturn<IntVariable> index = putIndexes.get(ri);
                     if(index != null) {
@@ -887,23 +914,12 @@ public class TraceArrayRestrictions {
                     innerScope = new BlockScope(innerScope, Tree.NoComment);
 
                     // Process the reduction
-                    if(data.passValues) {
+                    if(data.passValues)
                         innerScope = processReductionInput(ri, index, innerScope, data, varSubstitutions,
                                 compilationCtx);
-                        ScopeChanges s = data.scopeData.get(ri);
-                        removeSubstitutions(s, forScopeSubstitutions, reductionScopeSubs, compilationCtx);
-                    } else {
-                        /*
-                         * If variables are not being passed the reduction is called as normal, but placed in the
-                         * constructed scope.
-                         */
-                        ReductionScope<?> rs = ri.scope();
-                        ReductionScopeCopied<?> newReductionScope = new ReductionScopeCopied<>(innerScope, rs);
-                        ScopeChanges s = data.scopeData.get(ri);
-                        removeSubstitutions(s, forScopeSubstitutions, reductionScopeSubs, compilationCtx);
-                        reductionScopeSubs.put(rs, newReductionScope);
 
-                    }
+                    ScopeChanges s = data.scopeData.get(ri);
+                    removeSubstitutions(s, scopeSubstitutions, compilationCtx);
 
                     break;
                 }
@@ -913,8 +929,8 @@ public class TraceArrayRestrictions {
 
                     // Construct the environment
                     ScopeChanges s = data.scopeData.get(ifElseAssignmentTask);
-                    innerScope = constructEnvironment(ifElseAssignmentTask, data, forScopeSubstitutions,
-                            reductionScopeSubs, innerScope, compilationCtx);
+                    innerScope = constructEnvironment(ifElseAssignmentTask, data, scopeSubstitutions,
+                            innerScope, compilationCtx);
 
                     // Construct the guard.
                     switch(d.argPos) {
@@ -935,10 +951,13 @@ public class TraceArrayRestrictions {
                             }
 
                             innerScope = new IfScope(innerScope, guard);
-                            IRTreeReturn<?> t = getForwardIR(v, ifElseAssignmentTask.scope(), innerScope,
-                                    compilationCtx);
-                            constructVarSubstitution(ifElseAssignmentTask.getOutput(), t, innerScope, data,
-                                    varSubstitutions, compilationCtx);
+
+                            if(data.passValues) {
+                                IRTreeReturn<?> t = getForwardIR(v, ifElseAssignmentTask.scope(), innerScope,
+                                        compilationCtx);
+                                constructVarSubstitution(ifElseAssignmentTask.getOutput(), t, innerScope, data,
+                                        varSubstitutions, compilationCtx);
+                            }
                             break;
                         }
 
@@ -948,7 +967,7 @@ public class TraceArrayRestrictions {
 
                     target = target.insertScope(innerScope, compilationCtx);
 
-                    removeSubstitutions(s, forScopeSubstitutions, reductionScopeSubs, compilationCtx);
+                    removeSubstitutions(s, scopeSubstitutions, compilationCtx);
 
                     break;
                 }
@@ -958,7 +977,7 @@ public class TraceArrayRestrictions {
             }
         }
 
-        innerScope = constructAdditionalScopes(data, forScopeSubstitutions, innerScope, compilationCtx);
+        innerScope = constructAdditionalScopes(data, scopeSubstitutions, innerScope, compilationCtx);
 
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(data.requiredVariables.get(data.trace.peek().task));
         Scope targetScope = data.trace.peek().task.scope();
@@ -971,8 +990,7 @@ public class TraceArrayRestrictions {
 
         target.removeSubstitutions(position, compilationCtx);
 
-        Substitutions s = constructSubstituions(originalSubstitutions, varSubstitutions, forScopeSubstitutions,
-                reductionScopeSubs);
+        Substitutions s = constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions);
         target = target.insertScope(innerScope, data.existingScopes, compilationCtx);
         target = target.addSubstitutions(position, s);
 
@@ -1020,17 +1038,19 @@ public class TraceArrayRestrictions {
     }
 
     private static Substitutions constructSubstituions(Substitutions originalSubstitutions,
-            Map<Variable<?>, VariablePair<?>> varSubstitutions, Map<ForTask, IntVariable> forSubstitutions,
-            Map<ReductionScope<?>, ReductionScopeCopied<?>> reductionSubstitutions) {
+            Map<Variable<?>, VariablePair<?>> varSubstitutions, Map<Scope, IntVariable> forSubstitutions) {
         HashMap<Variable<?>, VariablePair<?>> returnSubstitutions = new HashMap<>(
                 originalSubstitutions.varSubstitutions);
         returnSubstitutions.putAll(varSubstitutions);
-        for(ForTask t:forSubstitutions.keySet()) {
-            IntVariable index = t.getIndex();
-            returnSubstitutions.put(index, new VariablePair<>(index, forSubstitutions.get(t)));
+        for(Scope scope:forSubstitutions.keySet()) {
+            if(scope.getScopeType() == ScopeType.FOR) {
+                ForTask t = (ForTask) scope;
+                IntVariable index = t.getIndex();
+                returnSubstitutions.put(index, new VariablePair<>(index, forSubstitutions.get(t)));
+            }
         }
 
-        return new Substitutions(returnSubstitutions, reductionSubstitutions);
+        return new Substitutions(returnSubstitutions);
     }
 
     /**
@@ -1125,86 +1145,128 @@ public class TraceArrayRestrictions {
     }
 
     private static Scope constructEnvironment(DataflowTask<?> task, RestrictionsData data,
-            Map<ForTask, IntVariable> forScopeSubs, Map<ReductionScope<?>, ReductionScopeCopied<?>> reductionScopeSubs,
-            Scope outerScope, CompilationContext compilationCtx) {
+            Map<Scope, IntVariable> substitutions, Scope outerScope, CompilationContext compilationCtx) {
         ScopeChanges s = data.scopeData.get(task);
 
         // Set all the current substitutions so they are there when the scopes are created.
-        for(ForTask t:forScopeSubs.keySet()) {
-            IntVariable index = forScopeSubs.get(t);
-            compilationCtx.addSubstitute(t.getIndex(), index);
-            compilationCtx.addScopeSubstitute(t, outerScope);
+        for(Scope scope:substitutions.keySet()) {
+            if(scope.getScopeType() == ScopeType.FOR) {
+                IntVariable index = substitutions.get(scope);
+                compilationCtx.addSubstitute(((ForTask) scope).getIndex(), index);
+            }
+            compilationCtx.addScopeSubstitute(scope, outerScope);
         }
 
-        for(ReductionScope<?> rs:reductionScopeSubs.keySet())
-            compilationCtx.addScopeSubstitute(rs, reductionScopeSubs.get(rs));
-
-        // Construct any required Scopes
-        Set<ForTask> constructScopes = s.getConstructScopes();
-        PriorityQueue<ForTask> p = new PriorityQueue<>(constructScopes);
-        Scope lastScope = GlobalScope.scope;
+        // Construct any required substitutions for existing Scopes
+        PriorityQueue<Scope> p = new PriorityQueue<>(scopeCmp);
+        p.addAll(s.getSubstituteScopes());
         while(!p.isEmpty()) {
-            ForTask t = p.poll();
-
-            // Add any required guards
-            outerScope = addGuards(outerScope, t, lastScope, compilationCtx);
-
-            ForTask newScope = ScopeUtils.constructForScope(outerScope, t, data.existingScopes.contains(t),
-                    data.globalID + "_" + data.localID++, compilationCtx);
-            data.existingScopes.add(t);
+            Scope scope = p.poll();
 
             // If we have replaced the old scope remove its substitution
-            if(forScopeSubs.containsKey(t)) {
-                compilationCtx.removeSubstitute(t.getIndex());
-                compilationCtx.removeScopeSubstitute(t);
+            if(substitutions.containsKey(scope)) {
+                compilationCtx.removeScopeSubstitute(scope);
+                if(scope.getScopeType() == ScopeType.FOR)
+                    compilationCtx.removeSubstitute(((ForTask) scope).getIndex());
             }
 
-            // Add in substitutes for the newly
-            compilationCtx.addSubstitute(t.getIndex(), newScope.getIndex());
-            compilationCtx.addScopeSubstitute(t, newScope);
+            // Add in substitutes for the new scopes
+            compilationCtx.addScopeSubstitute(scope, outerScope);
+            if(scope.getScopeType() == ScopeType.FOR) {
+                IntVariable index = data.existingEndScopes.get(scope);
+                compilationCtx.addSubstitute(((ForTask) scope).getIndex(), index);
 
-            // Store the substitute for later
-            forScopeSubs.put(t, newScope.getIndex());
-
-            // and update the outer scope.
-            outerScope = newScope;
+                // Store the substitute for later
+                substitutions.put(scope, index);
+            } else
+                // Store the substitute for later
+                substitutions.put(scope, null);
         }
 
         // Construct any required Scopes
-        p = new PriorityQueue<>(s.getSubstituteScopes());
+        Set<Scope> constructScopes = s.getConstructScopes();
+        p.addAll(constructScopes);
         while(!p.isEmpty()) {
-            ForTask t = p.poll();
+            Scope scope = p.poll();
 
-            // Add any required guards
-            outerScope = addGuards(outerScope, t, lastScope, compilationCtx);
+            switch(scope.getScopeType()) {
+                case IF: {
+                    IfScope ifScope = (IfScope) scope;
+                    IRTreeReturn<BooleanVariable>  guardTree = ifScope.guard.getForwardIR(compilationCtx);
+                    outerScope = new IfScope(outerScope, guardTree);
 
-            // If we have replaced the old scope remove its substitution
-            if(forScopeSubs.containsKey(t)) {
-                compilationCtx.removeSubstitute(t.getIndex());
-                compilationCtx.removeScopeSubstitute(t);
+                    // If we have replaced the old scope remove its substitution
+                    if(substitutions.containsKey(scope))
+                        compilationCtx.removeScopeSubstitute(scope);
+
+                    // Add in substitutes for the newly
+                    compilationCtx.addScopeSubstitute(scope, outerScope);
+
+                    // Store the substitute for later
+                    substitutions.put(ifScope, null);
+
+                    break;
+                }
+                case ELSE: {
+                    ElseScope elseScope = (ElseScope) scope;
+                    IRTreeReturn<BooleanVariable>  guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
+                    guardTree = IRTree.negateBoolean(guardTree);
+                    outerScope = new IfScope(outerScope, guardTree);
+
+                    // If we have replaced the old scope remove its substitution
+                    if(substitutions.containsKey(scope))
+                        compilationCtx.removeScopeSubstitute(scope);
+
+                    // Add in substitutes for the newly
+                    compilationCtx.addScopeSubstitute(scope, outerScope);
+
+                    // Store the substitute for later
+                    substitutions.put(elseScope, null);
+
+                    break;
+                }
+                case FOR: {
+                    ForTask t = (ForTask) scope;
+                    ForTask newScope = ScopeUtils.constructForScope(outerScope, t, data.existingScopes.contains(scope),
+                            data.globalID + "_" + data.localID++, compilationCtx);
+                    data.existingScopes.add(t);
+
+                    // If we have replaced the old scope remove its substitution
+                    if(substitutions.containsKey(t)) {
+                        compilationCtx.removeSubstitute(t.getIndex());
+                        compilationCtx.removeScopeSubstitute(t);
+                    }
+
+                    // Add in substitutes for the newly
+                    compilationCtx.addSubstitute(t.getIndex(), newScope.getIndex());
+                    compilationCtx.addScopeSubstitute(t, newScope);
+
+                    // Store the substitute for later
+                    substitutions.put(t, newScope.getIndex());
+
+                    // and update the outer scope.
+                    outerScope = newScope;
+                    break;
+                }
+                default:
+                    break;
             }
-
-            // Add in substitutes for the newly
-            IntVariable index = data.existingEndLoops.get(t);
-            compilationCtx.addSubstitute(t.getIndex(), index);
-            compilationCtx.addScopeSubstitute(t, outerScope);
-
-            // Store the substitute for later
-            forScopeSubs.put(t, index);
         }
-
-        // Add any required guards
-        outerScope = addGuards(outerScope, task.scope(), lastScope, compilationCtx);
 
         // Now the scopes are created remove the substitutions.
-        for(ForTask t:forScopeSubs.keySet()) {
-            compilationCtx.removeSubstitute(t.getIndex());
-            compilationCtx.removeScopeSubstitute(t);
+        for(Scope scope:substitutions.keySet()) {
+            if(scope.getScopeType() == ScopeType.FOR)
+                compilationCtx.removeSubstitute(((ForTask) scope).getIndex());
+            compilationCtx.removeScopeSubstitute(scope);
         }
 
-        // Set any required substitutions for the guard
+        /*
+         * Set any required substitutions for the guard. TODO This currently includes the scopes needed for other
+         * scopes. This could be tightened in the future, but it had no negative effects beyond compiler performance
+         * including unused scopes.
+         */
         for(ForTask t:s.getUsedScopes()) {
-            IntVariable index = forScopeSubs.get(t);
+            IntVariable index = substitutions.get(t);
             if(index != null) {
                 compilationCtx.addSubstitute(t.getIndex(), index);
                 compilationCtx.addScopeSubstitute(t, outerScope);
@@ -1214,44 +1276,8 @@ public class TraceArrayRestrictions {
         return outerScope;
     }
 
-    private static Scope addGuards(Scope outerScope, Scope taskScope, Scope lastScope,
+    private static void removeSubstitutions(ScopeChanges s, Map<Scope, IntVariable> substitutions,
             CompilationContext compilationCtx) {
-        List<Scope> guardScopes = new ArrayList<>();
-        while(taskScope != lastScope) {
-            switch(taskScope.getScopeType()) {
-                case ELSE:
-                case IF:
-                    guardScopes.add(taskScope);
-                    break;
-                default:
-                    break;
-
-            }
-            taskScope = taskScope.getEnclosingScope();
-        }
-
-        int size = guardScopes.size();
-        for(int i = size - 1; i >= 0; i--) {
-            Scope scope = guardScopes.get(i);
-            IRTreeReturn<BooleanVariable> guardTree;
-            switch(scope.getScopeType()) {
-                case IF:
-                    guardTree = getForwardIR(((IfScope) scope).guard, taskScope, outerScope, compilationCtx);
-                    break;
-                case ELSE:
-                    guardTree = IRTree.negateBoolean(
-                            getForwardIR(((ElseScope) scope).ifScope.guard, taskScope, outerScope, compilationCtx));
-                    break;
-                default:
-                    throw new CompilerException("This should be unreachable");
-            }
-            outerScope = new IfScope(outerScope, guardTree);
-        }
-        return outerScope;
-    }
-
-    private static void removeSubstitutions(ScopeChanges s, Map<ForTask, IntVariable> substitutions,
-            Map<ReductionScope<?>, ReductionScopeCopied<?>> reductionScopeSubs, CompilationContext compilationCtx) {
         // Remove any required substitutions
         for(ForTask t:s.getUsedScopes()) {
             if(substitutions.containsKey(t)) {
@@ -1259,45 +1285,88 @@ public class TraceArrayRestrictions {
                 compilationCtx.removeScopeSubstitute(t);
             }
         }
-        for(ReductionScope<?> rs:reductionScopeSubs.keySet())
-            compilationCtx.removeScopeSubstitute(rs);
     }
 
-    private static Scope constructAdditionalScopes(RestrictionsData data, Map<ForTask, IntVariable> substitutions,
+    private static Scope constructAdditionalScopes(RestrictionsData data, Map<Scope, IntVariable> substitutions,
             Scope outerScope, CompilationContext compilationCtx) {
         // Set all the current substitutions so they are there when the scopes are
         // created.
-        for(ForTask t:substitutions.keySet()) {
-            IntVariable index = substitutions.get(t);
-            compilationCtx.addSubstitute(t.getIndex(), index);
-            compilationCtx.addScopeSubstitute(t, outerScope);
+        for(Scope scope:substitutions.keySet()) {
+            if(scope.getScopeType() == ScopeType.FOR)
+                compilationCtx.addSubstitute(((ForTask)scope).getIndex(), substitutions.get(scope));
+            compilationCtx.addScopeSubstitute(scope, outerScope);
         }
 
-        for(ForTask t:data.finalLoops) {
-            ForTask newScope = ScopeUtils.constructForScope(outerScope, t, data.existingScopes.contains(t),
-                    data.globalID + "_" + data.localID++, compilationCtx);
-            data.existingScopes.add(t);
+        for(Scope scope:data.finalScopes) {
+            switch(scope.getScopeType()) {
+                case IF: {
+                    IfScope ifScope = (IfScope) scope;
+                    IRTreeReturn<BooleanVariable>  guardTree = ifScope.guard.getForwardIR(compilationCtx);
+                    outerScope = new IfScope(outerScope, guardTree);
 
-            // If we have replaced the old scope remove its substitution
-            if(substitutions.containsKey(t)) {
-                compilationCtx.removeSubstitute(t.getIndex());
-                compilationCtx.removeScopeSubstitute(t);
+                    // If we have replaced the old scope remove its substitution
+                    if(substitutions.containsKey(scope))
+                        compilationCtx.removeScopeSubstitute(scope);
+
+                    // Add in substitutes for the newly
+                    compilationCtx.addScopeSubstitute(scope, outerScope);
+
+                    // Store the substitute for later
+                    substitutions.put(ifScope, null);
+
+                    break;
+                }
+                case ELSE: {
+                    ElseScope elseScope = (ElseScope) scope;
+                    IRTreeReturn<BooleanVariable>  guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
+                    guardTree = IRTree.negateBoolean(guardTree);
+                    outerScope = new IfScope(outerScope, guardTree);
+
+                    // If we have replaced the old scope remove its substitution
+                    if(substitutions.containsKey(scope))
+                        compilationCtx.removeScopeSubstitute(scope);
+
+                    // Add in substitutes for the newly
+                    compilationCtx.addScopeSubstitute(scope, outerScope);
+
+                    // Store the substitute for later
+                    substitutions.put(elseScope, null);
+
+                    break;
+                }
+                case FOR: {
+                    ForTask t = (ForTask) scope;
+                    ForTask newScope = ScopeUtils.constructForScope(outerScope, t, data.existingScopes.contains(t),
+                            data.globalID + "_" + data.localID++, compilationCtx);
+                    data.existingScopes.add(t);
+
+                    // If we have replaced the old scope remove its substitution
+                    if(substitutions.containsKey(t)) {
+                        compilationCtx.removeSubstitute(t.getIndex());
+                        compilationCtx.removeScopeSubstitute(t);
+                    }
+
+                    // Add in substitutes for the newly
+                    compilationCtx.addSubstitute(t.getIndex(), newScope.getIndex());
+                    compilationCtx.addScopeSubstitute(t, newScope);
+
+                    // Store the substitute for later
+                    substitutions.put(t, newScope.getIndex());
+                    outerScope = newScope;
+                    break;
+                }
+                default:
+                    break;
             }
-
-            // Add in substitutes for the newly
-            compilationCtx.addSubstitute(t.getIndex(), newScope.getIndex());
-            compilationCtx.addScopeSubstitute(t, newScope);
-
-            // Store the substitute for later
-            substitutions.put(t, newScope.getIndex());
-            outerScope = newScope;
         }
 
         // Now the scopes are created remove the substitutions.
-        for(ForTask t:substitutions.keySet()) {
-            compilationCtx.removeSubstitute(t.getIndex());
-            compilationCtx.removeScopeSubstitute(t);
+        for(Scope scope:substitutions.keySet()) {
+            if(scope.getScopeType() == ScopeType.FOR)
+                compilationCtx.removeSubstitute(((ForTask)scope).getIndex());
+            compilationCtx.removeScopeSubstitute(scope);
         }
+
         return outerScope;
     }
 

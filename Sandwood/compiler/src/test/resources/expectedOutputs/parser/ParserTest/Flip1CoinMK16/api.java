@@ -5,6 +5,7 @@ import static org.sandwood.compiler.dataflowGraph.Math.*;
 import static org.sandwood.compiler.dataflowGraph.Number.*;
 import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;
 
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;
@@ -29,7 +30,7 @@ public class Flip1CoinMK16 extends GeneratedAPIBuilder {
         DoubleVariable guard = observeDouble("guard", location(11, 50, 11, 61));
 
         BooleanVariable guard$1 = isNaN(guard, location(12, 8, 12, 19));
-        ifElse(guard$1, () -> {
+        IfScope ifScope$1 = ifElse(guard$1, () -> {
             DoubleVariable bias = beta(doubleVariable(1.0, location(13, 28, 13, 30)), doubleVariable(1.0, location(13, 33, 13, 35)), location(13, 23, 13, 36)).sample(location(13, 38, 13, 45));
             bias.setAlias("bias");
             bias.setLocation(location(13, 16, 13, 19));

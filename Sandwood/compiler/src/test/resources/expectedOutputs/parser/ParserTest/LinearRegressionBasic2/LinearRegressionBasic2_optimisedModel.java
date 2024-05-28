@@ -139,13 +139,13 @@ public class LinearRegressionBasic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample33(fixed);
+                system$c.set$fixedFlag$sample40(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample33())
+            if(system$c.get$fixedFlag$sample40())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -285,7 +285,7 @@ public class LinearRegressionBasic2 extends Model {
         if(variance.isSet())
             newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
         if(y.isSet())
-            newCore.set$fixedFlag$sample33(oldCore.get$fixedFlag$sample33());
+            newCore.set$fixedFlag$sample40(oldCore.get$fixedFlag$sample40());
     }
 
     /**

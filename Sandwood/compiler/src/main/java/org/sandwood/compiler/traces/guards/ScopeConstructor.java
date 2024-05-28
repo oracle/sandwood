@@ -48,8 +48,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.BlockScope;
 import org.sandwood.compiler.dataflowGraph.scopes.CommentScope;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
-import org.sandwood.compiler.dataflowGraph.scopes.ReductionScope;
-import org.sandwood.compiler.dataflowGraph.scopes.ReductionScopeCopied;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
@@ -809,22 +807,27 @@ public class ScopeConstructor {
     public ScopeConstructor addConstraint(TraceHandle consumerToSampleTrace, Set<Set<TraceHandle>> rvDistTraces) {
         Set<TraceHandle> traces = new HashSet<>();
         traces.add(consumerToSampleTrace);
-        return addConstraints(traces, rvDistTraces, false, false);
+        return addConstraints(traces, rvDistTraces, false, false, true);
     }
 
     public ScopeConstructor addConstraints(Set<TraceHandle> consumerToSampleTraces) {
-        return addConstraints(consumerToSampleTraces, Traces.noDistributionTraces, false, false);
+        return addConstraints(consumerToSampleTraces, Traces.noDistributionTraces, false, false, true);
     }
 
     public ScopeConstructor addConstraints(Set<TraceHandle> consumerToSampleTraces, boolean noGuards) {
         Set<Set<TraceHandle>> rvDistTraces = new HashSet<>();
         rvDistTraces.add(new HashSet<>());
-        return addConstraints(consumerToSampleTraces, rvDistTraces, noGuards, false);
+        return addConstraints(consumerToSampleTraces, rvDistTraces, noGuards, false, true);
     }
 
     public ScopeConstructor addConstraints(Set<TraceHandle> traces, Set<Set<TraceHandle>> rvDistTraces,
             boolean passValues) {
-        return addConstraints(traces, rvDistTraces, false, passValues);
+        return addConstraints(traces, rvDistTraces, false, passValues, true);
+    }
+
+    public ScopeConstructor addBackConstraints(Set<TraceHandle> traces, Set<Set<TraceHandle>> rvDistTraces,
+            boolean passValues) {
+        return addConstraints(traces, rvDistTraces, false, passValues, false);
     }
 
     /**
@@ -836,24 +839,32 @@ public class ScopeConstructor {
      * @return
      */
     private ScopeConstructor addConstraints(Set<TraceHandle> traces, Set<Set<TraceHandle>> rvDistTraces,
-            boolean noGuards, boolean passValues) {
+            boolean noGuards, boolean passValues, boolean forward) {
         String comment = constructConstraintsComment(traces);
         ScopeConstructor sc = addIsolation(comment);
-        return sc.addConstraintsInternal(traces, rvDistTraces, noGuards, passValues);
+        return sc.addConstraintsInternal(traces, rvDistTraces, noGuards, passValues, forward);
     }
 
     private ScopeConstructor addConstraintsInternal(Set<TraceHandle> traces, Set<Set<TraceHandle>> rvDistTraces,
-            boolean noGuards, boolean passValues) {
+            boolean noGuards, boolean passValues, boolean forward) {
         if(traces.isEmpty())
             throw new CompilerException("Attempting to apply constraints to an empty set of traces.");
 
         // Declare a parameter describing the origin, consumer
         TraceDesc traceDesc = constructTraceDescription(traces);
         // Ensure the scope constructors are linked.
-        if(traceDesc.origin != tasks.get(noConstraints() - 1))
-            throw new CompilerException("Traces: " + traces + " start at " + traceDesc.origin
-                    + " they should start at the position of the proceeding Scope Constructor: "
-                    + tasks.get(noConstraints() - 1));
+        if(forward) {
+            if(traceDesc.origin != tasks.get(noConstraints() - 1))
+                throw new CompilerException("Traces: " + traces + " start at " + traceDesc.origin
+                        + " they should start at the position of the proceeding Scope Constructor: "
+                        + tasks.get(noConstraints() - 1));
+        } else {
+            // Ensure the scope constructors are linked.
+            if(traceDesc.consumer != tasks.get(noConstraints() - 1))
+                throw new CompilerException("Traces: " + traces + " end at " + traceDesc.consumer
+                        + " they should end at the position of the proceeding Scope Constructor: "
+                        + tasks.get(noConstraints() - 1));
+        }
 
         Map<TraceHandle, Set<TraceHandle>> simplifiedTraces = simplifyTraces(traces);
 
@@ -870,7 +881,7 @@ public class ScopeConstructor {
         // Construct a description of the guard if required.
         GuardDesc guardDesc = null;
         if(!noGuards) {
-            guardDesc = constructGuardDesc(traceGroups.keySet(), traceDesc, distPreTraces);
+            guardDesc = constructGuardDesc(traceGroups.keySet(), traceDesc, distPreTraces, forward);
 
             // Test if we need to construct a guard and if we do build the required data structures.
             if(guardDesc != null) {
@@ -882,26 +893,36 @@ public class ScopeConstructor {
                             initializeVariable(varDesc, constant(false),
                                     "Guard to check that at most one copy of the code is executed for a given set of loop iterations.")));
                 } else {
-                    initializeArrayGuard(guardDesc, traceGroups.keySet());
+                    initializeArrayGuard(guardDesc, traceGroups.keySet(), forward);
                 }
             }
         }
 
-        ScopeConstructor sc = new ScopeConstructor(this, traceDesc.consumer);
-        return sc.addConstraintsInternal(traceGroups, simplifiedTraces, guardDesc, passValues);
+        ScopeConstructor sc = new ScopeConstructor(this, forward?traceDesc.consumer:traceDesc.origin);
+        return sc.addConstraintsInternal(traceGroups, simplifiedTraces, guardDesc, passValues, forward);
     }
 
     private ScopeConstructor addConstraintsInternal(
             Map<TraceHandle, Map<Set<TraceHandle>, Set<Set<TraceHandle>>>> traceGroups,
-            Map<TraceHandle, Set<TraceHandle>> simplifyTraces, GuardDesc guardDesc, boolean passValues) {
+            Map<TraceHandle, Set<TraceHandle>> simplifyTraces, GuardDesc guardDesc, boolean passValues,
+            boolean forward) {
         int position = noConstraints() - 1;
 
-        // Get the scopes at the start of the trace.
-        Set<Scope> startScopes = getTaskScopes(tasks.get(position - 1));
-
-        // Get the scope at the end of the trace
-        DataflowTask<?> consumer = tasks.get(position);
-        Set<Scope> endScopes = getTaskScopes(consumer);
+        // Get the scopes at the start and end of the trace.
+        Set<Scope> startScopes;
+        DataflowTask<?> sink, source;
+        Set<Scope> endScopes;
+        if(forward) {
+            source = tasks.get(position - 1);
+            startScopes = getTaskScopes(source);
+            sink = tasks.get(position);
+            endScopes = getTaskScopes(sink);
+        } else {
+            source = tasks.get(position);
+            sink = tasks.get(position - 1);
+            startScopes = getTaskScopes(source);
+            endScopes = getTaskScopes(sink);
+        }
 
         List<ScopeDescription> postTraceList = new ArrayList<>();
 
@@ -923,29 +944,44 @@ public class ScopeConstructor {
                 // For each distribution scope Construct the restrictions from the producer to the consumer
                 List<ScopeDescription> withTraceConstraint = new ArrayList<>();
                 for(ScopeDescription d:distributionScopes) {
-                    d = d.constructConstraintSpace(trace);
+                    d = d.constructConstraintSpace(trace, forward);
                     if(preTraces.isEmpty()) {
-                        Map<ForTask, IntVariable> startSubstitutions = constructScopeSubstitutions(startScopes, d,
-                                position - 1);
-                        Map<ForTask, IntVariable> endSubstitutions = Collections.emptyMap();
+                        Map<ForTask, IntVariable> startSubstitutions;
+                        Map<ForTask, IntVariable> endSubstitutions;
+                        if(forward) {
+                            startSubstitutions = constructScopeSubstitutions(startScopes, d, position - 1);
+                            endSubstitutions = Collections.emptyMap();
+                        } else {
+                            startSubstitutions = Collections.emptyMap();
+                            endSubstitutions = constructScopeSubstitutions(endScopes, d, position - 1);
+                        }
                         d = TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
                                 startSubstitutions, endSubstitutions, d, id.get().next(), passValues, position,
                                 compilationCtx);
                         // If the consumer is a distribution sample add a description for it to the scope description.
-                        if(consumer.isDistribution() && consumer.getType() == DFType.SAMPLE)
-                            d = addSampleDesc((SampleTask<?, ?>) consumer, null, d);
+                        if(sink.isDistribution() && sink.getType() == DFType.SAMPLE)
+                            d = addSampleDesc((SampleTask<?, ?>) sink, null, d);
                         withTraceConstraint.add(d);
                     } else {
                         // Construct a new description where the fixed scopes are the shared scopes of the consumer
                         // trace and the existing distribution.
-                        List<Scope> changeableScopes = getChangeableScopes(consumer, trace);
-                        Set<Scope> fixedScopes = new HashSet<>(endScopes);
-                        fixedScopes.removeAll(changeableScopes);
+                        Set<Scope> fixedScopes;
+                        List<Scope> changeableScopes;
+                        if(forward) {
+                            changeableScopes = getChangeableScopes(sink, trace);
+                            fixedScopes = new HashSet<>(endScopes);
+                            fixedScopes.removeAll(changeableScopes);
+                        } else {
+                            changeableScopes = getChangeableScopes(source, trace);
+                            fixedScopes = new HashSet<>(startScopes);
+                            fixedScopes.removeAll(changeableScopes);
+                        }
                         d = constructAdditionalScopes(filterForTasks(changeableScopes),
                                 constructScopeSubstitutions(fixedScopes, d, position), d, position);
+
                         // If the consumer is a distribution sample add a description for it to the scope description.
-                        if(consumer.isDistribution() && consumer.getType() == DFType.SAMPLE)
-                            d = addSampleDesc((SampleTask<?, ?>) consumer, null, d);
+                        if(sink.isDistribution() && sink.getType() == DFType.SAMPLE)
+                            d = addSampleDesc((SampleTask<?, ?>) sink, null, d);
 
                         // Now the end scopes have been constructed test all the other traces using fixing these end
                         // scopes.
@@ -959,12 +995,22 @@ public class ScopeConstructor {
                         }
 
                         // Construct the distributions going to the consumer
-                        for(ScopeDescription ptd:preTraceDescriptions) {
-                            withTraceConstraint
-                                    .add(TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
-                                            constructScopeSubstitutions(startScopes, ptd, position - 1),
-                                            constructScopeSubstitutions(endScopes, ptd, position), ptd, id.get().next(),
-                                            passValues, position, compilationCtx));
+                        if(forward) {
+                            for(ScopeDescription ptd:preTraceDescriptions) {
+                                withTraceConstraint.add(
+                                        TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
+                                                constructScopeSubstitutions(startScopes, ptd, position - 1),
+                                                constructScopeSubstitutions(endScopes, ptd, position), ptd,
+                                                id.get().next(), passValues, position, compilationCtx));
+                            }
+                        } else {
+                            for(ScopeDescription ptd:preTraceDescriptions) {
+                                withTraceConstraint.add(
+                                        TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
+                                                constructScopeSubstitutions(startScopes, ptd, position),
+                                                constructScopeSubstitutions(endScopes, ptd, position - 1), ptd,
+                                                id.get().next(), passValues, position, compilationCtx));
+                            }
                         }
                     }
                 }
@@ -1036,10 +1082,7 @@ public class ScopeConstructor {
             returnVarSubstitutions.put(index, new VariablePair<>(index, substitutions.get(t)));
         }
 
-        HashMap<ReductionScope<?>, ReductionScopeCopied<?>> returnReduceSubstitutions = new HashMap<>(
-                originalSubstitutions.reductionScopesSubstitutions);
-
-        return new Substitutions(returnVarSubstitutions, returnReduceSubstitutions);
+        return new Substitutions(returnVarSubstitutions);
     }
 
     private Map<TraceHandle, Set<TraceHandle>> simplifyTraces(Set<TraceHandle> traces) {
@@ -1053,21 +1096,25 @@ public class ScopeConstructor {
     }
 
     private TraceHandle simplifyTrace(TraceHandle trace) {
+        int size = trace.size();
+        //If the trace only contains the start and end just return it.
+        if(trace.size() <=2)
+            return trace;
+        
         // Construct a new trace copying over just the first and last elements plus any puts and gets as these are the
         // only elements used to construct the restrictions
         Trace t = new Trace();
         // First element
         t.add(trace.get(0));
         // Intermediate puts and gets
-        int size = trace.size() - 1;
-        for(int i = 1; i < size; i++) {
+        for(int i = 1; i < size-1; i++) {
             DataflowTaskArgDesc d = trace.get(i);
             DFType type = d.task.getType();
             if(type == DFType.GET || type == DFType.PUT || type == DFType.IF_ASSIGNMENT || type == DFType.REDUCE_INPUT)
                 t.add(d);
         }
         // Last element
-        t.add(trace.get(size));
+        t.add(trace.get(size-1));
         return TraceHandle.getTraceHandle(t);
     }
 
@@ -1102,8 +1149,8 @@ public class ScopeConstructor {
         return d;
     }
 
-    private GuardDesc constructGuardDesc(Set<TraceHandle> consumerToSampleTraces, TraceDesc endPointDesc,
-            Set<TraceHandle> distPreTraces) {
+    private GuardDesc constructGuardDesc(Set<TraceHandle> consumerToSampleTraces, TraceDesc traceDesc,
+            Set<TraceHandle> distPreTraces, boolean forward) {
         // Test if the traces are distinct. This will occur if the traces only differ on if else branches or the puts
         // they recover from arrays and do not contain multiple paths to a reduction.
         if(!Traces.concurrentPaths(consumerToSampleTraces))
@@ -1120,17 +1167,18 @@ public class ScopeConstructor {
                     "Currently, unable to handle multiple producer consumer traces where the traces depend on distribution samples.");
 
         // Check this task has not already been used for a guard.
-        Integer guardNo = guardTasks.get(endPointDesc.consumer);
+        DataflowTask<?> guardTask = forward ? traceDesc.consumer : traceDesc.origin;
+        Integer guardNo = guardTasks.get(guardTask);
         if(guardNo == null)
             guardNo = Integer.valueOf(1);
         else
             guardNo = guardNo + 1;
-        guardTasks.put(endPointDesc.consumer, guardNo);
+        guardTasks.put(guardTask, guardNo);
 
         // Allocate guards if required.
-        List<Scope> changeableScopes = getChangeableScopes(endPointDesc.consumer, consumerToSampleTraces);
-        VariableDescription<BooleanVariable> guardName = VariableNames.guardName(endPointDesc.origin,
-                endPointDesc.consumer, guardNo, VariableType.BooleanVariable);
+        List<Scope> changeableScopes = getChangeableScopes(guardTask, consumerToSampleTraces);
+        VariableDescription<BooleanVariable> guardName = VariableNames.guardName(traceDesc.origin, traceDesc.consumer,
+                guardNo, VariableType.BooleanVariable);
         return new GuardDesc(guardName, filterForTasks(changeableScopes));
     }
 
@@ -1151,7 +1199,7 @@ public class ScopeConstructor {
         return getChangeableScopesInternal(consumer, getScopes);
     }
 
-    private List<Scope> getChangeableScopesInternal(DataflowTask<?> consumer, Set<Scope> getScopes) {
+    private List<Scope> getChangeableScopesInternal(DataflowTask<?> consumer, Set<Scope> usedArrayScopes) {
         // get all the scopes of the consumer
         Stack<Scope> consumerScopes = new Stack<>();
         Scope s = consumer.scope();
@@ -1165,11 +1213,11 @@ public class ScopeConstructor {
         while(!consumerScopes.isEmpty()) {
             s = consumerScopes.pop();
             // Once we find a scope containing an array, stop as all further scopes could change index value.
-            if(getScopes.contains(s))
+            if(usedArrayScopes.contains(s))
                 break;
         }
 
-        // Copy ForTasks to a new list. These are the only ones where the value can vary.
+        // Copy scopes to a new list. These are the only ones where the value can vary.
         List<Scope> changeable = new ArrayList<>();
         while(!consumerScopes.isEmpty())
             changeable.add(consumerScopes.pop());
@@ -1323,8 +1371,8 @@ public class ScopeConstructor {
         return false;
     }
 
-    private <A extends Variable<A>> void initializeArrayGuard(GuardDesc guardDesc,
-            Set<TraceHandle> consumerToSampleTraces) {
+    private <A extends Variable<A>> void initializeArrayGuard(GuardDesc guardDesc, Set<TraceHandle> constraintTraces,
+            boolean forward) {
         // TODO change the allocation here to use an allocator that allows guard name to have a type of boolean.
         // TODO Likewise with the loading of global.
         VariableDescription<ArrayVariable<A>> globalGuardName = (VariableDescription<ArrayVariable<A>>) VariableNames
@@ -1339,7 +1387,8 @@ public class ScopeConstructor {
                 loadGlobalField(globalGuardName, parallelScope),
                 "Guard to check that at most one copy of the code is executed for a given random variable instance.")));
 
-        ScopeConstructor sc = addConstraintsInternal(consumerToSampleTraces, Traces.noDistributionTraces, true, false);
+        ScopeConstructor sc = addConstraintsInternal(constraintTraces, Traces.noDistributionTraces, true, false,
+                forward);
         sc.addTree(noConstraints() - 1, (TreeBuilderInfo info) -> {
             // Construct all the indexes
             List<IRTreeReturn<IntVariable>> indexes = constructGuardScopes(guardDesc.scopes);

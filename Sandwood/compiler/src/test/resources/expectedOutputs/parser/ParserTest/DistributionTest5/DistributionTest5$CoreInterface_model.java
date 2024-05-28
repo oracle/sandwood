@@ -14,17 +14,17 @@ interface DistributionTest5$CoreInterface extends org.sandwood.runtime.internal.
 	// Setter for fixedFlag$sample18.
 	public void set$fixedFlag$sample18(boolean cv$value);
 
-	// Getter for fixedFlag$sample26.
-	public boolean get$fixedFlag$sample26();
+	// Getter for fixedFlag$sample34.
+	public boolean get$fixedFlag$sample34();
 
-	// Setter for fixedFlag$sample26.
-	public void set$fixedFlag$sample26(boolean cv$value);
+	// Setter for fixedFlag$sample34.
+	public void set$fixedFlag$sample34(boolean cv$value);
 
-	// Getter for fixedFlag$sample55.
-	public boolean get$fixedFlag$sample55();
+	// Getter for fixedFlag$sample77.
+	public boolean get$fixedFlag$sample77();
 
-	// Setter for fixedFlag$sample55.
-	public void set$fixedFlag$sample55(boolean cv$value);
+	// Setter for fixedFlag$sample77.
+	public void set$fixedFlag$sample77(boolean cv$value);
 
 	// Getter for length$value.
 	public int get$length$value();

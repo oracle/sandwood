@@ -26,41 +26,41 @@ interface HMM_Mk2$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	// Setter for fixedFlag$sample103.
 	public void set$fixedFlag$sample103(boolean cv$value);
 
-	// Getter for fixedFlag$sample26.
-	public boolean get$fixedFlag$sample26();
+	// Getter for fixedFlag$sample136.
+	public boolean get$fixedFlag$sample136();
 
-	// Setter for fixedFlag$sample26.
-	public void set$fixedFlag$sample26(boolean cv$value);
+	// Setter for fixedFlag$sample136.
+	public void set$fixedFlag$sample136(boolean cv$value);
 
-	// Getter for fixedFlag$sample34.
-	public boolean get$fixedFlag$sample34();
+	// Getter for fixedFlag$sample171.
+	public boolean get$fixedFlag$sample171();
 
-	// Setter for fixedFlag$sample34.
-	public void set$fixedFlag$sample34(boolean cv$value);
+	// Setter for fixedFlag$sample171.
+	public void set$fixedFlag$sample171(boolean cv$value);
 
-	// Getter for fixedFlag$sample51.
-	public boolean get$fixedFlag$sample51();
+	// Getter for fixedFlag$sample47.
+	public boolean get$fixedFlag$sample47();
 
-	// Setter for fixedFlag$sample51.
-	public void set$fixedFlag$sample51(boolean cv$value);
+	// Setter for fixedFlag$sample47.
+	public void set$fixedFlag$sample47(boolean cv$value);
 
-	// Getter for fixedFlag$sample53.
-	public boolean get$fixedFlag$sample53();
+	// Getter for fixedFlag$sample62.
+	public boolean get$fixedFlag$sample62();
 
-	// Setter for fixedFlag$sample53.
-	public void set$fixedFlag$sample53(boolean cv$value);
+	// Setter for fixedFlag$sample62.
+	public void set$fixedFlag$sample62(boolean cv$value);
 
-	// Getter for fixedFlag$sample61.
-	public boolean get$fixedFlag$sample61();
+	// Getter for fixedFlag$sample86.
+	public boolean get$fixedFlag$sample86();
 
-	// Setter for fixedFlag$sample61.
-	public void set$fixedFlag$sample61(boolean cv$value);
+	// Setter for fixedFlag$sample86.
+	public void set$fixedFlag$sample86(boolean cv$value);
 
-	// Getter for fixedFlag$sample81.
-	public boolean get$fixedFlag$sample81();
+	// Getter for fixedFlag$sample88.
+	public boolean get$fixedFlag$sample88();
 
-	// Setter for fixedFlag$sample81.
-	public void set$fixedFlag$sample81(boolean cv$value);
+	// Setter for fixedFlag$sample88.
+	public void set$fixedFlag$sample88(boolean cv$value);
 
 	// Getter for initialState.
 	public int get$initialState();

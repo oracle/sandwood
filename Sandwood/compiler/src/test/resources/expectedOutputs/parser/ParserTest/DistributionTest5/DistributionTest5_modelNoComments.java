@@ -34,13 +34,13 @@ public class DistributionTest5 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample55(fixed);
+                system$c.set$fixedFlag$sample77(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample55())
+            if(system$c.get$fixedFlag$sample77())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -105,17 +105,17 @@ public class DistributionTest5 extends Model {
         public void setFixed(boolean fixed) {
             synchronized(model) {
                 system$c.set$fixedFlag$sample18(fixed);
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample34(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
             boolean fixedFlag$sample18 = system$c.get$fixedFlag$sample18();
-            boolean fixedFlag$sample26 = system$c.get$fixedFlag$sample26();
-            if(fixedFlag$sample18 && fixedFlag$sample26)
+            boolean fixedFlag$sample34 = system$c.get$fixedFlag$sample34();
+            if(fixedFlag$sample18 && fixedFlag$sample34)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample18 || fixedFlag$sample26)
+            else if(fixedFlag$sample18 || fixedFlag$sample34)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -146,17 +146,17 @@ public class DistributionTest5 extends Model {
         public void setFixed(boolean fixed) {
             synchronized(model) {
                 system$c.set$fixedFlag$sample18(fixed);
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample34(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
             boolean fixedFlag$sample18 = system$c.get$fixedFlag$sample18();
-            boolean fixedFlag$sample26 = system$c.get$fixedFlag$sample26();
-            if(fixedFlag$sample18 && fixedFlag$sample26)
+            boolean fixedFlag$sample34 = system$c.get$fixedFlag$sample34();
+            if(fixedFlag$sample18 && fixedFlag$sample34)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample18 || fixedFlag$sample26)
+            else if(fixedFlag$sample18 || fixedFlag$sample34)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -308,12 +308,12 @@ public class DistributionTest5 extends Model {
 
         //Set fixed flags
         if(v.isSet())
-            newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
+            newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
         if(v1.isSet())
             newCore.set$fixedFlag$sample12(oldCore.get$fixedFlag$sample12());
         if(v2.isSet()){
             newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
-            newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
+            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
         }
     }
 

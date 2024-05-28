@@ -32,11 +32,11 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	// Setter for choices.
 	public void set$choices(int[] cv$value);
 
-	// Getter for fixedFlag$sample22.
-	public boolean get$fixedFlag$sample22();
+	// Getter for fixedFlag$sample111.
+	public boolean get$fixedFlag$sample111();
 
-	// Setter for fixedFlag$sample22.
-	public void set$fixedFlag$sample22(boolean cv$value);
+	// Setter for fixedFlag$sample111.
+	public void set$fixedFlag$sample111(boolean cv$value);
 
 	// Getter for fixedFlag$sample29.
 	public boolean get$fixedFlag$sample29();
@@ -44,23 +44,23 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	// Setter for fixedFlag$sample29.
 	public void set$fixedFlag$sample29(boolean cv$value);
 
-	// Getter for fixedFlag$sample35.
-	public boolean get$fixedFlag$sample35();
+	// Getter for fixedFlag$sample36.
+	public boolean get$fixedFlag$sample36();
 
-	// Setter for fixedFlag$sample35.
-	public void set$fixedFlag$sample35(boolean cv$value);
+	// Setter for fixedFlag$sample36.
+	public void set$fixedFlag$sample36(boolean cv$value);
 
-	// Getter for fixedFlag$sample41.
-	public boolean get$fixedFlag$sample41();
+	// Getter for fixedFlag$sample42.
+	public boolean get$fixedFlag$sample42();
 
-	// Setter for fixedFlag$sample41.
-	public void set$fixedFlag$sample41(boolean cv$value);
+	// Setter for fixedFlag$sample42.
+	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample76.
-	public boolean get$fixedFlag$sample76();
+	// Getter for fixedFlag$sample55.
+	public boolean get$fixedFlag$sample55();
 
-	// Setter for fixedFlag$sample76.
-	public void set$fixedFlag$sample76(boolean cv$value);
+	// Setter for fixedFlag$sample55.
+	public void set$fixedFlag$sample55(boolean cv$value);
 
 	// Getter for logProbability$b.
 	public double get$logProbability$b();

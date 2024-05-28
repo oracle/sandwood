@@ -809,6 +809,9 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
      */
     @Override
     public Location getLocation() {
-        return location;
+        if(location==null)
+            return parent.getLocation();
+        else
+            return location;
     }
 }

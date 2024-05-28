@@ -7,16 +7,16 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMTestPart1b$CoreInterface {
 	private double[] bias;
-	private double[][] cv$var14$countGlobal;
-	private double[] cv$var28$stateProbabilityGlobal;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample32 = false;
+	private double[][] cv$var28$countGlobal;
+	private double[] cv$var49$stateProbabilityGlobal;
+	private boolean fixedFlag$sample28 = false;
+	private boolean fixedFlag$sample45 = false;
+	private boolean fixedFlag$sample50 = false;
+	private boolean fixedFlag$sample53 = false;
+	private boolean fixedProbFlag$sample28 = false;
+	private boolean fixedProbFlag$sample45 = false;
+	private boolean fixedProbFlag$sample50 = false;
+	private boolean fixedProbFlag$sample53 = false;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double logProbability$$evidence;
@@ -25,12 +25,12 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$flip;
 	private double logProbability$m;
 	private double logProbability$st;
-	private double logProbability$var14;
-	private double logProbability$var18;
-	private double logProbability$var23;
-	private double logProbability$var27;
-	private double logProbability$var30;
-	private double logProbability$var9;
+	private double logProbability$var16;
+	private double logProbability$var28;
+	private double logProbability$var32;
+	private double logProbability$var44;
+	private double logProbability$var48;
+	private double logProbability$var51;
 	private double[][] m;
 	private boolean setFlag$bias = false;
 	private boolean setFlag$m = false;
@@ -51,55 +51,55 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
-		fixedProbFlag$sample24 = false;
-		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample45 = false;
+		fixedProbFlag$sample53 = false;
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
+	public final boolean get$fixedFlag$sample28() {
+		return fixedFlag$sample28;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		fixedFlag$sample14 = cv$value;
-		fixedProbFlag$sample14 = (cv$value && fixedProbFlag$sample14);
-		fixedProbFlag$sample29 = (cv$value && fixedProbFlag$sample29);
+	public final void set$fixedFlag$sample28(boolean cv$value) {
+		fixedFlag$sample28 = cv$value;
+		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
+		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample24() {
-		return fixedFlag$sample24;
+	public final boolean get$fixedFlag$sample45() {
+		return fixedFlag$sample45;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
-		fixedFlag$sample24 = cv$value;
-		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
-		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
+	public final void set$fixedFlag$sample45(boolean cv$value) {
+		fixedFlag$sample45 = cv$value;
+		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample29() {
-		return fixedFlag$sample29;
+	public final boolean get$fixedFlag$sample50() {
+		return fixedFlag$sample50;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample29(boolean cv$value) {
-		fixedFlag$sample29 = cv$value;
-		fixedProbFlag$sample29 = (cv$value && fixedProbFlag$sample29);
-		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
+	public final void set$fixedFlag$sample50(boolean cv$value) {
+		fixedFlag$sample50 = cv$value;
+		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
+		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample32() {
-		return fixedFlag$sample32;
+	public final boolean get$fixedFlag$sample53() {
+		return fixedFlag$sample53;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample32(boolean cv$value) {
-		fixedFlag$sample32 = cv$value;
-		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
+	public final void set$fixedFlag$sample53(boolean cv$value) {
+		fixedFlag$sample53 = cv$value;
+		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$flip(boolean cv$value) {
 		flip = cv$value;
-		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample53 = false;
 	}
 
 	@Override
@@ -162,8 +162,8 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
-		fixedProbFlag$sample14 = false;
-		fixedProbFlag$sample29 = false;
+		fixedProbFlag$sample28 = false;
+		fixedProbFlag$sample50 = false;
 	}
 
 	@Override
@@ -174,8 +174,8 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$st(int cv$value) {
 		st = cv$value;
-		fixedProbFlag$sample29 = false;
-		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample50 = false;
+		fixedProbFlag$sample53 = false;
 	}
 
 	@Override
@@ -188,134 +188,134 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		return v;
 	}
 
-	private final void logProbabilityValue$sample14() {
-		if(!fixedProbFlag$sample14) {
+	private final void logProbabilityValue$sample28() {
+		if(!fixedProbFlag$sample28) {
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v) + DistributionSampling.logProbabilityDirichlet(m[1], v));
-			logProbability$var9 = cv$sampleAccumulator;
-			logProbability$var14 = cv$sampleAccumulator;
+			logProbability$var16 = cv$sampleAccumulator;
+			logProbability$var28 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample14)
+			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample14 = fixedFlag$sample14;
+			fixedProbFlag$sample28 = fixedFlag$sample28;
 		} else {
-			logProbability$var9 = logProbability$var14;
-			logProbability$m = (logProbability$m + logProbability$var14);
-			logProbability$$model = (logProbability$$model + logProbability$var14);
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var14);
+			logProbability$var16 = logProbability$var28;
+			logProbability$m = (logProbability$m + logProbability$var28);
+			logProbability$$model = (logProbability$$model + logProbability$var28);
+			if(fixedFlag$sample28)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var28);
 		}
 	}
 
-	private final void logProbabilityValue$sample24() {
-		if(!fixedProbFlag$sample24) {
+	private final void logProbabilityValue$sample45() {
+		if(!fixedProbFlag$sample45) {
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(bias[1], 1.0, 1.0));
-			logProbability$var18 = cv$sampleAccumulator;
-			logProbability$var23 = cv$sampleAccumulator;
+			logProbability$var32 = cv$sampleAccumulator;
+			logProbability$var44 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample24)
+			if(fixedFlag$sample45)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample24 = fixedFlag$sample24;
+			fixedProbFlag$sample45 = fixedFlag$sample45;
 		} else {
-			logProbability$var18 = logProbability$var23;
-			logProbability$bias = (logProbability$bias + logProbability$var23);
-			logProbability$$model = (logProbability$$model + logProbability$var23);
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var23);
+			logProbability$var32 = logProbability$var44;
+			logProbability$bias = (logProbability$bias + logProbability$var44);
+			logProbability$$model = (logProbability$$model + logProbability$var44);
+			if(fixedFlag$sample45)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var44);
 		}
 	}
 
-	private final void logProbabilityValue$sample29() {
-		if(!fixedProbFlag$sample29) {
-			double[] var26 = m[0];
-			double cv$distributionAccumulator = (((0.0 <= st) && (st < var26.length))?Math.log(var26[st]):Double.NEGATIVE_INFINITY);
-			logProbability$var27 = cv$distributionAccumulator;
+	private final void logProbabilityValue$sample50() {
+		if(!fixedProbFlag$sample50) {
+			double[] var47 = m[0];
+			double cv$distributionAccumulator = (((0.0 <= st) && (st < var47.length))?Math.log(var47[st]):Double.NEGATIVE_INFINITY);
+			logProbability$var48 = cv$distributionAccumulator;
 			logProbability$st = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample29)
+			if(fixedFlag$sample50)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample29 = (fixedFlag$sample29 && fixedFlag$sample14);
+			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample28);
 		} else {
-			logProbability$var27 = logProbability$st;
+			logProbability$var48 = logProbability$st;
 			logProbability$$model = (logProbability$$model + logProbability$st);
-			if(fixedFlag$sample29)
+			if(fixedFlag$sample50)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$st);
 		}
 	}
 
-	private final void logProbabilityValue$sample32() {
-		if(!fixedProbFlag$sample32) {
+	private final void logProbabilityValue$sample53() {
+		if(!fixedProbFlag$sample53) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flip, bias[st]);
-			logProbability$var30 = cv$distributionAccumulator;
+			logProbability$var51 = cv$distributionAccumulator;
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample32 = ((fixedFlag$sample32 && fixedFlag$sample24) && fixedFlag$sample29);
+			fixedProbFlag$sample53 = ((fixedFlag$sample53 && fixedFlag$sample45) && fixedFlag$sample50);
 		} else {
-			logProbability$var30 = logProbability$flip;
+			logProbability$var51 = logProbability$flip;
 			logProbability$$model = (logProbability$$model + logProbability$flip);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$flip);
 		}
 	}
 
-	private final void sample14(int var13, int threadID$cv$var13, Rng RNG$) {
-		double[] cv$countLocal = cv$var14$countGlobal[threadID$cv$var13];
+	private final void sample28(int var27, int threadID$cv$var27, Rng RNG$) {
+		double[] cv$countLocal = cv$var28$countGlobal[threadID$cv$var27];
 		cv$countLocal[0] = 0.0;
 		cv$countLocal[1] = 0.0;
-		if((var13 == 0))
+		if((var27 == 0))
 			cv$countLocal[st] = (cv$countLocal[st] + 1.0);
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var13]);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27]);
 	}
 
-	private final void sample24(int var22, int threadID$cv$var22, Rng RNG$) {
+	private final void sample45(int var43, int threadID$cv$var43, Rng RNG$) {
 		int cv$sum = 0;
 		int cv$count = 0;
-		if((var22 == st)) {
+		if((var43 == st)) {
 			cv$count = 1;
 			if(flip)
 				cv$sum = 1;
 		}
-		bias[var22] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
-	private final void sample29() {
+	private final void sample50() {
 		{
 			st = 0;
-			double[] cv$temp$0$var26 = m[0];
-			cv$var28$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + ((0 < cv$temp$0$var26.length)?Math.log(cv$temp$0$var26[0]):Double.NEGATIVE_INFINITY));
+			double[] cv$temp$0$var47 = m[0];
+			cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + ((0 < cv$temp$0$var47.length)?Math.log(cv$temp$0$var47[0]):Double.NEGATIVE_INFINITY));
 		}
 		st = 1;
-		double[] cv$temp$0$var26 = m[0];
-		cv$var28$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + ((1 < cv$temp$0$var26.length)?Math.log(cv$temp$0$var26[1]):Double.NEGATIVE_INFINITY));
+		double[] cv$temp$0$var47 = m[0];
+		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + ((1 < cv$temp$0$var47.length)?Math.log(cv$temp$0$var47[1]):Double.NEGATIVE_INFINITY));
 		double cv$logSum;
-		double cv$lseMax = cv$var28$stateProbabilityGlobal[0];
-		double cv$lseElementValue = cv$var28$stateProbabilityGlobal[1];
+		double cv$lseMax = cv$var49$stateProbabilityGlobal[0];
+		double cv$lseElementValue = cv$var49$stateProbabilityGlobal[1];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else
-			cv$logSum = (Math.log((Math.exp((cv$var28$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var28$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			cv$logSum = (Math.log((Math.exp((cv$var49$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var49$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			cv$var28$stateProbabilityGlobal[0] = 0.5;
-			cv$var28$stateProbabilityGlobal[1] = 0.5;
+			cv$var49$stateProbabilityGlobal[0] = 0.5;
+			cv$var49$stateProbabilityGlobal[1] = 0.5;
 		} else {
-			cv$var28$stateProbabilityGlobal[0] = Math.exp((cv$var28$stateProbabilityGlobal[0] - cv$logSum));
-			cv$var28$stateProbabilityGlobal[1] = Math.exp((cv$var28$stateProbabilityGlobal[1] - cv$logSum));
+			cv$var49$stateProbabilityGlobal[0] = Math.exp((cv$var49$stateProbabilityGlobal[0] - cv$logSum));
+			cv$var49$stateProbabilityGlobal[1] = Math.exp((cv$var49$stateProbabilityGlobal[1] - cv$logSum));
 		}
-		for(int cv$indexName = 2; cv$indexName < cv$var28$stateProbabilityGlobal.length; cv$indexName += 1)
-			cv$var28$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		st = DistributionSampling.sampleCategorical(RNG$, cv$var28$stateProbabilityGlobal);
+		for(int cv$indexName = 2; cv$indexName < cv$var49$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var49$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+		st = DistributionSampling.sampleCategorical(RNG$, cv$var49$stateProbabilityGlobal);
 	}
 
 	@Override
 	public final void allocateScratch() {
 		int cv$threadCount = threadCount();
-		cv$var14$countGlobal = new double[cv$threadCount][];
+		cv$var28$countGlobal = new double[cv$threadCount][];
 		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var14$countGlobal[cv$index] = new double[2];
-		cv$var28$stateProbabilityGlobal = new double[2];
+			cv$var28$countGlobal[cv$index] = new double[2];
+		cv$var49$stateProbabilityGlobal = new double[2];
 	}
 
 	@Override
@@ -333,109 +333,109 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var13]);
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample45)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							bias[var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample50)
 			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		if(!fixedFlag$sample32)
+		if(!fixedFlag$sample53)
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var13]);
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample45)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							bias[var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample50)
 			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var13]);
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample45)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							bias[var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample50)
 			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample14)
+			if(!fixedFlag$sample28)
 				parallelFor(RNG$, 0, 2, 1,
-					(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-								sample14(var13, threadID$var13, RNG$1);
+					(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+								sample28(var27, threadID$var27, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample24)
+			if(!fixedFlag$sample45)
 				parallelFor(RNG$, 0, 2, 1,
-					(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-								sample24(var22, threadID$var22, RNG$1);
+					(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+								sample45(var43, threadID$var43, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample29)
-				sample29();
+			if(!fixedFlag$sample50)
+				sample50();
 		} else {
-			if(!fixedFlag$sample29)
-				sample29();
-			if(!fixedFlag$sample24)
+			if(!fixedFlag$sample50)
+				sample50();
+			if(!fixedFlag$sample45)
 				parallelFor(RNG$, 0, 2, 1,
-					(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-								sample24(var22, threadID$var22, RNG$1);
+					(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+								sample45(var43, threadID$var43, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample14)
+			if(!fixedFlag$sample28)
 				parallelFor(RNG$, 0, 2, 1,
-					(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-								sample14(var13, threadID$var13, RNG$1);
+					(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+								sample28(var27, threadID$var27, RNG$1);
 					}
 				);
 
@@ -446,9 +446,9 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void initializeConstants() {
 		parallelFor(RNG$, 0, 2, 1,
-			(int forStart$var6, int forEnd$var6, int threadID$var6, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var6 = forStart$var6; var6 < forEnd$var6; var6 += 1)
-						v[var6] = 0.1;
+			(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
+						v[var13] = 0.1;
 			}
 		);
 	}
@@ -456,19 +456,19 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
+		logProbability$var16 = 0.0;
 		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample14)
-			logProbability$var14 = 0.0;
-		logProbability$var18 = 0.0;
+		if(!fixedProbFlag$sample28)
+			logProbability$var28 = 0.0;
+		logProbability$var32 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample24)
-			logProbability$var23 = 0.0;
-		logProbability$var27 = 0.0;
-		if(!fixedProbFlag$sample29)
+		if(!fixedProbFlag$sample45)
+			logProbability$var44 = 0.0;
+		logProbability$var48 = 0.0;
+		if(!fixedProbFlag$sample50)
 			logProbability$st = 0.0;
-		logProbability$var30 = 0.0;
-		if(!fixedProbFlag$sample32)
+		logProbability$var51 = 0.0;
+		if(!fixedProbFlag$sample53)
 			logProbability$flip = 0.0;
 	}
 
@@ -480,52 +480,52 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
-		if(fixedFlag$sample24)
-			logProbabilityValue$sample24();
-		if(fixedFlag$sample29)
-			logProbabilityValue$sample29();
-		logProbabilityValue$sample32();
+		if(fixedFlag$sample28)
+			logProbabilityValue$sample28();
+		if(fixedFlag$sample45)
+			logProbabilityValue$sample45();
+		if(fixedFlag$sample50)
+			logProbabilityValue$sample50();
+		logProbabilityValue$sample53();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample24();
-		logProbabilityValue$sample29();
-		logProbabilityValue$sample32();
+		logProbabilityValue$sample28();
+		logProbabilityValue$sample45();
+		logProbabilityValue$sample50();
+		logProbabilityValue$sample53();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample24();
-		logProbabilityValue$sample29();
-		logProbabilityValue$sample32();
+		logProbabilityValue$sample28();
+		logProbabilityValue$sample45();
+		logProbabilityValue$sample50();
+		logProbabilityValue$sample53();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var13]);
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample24)
+		if(!fixedFlag$sample45)
 			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							bias[var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample50)
 			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
 		logModelProbabilitiesVal();
 	}

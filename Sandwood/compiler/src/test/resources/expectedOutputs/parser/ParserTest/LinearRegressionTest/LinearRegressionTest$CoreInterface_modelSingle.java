@@ -8,29 +8,29 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	// Setter for bias.
 	public void set$bias(double cv$value);
 
-	// Getter for fixedFlag$sample28.
-	public boolean get$fixedFlag$sample28();
-
-	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
-
 	// Getter for fixedFlag$sample35.
 	public boolean get$fixedFlag$sample35();
 
 	// Setter for fixedFlag$sample35.
 	public void set$fixedFlag$sample35(boolean cv$value);
 
-	// Getter for fixedFlag$sample39.
-	public boolean get$fixedFlag$sample39();
+	// Getter for fixedFlag$sample42.
+	public boolean get$fixedFlag$sample42();
 
-	// Setter for fixedFlag$sample39.
-	public void set$fixedFlag$sample39(boolean cv$value);
+	// Setter for fixedFlag$sample42.
+	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample63.
-	public boolean get$fixedFlag$sample63();
+	// Getter for fixedFlag$sample46.
+	public boolean get$fixedFlag$sample46();
 
-	// Setter for fixedFlag$sample63.
-	public void set$fixedFlag$sample63(boolean cv$value);
+	// Setter for fixedFlag$sample46.
+	public void set$fixedFlag$sample46(boolean cv$value);
+
+	// Getter for fixedFlag$sample85.
+	public boolean get$fixedFlag$sample85();
+
+	// Setter for fixedFlag$sample85.
+	public void set$fixedFlag$sample85(boolean cv$value);
 
 	// Getter for k.
 	public int get$k();

@@ -7,91 +7,147 @@ double var6 = 1.0;
 double[] var7 = new double[var4];
 int var8 = 0;
 int var9 = 1;
-for(int var10=var8; var10 < var4; var10 += var9) {
-	var7[var10] = var6;
+for(int var17=var8; var17 < var4; var17 += var9) {
+	boolean var10 = true;
+	boolean var11 = var8 >= var4;
+	int var12 = 0;
+	boolean var13 = var9 == var12;
+	boolean var14 = !var13;
+	boolean var15 = var11 && var14;
+	boolean var16 = var15 && var10;
+	var7[var17] = var6;
 }
-int var12 = 0;
-var5[var12] = var7;
-double var14 = 4.0;
-double[] var15 = new double[var4];
-int var16 = 0;
-int var17 = 1;
-for(int var18=var16; var18 < var4; var18 += var17) {
-	var15[var18] = var14;
-}
-int var20 = 1;
-var5[var20] = var15;
-double var22 = 3.5;
-double[] var23 = new double[var3];
+int var19 = 0;
+boolean var20 = true;
+var5[var19] = var7;
+double var22 = 4.0;
+double[] var23 = new double[var4];
 int var24 = 0;
 int var25 = 1;
-for(int var26=var24; var26 < var3; var26 += var25) {
-	var23[var26] = var22;
+for(int var33=var24; var33 < var4; var33 += var25) {
+	boolean var26 = true;
+	boolean var27 = var24 >= var4;
+	int var28 = 0;
+	boolean var29 = var25 == var28;
+	boolean var30 = !var29;
+	boolean var31 = var27 && var30;
+	boolean var32 = var31 && var26;
+	var23[var33] = var22;
 }
-int var28 = 0;
-double[] var29 = var5[var28];
-int var30 = var29.length;
-int var31 = var5.length;
-double[] var32 = new double[var31];
-int var33 = var5.length;
-double[][] var34 = new double[var33][];
-double var35 = 0.0;
-double var36 = 10.0;
-Gaussian var37 = new Gaussian(var35, var36);
-double[] var38 = new double[var30];
-int var39 = 0;
-int var40 = 1;
-for(int var41=var39; var41 < var30; var41 += var40) {
-	double var42 = var37.sample();
-	var38[var41] = var42;
+int var35 = 1;
+boolean var36 = true;
+var5[var35] = var23;
+double var38 = 3.5;
+double[] var39 = new double[var3];
+int var40 = 0;
+int var41 = 1;
+for(int var49=var40; var49 < var3; var49 += var41) {
+	boolean var42 = true;
+	boolean var43 = var40 >= var3;
+	int var44 = 0;
+	boolean var45 = var41 == var44;
+	boolean var46 = !var45;
+	boolean var47 = var43 && var46;
+	boolean var48 = var47 && var42;
+	var39[var49] = var38;
 }
-double var44 = 0.0;
-double var45 = 10.0;
-Gaussian var46 = new Gaussian(var44, var45);
-double var47 = var46.sample();
-double var48 = 3.0;
-double var49 = 1.0;
-InverseGamma var50 = new Inverse Gamma(var48, var49);
-double var51 = var50.sample();
-int var52 = 0;
-int var53 = var5.length;
-int var54 = 1;
-for(int var55=var52; var55 < var53; var55 += var54) {
-	Uniform var56 = new Uniform(var1, var2);
-	double[] var57 = new double[var30];
-	int var58 = 0;
-	int var59 = 1;
-	for(int var60=var58; var60 < var30; var60 += var59) {
-		double var61 = var56.sample();
-		var57[var60] = var61;
+int var51 = 0;
+double[] var52 = var5[var51];
+int var53 = var52.length;
+int var54 = var5.length;
+double[] var55 = new double[var54];
+int var56 = var5.length;
+double[][] var57 = new double[var56][];
+double var58 = 0.0;
+double var59 = 10.0;
+Gaussian var60 = new Gaussian(var58, var59);
+double[] var61 = new double[var53];
+int var62 = 0;
+int var63 = 1;
+for(int var71=var62; var71 < var53; var71 += var63) {
+	boolean var64 = true;
+	boolean var65 = var62 >= var53;
+	int var66 = 0;
+	boolean var67 = var63 == var66;
+	boolean var68 = !var67;
+	boolean var69 = var65 && var68;
+	boolean var70 = var69 && var64;
+	double var72 = var60.sample();
+	var61[var71] = var72;
+}
+double var74 = 0.0;
+double var75 = 10.0;
+Gaussian var76 = new Gaussian(var74, var75);
+double var77 = var76.sample();
+double var78 = 3.0;
+double var79 = 1.0;
+InverseGamma var80 = new Inverse Gamma(var78, var79);
+double var81 = var80.sample();
+int var82 = 0;
+int var83 = var5.length;
+int var84 = 1;
+for(int var92=var82; var92 < var83; var92 += var84) {
+	boolean var85 = true;
+	boolean var86 = var82 >= var83;
+	int var87 = 0;
+	boolean var88 = var84 == var87;
+	boolean var89 = !var88;
+	boolean var90 = var86 && var89;
+	boolean var91 = var90 && var85;
+	Uniform var93 = new Uniform(var1, var2);
+	double[] var94 = new double[var53];
+	int var95 = 0;
+	int var96 = 1;
+	for(int var103=var95; var103 < var53; var103 += var96) {
+		boolean var97 = var95 >= var53;
+		int var98 = 0;
+		boolean var99 = var96 == var98;
+		boolean var100 = !var99;
+		boolean var101 = var97 && var100;
+		boolean var102 = var101 && var91;
+		double var104 = var93.sample();
+		var94[var103] = var104;
 	}
-	var34[var55] = var57;
+	var57[var92] = var94;
 }
-int var64 = 0;
-int var65 = var5.length;
-int var66 = 1;
-for(int var67=var64; var67 < var65; var67 += var66) {
-	double[] var68 = new double[var30];
-	int var69 = 0;
-	int var70 = 1;
-	for(int var71=var69; var71 < var30; var71 += var70) {
-		double var72 = var38[var71];
-		double[] var73 = var34[var67];
-		double var74 = var73[var71];
-		double var75 = var72 * var74;
-		var68[var71] = var75;
+int var107 = 0;
+int var108 = var5.length;
+int var109 = 1;
+for(int var117=var107; var117 < var108; var117 += var109) {
+	boolean var110 = true;
+	boolean var111 = var107 >= var108;
+	int var112 = 0;
+	boolean var113 = var109 == var112;
+	boolean var114 = !var113;
+	boolean var115 = var111 && var114;
+	boolean var116 = var115 && var110;
+	double[] var118 = new double[var53];
+	int var119 = 0;
+	int var120 = 1;
+	for(int var127=var119; var127 < var53; var127 += var120) {
+		boolean var121 = var119 >= var53;
+		int var122 = 0;
+		boolean var123 = var120 == var122;
+		boolean var124 = !var123;
+		boolean var125 = var121 && var124;
+		boolean var126 = var125 && var116;
+		double var128 = var61[var127];
+		double[] var129 = var57[var117];
+		double var130 = var129[var127];
+		double var131 = var128 * var130;
+		var118[var127] = var131;
 	}
-	int var77 = 0;
-	int var78 = var68.length;
-	double var79 = 0.0;
-	double var83 = reduce(var68, var77, var78, var79) (double var80, double var81) -> {
-		double var82 = var80 + var81;
+	int var133 = 0;
+	int var134 = var118.length;
+	double var135 = 0.0;
+	double var141 = reduce(var118, var133, var134, var135) (double var138, double var139) -> {
+		double var140 = var138 + var139;
 	}
-	return var82;
-	double var84 = var83 + var47;
-	Gaussian var85 = new Gaussian(var84, var51);
-	double var86 = var85.sample();
-	var32[var67] = var86;
+	return var140;
+	double var142 = var141 + var77;
+	Gaussian var143 = new Gaussian(var142, var81);
+	double var144 = var143.sample();
+	var55[var117] = var144;
 }
-var34.observe(var5);
-var32.observe(var23);
+var57.observe(var5);
+var55.observe(var39);

@@ -10,21 +10,21 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	private boolean fixedFlag$sample14 = false;
 	private boolean fixedFlag$sample18 = false;
 	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample33 = false;
+	private boolean fixedFlag$sample40 = false;
 	private boolean fixedProbFlag$sample14 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample33 = false;
+	private boolean fixedProbFlag$sample40 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double[] logProbability$sample33;
+	private double[] logProbability$sample40;
 	private double logProbability$var10;
 	private double logProbability$var14;
 	private double logProbability$var19;
 	private double logProbability$var20;
-	private double[] logProbability$var29;
+	private double[] logProbability$var36;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -48,7 +48,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$b0(double cv$value) {
 		b0 = cv$value;
 		fixedProbFlag$sample14 = false;
-		fixedProbFlag$sample33 = false;
+		fixedProbFlag$sample40 = false;
 	}
 
 	@Override
@@ -60,7 +60,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$b1(double cv$value) {
 		b1 = cv$value;
 		fixedProbFlag$sample18 = false;
-		fixedProbFlag$sample33 = false;
+		fixedProbFlag$sample40 = false;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$fixedFlag$sample14(boolean cv$value) {
 		fixedFlag$sample14 = cv$value;
 		fixedProbFlag$sample14 = (cv$value && fixedProbFlag$sample14);
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$fixedFlag$sample18(boolean cv$value) {
 		fixedFlag$sample18 = cv$value;
 		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	@Override
@@ -96,18 +96,18 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$fixedFlag$sample23(boolean cv$value) {
 		fixedFlag$sample23 = cv$value;
 		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
+	public final boolean get$fixedFlag$sample40() {
+		return fixedFlag$sample40;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value) {
-		fixedFlag$sample33 = cv$value;
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
+	public final void set$fixedFlag$sample40(boolean cv$value) {
+		fixedFlag$sample40 = cv$value;
+		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
 	}
 
 	@Override
@@ -154,7 +154,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$variance(double cv$value) {
 		variance = cv$value;
 		fixedProbFlag$sample23 = false;
-		fixedProbFlag$sample33 = false;
+		fixedProbFlag$sample40 = false;
 	}
 
 	@Override
@@ -176,7 +176,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$y(double[] cv$value) {
 		y = cv$value;
 		setFlag$y = true;
-		fixedProbFlag$sample33 = false;
+		fixedProbFlag$sample40 = false;
 	}
 
 	@Override
@@ -242,25 +242,25 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	private final void logProbabilityValue$sample33() {
-		if(!fixedProbFlag$sample33) {
+	private final void logProbabilityValue$sample40() {
+		if(!fixedProbFlag$sample40) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance))) - (Math.log(variance) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var29[i] = cv$distributionAccumulator;
-				logProbability$sample33[i] = cv$distributionAccumulator;
+				logProbability$var36[i] = cv$distributionAccumulator;
+				logProbability$sample40[i] = cv$distributionAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample33 = (((fixedFlag$sample33 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample23);
+			fixedProbFlag$sample40 = (((fixedFlag$sample40 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
-				double cv$rvAccumulator = logProbability$sample33[i];
+				double cv$rvAccumulator = logProbability$sample40[i];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var29[i] = cv$rvAccumulator;
+				logProbability$var36[i] = cv$rvAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -305,8 +305,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		double cv$sum = 0.0;
 		int cv$count = 0;
 		for(int i = 0; i < noSamples; i += 1) {
-			double cv$var29$diff = ((b0 + (b1 * x[i])) - y[i]);
-			cv$sum = (cv$sum + (cv$var29$diff * cv$var29$diff));
+			double cv$var36$diff = ((b0 + (b1 * x[i])) - y[i]);
+			cv$sum = (cv$sum + (cv$var36$diff * cv$var36$diff));
 			cv$count = (cv$count + 1);
 		}
 		variance = (1 / Conjugates.sampleConjugateGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count));
@@ -319,8 +319,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void allocator() {
 		if(!setFlag$y)
 			y = new double[x.length];
-		logProbability$var29 = new double[x.length];
-		logProbability$sample33 = new double[x.length];
+		logProbability$var36 = new double[x.length];
+		logProbability$sample40 = new double[x.length];
 	}
 
 	@Override
@@ -331,7 +331,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
 		if(!fixedFlag$sample23)
 			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
-		if(!fixedFlag$sample33) {
+		if(!fixedFlag$sample40) {
 			for(int i = 0; i < noSamples; i += 1)
 				y[i] = (((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + b0) + (b1 * x[i]));
 		}
@@ -396,11 +396,11 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample23)
 			logProbability$var20 = 0.0;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var29[i] = 0.0;
+			logProbability$var36[i] = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample33) {
+		if(!fixedProbFlag$sample40) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample33[i] = 0.0;
+				logProbability$sample40[i] = 0.0;
 		}
 	}
 
@@ -418,7 +418,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			logProbabilityValue$sample18();
 		if(fixedFlag$sample23)
 			logProbabilityValue$sample23();
-		logProbabilityValue$sample33();
+		logProbabilityValue$sample40();
 	}
 
 	@Override
@@ -427,7 +427,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample23();
-		logProbabilityValue$sample33();
+		logProbabilityValue$sample40();
 	}
 
 	@Override
@@ -436,7 +436,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample23();
-		logProbabilityValue$sample33();
+		logProbabilityValue$sample40();
 	}
 
 	@Override

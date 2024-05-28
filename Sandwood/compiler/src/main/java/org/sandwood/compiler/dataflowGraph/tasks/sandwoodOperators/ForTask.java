@@ -25,6 +25,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
@@ -40,6 +41,7 @@ public class ForTask extends ScopedNumberProducingDataflowTask<IntVariable> {
     public final IntVariable start, end, step;
     public final boolean incrementing;
     protected IntVariable index;
+    private final BooleanVariable scopeCondition;
 
     public ForTask(IntVariable start, IntVariable end, IntVariable step, boolean incrementing) {
         this(start, end, step, incrementing, null);
@@ -56,6 +58,14 @@ public class ForTask extends ScopedNumberProducingDataflowTask<IntVariable> {
         this.end = end;
         this.step = step;
         this.incrementing = incrementing;
+        // This value does not need to include all the required properties, it just needs to use all the inputs.
+        BooleanVariable scopeCondition = getEnclosingScope().getScopeCondition();
+        if(scopeCondition == null)
+            this.scopeCondition = scopeCondition;
+        else
+            this.scopeCondition = start.lessThan(end)
+                .and(step.eq(Variable.intVariable(0)).negate())
+                .and(scopeCondition);
     }
 
     @Override
@@ -237,6 +247,11 @@ public class ForTask extends ScopedNumberProducingDataflowTask<IntVariable> {
         ForTask t = (ForTask) other;
         return incrementing == t.incrementing && start.equivalent(t.start) && end.equivalent(t.end)
                 && step.equivalent(t.step);
+    }
+
+    @Override
+    public BooleanVariable getScopeCondition() {
+        return scopeCondition;
     }
 
     @Override

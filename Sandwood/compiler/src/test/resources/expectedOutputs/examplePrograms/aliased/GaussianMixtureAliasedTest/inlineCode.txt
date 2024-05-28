@@ -2,27 +2,43 @@ int k = 5;
 double var2 = 1.0;
 int var3 = 10;
 double[] xMeasured = new double[var3];
-for(int var7=0; var7 < var3; var7 += 1) {
-	xMeasured[var7] = var2;
+int var5 = 0;
+int var6 = 1;
+for(int var14=var5; var14 < var3; var14 += var6) {
+	boolean var13 = var5 >= var3 && !var6 == 0 && true;
+	xMeasured[var14] = var2;
 }
-double var9 = 1.0;
+double var16 = 1.0;
 double[] alpha = new double[k];
-for(int var13=0; var13 < k; var13 += 1) {
-	alpha[var13] = var9;
+int var18 = 0;
+int var19 = 1;
+for(int var27=var18; var27 < k; var27 += var19) {
+	boolean var26 = var18 >= k && !var19 == 0 && true;
+	alpha[var27] = var16;
 }
 double[] phi = new Dirichlet(alpha).sample();
-Gaussian var19 = new Gaussian(0.0, 20.0);
+Gaussian var33 = new Gaussian(0.0, 20.0);
 double[] mu = new double[k];
-for(int var23=0; var23 < k; var23 += 1) {
-	mu[var23] = var19.sample();
+int var35 = 0;
+int var36 = 1;
+for(int var44=var35; var44 < k; var44 += var36) {
+	boolean var43 = var35 >= k && !var36 == 0 && true;
+	mu[var44] = var33.sample();
 }
-InverseGamma var28 = new Inverse Gamma(1.0, 1.0);
+InverseGamma var49 = new Inverse Gamma(1.0, 1.0);
 double[] sigma = new double[k];
-for(int var32=0; var32 < k; var32 += 1) {
-	sigma[var32] = var28.sample();
+int var51 = 0;
+int var52 = 1;
+for(int var60=var51; var60 < k; var60 += var52) {
+	boolean var59 = var51 >= k && !var52 == 0 && true;
+	sigma[var60] = var49.sample();
 }
 double[] x = new double[xMeasured.length];
-for(int i=0; i < xMeasured.length; i += 1) {
+int var65 = 0;
+int var66 = xMeasured.length;
+int var67 = 1;
+for(int i=var65; i < var66; i += var67) {
+	boolean var74 = var65 >= var66 && !var67 == 0 && true;
 	int z = new Categorical(phi).sample();
 	x[i] = new Gaussian(mu[z], sigma[z]).sample();
 }

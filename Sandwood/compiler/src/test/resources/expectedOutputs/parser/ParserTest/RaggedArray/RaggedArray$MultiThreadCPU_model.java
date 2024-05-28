@@ -8,11 +8,11 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Declare the variables for the model.
 	private double[][] a;
 	private double[][] b;
-	private double[] cv$var57$stateProbabilityGlobal;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample72 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample72 = false;
+	private double[] cv$var71$stateProbabilityGlobal;
+	private boolean fixedFlag$sample76 = false;
+	private boolean fixedFlag$sample93 = false;
+	private boolean fixedProbFlag$sample76 = false;
+	private boolean fixedProbFlag$sample93 = false;
 	private int i;
 	private int length$obs_measured;
 	private double logProbability$$evidence;
@@ -20,9 +20,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$i;
 	private double logProbability$obs;
 	private double logProbability$p;
-	private double logProbability$var56;
-	private double logProbability$var60;
-	private double logProbability$var66;
+	private double logProbability$var70;
+	private double logProbability$var74;
+	private double logProbability$var87;
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
@@ -46,44 +46,44 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		return b;
 	}
 
-	// Getter for fixedFlag$sample62.
+	// Getter for fixedFlag$sample76.
 	@Override
-	public final boolean get$fixedFlag$sample62() {
-		return fixedFlag$sample62;
+	public final boolean get$fixedFlag$sample76() {
+		return fixedFlag$sample76;
 	}
 
-	// Setter for fixedFlag$sample62.
+	// Setter for fixedFlag$sample76.
 	@Override
-	public final void set$fixedFlag$sample62(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample62 including if probabilities
+	public final void set$fixedFlag$sample76(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample76 including if probabilities
 		// need to be updated.
-		fixedFlag$sample62 = cv$value;
+		fixedFlag$sample76 = cv$value;
 		
-		// Should the probability of sample 62 be set to fixed. This will only every change
+		// Should the probability of sample 76 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedProbFlag$sample62);
+		fixedProbFlag$sample76 = (fixedFlag$sample76 && fixedProbFlag$sample76);
 		
-		// Should the probability of sample 72 be set to fixed. This will only every change
+		// Should the probability of sample 93 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample62 && fixedProbFlag$sample72);
+		fixedProbFlag$sample93 = (fixedFlag$sample76 && fixedProbFlag$sample93);
 	}
 
-	// Getter for fixedFlag$sample72.
+	// Getter for fixedFlag$sample93.
 	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
+	public final boolean get$fixedFlag$sample93() {
+		return fixedFlag$sample93;
 	}
 
-	// Setter for fixedFlag$sample72.
+	// Setter for fixedFlag$sample93.
 	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
+	public final void set$fixedFlag$sample93(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample93 including if probabilities
 		// need to be updated.
-		fixedFlag$sample72 = cv$value;
+		fixedFlag$sample93 = cv$value;
 		
-		// Should the probability of sample 72 be set to fixed. This will only every change
+		// Should the probability of sample 93 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedProbFlag$sample72);
+		fixedProbFlag$sample93 = (fixedFlag$sample93 && fixedProbFlag$sample93);
 	}
 
 	// Getter for i.
@@ -98,11 +98,11 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// Set flags for all the side effects of i including if probabilities need to be updated.
 		i = cv$value;
 		
-		// Unset the fixed probability flag for sample 62 as it depends on i.
-		fixedProbFlag$sample62 = false;
+		// Unset the fixed probability flag for sample 76 as it depends on i.
+		fixedProbFlag$sample76 = false;
 		
-		// Unset the fixed probability flag for sample 72 as it depends on i.
-		fixedProbFlag$sample72 = false;
+		// Unset the fixed probability flag for sample 93 as it depends on i.
+		fixedProbFlag$sample93 = false;
 	}
 
 	// Getter for length$obs_measured.
@@ -163,8 +163,8 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		obs = cv$value;
 		setFlag$obs = true;
 		
-		// Unset the fixed probability flag for sample 72 as it depends on obs.
-		fixedProbFlag$sample72 = false;
+		// Unset the fixed probability flag for sample 93 as it depends on obs.
+		fixedProbFlag$sample93 = false;
 	}
 
 	// Getter for obs_measured.
@@ -199,12 +199,12 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		y = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample62 using sampled
+	// Calculate the probability of the samples represented by sample76 using sampled
 	// values.
-	private final void logProbabilityValue$sample62() {
-		// Determine if we need to calculate the values for sample task 62 or if we should
+	private final void logProbabilityValue$sample76() {
+		// Determine if we need to calculate the values for sample task 76 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample62) {
+		if(!fixedProbFlag$sample76) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -222,10 +222,10 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				int cv$sampleValue = i;
 				{
 					{
-						double[] var55 = a[y];
+						double[] var69 = a[y];
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var69.length))?Math.log(var69[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -257,7 +257,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var56 = cv$sampleAccumulator;
+			logProbability$var70 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$i = cv$sampleProbability;
@@ -282,12 +282,12 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample62)
+			if(fixedFlag$sample76)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample62 = fixedFlag$sample62;
+			fixedProbFlag$sample76 = fixedFlag$sample76;
 		}
 		// Using cached values.
 		else {
@@ -298,7 +298,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$sampleValue = logProbability$i;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var56 = cv$rvAccumulator;
+			logProbability$var70 = cv$rvAccumulator;
 			
 			// Guard to ensure that p is only updated once for this probability.
 			boolean cv$guard$p = false;
@@ -320,24 +320,24 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample62)
+			if(fixedFlag$sample76)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample72 using sampled
+	// Calculate the probability of the samples represented by sample93 using sampled
 	// values.
-	private final void logProbabilityValue$sample72() {
-		// Determine if we need to calculate the values for sample task 72 or if we should
+	private final void logProbabilityValue$sample93() {
+		// Determine if we need to calculate the values for sample task 93 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample72) {
+		if(!fixedProbFlag$sample93) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var65 = 0; var65 < length$obs_measured; var65 += 1) {
+			for(int var86 = 0; var86 < length$obs_measured; var86 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -345,7 +345,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = obs[var65];
+					boolean cv$sampleValue = obs[var86];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
@@ -382,10 +382,10 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var60 = cv$sampleAccumulator;
+			logProbability$var74 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var66 = cv$sampleAccumulator;
+			logProbability$var87 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -396,7 +396,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedFlag$sample62);
+			fixedProbFlag$sample93 = (fixedFlag$sample93 && fixedFlag$sample76);
 		}
 		// Using cached values.
 		else {
@@ -404,10 +404,10 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var66;
+			double cv$sampleValue = logProbability$var87;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var60 = cv$rvAccumulator;
+			logProbability$var74 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -419,9 +419,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 62 drawn from Categorical 56. Inference was performed using variable
+	// by sample task 76 drawn from Categorical 70. Inference was performed using variable
 	// marginalization.
-	private final void sample62() {
+	private final void sample76() {
 		// Calculate the number of states to evaluate.
 		int cv$noStates = 0;
 		{
@@ -430,7 +430,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var57$stateProbabilityGlobal;
+		double[] cv$stateProbabilityLocal = cv$var71$stateProbabilityGlobal;
 		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -461,23 +461,23 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double[] cv$temp$0$var55;
+				double[] cv$temp$0$var69;
 				{
-					cv$temp$0$var55 = a[y];
+					cv$temp$0$var69 = a[y];
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var55.length))?Math.log(cv$temp$0$var55[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var69.length))?Math.log(cv$temp$0$var69[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
-				// Processing random variable 60.
+				// Processing random variable 74.
 				{
 					{
 						int traceTempVariable$i$2_1 = cv$currentValue;
 						
-						// Processing sample task 72 of consumer random variable null.
+						// Processing sample task 93 of consumer random variable null.
 						{
-							for(int var65 = 0; var65 < length$obs_measured; var65 += 1) {
+							for(int var86 = 0; var86 < length$obs_measured; var86 += 1) {
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -494,18 +494,18 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													cv$temp$1$p = p;
 												}
 												
-												// Record the probability of sample task 72 generating output with current configuration.
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var65], cv$temp$1$p)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var65], cv$temp$1$p)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												// Record the probability of sample task 93 generating output with current configuration.
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var86], cv$temp$1$p)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var86], cv$temp$1$p)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var65], cv$temp$1$p));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var86], cv$temp$1$p));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var65], cv$temp$1$p)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var65], cv$temp$1$p)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var86], cv$temp$1$p)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var86], cv$temp$1$p)));
 												}
 												
-												// Recorded the probability of reaching sample task 72 with the current configuration.
+												// Recorded the probability of reaching sample task 93 with the current configuration.
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
 										}
@@ -614,15 +614,15 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Variable to record the maximum value of Task Get 60. Initially set to the value
-		// of putTask 17.
-		int cv$var29$max = 2;
+		// Variable to record the maximum value of Task Get 74. Initially set to the value
+		// of putTask 20.
+		int cv$var36$max = 2;
 		
-		// Test if the input to putTask 31 is larger than the current values.
-		cv$var29$max = Math.max(cv$var29$max, 3);
+		// Test if the input to putTask 38 is larger than the current values.
+		cv$var36$max = Math.max(cv$var36$max, 3);
 		
-		// Allocation of cv$var57$stateProbabilityGlobal for single threaded execution
-		cv$var57$stateProbabilityGlobal = new double[cv$var29$max];
+		// Allocation of cv$var71$stateProbabilityGlobal for single threaded execution
+		cv$var71$stateProbabilityGlobal = new double[cv$var36$max];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -657,20 +657,20 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			i = DistributionSampling.sampleCategorical(RNG$, a[y]);
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			p = b[y][i];
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, length$obs_measured, 1,
-			(int forStart$var65, int forEnd$var65, int threadID$var65, org.sandwood.random.internal.Rng RNG$1) -> { 
+			(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int var65 = forStart$var65; var65 < forEnd$var65; var65 += 1) {
-						if(!fixedFlag$sample72)
-							obs[var65] = DistributionSampling.sampleBernoulli(RNG$1, p);
+					for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1) {
+						if(!fixedFlag$sample93)
+							obs[var86] = DistributionSampling.sampleBernoulli(RNG$1, p);
 					}
 			}
 		);
@@ -680,9 +680,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			i = DistributionSampling.sampleCategorical(RNG$, a[y]);
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			p = b[y][i];
 	}
 
@@ -690,9 +690,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			i = DistributionSampling.sampleCategorical(RNG$, a[y]);
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			p = b[y][i];
 	}
 
@@ -701,13 +701,13 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample62)
-				sample62();
+			if(!fixedFlag$sample76)
+				sample76();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample62)
-				sample62();
+			if(!fixedFlag$sample76)
+				sample76();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -721,17 +721,17 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		double[] var8 = a[0];
 		var8[0] = 0.4;
 		var8[1] = 0.6;
-		double[] var18 = a[1];
-		var18[0] = 0.2;
-		var18[1] = 0.3;
-		var18[2] = 0.5;
-		double[] var33 = b[0];
-		var33[0] = 0.2;
-		var33[1] = 0.8;
-		double[] var43 = b[1];
-		var43[0] = 0.4;
-		var43[1] = 0.2;
-		var43[2] = 0.6;
+		double[] var21 = a[1];
+		var21[0] = 0.2;
+		var21[1] = 0.3;
+		var21[2] = 0.5;
+		double[] var40 = b[0];
+		var40[0] = 0.2;
+		var40[1] = 0.8;
+		double[] var53 = b[1];
+		var53[0] = 0.4;
+		var53[1] = 0.2;
+		var53[2] = 0.6;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -744,14 +744,14 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var56 = 0.0;
+		logProbability$var70 = 0.0;
 		logProbability$p = 0.0;
-		if(!fixedProbFlag$sample62)
+		if(!fixedProbFlag$sample76)
 			logProbability$i = 0.0;
-		logProbability$var60 = 0.0;
+		logProbability$var74 = 0.0;
 		logProbability$obs = 0.0;
-		if(!fixedProbFlag$sample72)
-			logProbability$var66 = 0.0;
+		if(!fixedProbFlag$sample93)
+			logProbability$var87 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -771,9 +771,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample62)
-			logProbabilityValue$sample62();
-		logProbabilityValue$sample72();
+		if(fixedFlag$sample76)
+			logProbabilityValue$sample76();
+		logProbabilityValue$sample93();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -791,8 +791,8 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample62();
-		logProbabilityValue$sample72();
+		logProbabilityValue$sample76();
+		logProbabilityValue$sample93();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -809,8 +809,8 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample62();
-		logProbabilityValue$sample72();
+		logProbabilityValue$sample76();
+		logProbabilityValue$sample93();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -818,9 +818,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			i = DistributionSampling.sampleCategorical(RNG$, a[y]);
-		if(!fixedFlag$sample62)
+		if(!fixedFlag$sample76)
 			p = b[y][i];
 		
 		// Calculate the probabilities for every sample task in the model. These values are

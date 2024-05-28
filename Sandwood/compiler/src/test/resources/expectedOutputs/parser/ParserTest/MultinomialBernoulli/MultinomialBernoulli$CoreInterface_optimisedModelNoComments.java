@@ -2,16 +2,16 @@ package org.sandwood.compiler.tests.parser;
 
 interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[] get$beta();
-	public boolean get$fixedFlag$sample17();
-	public void set$fixedFlag$sample17(boolean cv$value);
 	public boolean get$fixedFlag$sample20();
 	public void set$fixedFlag$sample20(boolean cv$value);
-	public boolean get$fixedFlag$sample42();
-	public void set$fixedFlag$sample42(boolean cv$value);
-	public boolean get$fixedFlag$sample47();
-	public void set$fixedFlag$sample47(boolean cv$value);
+	public boolean get$fixedFlag$sample23();
+	public void set$fixedFlag$sample23(boolean cv$value);
 	public boolean get$fixedFlag$sample52();
 	public void set$fixedFlag$sample52(boolean cv$value);
+	public boolean get$fixedFlag$sample64();
+	public void set$fixedFlag$sample64(boolean cv$value);
+	public boolean get$fixedFlag$sample76();
+	public void set$fixedFlag$sample76(boolean cv$value);
 	public int get$length();
 	public int get$length$observed();
 	public void set$length$observed(int cv$value);

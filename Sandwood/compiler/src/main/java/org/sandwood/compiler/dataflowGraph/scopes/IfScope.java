@@ -21,6 +21,7 @@ public class IfScope extends Id implements Scope {
 
     public final BooleanVariable guard;
     protected final IRTreeReturn<BooleanVariable> guardTree;
+    private final BooleanVariable scopeCondition;
 
     private final Scope scope;
 
@@ -35,6 +36,11 @@ public class IfScope extends Id implements Scope {
         guardTree = null;
         this.scope = scope;
         elseScope = new ElseScope(scope, this);
+        BooleanVariable scopeCondition = scope.getScopeCondition();
+        if(scopeCondition == null)
+            this.scopeCondition = scopeCondition;
+        else
+            this.scopeCondition = guard.and(scopeCondition);
     }
 
     public IfScope(IRTreeReturn<BooleanVariable> guardTree) {
@@ -48,15 +54,18 @@ public class IfScope extends Id implements Scope {
         assert (guardTree != null);
         this.scope = scope;
         elseScope = new ElseScope(scope, this);
+        scopeCondition = null;
     }
 
     public IfScope(Scope scope, IfScope ifScope) {
         if(ifScope.guard == null) {
             guard = null;
             guardTree = ifScope.guardTree;
+            scopeCondition = null;
         } else {
             guard = ifScope.guard;
             guardTree = null;
+            scopeCondition = ifScope.getScopeCondition();
         }
         this.scope = scope;
         elseScope = new ElseScope(scope, this);
@@ -104,6 +113,11 @@ public class IfScope extends Id implements Scope {
     @Override
     public Scope getEnclosingScope() {
         return scope;
+    }
+
+    @Override
+    public BooleanVariable getScopeCondition() {
+        return scopeCondition;
     }
 
     @Override

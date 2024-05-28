@@ -10,6 +10,7 @@ package org.sandwood.compiler.dataflowGraph.scopes;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ScopeTracking;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
 /**
@@ -25,7 +26,7 @@ public interface Scope {
         ELSE,
         BLOCK,
         COMMENT
-   }
+    }
 
     int id();
 
@@ -38,6 +39,14 @@ public interface Scope {
     Scope getEnclosingScope();
 
     ScopeType getScopeType();
+
+    /**
+     * A method that returns a variable representing the conditions that must be true for the code to be in the scope.
+     * This is constructed such that traces built from this can be used to construct constraints.
+     * 
+     * @return A boolean variable holding the conditions that must be true.
+     */
+    BooleanVariable getScopeCondition();
 
     boolean iterating();
 

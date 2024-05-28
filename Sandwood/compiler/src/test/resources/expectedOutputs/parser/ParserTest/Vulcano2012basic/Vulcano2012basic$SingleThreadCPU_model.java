@@ -14,15 +14,15 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private int[] arrivals;
 	private double denom;
 	private double[] exped;
-	private boolean fixedFlag$sample25 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedFlag$sample61 = false;
-	private boolean fixedFlag$sample86 = false;
-	private boolean fixedProbFlag$sample25 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean fixedProbFlag$sample61 = false;
-	private boolean fixedProbFlag$sample86 = false;
-	private boolean[][] guard$sample25gaussian85$global;
+	private boolean fixedFlag$sample137 = false;
+	private boolean fixedFlag$sample32 = false;
+	private boolean fixedFlag$sample77 = false;
+	private boolean fixedFlag$sample92 = false;
+	private boolean fixedProbFlag$sample137 = false;
+	private boolean fixedProbFlag$sample32 = false;
+	private boolean fixedProbFlag$sample77 = false;
+	private boolean fixedProbFlag$sample92 = false;
+	private boolean[][] guard$sample32gaussian136$global;
 	private double[] lambda;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -31,16 +31,16 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private double logProbability$denom;
 	private double logProbability$exped;
 	private double logProbability$lambda;
-	private double[] logProbability$sample25;
-	private double[] logProbability$sample61;
-	private double[][] logProbability$sample86;
+	private double[][] logProbability$sample137;
+	private double[] logProbability$sample32;
+	private double[] logProbability$sample92;
 	private double logProbability$sum;
 	private double logProbability$ut;
+	private double[][] logProbability$var132;
 	private double logProbability$var18;
-	private double logProbability$var45;
-	private double logProbability$var50;
-	private double[] logProbability$var57;
-	private double[][] logProbability$var81;
+	private double logProbability$var62;
+	private double logProbability$var74;
+	private double[] logProbability$var88;
 	private int noProducts;
 	private int s;
 	private boolean setFlag$Sales = false;
@@ -99,8 +99,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		Sales = cv$value;
 		setFlag$Sales = true;
 		
-		// Unset the fixed probability flag for sample 86 as it depends on Sales.
-		fixedProbFlag$sample86 = false;
+		// Unset the fixed probability flag for sample 137 as it depends on Sales.
+		fixedProbFlag$sample137 = false;
 	}
 
 	// Getter for T.
@@ -131,11 +131,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		arrivals = cv$value;
 		setFlag$arrivals = true;
 		
-		// Unset the fixed probability flag for sample 61 as it depends on arrivals.
-		fixedProbFlag$sample61 = false;
+		// Unset the fixed probability flag for sample 92 as it depends on arrivals.
+		fixedProbFlag$sample92 = false;
 		
-		// Unset the fixed probability flag for sample 86 as it depends on arrivals.
-		fixedProbFlag$sample86 = false;
+		// Unset the fixed probability flag for sample 137 as it depends on arrivals.
+		fixedProbFlag$sample137 = false;
 	}
 
 	// Getter for denom.
@@ -150,88 +150,88 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		return exped;
 	}
 
-	// Getter for fixedFlag$sample25.
+	// Getter for fixedFlag$sample137.
 	@Override
-	public final boolean get$fixedFlag$sample25() {
-		return fixedFlag$sample25;
+	public final boolean get$fixedFlag$sample137() {
+		return fixedFlag$sample137;
 	}
 
-	// Setter for fixedFlag$sample25.
+	// Setter for fixedFlag$sample137.
 	@Override
-	public final void set$fixedFlag$sample25(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample25 including if probabilities
+	public final void set$fixedFlag$sample137(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample137 including if probabilities
 		// need to be updated.
-		fixedFlag$sample25 = cv$value;
+		fixedFlag$sample137 = cv$value;
 		
-		// Should the probability of sample 25 be set to fixed. This will only every change
+		// Should the probability of sample 137 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample25 = (fixedFlag$sample25 && fixedProbFlag$sample25);
-		
-		// Should the probability of sample 86 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample86 = (fixedFlag$sample25 && fixedProbFlag$sample86);
+		fixedProbFlag$sample137 = (fixedFlag$sample137 && fixedProbFlag$sample137);
 	}
 
-	// Getter for fixedFlag$sample53.
+	// Getter for fixedFlag$sample32.
 	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
+	public final boolean get$fixedFlag$sample32() {
+		return fixedFlag$sample32;
 	}
 
-	// Setter for fixedFlag$sample53.
+	// Setter for fixedFlag$sample32.
 	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
+	public final void set$fixedFlag$sample32(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample32 including if probabilities
 		// need to be updated.
-		fixedFlag$sample53 = cv$value;
+		fixedFlag$sample32 = cv$value;
 		
-		// Should the probability of sample 53 be set to fixed. This will only every change
+		// Should the probability of sample 32 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedProbFlag$sample53);
+		fixedProbFlag$sample32 = (fixedFlag$sample32 && fixedProbFlag$sample32);
 		
-		// Should the probability of sample 61 be set to fixed. This will only every change
+		// Should the probability of sample 137 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample61 = (fixedFlag$sample53 && fixedProbFlag$sample61);
+		fixedProbFlag$sample137 = (fixedFlag$sample32 && fixedProbFlag$sample137);
 	}
 
-	// Getter for fixedFlag$sample61.
+	// Getter for fixedFlag$sample77.
 	@Override
-	public final boolean get$fixedFlag$sample61() {
-		return fixedFlag$sample61;
+	public final boolean get$fixedFlag$sample77() {
+		return fixedFlag$sample77;
 	}
 
-	// Setter for fixedFlag$sample61.
+	// Setter for fixedFlag$sample77.
 	@Override
-	public final void set$fixedFlag$sample61(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample61 including if probabilities
+	public final void set$fixedFlag$sample77(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample77 including if probabilities
 		// need to be updated.
-		fixedFlag$sample61 = cv$value;
+		fixedFlag$sample77 = cv$value;
 		
-		// Should the probability of sample 61 be set to fixed. This will only every change
+		// Should the probability of sample 77 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedProbFlag$sample61);
+		fixedProbFlag$sample77 = (fixedFlag$sample77 && fixedProbFlag$sample77);
 		
-		// Should the probability of sample 86 be set to fixed. This will only every change
+		// Should the probability of sample 92 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample86 = (fixedFlag$sample61 && fixedProbFlag$sample86);
+		fixedProbFlag$sample92 = (fixedFlag$sample77 && fixedProbFlag$sample92);
 	}
 
-	// Getter for fixedFlag$sample86.
+	// Getter for fixedFlag$sample92.
 	@Override
-	public final boolean get$fixedFlag$sample86() {
-		return fixedFlag$sample86;
+	public final boolean get$fixedFlag$sample92() {
+		return fixedFlag$sample92;
 	}
 
-	// Setter for fixedFlag$sample86.
+	// Setter for fixedFlag$sample92.
 	@Override
-	public final void set$fixedFlag$sample86(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample86 including if probabilities
+	public final void set$fixedFlag$sample92(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample92 including if probabilities
 		// need to be updated.
-		fixedFlag$sample86 = cv$value;
+		fixedFlag$sample92 = cv$value;
 		
-		// Should the probability of sample 86 be set to fixed. This will only every change
+		// Should the probability of sample 92 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample86 = (fixedFlag$sample86 && fixedProbFlag$sample86);
+		fixedProbFlag$sample92 = (fixedFlag$sample92 && fixedProbFlag$sample92);
+		
+		// Should the probability of sample 137 be set to fixed. This will only every change
+		// the flag to false.
+		fixedProbFlag$sample137 = (fixedFlag$sample92 && fixedProbFlag$sample137);
 	}
 
 	// Getter for lambda.
@@ -250,11 +250,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		lambda = cv$value;
 		setFlag$lambda = true;
 		
-		// Unset the fixed probability flag for sample 53 as it depends on lambda.
-		fixedProbFlag$sample53 = false;
+		// Unset the fixed probability flag for sample 77 as it depends on lambda.
+		fixedProbFlag$sample77 = false;
 		
-		// Unset the fixed probability flag for sample 61 as it depends on lambda.
-		fixedProbFlag$sample61 = false;
+		// Unset the fixed probability flag for sample 92 as it depends on lambda.
+		fixedProbFlag$sample92 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -357,26 +357,128 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		ut = cv$value;
 		setFlag$ut = true;
 		
-		// Unset the fixed probability flag for sample 25 as it depends on ut.
-		fixedProbFlag$sample25 = false;
+		// Unset the fixed probability flag for sample 32 as it depends on ut.
+		fixedProbFlag$sample32 = false;
 		
-		// Unset the fixed probability flag for sample 86 as it depends on ut.
-		fixedProbFlag$sample86 = false;
+		// Unset the fixed probability flag for sample 137 as it depends on ut.
+		fixedProbFlag$sample137 = false;
 	}
 
-	// Calculate the probability of the samples represented by sample25 using sampled
+	// Calculate the probability of the samples represented by sample137 using sampled
 	// values.
-	private final void logProbabilityValue$sample25() {
-		// Determine if we need to calculate the values for sample task 25 or if we should
+	private final void logProbabilityValue$sample137() {
+		// Determine if we need to calculate the values for sample task 137 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample25) {
+		if(!fixedProbFlag$sample137) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+					// Accumulator for sample probabilities for a specific instance of the random variable.
+					double cv$sampleAccumulator = 0.0;
+					
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = Sales[t$var113][j$var123];
+						{
+							{
+								double var130 = (((exped[j$var123] * Avail[t$var113][j$var123]) / denom) * arrivals[t$var113]);
+								double var131 = 0.2;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var130) / Math.sqrt(var131))) - (0.5 * Math.log(var131))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					logProbability$var132[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = cv$sampleAccumulator;
+					
+					// Store the sample task probability
+					logProbability$sample137[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = cv$sampleProbability;
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample137 = ((fixedFlag$sample137 && fixedFlag$sample32) && fixedFlag$sample92);
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample137[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var132[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = cv$rvAccumulator;
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample32 using sampled
+	// values.
+	private final void logProbabilityValue$sample32() {
+		// Determine if we need to calculate the values for sample task 32 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample32) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var22 = 0; var22 < noProducts; var22 += 1) {
+			for(int var29 = 0; var29 < noProducts; var29 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -384,7 +486,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = ut[var22];
+					double cv$sampleValue = ut[var29];
 					{
 						{
 							double var16 = 0.0;
@@ -421,7 +523,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
 				// Store the sample task probability
-				logProbability$sample25[((var22 - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample32[((var29 - 0) / 1)] = cv$sampleProbability;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -435,10 +537,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 25 and consumer double[] 31.
+				// Looking for a path between Sample 32 and consumer double[] 45.
 				{
-					for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-						if((var22 == j$var28)) {
+					for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+						if((var29 == j$var42)) {
 							// If the probability of the variable has not already been updated
 							if(!cv$guard$exped) {
 								// Set the guard so the update is only applied once.
@@ -451,11 +553,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 				
-				// Looking for a path between Sample 25 and consumer double 39.
+				// Looking for a path between Sample 32 and consumer double 56.
 				{
-					for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-						if((var22 == j$var28)) {
-							if(((0 <= j$var28) && (j$var28 < noProducts))) {
+					for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+						if((var29 == j$var42)) {
+							if(((0 <= j$var42) && (j$var42 < noProducts))) {
 								{
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$sum) {
@@ -471,11 +573,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 				
-				// Looking for a path between Sample 25 and consumer double 40.
+				// Looking for a path between Sample 32 and consumer double 57.
 				{
-					for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-						if((var22 == j$var28)) {
-							if(((0 <= j$var28) && (j$var28 < noProducts))) {
+					for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+						if((var29 == j$var42)) {
+							if(((0 <= j$var42) && (j$var42 < noProducts))) {
 								{
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$denom) {
@@ -505,12 +607,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample25)
+			if(fixedFlag$sample32)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample25 = fixedFlag$sample25;
+			fixedProbFlag$sample32 = fixedFlag$sample32;
 		}
 		// Using cached values.
 		else {
@@ -518,8 +620,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			for(int var22 = 0; var22 < noProducts; var22 += 1) {
-				double cv$sampleValue = logProbability$sample25[((var22 - 0) / 1)];
+			for(int var29 = 0; var29 < noProducts; var29 += 1) {
+				double cv$sampleValue = logProbability$sample32[((var29 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Guard to ensure that exped is only updated once for this probability.
@@ -534,10 +636,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 25 and consumer double[] 31.
+				// Looking for a path between Sample 32 and consumer double[] 45.
 				{
-					for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-						if((var22 == j$var28)) {
+					for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+						if((var29 == j$var42)) {
 							// If the probability of the variable has not already been updated
 							if(!cv$guard$exped) {
 								// Set the guard so the update is only applied once.
@@ -550,11 +652,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 				
-				// Looking for a path between Sample 25 and consumer double 39.
+				// Looking for a path between Sample 32 and consumer double 56.
 				{
-					for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-						if((var22 == j$var28)) {
-							if(((0 <= j$var28) && (j$var28 < noProducts))) {
+					for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+						if((var29 == j$var42)) {
+							if(((0 <= j$var42) && (j$var42 < noProducts))) {
 								{
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$sum) {
@@ -570,11 +672,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 				
-				// Looking for a path between Sample 25 and consumer double 40.
+				// Looking for a path between Sample 32 and consumer double 57.
 				{
-					for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-						if((var22 == j$var28)) {
-							if(((0 <= j$var28) && (j$var28 < noProducts))) {
+					for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+						if((var29 == j$var42)) {
+							if(((0 <= j$var42) && (j$var42 < noProducts))) {
 								{
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$denom) {
@@ -601,24 +703,24 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample25)
+			if(fixedFlag$sample32)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample53 using sampled
+	// Calculate the probability of the samples represented by sample77 using sampled
 	// values.
-	private final void logProbabilityValue$sample53() {
-		// Determine if we need to calculate the values for sample task 53 or if we should
+	private final void logProbabilityValue$sample77() {
+		// Determine if we need to calculate the values for sample task 77 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample53) {
+		if(!fixedProbFlag$sample77) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var49 = 0; var49 < T; var49 += 1) {
+			for(int var73 = 0; var73 < T; var73 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -626,14 +728,14 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = lambda[var49];
+					double cv$sampleValue = lambda[var73];
 					{
 						{
-							double var43 = 10.0;
-							double var44 = 10.0;
+							double var60 = 10.0;
+							double var61 = 10.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGamma(cv$sampleValue, var43, var44));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGamma(cv$sampleValue, var60, var61));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -666,10 +768,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var45 = cv$sampleAccumulator;
+			logProbability$var62 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var50 = cv$sampleAccumulator;
+			logProbability$var74 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$lambda = (logProbability$lambda + cv$accumulator);
@@ -679,12 +781,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample53)
+			if(fixedFlag$sample77)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = fixedFlag$sample53;
+			fixedProbFlag$sample77 = fixedFlag$sample77;
 		}
 		// Using cached values.
 		else {
@@ -692,10 +794,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var50;
+			double cv$sampleValue = logProbability$var74;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var45 = cv$rvAccumulator;
+			logProbability$var62 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$lambda = (logProbability$lambda + cv$accumulator);
@@ -705,21 +807,21 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample53)
+			if(fixedFlag$sample77)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample61 using sampled
+	// Calculate the probability of the samples represented by sample92 using sampled
 	// values.
-	private final void logProbabilityValue$sample61() {
-		// Determine if we need to calculate the values for sample task 61 or if we should
+	private final void logProbabilityValue$sample92() {
+		// Determine if we need to calculate the values for sample task 92 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample61) {
+		if(!fixedProbFlag$sample92) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -730,13 +832,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = arrivals[t$var55];
+					int cv$sampleValue = arrivals[t$var86];
 					{
 						{
-							double var56 = lambda[t$var55];
+							double var87 = lambda[t$var86];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var56));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var87));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -768,10 +870,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var57[((t$var55 - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$var88[((t$var86 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample61[((t$var55 - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample92[((t$var86 - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -782,24 +884,24 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample61)
+			if(fixedFlag$sample92)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedFlag$sample53);
+			fixedProbFlag$sample92 = (fixedFlag$sample92 && fixedFlag$sample77);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample61[((t$var55 - 0) / 1)];
+				double cv$sampleValue = logProbability$sample92[((t$var86 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var57[((t$var55 - 0) / 1)] = cv$rvAccumulator;
+				logProbability$var88[((t$var86 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -810,116 +912,14 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample61)
+			if(fixedFlag$sample92)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample86 using sampled
-	// values.
-	private final void logProbabilityValue$sample86() {
-		// Determine if we need to calculate the values for sample task 86 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample86) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					double cv$sampleAccumulator = 0.0;
-					
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					{
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = Sales[t$var68][j$var72];
-						{
-							{
-								double var79 = (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]);
-								double var80 = 0.2;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var79) / Math.sqrt(var80))) - (0.5 * Math.log(var80))));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var81[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$sampleAccumulator;
-					
-					// Store the sample task probability
-					logProbability$sample86[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$sampleProbability;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample86 = ((fixedFlag$sample86 && fixedFlag$sample25) && fixedFlag$sample61);
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample86[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var81[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$rvAccumulator;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 25 drawn from Gaussian 18. Inference was performed using Metropolis-Hastings.
-	private final void sample25(int var22) {
+	// by sample task 32 drawn from Gaussian 18. Inference was performed using Metropolis-Hastings.
+	private final void sample32(int var29) {
 		// Calculate the number of states to evaluate.
 		int cv$noStates = 0;
 		{
@@ -928,7 +928,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		
 		// The original value of the sample
-		double cv$originalValue = ut[var22];
+		double cv$originalValue = ut[var29];
 		
 		// The probability of the random variable generating the originally sampled value
 		double cv$originalProbability = 0.0;
@@ -968,17 +968,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
-					double var23 = cv$proposedValue;
-					ut[var22] = cv$currentValue;
+					double var30 = cv$proposedValue;
+					ut[var29] = cv$currentValue;
 					
 					// Guards to ensure that exped is only updated when there is a valid path.
 					// 
-					// Looking for a path between Sample 25 and consumer double[] 31.
+					// Looking for a path between Sample 32 and consumer double[] 45.
 					{
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
 								{
-									exped[j$var28] = Math.exp(ut[j$var28]);
+									exped[j$var42] = Math.exp(ut[j$var42]);
 								}
 							}
 						}
@@ -986,11 +986,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// Guards to ensure that sum is only updated when there is a valid path.
 					// 
-					// Looking for a path between Sample 25 and consumer double 39.
+					// Looking for a path between Sample 32 and consumer double 56.
 					{
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
-								if(((0 <= j$var28) && (j$var28 < noProducts))) {
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
+								if(((0 <= j$var42) && (j$var42 < noProducts))) {
 									{
 										{
 											// Reduction of array exped
@@ -1001,12 +1001,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 											double reduceVar$sum$0 = 0.0;
 											
 											// For each index in the array to be reduced
-											for(int cv$reduction139Index = 0; cv$reduction139Index < noProducts; cv$reduction139Index += 1) {
+											for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double k = reduceVar$sum$0;
 												
 												// Set the right hand term to a value from the array exped
-												double l = exped[cv$reduction139Index];
+												double l = exped[cv$reduction52Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1025,11 +1025,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// Guards to ensure that denom is only updated when there is a valid path.
 					// 
-					// Looking for a path between Sample 25 and consumer double 40.
+					// Looking for a path between Sample 32 and consumer double 57.
 					{
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
-								if(((0 <= j$var28) && (j$var28 < noProducts))) {
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
+								if(((0 <= j$var42) && (j$var42 < noProducts))) {
 									{
 										{
 											// Write out the new sample value.
@@ -1058,42 +1058,42 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// it is added to the index probabilities.
 				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var16) / Math.sqrt(cv$temp$1$var17))) - (0.5 * Math.log(cv$temp$1$var17))));
 				
-				// Processing random variable 81.
+				// Processing random variable 132.
 				{
-					// Looking for a path between Sample 25 and consumer Gaussian 81.
+					// Looking for a path between Sample 32 and consumer Gaussian 132.
 					{
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						boolean[][] guard$sample25gaussian85 = guard$sample25gaussian85$global;
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
-								if(((0 <= j$var28) && (j$var28 < noProducts))) {
+						boolean[][] guard$sample32gaussian136 = guard$sample32gaussian136$global;
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
+								if(((0 <= j$var42) && (j$var42 < noProducts))) {
 									{
-										for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-											for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
+										for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+											for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
 												// Set the flags to false
-												guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = false;
+												guard$sample32gaussian136[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 										}
 									}
 								}
 							}
 						}
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
-								for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-									if((j$var28 == j$var72)) {
-										for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var42 == j$var123)) {
+										for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
 											// Set the flags to false
-											guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = false;
+											guard$sample32gaussian136[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 									}
 								}
 							}
 						}
-						double traceTempVariable$var29$6_1 = cv$currentValue;
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
-								double traceTempVariable$k$6_3 = Math.exp(traceTempVariable$var29$6_1);
-								if(((0 <= j$var28) && (j$var28 < noProducts))) {
+						double traceTempVariable$var43$6_1 = cv$currentValue;
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
+								double traceTempVariable$k$6_3 = Math.exp(traceTempVariable$var43$6_1);
+								if(((0 <= j$var42) && (j$var42 < noProducts))) {
 									{
 										if((0 < noProducts)) {
 											// Reduction of array exped
@@ -1104,24 +1104,24 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 											double reduceVar$sum$1 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction196Index = 0; cv$reduction196Index < j$var28; cv$reduction196Index += 1) {
+											for(int cv$reduction330Index = 0; cv$reduction330Index < j$var42; cv$reduction330Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double k = reduceVar$sum$1;
 												
 												// Set the right hand term to a value from the array exped
-												double l = exped[cv$reduction196Index];
+												double l = exped[cv$reduction330Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$sum$1 = (k + l);
 											}
-											for(int cv$reduction196Index = (j$var28 + 1); cv$reduction196Index < noProducts; cv$reduction196Index += 1) {
+											for(int cv$reduction330Index = (j$var42 + 1); cv$reduction330Index < noProducts; cv$reduction330Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double k = reduceVar$sum$1;
 												
 												// Set the right hand term to a value from the array exped
-												double l = exped[cv$reduction196Index];
+												double l = exped[cv$reduction330Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1130,19 +1130,19 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$sum$1 = (k + l);
 											}
-											double cv$reduced38 = reduceVar$sum$1;
+											double cv$reduced52 = reduceVar$sum$1;
 											
 											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$sum$1 = (traceTempVariable$k$6_3 + cv$reduced38);
+											reduceVar$sum$1 = (traceTempVariable$k$6_3 + cv$reduced52);
 											double traceTempVariable$sum$6_4 = reduceVar$sum$1;
-											for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-												for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
+											for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
 													double traceTempVariable$denom$6_7 = (traceTempVariable$sum$6_4 / s);
-													if(!guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)]) {
+													if(!guard$sample32gaussian136[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
-														guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = true;
+														guard$sample32gaussian136[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 														
-														// Processing sample task 86 of consumer random variable null.
+														// Processing sample task 137 of consumer random variable null.
 														{
 															// Set an accumulator to sum the probabilities for each possible configuration of
 															// inputs.
@@ -1155,29 +1155,29 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 																{
 																	{
 																		{
-																			double cv$temp$2$var79;
+																			double cv$temp$2$var130;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var79 = (((exped[j$var72] * Avail[t$var68][j$var72]) / traceTempVariable$denom$6_7) * arrivals[t$var68]);
-																				cv$temp$2$var79 = var79;
+																				double var130 = (((exped[j$var123] * Avail[t$var113][j$var123]) / traceTempVariable$denom$6_7) * arrivals[t$var113]);
+																				cv$temp$2$var130 = var130;
 																			}
-																			double cv$temp$3$var80;
+																			double cv$temp$3$var131;
 																			{
-																				cv$temp$3$var80 = 0.2;
+																				cv$temp$3$var131 = 0.2;
 																			}
 																			
-																			// Record the probability of sample task 86 generating output with current configuration.
-																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$2$var79) / Math.sqrt(cv$temp$3$var80))) - (0.5 * Math.log(cv$temp$3$var80)))) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$2$var79) / Math.sqrt(cv$temp$3$var80))) - (0.5 * Math.log(cv$temp$3$var80)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			// Record the probability of sample task 137 generating output with current configuration.
+																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$2$var130) / Math.sqrt(cv$temp$3$var131))) - (0.5 * Math.log(cv$temp$3$var131)))) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$2$var130) / Math.sqrt(cv$temp$3$var131))) - (0.5 * Math.log(cv$temp$3$var131)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$2$var79) / Math.sqrt(cv$temp$3$var80))) - (0.5 * Math.log(cv$temp$3$var80))));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$2$var130) / Math.sqrt(cv$temp$3$var131))) - (0.5 * Math.log(cv$temp$3$var131))));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$2$var79) / Math.sqrt(cv$temp$3$var80))) - (0.5 * Math.log(cv$temp$3$var80)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$2$var79) / Math.sqrt(cv$temp$3$var80))) - (0.5 * Math.log(cv$temp$3$var80)))));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$2$var130) / Math.sqrt(cv$temp$3$var131))) - (0.5 * Math.log(cv$temp$3$var131)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$2$var130) / Math.sqrt(cv$temp$3$var131))) - (0.5 * Math.log(cv$temp$3$var131)))));
 																			}
 																			
-																			// Recorded the probability of reaching sample task 86 with the current configuration.
+																			// Recorded the probability of reaching sample task 137 with the current configuration.
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
 																	}
@@ -1208,18 +1208,18 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 								}
 							}
 						}
-						double traceTempVariable$var29$7_1 = cv$currentValue;
-						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-							if((var22 == j$var28)) {
-								double traceTempVariable$var73$7_3 = Math.exp(traceTempVariable$var29$7_1);
-								for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-									if((j$var28 == j$var72)) {
-										for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-											if(!guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)]) {
+						double traceTempVariable$var43$7_1 = cv$currentValue;
+						for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+							if((var29 == j$var42)) {
+								double traceTempVariable$var124$7_3 = Math.exp(traceTempVariable$var43$7_1);
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var42 == j$var123)) {
+										for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+											if(!guard$sample32gaussian136[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
-												guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = true;
+												guard$sample32gaussian136[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 												
-												// Processing sample task 86 of consumer random variable null.
+												// Processing sample task 137 of consumer random variable null.
 												{
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -1232,29 +1232,29 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 														{
 															{
 																{
-																	double cv$temp$4$var79;
+																	double cv$temp$4$var130;
 																	{
 																		// Constructing a random variable input for use later.
-																		double var79 = (((traceTempVariable$var73$7_3 * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]);
-																		cv$temp$4$var79 = var79;
+																		double var130 = (((traceTempVariable$var124$7_3 * Avail[t$var113][j$var123]) / denom) * arrivals[t$var113]);
+																		cv$temp$4$var130 = var130;
 																	}
-																	double cv$temp$5$var80;
+																	double cv$temp$5$var131;
 																	{
-																		cv$temp$5$var80 = 0.2;
+																		cv$temp$5$var131 = 0.2;
 																	}
 																	
-																	// Record the probability of sample task 86 generating output with current configuration.
-																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$4$var79) / Math.sqrt(cv$temp$5$var80))) - (0.5 * Math.log(cv$temp$5$var80)))) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$4$var79) / Math.sqrt(cv$temp$5$var80))) - (0.5 * Math.log(cv$temp$5$var80)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	// Record the probability of sample task 137 generating output with current configuration.
+																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$4$var130) / Math.sqrt(cv$temp$5$var131))) - (0.5 * Math.log(cv$temp$5$var131)))) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$4$var130) / Math.sqrt(cv$temp$5$var131))) - (0.5 * Math.log(cv$temp$5$var131)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$4$var79) / Math.sqrt(cv$temp$5$var80))) - (0.5 * Math.log(cv$temp$5$var80))));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$4$var130) / Math.sqrt(cv$temp$5$var131))) - (0.5 * Math.log(cv$temp$5$var131))));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$4$var79) / Math.sqrt(cv$temp$5$var80))) - (0.5 * Math.log(cv$temp$5$var80)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$4$var79) / Math.sqrt(cv$temp$5$var80))) - (0.5 * Math.log(cv$temp$5$var80)))));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$4$var130) / Math.sqrt(cv$temp$5$var131))) - (0.5 * Math.log(cv$temp$5$var131)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$4$var130) / Math.sqrt(cv$temp$5$var131))) - (0.5 * Math.log(cv$temp$5$var131)))));
 																	}
 																	
-																	// Recorded the probability of reaching sample task 86 with the current configuration.
+																	// Recorded the probability of reaching sample task 137 with the current configuration.
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
 															}
@@ -1320,17 +1320,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Set the sample value
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			double var23 = cv$originalValue;
-			ut[var22] = var23;
+			double var30 = cv$originalValue;
+			ut[var29] = var30;
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 25 and consumer double[] 31.
+			// Looking for a path between Sample 32 and consumer double[] 45.
 			{
-				for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-					if((var22 == j$var28)) {
+				for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+					if((var29 == j$var42)) {
 						{
-							exped[j$var28] = Math.exp(ut[j$var28]);
+							exped[j$var42] = Math.exp(ut[j$var42]);
 						}
 					}
 				}
@@ -1338,11 +1338,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Guards to ensure that sum is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 25 and consumer double 39.
+			// Looking for a path between Sample 32 and consumer double 56.
 			{
-				for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-					if((var22 == j$var28)) {
-						if(((0 <= j$var28) && (j$var28 < noProducts))) {
+				for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+					if((var29 == j$var42)) {
+						if(((0 <= j$var42) && (j$var42 < noProducts))) {
 							{
 								{
 									// Reduction of array exped
@@ -1353,12 +1353,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 									double reduceVar$sum$2 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction249Index = 0; cv$reduction249Index < noProducts; cv$reduction249Index += 1) {
+									for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double k = reduceVar$sum$2;
 										
 										// Set the right hand term to a value from the array exped
-										double l = exped[cv$reduction249Index];
+										double l = exped[cv$reduction52Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -1377,11 +1377,11 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Guards to ensure that denom is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 25 and consumer double 40.
+			// Looking for a path between Sample 32 and consumer double 57.
 			{
-				for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-					if((var22 == j$var28)) {
-						if(((0 <= j$var28) && (j$var28 < noProducts))) {
+				for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+					if((var29 == j$var42)) {
+						if(((0 <= j$var42) && (j$var42 < noProducts))) {
 							{
 								{
 									// Write out the new sample value.
@@ -1396,30 +1396,30 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 53 drawn from Gamma 45. Inference was performed using a Gamma to
+	// by sample task 77 drawn from Gamma 62. Inference was performed using a Gamma to
 	// Poisson conjugate prior.
-	private final void sample53(int var49) {
+	private final void sample77(int var73) {
 		// Variable to store the sum of all the samples from consuming random variables.
 		double cv$sum = 0.0;
 		
 		// Variable to record the number of samples from consuming random variables.
 		int cv$count = 0;
 		{
-			// Processing random variable 57.
+			// Processing random variable 88.
 			{
-				// Looking for a path between Sample 53 and consumer Poisson 57.
+				// Looking for a path between Sample 77 and consumer Poisson 88.
 				{
-					for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-						if((var49 == t$var55)) {
-							// Processing sample task 61 of consumer random variable null.
+					for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+						if((var73 == t$var86)) {
+							// Processing sample task 92 of consumer random variable null.
 							{
 								{
 									{
 										{
 											{
-												// Add the value of a sample from consuming random variable var57 to the inference
+												// Add the value of a sample from consuming random variable var88 to the inference
 												// state.
-												cv$sum = (cv$sum + arrivals[t$var55]);
+												cv$sum = (cv$sum + arrivals[t$var86]);
 												cv$count = (cv$count + 1);
 											}
 										}
@@ -1434,13 +1434,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		double var50 = Conjugates.sampleConjugateGammaPoisson(RNG$, 10.0, 10.0, cv$sum, cv$count);
-		lambda[var49] = var50;
+		double var74 = Conjugates.sampleConjugateGammaPoisson(RNG$, 10.0, 10.0, cv$sum, cv$count);
+		lambda[var73] = var74;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 61 drawn from Poisson 57. Inference was performed using Metropolis-Hastings.
-	private final void sample61(int t$var55) {
+	// by sample task 92 drawn from Poisson 88. Inference was performed using Metropolis-Hastings.
+	private final void sample92(int t$var86) {
 		// Calculate the number of states to evaluate.
 		int cv$noStates = 0;
 		{
@@ -1449,7 +1449,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		
 		// The original value of the sample
-		int cv$originalValue = arrivals[t$var55];
+		int cv$originalValue = arrivals[t$var86];
 		
 		// The probability of the random variable generating the originally sampled value
 		double cv$originalProbability = 0.0;
@@ -1495,32 +1495,32 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
-					int var58 = cv$proposedValue;
-					arrivals[t$var55] = cv$currentValue;
+					int var89 = cv$proposedValue;
+					arrivals[t$var86] = cv$currentValue;
 				}
 			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double cv$temp$0$var56;
+				double cv$temp$0$var87;
 				{
 					// Constructing a random variable input for use later.
-					double var56 = lambda[t$var55];
-					cv$temp$0$var56 = var56;
+					double var87 = lambda[t$var86];
+					cv$temp$0$var87 = var87;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$currentValue, cv$temp$0$var56));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$currentValue, cv$temp$0$var87));
 				
-				// Processing random variable 81.
+				// Processing random variable 132.
 				{
-					// Looking for a path between Sample 61 and consumer Gaussian 81.
+					// Looking for a path between Sample 92 and consumer Gaussian 132.
 					{
-						int traceTempVariable$var78$1_1 = cv$currentValue;
-						for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-							if((t$var55 == t$var68)) {
-								for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
+						int traceTempVariable$var129$1_1 = cv$currentValue;
+						for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+							if((t$var86 == t$var113)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -1532,29 +1532,29 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 										{
 											{
 												{
-													double cv$temp$1$var79;
+													double cv$temp$1$var130;
 													{
 														// Constructing a random variable input for use later.
-														double var79 = (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * traceTempVariable$var78$1_1);
-														cv$temp$1$var79 = var79;
+														double var130 = (((exped[j$var123] * Avail[t$var113][j$var123]) / denom) * traceTempVariable$var129$1_1);
+														cv$temp$1$var130 = var130;
 													}
-													double cv$temp$2$var80;
+													double cv$temp$2$var131;
 													{
-														cv$temp$2$var80 = 0.2;
+														cv$temp$2$var131 = 0.2;
 													}
 													
-													// Record the probability of sample task 86 generating output with current configuration.
-													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$1$var79) / Math.sqrt(cv$temp$2$var80))) - (0.5 * Math.log(cv$temp$2$var80)))) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$1$var79) / Math.sqrt(cv$temp$2$var80))) - (0.5 * Math.log(cv$temp$2$var80)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													// Record the probability of sample task 137 generating output with current configuration.
+													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$1$var130) / Math.sqrt(cv$temp$2$var131))) - (0.5 * Math.log(cv$temp$2$var131)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$1$var130) / Math.sqrt(cv$temp$2$var131))) - (0.5 * Math.log(cv$temp$2$var131)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$1$var79) / Math.sqrt(cv$temp$2$var80))) - (0.5 * Math.log(cv$temp$2$var80))));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$1$var130) / Math.sqrt(cv$temp$2$var131))) - (0.5 * Math.log(cv$temp$2$var131))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$1$var79) / Math.sqrt(cv$temp$2$var80))) - (0.5 * Math.log(cv$temp$2$var80)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - cv$temp$1$var79) / Math.sqrt(cv$temp$2$var80))) - (0.5 * Math.log(cv$temp$2$var80)))));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$1$var130) / Math.sqrt(cv$temp$2$var131))) - (0.5 * Math.log(cv$temp$2$var131)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((Sales[t$var113][j$var123] - cv$temp$1$var130) / Math.sqrt(cv$temp$2$var131))) - (0.5 * Math.log(cv$temp$2$var131)))));
 													}
 													
-													// Recorded the probability of reaching sample task 86 with the current configuration.
+													// Recorded the probability of reaching sample task 137 with the current configuration.
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
@@ -1616,8 +1616,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Set the sample value
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			int var58 = cv$originalValue;
-			arrivals[t$var55] = var58;
+			int var89 = cv$originalValue;
+			arrivals[t$var86] = var89;
 		}
 	}
 
@@ -1628,17 +1628,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void allocateScratch() {
 		// Calculate the largest index of t that is possible and allocate an array to hold
 		// the guard for each of these.
-		int cv$max_t$var68 = 0;
+		int cv$max_t$var113 = 0;
 		
 		// Calculate the largest index of j that is possible and allocate an array to hold
 		// the guard for each of these.
-		int cv$max_j$var72 = 0;
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-			cv$max_j$var72 = Math.max(cv$max_j$var72, ((noProducts - 0) / 1));
-		cv$max_t$var68 = Math.max(cv$max_t$var68, ((T - 0) / 1));
+		int cv$max_j$var123 = 0;
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+			cv$max_j$var123 = Math.max(cv$max_j$var123, ((noProducts - 0) / 1));
+		cv$max_t$var113 = Math.max(cv$max_t$var113, ((T - 0) / 1));
 		
-		// Allocation of guard$sample25gaussian85$global for single threaded execution
-		guard$sample25gaussian85$global = new boolean[cv$max_t$var68][cv$max_j$var72];
+		// Allocation of guard$sample32gaussian136$global for single threaded execution
+		guard$sample32gaussian136$global = new boolean[cv$max_t$var113][cv$max_j$var123];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -1678,40 +1678,40 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Constructor for Sales
 			{
 				Sales = new double[T][];
-				for(int var63 = 0; var63 < T; var63 += 1)
-					Sales[var63] = new double[noProducts];
-				for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-					Sales[t$var68] = new double[noProducts];
+				for(int var101 = 0; var101 < T; var101 += 1)
+					Sales[var101] = new double[noProducts];
+				for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+					Sales[t$var113] = new double[noProducts];
 			}
 		}
 		
-		// Constructor for logProbability$sample25
+		// Constructor for logProbability$sample32
 		{
-			logProbability$sample25 = new double[((((noProducts - 1) - 0) / 1) + 1)];
+			logProbability$sample32 = new double[((((noProducts - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var57
+		// Constructor for logProbability$var88
 		{
-			logProbability$var57 = new double[((((T - 1) - 0) / 1) + 1)];
+			logProbability$var88 = new double[((((T - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample61
+		// Constructor for logProbability$sample92
 		{
-			logProbability$sample61 = new double[((((T - 1) - 0) / 1) + 1)];
+			logProbability$sample92 = new double[((((T - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var81
+		// Constructor for logProbability$var132
 		{
-			logProbability$var81 = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-				logProbability$var81[((t$var68 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
+			logProbability$var132 = new double[((((T - 1) - 0) / 1) + 1)][];
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+				logProbability$var132[((t$var113 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample86
+		// Constructor for logProbability$sample137
 		{
-			logProbability$sample86 = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-				logProbability$sample86[((t$var68 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
+			logProbability$sample137 = new double[((((T - 1) - 0) / 1) + 1)][];
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1)
+				logProbability$sample137[((t$var113 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -1721,13 +1721,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int var22 = 0; var22 < noProducts; var22 += 1) {
-			if(!fixedFlag$sample25)
-				ut[var22] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var29 = 0; var29 < noProducts; var29 += 1) {
+			if(!fixedFlag$sample32)
+				ut[var29] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-			if(!fixedFlag$sample25)
-				exped[j$var28] = Math.exp(ut[j$var28]);
+		for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+			if(!fixedFlag$sample32)
+				exped[j$var42] = Math.exp(ut[j$var42]);
 		}
 		
 		// Reduction of array exped
@@ -1738,35 +1738,35 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		double reduceVar$sum$3 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1) {
+		for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k = reduceVar$sum$3;
 			
 			// Set the right hand term to a value from the array exped
-			double l = exped[cv$reduction38Index];
+			double l = exped[cv$reduction52Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample25)
+			if(!fixedFlag$sample32)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$3 = (k + l);
 		}
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			sum = reduceVar$sum$3;
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			denom = (sum / s);
-		for(int var49 = 0; var49 < T; var49 += 1) {
-			if(!fixedFlag$sample53)
-				lambda[var49] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
+		for(int var73 = 0; var73 < T; var73 += 1) {
+			if(!fixedFlag$sample77)
+				lambda[var73] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
 		}
-		for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-			if(!fixedFlag$sample61)
-				arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$, lambda[t$var55]);
+		for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+			if(!fixedFlag$sample92)
+				arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$, lambda[t$var86]);
 		}
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-			double[] weekly_sales = Sales[t$var68];
-			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-				if(!fixedFlag$sample86)
-					weekly_sales[j$var72] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$)) + (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]));
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+			double[] weekly_sales = Sales[t$var113];
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+				if(!fixedFlag$sample137)
+					weekly_sales[j$var123] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$)) + (((exped[j$var123] * Avail[t$var113][j$var123]) / denom) * arrivals[t$var113]));
 			}
 		}
 	}
@@ -1775,13 +1775,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		for(int var22 = 0; var22 < noProducts; var22 += 1) {
-			if(!fixedFlag$sample25)
-				ut[var22] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var29 = 0; var29 < noProducts; var29 += 1) {
+			if(!fixedFlag$sample32)
+				ut[var29] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-			if(!fixedFlag$sample25)
-				exped[j$var28] = Math.exp(ut[j$var28]);
+		for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+			if(!fixedFlag$sample32)
+				exped[j$var42] = Math.exp(ut[j$var42]);
 		}
 		
 		// Reduction of array exped
@@ -1792,29 +1792,29 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		double reduceVar$sum$5 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1) {
+		for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k = reduceVar$sum$5;
 			
 			// Set the right hand term to a value from the array exped
-			double l = exped[cv$reduction38Index];
+			double l = exped[cv$reduction52Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample25)
+			if(!fixedFlag$sample32)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$5 = (k + l);
 		}
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			sum = reduceVar$sum$5;
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			denom = (sum / s);
-		for(int var49 = 0; var49 < T; var49 += 1) {
-			if(!fixedFlag$sample53)
-				lambda[var49] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
+		for(int var73 = 0; var73 < T; var73 += 1) {
+			if(!fixedFlag$sample77)
+				lambda[var73] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
 		}
-		for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-			if(!fixedFlag$sample61)
-				arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$, lambda[t$var55]);
+		for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+			if(!fixedFlag$sample92)
+				arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$, lambda[t$var86]);
 		}
 	}
 
@@ -1822,13 +1822,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int var22 = 0; var22 < noProducts; var22 += 1) {
-			if(!fixedFlag$sample25)
-				ut[var22] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var29 = 0; var29 < noProducts; var29 += 1) {
+			if(!fixedFlag$sample32)
+				ut[var29] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-			if(!fixedFlag$sample25)
-				exped[j$var28] = Math.exp(ut[j$var28]);
+		for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+			if(!fixedFlag$sample32)
+				exped[j$var42] = Math.exp(ut[j$var42]);
 		}
 		
 		// Reduction of array exped
@@ -1839,29 +1839,29 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		double reduceVar$sum$4 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1) {
+		for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k = reduceVar$sum$4;
 			
 			// Set the right hand term to a value from the array exped
-			double l = exped[cv$reduction38Index];
+			double l = exped[cv$reduction52Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample25)
+			if(!fixedFlag$sample32)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$4 = (k + l);
 		}
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			sum = reduceVar$sum$4;
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			denom = (sum / s);
-		for(int var49 = 0; var49 < T; var49 += 1) {
-			if(!fixedFlag$sample53)
-				lambda[var49] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
+		for(int var73 = 0; var73 < T; var73 += 1) {
+			if(!fixedFlag$sample77)
+				lambda[var73] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
 		}
-		for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-			if(!fixedFlag$sample61)
-				arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$, lambda[t$var55]);
+		for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+			if(!fixedFlag$sample92)
+				arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$, lambda[t$var86]);
 		}
 	}
 
@@ -1870,32 +1870,32 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			for(int var22 = 0; var22 < noProducts; var22 += 1) {
-				if(!fixedFlag$sample25)
-					sample25(var22);
+			for(int var29 = 0; var29 < noProducts; var29 += 1) {
+				if(!fixedFlag$sample32)
+					sample32(var29);
 			}
-			for(int var49 = 0; var49 < T; var49 += 1) {
-				if(!fixedFlag$sample53)
-					sample53(var49);
+			for(int var73 = 0; var73 < T; var73 += 1) {
+				if(!fixedFlag$sample77)
+					sample77(var73);
 			}
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-				if(!fixedFlag$sample61)
-					sample61(t$var55);
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+				if(!fixedFlag$sample92)
+					sample92(t$var86);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int t$var55 = (T - ((((T - 1) - 0) % 1) + 1)); t$var55 >= ((0 - 1) + 1); t$var55 -= 1) {
-				if(!fixedFlag$sample61)
-					sample61(t$var55);
+			for(int t$var86 = (T - ((((T - 1) - 0) % 1) + 1)); t$var86 >= ((0 - 1) + 1); t$var86 -= 1) {
+				if(!fixedFlag$sample92)
+					sample92(t$var86);
 			}
-			for(int var49 = (T - ((((T - 1) - 0) % 1) + 1)); var49 >= ((0 - 1) + 1); var49 -= 1) {
-				if(!fixedFlag$sample53)
-					sample53(var49);
+			for(int var73 = (T - ((((T - 1) - 0) % 1) + 1)); var73 >= ((0 - 1) + 1); var73 -= 1) {
+				if(!fixedFlag$sample77)
+					sample77(var73);
 			}
-			for(int var22 = (noProducts - ((((noProducts - 1) - 0) % 1) + 1)); var22 >= ((0 - 1) + 1); var22 -= 1) {
-				if(!fixedFlag$sample25)
-					sample25(var22);
+			for(int var29 = (noProducts - ((((noProducts - 1) - 0) % 1) + 1)); var29 >= ((0 - 1) + 1); var29 -= 1) {
+				if(!fixedFlag$sample32)
+					sample32(var29);
 			}
 		}
 		
@@ -1920,33 +1920,33 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var18 = 0.0;
 		logProbability$sum = 0.0;
-		logProbability$ut = 0.0;
 		logProbability$denom = 0.0;
 		logProbability$exped = 0.0;
-		if(!fixedProbFlag$sample25) {
-			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				logProbability$sample25[((var22 - 0) / 1)] = 0.0;
+		logProbability$ut = 0.0;
+		if(!fixedProbFlag$sample32) {
+			for(int var29 = 0; var29 < noProducts; var29 += 1)
+				logProbability$sample32[((var29 - 0) / 1)] = 0.0;
 		}
-		logProbability$var45 = 0.0;
+		logProbability$var62 = 0.0;
 		logProbability$lambda = 0.0;
-		if(!fixedProbFlag$sample53)
-			logProbability$var50 = 0.0;
-		for(int t$var55 = 0; t$var55 < T; t$var55 += 1)
-			logProbability$var57[((t$var55 - 0) / 1)] = 0.0;
+		if(!fixedProbFlag$sample77)
+			logProbability$var74 = 0.0;
+		for(int t$var86 = 0; t$var86 < T; t$var86 += 1)
+			logProbability$var88[((t$var86 - 0) / 1)] = 0.0;
 		logProbability$arrivals = 0.0;
-		if(!fixedProbFlag$sample61) {
-			for(int t$var55 = 0; t$var55 < T; t$var55 += 1)
-				logProbability$sample61[((t$var55 - 0) / 1)] = 0.0;
+		if(!fixedProbFlag$sample92) {
+			for(int t$var86 = 0; t$var86 < T; t$var86 += 1)
+				logProbability$sample92[((t$var86 - 0) / 1)] = 0.0;
 		}
-		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-				logProbability$var81[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = 0.0;
+		for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				logProbability$var132[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = 0.0;
 		}
 		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample86) {
-			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-					logProbability$sample86[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = 0.0;
+		if(!fixedProbFlag$sample137) {
+			for(int t$var113 = 0; t$var113 < T; t$var113 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+					logProbability$sample137[((t$var113 - 0) / 1)][((j$var123 - 0) / 1)] = 0.0;
 			}
 		}
 	}
@@ -1968,13 +1968,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample25)
-			logProbabilityValue$sample25();
-		if(fixedFlag$sample53)
-			logProbabilityValue$sample53();
-		if(fixedFlag$sample61)
-			logProbabilityValue$sample61();
-		logProbabilityValue$sample86();
+		if(fixedFlag$sample32)
+			logProbabilityValue$sample32();
+		if(fixedFlag$sample77)
+			logProbabilityValue$sample77();
+		if(fixedFlag$sample92)
+			logProbabilityValue$sample92();
+		logProbabilityValue$sample137();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1992,10 +1992,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample25();
-		logProbabilityValue$sample53();
-		logProbabilityValue$sample61();
-		logProbabilityValue$sample86();
+		logProbabilityValue$sample32();
+		logProbabilityValue$sample77();
+		logProbabilityValue$sample92();
+		logProbabilityValue$sample137();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2012,10 +2012,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample25();
-		logProbabilityValue$sample53();
-		logProbabilityValue$sample61();
-		logProbabilityValue$sample86();
+		logProbabilityValue$sample32();
+		logProbabilityValue$sample77();
+		logProbabilityValue$sample92();
+		logProbabilityValue$sample137();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -2023,13 +2023,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		for(int var22 = 0; var22 < noProducts; var22 += 1) {
-			if(!fixedFlag$sample25)
-				ut[var22] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var29 = 0; var29 < noProducts; var29 += 1) {
+			if(!fixedFlag$sample32)
+				ut[var29] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
-			if(!fixedFlag$sample25)
-				exped[j$var28] = Math.exp(ut[j$var28]);
+		for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
+			if(!fixedFlag$sample32)
+				exped[j$var42] = Math.exp(ut[j$var42]);
 		}
 		
 		// Reduction of array exped
@@ -2040,29 +2040,29 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		double reduceVar$sum$6 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1) {
+		for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k = reduceVar$sum$6;
 			
 			// Set the right hand term to a value from the array exped
-			double l = exped[cv$reduction38Index];
+			double l = exped[cv$reduction52Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample25)
+			if(!fixedFlag$sample32)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$6 = (k + l);
 		}
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			sum = reduceVar$sum$6;
-		if(!fixedFlag$sample25)
+		if(!fixedFlag$sample32)
 			denom = (sum / s);
-		for(int var49 = 0; var49 < T; var49 += 1) {
-			if(!fixedFlag$sample53)
-				lambda[var49] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
+		for(int var73 = 0; var73 < T; var73 += 1) {
+			if(!fixedFlag$sample77)
+				lambda[var73] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
 		}
-		for(int t$var55 = 0; t$var55 < T; t$var55 += 1) {
-			if(!fixedFlag$sample61)
-				arrivals[t$var55] = DistributionSampling.samplePoisson(RNG$, lambda[t$var55]);
+		for(int t$var86 = 0; t$var86 < T; t$var86 += 1) {
+			if(!fixedFlag$sample92)
+				arrivals[t$var86] = DistributionSampling.samplePoisson(RNG$, lambda[t$var86]);
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are
@@ -2091,9 +2091,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// not directly set by the sample task.
 	@Override
 	public final void setIntermediates() {
-		for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
+		for(int j$var42 = 0; j$var42 < noProducts; j$var42 += 1) {
 			if(setFlag$ut)
-				exped[j$var28] = Math.exp(ut[j$var28]);
+				exped[j$var42] = Math.exp(ut[j$var42]);
 		}
 		if(setFlag$ut) {
 			// Reduction of array exped
@@ -2104,12 +2104,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			double reduceVar$sum$7 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction38Index = 0; cv$reduction38Index < noProducts; cv$reduction38Index += 1) {
+			for(int cv$reduction52Index = 0; cv$reduction52Index < noProducts; cv$reduction52Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k = reduceVar$sum$7;
 				
 				// Set the right hand term to a value from the array exped
-				double l = exped[cv$reduction38Index];
+				double l = exped[cv$reduction52Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 

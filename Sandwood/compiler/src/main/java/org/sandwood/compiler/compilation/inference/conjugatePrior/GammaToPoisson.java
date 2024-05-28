@@ -36,6 +36,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -176,9 +177,24 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
                 for(int i = 1; i < noTasks - 1; i++) {
                     DataflowTaskArgDesc d = t.get(i);
                     DFType type = d.task.getType();
-                    if(!(type == DFType.SAMPLE || type == DFType.IF_ASSIGNMENT || (type == DFType.GET && d.argPos != 1)
-                            || (type == DFType.PUT && d.argPos != 1)))
-                        return false;
+                    switch(type) {
+                        case GET:
+                            if(d.argPos == 1)
+                                return false;
+                            break;
+                        case IF_ASSIGNMENT:
+                            if(d.argPos == 0)
+                                return false;
+                            break;
+                        case PUT:
+                            if(d.argPos == 1)
+                                return false;
+                            break;
+                        case SAMPLE:
+                            break;
+                        default:
+                            return false;
+                    }
                 }
             }
         }
@@ -205,11 +221,11 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleStartIR(GammaToPoissonData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
+    protected void getPerConsumerStartIR(GammaToPoissonData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleEndIR(GammaToPoissonData funcData, TreeBuilderInfo info,
+    protected void getPerConsumerEndIR(GammaToPoissonData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
@@ -227,8 +243,7 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
 
     @Override
     protected void addDistributionProbabilities(GammaToPoissonData funcData, CompilationContext compilationCtx) {
-        throw new CompilerException(
-                "Unable to merge distributions in Gamma to Poisson inference method. This is a bug in Sandwood.");
+        throw new CompilerException("Unable to merge distributions in Gamma to Poisson inference method.");
     }
 
     @Override
@@ -250,4 +265,11 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
             GammaToPoissonData funcData, CompilationContext compilationCtx) {}
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToPoissonData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
+        throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
+    }
 }

@@ -10,16 +10,16 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private int[] decay;
 	private int[] decayDetected;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample16 = false;
+	private boolean fixedFlag$sample23 = false;
 	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample16 = false;
+	private boolean fixedProbFlag$sample23 = false;
 	private int length$decayDetected;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$decay;
 	private double logProbability$poisson;
 	private double logProbability$rate;
-	private double logProbability$var14;
+	private double logProbability$var21;
 	private double logProbability$var7;
 	private double rate;
 	private int samples;
@@ -59,7 +59,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$decay(int[] cv$value) {
 		decay = cv$value;
 		setFlag$decay = true;
-		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample23 = false;
 	}
 
 	@Override
@@ -81,18 +81,18 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$fixedFlag$sample10(boolean cv$value) {
 		fixedFlag$sample10 = cv$value;
 		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
-		fixedProbFlag$sample16 = (fixedFlag$sample10 && fixedProbFlag$sample16);
+		fixedProbFlag$sample23 = (fixedFlag$sample10 && fixedProbFlag$sample23);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		fixedFlag$sample16 = cv$value;
-		fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedProbFlag$sample16);
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		fixedFlag$sample23 = cv$value;
+		fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedProbFlag$sample23);
 	}
 
 	@Override
@@ -139,7 +139,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$rate(double cv$value) {
 		rate = cv$value;
 		fixedProbFlag$sample10 = false;
-		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample23 = false;
 	}
 
 	@Override
@@ -196,15 +196,15 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	private final void logProbabilityValue$sample16() {
-		if(!fixedProbFlag$sample16) {
+	private final void logProbabilityValue$sample23() {
+		if(!fixedProbFlag$sample23) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
-			for(int var13 = 0; var13 < samples; var13 += 1) {
+			for(int var20 = 0; var20 < samples; var20 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					int cv$sampleValue = decay[var13];
+					int cv$sampleValue = decay[var20];
 					{
 						{
 							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, rate));
@@ -229,15 +229,15 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$poisson = cv$sampleAccumulator;
-			logProbability$var14 = cv$sampleAccumulator;
+			logProbability$var21 = cv$sampleAccumulator;
 			logProbability$decay = (logProbability$decay + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample10);
+			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample10);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var14;
+			double cv$sampleValue = logProbability$var21;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$poisson = cv$rvAccumulator;
@@ -254,8 +254,8 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			{
 				{
 					{
-						for(int var13 = 0; var13 < samples; var13 += 1) {
-							cv$sum = (cv$sum + decay[var13]);
+						for(int var20 = 0; var20 < samples; var20 += 1) {
+							cv$sum = (cv$sum + decay[var20]);
 							cv$count = (cv$count + 1);
 						}
 					}
@@ -282,10 +282,10 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		if(!fixedFlag$sample10)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 		parallelFor(RNG$, 0, samples, 1,
-			(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1) {
-						if(!fixedFlag$sample16)
-							decay[var13] = DistributionSampling.samplePoisson(RNG$1, rate);
+			(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1) {
+						if(!fixedFlag$sample23)
+							decay[var20] = DistributionSampling.samplePoisson(RNG$1, rate);
 					}
 			}
 		);
@@ -328,8 +328,8 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$rate = 0.0;
 		logProbability$poisson = 0.0;
 		logProbability$decay = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$var14 = 0.0;
+		if(!fixedProbFlag$sample23)
+			logProbability$var21 = 0.0;
 	}
 
 	@Override
@@ -342,21 +342,21 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	@Override

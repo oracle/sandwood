@@ -34,18 +34,18 @@ public class DirichletBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed);
-                system$c.set$fixedFlag$sample34(fixed);
+                system$c.set$fixedFlag$sample42(fixed);
+                system$c.set$fixedFlag$sample55(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample28 = system$c.get$fixedFlag$sample28();
-            boolean fixedFlag$sample34 = system$c.get$fixedFlag$sample34();
-            if(fixedFlag$sample28 && fixedFlag$sample34)
+            boolean fixedFlag$sample42 = system$c.get$fixedFlag$sample42();
+            boolean fixedFlag$sample55 = system$c.get$fixedFlag$sample55();
+            if(fixedFlag$sample42 && fixedFlag$sample55)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample28 || fixedFlag$sample34)
+            else if(fixedFlag$sample42 || fixedFlag$sample55)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -74,13 +74,13 @@ public class DirichletBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample20(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -225,11 +225,11 @@ public class DirichletBernoulli extends Model {
 
         //Set fixed flags
         if(output.isSet()){
-            newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
+            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
+            newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
         }
         if(prior.isSet())
-            newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
+            newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
     }
 
     /**

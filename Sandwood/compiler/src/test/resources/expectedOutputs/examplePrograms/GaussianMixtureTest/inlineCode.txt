@@ -2,28 +2,44 @@ int var1 = 5;
 double var2 = 1.0;
 int var3 = 10;
 double[] var4 = new double[var3];
-for(int var7=0; var7 < var3; var7 += 1) {
-	var4[var7] = var2;
+int var5 = 0;
+int var6 = 1;
+for(int var14=var5; var14 < var3; var14 += var6) {
+	boolean var13 = var5 >= var3 && !var6 == 0 && true;
+	var4[var14] = var2;
 }
-double var9 = 1.0;
-double[] var10 = new double[var1];
-for(int var13=0; var13 < var1; var13 += 1) {
-	var10[var13] = var9;
+double var16 = 1.0;
+double[] var17 = new double[var1];
+int var18 = 0;
+int var19 = 1;
+for(int var27=var18; var27 < var1; var27 += var19) {
+	boolean var26 = var18 >= var1 && !var19 == 0 && true;
+	var17[var27] = var16;
 }
-double[] var16 = new Dirichlet(var10).sample();
-Gaussian var19 = new Gaussian(0.0, 20.0);
-double[] var20 = new double[var1];
-for(int var23=0; var23 < var1; var23 += 1) {
-	var20[var23] = var19.sample();
+double[] var30 = new Dirichlet(var17).sample();
+Gaussian var33 = new Gaussian(0.0, 20.0);
+double[] var34 = new double[var1];
+int var35 = 0;
+int var36 = 1;
+for(int var44=var35; var44 < var1; var44 += var36) {
+	boolean var43 = var35 >= var1 && !var36 == 0 && true;
+	var34[var44] = var33.sample();
 }
-InverseGamma var28 = new Inverse Gamma(1.0, 1.0);
-double[] var29 = new double[var1];
-for(int var32=0; var32 < var1; var32 += 1) {
-	var29[var32] = var28.sample();
+InverseGamma var49 = new Inverse Gamma(1.0, 1.0);
+double[] var50 = new double[var1];
+int var51 = 0;
+int var52 = 1;
+for(int var60=var51; var60 < var1; var60 += var52) {
+	boolean var59 = var51 >= var1 && !var52 == 0 && true;
+	var50[var60] = var49.sample();
 }
-double[] var36 = new double[var4.length];
-for(int var40=0; var40 < var4.length; var40 += 1) {
-	int var42 = new Categorical(var16).sample();
-	var36[var40] = new Gaussian(var20[var42], var29[var42]).sample();
+double[] var64 = new double[var4.length];
+int var65 = 0;
+int var66 = var4.length;
+int var67 = 1;
+for(int var75=var65; var75 < var66; var75 += var67) {
+	boolean var74 = var65 >= var66 && !var67 == 0 && true;
+	int var77 = new Categorical(var30).sample();
+	var64[var75] = new Gaussian(var34[var77], var50[var77]).sample();
 }
-var36.observe(var4);
+var64.observe(var4);

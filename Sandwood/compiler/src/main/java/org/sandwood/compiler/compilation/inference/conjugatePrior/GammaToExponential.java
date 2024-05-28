@@ -36,6 +36,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -164,7 +165,10 @@ public class GammaToExponential
                     DFType type = d.task.getType();
                     switch(type) {
                         case COPY:
+                            break;
                         case IF_ASSIGNMENT:
+                            if(d.argPos == 0)
+                                return false;
                             break;
                         case GET:
                             if(d.argPos == 1)
@@ -203,11 +207,11 @@ public class GammaToExponential
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleStartIR(GammaToExponentialData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
+    protected void getPerConsumerStartIR(GammaToExponentialData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleEndIR(GammaToExponentialData funcData, TreeBuilderInfo info,
+    protected void getPerConsumerEndIR(GammaToExponentialData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
@@ -225,8 +229,7 @@ public class GammaToExponential
 
     @Override
     protected void addDistributionProbabilities(GammaToExponentialData funcData, CompilationContext compilationCtx) {
-        throw new CompilerException(
-                "Unable to merge distributions in this inference method. This is a bug in Sandwood.");
+        throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
@@ -248,4 +251,11 @@ public class GammaToExponential
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
             GammaToExponentialData funcData, CompilationContext compilationCtx) {}
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToExponentialData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
+        throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
+    }
 }

@@ -6,17 +6,17 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements MultinomialBernoulli$CoreInterface {
 	private double[] beta;
-	private double[] cv$var16$countGlobal;
-	private boolean fixedFlag$sample17 = false;
+	private double[] cv$var19$countGlobal;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample47 = false;
+	private boolean fixedFlag$sample23 = false;
 	private boolean fixedFlag$sample52 = false;
-	private boolean fixedProbFlag$sample17 = false;
+	private boolean fixedFlag$sample64 = false;
+	private boolean fixedFlag$sample76 = false;
 	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample47 = false;
+	private boolean fixedProbFlag$sample23 = false;
 	private boolean fixedProbFlag$sample52 = false;
+	private boolean fixedProbFlag$sample64 = false;
+	private boolean fixedProbFlag$sample76 = false;
 	private int length;
 	private int length$observed;
 	private double logProbability$$evidence;
@@ -27,11 +27,11 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$output;
 	private double logProbability$p;
 	private double logProbability$prior;
-	private double logProbability$var15;
 	private double logProbability$var18;
-	private double logProbability$var40;
-	private double logProbability$var45;
+	private double logProbability$var21;
 	private double logProbability$var50;
+	private double logProbability$var62;
+	private double logProbability$var74;
 	private int n;
 	private boolean[] observed;
 	private boolean[] output;
@@ -52,18 +52,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample17() {
-		return fixedFlag$sample17;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample17(boolean cv$value) {
-		fixedFlag$sample17 = cv$value;
-		fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
-		fixedProbFlag$sample20 = (fixedFlag$sample17 && fixedProbFlag$sample20);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample20() {
 		return fixedFlag$sample20;
 	}
@@ -72,31 +60,21 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$fixedFlag$sample20(boolean cv$value) {
 		fixedFlag$sample20 = cv$value;
 		fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
-		fixedProbFlag$sample42 = (fixedFlag$sample20 && fixedProbFlag$sample42);
-		fixedProbFlag$sample47 = (fixedFlag$sample20 && fixedProbFlag$sample47);
-		fixedProbFlag$sample52 = (fixedFlag$sample20 && fixedProbFlag$sample52);
+		fixedProbFlag$sample23 = (fixedFlag$sample20 && fixedProbFlag$sample23);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
-		fixedFlag$sample42 = cv$value;
-		fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
-		fixedFlag$sample47 = cv$value;
-		fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedProbFlag$sample47);
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		fixedFlag$sample23 = cv$value;
+		fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedProbFlag$sample23);
+		fixedProbFlag$sample52 = (fixedFlag$sample23 && fixedProbFlag$sample52);
+		fixedProbFlag$sample64 = (fixedFlag$sample23 && fixedProbFlag$sample64);
+		fixedProbFlag$sample76 = (fixedFlag$sample23 && fixedProbFlag$sample76);
 	}
 
 	@Override
@@ -108,6 +86,28 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$fixedFlag$sample52(boolean cv$value) {
 		fixedFlag$sample52 = cv$value;
 		fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedProbFlag$sample52);
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample64() {
+		return fixedFlag$sample64;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample64(boolean cv$value) {
+		fixedFlag$sample64 = cv$value;
+		fixedProbFlag$sample64 = (fixedFlag$sample64 && fixedProbFlag$sample64);
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample76() {
+		return fixedFlag$sample76;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample76(boolean cv$value) {
+		fixedFlag$sample76 = cv$value;
+		fixedProbFlag$sample76 = (fixedFlag$sample76 && fixedProbFlag$sample76);
 	}
 
 	@Override
@@ -189,9 +189,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$output(boolean[] cv$value) {
 		output = cv$value;
 		setFlag$output = true;
-		fixedProbFlag$sample42 = false;
-		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample52 = false;
+		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample76 = false;
 	}
 
 	@Override
@@ -203,8 +203,8 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$p(double[] cv$value) {
 		p = cv$value;
 		setFlag$p = true;
-		fixedProbFlag$sample17 = false;
 		fixedProbFlag$sample20 = false;
+		fixedProbFlag$sample23 = false;
 	}
 
 	@Override
@@ -216,14 +216,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$prior(int[] cv$value) {
 		prior = cv$value;
 		setFlag$prior = true;
-		fixedProbFlag$sample20 = false;
-		fixedProbFlag$sample42 = false;
-		fixedProbFlag$sample47 = false;
+		fixedProbFlag$sample23 = false;
 		fixedProbFlag$sample52 = false;
+		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample76 = false;
 	}
 
-	private final void logProbabilityValue$sample17() {
-		if(!fixedProbFlag$sample17) {
+	private final void logProbabilityValue$sample20() {
+		if(!fixedProbFlag$sample20) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -252,27 +252,27 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var15 = cv$sampleAccumulator;
+			logProbability$var18 = cv$sampleAccumulator;
 			logProbability$p = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample17)
+			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample17 = fixedFlag$sample17;
+			fixedProbFlag$sample20 = fixedFlag$sample20;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			double cv$sampleValue = logProbability$p;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var15 = cv$rvAccumulator;
+			logProbability$var18 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample17)
+			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample20() {
-		if(!fixedProbFlag$sample20) {
+	private final void logProbabilityValue$sample23() {
+		if(!fixedProbFlag$sample23) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -301,38 +301,38 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
+			logProbability$var21 = cv$sampleAccumulator;
 			logProbability$prior = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample20)
+			if(fixedFlag$sample23)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedFlag$sample17);
+			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample20);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			double cv$sampleValue = logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
+			logProbability$var21 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample20)
+			if(fixedFlag$sample23)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample42() {
-		if(!fixedProbFlag$sample42) {
+	private final void logProbabilityValue$sample52() {
+		if(!fixedProbFlag$sample52) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var39 = 0; i$var39 < length; i$var39 += 3) {
+			for(int i$var49 = 0; i$var49 < length; i$var49 += 3) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					boolean cv$sampleValue = output[i$var39];
+					boolean cv$sampleValue = output[i$var49];
 					{
 						{
-							double var23 = (double)(prior[0] / n);
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var23));
+							double var26 = (double)(prior[0] / n);
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var26));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -354,15 +354,15 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$b1 = cv$sampleAccumulator;
-			logProbability$var40 = cv$sampleAccumulator;
+			logProbability$var50 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedFlag$sample20);
+			fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var40;
+			double cv$sampleValue = logProbability$var50;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$b1 = cv$rvAccumulator;
@@ -372,19 +372,19 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	private final void logProbabilityValue$sample47() {
-		if(!fixedProbFlag$sample47) {
+	private final void logProbabilityValue$sample64() {
+		if(!fixedProbFlag$sample64) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var44 = 1; i$var44 < length; i$var44 += 3) {
+			for(int i$var61 = 1; i$var61 < length; i$var61 += 3) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					boolean cv$sampleValue = output[i$var44];
+					boolean cv$sampleValue = output[i$var61];
 					{
 						{
-							double var28 = (double)(prior[1] / n);
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var28));
+							double var31 = (double)(prior[1] / n);
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var31));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -406,15 +406,15 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$b2 = cv$sampleAccumulator;
-			logProbability$var45 = cv$sampleAccumulator;
+			logProbability$var62 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedFlag$sample20);
+			fixedProbFlag$sample64 = (fixedFlag$sample64 && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var45;
+			double cv$sampleValue = logProbability$var62;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$b2 = cv$rvAccumulator;
@@ -424,19 +424,19 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	private final void logProbabilityValue$sample52() {
-		if(!fixedProbFlag$sample52) {
+	private final void logProbabilityValue$sample76() {
+		if(!fixedProbFlag$sample76) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var49 = 2; i$var49 < length; i$var49 += 3) {
+			for(int i$var73 = 2; i$var73 < length; i$var73 += 3) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					boolean cv$sampleValue = output[i$var49];
+					boolean cv$sampleValue = output[i$var73];
 					{
 						{
-							double var33 = (double)(prior[2] / n);
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var33));
+							double var36 = (double)(prior[2] / n);
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var36));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -458,15 +458,15 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$b3 = cv$sampleAccumulator;
-			logProbability$var50 = cv$sampleAccumulator;
+			logProbability$var74 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedFlag$sample20);
+			fixedProbFlag$sample76 = (fixedFlag$sample76 && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var50;
+			double cv$sampleValue = logProbability$var74;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$b3 = cv$rvAccumulator;
@@ -476,9 +476,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	private final void sample17() {
+	private final void sample20() {
 		double[] cv$targetLocal = p;
-		double[] cv$countLocal = cv$var16$countGlobal;
+		double[] cv$countLocal = cv$var19$countGlobal;
 		int cv$arrayLength = 3;
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
@@ -504,7 +504,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, cv$targetLocal);
 	}
 
-	private final void sample20() {
+	private final void sample23() {
 		int[] cv$targetLocal = prior;
 		double cv$originalProbability = 0.0;
 		double cv$proposedProbability = 0.0;
@@ -547,25 +547,25 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					{
 						{
-							for(int i$var39 = 0; i$var39 < length; i$var39 += 3) {
+							for(int i$var49 = 0; i$var49 < length; i$var49 += 3) {
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								{
 									{
 										{
 											{
-												double cv$temp$2$var23;
+												double cv$temp$2$var26;
 												{
-													double var23 = (double)(prior[0] / n);
-													cv$temp$2$var23 = var23;
+													double var26 = (double)(prior[0] / n);
+													cv$temp$2$var26 = var26;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$2$var23)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$2$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$2$var26)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$2$var26)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$2$var23));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$2$var26));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$2$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$2$var23)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$2$var26)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$2$var26)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -588,25 +588,25 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					{
 						{
-							for(int i$var44 = 1; i$var44 < length; i$var44 += 3) {
+							for(int i$var61 = 1; i$var61 < length; i$var61 += 3) {
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								{
 									{
 										{
 											{
-												double cv$temp$3$var28;
+												double cv$temp$3$var31;
 												{
-													double var28 = (double)(prior[1] / n);
-													cv$temp$3$var28 = var28;
+													double var31 = (double)(prior[1] / n);
+													cv$temp$3$var31 = var31;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var44], cv$temp$3$var28)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var44], cv$temp$3$var28)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var61], cv$temp$3$var31)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var61], cv$temp$3$var31)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var44], cv$temp$3$var28));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var61], cv$temp$3$var31));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var44], cv$temp$3$var28)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var44], cv$temp$3$var28)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var61], cv$temp$3$var31)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var61], cv$temp$3$var31)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -629,25 +629,25 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					{
 						{
-							for(int i$var49 = 2; i$var49 < length; i$var49 += 3) {
+							for(int i$var73 = 2; i$var73 < length; i$var73 += 3) {
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								{
 									{
 										{
 											{
-												double cv$temp$4$var33;
+												double cv$temp$4$var36;
 												{
-													double var33 = (double)(prior[2] / n);
-													cv$temp$4$var33 = var33;
+													double var36 = (double)(prior[2] / n);
+													cv$temp$4$var36 = var36;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$4$var33)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$4$var33)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var73], cv$temp$4$var36)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var73], cv$temp$4$var36)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$4$var33));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var73], cv$temp$4$var36));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$4$var33)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var49], cv$temp$4$var33)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var73], cv$temp$4$var36)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var73], cv$temp$4$var36)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -692,7 +692,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void allocateScratch() {
 		int cv$max = 0;
 		cv$max = Math.max(cv$max, 3);
-		cv$var16$countGlobal = new double[cv$max];
+		cv$var19$countGlobal = new double[cv$max];
 	}
 
 	@Override
@@ -720,52 +720,52 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, n, prior);
-		for(int i$var39 = 0; i$var39 < length; i$var39 += 3) {
-			if(!fixedFlag$sample42)
-				output[i$var39] = DistributionSampling.sampleBernoulli(RNG$, (prior[0] / n));
-		}
-		for(int i$var44 = 1; i$var44 < length; i$var44 += 3) {
-			if(!fixedFlag$sample47)
-				output[i$var44] = DistributionSampling.sampleBernoulli(RNG$, (prior[1] / n));
-		}
-		for(int i$var49 = 2; i$var49 < length; i$var49 += 3) {
+		for(int i$var49 = 0; i$var49 < length; i$var49 += 3) {
 			if(!fixedFlag$sample52)
-				output[i$var49] = DistributionSampling.sampleBernoulli(RNG$, (prior[2] / n));
+				output[i$var49] = DistributionSampling.sampleBernoulli(RNG$, (prior[0] / n));
+		}
+		for(int i$var61 = 1; i$var61 < length; i$var61 += 3) {
+			if(!fixedFlag$sample64)
+				output[i$var61] = DistributionSampling.sampleBernoulli(RNG$, (prior[1] / n));
+		}
+		for(int i$var73 = 2; i$var73 < length; i$var73 += 3) {
+			if(!fixedFlag$sample76)
+				output[i$var73] = DistributionSampling.sampleBernoulli(RNG$, (prior[2] / n));
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, n, prior);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, n, prior);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample17)
-				sample17();
 			if(!fixedFlag$sample20)
 				sample20();
+			if(!fixedFlag$sample23)
+				sample23();
 		} else {
+			if(!fixedFlag$sample23)
+				sample23();
 			if(!fixedFlag$sample20)
 				sample20();
-			if(!fixedFlag$sample17)
-				sample17();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -782,22 +782,22 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var15 = 0.0;
-		if(!fixedProbFlag$sample17)
-			logProbability$p = 0.0;
 		logProbability$var18 = 0.0;
 		if(!fixedProbFlag$sample20)
+			logProbability$p = 0.0;
+		logProbability$var21 = 0.0;
+		if(!fixedProbFlag$sample23)
 			logProbability$prior = 0.0;
 		logProbability$b1 = 0.0;
 		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample42)
-			logProbability$var40 = 0.0;
-		logProbability$b2 = 0.0;
-		if(!fixedProbFlag$sample47)
-			logProbability$var45 = 0.0;
-		logProbability$b3 = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var50 = 0.0;
+		logProbability$b2 = 0.0;
+		if(!fixedProbFlag$sample64)
+			logProbability$var62 = 0.0;
+		logProbability$b3 = 0.0;
+		if(!fixedProbFlag$sample76)
+			logProbability$var74 = 0.0;
 	}
 
 	@Override
@@ -808,40 +808,40 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample17)
-			logProbabilityValue$sample17();
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample47();
+		if(fixedFlag$sample23)
+			logProbabilityValue$sample23();
 		logProbabilityValue$sample52();
+		logProbabilityValue$sample64();
+		logProbabilityValue$sample76();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample17();
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample47();
+		logProbabilityValue$sample23();
 		logProbabilityValue$sample52();
+		logProbabilityValue$sample64();
+		logProbabilityValue$sample76();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample17();
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample47();
+		logProbabilityValue$sample23();
 		logProbabilityValue$sample52();
+		logProbabilityValue$sample64();
+		logProbabilityValue$sample76();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, n, prior);
 		logModelProbabilitiesVal();
 	}

@@ -9,7 +9,8 @@
 package org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
+import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTaskImplementation;
@@ -29,12 +30,14 @@ public class IfElseAssignmentTask<A extends Variable<A>> extends ProducingDatafl
 
     public final BooleanVariable guard;
     public final A ifValue, elseValue;
+    public final IfScope ifScope;
 
-    public IfElseAssignmentTask(BooleanVariable guard, A ifValue, A elseValue, Location location) {
+    public IfElseAssignmentTask(BooleanVariable guard, A ifValue, A elseValue, IfScope ifScope, Location location) {
         super(DFType.IF_ASSIGNMENT, ifValue.getType(), location, guard, ifValue, elseValue);
         this.guard = guard;
         this.ifValue = ifValue;
         this.elseValue = elseValue;
+        this.ifScope = ifScope;
     }
 
     @Override
@@ -70,7 +73,6 @@ public class IfElseAssignmentTask<A extends Variable<A>> extends ProducingDatafl
         A output = getOutput();
         VariableDescription<A> outputDesc = output.getUniqueVarDesc();
 
-        Scope ifScope = ifValue.scope();
         compilationCtx.enterScope(ifScope);
         if(!output.isIntermediate()) {
             if(compilationCtx.codeGuardSet()) {
@@ -93,13 +95,13 @@ public class IfElseAssignmentTask<A extends Variable<A>> extends ProducingDatafl
                 compilationCtx.addTreeToScope(output.scope(),
                         IRTree.initializeUnsetVariable(outputDesc, Tree.NoComment));
             }
-
         }
+        
         compilationCtx.addTreeToScope(ifScope,
                 IRTree.store(outputDesc, ifValue.getForwardIR(compilationCtx), Tree.NoComment));
         compilationCtx.leaveScope(ifScope);
 
-        Scope elseScope = elseValue.scope();
+        ElseScope elseScope = ifScope.elseScope;
         compilationCtx.enterScope(elseScope);
         compilationCtx.addTreeToScope(elseScope,
                 IRTree.store(outputDesc, elseValue.getForwardIR(compilationCtx), Tree.NoComment));

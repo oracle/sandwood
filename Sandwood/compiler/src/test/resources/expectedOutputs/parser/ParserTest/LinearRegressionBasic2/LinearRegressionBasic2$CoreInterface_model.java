@@ -32,11 +32,11 @@ interface LinearRegressionBasic2$CoreInterface extends org.sandwood.runtime.inte
 	// Setter for fixedFlag$sample23.
 	public void set$fixedFlag$sample23(boolean cv$value);
 
-	// Getter for fixedFlag$sample33.
-	public boolean get$fixedFlag$sample33();
+	// Getter for fixedFlag$sample40.
+	public boolean get$fixedFlag$sample40();
 
-	// Setter for fixedFlag$sample33.
-	public void set$fixedFlag$sample33(boolean cv$value);
+	// Setter for fixedFlag$sample40.
+	public void set$fixedFlag$sample40(boolean cv$value);
 
 	// Getter for logProbability$b0.
 	public double get$logProbability$b0();

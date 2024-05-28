@@ -10,9 +10,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double bias;
 	private double[] c;
 	private boolean fixedFlag$sample12 = false;
-	private boolean fixedFlag$sample40 = false;
+	private boolean fixedFlag$sample54 = false;
 	private boolean fixedProbFlag$sample12 = false;
-	private boolean fixedProbFlag$sample40 = false;
+	private boolean fixedProbFlag$sample54 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private boolean guard1;
@@ -24,7 +24,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bias;
 	private double logProbability$c;
 	private double logProbability$flips;
-	private double logProbability$var35;
+	private double logProbability$var49;
 	private double logProbability$var9;
 	private int samples;
 	private boolean setFlag$flips = false;
@@ -49,8 +49,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Unset the fixed probability flag for sample 12 as it depends on b.
 		fixedProbFlag$sample12 = false;
 		
-		// Unset the fixed probability flag for sample 40 as it depends on b.
-		fixedProbFlag$sample40 = false;
+		// Unset the fixed probability flag for sample 54 as it depends on b.
+		fixedProbFlag$sample54 = false;
 	}
 
 	// Getter for bias.
@@ -76,27 +76,27 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// the flag to false.
 		fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedProbFlag$sample12);
 		
-		// Should the probability of sample 40 be set to fixed. This will only every change
+		// Should the probability of sample 54 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample40 = (fixedFlag$sample12 && fixedProbFlag$sample40);
+		fixedProbFlag$sample54 = (fixedFlag$sample12 && fixedProbFlag$sample54);
 	}
 
-	// Getter for fixedFlag$sample40.
+	// Getter for fixedFlag$sample54.
 	@Override
-	public final boolean get$fixedFlag$sample40() {
-		return fixedFlag$sample40;
+	public final boolean get$fixedFlag$sample54() {
+		return fixedFlag$sample54;
 	}
 
-	// Setter for fixedFlag$sample40.
+	// Setter for fixedFlag$sample54.
 	@Override
-	public final void set$fixedFlag$sample40(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample40 including if probabilities
+	public final void set$fixedFlag$sample54(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample54 including if probabilities
 		// need to be updated.
-		fixedFlag$sample40 = cv$value;
+		fixedFlag$sample54 = cv$value;
 		
-		// Should the probability of sample 40 be set to fixed. This will only every change
+		// Should the probability of sample 54 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample40 = (fixedFlag$sample40 && fixedProbFlag$sample40);
+		fixedProbFlag$sample54 = (fixedFlag$sample54 && fixedProbFlag$sample54);
 	}
 
 	// Getter for flips.
@@ -115,8 +115,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		flips = cv$value;
 		setFlag$flips = true;
 		
-		// Unset the fixed probability flag for sample 40 as it depends on flips.
-		fixedProbFlag$sample40 = false;
+		// Unset the fixed probability flag for sample 54 as it depends on flips.
+		fixedProbFlag$sample54 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -271,29 +271,31 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Add probability to constructed variables from the combined probability
 			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$c) {
-					// Set the guard so the update is only applied once.
-					cv$guard$c = true;
-					
-					// Update the variable probability
-					logProbability$c = (logProbability$c + cv$accumulator);
+				if(!guard1) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$c) {
+						// Set the guard so the update is only applied once.
+						cv$guard$c = true;
+						
+						// Update the variable probability
+						logProbability$c = (logProbability$c + cv$accumulator);
+					}
 				}
 			}
 			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$c) {
-					// Set the guard so the update is only applied once.
-					cv$guard$c = true;
-					
-					// Update the variable probability
-					logProbability$c = (logProbability$c + cv$accumulator);
+				if(!guard1) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$c) {
+						// Set the guard so the update is only applied once.
+						cv$guard$c = true;
+						
+						// Update the variable probability
+						logProbability$c = (logProbability$c + cv$accumulator);
+					}
 				}
 			}
 			{
 				if(guard1) {
-					double traceTempVariable$bias$4_1 = b;
-					
 					// If the probability of the variable has not already been updated
 					if(!cv$guard$bias) {
 						// Set the guard so the update is only applied once.
@@ -304,80 +306,32 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 				if(!guard1) {
-					if(!guard1) {
-						if(((0 <= 0) && (0 < 2))) {
-							{
-								if(!guard1) {
-									// Reduction of array c
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									double reduceVar$var28$21 = 0.0;
+					if(((0 <= 0) && (0 < 2))) {
+						{
+							if(!guard1) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$bias) {
+									// Set the guard so the update is only applied once.
+									cv$guard$bias = true;
 									
-									// For each index in the array to be reduced
-									for(int cv$reduction495Index = 0; cv$reduction495Index < 2; cv$reduction495Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										double i$var25 = reduceVar$var28$21;
-										
-										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction495Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var28$21 = (i$var25 + j);
-									}
-									double traceTempVariable$bias$5_1 = reduceVar$var28$21;
-									
-									// If the probability of the variable has not already been updated
-									if(!cv$guard$bias) {
-										// Set the guard so the update is only applied once.
-										cv$guard$bias = true;
-										
-										// Update the variable probability
-										logProbability$bias = (logProbability$bias + cv$accumulator);
-									}
+									// Update the variable probability
+									logProbability$bias = (logProbability$bias + cv$accumulator);
 								}
 							}
 						}
 					}
 				}
 				if(!guard1) {
-					if(!guard1) {
-						if(((0 <= 1) && (1 < 2))) {
-							{
-								if(!guard1) {
-									// Reduction of array c
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									double reduceVar$var28$22 = 0.0;
+					if(((0 <= 1) && (1 < 2))) {
+						{
+							if(!guard1) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$bias) {
+									// Set the guard so the update is only applied once.
+									cv$guard$bias = true;
 									
-									// For each index in the array to be reduced
-									for(int cv$reduction506Index = 0; cv$reduction506Index < 2; cv$reduction506Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										double i$var25 = reduceVar$var28$22;
-										
-										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction506Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var28$22 = (i$var25 + j);
-									}
-									double traceTempVariable$bias$6_1 = reduceVar$var28$22;
-									
-									// If the probability of the variable has not already been updated
-									if(!cv$guard$bias) {
-										// Set the guard so the update is only applied once.
-										cv$guard$bias = true;
-										
-										// Update the variable probability
-										logProbability$bias = (logProbability$bias + cv$accumulator);
-									}
+									// Update the variable probability
+									logProbability$bias = (logProbability$bias + cv$accumulator);
 								}
 							}
 						}
@@ -416,29 +370,31 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Add probability to constructed variables from the combined probability
 			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$c) {
-					// Set the guard so the update is only applied once.
-					cv$guard$c = true;
-					
-					// Update the variable probability
-					logProbability$c = (logProbability$c + cv$accumulator);
+				if(!guard1) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$c) {
+						// Set the guard so the update is only applied once.
+						cv$guard$c = true;
+						
+						// Update the variable probability
+						logProbability$c = (logProbability$c + cv$accumulator);
+					}
 				}
 			}
 			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$c) {
-					// Set the guard so the update is only applied once.
-					cv$guard$c = true;
-					
-					// Update the variable probability
-					logProbability$c = (logProbability$c + cv$accumulator);
+				if(!guard1) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$c) {
+						// Set the guard so the update is only applied once.
+						cv$guard$c = true;
+						
+						// Update the variable probability
+						logProbability$c = (logProbability$c + cv$accumulator);
+					}
 				}
 			}
 			{
 				if(guard1) {
-					double traceTempVariable$bias$9_1 = b;
-					
 					// If the probability of the variable has not already been updated
 					if(!cv$guard$bias) {
 						// Set the guard so the update is only applied once.
@@ -449,80 +405,32 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 				if(!guard1) {
-					if(!guard1) {
-						if(((0 <= 0) && (0 < 2))) {
-							{
-								if(!guard1) {
-									// Reduction of array c
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									double reduceVar$var28$23 = 0.0;
+					if(((0 <= 0) && (0 < 2))) {
+						{
+							if(!guard1) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$bias) {
+									// Set the guard so the update is only applied once.
+									cv$guard$bias = true;
 									
-									// For each index in the array to be reduced
-									for(int cv$reduction524Index = 0; cv$reduction524Index < 2; cv$reduction524Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										double i$var25 = reduceVar$var28$23;
-										
-										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction524Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var28$23 = (i$var25 + j);
-									}
-									double traceTempVariable$bias$10_1 = reduceVar$var28$23;
-									
-									// If the probability of the variable has not already been updated
-									if(!cv$guard$bias) {
-										// Set the guard so the update is only applied once.
-										cv$guard$bias = true;
-										
-										// Update the variable probability
-										logProbability$bias = (logProbability$bias + cv$accumulator);
-									}
+									// Update the variable probability
+									logProbability$bias = (logProbability$bias + cv$accumulator);
 								}
 							}
 						}
 					}
 				}
 				if(!guard1) {
-					if(!guard1) {
-						if(((0 <= 1) && (1 < 2))) {
-							{
-								if(!guard1) {
-									// Reduction of array c
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									double reduceVar$var28$24 = 0.0;
+					if(((0 <= 1) && (1 < 2))) {
+						{
+							if(!guard1) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$bias) {
+									// Set the guard so the update is only applied once.
+									cv$guard$bias = true;
 									
-									// For each index in the array to be reduced
-									for(int cv$reduction535Index = 0; cv$reduction535Index < 2; cv$reduction535Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										double i$var25 = reduceVar$var28$24;
-										
-										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction535Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var28$24 = (i$var25 + j);
-									}
-									double traceTempVariable$bias$11_1 = reduceVar$var28$24;
-									
-									// If the probability of the variable has not already been updated
-									if(!cv$guard$bias) {
-										// Set the guard so the update is only applied once.
-										cv$guard$bias = true;
-										
-										// Update the variable probability
-										logProbability$bias = (logProbability$bias + cv$accumulator);
-									}
+									// Update the variable probability
+									logProbability$bias = (logProbability$bias + cv$accumulator);
 								}
 							}
 						}
@@ -540,19 +448,19 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample40 using sampled
+	// Calculate the probability of the samples represented by sample54 using sampled
 	// values.
-	private final void logProbabilityValue$sample40() {
-		// Determine if we need to calculate the values for sample task 40 or if we should
+	private final void logProbabilityValue$sample54() {
+		// Determine if we need to calculate the values for sample task 54 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample40) {
+		if(!fixedProbFlag$sample54) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var34 = 0; var34 < samples; var34 += 1) {
+			for(int var48 = 0; var48 < samples; var48 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -560,7 +468,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = flips[var34];
+					boolean cv$sampleValue = flips[var48];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
@@ -600,7 +508,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var35 = cv$sampleAccumulator;
+			logProbability$var49 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -611,7 +519,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample40 = (fixedFlag$sample40 && fixedFlag$sample12);
+			fixedProbFlag$sample54 = (fixedFlag$sample54 && fixedFlag$sample12);
 		}
 		// Using cached values.
 		else {
@@ -619,7 +527,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var35;
+			double cv$sampleValue = logProbability$var49;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$bernoulli = cv$rvAccumulator;
@@ -687,15 +595,19 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					
 					// Guards to ensure that c is only updated when there is a valid path.
 					{
-						{
-							c[0] = (cv$currentValue / 2);
+						if(!guard1) {
+							{
+								c[0] = (cv$currentValue / 2);
+							}
 						}
 					}
 					
 					// Guards to ensure that c is only updated when there is a valid path.
 					{
-						{
-							c[1] = (cv$currentValue / 2);
+						if(!guard1) {
+							{
+								c[1] = (cv$currentValue / 2);
+							}
 						}
 					}
 					
@@ -703,50 +615,72 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						// Guard to check that at most one copy of the code is executed for a given set of
 						// loop iterations.
-						boolean guard$sample12if34 = false;
+						boolean guard$sample12if41 = false;
 						if(guard1) {
-							double traceTempVariable$bias$3_1 = cv$currentValue;
-							if(!guard$sample12if34) {
+							if(!guard$sample12if41) {
 								// The body will execute, so should not be executed again
-								guard$sample12if34 = true;
+								guard$sample12if41 = true;
 								{
-									// Write out the new sample value.
-									bias = traceTempVariable$bias$3_1;
+									if(guard1)
+										bias = cv$currentValue;
+									else {
+										// Reduction of array c
+										// 
+										// A generated name to prevent name collisions if the reduction is implemented more
+										// than once in inference and probability code. Initialize the variable to the unit
+										// value
+										double reduceVar$var35$13 = 0.0;
+										
+										// For each index in the array to be reduced
+										for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											double i$var32 = reduceVar$var35$13;
+											
+											// Set the right hand term to a value from the array c
+											double j = c[cv$reduction34Index];
+											
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var35$13 = (i$var32 + j);
+										}
+										bias = reduceVar$var35$13;
+									}
 								}
 							}
 						}
 						if(!guard1) {
-							if(!guard1) {
-								if(((0 <= 0) && (0 < 2))) {
-									{
-										if(!guard1) {
-											// Reduction of array c
-											// 
-											// A generated name to prevent name collisions if the reduction is implemented more
-											// than once in inference and probability code. Initialize the variable to the unit
-											// value
-											double reduceVar$var28$15 = 0.0;
-											
-											// For each index in the array to be reduced
-											for(int cv$reduction337Index = 0; cv$reduction337Index < 2; cv$reduction337Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var25 = reduceVar$var28$15;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction337Index];
-												
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var28$15 = (i$var25 + j);
-											}
-											double traceTempVariable$bias$4_1 = reduceVar$var28$15;
-											if(!guard$sample12if34) {
-												// The body will execute, so should not be executed again
-												guard$sample12if34 = true;
-												{
-													// Write out the new sample value.
-													bias = traceTempVariable$bias$4_1;
+							if(((0 <= 0) && (0 < 2))) {
+								{
+									if(!guard1) {
+										if(!guard$sample12if41) {
+											// The body will execute, so should not be executed again
+											guard$sample12if41 = true;
+											{
+												if(guard1)
+													bias = cv$currentValue;
+												else {
+													// Reduction of array c
+													// 
+													// A generated name to prevent name collisions if the reduction is implemented more
+													// than once in inference and probability code. Initialize the variable to the unit
+													// value
+													double reduceVar$var35$14 = 0.0;
+													
+													// For each index in the array to be reduced
+													for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double i$var32 = reduceVar$var35$14;
+														
+														// Set the right hand term to a value from the array c
+														double j = c[cv$reduction34Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$var35$14 = (i$var32 + j);
+													}
+													bias = reduceVar$var35$14;
 												}
 											}
 										}
@@ -755,37 +689,37 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							}
 						}
 						if(!guard1) {
-							if(!guard1) {
-								if(((0 <= 1) && (1 < 2))) {
-									{
-										if(!guard1) {
-											// Reduction of array c
-											// 
-											// A generated name to prevent name collisions if the reduction is implemented more
-											// than once in inference and probability code. Initialize the variable to the unit
-											// value
-											double reduceVar$var28$16 = 0.0;
-											
-											// For each index in the array to be reduced
-											for(int cv$reduction350Index = 0; cv$reduction350Index < 2; cv$reduction350Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var25 = reduceVar$var28$16;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction350Index];
-												
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var28$16 = (i$var25 + j);
-											}
-											double traceTempVariable$bias$5_1 = reduceVar$var28$16;
-											if(!guard$sample12if34) {
-												// The body will execute, so should not be executed again
-												guard$sample12if34 = true;
-												{
-													// Write out the new sample value.
-													bias = traceTempVariable$bias$5_1;
+							if(((0 <= 1) && (1 < 2))) {
+								{
+									if(!guard1) {
+										if(!guard$sample12if41) {
+											// The body will execute, so should not be executed again
+											guard$sample12if41 = true;
+											{
+												if(guard1)
+													bias = cv$currentValue;
+												else {
+													// Reduction of array c
+													// 
+													// A generated name to prevent name collisions if the reduction is implemented more
+													// than once in inference and probability code. Initialize the variable to the unit
+													// value
+													double reduceVar$var35$15 = 0.0;
+													
+													// For each index in the array to be reduced
+													for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double i$var32 = reduceVar$var35$15;
+														
+														// Set the right hand term to a value from the array c
+														double j = c[cv$reduction34Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$var35$15 = (i$var32 + j);
+													}
+													bias = reduceVar$var35$15;
 												}
 											}
 										}
@@ -812,22 +746,22 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// it is added to the index probabilities.
 				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$currentValue, cv$temp$0$var6, cv$temp$1$var8));
 				
-				// Processing random variable 30.
+				// Processing random variable 37.
 				{
 					{
 						// Guard to check that at most one copy of the code is executed for a given set of
 						// loop iterations.
-						boolean guard$sample12bernoulli35 = false;
+						boolean guard$sample12bernoulli42 = false;
 						if(guard1) {
 							double traceTempVariable$bias$6_1 = cv$currentValue;
 							double traceTempVariable$b$6_2 = cv$currentValue;
-							if(!guard$sample12bernoulli35) {
+							if(!guard$sample12bernoulli42) {
 								// The body will execute, so should not be executed again
-								guard$sample12bernoulli35 = true;
+								guard$sample12bernoulli42 = true;
 								
-								// Processing sample task 40 of consumer random variable bernoulli.
+								// Processing sample task 54 of consumer random variable bernoulli.
 								{
-									for(int var34 = 0; var34 < samples; var34 += 1) {
+									for(int var48 = 0; var48 < samples; var48 += 1) {
 										// Set an accumulator to sum the probabilities for each possible configuration of
 										// inputs.
 										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -844,18 +778,18 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 															cv$temp$2$bias = traceTempVariable$bias$6_1;
 														}
 														
-														// Record the probability of sample task 40 generating output with current configuration.
-														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$2$bias)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$2$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														// Record the probability of sample task 54 generating output with current configuration.
+														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$2$bias)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$2$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															// If the second value is -infinity.
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$2$bias));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$2$bias));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$2$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$2$bias)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$2$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$2$bias)));
 														}
 														
-														// Recorded the probability of reaching sample task 40 with the current configuration.
+														// Recorded the probability of reaching sample task 54 with the current configuration.
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
 												}
@@ -884,107 +818,105 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						if(!guard1) {
 							double traceTempVariable$b$7_1 = cv$currentValue;
 							double traceTempVariable$i$7_2 = (traceTempVariable$b$7_1 / 2);
-							if(!guard1) {
-								if(((0 <= 0) && (0 < 2))) {
-									{
-										if(((0 < c.length) && (0 < 2))) {
-											// Reduction of array c
+							if(((0 <= 0) && (0 < 2))) {
+								{
+									if(((0 < c.length) && (0 < 2))) {
+										// Reduction of array c
+										// 
+										// A generated name to prevent name collisions if the reduction is implemented more
+										// than once in inference and probability code. Initialize the variable to the unit
+										// value
+										double reduceVar$var35$16 = 0.0;
+										
+										// Reduce for every value except a masked value which will be skipped.
+										for(int cv$reduction424Index = 0; cv$reduction424Index < 0; cv$reduction424Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											double i$var32 = reduceVar$var35$16;
+											
+											// Set the right hand term to a value from the array c
+											double j = c[cv$reduction424Index];
+											
+											// Execute the reduction function, saving the result into the return value.
 											// 
-											// A generated name to prevent name collisions if the reduction is implemented more
-											// than once in inference and probability code. Initialize the variable to the unit
-											// value
-											double reduceVar$var28$17 = 0.0;
-											
-											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction383Index = 0; cv$reduction383Index < 0; cv$reduction383Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var25 = reduceVar$var28$17;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction383Index];
-												
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var28$17 = (i$var25 + j);
-											}
-											for(int cv$reduction383Index = (0 + 1); cv$reduction383Index < 2; cv$reduction383Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var25 = reduceVar$var28$17;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction383Index];
-												
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var28$17 = (i$var25 + j);
-											}
-											double cv$reduced29 = reduceVar$var28$17;
-											
 											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var28$17 = (traceTempVariable$i$7_2 + cv$reduced29);
-											double traceTempVariable$var28$7_3 = reduceVar$var28$17;
-											if(!guard1) {
-												double traceTempVariable$bias$7_4 = traceTempVariable$var28$7_3;
-												if(!guard$sample12bernoulli35) {
-													// The body will execute, so should not be executed again
-													guard$sample12bernoulli35 = true;
-													
-													// Processing sample task 40 of consumer random variable bernoulli.
-													{
-														for(int var34 = 0; var34 < samples; var34 += 1) {
-															// Set an accumulator to sum the probabilities for each possible configuration of
-															// inputs.
-															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-															
-															// Set an accumulator to record the consumer distributions not seen. Initially set
-															// to 1 as seen values will be deducted from this value.
-															double cv$consumerDistributionProbabilityAccumulator = 1.0;
+											reduceVar$var35$16 = (i$var32 + j);
+										}
+										for(int cv$reduction424Index = (0 + 1); cv$reduction424Index < 2; cv$reduction424Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											double i$var32 = reduceVar$var35$16;
+											
+											// Set the right hand term to a value from the array c
+											double j = c[cv$reduction424Index];
+											
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var35$16 = (i$var32 + j);
+										}
+										double cv$reduced34 = reduceVar$var35$16;
+										
+										// Copy the result of the reduction into the variable returned by the reduction.
+										reduceVar$var35$16 = (traceTempVariable$i$7_2 + cv$reduced34);
+										double traceTempVariable$var35$7_3 = reduceVar$var35$16;
+										if(!guard1) {
+											double traceTempVariable$bias$7_4 = traceTempVariable$var35$7_3;
+											if(!guard$sample12bernoulli42) {
+												// The body will execute, so should not be executed again
+												guard$sample12bernoulli42 = true;
+												
+												// Processing sample task 54 of consumer random variable bernoulli.
+												{
+													for(int var48 = 0; var48 < samples; var48 += 1) {
+														// Set an accumulator to sum the probabilities for each possible configuration of
+														// inputs.
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														
+														// Set an accumulator to record the consumer distributions not seen. Initially set
+														// to 1 as seen values will be deducted from this value.
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
+														{
 															{
 																{
 																	{
+																		double cv$temp$3$bias;
 																		{
-																			double cv$temp$3$bias;
-																			{
-																				cv$temp$3$bias = traceTempVariable$bias$7_4;
-																			}
-																			
-																			// Record the probability of sample task 40 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$3$bias)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$3$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																			else {
-																				// If the second value is -infinity.
-																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$3$bias));
-																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$3$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$3$bias)));
-																			}
-																			
-																			// Recorded the probability of reaching sample task 40 with the current configuration.
-																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																			cv$temp$3$bias = traceTempVariable$bias$7_4;
 																		}
+																		
+																		// Record the probability of sample task 54 generating output with current configuration.
+																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$3$bias)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$3$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$3$bias));
+																			else
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$3$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$3$bias)));
+																		}
+																		
+																		// Recorded the probability of reaching sample task 54 with the current configuration.
+																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																	}
 																}
 															}
-															
-															// A check to ensure rounding of floating point values can never result in a negative
-															// value.
-															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-															
-															// Multiply (log space add) in the probability of the sample task to the overall probability
-															// for this configuration of the source random variable.
-															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																else
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-															}
+														}
+														
+														// A check to ensure rounding of floating point values can never result in a negative
+														// value.
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														
+														// Multiply (log space add) in the probability of the sample task to the overall probability
+														// for this configuration of the source random variable.
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
@@ -997,107 +929,105 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						if(!guard1) {
 							double traceTempVariable$b$8_1 = cv$currentValue;
 							double traceTempVariable$i$8_2 = (traceTempVariable$b$8_1 / 2);
-							if(!guard1) {
-								if(((0 <= 1) && (1 < 2))) {
-									{
-										if(((0 < c.length) && (0 < 2))) {
-											// Reduction of array c
+							if(((0 <= 1) && (1 < 2))) {
+								{
+									if(((0 < c.length) && (0 < 2))) {
+										// Reduction of array c
+										// 
+										// A generated name to prevent name collisions if the reduction is implemented more
+										// than once in inference and probability code. Initialize the variable to the unit
+										// value
+										double reduceVar$var35$17 = 0.0;
+										
+										// Reduce for every value except a masked value which will be skipped.
+										for(int cv$reduction445Index = 0; cv$reduction445Index < 1; cv$reduction445Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											double i$var32 = reduceVar$var35$17;
+											
+											// Set the right hand term to a value from the array c
+											double j = c[cv$reduction445Index];
+											
+											// Execute the reduction function, saving the result into the return value.
 											// 
-											// A generated name to prevent name collisions if the reduction is implemented more
-											// than once in inference and probability code. Initialize the variable to the unit
-											// value
-											double reduceVar$var28$18 = 0.0;
-											
-											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction406Index = 0; cv$reduction406Index < 1; cv$reduction406Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var25 = reduceVar$var28$18;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction406Index];
-												
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var28$18 = (i$var25 + j);
-											}
-											for(int cv$reduction406Index = (1 + 1); cv$reduction406Index < 2; cv$reduction406Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var25 = reduceVar$var28$18;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction406Index];
-												
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Execute the reduction function, saving the result into the return value.
-												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var28$18 = (i$var25 + j);
-											}
-											double cv$reduced29 = reduceVar$var28$18;
-											
 											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var28$18 = (traceTempVariable$i$8_2 + cv$reduced29);
-											double traceTempVariable$var28$8_3 = reduceVar$var28$18;
-											if(!guard1) {
-												double traceTempVariable$bias$8_4 = traceTempVariable$var28$8_3;
-												if(!guard$sample12bernoulli35) {
-													// The body will execute, so should not be executed again
-													guard$sample12bernoulli35 = true;
-													
-													// Processing sample task 40 of consumer random variable bernoulli.
-													{
-														for(int var34 = 0; var34 < samples; var34 += 1) {
-															// Set an accumulator to sum the probabilities for each possible configuration of
-															// inputs.
-															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-															
-															// Set an accumulator to record the consumer distributions not seen. Initially set
-															// to 1 as seen values will be deducted from this value.
-															double cv$consumerDistributionProbabilityAccumulator = 1.0;
+											reduceVar$var35$17 = (i$var32 + j);
+										}
+										for(int cv$reduction445Index = (1 + 1); cv$reduction445Index < 2; cv$reduction445Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											double i$var32 = reduceVar$var35$17;
+											
+											// Set the right hand term to a value from the array c
+											double j = c[cv$reduction445Index];
+											
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var35$17 = (i$var32 + j);
+										}
+										double cv$reduced34 = reduceVar$var35$17;
+										
+										// Copy the result of the reduction into the variable returned by the reduction.
+										reduceVar$var35$17 = (traceTempVariable$i$8_2 + cv$reduced34);
+										double traceTempVariable$var35$8_3 = reduceVar$var35$17;
+										if(!guard1) {
+											double traceTempVariable$bias$8_4 = traceTempVariable$var35$8_3;
+											if(!guard$sample12bernoulli42) {
+												// The body will execute, so should not be executed again
+												guard$sample12bernoulli42 = true;
+												
+												// Processing sample task 54 of consumer random variable bernoulli.
+												{
+													for(int var48 = 0; var48 < samples; var48 += 1) {
+														// Set an accumulator to sum the probabilities for each possible configuration of
+														// inputs.
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														
+														// Set an accumulator to record the consumer distributions not seen. Initially set
+														// to 1 as seen values will be deducted from this value.
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
+														{
 															{
 																{
 																	{
+																		double cv$temp$4$bias;
 																		{
-																			double cv$temp$4$bias;
-																			{
-																				cv$temp$4$bias = traceTempVariable$bias$8_4;
-																			}
-																			
-																			// Record the probability of sample task 40 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$4$bias)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$4$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																			else {
-																				// If the second value is -infinity.
-																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$4$bias));
-																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$4$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var34], cv$temp$4$bias)));
-																			}
-																			
-																			// Recorded the probability of reaching sample task 40 with the current configuration.
-																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																			cv$temp$4$bias = traceTempVariable$bias$8_4;
 																		}
+																		
+																		// Record the probability of sample task 54 generating output with current configuration.
+																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$4$bias)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$4$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$4$bias));
+																			else
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$4$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var48], cv$temp$4$bias)));
+																		}
+																		
+																		// Recorded the probability of reaching sample task 54 with the current configuration.
+																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																	}
 																}
 															}
-															
-															// A check to ensure rounding of floating point values can never result in a negative
-															// value.
-															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-															
-															// Multiply (log space add) in the probability of the sample task to the overall probability
-															// for this configuration of the source random variable.
-															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																else
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-															}
+														}
+														
+														// A check to ensure rounding of floating point values can never result in a negative
+														// value.
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														
+														// Multiply (log space add) in the probability of the sample task to the overall probability
+														// for this configuration of the source random variable.
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
@@ -1147,15 +1077,19 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Guards to ensure that c is only updated when there is a valid path.
 			{
-				{
-					c[0] = (b / 2);
+				if(!guard1) {
+					{
+						c[0] = (b / 2);
+					}
 				}
 			}
 			
 			// Guards to ensure that c is only updated when there is a valid path.
 			{
-				{
-					c[1] = (b / 2);
+				if(!guard1) {
+					{
+						c[1] = (b / 2);
+					}
 				}
 			}
 			
@@ -1163,50 +1097,72 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			{
 				// Guard to check that at most one copy of the code is executed for a given set of
 				// loop iterations.
-				boolean guard$sample12if34 = false;
+				boolean guard$sample12if41 = false;
 				if(guard1) {
-					double traceTempVariable$bias$17_1 = b;
-					if(!guard$sample12if34) {
+					if(!guard$sample12if41) {
 						// The body will execute, so should not be executed again
-						guard$sample12if34 = true;
+						guard$sample12if41 = true;
 						{
-							// Write out the new sample value.
-							bias = traceTempVariable$bias$17_1;
+							if(guard1)
+								bias = b;
+							else {
+								// Reduction of array c
+								// 
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								double reduceVar$var35$18 = 0.0;
+								
+								// For each index in the array to be reduced
+								for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									double i$var32 = reduceVar$var35$18;
+									
+									// Set the right hand term to a value from the array c
+									double j = c[cv$reduction34Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$var35$18 = (i$var32 + j);
+								}
+								bias = reduceVar$var35$18;
+							}
 						}
 					}
 				}
 				if(!guard1) {
-					if(!guard1) {
-						if(((0 <= 0) && (0 < 2))) {
-							{
-								if(!guard1) {
-									// Reduction of array c
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									double reduceVar$var28$19 = 0.0;
-									
-									// For each index in the array to be reduced
-									for(int cv$reduction455Index = 0; cv$reduction455Index < 2; cv$reduction455Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										double i$var25 = reduceVar$var28$19;
-										
-										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction455Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var28$19 = (i$var25 + j);
-									}
-									double traceTempVariable$bias$18_1 = reduceVar$var28$19;
-									if(!guard$sample12if34) {
-										// The body will execute, so should not be executed again
-										guard$sample12if34 = true;
-										{
-											// Write out the new sample value.
-											bias = traceTempVariable$bias$18_1;
+					if(((0 <= 0) && (0 < 2))) {
+						{
+							if(!guard1) {
+								if(!guard$sample12if41) {
+									// The body will execute, so should not be executed again
+									guard$sample12if41 = true;
+									{
+										if(guard1)
+											bias = b;
+										else {
+											// Reduction of array c
+											// 
+											// A generated name to prevent name collisions if the reduction is implemented more
+											// than once in inference and probability code. Initialize the variable to the unit
+											// value
+											double reduceVar$var35$19 = 0.0;
+											
+											// For each index in the array to be reduced
+											for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var32 = reduceVar$var35$19;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction34Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var35$19 = (i$var32 + j);
+											}
+											bias = reduceVar$var35$19;
 										}
 									}
 								}
@@ -1215,37 +1171,37 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 				if(!guard1) {
-					if(!guard1) {
-						if(((0 <= 1) && (1 < 2))) {
-							{
-								if(!guard1) {
-									// Reduction of array c
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									double reduceVar$var28$20 = 0.0;
-									
-									// For each index in the array to be reduced
-									for(int cv$reduction468Index = 0; cv$reduction468Index < 2; cv$reduction468Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										double i$var25 = reduceVar$var28$20;
-										
-										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction468Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var28$20 = (i$var25 + j);
-									}
-									double traceTempVariable$bias$19_1 = reduceVar$var28$20;
-									if(!guard$sample12if34) {
-										// The body will execute, so should not be executed again
-										guard$sample12if34 = true;
-										{
-											// Write out the new sample value.
-											bias = traceTempVariable$bias$19_1;
+					if(((0 <= 1) && (1 < 2))) {
+						{
+							if(!guard1) {
+								if(!guard$sample12if41) {
+									// The body will execute, so should not be executed again
+									guard$sample12if41 = true;
+									{
+										if(guard1)
+											bias = b;
+										else {
+											// Reduction of array c
+											// 
+											// A generated name to prevent name collisions if the reduction is implemented more
+											// than once in inference and probability code. Initialize the variable to the unit
+											// value
+											double reduceVar$var35$20 = 0.0;
+											
+											// For each index in the array to be reduced
+											for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var32 = reduceVar$var35$20;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction34Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var35$20 = (i$var32 + j);
+											}
+											bias = reduceVar$var35$20;
 										}
 									}
 								}
@@ -1297,36 +1253,36 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var28$25 = 0.0;
+			double reduceVar$var35$21 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction29Index = 0; cv$reduction29Index < 2; cv$reduction29Index += 1) {
+			for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var25 = reduceVar$var28$25;
+				double i$var32 = reduceVar$var35$21;
 				
 				// Set the right hand term to a value from the array c
-				double j = c[cv$reduction29Index];
+				double j = c[cv$reduction34Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				if(!fixedFlag$sample12)
 					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var28$25 = (i$var25 + j);
+					reduceVar$var35$21 = (i$var32 + j);
 			}
 			if(!fixedFlag$sample12)
-				bias = reduceVar$var28$25;
+				bias = reduceVar$var35$21;
 		}
 		if(!fixedFlag$sample12)
 			bias = b;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, samples, 1,
-			(int forStart$var34, int forEnd$var34, int threadID$var34, org.sandwood.random.internal.Rng RNG$1) -> { 
+			(int forStart$var48, int forEnd$var48, int threadID$var48, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int var34 = forStart$var34; var34 < forEnd$var34; var34 += 1) {
-						if(!fixedFlag$sample40)
-							flips[var34] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+					for(int var48 = forStart$var48; var48 < forEnd$var48; var48 += 1) {
+						if(!fixedFlag$sample54)
+							flips[var48] = DistributionSampling.sampleBernoulli(RNG$1, bias);
 					}
 			}
 		);
@@ -1349,23 +1305,23 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var28$27 = 0.0;
+			double reduceVar$var35$23 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction29Index = 0; cv$reduction29Index < 2; cv$reduction29Index += 1) {
+			for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var25 = reduceVar$var28$27;
+				double i$var32 = reduceVar$var35$23;
 				
 				// Set the right hand term to a value from the array c
-				double j = c[cv$reduction29Index];
+				double j = c[cv$reduction34Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				if(!fixedFlag$sample12)
 					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var28$27 = (i$var25 + j);
+					reduceVar$var35$23 = (i$var32 + j);
 			}
 			if(!fixedFlag$sample12)
-				bias = reduceVar$var28$27;
+				bias = reduceVar$var35$23;
 		}
 		if(!fixedFlag$sample12)
 			bias = b;
@@ -1388,23 +1344,23 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var28$26 = 0.0;
+			double reduceVar$var35$22 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction29Index = 0; cv$reduction29Index < 2; cv$reduction29Index += 1) {
+			for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var25 = reduceVar$var28$26;
+				double i$var32 = reduceVar$var35$22;
 				
 				// Set the right hand term to a value from the array c
-				double j = c[cv$reduction29Index];
+				double j = c[cv$reduction34Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				if(!fixedFlag$sample12)
 					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var28$26 = (i$var25 + j);
+					reduceVar$var35$22 = (i$var32 + j);
 			}
 			if(!fixedFlag$sample12)
-				bias = reduceVar$var28$26;
+				bias = reduceVar$var35$22;
 		}
 		if(!fixedFlag$sample12)
 			bias = b;
@@ -1446,14 +1402,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var9 = 0.0;
-		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
+		logProbability$c = 0.0;
 		if(!fixedProbFlag$sample12)
 			logProbability$b = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample40)
-			logProbability$var35 = 0.0;
+		if(!fixedProbFlag$sample54)
+			logProbability$var49 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -1475,7 +1431,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample12)
 			logProbabilityValue$sample12();
-		logProbabilityValue$sample40();
+		logProbabilityValue$sample54();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1494,7 +1450,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample12();
-		logProbabilityValue$sample40();
+		logProbabilityValue$sample54();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1512,7 +1468,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample12();
-		logProbabilityValue$sample40();
+		logProbabilityValue$sample54();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1533,23 +1489,23 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var28$28 = 0.0;
+			double reduceVar$var35$24 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction29Index = 0; cv$reduction29Index < 2; cv$reduction29Index += 1) {
+			for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var25 = reduceVar$var28$28;
+				double i$var32 = reduceVar$var35$24;
 				
 				// Set the right hand term to a value from the array c
-				double j = c[cv$reduction29Index];
+				double j = c[cv$reduction34Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				if(!fixedFlag$sample12)
 					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var28$28 = (i$var25 + j);
+					reduceVar$var35$24 = (i$var32 + j);
 			}
 			if(!fixedFlag$sample12)
-				bias = reduceVar$var28$28;
+				bias = reduceVar$var35$24;
 		}
 		if(!fixedFlag$sample12)
 			bias = b;
@@ -1563,15 +1519,17 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propogateObservedValues() {
-		for(int i$var39 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var39 >= ((0 - 1) + 1); i$var39 -= 1)
-			flips[i$var39] = flipsMeasured[i$var39];
+		for(int i$var60 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var60 >= ((0 - 1) + 1); i$var60 -= 1)
+			flips[i$var60] = flipsMeasured[i$var60];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
 	// not directly set by the sample task.
 	@Override
 	public final void setIntermediates() {
-		if(!guard1) {
+		if(guard1)
+			bias = b;
+		else {
 			if(true)
 				c[0] = (b / 2);
 			if(true)
@@ -1582,25 +1540,23 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var28$29 = 0.0;
+			double reduceVar$var35$25 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction29Index = 0; cv$reduction29Index < 2; cv$reduction29Index += 1) {
+			for(int cv$reduction34Index = 0; cv$reduction34Index < 2; cv$reduction34Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var25 = reduceVar$var28$29;
+				double i$var32 = reduceVar$var35$25;
 				
 				// Set the right hand term to a value from the array c
-				double j = c[cv$reduction29Index];
+				double j = c[cv$reduction34Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$var28$29 = (i$var25 + j);
+				reduceVar$var35$25 = (i$var32 + j);
 			}
-			bias = reduceVar$var28$29;
+			bias = reduceVar$var35$25;
 		}
-		if(true)
-			bias = b;
 	}
 
 	@Override

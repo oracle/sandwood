@@ -58,6 +58,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
@@ -71,7 +72,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeVoid;
  * of provided samples. The formulas for the probability of each value being are as follows:
  * <p>
  * The probabilities for the source RV generating the value, and each sample task from a consuming RV that produce a
- * fixed output our combined for efficiency reasons, but can be described for each part as.
+ * fixed output are combined for efficiency reasons, but can be described for each part as.
  * <p>
  * Probability of the source generating the marginalized value = (Sum over possible distributed source arguments 'ds'
  * (P(source_value | ds) * p(ds))) / (Sum over possible distributed source arguments 'ds' P(ds))
@@ -269,8 +270,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
     }
 
     @Override
-    protected void getPerSampleStartIR(FuncData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+    protected void getPerConsumerStartIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(consumerSampleProbabilitiesAccumulator, constant(Double.NEGATIVE_INFINITY),
                         "Set an accumulator to sum the probabilities for each possible configuration " + "of inputs."));
@@ -281,7 +281,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
     }
 
     @Override
-    protected void getPerSampleEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+    protected void getPerConsumerEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 store(consumerSampleDistributionProbabilityAccumulator,
                         max(load(consumerSampleDistributionProbabilityAccumulator), constant(0.0)),
@@ -588,5 +588,24 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         IRTreeVoid sample = store(consumerSampleDistributionProbabilityAccumulator, outputValue,
                 "Recorded the probability of reaching sample task " + task.id() + " with the current configuration.");
         compilationCtx.addTreeToScope(task.scope(), sample);
+    }
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
+        IRTreeReturn<D> inputValue = input.getForwardIR(compilationCtx);
+        IRTreeReturn<BooleanVariable> guard = IRTree.eq(current, inputValue);
+        IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
+                log(info.probability), consumerSampleProbabilitiesAccumulator,
+                "Record if the conditional is valid.");
+        IRTreeVoid condition = IRTree.ifElse(guard, recordValid, "Check observed variable is possible");
+        compilationCtx.addTreeToScope(GlobalScope.scope, condition);
+
+        IRTreeReturn<DoubleVariable> outputValue = subtractDD(load(consumerSampleDistributionProbabilityAccumulator),
+                info.probability);
+        IRTreeVoid sample = store(consumerSampleDistributionProbabilityAccumulator, outputValue,
+                "Recorded the probability of reaching branch with the current configuration.");
+        compilationCtx.addTreeToScope(GlobalScope.scope, sample);
     }
 }

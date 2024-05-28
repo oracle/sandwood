@@ -3,6 +3,7 @@ import static org.sandwood.compiler.dataflowGraph.Math.*;
 import static org.sandwood.compiler.dataflowGraph.Number.*;
 import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;
 
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;

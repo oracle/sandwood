@@ -15,23 +15,23 @@ interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	// Getter for coins.
 	public int get$coins();
 
-	// Getter for fixedFlag$sample16.
-	public boolean get$fixedFlag$sample16();
+	// Getter for fixedFlag$sample23.
+	public boolean get$fixedFlag$sample23();
 
-	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
+	// Setter for fixedFlag$sample23.
+	public void set$fixedFlag$sample23(boolean cv$value);
 
-	// Getter for fixedFlag$sample47.
-	public boolean get$fixedFlag$sample47();
+	// Getter for fixedFlag$sample67.
+	public boolean get$fixedFlag$sample67();
 
-	// Setter for fixedFlag$sample47.
-	public void set$fixedFlag$sample47(boolean cv$value);
+	// Setter for fixedFlag$sample67.
+	public void set$fixedFlag$sample67(boolean cv$value);
 
-	// Getter for fixedFlag$sample58.
-	public boolean get$fixedFlag$sample58();
+	// Getter for fixedFlag$sample84.
+	public boolean get$fixedFlag$sample84();
 
-	// Setter for fixedFlag$sample58.
-	public void set$fixedFlag$sample58(boolean cv$value);
+	// Setter for fixedFlag$sample84.
+	public void set$fixedFlag$sample84(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[][][] get$flips();

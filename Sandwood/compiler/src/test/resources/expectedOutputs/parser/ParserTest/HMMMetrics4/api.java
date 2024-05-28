@@ -5,6 +5,7 @@ import static org.sandwood.compiler.dataflowGraph.Math.*;
 import static org.sandwood.compiler.dataflowGraph.Number.*;
 import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;
 
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;
@@ -121,7 +122,7 @@ public class HMMMetrics4 extends GeneratedAPIBuilder {
 
                     metric_valid_inner.put(timeStep, bernoulli(current_metric_valid_bias.get(server, location(67, 83, 67, 90)).get(currentState, location(67, 91, 67, 104)), location(67, 48, 67, 105)).sample(location(67, 107, 67, 114)), location(67, 35, 67, 114));
                     BooleanVariable guard$1 = metric_valid_inner.get(timeStep, location(68, 38, 68, 47));
-                    ifElse(guard$1, () -> {
+                    IfScope ifScope$1 = ifElse(guard$1, () -> {
                         metric_inner.put(timeStep, gaussian(current_metric_mean.get(server, location(69, 74, 69, 81)).get(currentState, location(69, 82, 69, 95)), current_metric_var.get(server, location(69, 116, 69, 123)).get(currentState, location(69, 124, 69, 137)), location(69, 46, 69, 138)).sample(location(69, 140, 69, 147)), location(69, 33, 69, 147));
                     }, () -> {
                     });

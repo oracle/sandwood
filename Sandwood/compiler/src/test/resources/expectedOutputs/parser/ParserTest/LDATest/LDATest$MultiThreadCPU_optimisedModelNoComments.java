@@ -8,31 +8,31 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LDATest$CoreInterface {
 	private double[] alpha;
 	private double[] beta;
-	private double[][] cv$var25$countGlobal;
-	private double[][] cv$var33$countGlobal;
-	private double[][] cv$var53$stateProbabilityGlobal;
+	private double[][] cv$var46$countGlobal;
+	private double[][] cv$var61$countGlobal;
+	private double[][] cv$var94$stateProbabilityGlobal;
 	private int[][] documents;
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample36 = false;
-	private boolean fixedFlag$sample61 = false;
+	private boolean fixedFlag$sample102 = false;
+	private boolean fixedFlag$sample105 = false;
+	private boolean fixedFlag$sample47 = false;
 	private boolean fixedFlag$sample64 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean fixedProbFlag$sample36 = false;
-	private boolean fixedProbFlag$sample61 = false;
+	private boolean fixedProbFlag$sample102 = false;
+	private boolean fixedProbFlag$sample105 = false;
+	private boolean fixedProbFlag$sample47 = false;
 	private boolean fixedProbFlag$sample64 = false;
 	private int[] length$documents;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$phi;
-	private double[][] logProbability$sample61;
-	private double[][] logProbability$sample64;
+	private double[][] logProbability$sample102;
+	private double[][] logProbability$sample105;
 	private double logProbability$theta;
-	private double logProbability$var20;
-	private double logProbability$var25;
-	private double logProbability$var27;
-	private double logProbability$var33;
-	private double[][] logProbability$var52;
-	private double[][] logProbability$var55;
+	private double logProbability$var34;
+	private double logProbability$var46;
+	private double logProbability$var48;
+	private double logProbability$var61;
+	private double[][] logProbability$var93;
+	private double[][] logProbability$var96;
 	private double logProbability$w;
 	private double logProbability$z;
 	private int noTopics;
@@ -72,39 +72,38 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample26() {
-		return fixedFlag$sample26;
+	public final boolean get$fixedFlag$sample102() {
+		return fixedFlag$sample102;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value) {
-		fixedFlag$sample26 = cv$value;
-		fixedProbFlag$sample26 = (cv$value && fixedProbFlag$sample26);
-		fixedProbFlag$sample64 = (cv$value && fixedProbFlag$sample64);
+	public final void set$fixedFlag$sample102(boolean cv$value) {
+		fixedFlag$sample102 = cv$value;
+		fixedProbFlag$sample102 = (cv$value && fixedProbFlag$sample102);
+		fixedProbFlag$sample105 = (cv$value && fixedProbFlag$sample105);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample36() {
-		return fixedFlag$sample36;
+	public final boolean get$fixedFlag$sample105() {
+		return fixedFlag$sample105;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample36(boolean cv$value) {
-		fixedFlag$sample36 = cv$value;
-		fixedProbFlag$sample36 = (cv$value && fixedProbFlag$sample36);
-		fixedProbFlag$sample61 = (cv$value && fixedProbFlag$sample61);
+	public final void set$fixedFlag$sample105(boolean cv$value) {
+		fixedFlag$sample105 = cv$value;
+		fixedProbFlag$sample105 = (cv$value && fixedProbFlag$sample105);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample61() {
-		return fixedFlag$sample61;
+	public final boolean get$fixedFlag$sample47() {
+		return fixedFlag$sample47;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample61(boolean cv$value) {
-		fixedFlag$sample61 = cv$value;
-		fixedProbFlag$sample61 = (cv$value && fixedProbFlag$sample61);
-		fixedProbFlag$sample64 = (cv$value && fixedProbFlag$sample64);
+	public final void set$fixedFlag$sample47(boolean cv$value) {
+		fixedFlag$sample47 = cv$value;
+		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
+		fixedProbFlag$sample105 = (cv$value && fixedProbFlag$sample105);
 	}
 
 	@Override
@@ -116,6 +115,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$fixedFlag$sample64(boolean cv$value) {
 		fixedFlag$sample64 = cv$value;
 		fixedProbFlag$sample64 = (cv$value && fixedProbFlag$sample64);
+		fixedProbFlag$sample102 = (cv$value && fixedProbFlag$sample102);
 	}
 
 	@Override
@@ -177,8 +177,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$phi(double[][] cv$value) {
 		phi = cv$value;
 		setFlag$phi = true;
-		fixedProbFlag$sample26 = false;
-		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample47 = false;
+		fixedProbFlag$sample105 = false;
 	}
 
 	@Override
@@ -190,8 +190,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$theta(double[][] cv$value) {
 		theta = cv$value;
 		setFlag$theta = true;
-		fixedProbFlag$sample36 = false;
-		fixedProbFlag$sample61 = false;
+		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample102 = false;
 	}
 
 	@Override
@@ -213,7 +213,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$w(int[][] cv$value) {
 		w = cv$value;
 		setFlag$w = true;
-		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample105 = false;
 	}
 
 	@Override
@@ -227,144 +227,122 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		setFlag$z = true;
 	}
 
-	private final void logProbabilityValue$sample26() {
-		if(!fixedProbFlag$sample26) {
+	private final void logProbabilityValue$sample102() {
+		if(!fixedProbFlag$sample102) {
+			double cv$accumulator = 0.0;
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+				for(int j = 0; j < length$documents[i$var75]; j += 1) {
+					int cv$sampleValue = z[i$var75][j];
+					double[] var92 = theta[i$var75];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
+					logProbability$var93[i$var75][j] = cv$distributionAccumulator;
+					logProbability$sample102[i$var75][j] = cv$distributionAccumulator;
+				}
+			}
+			logProbability$z = (logProbability$z + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample102)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample102 = (fixedFlag$sample102 && fixedFlag$sample64);
+		} else {
+			double cv$accumulator = 0.0;
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+				for(int j = 0; j < length$documents[i$var75]; j += 1) {
+					double cv$rvAccumulator = logProbability$sample102[i$var75][j];
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var93[i$var75][j] = cv$rvAccumulator;
+				}
+			}
+			logProbability$z = (logProbability$z + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample102)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample105() {
+		if(!fixedProbFlag$sample105) {
+			double cv$accumulator = 0.0;
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+				for(int j = 0; j < length$documents[i$var75]; j += 1) {
+					int cv$sampleValue = w[i$var75][j];
+					double[] var95 = phi[z[i$var75][j]];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var95.length))?Math.log(var95[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
+					logProbability$var96[i$var75][j] = cv$distributionAccumulator;
+					logProbability$sample105[i$var75][j] = cv$distributionAccumulator;
+				}
+			}
+			logProbability$w = (logProbability$w + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample105 = ((fixedFlag$sample105 && fixedFlag$sample47) && fixedFlag$sample102);
+		} else {
+			double cv$accumulator = 0.0;
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+				for(int j = 0; j < length$documents[i$var75]; j += 1) {
+					double cv$rvAccumulator = logProbability$sample105[i$var75][j];
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var96[i$var75][j] = cv$rvAccumulator;
+				}
+			}
+			logProbability$w = (logProbability$w + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample47() {
+		if(!fixedProbFlag$sample47) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var24 = 0; var24 < noTopics; var24 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var24], beta));
-			logProbability$var20 = cv$sampleAccumulator;
-			logProbability$var25 = cv$sampleAccumulator;
+			for(int var45 = 0; var45 < noTopics; var45 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var45], beta));
+			logProbability$var34 = cv$sampleAccumulator;
+			logProbability$var46 = cv$sampleAccumulator;
 			logProbability$phi = (logProbability$phi + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample26)
+			if(fixedFlag$sample47)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample26 = fixedFlag$sample26;
+			fixedProbFlag$sample47 = fixedFlag$sample47;
 		} else {
-			logProbability$var20 = logProbability$var25;
-			logProbability$phi = (logProbability$phi + logProbability$var25);
-			logProbability$$model = (logProbability$$model + logProbability$var25);
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var25);
-		}
-	}
-
-	private final void logProbabilityValue$sample36() {
-		if(!fixedProbFlag$sample36) {
-			double cv$sampleAccumulator = 0.0;
-			for(int var32 = 0; var32 < length$documents.length; var32 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var32], alpha));
-			logProbability$var27 = cv$sampleAccumulator;
-			logProbability$var33 = cv$sampleAccumulator;
-			logProbability$theta = (logProbability$theta + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample36)
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample36 = fixedFlag$sample36;
-		} else {
-			logProbability$var27 = logProbability$var33;
-			logProbability$theta = (logProbability$theta + logProbability$var33);
-			logProbability$$model = (logProbability$$model + logProbability$var33);
-			if(fixedFlag$sample36)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var33);
-		}
-	}
-
-	private final void logProbabilityValue$sample61() {
-		if(!fixedProbFlag$sample61) {
-			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1) {
-					int cv$sampleValue = z[i$var40][j];
-					double[] var51 = theta[i$var40];
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var51.length))?Math.log(var51[cv$sampleValue]):Double.NEGATIVE_INFINITY);
-					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					logProbability$var52[i$var40][j] = cv$distributionAccumulator;
-					logProbability$sample61[i$var40][j] = cv$distributionAccumulator;
-				}
-			}
-			logProbability$z = (logProbability$z + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample61)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedFlag$sample36);
-		} else {
-			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1) {
-					double cv$rvAccumulator = logProbability$sample61[i$var40][j];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var52[i$var40][j] = cv$rvAccumulator;
-				}
-			}
-			logProbability$z = (logProbability$z + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample61)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			logProbability$var34 = logProbability$var46;
+			logProbability$phi = (logProbability$phi + logProbability$var46);
+			logProbability$$model = (logProbability$$model + logProbability$var46);
+			if(fixedFlag$sample47)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var46);
 		}
 	}
 
 	private final void logProbabilityValue$sample64() {
 		if(!fixedProbFlag$sample64) {
-			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1) {
-					int cv$sampleValue = w[i$var40][j];
-					double[] var54 = phi[z[i$var40][j]];
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var54.length))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY);
-					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					logProbability$var55[i$var40][j] = cv$distributionAccumulator;
-					logProbability$sample64[i$var40][j] = cv$distributionAccumulator;
-				}
-			}
-			logProbability$w = (logProbability$w + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample64 = ((fixedFlag$sample64 && fixedFlag$sample26) && fixedFlag$sample61);
+			double cv$sampleAccumulator = 0.0;
+			for(int var60 = 0; var60 < length$documents.length; var60 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var60], alpha));
+			logProbability$var48 = cv$sampleAccumulator;
+			logProbability$var61 = cv$sampleAccumulator;
+			logProbability$theta = (logProbability$theta + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			if(fixedFlag$sample64)
+				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample64 = fixedFlag$sample64;
 		} else {
-			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1) {
-					double cv$rvAccumulator = logProbability$sample64[i$var40][j];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var55[i$var40][j] = cv$rvAccumulator;
-				}
-			}
-			logProbability$w = (logProbability$w + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			logProbability$var48 = logProbability$var61;
+			logProbability$theta = (logProbability$theta + logProbability$var61);
+			logProbability$$model = (logProbability$$model + logProbability$var61);
+			if(fixedFlag$sample64)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var61);
 		}
 	}
 
-	private final void sample26(int var24, int threadID$cv$var24, Rng RNG$) {
-		double[] cv$countLocal = cv$var25$countGlobal[threadID$cv$var24];
-		for(int cv$loopIndex = 0; cv$loopIndex < vocabSize; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-			for(int j = 0; j < length$documents[i$var40]; j += 1) {
-				if((var24 == z[i$var40][j]))
-					cv$countLocal[w[i$var40][j]] = (cv$countLocal[w[i$var40][j]] + 1.0);
-			}
-		}
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, phi[var24]);
-	}
-
-	private final void sample36(int var32, int threadID$cv$var32, Rng RNG$) {
-		double[] cv$countLocal = cv$var33$countGlobal[threadID$cv$var32];
-		for(int cv$loopIndex = 0; cv$loopIndex < noTopics; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		for(int j = 0; j < length$documents[var32]; j += 1)
-			cv$countLocal[z[var32][j]] = (cv$countLocal[z[var32][j]] + 1.0);
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, theta[var32]);
-	}
-
-	private final void sample61(int i$var40, int j, int threadID$cv$j, Rng RNG$) {
+	private final void sample102(int i$var75, int j, int threadID$cv$j, Rng RNG$) {
 		int cv$noStates = Math.max(0, noTopics);
-		double[] cv$stateProbabilityLocal = cv$var53$stateProbabilityGlobal[threadID$cv$j];
+		double[] cv$stateProbabilityLocal = cv$var94$stateProbabilityGlobal[threadID$cv$j];
 		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
-			z[i$var40][j] = cv$valuePos;
-			double[] cv$temp$0$var51 = theta[i$var40];
-			double[] cv$temp$1$var54 = phi[cv$valuePos];
-			cv$stateProbabilityLocal[cv$valuePos] = ((((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY) + ((cv$valuePos < cv$temp$0$var51.length)?Math.log(cv$temp$0$var51[cv$valuePos]):Double.NEGATIVE_INFINITY));
+			z[i$var75][j] = cv$valuePos;
+			double[] cv$temp$0$var92 = theta[i$var75];
+			double[] cv$temp$1$var95 = phi[cv$valuePos];
+			cv$stateProbabilityLocal[cv$valuePos] = ((((0.0 <= w[i$var75][j]) && (w[i$var75][j] < cv$temp$1$var95.length))?Math.log(cv$temp$1$var95[w[i$var75][j]]):Double.NEGATIVE_INFINITY) + ((cv$valuePos < cv$temp$0$var92.length)?Math.log(cv$temp$0$var92[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$stateProbabilityLocal[0];
@@ -390,7 +368,29 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		}
 		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		z[i$var40][j] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal);
+		z[i$var75][j] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal);
+	}
+
+	private final void sample47(int var45, int threadID$cv$var45, Rng RNG$) {
+		double[] cv$countLocal = cv$var46$countGlobal[threadID$cv$var45];
+		for(int cv$loopIndex = 0; cv$loopIndex < vocabSize; cv$loopIndex += 1)
+			cv$countLocal[cv$loopIndex] = 0.0;
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+			for(int j = 0; j < length$documents[i$var75]; j += 1) {
+				if((var45 == z[i$var75][j]))
+					cv$countLocal[w[i$var75][j]] = (cv$countLocal[w[i$var75][j]] + 1.0);
+			}
+		}
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, phi[var45]);
+	}
+
+	private final void sample64(int var60, int threadID$cv$var60, Rng RNG$) {
+		double[] cv$countLocal = cv$var61$countGlobal[threadID$cv$var60];
+		for(int cv$loopIndex = 0; cv$loopIndex < noTopics; cv$loopIndex += 1)
+			cv$countLocal[cv$loopIndex] = 0.0;
+		for(int j = 0; j < length$documents[var60]; j += 1)
+			cv$countLocal[z[var60][j]] = (cv$countLocal[z[var60][j]] + 1.0);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, theta[var60]);
 	}
 
 	@Override
@@ -400,23 +400,23 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			if((0 < noTopics))
 				cv$max = Math.max(0, vocabSize);
 			int cv$threadCount = threadCount();
-			cv$var25$countGlobal = new double[cv$threadCount][];
+			cv$var46$countGlobal = new double[cv$threadCount][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var25$countGlobal[cv$index] = new double[cv$max];
+				cv$var46$countGlobal[cv$index] = new double[cv$max];
 		}
 		{
 			int cv$max = 0;
 			if((0 < length$documents.length))
 				cv$max = Math.max(0, noTopics);
 			int cv$threadCount = threadCount();
-			cv$var33$countGlobal = new double[cv$threadCount][];
+			cv$var61$countGlobal = new double[cv$threadCount][];
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var33$countGlobal[cv$index] = new double[cv$max];
+				cv$var61$countGlobal[cv$index] = new double[cv$max];
 		}
 		int cv$threadCount = threadCount();
-		cv$var53$stateProbabilityGlobal = new double[cv$threadCount][];
+		cv$var94$stateProbabilityGlobal = new double[cv$threadCount][];
 		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var53$stateProbabilityGlobal[cv$index] = new double[noTopics];
+			cv$var94$stateProbabilityGlobal[cv$index] = new double[noTopics];
 	}
 
 	@Override
@@ -425,69 +425,70 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		beta = new double[vocabSize];
 		if(!setFlag$phi) {
 			phi = new double[noTopics][];
-			for(int var24 = 0; var24 < noTopics; var24 += 1)
-				phi[var24] = new double[vocabSize];
+			for(int var45 = 0; var45 < noTopics; var45 += 1)
+				phi[var45] = new double[vocabSize];
 		}
 		if(!setFlag$theta) {
 			theta = new double[length$documents.length][];
-			for(int var32 = 0; var32 < length$documents.length; var32 += 1)
-				theta[var32] = new double[noTopics];
+			for(int var60 = 0; var60 < length$documents.length; var60 += 1)
+				theta[var60] = new double[noTopics];
 		}
 		if(!setFlag$w) {
 			w = new int[length$documents.length][];
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1)
-				w[i$var40] = new int[length$documents[i$var40]];
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1)
+				w[i$var75] = new int[length$documents[i$var75]];
 		}
 		if(!setFlag$z) {
 			z = new int[length$documents.length][];
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1)
-				z[i$var40] = new int[length$documents[i$var40]];
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1)
+				z[i$var75] = new int[length$documents[i$var75]];
 		}
-		logProbability$var52 = new double[length$documents.length][];
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1)
-			logProbability$var52[i$var40] = new double[length$documents[i$var40]];
-		logProbability$sample61 = new double[length$documents.length][];
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1)
-			logProbability$sample61[i$var40] = new double[length$documents[i$var40]];
-		logProbability$var55 = new double[length$documents.length][];
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1)
-			logProbability$var55[i$var40] = new double[length$documents[i$var40]];
-		logProbability$sample64 = new double[length$documents.length][];
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1)
-			logProbability$sample64[i$var40] = new double[length$documents[i$var40]];
+		logProbability$var93 = new double[length$documents.length][];
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1)
+			logProbability$var93[i$var75] = new double[length$documents[i$var75]];
+		logProbability$sample102 = new double[length$documents.length][];
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1)
+			logProbability$sample102[i$var75] = new double[length$documents[i$var75]];
+		logProbability$var96 = new double[length$documents.length][];
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1)
+			logProbability$var96[i$var75] = new double[length$documents[i$var75]];
+		logProbability$sample105 = new double[length$documents.length][];
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1)
+			logProbability$sample105[i$var75] = new double[length$documents[i$var75]];
 		allocateScratch();
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample26)
+		if(!fixedFlag$sample47)
 			parallelFor(RNG$, 0, noTopics, 1,
-				(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var24]);
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var45]);
 				}
 			);
 
-		if(!fixedFlag$sample36)
+		if(!fixedFlag$sample64)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var32]);
+				(int forStart$var60, int forEnd$var60, int threadID$var60, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var60 = forStart$var60; var60 < forEnd$var60; var60 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var60]);
 				}
 			);
 
 		parallelFor(RNG$, 0, length$documents.length, 1,
-			(int forStart$index$i$var40, int forEnd$index$i$var40, int threadID$index$i$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int index$i$var40 = forStart$index$i$var40; index$i$var40 < forEnd$index$i$var40; index$i$var40 += 1) {
-						int i$var40 = index$i$var40;
-						int[] t = w[i$var40];
-						parallelFor(RNG$1, 0, length$documents[i$var40], 1,
+			(int forStart$index$i$var75, int forEnd$index$i$var75, int threadID$index$i$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var75 = forStart$index$i$var75; index$i$var75 < forEnd$index$i$var75; index$i$var75 += 1) {
+						int i$var75 = index$i$var75;
+						int threadID$i$var75 = threadID$index$i$var75;
+						int[] t = w[i$var75];
+						parallelFor(RNG$1, 0, length$documents[i$var75], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample61)
-											z[i$var40][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
-										if(!fixedFlag$sample64)
-											t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[i$var40][j]]);
+										if(!fixedFlag$sample102)
+											z[i$var75][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var75]);
+										if(!fixedFlag$sample105)
+											t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[i$var75][j]]);
 									}
 							}
 						);
@@ -498,31 +499,32 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample26)
+		if(!fixedFlag$sample47)
 			parallelFor(RNG$, 0, noTopics, 1,
-				(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var24]);
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var45]);
 				}
 			);
 
-		if(!fixedFlag$sample36)
+		if(!fixedFlag$sample64)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var32]);
+				(int forStart$var60, int forEnd$var60, int threadID$var60, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var60 = forStart$var60; var60 < forEnd$var60; var60 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var60]);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample102)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$index$i$var40, int forEnd$index$i$var40, int threadID$index$i$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var40 = forStart$index$i$var40; index$i$var40 < forEnd$index$i$var40; index$i$var40 += 1) {
-							int i$var40 = index$i$var40;
-							parallelFor(RNG$1, 0, length$documents[i$var40], 1,
+				(int forStart$index$i$var75, int forEnd$index$i$var75, int threadID$index$i$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$i$var75 = forStart$index$i$var75; index$i$var75 < forEnd$index$i$var75; index$i$var75 += 1) {
+							int i$var75 = index$i$var75;
+							int threadID$i$var75 = threadID$index$i$var75;
+							parallelFor(RNG$1, 0, length$documents[i$var75], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											z[i$var40][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
+											z[i$var75][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var75]);
 								}
 							);
 						}
@@ -533,31 +535,32 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample26)
+		if(!fixedFlag$sample47)
 			parallelFor(RNG$, 0, noTopics, 1,
-				(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var24]);
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var45]);
 				}
 			);
 
-		if(!fixedFlag$sample36)
+		if(!fixedFlag$sample64)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var32]);
+				(int forStart$var60, int forEnd$var60, int threadID$var60, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var60 = forStart$var60; var60 < forEnd$var60; var60 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var60]);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample102)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$index$i$var40, int forEnd$index$i$var40, int threadID$index$i$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var40 = forStart$index$i$var40; index$i$var40 < forEnd$index$i$var40; index$i$var40 += 1) {
-							int i$var40 = index$i$var40;
-							parallelFor(RNG$1, 0, length$documents[i$var40], 1,
+				(int forStart$index$i$var75, int forEnd$index$i$var75, int threadID$index$i$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$i$var75 = forStart$index$i$var75; index$i$var75 < forEnd$index$i$var75; index$i$var75 += 1) {
+							int i$var75 = index$i$var75;
+							int threadID$i$var75 = threadID$index$i$var75;
+							parallelFor(RNG$1, 0, length$documents[i$var75], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											z[i$var40][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
+											z[i$var75][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var75]);
 								}
 							);
 						}
@@ -569,31 +572,32 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample26)
+			if(!fixedFlag$sample47)
 				parallelFor(RNG$, 0, noTopics, 1,
-					(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
-								sample26(var24, threadID$var24, RNG$1);
+					(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+								sample47(var45, threadID$var45, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample36)
+			if(!fixedFlag$sample64)
 				parallelFor(RNG$, 0, length$documents.length, 1,
-					(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-								sample36(var32, threadID$var32, RNG$1);
+					(int forStart$var60, int forEnd$var60, int threadID$var60, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var60 = forStart$var60; var60 < forEnd$var60; var60 += 1)
+								sample64(var60, threadID$var60, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample61)
+			if(!fixedFlag$sample102)
 				parallelFor(RNG$, 0, length$documents.length, 1,
-					(int forStart$index$i$var40, int forEnd$index$i$var40, int threadID$index$i$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$i$var40 = forStart$index$i$var40; index$i$var40 < forEnd$index$i$var40; index$i$var40 += 1) {
-								int i$var40 = index$i$var40;
-								parallelFor(RNG$1, 0, length$documents[i$var40], 1,
+					(int forStart$index$i$var75, int forEnd$index$i$var75, int threadID$index$i$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$i$var75 = forStart$index$i$var75; index$i$var75 < forEnd$index$i$var75; index$i$var75 += 1) {
+								int i$var75 = index$i$var75;
+								int threadID$i$var75 = threadID$index$i$var75;
+								parallelFor(RNG$1, 0, length$documents[i$var75], 1,
 									(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-												sample61(i$var40, j, threadID$j, RNG$2);
+												sample102(i$var75, j, threadID$j, RNG$2);
 									}
 								);
 							}
@@ -601,34 +605,35 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				);
 
 		} else {
-			if(!fixedFlag$sample61)
+			if(!fixedFlag$sample102)
 				parallelFor(RNG$, 0, length$documents.length, 1,
-					(int forStart$index$i$var40, int forEnd$index$i$var40, int threadID$index$i$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$i$var40 = forStart$index$i$var40; index$i$var40 < forEnd$index$i$var40; index$i$var40 += 1) {
-								int i$var40 = index$i$var40;
-								parallelFor(RNG$1, 0, length$documents[i$var40], 1,
+					(int forStart$index$i$var75, int forEnd$index$i$var75, int threadID$index$i$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int index$i$var75 = forStart$index$i$var75; index$i$var75 < forEnd$index$i$var75; index$i$var75 += 1) {
+								int i$var75 = index$i$var75;
+								int threadID$i$var75 = threadID$index$i$var75;
+								parallelFor(RNG$1, 0, length$documents[i$var75], 1,
 									(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-												sample61(i$var40, j, threadID$j, RNG$2);
+												sample102(i$var75, j, threadID$j, RNG$2);
 									}
 								);
 							}
 					}
 				);
 
-			if(!fixedFlag$sample36)
+			if(!fixedFlag$sample64)
 				parallelFor(RNG$, 0, length$documents.length, 1,
-					(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-								sample36(var32, threadID$var32, RNG$1);
+					(int forStart$var60, int forEnd$var60, int threadID$var60, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var60 = forStart$var60; var60 < forEnd$var60; var60 += 1)
+								sample64(var60, threadID$var60, RNG$1);
 					}
 				);
 
-			if(!fixedFlag$sample26)
+			if(!fixedFlag$sample47)
 				parallelFor(RNG$, 0, noTopics, 1,
-					(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
-								sample26(var24, threadID$var24, RNG$1);
+					(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+								sample47(var45, threadID$var45, RNG$1);
 					}
 				);
 
@@ -639,15 +644,15 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final void initializeConstants() {
 		parallelFor(RNG$, 0, noTopics, 1,
-			(int forStart$i$var11, int forEnd$i$var11, int threadID$i$var11, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i$var11 = forStart$i$var11; i$var11 < forEnd$i$var11; i$var11 += 1)
-						alpha[i$var11] = 0.1;
+			(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+						alpha[i$var18] = 0.1;
 			}
 		);
 		parallelFor(RNG$, 0, vocabSize, 1,
-			(int forStart$i$var17, int forEnd$i$var17, int threadID$i$var17, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i$var17 = forStart$i$var17; i$var17 < forEnd$i$var17; i$var17 += 1)
-						beta[i$var17] = 0.1;
+			(int forStart$i$var31, int forEnd$i$var31, int threadID$i$var31, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var31 = forStart$i$var31; i$var31 < forEnd$i$var31; i$var31 += 1)
+						beta[i$var31] = 0.1;
 			}
 		);
 	}
@@ -655,34 +660,34 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var20 = 0.0;
+		logProbability$var34 = 0.0;
 		logProbability$phi = 0.0;
-		if(!fixedProbFlag$sample26)
-			logProbability$var25 = 0.0;
-		logProbability$var27 = 0.0;
+		if(!fixedProbFlag$sample47)
+			logProbability$var46 = 0.0;
+		logProbability$var48 = 0.0;
 		logProbability$theta = 0.0;
-		if(!fixedProbFlag$sample36)
-			logProbability$var33 = 0.0;
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-			for(int j = 0; j < length$documents[i$var40]; j += 1)
-				logProbability$var52[i$var40][j] = 0.0;
+		if(!fixedProbFlag$sample64)
+			logProbability$var61 = 0.0;
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+			for(int j = 0; j < length$documents[i$var75]; j += 1)
+				logProbability$var93[i$var75][j] = 0.0;
 		}
 		logProbability$z = 0.0;
-		if(!fixedProbFlag$sample61) {
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1)
-					logProbability$sample61[i$var40][j] = 0.0;
+		if(!fixedProbFlag$sample102) {
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+				for(int j = 0; j < length$documents[i$var75]; j += 1)
+					logProbability$sample102[i$var75][j] = 0.0;
 			}
 		}
-		for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-			for(int j = 0; j < length$documents[i$var40]; j += 1)
-				logProbability$var55[i$var40][j] = 0.0;
+		for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+			for(int j = 0; j < length$documents[i$var75]; j += 1)
+				logProbability$var96[i$var75][j] = 0.0;
 		}
 		logProbability$w = 0.0;
-		if(!fixedProbFlag$sample64) {
-			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1)
-					logProbability$sample64[i$var40][j] = 0.0;
+		if(!fixedProbFlag$sample105) {
+			for(int i$var75 = 0; i$var75 < length$documents.length; i$var75 += 1) {
+				for(int j = 0; j < length$documents[i$var75]; j += 1)
+					logProbability$sample105[i$var75][j] = 0.0;
 			}
 		}
 	}
@@ -695,60 +700,61 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample26)
-			logProbabilityValue$sample26();
-		if(fixedFlag$sample36)
-			logProbabilityValue$sample36();
-		if(fixedFlag$sample61)
-			logProbabilityValue$sample61();
-		logProbabilityValue$sample64();
+		if(fixedFlag$sample47)
+			logProbabilityValue$sample47();
+		if(fixedFlag$sample64)
+			logProbabilityValue$sample64();
+		if(fixedFlag$sample102)
+			logProbabilityValue$sample102();
+		logProbabilityValue$sample105();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample26();
-		logProbabilityValue$sample36();
-		logProbabilityValue$sample61();
+		logProbabilityValue$sample47();
 		logProbabilityValue$sample64();
+		logProbabilityValue$sample102();
+		logProbabilityValue$sample105();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample26();
-		logProbabilityValue$sample36();
-		logProbabilityValue$sample61();
+		logProbabilityValue$sample47();
 		logProbabilityValue$sample64();
+		logProbabilityValue$sample102();
+		logProbabilityValue$sample105();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample26)
+		if(!fixedFlag$sample47)
 			parallelFor(RNG$, 0, noTopics, 1,
-				(int forStart$var24, int forEnd$var24, int threadID$var24, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var24 = forStart$var24; var24 < forEnd$var24; var24 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var24]);
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, phi[var45]);
 				}
 			);
 
-		if(!fixedFlag$sample36)
+		if(!fixedFlag$sample64)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var32]);
+				(int forStart$var60, int forEnd$var60, int threadID$var60, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var60 = forStart$var60; var60 < forEnd$var60; var60 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, theta[var60]);
 				}
 			);
 
-		if(!fixedFlag$sample61)
+		if(!fixedFlag$sample102)
 			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$index$i$var40, int forEnd$index$i$var40, int threadID$index$i$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var40 = forStart$index$i$var40; index$i$var40 < forEnd$index$i$var40; index$i$var40 += 1) {
-							int i$var40 = index$i$var40;
-							parallelFor(RNG$1, 0, length$documents[i$var40], 1,
+				(int forStart$index$i$var75, int forEnd$index$i$var75, int threadID$index$i$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$i$var75 = forStart$index$i$var75; index$i$var75 < forEnd$index$i$var75; index$i$var75 += 1) {
+							int i$var75 = index$i$var75;
+							int threadID$i$var75 = threadID$index$i$var75;
+							parallelFor(RNG$1, 0, length$documents[i$var75], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											z[i$var40][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
+											z[i$var75][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var75]);
 								}
 							);
 						}

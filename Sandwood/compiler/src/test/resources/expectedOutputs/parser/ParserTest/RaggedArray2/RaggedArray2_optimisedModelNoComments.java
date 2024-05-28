@@ -34,13 +34,13 @@ public class RaggedArray2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample71(fixed);
+                system$c.set$fixedFlag$sample87(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample71())
+            if(system$c.get$fixedFlag$sample87())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class RaggedArray2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample81(fixed);
+                system$c.set$fixedFlag$sample104(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample81())
+            if(system$c.get$fixedFlag$sample104())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -105,18 +105,18 @@ public class RaggedArray2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample68(fixed);
-                system$c.set$fixedFlag$sample71(fixed);
+                system$c.set$fixedFlag$sample84(fixed);
+                system$c.set$fixedFlag$sample87(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample68 = system$c.get$fixedFlag$sample68();
-            boolean fixedFlag$sample71 = system$c.get$fixedFlag$sample71();
-            if(fixedFlag$sample68 && fixedFlag$sample71)
+            boolean fixedFlag$sample84 = system$c.get$fixedFlag$sample84();
+            boolean fixedFlag$sample87 = system$c.get$fixedFlag$sample87();
+            if(fixedFlag$sample84 && fixedFlag$sample87)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample68 || fixedFlag$sample71)
+            else if(fixedFlag$sample84 || fixedFlag$sample87)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -145,13 +145,13 @@ public class RaggedArray2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample68(fixed);
+                system$c.set$fixedFlag$sample84(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample68())
+            if(system$c.get$fixedFlag$sample84())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -276,11 +276,11 @@ public class RaggedArray2 extends Model {
 
         //Set fixed flags
         if(i.isSet())
-            newCore.set$fixedFlag$sample71(oldCore.get$fixedFlag$sample71());
+            newCore.set$fixedFlag$sample87(oldCore.get$fixedFlag$sample87());
         if(obs.isSet())
-            newCore.set$fixedFlag$sample81(oldCore.get$fixedFlag$sample81());
+            newCore.set$fixedFlag$sample104(oldCore.get$fixedFlag$sample104());
         if(y.isSet())
-            newCore.set$fixedFlag$sample68(oldCore.get$fixedFlag$sample68());
+            newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
     }
 
     /**

@@ -104,13 +104,13 @@ public class DistributionsTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
+                system$c.set$fixedFlag$sample34(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
+            if(system$c.get$fixedFlag$sample34())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -245,7 +245,7 @@ public class DistributionsTest extends Model {
         if(b1.isSet())
             newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
         if(y.isSet())
-            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
+            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
     }
 
     /**
