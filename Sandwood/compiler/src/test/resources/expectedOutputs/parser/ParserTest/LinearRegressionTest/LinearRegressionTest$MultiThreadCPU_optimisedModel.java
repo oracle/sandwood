@@ -8,26 +8,26 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample63 = false;
-	private boolean fixedProbFlag$sample28 = false;
+	private boolean fixedFlag$sample42 = false;
+	private boolean fixedFlag$sample46 = false;
+	private boolean fixedFlag$sample85 = false;
 	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample63 = false;
+	private boolean fixedProbFlag$sample42 = false;
+	private boolean fixedProbFlag$sample46 = false;
+	private boolean fixedProbFlag$sample85 = false;
 	private int k;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
 	private double logProbability$phi;
-	private double[] logProbability$sample28;
-	private double[] logProbability$sample63;
+	private double[] logProbability$sample35;
+	private double[] logProbability$sample85;
 	private double logProbability$tau;
 	private double logProbability$var19;
-	private double logProbability$var30;
-	private double logProbability$var34;
-	private double[] logProbability$var57;
+	private double logProbability$var37;
+	private double logProbability$var41;
+	private double[] logProbability$var79;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -58,37 +58,11 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// updated.
 		bias = cv$value;
 		
-		// Unset the fixed probability flag for sample 35 as it depends on bias.
-		fixedProbFlag$sample35 = false;
+		// Unset the fixed probability flag for sample 42 as it depends on bias.
+		fixedProbFlag$sample42 = false;
 		
-		// Unset the fixed probability flag for sample 63 as it depends on bias.
-		fixedProbFlag$sample63 = false;
-	}
-
-	// Getter for fixedFlag$sample28.
-	@Override
-	public final boolean get$fixedFlag$sample28() {
-		return fixedFlag$sample28;
-	}
-
-	// Setter for fixedFlag$sample28.
-	@Override
-	public final void set$fixedFlag$sample28(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample28 including if probabilities
-		// need to be updated.
-		fixedFlag$sample28 = cv$value;
-		
-		// Should the probability of sample 28 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
-		
-		// Should the probability of sample 63 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+		// Unset the fixed probability flag for sample 85 as it depends on bias.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Getter for fixedFlag$sample35.
@@ -110,57 +84,83 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// Substituted "fixedFlag$sample35" with its value "cv$value".
 		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
 		
-		// Should the probability of sample 63 be set to fixed. This will only every change
+		// Should the probability of sample 85 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample35" with its value "cv$value".
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+		fixedProbFlag$sample85 = (cv$value && fixedProbFlag$sample85);
 	}
 
-	// Getter for fixedFlag$sample39.
+	// Getter for fixedFlag$sample42.
 	@Override
-	public final boolean get$fixedFlag$sample39() {
-		return fixedFlag$sample39;
+	public final boolean get$fixedFlag$sample42() {
+		return fixedFlag$sample42;
 	}
 
-	// Setter for fixedFlag$sample39.
+	// Setter for fixedFlag$sample42.
 	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
+	public final void set$fixedFlag$sample42(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
 		// need to be updated.
-		fixedFlag$sample39 = cv$value;
+		fixedFlag$sample42 = cv$value;
 		
-		// Should the probability of sample 39 be set to fixed. This will only every change
+		// Should the probability of sample 42 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample39" with its value "cv$value".
-		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 		
-		// Should the probability of sample 63 be set to fixed. This will only every change
+		// Should the probability of sample 85 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample39" with its value "cv$value".
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		fixedProbFlag$sample85 = (cv$value && fixedProbFlag$sample85);
 	}
 
-	// Getter for fixedFlag$sample63.
+	// Getter for fixedFlag$sample46.
 	@Override
-	public final boolean get$fixedFlag$sample63() {
-		return fixedFlag$sample63;
+	public final boolean get$fixedFlag$sample46() {
+		return fixedFlag$sample46;
 	}
 
-	// Setter for fixedFlag$sample63.
+	// Setter for fixedFlag$sample46.
 	@Override
-	public final void set$fixedFlag$sample63(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample63 including if probabilities
+	public final void set$fixedFlag$sample46(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample46 including if probabilities
 		// need to be updated.
-		fixedFlag$sample63 = cv$value;
+		fixedFlag$sample46 = cv$value;
 		
-		// Should the probability of sample 63 be set to fixed. This will only every change
+		// Should the probability of sample 46 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample63" with its value "cv$value".
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+		// Substituted "fixedFlag$sample46" with its value "cv$value".
+		fixedProbFlag$sample46 = (cv$value && fixedProbFlag$sample46);
+		
+		// Should the probability of sample 85 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample46" with its value "cv$value".
+		fixedProbFlag$sample85 = (cv$value && fixedProbFlag$sample85);
+	}
+
+	// Getter for fixedFlag$sample85.
+	@Override
+	public final boolean get$fixedFlag$sample85() {
+		return fixedFlag$sample85;
+	}
+
+	// Setter for fixedFlag$sample85.
+	@Override
+	public final void set$fixedFlag$sample85(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample85 including if probabilities
+		// need to be updated.
+		fixedFlag$sample85 = cv$value;
+		
+		// Should the probability of sample 85 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample85" with its value "cv$value".
+		fixedProbFlag$sample85 = (cv$value && fixedProbFlag$sample85);
 	}
 
 	// Getter for k.
@@ -224,11 +224,11 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// updated.
 		tau = cv$value;
 		
-		// Unset the fixed probability flag for sample 39 as it depends on tau.
-		fixedProbFlag$sample39 = false;
+		// Unset the fixed probability flag for sample 46 as it depends on tau.
+		fixedProbFlag$sample46 = false;
 		
-		// Unset the fixed probability flag for sample 63 as it depends on tau.
-		fixedProbFlag$sample63 = false;
+		// Unset the fixed probability flag for sample 85 as it depends on tau.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Getter for weights.
@@ -247,11 +247,11 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		weights = cv$value;
 		setFlag$weights = true;
 		
-		// Unset the fixed probability flag for sample 28 as it depends on weights.
-		fixedProbFlag$sample28 = false;
+		// Unset the fixed probability flag for sample 35 as it depends on weights.
+		fixedProbFlag$sample35 = false;
 		
-		// Unset the fixed probability flag for sample 63 as it depends on weights.
-		fixedProbFlag$sample63 = false;
+		// Unset the fixed probability flag for sample 85 as it depends on weights.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Getter for x.
@@ -283,8 +283,8 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 63 as it depends on y.
-		fixedProbFlag$sample63 = false;
+		// Unset the fixed probability flag for sample 85 as it depends on y.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Getter for yMeasured.
@@ -301,16 +301,16 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample28 using sampled
+	// Calculate the probability of the samples represented by sample35 using sampled
 	// values.
-	private final void logProbabilityValue$sample28() {
-		// Determine if we need to calculate the values for sample task 28 or if we should
+	private final void logProbabilityValue$sample35() {
+		// Determine if we need to calculate the values for sample task 35 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample28) {
+		if(!fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var23 = 0; var23 < k; var23 += 1) {
+			for(int var30 = 0; var30 < k; var30 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -334,13 +334,13 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((weights[var23] / 3.1622776601683795)) - 1.151292546497023);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((weights[var30] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample28[var23] = cv$distributionAccumulator;
+				logProbability$sample35[var30] = cv$distributionAccumulator;
 				if((0 < n))
 					// Update the variable probability
 					logProbability$phi = (logProbability$phi + cv$distributionAccumulator);
@@ -365,7 +365,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(fixedFlag$sample35)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -374,15 +374,15 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample28 = fixedFlag$sample28;
+			fixedProbFlag$sample35 = fixedFlag$sample35;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			for(int var23 = 0; var23 < k; var23 += 1) {
-				double cv$sampleValue = logProbability$sample28[var23];
+			for(int var30 = 0; var30 < k; var30 += 1) {
+				double cv$sampleValue = logProbability$sample35[var30];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				if((0 < n))
 					// Update the variable probability
@@ -398,17 +398,17 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample35 using sampled
+	// Calculate the probability of the samples represented by sample42 using sampled
 	// values.
-	private final void logProbabilityValue$sample35() {
-		// Determine if we need to calculate the values for sample task 35 or if we should
+	private final void logProbabilityValue$sample42() {
+		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -438,7 +438,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var30 = cv$distributionAccumulator;
+			logProbability$var37 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$distributionAccumulator;
@@ -461,7 +461,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -478,13 +478,13 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
+			fixedProbFlag$sample42 = fixedFlag$sample42;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var30 = logProbability$bias;
+			logProbability$var37 = logProbability$bias;
 			
 			// Add probability to model
 			// 
@@ -493,18 +493,18 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample39 using sampled
+	// Calculate the probability of the samples represented by sample46 using sampled
 	// values.
-	private final void logProbabilityValue$sample39() {
-		// Determine if we need to calculate the values for sample task 39 or if we should
+	private final void logProbabilityValue$sample46() {
+		// Determine if we need to calculate the values for sample task 46 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample39) {
+		if(!fixedProbFlag$sample46) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -534,7 +534,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var34 = cv$distributionAccumulator;
+			logProbability$var41 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$tau = cv$distributionAccumulator;
@@ -557,7 +557,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample39)
+			if(fixedFlag$sample46)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -574,13 +574,13 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample39 = fixedFlag$sample39;
+			fixedProbFlag$sample46 = fixedFlag$sample46;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var34 = logProbability$tau;
+			logProbability$var41 = logProbability$tau;
 			
 			// Add probability to model
 			// 
@@ -589,38 +589,38 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample39)
+			if(fixedFlag$sample46)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$tau);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample63 using sampled
+	// Calculate the probability of the samples represented by sample85 using sampled
 	// values.
-	private final void logProbabilityValue$sample63() {
-		// Determine if we need to calculate the values for sample task 63 or if we should
+	private final void logProbabilityValue$sample85() {
+		// Determine if we need to calculate the values for sample task 85 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample63) {
+		if(!fixedProbFlag$sample85) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
+			for(int i$var52 = 0; i$var52 < n; i$var52 += 1) {
 				// Reduction of array phi
 				// 
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				double reduceVar$var55$8 = 0.0;
+				double reduceVar$var77$8 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction56Index = 0; cv$reduction56Index < k; cv$reduction56Index += 1)
+				for(int cv$reduction76Index = 0; cv$reduction76Index < k; cv$reduction76Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// j$var53's comment
+					// j$var75's comment
 					// Set the right hand term to a value from the array phi
-					reduceVar$var55$8 = (reduceVar$var55$8 + phi[i$var38][cv$reduction56Index]);
+					reduceVar$var77$8 = (reduceVar$var77$8 + phi[i$var52][cv$reduction76Index]);
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -645,7 +645,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i$var38] - (reduceVar$var55$8 + bias)) / Math.sqrt(tau))) - (Math.log(tau) * 0.5));
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i$var52] - (reduceVar$var77$8 + bias)) / Math.sqrt(tau))) - (Math.log(tau) * 0.5));
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -658,10 +658,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var57[i$var38] = cv$distributionAccumulator;
+				logProbability$var79[i$var52] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample63[i$var38] = cv$distributionAccumulator;
+				logProbability$sample85[i$var52] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -673,18 +673,18 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample63 = (((fixedFlag$sample63 && fixedFlag$sample28) && fixedFlag$sample35) && fixedFlag$sample39);
+			fixedProbFlag$sample85 = (((fixedFlag$sample85 && fixedFlag$sample35) && fixedFlag$sample42) && fixedFlag$sample46);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
+			for(int i$var52 = 0; i$var52 < n; i$var52 += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample63[i$var38];
+				double cv$rvAccumulator = logProbability$sample85[i$var52];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var57[i$var38] = cv$rvAccumulator;
+				logProbability$var79[i$var52] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -697,9 +697,9 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 28 drawn from Gaussian 19. Inference was performed using a Gaussian
+	// by sample task 35 drawn from Gaussian 19. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
-	private final void sample28(int var23) {
+	private final void sample35(int var30) {
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -713,52 +713,52 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// State for the value of sigma once we find it.
 		double cv$sigmaValue = 1.0;
 		
-		// Processing random variable 57.
+		// Processing random variable 79.
 		// 
-		// Looking for a path between Sample 28 and consumer Gaussian 57.
-		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
-			// Processing sample task 63 of consumer random variable null.
+		// Looking for a path between Sample 35 and consumer Gaussian 79.
+		for(int i$var52 = 0; i$var52 < n; i$var52 += 1) {
+			// Processing sample task 85 of consumer random variable null.
 			// Variable declaration of cv$denominator moved.
 			// Declaration comment was:
 			// State for tracking the changes that happen to the sampled value between it being
 			// consumed and it being produced.
 			// 
-			// Substituted "j$var42" with its value "var23".
-			double cv$denominator = x[i$var38][var23];
+			// Substituted "j$var62" with its value "var30".
+			double cv$denominator = x[i$var52][var30];
 			
 			// Reduction of array phi
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var55$5 = 0.0;
+			double reduceVar$var77$5 = 0.0;
 			
 			// Reduce for every value except a masked value which will be skipped.
 			// 
-			// Substituted "j$var42" with its value "var23".
-			for(int cv$reduction273Index = 0; cv$reduction273Index < var23; cv$reduction273Index += 1)
+			// Substituted "j$var62" with its value "var30".
+			for(int cv$reduction393Index = 0; cv$reduction393Index < var30; cv$reduction393Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var53's comment
+				// j$var75's comment
 				// Set the right hand term to a value from the array phi
-				reduceVar$var55$5 = (reduceVar$var55$5 + phi[i$var38][cv$reduction273Index]);
+				reduceVar$var77$5 = (reduceVar$var77$5 + phi[i$var52][cv$reduction393Index]);
 			
-			// Substituted "j$var42" with its value "var23".
-			for(int cv$reduction273Index = (var23 + 1); cv$reduction273Index < k; cv$reduction273Index += 1)
+			// Substituted "j$var62" with its value "var30".
+			for(int cv$reduction393Index = (var30 + 1); cv$reduction393Index < k; cv$reduction393Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var53's comment
+				// j$var75's comment
 				// Set the right hand term to a value from the array phi
-				reduceVar$var55$5 = (reduceVar$var55$5 + phi[i$var38][cv$reduction273Index]);
+				reduceVar$var77$5 = (reduceVar$var77$5 + phi[i$var52][cv$reduction393Index]);
 			
-			// Record the value of a sample generated by a consuming sample 63 of random variable
-			// var57.
+			// Record the value of a sample generated by a consuming sample 85 of random variable
+			// var79.
 			// 
 			// Add the denominator squared to the sample denominator
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
@@ -771,8 +771,8 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// cv$numerator's comment
 			// 
-			// Substituted "j$var42" with its value "var23".
-			cv$sum = (cv$sum + (cv$denominator * (y[i$var38] - (reduceVar$var55$5 + bias))));
+			// Substituted "j$var62" with its value "var30".
+			cv$sum = (cv$sum + (cv$denominator * (y[i$var52] - (reduceVar$var77$5 + bias))));
 			
 			// If we have not got the value of sigma yet record it and set a flag so it is not
 			// recorded again.
@@ -784,16 +784,16 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		weights[var23] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		for(int i$var38 = 0; i$var38 < n; i$var38 += 1)
-			// Substituted "j$var42" with its value "var23".
-			phi[i$var38][var23] = (weights[var23] * x[i$var38][var23]);
+		weights[var30] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		for(int i$var52 = 0; i$var52 < n; i$var52 += 1)
+			// Substituted "j$var62" with its value "var30".
+			phi[i$var52][var30] = (weights[var30] * x[i$var52][var30]);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 35 drawn from Gaussian 30. Inference was performed using a Gaussian
+	// by sample task 42 drawn from Gaussian 37. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
-	private final void sample35() {
+	private final void sample42() {
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -807,28 +807,28 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// State for the value of sigma once we find it.
 		double cv$sigmaValue = 1.0;
 		
-		// Processing random variable 57.
-		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
-			// Processing sample task 63 of consumer random variable null.
+		// Processing random variable 79.
+		for(int i$var52 = 0; i$var52 < n; i$var52 += 1) {
+			// Processing sample task 85 of consumer random variable null.
 			// Reduction of array phi
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var55$6 = 0.0;
+			double reduceVar$var77$6 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction56Index = 0; cv$reduction56Index < k; cv$reduction56Index += 1)
+			for(int cv$reduction76Index = 0; cv$reduction76Index < k; cv$reduction76Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var53's comment
+				// j$var75's comment
 				// Set the right hand term to a value from the array phi
-				reduceVar$var55$6 = (reduceVar$var55$6 + phi[i$var38][cv$reduction56Index]);
+				reduceVar$var77$6 = (reduceVar$var77$6 + phi[i$var52][cv$reduction76Index]);
 			
-			// Record the value of a sample generated by a consuming sample 63 of random variable
-			// var57.
+			// Record the value of a sample generated by a consuming sample 85 of random variable
+			// var79.
 			// 
 			// Add the denominator squared to the sample denominator
 			// 
@@ -845,7 +845,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// cv$numerator's comment
 			// Substituted "cv$numerator" with its value "0.0".
-			cv$sum = ((cv$sum + y[i$var38]) - reduceVar$var55$6);
+			cv$sum = ((cv$sum + y[i$var52]) - reduceVar$var77$6);
 			
 			// If we have not got the value of sigma yet record it and set a flag so it is not
 			// recorded again.
@@ -860,9 +860,9 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 39 drawn from InverseGamma 34. Inference was performed using a Inverse
+	// by sample task 46 drawn from InverseGamma 41. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
-	private final void sample39() {
+	private final void sample46() {
 		// Variable to track the sum of the difference between the samples and the random
 		// variables mean squared.
 		double cv$sum = 0.0;
@@ -870,35 +870,35 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// Variable to record the number of samples from consuming random variables.
 		int cv$count = 0;
 		
-		// Processing random variable 57.
-		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
-			// Processing sample task 63 of consumer random variable null.
+		// Processing random variable 79.
+		for(int i$var52 = 0; i$var52 < n; i$var52 += 1) {
+			// Processing sample task 85 of consumer random variable null.
 			// Reduction of array phi
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var55$7 = 0.0;
+			double reduceVar$var77$7 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction56Index = 0; cv$reduction56Index < k; cv$reduction56Index += 1)
+			for(int cv$reduction76Index = 0; cv$reduction76Index < k; cv$reduction76Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var53's comment
+				// j$var75's comment
 				// Set the right hand term to a value from the array phi
-				reduceVar$var55$7 = (reduceVar$var55$7 + phi[i$var38][cv$reduction56Index]);
+				reduceVar$var77$7 = (reduceVar$var77$7 + phi[i$var52][cv$reduction76Index]);
 			
-			// Consume sample task 63 from random variable var57.
+			// Consume sample task 85 from random variable var79.
 			// 
 			// The difference between the mean parameter and the value sampled from the Gaussian.
 			// 
-			// The mean parameter for Gaussian var57.
-			double cv$var57$diff = ((reduceVar$var55$7 + bias) - y[i$var38]);
+			// The mean parameter for Gaussian var79.
+			double cv$var79$diff = ((reduceVar$var77$7 + bias) - y[i$var52]);
 			
 			// Include this sample by adding the square of the difference to the sum.
-			cv$sum = (cv$sum + (cv$var57$diff * cv$var57$diff));
+			cv$sum = (cv$sum + (cv$var79$diff * cv$var79$diff));
 			
 			// Increment the number of samples in the calculation.
 			cv$count = (cv$count + 1);
@@ -929,80 +929,81 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Constructor for phi
 		phi = new double[x.length][];
-		for(int i$var38 = 0; i$var38 < x.length; i$var38 += 1)
-			phi[i$var38] = new double[x[0].length];
+		for(int i$var52 = 0; i$var52 < x.length; i$var52 += 1)
+			phi[i$var52] = new double[x[0].length];
 		
-		// Constructor for logProbability$sample28
-		logProbability$sample28 = new double[x[0].length];
+		// Constructor for logProbability$sample35
+		logProbability$sample35 = new double[x[0].length];
 		
-		// Constructor for logProbability$var57
-		logProbability$var57 = new double[x.length];
+		// Constructor for logProbability$var79
+		logProbability$var79 = new double[x.length];
 		
-		// Constructor for logProbability$sample63
-		logProbability$sample63 = new double[x.length];
+		// Constructor for logProbability$sample85
+		logProbability$sample85 = new double[x.length];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, k, 1,
-				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var30, int forEnd$var30, int threadID$var30, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
-							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var30 = forStart$var30; var30 < forEnd$var30; var30 += 1)
+							weights[var30] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample46)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, n, 1,
-			(int forStart$index$i$var38, int forEnd$index$i$var38, int threadID$index$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+			(int forStart$index$i$var52, int forEnd$index$i$var52, int threadID$index$i$var52, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int index$i$var38 = forStart$index$i$var38; index$i$var38 < forEnd$index$i$var38; index$i$var38 += 1) {
-						int i$var38 = index$i$var38;
+					for(int index$i$var52 = forStart$index$i$var52; index$i$var52 < forEnd$index$i$var52; index$i$var52 += 1) {
+						int i$var52 = index$i$var52;
+						int threadID$i$var52 = threadID$index$i$var52;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample28)
+						if(!fixedFlag$sample35)
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var62, int forEnd$j$var62, int threadID$j$var62, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
-											phi[i$var38][j$var42] = (weights[j$var42] * x[i$var38][j$var42]);
+										for(int j$var62 = forStart$j$var62; j$var62 < forEnd$j$var62; j$var62 += 1)
+											phi[i$var52][j$var62] = (weights[j$var62] * x[i$var52][j$var62]);
 								}
 							);
 
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample63) {
+						if(!fixedFlag$sample85) {
 							// Reduction of array phi
 							// 
 							// A generated name to prevent name collisions if the reduction is implemented more
 							// than once in inference and probability code. Initialize the variable to the unit
 							// value
-							double reduceVar$var55$9 = 0.0;
+							double reduceVar$var77$9 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction56Index = 0; cv$reduction56Index < k; cv$reduction56Index += 1)
+							for(int cv$reduction76Index = 0; cv$reduction76Index < k; cv$reduction76Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// j$var53's comment
+								// j$var75's comment
 								// Set the right hand term to a value from the array phi
-								reduceVar$var55$9 = (reduceVar$var55$9 + phi[i$var38][cv$reduction56Index]);
-							y[i$var38] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$1)) + reduceVar$var55$9) + bias);
+								reduceVar$var77$9 = (reduceVar$var77$9 + phi[i$var52][cv$reduction76Index]);
+							y[i$var52] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$1)) + reduceVar$var77$9) + bias);
 						}
 					}
 			}
@@ -1014,42 +1015,43 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, k, 1,
-				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var30, int forEnd$var30, int threadID$var30, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
-							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var30 = forStart$var30; var30 < forEnd$var30; var30 += 1)
+							weights[var30] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample46)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var38, int forEnd$index$i$var38, int threadID$index$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$index$i$var52, int forEnd$index$i$var52, int threadID$index$i$var52, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$i$var38 = forStart$index$i$var38; index$i$var38 < forEnd$index$i$var38; index$i$var38 += 1) {
-							int i$var38 = index$i$var38;
+						for(int index$i$var52 = forStart$index$i$var52; index$i$var52 < forEnd$index$i$var52; index$i$var52 += 1) {
+							int i$var52 = index$i$var52;
+							int threadID$i$var52 = threadID$index$i$var52;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var62, int forEnd$j$var62, int threadID$j$var62, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
-											phi[i$var38][j$var42] = (weights[j$var42] * x[i$var38][j$var42]);
+										for(int j$var62 = forStart$j$var62; j$var62 < forEnd$j$var62; j$var62 += 1)
+											phi[i$var52][j$var62] = (weights[j$var62] * x[i$var52][j$var62]);
 								}
 							);
 						}
@@ -1063,42 +1065,43 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, k, 1,
-				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var30, int forEnd$var30, int threadID$var30, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
-							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var30 = forStart$var30; var30 < forEnd$var30; var30 += 1)
+							weights[var30] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample46)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var38, int forEnd$index$i$var38, int threadID$index$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$index$i$var52, int forEnd$index$i$var52, int threadID$index$i$var52, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$i$var38 = forStart$index$i$var38; index$i$var38 < forEnd$index$i$var38; index$i$var38 += 1) {
-							int i$var38 = index$i$var38;
+						for(int index$i$var52 = forStart$index$i$var52; index$i$var52 < forEnd$index$i$var52; index$i$var52 += 1) {
+							int i$var52 = index$i$var52;
+							int threadID$i$var52 = threadID$index$i$var52;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var62, int forEnd$j$var62, int threadID$j$var62, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
-											phi[i$var38][j$var42] = (weights[j$var42] * x[i$var38][j$var42]);
+										for(int j$var62 = forStart$j$var62; j$var62 < forEnd$j$var62; j$var62 += 1)
+											phi[i$var52][j$var62] = (weights[j$var62] * x[i$var52][j$var62]);
 								}
 							);
 						}
@@ -1113,26 +1116,26 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample28) {
-				for(int var23 = 0; var23 < k; var23 += 1)
-					sample28(var23);
+			if(!fixedFlag$sample35) {
+				for(int var30 = 0; var30 < k; var30 += 1)
+					sample35(var30);
 			}
-			if(!fixedFlag$sample35)
-				sample35();
-			if(!fixedFlag$sample39)
-				sample39();
+			if(!fixedFlag$sample42)
+				sample42();
+			if(!fixedFlag$sample46)
+				sample46();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample39)
-				sample39();
-			if(!fixedFlag$sample35)
-				sample35();
+			if(!fixedFlag$sample46)
+				sample46();
+			if(!fixedFlag$sample42)
+				sample42();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample28) {
-				for(int var23 = (k - 1); var23 >= 0; var23 -= 1)
-					sample28(var23);
+			if(!fixedFlag$sample35) {
+				for(int var30 = (k - 1); var30 >= 0; var30 -= 1)
+					sample35(var30);
 			}
 		}
 		
@@ -1159,24 +1162,24 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var19 = 0.0;
-		logProbability$weights = 0.0;
 		logProbability$phi = 0.0;
-		if(!fixedProbFlag$sample28) {
-			for(int var23 = 0; var23 < k; var23 += 1)
-				logProbability$sample28[var23] = 0.0;
+		logProbability$weights = 0.0;
+		if(!fixedProbFlag$sample35) {
+			for(int var30 = 0; var30 < k; var30 += 1)
+				logProbability$sample35[var30] = 0.0;
 		}
-		logProbability$var30 = 0.0;
-		if(!fixedProbFlag$sample35)
+		logProbability$var37 = 0.0;
+		if(!fixedProbFlag$sample42)
 			logProbability$bias = 0.0;
-		logProbability$var34 = 0.0;
-		if(!fixedProbFlag$sample39)
+		logProbability$var41 = 0.0;
+		if(!fixedProbFlag$sample46)
 			logProbability$tau = 0.0;
-		for(int i$var38 = 0; i$var38 < n; i$var38 += 1)
-			logProbability$var57[i$var38] = 0.0;
+		for(int i$var52 = 0; i$var52 < n; i$var52 += 1)
+			logProbability$var79[i$var52] = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample63) {
-			for(int i$var38 = 0; i$var38 < n; i$var38 += 1)
-				logProbability$sample63[i$var38] = 0.0;
+		if(!fixedProbFlag$sample85) {
+			for(int i$var52 = 0; i$var52 < n; i$var52 += 1)
+				logProbability$sample85[i$var52] = 0.0;
 		}
 	}
 
@@ -1197,13 +1200,13 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample28)
-			logProbabilityValue$sample28();
 		if(fixedFlag$sample35)
 			logProbabilityValue$sample35();
-		if(fixedFlag$sample39)
-			logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		if(fixedFlag$sample42)
+			logProbabilityValue$sample42();
+		if(fixedFlag$sample46)
+			logProbabilityValue$sample46();
+		logProbabilityValue$sample85();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1221,10 +1224,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample28();
 		logProbabilityValue$sample35();
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		logProbabilityValue$sample42();
+		logProbabilityValue$sample46();
+		logProbabilityValue$sample85();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1241,10 +1244,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample28();
 		logProbabilityValue$sample35();
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		logProbabilityValue$sample42();
+		logProbabilityValue$sample46();
+		logProbabilityValue$sample85();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1253,42 +1256,43 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, k, 1,
-				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var30, int forEnd$var30, int threadID$var30, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
-							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var30 = forStart$var30; var30 < forEnd$var30; var30 += 1)
+							weights[var30] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample46)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var38, int forEnd$index$i$var38, int threadID$index$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$index$i$var52, int forEnd$index$i$var52, int threadID$index$i$var52, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$i$var38 = forStart$index$i$var38; index$i$var38 < forEnd$index$i$var38; index$i$var38 += 1) {
-							int i$var38 = index$i$var38;
+						for(int index$i$var52 = forStart$index$i$var52; index$i$var52 < forEnd$index$i$var52; index$i$var52 += 1) {
+							int i$var52 = index$i$var52;
+							int threadID$i$var52 = threadID$index$i$var52;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var62, int forEnd$j$var62, int threadID$j$var62, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
-											phi[i$var38][j$var42] = (weights[j$var42] * x[i$var38][j$var42]);
+										for(int j$var62 = forStart$j$var62; j$var62 < forEnd$j$var62; j$var62 += 1)
+											phi[i$var52][j$var62] = (weights[j$var62] * x[i$var52][j$var62]);
 								}
 							);
 						}
@@ -1321,21 +1325,22 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		if(setFlag$weights)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var38, int forEnd$index$i$var38, int threadID$index$i$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$index$i$var52, int forEnd$index$i$var52, int threadID$index$i$var52, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$i$var38 = forStart$index$i$var38; index$i$var38 < forEnd$index$i$var38; index$i$var38 += 1) {
-							int i$var38 = index$i$var38;
+						for(int index$i$var52 = forStart$index$i$var52; index$i$var52 < forEnd$index$i$var52; index$i$var52 += 1) {
+							int i$var52 = index$i$var52;
+							int threadID$i$var52 = threadID$index$i$var52;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var42, int forEnd$j$var42, int threadID$j$var42, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var62, int forEnd$j$var62, int threadID$j$var62, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var42 = forStart$j$var42; j$var42 < forEnd$j$var42; j$var42 += 1)
-											phi[i$var38][j$var42] = (weights[j$var42] * x[i$var38][j$var42]);
+										for(int j$var62 = forStart$j$var62; j$var62 < forEnd$j$var62; j$var62 += 1)
+											phi[i$var52][j$var62] = (weights[j$var62] * x[i$var52][j$var62]);
 								}
 							);
 						}

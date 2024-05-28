@@ -160,6 +160,9 @@ public class APICompile {
             // Test the required inversions for errors.
             compDesc.errors.addAll(inversionCheck(traces));
 
+            // Test if any observed variables are also read by random variables.
+            readObservedCheck(traces, compDesc);
+
             if(!compDesc.errors.isEmpty()) {
                 return compDesc;
             }
@@ -211,13 +214,7 @@ public class APICompile {
                     protected OutputSandwoodClassGenerated compute() {
                         TransSandwoodClassGenerated transCls = irClasses.get(e).toTransformationTree();
                         if(optimise)
-                            try {
-                                transCls = transCls.applyOptimisations();
-                            } catch(Throwable e) {
-                                e.printStackTrace();
-                                System.out.println(e.getMessage());
-                                throw e;
-                            }
+                            transCls = transCls.applyOptimisations();
 
                         return transCls.toOutputTree(e);
                     }
@@ -263,6 +260,158 @@ public class APICompile {
         return compDesc;
     }
 
+    private static void readObservedCheck(Traces traces, CompilationDesc compDesc) {
+        for(Variable<?> v:traces.getReadObservedVariables()) {
+            String message = "Variable " + v.getAlias() + " is fixed by an observation and used to construct "
+                    + "arguments to random variables. Because of the observation, the value of this variable "
+                    + "will not be inferred, so all read locations must be set via the observation when performing "
+                    + "inference.";
+            compDesc.warnings.add(new SandwoodModelException(message, v));
+        }
+    }
+
+    /**
+     * Private class for sorting variables based on their dependencies. The class is creates so that dependencies can be
+     * cached.
+     */
+    private static class VariableDependencyDesc implements Comparable<VariableDependencyDesc> {
+        public final Variable<?> variable;
+        private final Set<Variable<?>> dependencies;
+
+        private VariableDependencyDesc(Variable<?> v, VarTraces traces) {
+            variable = v;
+            dependencies = new HashSet<>();
+            getDependencies(traces.traceToSource);
+            for(TraceHandle t:traces.tracesToVar)
+                getDependencies(t);
+        }
+
+        private void getDependencies(TraceHandle t) {
+            if(!t.isEmpty()) {
+                // Add the output as this will be the value being created by a later operation.
+                dependencies.add(t.peek().task.getOutput());
+                for(DataflowTaskArgDesc d:t) {
+                    DataflowTask<?> task = d.task;
+                    Variable<?> scopeCondition = task.scope().getScopeCondition();
+                    addDependencies(scopeCondition);
+                    switch(task.getType()) {
+                        case GET: {
+                            GetTask<?> gt = (GetTask<?>) task;
+                            addDependencies(gt.index);
+                            addArrayDependencies(gt.array);
+                            break;
+                        }
+                        case IF_ASSIGNMENT: {
+                            IfElseAssignmentTask<?> ifElse = (IfElseAssignmentTask<?>) task;
+                            addDependencies(ifElse.guard);
+                            break;
+                        }
+                        case PUT: {
+                            PutTask<?> pt = (PutTask<?>) task;
+                            addDependencies(pt.index);
+                            addArrayDependencies(pt.array);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void addArrayDependencies(ArrayVariable<?> array) {
+            array = array.instanceHandle();
+            ProducingDataflowTask<?> parent = array.getParent();
+            DFType type = parent.getType();
+            while(true) {
+                switch(type) {
+                    case ARRAY_CONSTRUCTOR:
+                    case SAMPLE:
+                        return;
+                    case GET: {
+                        GetTask<?> gt = (GetTask<?>) parent;
+                        addDependencies(gt.index);
+                        array = gt.array.instanceHandle();
+                        parent = array.getParent();
+                        type = parent.getType();
+                        break;
+                    }
+                    default:
+                        throw new CompilerException("Unexpected task type: " + type);
+                }
+            }
+        }
+
+        private void addDependencies(Variable<?> v) {
+            if(!v.isDeterministic()) {
+                dependencies.add(v);
+                dependencies.addAll(v.collectInputVariables(DFType.SAMPLE));
+            }
+        }
+
+        @Override
+        public int compareTo(VariableDependencyDesc o) {
+            boolean contains = o.dependencies.contains(variable);
+            if(dependencies.contains(o.variable)) {
+                if(contains)
+                    throw new SandwoodModelException("Observed variables include a dependency cycle between "
+                            + variable.getAlias() + " and " + o.variable.getAlias(), variable, o.variable);
+                else
+                    return 1;
+            } else {
+                if(contains)
+                    return -1;
+                else
+                    return variable.getId() - o.variable.getId();
+            }
+        }
+
+        public static Set<VariableDependencyDesc> getVariableDependencyDescs(
+                Map<Variable<?>, VarTraces> segmentedTraces) {
+            Set<VariableDependencyDesc> vdds = new HashSet<>();
+            for(Variable<?> v:segmentedTraces.keySet()) {
+                // Construct the VariableDependencyDesc
+                VariableDependencyDesc vdd = new VariableDependencyDesc(v, segmentedTraces.get(v));
+
+                /*
+                 * Add any recursive dependencies, this works because any dependencies as a later step will have already
+                 * been added to the existing VariableDependenceyDescs
+                 */
+                for(VariableDependencyDesc existing:vdds) {
+                    if(vdd.dependencies.contains(existing.variable))
+                        vdd.dependencies.addAll(existing.dependencies);
+                }
+
+                /* Add the dependencies of this variable to anything that depends on it. */
+                for(VariableDependencyDesc existing:vdds) {
+                    if(existing.dependencies.contains(v))
+                        existing.dependencies.addAll(vdd.dependencies);
+                }
+
+                vdds.add(vdd);
+            }
+            return vdds;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("\nVariable " + variable.getAlias() + ":" + variable.getId() + " dependent on:");
+            for(Variable<?> v:dependencies) {
+                if(v.aliasSet()) {
+                    sb.append("\n\t" + v.getAlias() + ":" + v.getId());
+                }
+            }
+            return sb.toString();
+        }
+    }
+
+    /**
+     * A record class for recording the trace to the value that will be the source followed by the set of traces
+     * to the value that will be constructed from the source.
+     */
+    private static record VarTraces(TraceHandle traceToSource, Set<TraceHandle> tracesToVar) {}
+
     private static void constructPropogateObservedValues(CompilationContext compilationCtx) {
 
         // Set any observed variables required as input to the observation task.
@@ -297,7 +446,7 @@ public class APICompile {
             compilationCtx.pushIsSerial(true);
             compilationCtx.setreverseScopes(true);
 
-            Map<Variable<?>, Set<TraceHandle>> segmentedTraces = new HashMap<>();
+            Map<Variable<?>, VarTraces> segmentedTraces = new HashMap<>();
             for(SampleTask<?, ?> sTask:compilationCtx.traces.getAllSampleTasks()) {
                 if(compilationCtx.traces.isObserved(sTask)) {
                     // Test that the traces are valid
@@ -327,28 +476,47 @@ public class APICompile {
                         throw new SandwoodModelException(
                                 "Multiple variables linked to sample task. This could result in inconsistencies. "
                                         + "Relevant variables are " + s + ".",
-                                sTask);
+                                        sTask);
                     }
 
                     ingestTrace(t.values(), segmentedTraces);
                 }
             }
 
-            // Construct the code to populate the values.
-            PriorityQueue<Variable<?>> p = new PriorityQueue<>(Collections.reverseOrder());
-            p.addAll(segmentedTraces.keySet());
+            ingestTrace(compilationCtx.traces.getObservedConditionTraces().values(), segmentedTraces);
 
+            // Construct the code to populate the values.
+            Set<VariableDependencyDesc> vdds = VariableDependencyDesc.getVariableDependencyDescs(segmentedTraces);
+            PriorityQueue<VariableDependencyDesc> p = new PriorityQueue<>(vdds);
+
+            Set<Variable<?>> copied = new HashSet<>();
             while(!p.isEmpty()) {
-                Variable<?> end = p.poll();
+                Variable<?> end = p.poll().variable;
+                Variable<?> instanceHandle = end.instanceHandle();
                 if(end.isObserved()) {
-                    copyObservation(end, compilationCtx);
+                    if(!copied.contains(instanceHandle)) {
+                        copyObservation(end, compilationCtx);
+                        copied.add(instanceHandle);
+                    }
                 } else {
-                    for(TraceHandle th:segmentedTraces.get(end)) {
-                        Variable<?> start = th.peek().task.getOutput();
-                        if(start.isObserved())
-                            start = start.getObservation().source;
-                        IRTreeReturn<?> current = start.getForwardIR(compilationCtx);
-                        processTask(th.size() - 1, th, current, new BackTraceInfo(), compilationCtx);
+                    VarTraces vt = segmentedTraces.get(end);
+                    for(TraceHandle th:vt.tracesToVar) {
+                        ProducingDataflowTask<?> endTask = th.get(0).task;
+                        ScopeConstructor sc = ScopeConstructor.construct(endTask, endTask.scope(), Tree.NoComment,
+                                compilationCtx);
+                        // make sure the path from the source to the value to be set is valid.
+                        sc = sc.addConstraint(th);
+                        // Make sure the path to the source is valid.
+                        if(!vt.traceToSource.isEmpty())
+                            sc = sc.addConstraint(vt.traceToSource);
+                        // Set the value using the source.
+                        sc.addTree(1, (TreeBuilderInfo info) -> {
+                            Variable<?> start = th.peek().task.getOutput();
+                            if(start.isObserved())
+                                start = start.getObservation().source;
+                            IRTreeReturn<?> current = start.getForwardIR(compilationCtx);
+                            processTask(th.size() - 1, th, current, info.backTraceInfo, compilationCtx);
+                        });
                     }
                 }
             }
@@ -413,7 +581,7 @@ public class APICompile {
     }
 
     /**
-     * A function to work out the segments of trace that values should be propogate back over and to Store the results
+     * A function to work out the segments of trace that values should be propagated back over and to store the results
      * in a map indexed by the variable they create so they can be recovered and the required code computed in the
      * correct order.
      * 
@@ -421,57 +589,91 @@ public class APICompile {
      * @param segmentedTraces
      */
     private static void ingestTrace(Collection<Set<TraceHandle>> observedTraces,
-            Map<Variable<?>, Set<TraceHandle>> segmentedTraces) {
+            Map<Variable<?>, VarTraces> segmentedTraces) {
         for(Set<TraceHandle> traces:observedTraces) {
             if(multiplePaths(traces)) {
                 TraceHandle t = traces.iterator().next();
                 Variable<?> output = t.peek().task.getOutput();
                 throw new SandwoodModelException("Multiple traces to observed variable " + output.getAlias()
-                        + ". This could result in inconsistencies.", output.getObservation());
+                + ". This could result in inconsistencies.", output.getObservation());
             }
 
-            TraceHandle t = traces.iterator().next();
-            Trace segment = new Trace();
-            int i = 0;
+            for(TraceHandle t:traces) {
+                Trace segment = new Trace();
+                int i = 0;
 
-            // Skip all the tasks before the sample variable.
-            DataflowTaskArgDesc d = t.get(i++);
-            Variable<?> output = d.task.getOutput();
-            while(!output.isSample()) {
-                d = t.get(i++);
-                output = d.task.getOutput();
-            }
-
-            // If the sample came from a put into an array skip it and find the outermost point of the trace.
-            while(d.task.getType() == DFType.PUT && !output.isObserved()) {
-                d = t.get(i++);
-                output = d.task.getOutput();
-            }
-
-            if(output.isObserved())
-                segmentedTraces.computeIfAbsent(output.instanceHandle(), k -> new HashSet<>());
-            else {
-                Variable<?> result = output.instanceHandle();
-                while(true) {
-                    // Add the value as this is where the trace segment ends
-                    segment.add(d);
-                    // If the output is observed, this is also the end of the trace so store the segment and stop.
-                    if(output.isObserved()) {
-                        Set<TraceHandle> segments = segmentedTraces.computeIfAbsent(result, k -> new HashSet<>());
-                        segments.add(TraceHandle.getTraceHandle(segment));
-                        break;
-                    }
-
-                    // Move along a segment
+                // Skip all the tasks before the sample variable.
+                DataflowTaskArgDesc d = t.get(i++);
+                ProducingDataflowTask<?> task = d.task;
+                Variable<?> output = task.getOutput();
+                while(!output.isSample() && !output.isIntermediate()) {
                     d = t.get(i++);
                     output = d.task.getOutput();
-                    // If the next intermediate has been found store the segment and start the next segment.
-                    if(output.isIntermediate()) {
-                        Set<TraceHandle> segments = segmentedTraces.computeIfAbsent(result, k -> new HashSet<>());
+                }
+
+                // If the sample came from a put into an array skip it and find the outermost point of the trace.
+                while(d.task.getType() == DFType.PUT && !output.isObserved()) {
+                    d = t.get(i++);
+                    output = d.task.getOutput();
+                }
+
+                if(output.isObserved())
+                    segmentedTraces.computeIfAbsent(output, k -> new VarTraces(TraceHandle.emptyTrace(), Collections.emptySet()));
+                else {
+                    Variable<?> result;
+                    // If the result is a get
+                    if(d.task.getType() == DFType.GET) {
+                        if(d.argPos == 0)
+                            result = ((GetTask<?>) d.task).array;
+                        else
+                            throw new CompilerException(
+                                    "Array indexes cannot be observed, this should have been "
+                                            + "detected and prevented from happening by reporting an "
+                                            + "error to the user before this point.");
+                    } else
+                        result = output;
+                    while(true) {
+                        
+                        // Add the value as this is where the trace segment ends
                         segment.add(d);
-                        segments.add(TraceHandle.getTraceHandle(segment));
-                        segment.clear();
-                        result = output.instanceHandle();
+                        // If the output is observed, this is also the end of the trace so store the segment and stop.
+                        if(output.isObserved()) {
+                            int start = i-1;
+                            VarTraces segments = segmentedTraces.computeIfAbsent(result, k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                            segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
+                            break;
+                        }
+
+                        // Move along a segment
+                        d = t.get(i++);
+                        output = d.task.getOutput();
+                        // If the next intermediate has been found store the segment and start the next segment.
+                        if(output.isIntermediate()) {
+                            int start = i-1;
+                            VarTraces segments = segmentedTraces.computeIfAbsent(result, k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                            segment.add(d);
+                            segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
+                            segment.clear();
+
+                            // If the value came from a put into an array skip it and find the outermost point of the
+                            // trace.
+                            while(d.task.getType() == DFType.PUT && !output.isObserved()) {
+                                d = t.get(i++);
+                                output = d.task.getOutput();
+                            }
+                            
+                            // If the result is a get
+                            if(d.task.getType() == DFType.GET) {
+                                if(d.argPos == 0)
+                                    result = ((GetTask<?>) d.task).array;
+                                else
+                                    throw new CompilerException(
+                                            "Array indexes cannot be observed, this should have been "
+                                                    + "detected and prevented from happening by reporting an "
+                                                    + "error to the user before this point.");
+                            } else
+                                result = output;
+                        }
                     }
                 }
             }
@@ -492,15 +694,40 @@ public class APICompile {
         int size = pattern.size();
         while(i.hasNext()) {
             TraceHandle test = i.next();
-            if(size != test.size())
+
+            // Remove puts, samples, and if assignments that will not result in generated code.
+            int patternPrefix = 0;
+            while(patternPrefix < size) {
+                DataflowTaskArgDesc dt = pattern.get(patternPrefix);
+                DFType type = dt.task.getType();
+                if(type != DFType.PUT && type != DFType.IF_ASSIGNMENT && type != DFType.SAMPLE)
+                    break;
+                patternPrefix++;
+            }
+
+            int testSize = test.size();
+            int testPrefix = 0;
+            while(testPrefix < testSize) {
+                DataflowTaskArgDesc dt = test.get(testPrefix);
+                DFType type = dt.task.getType();
+                if(type != DFType.PUT && type != DFType.IF_ASSIGNMENT && type != DFType.SAMPLE)
+                    break;
+                testPrefix++;
+            }
+
+            // Test the remaining suffixes
+            if(size - patternPrefix != testSize - testPrefix)
                 return true;
-            for(int j = 0; j < size; j++) {
-                DataflowTaskArgDesc dt = test.get(j);
+
+            int difference = testPrefix - patternPrefix;
+            for(int j = patternPrefix; j < size; j++) {
+                DataflowTaskArgDesc dt = test.get(j - difference);
                 DataflowTaskArgDesc pt = pattern.get(j);
                 if(!dt.equals(pt)) {
                     // If the 2 trace elements are not the same check that they are both puts entered through the same
                     // input and with the same index. This situation can occur because implicit puts are created when a
                     // value is put into an array that is itself in an array.
+
                     if(dt.argPos != pt.argPos)
                         return true;
                     if(dt.task.getType() != DFType.PUT || pt.task.getType() != DFType.PUT)
@@ -559,6 +786,8 @@ public class APICompile {
                 break;
             }
             case PUT: {
+                PutTask<B> pt = (PutTask<B>) task;
+                backTraceInfo.updateSubstitutions(pt, compilationCtx);
                 switch(d.argPos) {
                     case 0:
                         throw new CompilerException("Assignments to arrays where the input is the array"
@@ -573,7 +802,6 @@ public class APICompile {
                                 + "tasks cannot currently determine the index a value came from.");
                     case 2:
                         compilationCtx.enterScope(task.scope());
-                        PutTask<B> pt = (PutTask<B>) task;
 
                         // Get the tree for the array
                         IRTreeReturn<ArrayVariable<B>> arrayTree;
@@ -599,14 +827,20 @@ public class APICompile {
                                 compilationCtx.addTreeToScope(pt.scope(), IRTree.store(value.getUniqueVarDesc(),
                                         IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
                             }
-                        }
 
-                        if(index != 0)
                             processTask(index - 1, traceHandle, IRTree.arrayGet(arrayTree, indexTree), backTraceInfo,
                                     compilationCtx);
+                        }
 
                         compilationCtx.leaveScope(task.scope());
                         break;
+
+                        // Values are not propagated through scope conditions, instead we will have to infer these values
+                        // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
+                        // model probability of 0/-Infinity in normal/log space respectively.
+                    case 3:
+                        throw new CompilerException(
+                                "Values are not propagated through scope conditions, instead we will have to infer these values.");
 
                     default:
                         throw new CompilerException("Unknown operation put only accepts arguments in positions 0-2");
@@ -614,13 +848,13 @@ public class APICompile {
                 break;
             }
             default: {
-                // If this is an unobserved intermediate populate it with the current value.
-                Variable<?> output = task.getOutput();
-                if(output.isIntermediate() && index == 0)
+                if(index == 0) {
+                    Variable<?> output = task.getOutput();
                     saveIntermediate(output, current, compilationCtx);
-                IRTreeReturn<?> result = task.getInverseIR(d.argPos, current, backTraceInfo, compilationCtx);
-                if(index != 0)
+                } else {
+                    IRTreeReturn<?> result = task.getInverseIR(d.argPos, current, backTraceInfo, compilationCtx);
                     processTask(index - 1, traceHandle, result, backTraceInfo, compilationCtx);
+                }
             }
         }
     }
@@ -691,6 +925,7 @@ public class APICompile {
         Set<SandwoodModelException> errors = new HashSet<>();
         for(SampleTask<?, ?> s:traces.getAllIntermediateSamples()) {
             for(RandomVariable<?, ?> consumingRV:traces.getTracesRVToSampleTask(s).keySet()) {
+                // Confirm that all traces from observed variables to the generating samples are invertable.
                 for(TraceHandle t:traces.getObservedTraces(consumingRV)) {
                     Map<ProducingDataflowTask<?>, String> tErrors = t.inversionErrors();
                     // Remove the sample task as we know it is present and cannot be inverted.
@@ -698,7 +933,10 @@ public class APICompile {
                     for(ProducingDataflowTask<?> task:tErrors.keySet())
                         errors.add(new SandwoodModelException(tErrors.get(task), task));
                 }
-                for(TraceHandle t:traces.getIntermediateVariableTraces(consumingRV)) {
+
+                // Check that the traces from sample values to sample tasks are invertible for all samples whose random
+                // variables consume other sampled values
+                for(TraceHandle t:traces.getSampleVariableTraces(consumingRV)) {
                     Map<ProducingDataflowTask<?>, String> tErrors = t.inversionErrors();
                     // Remove the sample task as we know it is present and cannot be inverted.
                     tErrors.remove(t.get(0).task);
@@ -858,17 +1096,20 @@ public class APICompile {
                     generator = new MetropolisHastingsMultinomialFunctions();
 
                 if(generator != null && generator.canAcceptTraces(s, suggestions, compilationCtx)) {
-                    compDesc.warnings
-                            .add(new SandwoodModelException(matropolisHastingsWarning(s, signature, suggestions), s));
+                    Map<ProducingDataflowTask<?>, Set<TraceHandle>> conditionalTraces = compilationCtx.traces
+                            .getTracesToConditionals(s);
+                    String warningMessage = matropolisHastingsWarning(s, signature, suggestions, conditionalTraces);
+                    compDesc.warnings.add(new SandwoodModelException(warningMessage, s));
                     IRVoidFunction f = generator.constructFunction(s, compilationCtx);
                     compilationCtx.addFunction(SampleFunctionClass.INFERENCE, s, f);
                 } else {
-                    if(compilationCtx.fullInferenceRequired())
-                        compDesc.errors
-                                .add(new SandwoodModelException(constructPairingFailureMessage(s, signature), s));
-                    else
-                        compDesc.warnings
-                                .add(new SandwoodModelException(constructPairingFailureMessage(s, signature), s));
+                    if(compilationCtx.fullInferenceRequired()) {
+                        String errorMessage = constructPairingFailureMessage(s, signature);
+                        compDesc.errors.add(new SandwoodModelException(errorMessage, s));
+                    } else {
+                        String warningMessage = constructPairingFailureMessage(s, signature);
+                        compDesc.warnings.add(new SandwoodModelException(warningMessage, s));
+                    }
                     return;
                 }
             }
@@ -876,24 +1117,37 @@ public class APICompile {
     }
 
     private static String matropolisHastingsWarning(SampleTask<?, ?> s, Map<RandomVariable<?, ?>, boolean[]> signature,
-            List<String> suggestions) {
+            List<String> suggestions, Map<ProducingDataflowTask<?>, Set<TraceHandle>> conditionalTraces) {
         StringBuffer sb = new StringBuffer();
-        sb.append("Unable to generate inference function based on a conjugate prior for\n" + s.randomVariable.getType()
-                + " => {");
-        boolean first = true;
+        if(signature != null) {
+            sb.append("Unable to generate inference function based on a conjugate prior for\n"
+                    + s.randomVariable.getType() + " => {");
+            boolean first = true;
 
-        Set<RandomVariableType<?, ?>> types = new HashSet<>();
-        for(RandomVariable<?, ?> rv:signature.keySet())
-            types.add(rv.getType());
+            Set<RandomVariableType<?, ?>> types = new HashSet<>();
+            for(RandomVariable<?, ?> rv:signature.keySet())
+                types.add(rv.getType());
 
-        for(RandomVariableType<?, ?> t:types) {
-            if(first) {
-                sb.append(" " + t);
-                first = false;
-            } else
-                sb.append(", " + t);
+            for(RandomVariableType<?, ?> t:types) {
+                if(first) {
+                    sb.append(" " + t);
+                    first = false;
+                } else
+                    sb.append(", " + t);
+            }
+            sb.append(" }\n");
         }
-        sb.append(" }\nFalling back on Metropolis–Hastings. This may make convergence slow.");
+
+        if(!conditionalTraces.isEmpty()) {
+            if(signature != null)
+                sb.append("Also unable");
+            else
+                sb.append("Unable");
+
+            sb.append(" to generate inference function based on a conjugate prior for\n" + s.randomVariable.getType()
+            + " because the result is used by a conditional guard.\n");
+        }
+        sb.append("Falling back on Metropolis–Hastings. This may make convergence slow.");
         for(String suggestion:suggestions)
             sb.append(suggestion + "\n");
         return sb.toString();
@@ -902,24 +1156,26 @@ public class APICompile {
     private static String constructPairingFailureMessage(SampleTask<?, ?> s,
             Map<RandomVariable<?, ?>, boolean[]> signature) {
         StringBuffer sb = new StringBuffer();
-        sb.append("Unable to generate inference techniques for all the pairings.\n");
-        sb.append("From " + s.randomVariable.getType().getAPIType() + " to ");
-        PriorityQueue<RandomVariable<?, ?>> rvs = new PriorityQueue<>(signature.keySet());
+        sb.append("Unable to generate inference techniques for all the pairings.\nFrom "
+                + s.randomVariable.getType().getAPIType());
+        if(signature != null) {
+            sb.append(" to ");
+            PriorityQueue<RandomVariable<?, ?>> rvs = new PriorityQueue<>(signature.keySet());
 
-        if(!rvs.isEmpty())
-            getTargetRVDesc(rvs.poll(), signature, sb);
+            if(!rvs.isEmpty())
+                getTargetRVDesc(rvs.poll(), signature, sb);
 
-        while(rvs.size() > 1) {
-            sb.append(", ");
-            getTargetRVDesc(rvs.poll(), signature, sb);
+            while(rvs.size() > 1) {
+                sb.append(", ");
+                getTargetRVDesc(rvs.poll(), signature, sb);
+            }
+
+            if(!rvs.isEmpty()) {
+                sb.append(", and ");
+                getTargetRVDesc(rvs.poll(), signature, sb);
+            }
         }
-
-        if(!rvs.isEmpty()) {
-            sb.append(", and ");
-            getTargetRVDesc(rvs.poll(), signature, sb);
-        }
-
-        System.out.println(sb.toString());
+        sb.append(".");
         return sb.toString();
     }
 
@@ -1530,7 +1786,7 @@ public class APICompile {
 
     private static Set<Variable<?>> getObservedVariableForwardableInputs(Set<Variable<?>> forwardableVars,
             CompilationContext compilationCtx) {
-        Set<Variable<?>> evidenceVariables = getObservedSampleTaskInputs(compilationCtx);
+        Set<Variable<?>> evidenceVariables = compilationCtx.traces.getEvidenceVariables();
 
         // Calculate all the variables that will need forward functions
         Set<Variable<?>> inputVariables = Variable.collectInputVariable(evidenceVariables);
@@ -1539,14 +1795,6 @@ public class APICompile {
             if(forwardableVars.contains(v))
                 addAllVars(outputVariables, v);
         return outputVariables;
-    }
-
-    private static Set<Variable<?>> getObservedSampleTaskInputs(CompilationContext compilationCtx) {
-        // Calculate the set of variable we want to use evidence functions for.
-        Set<Variable<?>> evidenceVariables = new HashSet<>();
-        for(Variable<?> v:compilationCtx.traces.getAllObservedVariables())
-            evidenceVariables.addAll(compilationCtx.traces.getSourceRandomVariables(v));
-        return evidenceVariables;
     }
 
     private static void allProbabilities(Set<Variable<?>> forwardableVars, CompilationContext compilationCtx) {
@@ -1647,7 +1895,7 @@ public class APICompile {
             CompilationContext compilationCtx) {
 
         // Get the random variables that you are consuming the output of, along with
-        // their sample task it consumes from.
+        // the sample tasks it consumes from.
         List<Set<SampleTask<?, ?>>> args = compilationCtx.traces.getRandomVariablesPerArgument(random);
 
         // Construct a list array of all the types, and an array list of all the

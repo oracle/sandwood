@@ -5,35 +5,35 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	// Getter for alpha.
 	public double[] get$alpha();
 
-	// Getter for fixedFlag$sample13.
-	public boolean get$fixedFlag$sample13();
+	// Getter for fixedFlag$sample20.
+	public boolean get$fixedFlag$sample20();
 
-	// Setter for fixedFlag$sample13.
-	public void set$fixedFlag$sample13(boolean cv$value);
+	// Setter for fixedFlag$sample20.
+	public void set$fixedFlag$sample20(boolean cv$value);
 
-	// Getter for fixedFlag$sample23.
-	public boolean get$fixedFlag$sample23();
+	// Getter for fixedFlag$sample37.
+	public boolean get$fixedFlag$sample37();
 
-	// Setter for fixedFlag$sample23.
-	public void set$fixedFlag$sample23(boolean cv$value);
+	// Setter for fixedFlag$sample37.
+	public void set$fixedFlag$sample37(boolean cv$value);
 
-	// Getter for fixedFlag$sample34.
-	public boolean get$fixedFlag$sample34();
+	// Getter for fixedFlag$sample55.
+	public boolean get$fixedFlag$sample55();
 
-	// Setter for fixedFlag$sample34.
-	public void set$fixedFlag$sample34(boolean cv$value);
+	// Setter for fixedFlag$sample55.
+	public void set$fixedFlag$sample55(boolean cv$value);
 
-	// Getter for fixedFlag$sample45.
-	public boolean get$fixedFlag$sample45();
+	// Getter for fixedFlag$sample73.
+	public boolean get$fixedFlag$sample73();
 
-	// Setter for fixedFlag$sample45.
-	public void set$fixedFlag$sample45(boolean cv$value);
+	// Setter for fixedFlag$sample73.
+	public void set$fixedFlag$sample73(boolean cv$value);
 
-	// Getter for fixedFlag$sample49.
-	public boolean get$fixedFlag$sample49();
+	// Getter for fixedFlag$sample77.
+	public boolean get$fixedFlag$sample77();
 
-	// Setter for fixedFlag$sample49.
-	public void set$fixedFlag$sample49(boolean cv$value);
+	// Setter for fixedFlag$sample77.
+	public void set$fixedFlag$sample77(boolean cv$value);
 
 	// Getter for k.
 	public int get$k();

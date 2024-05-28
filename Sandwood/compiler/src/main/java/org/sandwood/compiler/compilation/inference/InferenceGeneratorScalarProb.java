@@ -51,6 +51,7 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.DistributableRandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
@@ -299,8 +300,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     }
 
     @Override
-    protected void getPerSampleStartIR(FuncData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+    protected void getPerConsumerStartIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(consumerSampleProbabilitiesAccumulator, constant(Double.NEGATIVE_INFINITY),
                         "Set an accumulator to sum the probabilities for each possible configuration " + "of inputs."));
@@ -311,7 +311,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     }
 
     @Override
-    protected void getPerSampleEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+    protected void getPerConsumerEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 store(consumerSampleDistributionProbabilityAccumulator,
                         max(load(consumerSampleDistributionProbabilityAccumulator), constant(0.0)),
@@ -506,11 +506,11 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             DistributableRandomVariable<?, ?> rv, VariableDescription<ArrayVariable<C>> variableDescription) {
         // Allocate space for storing the results.
         compilationCtx.pushScope();
-        // Because of the reuse of max this needs to be serial. We could overcome this
-        // by taking a copy of the
-        // value of max in a new in, but as I am not sure that parallel allocation is a
-        // beneficial, for now we
-        // will make this serial and skip any overhead.
+        /*
+         * Because of the reuse of max this needs to be serial. We could overcome this by taking a copy of the value of
+         * max in a new in, but as I am not sure that parallel allocation is a beneficial, for now we will make this
+         * serial and skip any overhead.
+         */
         compilationCtx.pushIsSerial(true);
 
         IRTreeReturn<IntVariable> noStates = rv.getMaxNoStates(compilationCtx);
@@ -548,9 +548,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         IRTreeReturn<DoubleVariable> sampleProbability = functionCallReturn(FunctionType.LOG_PROBABILITY,
                 VariableType.DoubleVariable, task.randomVariable.getType(), args);
 
-        // Construct a tree to generate the probability, and save it to the sample
-        // accumulator.
-        compilationCtx.addTreeToScope(task.scope(),
+        // Construct a tree to generate the probability, and save it to the sample accumulator.
+        compilationCtx.addTreeToScope(GlobalScope.scope,
                 TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
                         addDD(log(info.probability), sampleProbability), consumerSampleProbabilitiesAccumulator,
                         "Record the probability of sample task " + task.id()
@@ -560,6 +559,25 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                 info.probability);
         IRTreeVoid sample = store(consumerSampleDistributionProbabilityAccumulator, outputValue,
                 "Recorded the probability of reaching sample task " + task.id() + " with the current configuration.");
-        compilationCtx.addTreeToScope(task.scope(), sample);
+        compilationCtx.addTreeToScope(GlobalScope.scope, sample);
+    }
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
+        IRTreeReturn<D> inputValue = input.getForwardIR(compilationCtx);
+        IRTreeReturn<BooleanVariable> guard = IRTree.eq(current, inputValue);
+        IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
+                log(info.probability), consumerSampleProbabilitiesAccumulator,
+                "Record if the conditional is valid.");
+        IRTreeVoid condition = IRTree.ifElse(guard, recordValid, "Check observed variable is possible");
+        compilationCtx.addTreeToScope(GlobalScope.scope, condition);
+
+        IRTreeReturn<DoubleVariable> outputValue = subtractDD(load(consumerSampleDistributionProbabilityAccumulator),
+                info.probability);
+        IRTreeVoid sample = store(consumerSampleDistributionProbabilityAccumulator, outputValue,
+                "Recorded the probability of reaching branch with the current configuration.");
+        compilationCtx.addTreeToScope(GlobalScope.scope, sample);
     }
 }

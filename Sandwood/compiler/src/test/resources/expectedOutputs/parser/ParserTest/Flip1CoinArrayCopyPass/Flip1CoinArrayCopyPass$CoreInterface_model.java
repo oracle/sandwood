@@ -20,11 +20,11 @@ interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.inte
 	// Setter for fixedFlag$sample13.
 	public void set$fixedFlag$sample13(boolean cv$value);
 
-	// Getter for fixedFlag$sample21.
-	public boolean get$fixedFlag$sample21();
+	// Getter for fixedFlag$sample29.
+	public boolean get$fixedFlag$sample29();
 
-	// Setter for fixedFlag$sample21.
-	public void set$fixedFlag$sample21(boolean cv$value);
+	// Setter for fixedFlag$sample29.
+	public void set$fixedFlag$sample29(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

@@ -6,17 +6,17 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
 	private double[] beta;
-	private double[] cv$var16$countGlobal;
-	private boolean fixedFlag$sample17 = false;
+	private double[] cv$var19$countGlobal;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample47 = false;
+	private boolean fixedFlag$sample23 = false;
 	private boolean fixedFlag$sample52 = false;
-	private boolean fixedProbFlag$sample17 = false;
+	private boolean fixedFlag$sample64 = false;
+	private boolean fixedFlag$sample76 = false;
 	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample47 = false;
+	private boolean fixedProbFlag$sample23 = false;
 	private boolean fixedProbFlag$sample52 = false;
+	private boolean fixedProbFlag$sample64 = false;
+	private boolean fixedProbFlag$sample76 = false;
 	private int length;
 	private int length$observed;
 	private double logProbability$$evidence;
@@ -27,11 +27,11 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$output;
 	private double logProbability$p;
 	private double logProbability$prior;
-	private double logProbability$var15;
 	private double logProbability$var18;
-	private double logProbability$var40;
-	private double logProbability$var45;
+	private double logProbability$var21;
 	private double logProbability$var50;
+	private double logProbability$var62;
+	private double logProbability$var74;
 	private boolean[] observed;
 	private boolean[] output;
 	private double[] p;
@@ -51,18 +51,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample17() {
-		return fixedFlag$sample17;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample17(boolean cv$value) {
-		fixedFlag$sample17 = cv$value;
-		fixedProbFlag$sample17 = (cv$value && fixedProbFlag$sample17);
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample20() {
 		return fixedFlag$sample20;
 	}
@@ -71,31 +59,21 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$fixedFlag$sample20(boolean cv$value) {
 		fixedFlag$sample20 = cv$value;
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
+		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		fixedFlag$sample23 = cv$value;
+		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
 		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
-		fixedFlag$sample42 = cv$value;
-		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
-		fixedFlag$sample47 = cv$value;
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
+		fixedProbFlag$sample64 = (cv$value && fixedProbFlag$sample64);
+		fixedProbFlag$sample76 = (cv$value && fixedProbFlag$sample76);
 	}
 
 	@Override
@@ -107,6 +85,28 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$fixedFlag$sample52(boolean cv$value) {
 		fixedFlag$sample52 = cv$value;
 		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample64() {
+		return fixedFlag$sample64;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample64(boolean cv$value) {
+		fixedFlag$sample64 = cv$value;
+		fixedProbFlag$sample64 = (cv$value && fixedProbFlag$sample64);
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample76() {
+		return fixedFlag$sample76;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample76(boolean cv$value) {
+		fixedFlag$sample76 = cv$value;
+		fixedProbFlag$sample76 = (cv$value && fixedProbFlag$sample76);
 	}
 
 	@Override
@@ -188,9 +188,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$output(boolean[] cv$value) {
 		output = cv$value;
 		setFlag$output = true;
-		fixedProbFlag$sample42 = false;
-		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample52 = false;
+		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample76 = false;
 	}
 
 	@Override
@@ -202,8 +202,8 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$p(double[] cv$value) {
 		p = cv$value;
 		setFlag$p = true;
-		fixedProbFlag$sample17 = false;
 		fixedProbFlag$sample20 = false;
+		fixedProbFlag$sample23 = false;
 	}
 
 	@Override
@@ -215,114 +215,114 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$prior(int[] cv$value) {
 		prior = cv$value;
 		setFlag$prior = true;
-		fixedProbFlag$sample20 = false;
-		fixedProbFlag$sample42 = false;
-		fixedProbFlag$sample47 = false;
+		fixedProbFlag$sample23 = false;
 		fixedProbFlag$sample52 = false;
-	}
-
-	private final void logProbabilityValue$sample17() {
-		if(!fixedProbFlag$sample17) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(p, beta);
-			logProbability$var15 = cv$distributionAccumulator;
-			logProbability$p = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample17)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample17 = fixedFlag$sample17;
-		} else {
-			logProbability$var15 = logProbability$p;
-			logProbability$$model = (logProbability$$model + logProbability$p);
-			if(fixedFlag$sample17)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$p);
-		}
+		fixedProbFlag$sample64 = false;
+		fixedProbFlag$sample76 = false;
 	}
 
 	private final void logProbabilityValue$sample20() {
 		if(!fixedProbFlag$sample20) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(prior, p, 10);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(p, beta);
 			logProbability$var18 = cv$distributionAccumulator;
-			logProbability$prior = cv$distributionAccumulator;
+			logProbability$p = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedFlag$sample17);
+			fixedProbFlag$sample20 = fixedFlag$sample20;
 		} else {
-			logProbability$var18 = logProbability$prior;
-			logProbability$$model = (logProbability$$model + logProbability$prior);
+			logProbability$var18 = logProbability$p;
+			logProbability$$model = (logProbability$$model + logProbability$p);
 			if(fixedFlag$sample20)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$p);
+		}
+	}
+
+	private final void logProbabilityValue$sample23() {
+		if(!fixedProbFlag$sample23) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(prior, p, 10);
+			logProbability$var21 = cv$distributionAccumulator;
+			logProbability$prior = cv$distributionAccumulator;
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			if(fixedFlag$sample23)
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample20);
+		} else {
+			logProbability$var21 = logProbability$prior;
+			logProbability$$model = (logProbability$$model + logProbability$prior);
+			if(fixedFlag$sample23)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$prior);
-		}
-	}
-
-	private final void logProbabilityValue$sample42() {
-		if(!fixedProbFlag$sample42) {
-			double cv$sampleAccumulator = 0.0;
-			for(int i$var39 = 0; i$var39 < length; i$var39 += 3)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var39], (prior[0] / 10)));
-			logProbability$b1 = cv$sampleAccumulator;
-			logProbability$var40 = cv$sampleAccumulator;
-			logProbability$output = (logProbability$output + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedFlag$sample20);
-		} else {
-			logProbability$b1 = logProbability$var40;
-			logProbability$output = (logProbability$output + logProbability$var40);
-			logProbability$$model = (logProbability$$model + logProbability$var40);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var40);
-		}
-	}
-
-	private final void logProbabilityValue$sample47() {
-		if(!fixedProbFlag$sample47) {
-			double cv$sampleAccumulator = 0.0;
-			for(int i$var44 = 1; i$var44 < length; i$var44 += 3)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var44], (prior[1] / 10)));
-			logProbability$b2 = cv$sampleAccumulator;
-			logProbability$var45 = cv$sampleAccumulator;
-			logProbability$output = (logProbability$output + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedFlag$sample20);
-		} else {
-			logProbability$b2 = logProbability$var45;
-			logProbability$output = (logProbability$output + logProbability$var45);
-			logProbability$$model = (logProbability$$model + logProbability$var45);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var45);
 		}
 	}
 
 	private final void logProbabilityValue$sample52() {
 		if(!fixedProbFlag$sample52) {
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var49 = 2; i$var49 < length; i$var49 += 3)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[2] / 10)));
-			logProbability$b3 = cv$sampleAccumulator;
+			for(int i$var49 = 0; i$var49 < length; i$var49 += 3)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[0] / 10)));
+			logProbability$b1 = cv$sampleAccumulator;
 			logProbability$var50 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedFlag$sample20);
+			fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedFlag$sample23);
 		} else {
-			logProbability$b3 = logProbability$var50;
+			logProbability$b1 = logProbability$var50;
 			logProbability$output = (logProbability$output + logProbability$var50);
 			logProbability$$model = (logProbability$$model + logProbability$var50);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$var50);
 		}
 	}
 
-	private final void sample17() {
-		cv$var16$countGlobal[0] = 0.0;
-		cv$var16$countGlobal[1] = 0.0;
-		cv$var16$countGlobal[2] = 0.0;
-		cv$var16$countGlobal[0] = (cv$var16$countGlobal[0] + prior[0]);
-		cv$var16$countGlobal[1] = (cv$var16$countGlobal[1] + prior[1]);
-		cv$var16$countGlobal[2] = (cv$var16$countGlobal[2] + prior[2]);
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var16$countGlobal, p);
+	private final void logProbabilityValue$sample64() {
+		if(!fixedProbFlag$sample64) {
+			double cv$sampleAccumulator = 0.0;
+			for(int i$var61 = 1; i$var61 < length; i$var61 += 3)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var61], (prior[1] / 10)));
+			logProbability$b2 = cv$sampleAccumulator;
+			logProbability$var62 = cv$sampleAccumulator;
+			logProbability$output = (logProbability$output + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample64 = (fixedFlag$sample64 && fixedFlag$sample23);
+		} else {
+			logProbability$b2 = logProbability$var62;
+			logProbability$output = (logProbability$output + logProbability$var62);
+			logProbability$$model = (logProbability$$model + logProbability$var62);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var62);
+		}
+	}
+
+	private final void logProbabilityValue$sample76() {
+		if(!fixedProbFlag$sample76) {
+			double cv$sampleAccumulator = 0.0;
+			for(int i$var73 = 2; i$var73 < length; i$var73 += 3)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var73], (prior[2] / 10)));
+			logProbability$b3 = cv$sampleAccumulator;
+			logProbability$var74 = cv$sampleAccumulator;
+			logProbability$output = (logProbability$output + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample76 = (fixedFlag$sample76 && fixedFlag$sample23);
+		} else {
+			logProbability$b3 = logProbability$var74;
+			logProbability$output = (logProbability$output + logProbability$var74);
+			logProbability$$model = (logProbability$$model + logProbability$var74);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var74);
+		}
 	}
 
 	private final void sample20() {
+		cv$var19$countGlobal[0] = 0.0;
+		cv$var19$countGlobal[1] = 0.0;
+		cv$var19$countGlobal[2] = 0.0;
+		cv$var19$countGlobal[0] = (cv$var19$countGlobal[0] + prior[0]);
+		cv$var19$countGlobal[1] = (cv$var19$countGlobal[1] + prior[1]);
+		cv$var19$countGlobal[2] = (cv$var19$countGlobal[2] + prior[2]);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var19$countGlobal, p);
+	}
+
+	private final void sample23() {
 		double cv$originalProbability;
 		int cv$nonZeroCount = 0;
 		for(int cv$loopIndex = 0; cv$loopIndex < prior.length; cv$loopIndex += 1) {
@@ -340,23 +340,23 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			cv$destinationIndex = (cv$destinationIndex + 1);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 10);
-			for(int i$var39 = 0; i$var39 < length; i$var39 += 3)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var39], (prior[0] / 10)) + cv$accumulatedProbabilities);
-			for(int i$var44 = 1; i$var44 < length; i$var44 += 3)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var44], (prior[1] / 10)) + cv$accumulatedProbabilities);
-			for(int i$var49 = 2; i$var49 < length; i$var49 += 3)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[2] / 10)) + cv$accumulatedProbabilities);
+			for(int i$var49 = 0; i$var49 < length; i$var49 += 3)
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[0] / 10)) + cv$accumulatedProbabilities);
+			for(int i$var61 = 1; i$var61 < length; i$var61 += 3)
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var61], (prior[1] / 10)) + cv$accumulatedProbabilities);
+			for(int i$var73 = 2; i$var73 < length; i$var73 += 3)
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var73], (prior[2] / 10)) + cv$accumulatedProbabilities);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		prior[cv$sourceIndex] = (prior[cv$sourceIndex] - cv$changeValue);
 		prior[cv$destinationIndex] = (prior[cv$destinationIndex] + cv$changeValue);
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 10);
-		for(int i$var39 = 0; i$var39 < length; i$var39 += 3)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var39], (prior[0] / 10)) + cv$accumulatedProbabilities);
-		for(int i$var44 = 1; i$var44 < length; i$var44 += 3)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var44], (prior[1] / 10)) + cv$accumulatedProbabilities);
-		for(int i$var49 = 2; i$var49 < length; i$var49 += 3)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[2] / 10)) + cv$accumulatedProbabilities);
+		for(int i$var49 = 0; i$var49 < length; i$var49 += 3)
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[0] / 10)) + cv$accumulatedProbabilities);
+		for(int i$var61 = 1; i$var61 < length; i$var61 += 3)
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var61], (prior[1] / 10)) + cv$accumulatedProbabilities);
+		for(int i$var73 = 2; i$var73 < length; i$var73 += 3)
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var73], (prior[2] / 10)) + cv$accumulatedProbabilities);
 		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			prior[cv$sourceIndex] = (prior[cv$sourceIndex] + cv$changeValue);
 			prior[cv$destinationIndex] = (prior[cv$destinationIndex] - cv$changeValue);
@@ -365,7 +365,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void allocateScratch() {
-		cv$var16$countGlobal = new double[3];
+		cv$var19$countGlobal = new double[3];
 	}
 
 	@Override
@@ -382,31 +382,31 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, 10, prior);
-		if(!fixedFlag$sample42)
-			parallelFor(RNG$, 0, length, 3,
-				(int forStart$i$var39, int forEnd$i$var39, int threadID$i$var39, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int i$var39 = forStart$i$var39; i$var39 < forEnd$i$var39; i$var39 += 3)
-							output[i$var39] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
-				}
-			);
-
-		if(!fixedFlag$sample47)
-			parallelFor(RNG$, 1, length, 3,
-				(int forStart$i$var44, int forEnd$i$var44, int threadID$i$var44, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int i$var44 = forStart$i$var44; i$var44 < forEnd$i$var44; i$var44 += 3)
-							output[i$var44] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
-				}
-			);
-
 		if(!fixedFlag$sample52)
-			parallelFor(RNG$, 2, length, 3,
+			parallelFor(RNG$, 0, length, 3,
 				(int forStart$i$var49, int forEnd$i$var49, int threadID$i$var49, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i$var49 = forStart$i$var49; i$var49 < forEnd$i$var49; i$var49 += 3)
-							output[i$var49] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
+							output[i$var49] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
+				}
+			);
+
+		if(!fixedFlag$sample64)
+			parallelFor(RNG$, 1, length, 3,
+				(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 3)
+							output[i$var61] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
+				}
+			);
+
+		if(!fixedFlag$sample76)
+			parallelFor(RNG$, 2, length, 3,
+				(int forStart$i$var73, int forEnd$i$var73, int threadID$i$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var73 = forStart$i$var73; i$var73 < forEnd$i$var73; i$var73 += 3)
+							output[i$var73] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
 				}
 			);
 
@@ -414,32 +414,32 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, 10, prior);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, 10, prior);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample17)
-				sample17();
 			if(!fixedFlag$sample20)
 				sample20();
+			if(!fixedFlag$sample23)
+				sample23();
 		} else {
+			if(!fixedFlag$sample23)
+				sample23();
 			if(!fixedFlag$sample20)
 				sample20();
-			if(!fixedFlag$sample17)
-				sample17();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -455,22 +455,22 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var15 = 0.0;
-		if(!fixedProbFlag$sample17)
-			logProbability$p = 0.0;
 		logProbability$var18 = 0.0;
 		if(!fixedProbFlag$sample20)
+			logProbability$p = 0.0;
+		logProbability$var21 = 0.0;
+		if(!fixedProbFlag$sample23)
 			logProbability$prior = 0.0;
 		logProbability$b1 = 0.0;
 		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample42)
-			logProbability$var40 = 0.0;
-		logProbability$b2 = 0.0;
-		if(!fixedProbFlag$sample47)
-			logProbability$var45 = 0.0;
-		logProbability$b3 = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var50 = 0.0;
+		logProbability$b2 = 0.0;
+		if(!fixedProbFlag$sample64)
+			logProbability$var62 = 0.0;
+		logProbability$b3 = 0.0;
+		if(!fixedProbFlag$sample76)
+			logProbability$var74 = 0.0;
 	}
 
 	@Override
@@ -481,40 +481,40 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample17)
-			logProbabilityValue$sample17();
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample47();
+		if(fixedFlag$sample23)
+			logProbabilityValue$sample23();
 		logProbabilityValue$sample52();
+		logProbabilityValue$sample64();
+		logProbabilityValue$sample76();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample17();
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample47();
+		logProbabilityValue$sample23();
 		logProbabilityValue$sample52();
+		logProbabilityValue$sample64();
+		logProbabilityValue$sample76();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample17();
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample47();
+		logProbabilityValue$sample23();
 		logProbabilityValue$sample52();
+		logProbabilityValue$sample64();
+		logProbabilityValue$sample76();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, p);
 		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, beta, p);
+		if(!fixedFlag$sample23)
 			DistributionSampling.sampleMultinomial(RNG$, p, 10, prior);
 		logModelProbabilitiesVal();
 	}

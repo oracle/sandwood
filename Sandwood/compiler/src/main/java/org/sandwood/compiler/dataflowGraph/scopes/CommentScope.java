@@ -11,6 +11,7 @@ package org.sandwood.compiler.dataflowGraph.scopes;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.Id;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
@@ -74,6 +75,11 @@ public class CommentScope extends Id implements Scope {
     protected void addIndent(StringBuilder sb, int depth) {
         for(int i = 0; i < depth; i++)
             sb.append("\t");
+    }
+
+    @Override
+    public BooleanVariable getScopeCondition() {
+        return scope.getScopeCondition();
     }
 
     @Override

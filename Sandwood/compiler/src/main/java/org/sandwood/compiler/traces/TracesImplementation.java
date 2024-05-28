@@ -30,10 +30,13 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable.OuterArrayDesc;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
@@ -85,7 +88,7 @@ public class TracesImplementation extends Traces {
     private final Map<SampleTask<?, ?>, Map<Variable<?>, Set<TraceHandle>>> observedSampleTraces = new HashMap<>();
 
     // Parent |-> Map(Intermediate Variable |-> Stack of tasks linking them).
-    private final Map<RandomVariable<?, ?>, Set<TraceHandle>> intermediateChildrenTraces = new HashMap<>();
+    private final Map<RandomVariable<?, ?>, Set<TraceHandle>> sampleVariableTraces = new HashMap<>();
 
     // Sample |-> Set(IntermediateVariables).
     private final Map<SampleTask<?, ?>, IntermediateDesc> sampleToIntermediates = new HashMap<>();
@@ -105,6 +108,20 @@ public class TracesImplementation extends Traces {
 
     // Set of all the distribution sample tasks.
     private final Set<DistributionSampleTask<?, ?>> distributionSampleTasks = new HashSet<>();
+
+    // Set of named variables on traces from a sample task that are read by a random variable argument and fixed by an
+    // observation.
+    private final Set<Variable<?>> consumedObservedVariables = new HashSet<>();
+
+    // A map from tasks where computation can branch to the traces taking data through that branch point.
+    private final Map<ProducingDataflowTask<?>, SplitConditionalTraces> conditionalTraces = new HashMap<>();
+    // A map from sample tasks to points where that sample effects the control flow of the program.
+    private final Map<SampleTask<?, ?>, Map<ProducingDataflowTask<?>, Set<TraceHandle>>> conditionalTraceTasks = new HashMap<>();
+    // A map from observed variables to the traces from conditionals that end at them.
+    private final Map<Variable<?>, Set<TraceHandle>> observedConditionalOutput = new HashMap<>();
+
+    // A set of model generated variables whose value is fixed by either direct or later observations.
+    private final Set<Variable<?>> evidenceVariables = new HashSet<>();
 
     /**
      * TODO currently using a variable as a means of collecting the graph, a neater way would be nice, but I don't want
@@ -167,10 +184,13 @@ public class TracesImplementation extends Traces {
         }
 
         DAGInfo dagInfo = new DAGInfo();
-        // Iterate through the variables starting trace generation. For anything other
-        // than random variables, observed variables, and terminal variables this will
-        // do nothing, but by constructing it like this was can add in other things we
-        // want to save just by overriding the method in the class.
+
+        /*
+         * Iterate through the variables starting trace generation. For anything other than random variables, observed
+         * variables, and terminal variables this will do nothing, but by constructing it like this was can add in other
+         * things we want to save just by overriding the method in the class.
+         */
+
         for(Variable<?> v:allVariables)
             v.constructTrace(dagInfo);
 
@@ -321,25 +341,38 @@ public class TracesImplementation extends Traces {
                 SampleTask<?, ?> sourceSample = (SampleTask<?, ?>) sourceTask;
                 RandomVariable<?, ?> sourceRV = sourceSample.randomVariable;
 
-                addIntermediates(handle);
                 addVariableSource(handle, sourceSample);
 
                 allSampleTasks.add(sourceSample);
 
-                {
+                // Record conditional properties of this trace.
+                DataflowTaskArgDesc conditionalGuard = recordConditionalTrace(sourceSample, handle);
+
+                addIntermediates(handle, conditionalGuard);
+
+                // Populate the evidence variables set.
+                for(int i = handle.size() - 1; i >= 0; i--) {
+                    DataflowTaskArgDesc dt = handle.get(i);
+                    Variable<?> ev = dt.task.getOutput();
+                    if(ev.isIntermediate() || ev.isObserved())
+                        evidenceVariables.add(ev);
+                    if(dt == conditionalGuard)
+                        break;
+                }
+
+                if(conditionalGuard == null) {
                     Set<TraceHandle> sourceChildren = observedChildrenTraces.computeIfAbsent(sourceRV,
                             k -> new HashSet<>());
                     sourceChildren.add(handle);
-                }
 
-                {
                     Map<Variable<?>, Set<TraceHandle>> sampleChildren = observedSampleTraces
-                            .computeIfAbsent(sourceSample, k -> new HashMap<>());
+                            .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
                     Set<TraceHandle> sampleTraces = sampleChildren.computeIfAbsent(sink, k -> new HashSet<>());
                     sampleTraces.add(handle);
+
+                    observedSampleTasks.add(sourceSample);
                 }
 
-                observedSampleTasks.add(sourceSample);
                 addToVarToSample(sink, sourceRV);
 
                 // Nothing progresses beyond this variable.
@@ -347,19 +380,16 @@ public class TracesImplementation extends Traces {
                     findTerminalVariables(handle);
 
                 // Populate sampleToRVTraces and intermediateChildrenTraces
-                Set<TraceHandle> intermediateVariableTraces = intermediateChildrenTraces.computeIfAbsent(sourceRV,
+                Set<TraceHandle> setSampleVariableTraces = sampleVariableTraces.computeIfAbsent(sourceRV,
                         k -> new HashSet<>());
 
                 SplitTrace splitTrace = splitTrace(handle);
                 TraceHandle toSampleHandle = TraceHandle.getTraceHandle(splitTrace.toSample);
-                intermediateVariableTraces.add(toSampleHandle);
+                setSampleVariableTraces.add(toSampleHandle);
                 addToVarToSample(splitTrace.sampleVar, sourceRV);
 
-                SampleTraceDesc sampleTraceDesc = sampleTrace.get(sourceSample);
-                if(sampleTraceDesc == null) {
-                    sampleTraceDesc = new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle);
-                    sampleTrace.put(sourceSample, sampleTraceDesc);
-                }
+                sampleTrace.computeIfAbsent(sourceSample,
+                        k -> new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle));
                 break;
             }
             case CONSTRUCT_INPUT: {
@@ -406,6 +436,165 @@ public class TracesImplementation extends Traces {
         }
     }
 
+    private DataflowTaskArgDesc recordConditionalTrace(SampleTask<?, ?> sourceSample, TraceHandle handle) {
+        DataflowTaskArgDesc conditionalGuard = null;
+        for(int i = handle.size() - 1; i >= 0; i--) {
+            DataflowTaskArgDesc d = handle.get(i);
+            switch(d.task.getType()) {
+                case IF_ASSIGNMENT: {
+                    IfElseAssignmentTask<?> ifElse = (IfElseAssignmentTask<?>) d.task;
+                    if(!ifElse.guard.isDeterministic()) {
+                        // Store this value of the trace does not go via the condition, otherwise set the inferGuard
+                        // flag
+                        if(d.argPos == 0) {
+                            conditionalGuard = d;
+                            Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks
+                                    .computeIfAbsent(sourceSample, k -> new HashMap<>());
+                            Set<TraceHandle> traces = m.computeIfAbsent(d.task, k -> new HashSet<>());
+                            Trace trace = handle.getTrace();
+                            while(trace.peek() != d)
+                                trace.pop();
+                            traces.add(TraceHandle.getTraceHandle(trace));
+
+                            // Record the trace to the break point for the assignment of a deterministic value.
+                            if(ifElse.ifValue.isDeterministic())
+                                recordConditionalTrace(d, handle, 1);
+
+                            // Record the trace to the break point for the assignment of a deterministic value.
+                            if(ifElse.elseValue.isDeterministic())
+                                recordConditionalTrace(d, handle, 2);
+
+                        } else {
+                            recordConditionalTrace(d, handle);
+                        }
+                    }
+                    break;
+                }
+                case PUT:
+                    PutTask<?> putTask = (PutTask<?>) d.task;
+                    if(!putTask.scopeCondition.isDeterministic()) {
+                        // Store this value of the trace does not go via the condition, otherwise set the inferGuard
+                        // flag
+                        if(d.argPos == 3) {
+                            conditionalGuard = d;
+                            Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks
+                                    .computeIfAbsent(sourceSample, k -> new HashMap<>());
+                            Set<TraceHandle> traces = m.computeIfAbsent(d.task, k -> new HashSet<>());
+                            Trace trace = handle.getTrace();
+                            while(trace.peek() != d)
+                                trace.pop();
+                            traces.add(TraceHandle.getTraceHandle(trace));
+
+                            // Record the trace to the break point for the assignment of a deterministic value.
+                            if(putTask.value.isDeterministic())
+                                recordConditionalTrace(d, handle, 2);
+                        } else {
+                            recordConditionalTrace(d, handle);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return conditionalGuard;
+    }
+
+    /**
+     * Method to split a trace around a provided point storing the trace before and after this point.
+     * 
+     * @param breakPoint The point to split the trace at.
+     * @param h          The trace to split.
+     */
+    private void recordConditionalTrace(DataflowTaskArgDesc breakPoint, TraceHandle h) {
+        Trace end = new Trace();
+        int i = 0;
+        DataflowTaskArgDesc d = h.get(i++);
+        while(d != breakPoint) {
+            end.add(d);
+            d = h.get(i++);
+        }
+        end.add(d);
+
+        Trace start = new Trace();
+        i--;
+        while(i < h.size())
+            start.add(h.get(i++));
+
+        SplitConditionalTraces s = conditionalTraces.computeIfAbsent(breakPoint.task,
+                k -> new SplitConditionalTraces());
+        s.addSinkToConditional(TraceHandle.getTraceHandle(start));
+        s.addConditionalToSource(d, (SampleTask<?,?>) end.get(0).task, TraceHandle.getTraceHandle(end));
+
+        recordObservedConditionalTraces(h);
+    }
+
+    /**
+     * Method to split a trace with a deterministic input on one of its arguments. The trace is split around a provided
+     * point storing the trace before and a description of the break point using the provided argument position to
+     * create a new argument description. The to source trace is empty as there is no need to invert a deterministic
+     * trace.
+     * 
+     * @param breakPoint The point to split the trace at.
+     * @param h          The trace to split.
+     * @param argPos     The argument position of the non deterministic argument.
+     */
+    private void recordConditionalTrace(DataflowTaskArgDesc breakPoint, TraceHandle h, int argPos) {
+        int i = 0;
+        DataflowTaskArgDesc d = h.get(i++);
+        while(d != breakPoint)
+            d = h.get(i++);
+
+        Trace start = new Trace();
+        start.add(new DataflowTaskArgDesc(breakPoint.task, argPos));
+        while(i < h.size())
+            start.add(h.get(i++));
+
+        SplitConditionalTraces s = conditionalTraces.computeIfAbsent(breakPoint.task,
+                k -> new SplitConditionalTraces());
+        s.addSinkToConditional(TraceHandle.getTraceHandle(start));
+
+        recordObservedConditionalTraces(h);
+    }
+
+    /**
+     * Method to test if a trace has an observed value as a sink and record the trace from the observation to the last
+     * value that would be set by the observation.
+     * 
+     * @param h The trace handle to process.
+     */
+    private void recordObservedConditionalTraces(TraceHandle h) {
+        int i;
+        DataflowTaskArgDesc d;
+        Variable<?> sink = h.peek().task.getOutput();
+        if(sink.isObserved()) {
+            // find the break point
+            int size = h.size();
+            i = size;
+            while(true) {
+                d = h.get(--i);
+                DFType type = d.task.getType();
+                if(type == DFType.IF_ASSIGNMENT) {
+                    IfElseAssignmentTask<?> ifElse = (IfElseAssignmentTask<?>) d.task;
+                    if(!ifElse.guard.isDeterministic())
+                        break;
+                } else if(type == DFType.PUT) {
+                    PutTask<?> putTask = (PutTask<?>) d.task;
+                    if(!putTask.scopeCondition.isDeterministic()) {
+                        break;
+                    }
+                }
+            }
+
+            // Copy the relevant portion of the trace into a new trace and save it.
+            Trace t = new Trace();
+            while(i < size)
+                t.add(h.get(i++));
+
+            observedConditionalOutput.computeIfAbsent(sink, k -> new HashSet<>()).add(TraceHandle.getTraceHandle(t));
+        }
+    }
+
     private void addObservedSource(TraceSinkPair p) {
         TraceHandle t = p.handle;
         for(DataflowTaskArgDesc d:t) {
@@ -442,6 +631,7 @@ public class TracesImplementation extends Traces {
 
     private void addRandomChild(TraceSinkPair p) {
         TraceHandle handle = p.handle;
+
         RandomVariable<?, ?> sink = (RandomVariable<?, ?>) p.sink;
 
         // Record the random variable constructor. //TODO revisit
@@ -467,11 +657,58 @@ public class TracesImplementation extends Traces {
 
                 allSampleTasks.add(sourceSample);
 
-                {
-                    Map<RandomVariable<?, ?>, Set<TraceHandle>> rvTraces = tracesRVToSampleTask
-                            .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
-                    Set<TraceHandle> traces = rvTraces.computeIfAbsent(sink, k -> new LinkedHashSet<>());
-                    traces.add(handle);
+                if(observedSampleTasks.contains(sourceTask)) {
+                    /*
+                     * The variable that would be inferred for this sample task is observed. As such the value will not
+                     * be inferred, so this trace should not be recorded. However, a warning will be recorded to ensure
+                     * that the user knows the value must be set as it won't be inferred. For example we will not allow
+                     * part of an array to be observed and the rest to be inferred.
+                     * 
+                     * TODO We may want to weaken this constraint in the future by the addition of a test to see if a
+                     * given value is observed before we attempt to infer it.
+                     * 
+                     * TODO Make this only trigger if the observed value has a possibility of being partially observed.
+                     * i.e. it is a part of an array that is being observed.
+                     */
+
+                    // Get all the named variables and arrays in the trace from the observed variable.
+                    SampleTraceDesc traceDesc = sampleTrace.get(sourceTask);
+                    Set<Variable<?>> vs = new HashSet<>();
+                    for(DataflowTaskArgDesc dt:traceDesc.traceToSampleVariable) {
+                        Variable<?> v = dt.task.getOutput();
+                        if(v.aliasSet() || v.getType().isArray())
+                            vs.add(v);
+                    }
+
+                    // For each variable in the passed trace check if it is in this set. If it is record it to report in
+                    // the compiler warning.
+                    for(DataflowTaskArgDesc dt:handle) {
+                        Variable<?> v = dt.task.getOutput();
+                        if(vs.contains(v)) {
+                            if(v.aliasSet())
+                                consumedObservedVariables.add(v);
+
+                            Type<?> t = v.getType();
+                            if(t.isArray()) {
+                                ArrayVariable<?> a = (ArrayVariable<?>) v;
+                                while(a.isSubArray()) {
+                                    OuterArrayDesc<?> o = a.getOuterArrayDesc();
+                                    a = o.getArray();
+                                    if(a.aliasSet())
+                                        consumedObservedVariables.add(a);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    DataflowTaskArgDesc conditionalGuard = recordConditionalTrace(sourceSample, handle);
+
+                    if(conditionalGuard == null) {
+                        Map<RandomVariable<?, ?>, Set<TraceHandle>> rvTraces = tracesRVToSampleTask
+                                .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
+                        Set<TraceHandle> traces = rvTraces.computeIfAbsent(sink, k -> new LinkedHashSet<>());
+                        traces.add(handle);
+                    }
                 }
 
                 // Populate random parents trace. This will have been initialized when the
@@ -486,20 +723,16 @@ public class TracesImplementation extends Traces {
                 if(sourceSample.isDistribution())
                     distributionSampleTasks.add((DistributionSampleTask<?, ?>) sourceSample);
 
-                // Populate sampleToRVTraces and intermediateChildrenTraces
-                Set<TraceHandle> intermediateVariableTraces = intermediateChildrenTraces.computeIfAbsent(sourceRV,
+                // Populate sampleToRVTraces and sampleVariableTraces
+                Set<TraceHandle> setSampleVariableTraces = sampleVariableTraces.computeIfAbsent(sourceRV,
                         k -> new HashSet<>());
 
                 SplitTrace splitTrace = splitTrace(handle);
                 TraceHandle toSampleHandle = TraceHandle.getTraceHandle(splitTrace.toSample);
-                intermediateVariableTraces.add(toSampleHandle);
+                setSampleVariableTraces.add(toSampleHandle);
                 addToVarToSample(splitTrace.sampleVar, sourceRV);
 
-                SampleTraceDesc sampleTraceDesc = sampleTrace.get(sourceSample);
-                if(sampleTraceDesc == null) {
-                    sampleTraceDesc = new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle);
-                    sampleTrace.put(sourceSample, sampleTraceDesc);
-                }
+                SampleTraceDesc sampleTraceDesc = sampleTrace.computeIfAbsent(sourceSample, k -> new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle));
                 sampleTraceDesc.toConsumingRV.put(sink, TraceHandle.getTraceHandle(splitTrace.fromConsumer));
                 break;
             }
@@ -538,13 +771,13 @@ public class TracesImplementation extends Traces {
                     // should be ignored.
                     case ARRAY_CONSTRUCTOR:
                         return false;
-                    // If the value goes via condition the trace should be ignored as the condition will appear in the
-                    // traces that go via the values.
+                        // If the value goes via condition the trace should be ignored as the condition will appear in the
+                        // traces that go via the values.
                     case IF_ASSIGNMENT:
                         if(d.task.getOutputType().isArray() && d.argPos == 0)
                             return false;
                         break;
-                    // As all passed arrays are populated this operation does not need to be filtered out.
+                        // As all passed arrays are populated this operation does not need to be filtered out.
                     case CONSTRUCT_INPUT:
                         break;
                     case GET:
@@ -759,8 +992,8 @@ public class TracesImplementation extends Traces {
     }
 
     @Override
-    public List<TraceHandle> getIntermediateVariableTraces(RandomVariable<?, ?> source) {
-        Set<TraceHandle> result = intermediateChildrenTraces.get(source);
+    public List<TraceHandle> getSampleVariableTraces(RandomVariable<?, ?> source) {
+        Set<TraceHandle> result = sampleVariableTraces.get(source);
         if(result != null) {
             List<TraceHandle> toReturn = new ArrayList<>(result);
             Collections.sort(toReturn);
@@ -884,7 +1117,9 @@ public class TracesImplementation extends Traces {
 
     @Override
     public Set<SampleTask<?, ?>> getAllIntermediateSamples() {
-        return tracesRVToSampleTask.keySet();
+        Set<SampleTask<?, ?>> toReturn = new HashSet<>(tracesRVToSampleTask.keySet());
+        toReturn.addAll(conditionalTraceTasks.keySet());
+        return toReturn;
     }
 
     /**
@@ -896,7 +1131,11 @@ public class TracesImplementation extends Traces {
      */
     @Override
     public Map<RandomVariable<?, ?>, Set<TraceHandle>> getTracesRVToSampleTask(SampleTask<?, ?> sampleTask) {
-        return tracesRVToSampleTask.get(sampleTask);
+        Map<RandomVariable<?, ?>, Set<TraceHandle>> toReturn = tracesRVToSampleTask.get(sampleTask);
+        if(toReturn == null)
+            return Collections.emptyMap();
+        else
+            return toReturn;
     }
 
     @Override
@@ -910,12 +1149,20 @@ public class TracesImplementation extends Traces {
     }
 
     private void addIntermediates(TraceHandle h) {
+        addIntermediates(h, null);
+    }
+
+    /**
+     * A method to record the variables set by a sample task.
+     * @param h The trace from the sample task.
+     * @param changePoint The point that a trace stops being observed, null if there is no point where the trace changes from observed to unobserved.
+     */
+    private void addIntermediates(TraceHandle h, DataflowTaskArgDesc changePoint) {
         SampleTask<?, ?> sample = (SampleTask<?, ?>) h.get(0).task;
         Set<Variable<?>> intermediateVars = h.getIntermediates();
 
-        IntermediateDesc intermediates = sampleToIntermediates.computeIfAbsent(sample,
-                k -> new IntermediateDesc(sample));
-        intermediates.addVariables(intermediateVars, h);
+        IntermediateDesc intermediates = sampleToIntermediates.computeIfAbsent(sample, k -> new IntermediateDesc(sample));
+        intermediates.addVariables(intermediateVars, h, changePoint);
 
         for(Variable<?> v:intermediateVars) {
             Set<SampleTask<?, ?>> s = intermediateSampleTaskDependencies.computeIfAbsent(v, k -> new LinkedHashSet<>());
@@ -924,8 +1171,8 @@ public class TracesImplementation extends Traces {
     }
 
     private void addVariableSource(TraceHandle t, SampleTask<?, ?> sample) {
-        int max = t.size();
-        for(int i = 0; i < max; i++) {
+        int size = t.size();
+        for(int i = 0; i < size; i++) {
             DataflowTask<?> d = t.get(i).task;
             Variable<?> v = d.getOutput();
             Set<SampleTask<?, ?>> s = sourceTasks.computeIfAbsent(v, k -> new HashSet<>());
@@ -1062,5 +1309,34 @@ public class TracesImplementation extends Traces {
     @Override
     public Set<Variable<?>> computedVariables() {
         return computedVars;
+    }
+
+    @Override
+    public Set<Variable<?>> getReadObservedVariables() {
+        return consumedObservedVariables;
+    }
+
+    @Override
+    public Map<ProducingDataflowTask<?>, Set<TraceHandle>> getTracesToConditionals(SampleTask<?, ?> sampleTask) {
+        Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks.get(sampleTask);
+        if(m == null)
+            return Collections.emptyMap();
+        else
+            return m;
+    }
+
+    @Override
+    public SplitConditionalTraces getSplitConditionalTraces(ProducingDataflowTask<?> task) {
+        return conditionalTraces.get(task);
+    }
+
+    @Override
+    public Map<Variable<?>, Set<TraceHandle>> getObservedConditionTraces() {
+        return observedConditionalOutput;
+    }
+
+    @Override
+    public Set<Variable<?>> getEvidenceVariables() {
+        return evidenceVariables;
     }
 }

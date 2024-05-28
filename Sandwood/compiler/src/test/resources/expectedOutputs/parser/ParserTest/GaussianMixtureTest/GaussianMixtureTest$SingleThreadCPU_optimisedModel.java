@@ -8,33 +8,33 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	
 	// Declare the variables for the model.
 	private double[] alpha;
-	private double[] cv$var12$countGlobal;
-	private double[] cv$var42$stateProbabilityGlobal;
-	private boolean fixedFlag$sample13 = false;
-	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample49 = false;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample49 = false;
+	private double[] cv$var19$countGlobal;
+	private double[] cv$var70$stateProbabilityGlobal;
+	private boolean fixedFlag$sample20 = false;
+	private boolean fixedFlag$sample37 = false;
+	private boolean fixedFlag$sample55 = false;
+	private boolean fixedFlag$sample73 = false;
+	private boolean fixedFlag$sample77 = false;
+	private boolean fixedProbFlag$sample20 = false;
+	private boolean fixedProbFlag$sample37 = false;
+	private boolean fixedProbFlag$sample55 = false;
+	private boolean fixedProbFlag$sample73 = false;
+	private boolean fixedProbFlag$sample77 = false;
 	private int length$xMeasured;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$mu;
 	private double logProbability$phi;
-	private double[] logProbability$sample45;
-	private double[] logProbability$sample49;
+	private double[] logProbability$sample73;
+	private double[] logProbability$sample77;
 	private double logProbability$sigma;
-	private double logProbability$var11;
-	private double logProbability$var17;
-	private double logProbability$var22;
-	private double logProbability$var28;
-	private double logProbability$var33;
-	private double[] logProbability$var41;
-	private double[] logProbability$var45;
+	private double logProbability$var18;
+	private double logProbability$var24;
+	private double logProbability$var36;
+	private double logProbability$var42;
+	private double logProbability$var54;
+	private double[] logProbability$var69;
+	private double[] logProbability$var73;
 	private double logProbability$x;
 	private double logProbability$z;
 	private double[] mu;
@@ -60,128 +60,128 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		return alpha;
 	}
 
-	// Getter for fixedFlag$sample13.
+	// Getter for fixedFlag$sample20.
 	@Override
-	public final boolean get$fixedFlag$sample13() {
-		return fixedFlag$sample13;
+	public final boolean get$fixedFlag$sample20() {
+		return fixedFlag$sample20;
 	}
 
-	// Setter for fixedFlag$sample13.
+	// Setter for fixedFlag$sample20.
 	@Override
-	public final void set$fixedFlag$sample13(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample13 including if probabilities
+	public final void set$fixedFlag$sample20(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
 		// need to be updated.
-		fixedFlag$sample13 = cv$value;
+		fixedFlag$sample20 = cv$value;
 		
-		// Should the probability of sample 13 be set to fixed. This will only every change
+		// Should the probability of sample 20 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample13" with its value "cv$value".
-		fixedProbFlag$sample13 = (cv$value && fixedProbFlag$sample13);
+		// Substituted "fixedFlag$sample20" with its value "cv$value".
+		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 		
-		// Should the probability of sample 45 be set to fixed. This will only every change
+		// Should the probability of sample 73 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample13" with its value "cv$value".
-		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+		// Substituted "fixedFlag$sample20" with its value "cv$value".
+		fixedProbFlag$sample73 = (cv$value && fixedProbFlag$sample73);
 	}
 
-	// Getter for fixedFlag$sample23.
+	// Getter for fixedFlag$sample37.
 	@Override
-	public final boolean get$fixedFlag$sample23() {
-		return fixedFlag$sample23;
+	public final boolean get$fixedFlag$sample37() {
+		return fixedFlag$sample37;
 	}
 
-	// Setter for fixedFlag$sample23.
+	// Setter for fixedFlag$sample37.
 	@Override
-	public final void set$fixedFlag$sample23(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample23 including if probabilities
+	public final void set$fixedFlag$sample37(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample37 including if probabilities
 		// need to be updated.
-		fixedFlag$sample23 = cv$value;
+		fixedFlag$sample37 = cv$value;
 		
-		// Should the probability of sample 23 be set to fixed. This will only every change
+		// Should the probability of sample 37 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample23" with its value "cv$value".
-		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
+		// Substituted "fixedFlag$sample37" with its value "cv$value".
+		fixedProbFlag$sample37 = (cv$value && fixedProbFlag$sample37);
 		
-		// Should the probability of sample 49 be set to fixed. This will only every change
+		// Should the probability of sample 77 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample23" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		// Substituted "fixedFlag$sample37" with its value "cv$value".
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
-	// Getter for fixedFlag$sample34.
+	// Getter for fixedFlag$sample55.
 	@Override
-	public final boolean get$fixedFlag$sample34() {
-		return fixedFlag$sample34;
+	public final boolean get$fixedFlag$sample55() {
+		return fixedFlag$sample55;
 	}
 
-	// Setter for fixedFlag$sample34.
+	// Setter for fixedFlag$sample55.
 	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
+	public final void set$fixedFlag$sample55(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample55 including if probabilities
 		// need to be updated.
-		fixedFlag$sample34 = cv$value;
+		fixedFlag$sample55 = cv$value;
 		
-		// Should the probability of sample 34 be set to fixed. This will only every change
+		// Should the probability of sample 55 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
+		// Substituted "fixedFlag$sample55" with its value "cv$value".
+		fixedProbFlag$sample55 = (cv$value && fixedProbFlag$sample55);
 		
-		// Should the probability of sample 49 be set to fixed. This will only every change
+		// Should the probability of sample 77 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		// Substituted "fixedFlag$sample55" with its value "cv$value".
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
-	// Getter for fixedFlag$sample45.
+	// Getter for fixedFlag$sample73.
 	@Override
-	public final boolean get$fixedFlag$sample45() {
-		return fixedFlag$sample45;
+	public final boolean get$fixedFlag$sample73() {
+		return fixedFlag$sample73;
 	}
 
-	// Setter for fixedFlag$sample45.
+	// Setter for fixedFlag$sample73.
 	@Override
-	public final void set$fixedFlag$sample45(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample45 including if probabilities
+	public final void set$fixedFlag$sample73(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample73 including if probabilities
 		// need to be updated.
-		fixedFlag$sample45 = cv$value;
+		fixedFlag$sample73 = cv$value;
 		
-		// Should the probability of sample 45 be set to fixed. This will only every change
+		// Should the probability of sample 73 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample45" with its value "cv$value".
-		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+		// Substituted "fixedFlag$sample73" with its value "cv$value".
+		fixedProbFlag$sample73 = (cv$value && fixedProbFlag$sample73);
 		
-		// Should the probability of sample 49 be set to fixed. This will only every change
+		// Should the probability of sample 77 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample45" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		// Substituted "fixedFlag$sample73" with its value "cv$value".
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
-	// Getter for fixedFlag$sample49.
+	// Getter for fixedFlag$sample77.
 	@Override
-	public final boolean get$fixedFlag$sample49() {
-		return fixedFlag$sample49;
+	public final boolean get$fixedFlag$sample77() {
+		return fixedFlag$sample77;
 	}
 
-	// Setter for fixedFlag$sample49.
+	// Setter for fixedFlag$sample77.
 	@Override
-	public final void set$fixedFlag$sample49(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample49 including if probabilities
+	public final void set$fixedFlag$sample77(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample77 including if probabilities
 		// need to be updated.
-		fixedFlag$sample49 = cv$value;
+		fixedFlag$sample77 = cv$value;
 		
-		// Should the probability of sample 49 be set to fixed. This will only every change
+		// Should the probability of sample 77 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample49" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		// Substituted "fixedFlag$sample77" with its value "cv$value".
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
 	// Getter for k.
@@ -260,11 +260,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		mu = cv$value;
 		setFlag$mu = true;
 		
-		// Unset the fixed probability flag for sample 23 as it depends on mu.
-		fixedProbFlag$sample23 = false;
+		// Unset the fixed probability flag for sample 37 as it depends on mu.
+		fixedProbFlag$sample37 = false;
 		
-		// Unset the fixed probability flag for sample 49 as it depends on mu.
-		fixedProbFlag$sample49 = false;
+		// Unset the fixed probability flag for sample 77 as it depends on mu.
+		fixedProbFlag$sample77 = false;
 	}
 
 	// Getter for phi.
@@ -283,11 +283,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		phi = cv$value;
 		setFlag$phi = true;
 		
-		// Unset the fixed probability flag for sample 13 as it depends on phi.
-		fixedProbFlag$sample13 = false;
+		// Unset the fixed probability flag for sample 20 as it depends on phi.
+		fixedProbFlag$sample20 = false;
 		
-		// Unset the fixed probability flag for sample 45 as it depends on phi.
-		fixedProbFlag$sample45 = false;
+		// Unset the fixed probability flag for sample 73 as it depends on phi.
+		fixedProbFlag$sample73 = false;
 	}
 
 	// Getter for sigma.
@@ -306,11 +306,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		sigma = cv$value;
 		setFlag$sigma = true;
 		
-		// Unset the fixed probability flag for sample 34 as it depends on sigma.
-		fixedProbFlag$sample34 = false;
+		// Unset the fixed probability flag for sample 55 as it depends on sigma.
+		fixedProbFlag$sample55 = false;
 		
-		// Unset the fixed probability flag for sample 49 as it depends on sigma.
-		fixedProbFlag$sample49 = false;
+		// Unset the fixed probability flag for sample 77 as it depends on sigma.
+		fixedProbFlag$sample77 = false;
 	}
 
 	// Getter for x.
@@ -328,8 +328,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		x = cv$value;
 		setFlag$x = true;
 		
-		// Unset the fixed probability flag for sample 49 as it depends on x.
-		fixedProbFlag$sample49 = false;
+		// Unset the fixed probability flag for sample 77 as it depends on x.
+		fixedProbFlag$sample77 = false;
 	}
 
 	// Getter for xMeasured.
@@ -361,12 +361,12 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		setFlag$z = true;
 	}
 
-	// Calculate the probability of the samples represented by sample13 using sampled
+	// Calculate the probability of the samples represented by sample20 using sampled
 	// values.
-	private final void logProbabilityValue$sample13() {
-		// Determine if we need to calculate the values for sample task 13 or if we should
+	private final void logProbabilityValue$sample20() {
+		// Determine if we need to calculate the values for sample task 20 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample13) {
+		if(!fixedProbFlag$sample20) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -396,7 +396,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var11 = cv$distributionAccumulator;
+			logProbability$var18 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$phi = cv$distributionAccumulator;
@@ -419,7 +419,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample13)
+			if(fixedFlag$sample20)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -436,13 +436,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample13 = fixedFlag$sample13;
+			fixedProbFlag$sample20 = fixedFlag$sample20;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var11 = logProbability$phi;
+			logProbability$var18 = logProbability$phi;
 			
 			// Add probability to model
 			// 
@@ -451,22 +451,22 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample13)
+			if(fixedFlag$sample20)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$phi);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample23 using sampled
+	// Calculate the probability of the samples represented by sample37 using sampled
 	// values.
-	private final void logProbabilityValue$sample23() {
-		// Determine if we need to calculate the values for sample task 23 or if we should
+	private final void logProbabilityValue$sample37() {
+		// Determine if we need to calculate the values for sample task 37 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample23) {
+		if(!fixedProbFlag$sample37) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var21 = 0; var21 < 5; var21 += 1)
+			for(int var35 = 0; var35 < 5; var35 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -482,11 +482,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var21] / 4.47213595499958))) - 1.4978661367769954);
-			logProbability$var17 = cv$sampleAccumulator;
+				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var35] / 4.47213595499958))) - 1.4978661367769954);
+			logProbability$var24 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var22 = cv$sampleAccumulator;
+			logProbability$var36 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -506,7 +506,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample23)
+			if(fixedFlag$sample37)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -515,42 +515,42 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample23 = fixedFlag$sample23;
+			fixedProbFlag$sample37 = fixedFlag$sample37;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var17 = logProbability$var22;
+			logProbability$var24 = logProbability$var36;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$mu = (logProbability$mu + logProbability$var22);
+			logProbability$mu = (logProbability$mu + logProbability$var36);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var22);
+			logProbability$$model = (logProbability$$model + logProbability$var36);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample23)
+			if(fixedFlag$sample37)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var22);
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var36);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample34 using sampled
+	// Calculate the probability of the samples represented by sample55 using sampled
 	// values.
-	private final void logProbabilityValue$sample34() {
-		// Determine if we need to calculate the values for sample task 34 or if we should
+	private final void logProbabilityValue$sample55() {
+		// Determine if we need to calculate the values for sample task 55 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample34) {
+		if(!fixedProbFlag$sample55) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var32 = 0; var32 < 5; var32 += 1)
+			for(int var53 = 0; var53 < 5; var53 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -566,11 +566,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(sigma[var32], 1.0, 1.0));
-			logProbability$var28 = cv$sampleAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(sigma[var53], 1.0, 1.0));
+			logProbability$var42 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var33 = cv$sampleAccumulator;
+			logProbability$var54 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -590,7 +590,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
+			if(fixedFlag$sample55)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -599,44 +599,44 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample34 = fixedFlag$sample34;
+			fixedProbFlag$sample55 = fixedFlag$sample55;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var28 = logProbability$var33;
+			logProbability$var42 = logProbability$var54;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$sigma = (logProbability$sigma + logProbability$var33);
+			logProbability$sigma = (logProbability$sigma + logProbability$var54);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var33);
+			logProbability$$model = (logProbability$$model + logProbability$var54);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
+			if(fixedFlag$sample55)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var33);
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var54);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample45 using sampled
+	// Calculate the probability of the samples represented by sample73 using sampled
 	// values.
-	private final void logProbabilityValue$sample45() {
-		// Determine if we need to calculate the values for sample task 45 or if we should
+	private final void logProbabilityValue$sample73() {
+		// Determine if we need to calculate the values for sample task 73 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample45) {
+		if(!fixedProbFlag$sample73) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = z[i$var40];
+				int cv$sampleValue = z[i$var68];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -670,10 +670,10 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var41[i$var40] = cv$distributionAccumulator;
+				logProbability$var69[i$var68] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample45[i$var40] = cv$distributionAccumulator;
+				logProbability$sample73[i$var68] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -684,23 +684,23 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample45)
+			if(fixedFlag$sample73)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample45 = (fixedFlag$sample45 && fixedFlag$sample13);
+			fixedProbFlag$sample73 = (fixedFlag$sample73 && fixedFlag$sample20);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample45[i$var40];
+				double cv$rvAccumulator = logProbability$sample73[i$var68];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var41[i$var40] = cv$rvAccumulator;
+				logProbability$var69[i$var68] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -711,22 +711,22 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample45)
+			if(fixedFlag$sample73)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample49 using sampled
+	// Calculate the probability of the samples represented by sample77 using sampled
 	// values.
-	private final void logProbabilityValue$sample49() {
-		// Determine if we need to calculate the values for sample task 49 or if we should
+	private final void logProbabilityValue$sample77() {
+		// Determine if we need to calculate the values for sample task 77 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample49) {
+		if(!fixedProbFlag$sample77) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
-				double var44 = sigma[z[i$var40]];
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
+				double var72 = sigma[z[i$var68]];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -751,7 +751,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((x[i$var40] - mu[z[i$var40]]) / Math.sqrt(var44))) - (Math.log(var44) * 0.5));
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((x[i$var68] - mu[z[i$var68]]) / Math.sqrt(var72))) - (Math.log(var72) * 0.5));
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -764,10 +764,10 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var45[i$var40] = cv$distributionAccumulator;
+				logProbability$var73[i$var68] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample49[i$var40] = cv$distributionAccumulator;
+				logProbability$sample77[i$var68] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -779,18 +779,18 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample49 = (((fixedFlag$sample49 && fixedFlag$sample23) && fixedFlag$sample34) && fixedFlag$sample45);
+			fixedProbFlag$sample77 = (((fixedFlag$sample77 && fixedFlag$sample37) && fixedFlag$sample55) && fixedFlag$sample73);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample49[i$var40];
+				double cv$rvAccumulator = logProbability$sample77[i$var68];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var45[i$var40] = cv$rvAccumulator;
+				logProbability$var73[i$var68] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -803,38 +803,38 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 13 drawn from Dirichlet 11. Inference was performed using a Dirichlet
+	// by sample task 20 drawn from Dirichlet 18. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample13() {
+	private final void sample20() {
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
 		for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
 			// A local reference to the scratch space.
-			cv$var12$countGlobal[cv$loopIndex] = 0.0;
+			cv$var19$countGlobal[cv$loopIndex] = 0.0;
 		
-		// Processing random variable 41.
-		for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-			// Processing sample task 45 of consumer random variable null.
+		// Processing random variable 69.
+		for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+			// Processing sample task 73 of consumer random variable null.
 			// 
-			// Increment the sample counter with the value sampled by sample task 45 of random
-			// variable var41
+			// Increment the sample counter with the value sampled by sample task 73 of random
+			// variable var69
 			// 
 			// A local reference to the scratch space.
-			cv$var12$countGlobal[z[i$var40]] = (cv$var12$countGlobal[z[i$var40]] + 1.0);
+			cv$var19$countGlobal[z[i$var68]] = (cv$var19$countGlobal[z[i$var68]] + 1.0);
 		
 		// Calculate the new sample value
 		// 
 		// Calculate a new sample value and write it into cv$targetLocal.
 		// 
 		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var12$countGlobal, phi);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var19$countGlobal, phi);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 23 drawn from Gaussian 17. Inference was performed using a Gaussian
+	// by sample task 37 drawn from Gaussian 24. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
-	private final void sample23(int var21) {
+	private final void sample37(int var35) {
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -848,14 +848,14 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// State for the value of sigma once we find it.
 		double cv$sigmaValue = 1.0;
 		
-		// Processing random variable 45.
+		// Processing random variable 73.
 		// 
-		// Looking for a path between Sample 23 and consumer Gaussian 45.
-		for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
-			if((var21 == z[i$var40])) {
-				// Processing sample task 49 of consumer random variable null.
-				// Record the value of a sample generated by a consuming sample 49 of random variable
-				// var45.
+		// Looking for a path between Sample 37 and consumer Gaussian 73.
+		for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
+			if((var35 == z[i$var68])) {
+				// Processing sample task 77 of consumer random variable null.
+				// Record the value of a sample generated by a consuming sample 77 of random variable
+				// var73.
 				// 
 				// Add the denominator squared to the sample denominator
 				// 
@@ -867,12 +867,12 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Add the weighting of the sample to the sum.
 				// 
 				// Substituted "cv$numerator" with its value "0.0".
-				cv$sum = (cv$sum + x[i$var40]);
+				cv$sum = (cv$sum + x[i$var68]);
 				
 				// If we have not got the value of sigma yet record it and set a flag so it is not
 				// recorded again.
 				if(cv$sigmaNotFound) {
-					cv$sigmaValue = sigma[z[i$var40]];
+					cv$sigmaValue = sigma[z[i$var68]];
 					cv$sigmaNotFound = false;
 				}
 			}
@@ -880,13 +880,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		mu[var21] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		mu[var35] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 34 drawn from InverseGamma 28. Inference was performed using a Inverse
+	// by sample task 55 drawn from InverseGamma 42. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
-	private final void sample34(int var32) {
+	private final void sample55(int var53) {
 		// Variable to track the sum of the difference between the samples and the random
 		// variables mean squared.
 		double cv$sum = 0.0;
@@ -894,21 +894,21 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Variable to record the number of samples from consuming random variables.
 		int cv$count = 0;
 		
-		// Processing random variable 45.
+		// Processing random variable 73.
 		// 
-		// Looking for a path between Sample 34 and consumer Gaussian 45.
-		for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
-			if((var32 == z[i$var40])) {
-				// Processing sample task 49 of consumer random variable null.
-				// Consume sample task 49 from random variable var45.
+		// Looking for a path between Sample 55 and consumer Gaussian 73.
+		for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
+			if((var53 == z[i$var68])) {
+				// Processing sample task 77 of consumer random variable null.
+				// Consume sample task 77 from random variable var73.
 				// 
 				// The difference between the mean parameter and the value sampled from the Gaussian.
 				// 
-				// The mean parameter for Gaussian var45.
-				double cv$var45$diff = (mu[z[i$var40]] - x[i$var40]);
+				// The mean parameter for Gaussian var73.
+				double cv$var73$diff = (mu[z[i$var68]] - x[i$var68]);
 				
 				// Include this sample by adding the square of the difference to the sum.
-				cv$sum = (cv$sum + (cv$var45$diff * cv$var45$diff));
+				cv$sum = (cv$sum + (cv$var73$diff * cv$var73$diff));
 				
 				// Increment the number of samples in the calculation.
 				cv$count = (cv$count + 1);
@@ -917,27 +917,27 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		sigma[var32] = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		sigma[var53] = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 45 drawn from Categorical 41. Inference was performed using variable
+	// by sample task 73 drawn from Categorical 69. Inference was performed using variable
 	// marginalization.
-	private final void sample45(int i$var40) {
+	private final void sample73(int i$var68) {
 		// cv$noStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
-			z[i$var40] = cv$valuePos;
+			z[i$var68] = cv$valuePos;
 			
-			// Variable declaration of cv$temp$2$var44 moved.
+			// Variable declaration of cv$temp$2$var72 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
-			double cv$temp$2$var44 = sigma[cv$valuePos];
+			double cv$temp$2$var72 = sigma[cv$valuePos];
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -950,7 +950,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 49 with the current configuration.
+			// Recorded the probability of reaching sample task 77 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
@@ -959,7 +959,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$phi" with its value "phi".
-			cv$var42$stateProbabilityGlobal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var40] - mu[cv$valuePos]) / Math.sqrt(cv$temp$2$var44))) + ((cv$valuePos < phi.length)?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY)) - (Math.log(cv$temp$2$var44) * 0.5));
+			cv$var70$stateProbabilityGlobal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var68] - mu[cv$valuePos]) / Math.sqrt(cv$temp$2$var72))) + ((cv$valuePos < phi.length)?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY)) - (Math.log(cv$temp$2$var72) * 0.5));
 		}
 		
 		// This value is not used before it is set again, so removing the value declaration.
@@ -972,30 +972,30 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Initialise the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var42$stateProbabilityGlobal[0];
+		double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
 		
 		// Unrolled loop
 		{
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var42$stateProbabilityGlobal[1];
+			double cv$lseElementValue = cv$var70$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
 		{
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var42$stateProbabilityGlobal[2];
+			double cv$lseElementValue = cv$var70$stateProbabilityGlobal[2];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
 		{
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var42$stateProbabilityGlobal[3];
+			double cv$lseElementValue = cv$var70$stateProbabilityGlobal[3];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
 		
 		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var42$stateProbabilityGlobal[4];
+		double cv$lseElementValue = cv$var70$stateProbabilityGlobal[4];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		
@@ -1014,7 +1014,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// variable marginalization
 			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var42$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				cv$lseSum = (cv$lseSum + Math.exp((cv$var70$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
 			// Increment the value of the target, moving the value back into log space.
 			// 
@@ -1030,7 +1030,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// variable marginalization
 			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var42$stateProbabilityGlobal[cv$indexName] = 0.2;
+				cv$var70$stateProbabilityGlobal[cv$indexName] = 0.2;
 		} else {
 			// Normalize log space values and move to normal space
 			// 
@@ -1038,20 +1038,20 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// variable marginalization
 			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var42$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var42$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+				cv$var70$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var70$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = 5; cv$indexName < cv$var42$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = 5; cv$indexName < cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var42$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
 		// Get a local reference to the scratch space.
-		z[i$var40] = DistributionSampling.sampleCategorical(RNG$, cv$var42$stateProbabilityGlobal);
+		z[i$var68] = DistributionSampling.sampleCategorical(RNG$, cv$var70$stateProbabilityGlobal);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -1060,13 +1060,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
-		// Allocation of cv$var12$countGlobal for single threaded execution
-		cv$var12$countGlobal = new double[5];
+		// Allocation of cv$var19$countGlobal for single threaded execution
+		cv$var19$countGlobal = new double[5];
 		
-		// Constructor for cv$var42$stateProbabilityGlobal
+		// Constructor for cv$var70$stateProbabilityGlobal
 		// 
-		// Allocation of cv$var42$stateProbabilityGlobal for single threaded execution
-		cv$var42$stateProbabilityGlobal = new double[5];
+		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+		cv$var70$stateProbabilityGlobal = new double[5];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -1100,17 +1100,17 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Constructor for z
 			z = new int[length$xMeasured];
 		
-		// Constructor for logProbability$var41
-		logProbability$var41 = new double[length$xMeasured];
+		// Constructor for logProbability$var69
+		logProbability$var69 = new double[length$xMeasured];
 		
-		// Constructor for logProbability$sample45
-		logProbability$sample45 = new double[length$xMeasured];
+		// Constructor for logProbability$sample73
+		logProbability$sample73 = new double[length$xMeasured];
 		
-		// Constructor for logProbability$var45
-		logProbability$var45 = new double[length$xMeasured];
+		// Constructor for logProbability$var73
+		logProbability$var73 = new double[length$xMeasured];
 		
-		// Constructor for logProbability$sample49
-		logProbability$sample49 = new double[length$xMeasured];
+		// Constructor for logProbability$sample77
+		logProbability$sample77 = new double[length$xMeasured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -1119,25 +1119,25 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample23) {
-			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		if(!fixedFlag$sample37) {
+			for(int var35 = 0; var35 < 5; var35 += 1)
+				mu[var35] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var32 = 0; var32 < 5; var32 += 1)
-				sigma[var32] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample55) {
+			for(int var53 = 0; var53 < 5; var53 += 1)
+				sigma[var53] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
-		for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
-			if(!fixedFlag$sample45)
-				z[i$var40] = DistributionSampling.sampleCategorical(RNG$, phi);
-			if(!fixedFlag$sample49)
-				x[i$var40] = ((Math.sqrt(sigma[z[i$var40]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[i$var40]]);
+		for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1) {
+			if(!fixedFlag$sample73)
+				z[i$var68] = DistributionSampling.sampleCategorical(RNG$, phi);
+			if(!fixedFlag$sample77)
+				x[i$var68] = ((Math.sqrt(sigma[z[i$var68]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[i$var68]]);
 		}
 	}
 
@@ -1145,25 +1145,25 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample23) {
-			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		if(!fixedFlag$sample37) {
+			for(int var35 = 0; var35 < 5; var35 += 1)
+				mu[var35] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var32 = 0; var32 < 5; var32 += 1)
-				sigma[var32] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample55) {
+			for(int var53 = 0; var53 < 5; var53 += 1)
+				sigma[var53] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-				z[i$var40] = DistributionSampling.sampleCategorical(RNG$, phi);
+		if(!fixedFlag$sample73) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+				z[i$var68] = DistributionSampling.sampleCategorical(RNG$, phi);
 		}
 	}
 
@@ -1171,25 +1171,25 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample23) {
-			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		if(!fixedFlag$sample37) {
+			for(int var35 = 0; var35 < 5; var35 += 1)
+				mu[var35] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var32 = 0; var32 < 5; var32 += 1)
-				sigma[var32] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample55) {
+			for(int var53 = 0; var53 < 5; var53 += 1)
+				sigma[var53] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-				z[i$var40] = DistributionSampling.sampleCategorical(RNG$, phi);
+		if(!fixedFlag$sample73) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+				z[i$var68] = DistributionSampling.sampleCategorical(RNG$, phi);
 		}
 	}
 
@@ -1198,48 +1198,48 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample13)
-				sample13();
+			if(!fixedFlag$sample20)
+				sample20();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample23) {
-				for(int var21 = 0; var21 < 5; var21 += 1)
-					sample23(var21);
+			if(!fixedFlag$sample37) {
+				for(int var35 = 0; var35 < 5; var35 += 1)
+					sample37(var35);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample34) {
-				for(int var32 = 0; var32 < 5; var32 += 1)
-					sample34(var32);
+			if(!fixedFlag$sample55) {
+				for(int var53 = 0; var53 < 5; var53 += 1)
+					sample55(var53);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample45) {
-				for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-					sample45(i$var40);
+			if(!fixedFlag$sample73) {
+				for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+					sample73(i$var68);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample45) {
-				for(int i$var40 = (length$xMeasured - 1); i$var40 >= 0; i$var40 -= 1)
-					sample45(i$var40);
+			if(!fixedFlag$sample73) {
+				for(int i$var68 = (length$xMeasured - 1); i$var68 >= 0; i$var68 -= 1)
+					sample73(i$var68);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample34) {
-				for(int var32 = 4; var32 >= 0; var32 -= 1)
-					sample34(var32);
+			if(!fixedFlag$sample55) {
+				for(int var53 = 4; var53 >= 0; var53 -= 1)
+					sample55(var53);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample23) {
-				for(int var21 = 4; var21 >= 0; var21 -= 1)
-					sample23(var21);
+			if(!fixedFlag$sample37) {
+				for(int var35 = 4; var35 >= 0; var35 -= 1)
+					sample37(var35);
 			}
-			if(!fixedFlag$sample13)
-				sample13();
+			if(!fixedFlag$sample20)
+				sample20();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -1250,8 +1250,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// etc.
 	@Override
 	public final void initializeConstants() {
-		for(int i$var8 = 0; i$var8 < 5; i$var8 += 1)
-			alpha[i$var8] = 1.0;
+		for(int i$var15 = 0; i$var15 < 5; i$var15 += 1)
+			alpha[i$var15] = 1.0;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1264,30 +1264,30 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var11 = 0.0;
-		if(!fixedProbFlag$sample13)
+		logProbability$var18 = 0.0;
+		if(!fixedProbFlag$sample20)
 			logProbability$phi = 0.0;
-		logProbability$var17 = 0.0;
+		logProbability$var24 = 0.0;
 		logProbability$mu = 0.0;
-		if(!fixedProbFlag$sample23)
-			logProbability$var22 = 0.0;
-		logProbability$var28 = 0.0;
+		if(!fixedProbFlag$sample37)
+			logProbability$var36 = 0.0;
+		logProbability$var42 = 0.0;
 		logProbability$sigma = 0.0;
-		if(!fixedProbFlag$sample34)
-			logProbability$var33 = 0.0;
-		for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-			logProbability$var41[i$var40] = 0.0;
+		if(!fixedProbFlag$sample55)
+			logProbability$var54 = 0.0;
+		for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+			logProbability$var69[i$var68] = 0.0;
 		logProbability$z = 0.0;
-		if(!fixedProbFlag$sample45) {
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-				logProbability$sample45[i$var40] = 0.0;
+		if(!fixedProbFlag$sample73) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+				logProbability$sample73[i$var68] = 0.0;
 		}
-		for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-			logProbability$var45[i$var40] = 0.0;
+		for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+			logProbability$var73[i$var68] = 0.0;
 		logProbability$x = 0.0;
-		if(!fixedProbFlag$sample49) {
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-				logProbability$sample49[i$var40] = 0.0;
+		if(!fixedProbFlag$sample77) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+				logProbability$sample77[i$var68] = 0.0;
 		}
 	}
 
@@ -1308,15 +1308,15 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample13)
-			logProbabilityValue$sample13();
-		if(fixedFlag$sample23)
-			logProbabilityValue$sample23();
-		if(fixedFlag$sample34)
-			logProbabilityValue$sample34();
-		if(fixedFlag$sample45)
-			logProbabilityValue$sample45();
-		logProbabilityValue$sample49();
+		if(fixedFlag$sample20)
+			logProbabilityValue$sample20();
+		if(fixedFlag$sample37)
+			logProbabilityValue$sample37();
+		if(fixedFlag$sample55)
+			logProbabilityValue$sample55();
+		if(fixedFlag$sample73)
+			logProbabilityValue$sample73();
+		logProbabilityValue$sample77();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1334,11 +1334,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample13();
-		logProbabilityValue$sample23();
-		logProbabilityValue$sample34();
-		logProbabilityValue$sample45();
-		logProbabilityValue$sample49();
+		logProbabilityValue$sample20();
+		logProbabilityValue$sample37();
+		logProbabilityValue$sample55();
+		logProbabilityValue$sample73();
+		logProbabilityValue$sample77();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1355,11 +1355,11 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample13();
-		logProbabilityValue$sample23();
-		logProbabilityValue$sample34();
-		logProbabilityValue$sample45();
-		logProbabilityValue$sample49();
+		logProbabilityValue$sample20();
+		logProbabilityValue$sample37();
+		logProbabilityValue$sample55();
+		logProbabilityValue$sample73();
+		logProbabilityValue$sample77();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1367,25 +1367,25 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample23) {
-			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		if(!fixedFlag$sample37) {
+			for(int var35 = 0; var35 < 5; var35 += 1)
+				mu[var35] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var32 = 0; var32 < 5; var32 += 1)
-				sigma[var32] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample55) {
+			for(int var53 = 0; var53 < 5; var53 += 1)
+				sigma[var53] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
-				z[i$var40] = DistributionSampling.sampleCategorical(RNG$, phi);
+		if(!fixedFlag$sample73) {
+			for(int i$var68 = 0; i$var68 < length$xMeasured; i$var68 += 1)
+				z[i$var68] = DistributionSampling.sampleCategorical(RNG$, phi);
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are

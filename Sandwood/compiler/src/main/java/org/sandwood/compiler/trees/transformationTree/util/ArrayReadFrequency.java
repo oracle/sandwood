@@ -361,14 +361,18 @@ public class ArrayReadFrequency {
             // Look to see if any candidates for removal from the tree can be confirmed.
             Map<Stack<TransTreeReturn<IntVariable>>, CandidateDescription> m = candidates.get(name);
             Collection<CandidateDescription> cs = m.values();
+            Set<Stack<TransTreeReturn<IntVariable>>> toRemove = new HashSet<>();
             for(CandidateDescription candidate:cs) {
                 if(candidate != ifCandidate && candidate != elseCandidate) {
                     if(equivalentCandidates(ifCandidate, candidate)) {
                         notRead.add(candidate.putTask);
-                        m.remove(candidate.indexes);
+                        toRemove.add(candidate.indexes);
                     }
                 }
             }
+            
+            for(Stack<TransTreeReturn<IntVariable>> indexes:toRemove)
+                m.remove(indexes);
         }
 
         private boolean equivalentCandidates(CandidateDescription current, CandidateDescription candidate) {

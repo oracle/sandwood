@@ -7,88 +7,144 @@ double var6 = 1.0;
 double[] var7 = new double[var4];
 int var8 = 0;
 int var9 = 1;
-for(int var10=var8; var10 < var4; var10 += var9) {
-	var7[var10] = var6;
+for(int var17=var8; var17 < var4; var17 += var9) {
+	boolean var10 = true;
+	boolean var11 = var8 >= var4;
+	int var12 = 0;
+	boolean var13 = var9 == var12;
+	boolean var14 = !var13;
+	boolean var15 = var11 && var14;
+	boolean var16 = var15 && var10;
+	var7[var17] = var6;
 }
-int var12 = 0;
-var5[var12] = var7;
-double var14 = 4.0;
-double[] var15 = new double[var4];
-int var16 = 0;
-int var17 = 1;
-for(int var18=var16; var18 < var4; var18 += var17) {
-	var15[var18] = var14;
-}
-int var20 = 1;
-var5[var20] = var15;
-boolean var22 = true;
-boolean[] var23 = new boolean[var3];
+int var19 = 0;
+boolean var20 = true;
+var5[var19] = var7;
+double var22 = 4.0;
+double[] var23 = new double[var4];
 int var24 = 0;
 int var25 = 1;
-for(int var26=var24; var26 < var3; var26 += var25) {
-	var23[var26] = var22;
+for(int var33=var24; var33 < var4; var33 += var25) {
+	boolean var26 = true;
+	boolean var27 = var24 >= var4;
+	int var28 = 0;
+	boolean var29 = var25 == var28;
+	boolean var30 = !var29;
+	boolean var31 = var27 && var30;
+	boolean var32 = var31 && var26;
+	var23[var33] = var22;
 }
-int var28 = 0;
-double[] var29 = var5[var28];
-int var30 = var29.length;
-int var31 = var5.length;
-boolean[] var32 = new boolean[var31];
-int var33 = var5.length;
-double[][] var34 = new double[var33][];
-double var35 = 0.0;
-double var36 = 10.0;
-Gaussian var37 = new Gaussian(var35, var36);
-double[] var38 = new double[var30];
-int var39 = 0;
-int var40 = 1;
-for(int var41=var39; var41 < var30; var41 += var40) {
-	double var42 = var37.sample();
-	var38[var41] = var42;
+int var35 = 1;
+boolean var36 = true;
+var5[var35] = var23;
+boolean var38 = true;
+boolean[] var39 = new boolean[var3];
+int var40 = 0;
+int var41 = 1;
+for(int var49=var40; var49 < var3; var49 += var41) {
+	boolean var42 = true;
+	boolean var43 = var40 >= var3;
+	int var44 = 0;
+	boolean var45 = var41 == var44;
+	boolean var46 = !var45;
+	boolean var47 = var43 && var46;
+	boolean var48 = var47 && var42;
+	var39[var49] = var38;
 }
-double var44 = 0.0;
-double var45 = 10.0;
-Gaussian var46 = new Gaussian(var44, var45);
-double var47 = var46.sample();
-int var48 = 0;
-int var49 = var5.length;
-int var50 = 1;
-for(int var51=var48; var51 < var49; var51 += var50) {
-	Uniform var52 = new Uniform(var1, var2);
-	double[] var53 = new double[var30];
-	int var54 = 0;
-	int var55 = 1;
-	for(int var56=var54; var56 < var30; var56 += var55) {
-		double var57 = var52.sample();
-		var53[var56] = var57;
+int var51 = 0;
+double[] var52 = var5[var51];
+int var53 = var52.length;
+int var54 = var5.length;
+boolean[] var55 = new boolean[var54];
+int var56 = var5.length;
+double[][] var57 = new double[var56][];
+double var58 = 0.0;
+double var59 = 10.0;
+Gaussian var60 = new Gaussian(var58, var59);
+double[] var61 = new double[var53];
+int var62 = 0;
+int var63 = 1;
+for(int var71=var62; var71 < var53; var71 += var63) {
+	boolean var64 = true;
+	boolean var65 = var62 >= var53;
+	int var66 = 0;
+	boolean var67 = var63 == var66;
+	boolean var68 = !var67;
+	boolean var69 = var65 && var68;
+	boolean var70 = var69 && var64;
+	double var72 = var60.sample();
+	var61[var71] = var72;
+}
+double var74 = 0.0;
+double var75 = 10.0;
+Gaussian var76 = new Gaussian(var74, var75);
+double var77 = var76.sample();
+int var78 = 0;
+int var79 = var5.length;
+int var80 = 1;
+for(int var88=var78; var88 < var79; var88 += var80) {
+	boolean var81 = true;
+	boolean var82 = var78 >= var79;
+	int var83 = 0;
+	boolean var84 = var80 == var83;
+	boolean var85 = !var84;
+	boolean var86 = var82 && var85;
+	boolean var87 = var86 && var81;
+	Uniform var89 = new Uniform(var1, var2);
+	double[] var90 = new double[var53];
+	int var91 = 0;
+	int var92 = 1;
+	for(int var99=var91; var99 < var53; var99 += var92) {
+		boolean var93 = var91 >= var53;
+		int var94 = 0;
+		boolean var95 = var92 == var94;
+		boolean var96 = !var95;
+		boolean var97 = var93 && var96;
+		boolean var98 = var97 && var87;
+		double var100 = var89.sample();
+		var90[var99] = var100;
 	}
-	var34[var51] = var53;
+	var57[var88] = var90;
 }
-int var60 = 0;
-int var61 = var5.length;
-int var62 = 1;
-for(int var63=var60; var63 < var61; var63 += var62) {
-	double[] var64 = new double[var30];
-	int var65 = 0;
-	int var66 = 1;
-	for(int var67=var65; var67 < var30; var67 += var66) {
-		double var68 = var38[var67];
-		double[] var69 = var34[var63];
-		double var70 = var69[var67];
-		double var71 = var68 * var70;
-		var64[var67] = var71;
+int var103 = 0;
+int var104 = var5.length;
+int var105 = 1;
+for(int var113=var103; var113 < var104; var113 += var105) {
+	boolean var106 = true;
+	boolean var107 = var103 >= var104;
+	int var108 = 0;
+	boolean var109 = var105 == var108;
+	boolean var110 = !var109;
+	boolean var111 = var107 && var110;
+	boolean var112 = var111 && var106;
+	double[] var114 = new double[var53];
+	int var115 = 0;
+	int var116 = 1;
+	for(int var123=var115; var123 < var53; var123 += var116) {
+		boolean var117 = var115 >= var53;
+		int var118 = 0;
+		boolean var119 = var116 == var118;
+		boolean var120 = !var119;
+		boolean var121 = var117 && var120;
+		boolean var122 = var121 && var112;
+		double var124 = var61[var123];
+		double[] var125 = var57[var113];
+		double var126 = var125[var123];
+		double var127 = var124 * var126;
+		var114[var123] = var127;
 	}
-	int var73 = 0;
-	int var74 = var64.length;
-	double var75 = 0.0;
-	double var79 = reduce(var64, var73, var74, var75) (double var76, double var77) -> {
-		double var78 = var76 + var77;
+	int var129 = 0;
+	int var130 = var114.length;
+	double var131 = 0.0;
+	double var137 = reduce(var114, var129, var130, var131) (double var134, double var135) -> {
+		double var136 = var134 + var135;
 	}
-	return var78;
-	double var80 = var79 + var47;
-	double var81 = Sigmoid(var80);
-	Bernoulli var82 = new Bernoulli(var81);
-	boolean var83 = var82.sample();
-	var32[var63] = var83;
+	return var136;
+	double var138 = var137 + var77;
+	double var139 = Sigmoid(var138);
+	Bernoulli var140 = new Bernoulli(var139);
+	boolean var141 = var140.sample();
+	var55[var113] = var141;
 }
-var34.observe(var5);
-var32.observe(var23);
+var57.observe(var5);
+var55.observe(var39);

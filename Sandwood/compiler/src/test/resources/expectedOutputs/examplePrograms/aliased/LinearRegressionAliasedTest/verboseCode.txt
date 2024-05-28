@@ -7,91 +7,147 @@ double var6 = 1.0;
 double[] t = new double[kInit];
 int var8 = 0;
 int var9 = 1;
-for(int var10=var8; var10 < kInit; var10 += var9) {
-	t[var10] = var6;
+for(int var17=var8; var17 < kInit; var17 += var9) {
+	boolean var10 = true;
+	boolean var11 = var8 >= kInit;
+	int var12 = 0;
+	boolean var13 = var9 == var12;
+	boolean var14 = !var13;
+	boolean var15 = var11 && var14;
+	boolean var16 = var15 && var10;
+	t[var17] = var6;
 }
-int var12 = 0;
-xMeasured[var12] = t;
-double var14 = 4.0;
+int var19 = 0;
+boolean var20 = true;
+xMeasured[var19] = t;
+double var22 = 4.0;
 double[] t = new double[kInit];
-int var16 = 0;
-int var17 = 1;
-for(int var18=var16; var18 < kInit; var18 += var17) {
-	t[var18] = var14;
-}
-int var20 = 1;
-xMeasured[var20] = t;
-double var22 = 3.5;
-double[] yMeasured = new double[n];
 int var24 = 0;
 int var25 = 1;
-for(int var26=var24; var26 < n; var26 += var25) {
-	yMeasured[var26] = var22;
+for(int var33=var24; var33 < kInit; var33 += var25) {
+	boolean var26 = true;
+	boolean var27 = var24 >= kInit;
+	int var28 = 0;
+	boolean var29 = var25 == var28;
+	boolean var30 = !var29;
+	boolean var31 = var27 && var30;
+	boolean var32 = var31 && var26;
+	t[var33] = var22;
 }
-int var28 = 0;
-double[] var29 = xMeasured[var28];
-int k = var29.length;
-int var31 = xMeasured.length;
-double[] y = new double[var31];
-int var33 = xMeasured.length;
-double[][] x = new double[var33][];
-double var35 = 0.0;
-double var36 = 10.0;
-Gaussian var37 = new Gaussian(var35, var36);
+int var35 = 1;
+boolean var36 = true;
+xMeasured[var35] = t;
+double var38 = 3.5;
+double[] yMeasured = new double[n];
+int var40 = 0;
+int var41 = 1;
+for(int var49=var40; var49 < n; var49 += var41) {
+	boolean var42 = true;
+	boolean var43 = var40 >= n;
+	int var44 = 0;
+	boolean var45 = var41 == var44;
+	boolean var46 = !var45;
+	boolean var47 = var43 && var46;
+	boolean var48 = var47 && var42;
+	yMeasured[var49] = var38;
+}
+int var51 = 0;
+double[] var52 = xMeasured[var51];
+int k = var52.length;
+int var54 = xMeasured.length;
+double[] y = new double[var54];
+int var56 = xMeasured.length;
+double[][] x = new double[var56][];
+double var58 = 0.0;
+double var59 = 10.0;
+Gaussian var60 = new Gaussian(var58, var59);
 double[] weights = new double[k];
-int var39 = 0;
-int var40 = 1;
-for(int var41=var39; var41 < k; var41 += var40) {
-	double var42 = var37.sample();
-	weights[var41] = var42;
+int var62 = 0;
+int var63 = 1;
+for(int var71=var62; var71 < k; var71 += var63) {
+	boolean var64 = true;
+	boolean var65 = var62 >= k;
+	int var66 = 0;
+	boolean var67 = var63 == var66;
+	boolean var68 = !var67;
+	boolean var69 = var65 && var68;
+	boolean var70 = var69 && var64;
+	double var72 = var60.sample();
+	weights[var71] = var72;
 }
-double var44 = 0.0;
-double var45 = 10.0;
-Gaussian var46 = new Gaussian(var44, var45);
-double bias = var46.sample();
-double var48 = 3.0;
-double var49 = 1.0;
-InverseGamma var50 = new Inverse Gamma(var48, var49);
-double tau = var50.sample();
-int var52 = 0;
-int var53 = xMeasured.length;
-int var54 = 1;
-for(int i=var52; i < var53; i += var54) {
+double var74 = 0.0;
+double var75 = 10.0;
+Gaussian var76 = new Gaussian(var74, var75);
+double bias = var76.sample();
+double var78 = 3.0;
+double var79 = 1.0;
+InverseGamma var80 = new Inverse Gamma(var78, var79);
+double tau = var80.sample();
+int var82 = 0;
+int var83 = xMeasured.length;
+int var84 = 1;
+for(int i=var82; i < var83; i += var84) {
+	boolean var85 = true;
+	boolean var86 = var82 >= var83;
+	int var87 = 0;
+	boolean var88 = var84 == var87;
+	boolean var89 = !var88;
+	boolean var90 = var86 && var89;
+	boolean var91 = var90 && var85;
 	Uniform uniform = new Uniform(l, u);
-	double[] var57 = new double[k];
-	int var58 = 0;
-	int var59 = 1;
-	for(int var60=var58; var60 < k; var60 += var59) {
-		double var61 = uniform.sample();
-		var57[var60] = var61;
+	double[] var94 = new double[k];
+	int var95 = 0;
+	int var96 = 1;
+	for(int var103=var95; var103 < k; var103 += var96) {
+		boolean var97 = var95 >= k;
+		int var98 = 0;
+		boolean var99 = var96 == var98;
+		boolean var100 = !var99;
+		boolean var101 = var97 && var100;
+		boolean var102 = var101 && var91;
+		double var104 = uniform.sample();
+		var94[var103] = var104;
 	}
-	x[i] = var57;
+	x[i] = var94;
 }
-int var64 = 0;
-int var65 = xMeasured.length;
-int var66 = 1;
-for(int i=var64; i < var65; i += var66) {
+int var107 = 0;
+int var108 = xMeasured.length;
+int var109 = 1;
+for(int i=var107; i < var108; i += var109) {
+	boolean var110 = true;
+	boolean var111 = var107 >= var108;
+	int var112 = 0;
+	boolean var113 = var109 == var112;
+	boolean var114 = !var113;
+	boolean var115 = var111 && var114;
+	boolean var116 = var115 && var110;
 	double[] phi = new double[k];
-	int var69 = 0;
-	int var70 = 1;
-	for(int j=var69; j < k; j += var70) {
-		double var72 = weights[j];
-		double[] var73 = x[i];
-		double var74 = var73[j];
-		double var75 = var72 * var74;
-		phi[j] = var75;
+	int var119 = 0;
+	int var120 = 1;
+	for(int j=var119; j < k; j += var120) {
+		boolean var121 = var119 >= k;
+		int var122 = 0;
+		boolean var123 = var120 == var122;
+		boolean var124 = !var123;
+		boolean var125 = var121 && var124;
+		boolean var126 = var125 && var116;
+		double var128 = weights[j];
+		double[] var129 = x[i];
+		double var130 = var129[j];
+		double var131 = var128 * var130;
+		phi[j] = var131;
 	}
-	int var77 = 0;
-	int var78 = phi.length;
-	double var79 = 0.0;
-	double var83 = reduce(phi, var77, var78, var79) (double var80, double var81) -> {
-		double var82 = var80 + var81;
+	int var133 = 0;
+	int var134 = phi.length;
+	double var135 = 0.0;
+	double var141 = reduce(phi, var133, var134, var135) (double var138, double var139) -> {
+		double var140 = var138 + var139;
 	}
-	return var82;
-	double var84 = var83 + bias;
-	Gaussian var85 = new Gaussian(var84, tau);
-	double var86 = var85.sample();
-	y[i] = var86;
+	return var140;
+	double var142 = var141 + bias;
+	Gaussian var143 = new Gaussian(var142, tau);
+	double var144 = var143.sample();
+	y[i] = var144;
 }
 x.observe(xMeasured);
 y.observe(yMeasured);

@@ -10,18 +10,18 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double b1;
 	private boolean fixedFlag$sample14 = false;
 	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample27 = false;
+	private boolean fixedFlag$sample34 = false;
 	private boolean fixedProbFlag$sample14 = false;
 	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample27 = false;
+	private boolean fixedProbFlag$sample34 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double[] logProbability$sample27;
+	private double[] logProbability$sample34;
 	private double logProbability$var10;
 	private double logProbability$var14;
-	private double[] logProbability$var23;
+	private double[] logProbability$var30;
 	private double logProbability$y;
 	private int noSamples;
 	private boolean setFlag$y = false;
@@ -50,8 +50,8 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Unset the fixed probability flag for sample 14 as it depends on b0.
 		fixedProbFlag$sample14 = false;
 		
-		// Unset the fixed probability flag for sample 27 as it depends on b0.
-		fixedProbFlag$sample27 = false;
+		// Unset the fixed probability flag for sample 34 as it depends on b0.
+		fixedProbFlag$sample34 = false;
 	}
 
 	// Getter for b1.
@@ -70,8 +70,8 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Unset the fixed probability flag for sample 18 as it depends on b1.
 		fixedProbFlag$sample18 = false;
 		
-		// Unset the fixed probability flag for sample 27 as it depends on b1.
-		fixedProbFlag$sample27 = false;
+		// Unset the fixed probability flag for sample 34 as it depends on b1.
+		fixedProbFlag$sample34 = false;
 	}
 
 	// Getter for fixedFlag$sample14.
@@ -93,11 +93,11 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Substituted "fixedFlag$sample14" with its value "cv$value".
 		fixedProbFlag$sample14 = (cv$value && fixedProbFlag$sample14);
 		
-		// Should the probability of sample 27 be set to fixed. This will only every change
+		// Should the probability of sample 34 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample14" with its value "cv$value".
-		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
+		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
 	}
 
 	// Getter for fixedFlag$sample18.
@@ -119,31 +119,31 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Substituted "fixedFlag$sample18" with its value "cv$value".
 		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
 		
-		// Should the probability of sample 27 be set to fixed. This will only every change
+		// Should the probability of sample 34 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample18" with its value "cv$value".
-		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
+		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
 	}
 
-	// Getter for fixedFlag$sample27.
+	// Getter for fixedFlag$sample34.
 	@Override
-	public final boolean get$fixedFlag$sample27() {
-		return fixedFlag$sample27;
+	public final boolean get$fixedFlag$sample34() {
+		return fixedFlag$sample34;
 	}
 
-	// Setter for fixedFlag$sample27.
+	// Setter for fixedFlag$sample34.
 	@Override
-	public final void set$fixedFlag$sample27(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
+	public final void set$fixedFlag$sample34(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
 		// need to be updated.
-		fixedFlag$sample27 = cv$value;
+		fixedFlag$sample34 = cv$value;
 		
-		// Should the probability of sample 27 be set to fixed. This will only every change
+		// Should the probability of sample 34 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample27" with its value "cv$value".
-		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
+		// Substituted "fixedFlag$sample34" with its value "cv$value".
+		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
 	}
 
 	// Getter for logProbability$$evidence.
@@ -211,8 +211,8 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 27 as it depends on y.
-		fixedProbFlag$sample27 = false;
+		// Unset the fixed probability flag for sample 34 as it depends on y.
+		fixedProbFlag$sample34 = false;
 	}
 
 	// Getter for yMeasured.
@@ -421,12 +421,12 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample27 using sampled
+	// Calculate the probability of the samples represented by sample34 using sampled
 	// values.
-	private final void logProbabilityValue$sample27() {
-		// Determine if we need to calculate the values for sample task 27 or if we should
+	private final void logProbabilityValue$sample34() {
+		// Determine if we need to calculate the values for sample task 34 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample27) {
+		if(!fixedProbFlag$sample34) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -467,10 +467,10 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var23[i] = cv$distributionAccumulator;
+				logProbability$var30[i] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample27[i] = cv$distributionAccumulator;
+				logProbability$sample34[i] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -482,7 +482,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample14) && fixedFlag$sample18);
+			fixedProbFlag$sample34 = ((fixedFlag$sample34 && fixedFlag$sample14) && fixedFlag$sample18);
 		}
 		// Using cached values.
 		else {
@@ -491,9 +491,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample27[i];
+				double cv$rvAccumulator = logProbability$sample34[i];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var23[i] = cv$rvAccumulator;
+				logProbability$var30[i] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -540,25 +540,25 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
 			
-			// Processing random variable 23.
+			// Processing random variable 30.
 			for(int i = 0; i < noSamples; i += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 27 with the current configuration.
+				// Recorded the probability of reaching sample task 34 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 27 of consumer random variable null.
+				// Processing sample task 34 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$var22's comment
-				// Variable declaration of cv$temp$2$var22 moved.
+				// cv$temp$2$var29's comment
+				// Variable declaration of cv$temp$2$var29 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -587,25 +587,25 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Substituted "cv$temp$1$var9" with its value "2.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
 		
-		// Processing random variable 23.
+		// Processing random variable 30.
 		for(int i = 0; i < noSamples; i += 1)
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 27 with the current configuration.
+			// Recorded the probability of reaching sample task 34 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 27 of consumer random variable null.
+			// Processing sample task 34 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var22's comment
-			// Variable declaration of cv$temp$2$var22 moved.
+			// cv$temp$2$var29's comment
+			// Variable declaration of cv$temp$2$var29 moved.
 			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
@@ -666,25 +666,25 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
 			
-			// Processing random variable 23.
+			// Processing random variable 30.
 			for(int i = 0; i < noSamples; i += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 27 with the current configuration.
+				// Recorded the probability of reaching sample task 34 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 27 of consumer random variable null.
+				// Processing sample task 34 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$var22's comment
-				// Variable declaration of cv$temp$2$var22 moved.
+				// cv$temp$2$var29's comment
+				// Variable declaration of cv$temp$2$var29 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -713,25 +713,25 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Substituted "cv$temp$1$var13" with its value "5.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
 		
-		// Processing random variable 23.
+		// Processing random variable 30.
 		for(int i = 0; i < noSamples; i += 1)
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 27 with the current configuration.
+			// Recorded the probability of reaching sample task 34 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 27 of consumer random variable null.
+			// Processing sample task 34 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var22's comment
-			// Variable declaration of cv$temp$2$var22 moved.
+			// cv$temp$2$var29's comment
+			// Variable declaration of cv$temp$2$var29 moved.
 			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
@@ -771,11 +771,11 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Constructor for y
 			y = new double[x.length];
 		
-		// Constructor for logProbability$var23
-		logProbability$var23 = new double[x.length];
+		// Constructor for logProbability$var30
+		logProbability$var30 = new double[x.length];
 		
-		// Constructor for logProbability$sample27
-		logProbability$sample27 = new double[x.length];
+		// Constructor for logProbability$sample34
+		logProbability$sample34 = new double[x.length];
 	}
 
 	// Method to execute the model code conventionally.
@@ -787,7 +787,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample27)
+		if(!fixedFlag$sample34)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noSamples, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -867,11 +867,11 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(!fixedProbFlag$sample18)
 			logProbability$b1 = 0.0;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var23[i] = 0.0;
+			logProbability$var30[i] = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample27) {
+		if(!fixedProbFlag$sample34) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample27[i] = 0.0;
+				logProbability$sample34[i] = 0.0;
 		}
 	}
 
@@ -896,7 +896,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbabilityValue$sample14();
 		if(fixedFlag$sample18)
 			logProbabilityValue$sample18();
-		logProbabilityValue$sample27();
+		logProbabilityValue$sample34();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -916,7 +916,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
-		logProbabilityValue$sample27();
+		logProbabilityValue$sample34();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -935,7 +935,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample14();
 		logProbabilityValue$sample18();
-		logProbabilityValue$sample27();
+		logProbabilityValue$sample34();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then

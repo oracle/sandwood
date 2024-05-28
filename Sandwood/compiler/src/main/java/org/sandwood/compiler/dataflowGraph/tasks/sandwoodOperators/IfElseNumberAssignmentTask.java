@@ -9,6 +9,7 @@
 package org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
@@ -19,8 +20,8 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 public class IfElseNumberAssignmentTask<A extends NumberVariable<A>> extends IfElseAssignmentTask<A>
         implements NumberProducingDataflowTask<A> {
 
-    public IfElseNumberAssignmentTask(BooleanVariable guard, A ifValue, A elseValue, Location location) {
-        super(guard, ifValue, elseValue, location);
+    public IfElseNumberAssignmentTask(BooleanVariable guard, A ifValue, A elseValue, IfScope ifScope, Location location) {
+        super(guard, ifValue, elseValue, ifScope, location);
     }
 
     @Override

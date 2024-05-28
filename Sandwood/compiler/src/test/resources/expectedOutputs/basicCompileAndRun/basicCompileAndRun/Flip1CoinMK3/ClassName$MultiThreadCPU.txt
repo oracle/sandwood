@@ -7,9 +7,9 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	// Declare the variables for the model.
 	private double bias;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample16 = false;
+	private boolean fixedFlag$sample23 = false;
 	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample16 = false;
+	private boolean fixedProbFlag$sample23 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private int length$flipsMeasured;
@@ -18,7 +18,7 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private double[] logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flips;
-	private double[] logProbability$sample16;
+	private double[] logProbability$sample23;
 	private double logProbability$var7;
 	private int samples;
 	private boolean setFlag$flips = false;
@@ -56,8 +56,8 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Unset the fixed probability flag for sample 10 as it depends on bias.
 		fixedProbFlag$sample10 = false;
 		
-		// Unset the fixed probability flag for sample 16 as it depends on bias.
-		fixedProbFlag$sample16 = false;
+		// Unset the fixed probability flag for sample 23 as it depends on bias.
+		fixedProbFlag$sample23 = false;
 	}
 
 	// Getter for fixedFlag$sample10.
@@ -79,31 +79,31 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Substituted "fixedFlag$sample10" with its value "cv$value".
 		fixedProbFlag$sample10 = (cv$value && fixedProbFlag$sample10);
 		
-		// Should the probability of sample 16 be set to fixed. This will only every change
+		// Should the probability of sample 23 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample10" with its value "cv$value".
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
+		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
 	}
 
-	// Getter for fixedFlag$sample16.
+	// Getter for fixedFlag$sample23.
 	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
 	}
 
-	// Setter for fixedFlag$sample16.
+	// Setter for fixedFlag$sample23.
 	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample23 including if probabilities
 		// need to be updated.
-		fixedFlag$sample16 = cv$value;
+		fixedFlag$sample23 = cv$value;
 		
-		// Should the probability of sample 16 be set to fixed. This will only every change
+		// Should the probability of sample 23 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
+		// Substituted "fixedFlag$sample23" with its value "cv$value".
+		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
 	}
 
 	// Getter for flips.
@@ -122,8 +122,8 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		flips = cv$value;
 		setFlag$flips = true;
 		
-		// Unset the fixed probability flag for sample 16 as it depends on flips.
-		fixedProbFlag$sample16 = false;
+		// Unset the fixed probability flag for sample 23 as it depends on flips.
+		fixedProbFlag$sample23 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -284,16 +284,16 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample16 using sampled
+	// Calculate the probability of the samples represented by sample23 using sampled
 	// values.
-	private final void logProbabilityValue$sample16() {
-		// Determine if we need to calculate the values for sample task 16 or if we should
+	private final void logProbabilityValue$sample23() {
+		// Determine if we need to calculate the values for sample task 23 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample16) {
+		if(!fixedProbFlag$sample23) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i$var12 = 0; i$var12 < samples; i$var12 += 1) {
+			for(int i$var19 = 0; i$var19 < samples; i$var19 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -317,7 +317,7 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[i$var12], bias);
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[i$var19], bias);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -330,10 +330,10 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$bernoulli[i$var12] = cv$distributionAccumulator;
+				logProbability$bernoulli[i$var19] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample16[i$var12] = cv$distributionAccumulator;
+				logProbability$sample23[i$var19] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -345,18 +345,18 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample10);
+			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample10);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var12 = 0; i$var12 < samples; i$var12 += 1) {
+			for(int i$var19 = 0; i$var19 < samples; i$var19 += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample16[i$var12];
+				double cv$rvAccumulator = logProbability$sample23[i$var19];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$bernoulli[i$var12] = cv$rvAccumulator;
+				logProbability$bernoulli[i$var19] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -378,16 +378,16 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Local variable to record the number of samples.
 		int cv$count = 0;
 		
-		// Processing random variable 13.
-		for(int i$var12 = 0; i$var12 < samples; i$var12 += 1) {
-			// Processing sample task 16 of consumer random variable bernoulli.
+		// Processing random variable 20.
+		for(int i$var19 = 0; i$var19 < samples; i$var19 += 1) {
+			// Processing sample task 23 of consumer random variable bernoulli.
 			// 
-			// Include the value sampled by task 16 from random variable bernoulli.
+			// Include the value sampled by task 23 from random variable bernoulli.
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
 			// If the sample value was positive increase the count
-			if(flips[i$var12])
+			if(flips[i$var19])
 				cv$sum = (cv$sum + 1);
 		}
 		
@@ -412,8 +412,8 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Constructor for logProbability$bernoulli
 		logProbability$bernoulli = new double[length$flipsMeasured];
 		
-		// Constructor for logProbability$sample16
-		logProbability$sample16 = new double[length$flipsMeasured];
+		// Constructor for logProbability$sample23
+		logProbability$sample23 = new double[length$flipsMeasured];
 	}
 
 	// Method to execute the model code conventionally.
@@ -423,15 +423,15 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample16)
+		if(!fixedFlag$sample23)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$i$var19, int forEnd$i$var19, int threadID$i$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							flips[i$var12] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+						for(int i$var19 = forStart$i$var19; i$var19 < forEnd$i$var19; i$var19 += 1)
+							flips[i$var19] = DistributionSampling.sampleBernoulli(RNG$1, bias);
 				}
 			);
 
@@ -484,12 +484,12 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		logProbability$var7 = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$bias = 0.0;
-		for(int i$var12 = 0; i$var12 < samples; i$var12 += 1)
-			logProbability$bernoulli[i$var12] = 0.0;
+		for(int i$var19 = 0; i$var19 < samples; i$var19 += 1)
+			logProbability$bernoulli[i$var19] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample16) {
-			for(int i$var12 = 0; i$var12 < samples; i$var12 += 1)
-				logProbability$sample16[i$var12] = 0.0;
+		if(!fixedProbFlag$sample23) {
+			for(int i$var19 = 0; i$var19 < samples; i$var19 += 1)
+				logProbability$sample23[i$var19] = 0.0;
 		}
 	}
 
@@ -512,7 +512,7 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -531,7 +531,7 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -549,7 +549,7 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample10();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -570,8 +570,8 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	@Override
 	public final void propogateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		for(int i$var18 = (samples - 1); i$var18 >= 0; i$var18 -= 1)
-			flips[i$var18] = flipsMeasured[i$var18];
+		for(int i$var32 = (samples - 1); i$var32 >= 0; i$var32 -= 1)
+			flips[i$var32] = flipsMeasured[i$var32];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

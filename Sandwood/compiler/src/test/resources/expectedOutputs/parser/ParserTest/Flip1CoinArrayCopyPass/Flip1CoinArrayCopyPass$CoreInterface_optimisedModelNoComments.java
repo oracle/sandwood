@@ -7,8 +7,8 @@ interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.inte
 	public void set$bias(double[] cv$value);
 	public boolean get$fixedFlag$sample13();
 	public void set$fixedFlag$sample13(boolean cv$value);
-	public boolean get$fixedFlag$sample21();
-	public void set$fixedFlag$sample21(boolean cv$value);
+	public boolean get$fixedFlag$sample29();
+	public void set$fixedFlag$sample29(boolean cv$value);
 	public boolean[] get$flips();
 	public void set$flips(boolean[] cv$value);
 	public boolean[] get$flipsMeasured();

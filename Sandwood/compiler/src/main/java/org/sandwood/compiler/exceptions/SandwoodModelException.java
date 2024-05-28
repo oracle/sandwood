@@ -24,14 +24,58 @@ public class SandwoodModelException extends SandwoodException {
         loc = null;
     }
 
-    public SandwoodModelException(String message, Variable<?> v) {
+    public SandwoodModelException(String message, Variable<?>... vs) {
         super(message);
-        loc = v.getLocation();
+        if(vs.length==1)
+            loc = vs[0].getLocation();
+        else {
+            int startCol = Integer.MAX_VALUE;
+            int startLine = Integer.MAX_VALUE;
+            int endCol = -1;
+            int endLine = -1;
+            for(Variable<?> v:vs) {
+                Location l = v.getLocation();
+                if(l.startLine < startLine) {
+                    startLine = l.startLine;
+                    startCol = l.startCol;
+                } else if(l.startLine == startLine && l.startCol < startCol)
+                    startCol = l.startCol;
+
+                if(l.endLine > endLine) {
+                    endLine = l.endLine;
+                    endCol = l.endCol;
+                } else if(l.endLine == endLine && l.endCol > endCol)
+                    endCol = l.endCol;
+            }
+            loc = new Location(startLine, startCol, endLine, endCol);
+        }
     }
 
-    public SandwoodModelException(String message, DataflowTask<?> t) {
+    public SandwoodModelException(String message, DataflowTask<?>... ts) {
         super(message);
-        loc = t.getLocation();
+        if(ts.length == 1)
+            loc = ts[0].getLocation();
+        else {
+            int startCol = Integer.MAX_VALUE;
+            int startLine = Integer.MAX_VALUE;
+            int endCol = -1;
+            int endLine = -1;
+            for(DataflowTask<?> t:ts) {
+                Location l = t.getLocation();
+                if(l.startLine < startLine) {
+                    startLine = l.startLine;
+                    startCol = l.startCol;
+                } else if(l.startLine == startLine && l.startCol < startCol)
+                    startCol = l.startCol;
+
+                if(l.endLine > endLine) {
+                    endLine = l.endLine;
+                    endCol = l.endCol;
+                } else if(l.endLine == endLine && l.endCol > endCol)
+                    endCol = l.endCol;
+            }
+            loc = new Location(startLine, startCol, endLine, endCol);
+        }
     }
 
     public SandwoodModelException(String message, Token t) {

@@ -17,9 +17,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.ReductionScope;
-import org.sandwood.compiler.dataflowGraph.scopes.ReductionScopeCopied;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
@@ -52,42 +49,32 @@ class ScopeDescription {
          */
         public final Map<Variable<?>, VariablePair<?>> varSubstitutions;
 
-        public final Map<ReductionScope<?>, ReductionScopeCopied<?>> reductionScopesSubstitutions;
-
-        public Substitutions(Map<Variable<?>, VariablePair<?>> substitutions,
-                Map<ReductionScope<?>, ReductionScopeCopied<?>> reductionScopesSubstitutions) {
+        public Substitutions(Map<Variable<?>, VariablePair<?>> substitutions) {
             this.varSubstitutions = Collections.unmodifiableMap(substitutions);
-            this.reductionScopesSubstitutions = Collections.unmodifiableMap(reductionScopesSubstitutions);
         }
 
         public Substitutions(Substitutions... ss) {
             Map<Variable<?>, VariablePair<?>> vs = new HashMap<>();
-            Map<ReductionScope<?>, ReductionScopeCopied<?>> rs = new HashMap<>();
             for(Substitutions s:ss) {
                 vs.putAll(s.varSubstitutions);
-                rs.putAll(s.reductionScopesSubstitutions);
             }
             varSubstitutions = Collections.unmodifiableMap(vs);
-            reductionScopesSubstitutions = Collections.unmodifiableMap(rs);
         }
 
         public Substitutions() {
             varSubstitutions = Collections.emptyMap();
-            reductionScopesSubstitutions = Collections.emptyMap();
         }
 
         public Substitutions(VariablePair<?> v) {
             Map<Variable<?>, VariablePair<?>> vs = new HashMap<>();
             vs.put(v.source, v);
             varSubstitutions = Collections.unmodifiableMap(vs);
-            reductionScopesSubstitutions = Collections.emptyMap();
         }
 
         public Substitutions(Substitutions s, VariablePair<?> v) {
             Map<Variable<?>, VariablePair<?>> vs = new HashMap<>(s.varSubstitutions);
             vs.put(v.source, v);
             varSubstitutions = Collections.unmodifiableMap(vs);
-            reductionScopesSubstitutions = Collections.emptyMap();
         }
 
         @Override
@@ -121,10 +108,10 @@ class ScopeDescription {
          */
         public final Set<Set<TraceHandle>> postTraceSets;
 
-        ConstraintData(TraceHandle trace, Set<Set<TraceHandle>> postTraceSets) {
-            this.task = trace.peek().task;
+        ConstraintData(TraceHandle trace, boolean forward) {
+            this.task = (forward?trace.peek():trace.get(0)).task;
             this.trace = trace;
-            this.postTraceSets = postTraceSets;
+            this.postTraceSets = null;
             Map<DataflowTask<?>, Substitutions> subs = new HashMap<>();
             subs.put(task, new Substitutions());
             substitutions = Collections.unmodifiableMap(subs);
@@ -396,11 +383,11 @@ class ScopeDescription {
                     "Trying to add distribution traces to a class that already has its distribution traces set.");
     }
 
-    public ScopeDescription constructConstraintSpace(TraceHandle trace) {
-        return new ScopeDescription(trace, this);
+    public ScopeDescription constructConstraintSpace(TraceHandle trace, boolean forward) {
+        return new ScopeDescription(trace, this, forward);
     }
 
-    private ScopeDescription(TraceHandle trace, ScopeDescription d) {
+    private ScopeDescription(TraceHandle trace, ScopeDescription d, boolean forward) {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
@@ -408,7 +395,7 @@ class ScopeDescription {
         knownFlags = d.knownFlags;
 
         List<ConstraintData> cd = new ArrayList<>(d.constraintData);
-        cd.add(new ConstraintData(trace, null));
+        cd.add(new ConstraintData(trace, forward));
         constraintData = Collections.unmodifiableList(cd);
     }
 
@@ -562,14 +549,6 @@ class ScopeDescription {
         Substitutions s = c.substitutions.get(task);
         for(VariablePair<?> v:s.varSubstitutions.values())
             addVarPairSubstitute(v, compilationCtx);
-        for(ReductionScope<?> rs:s.reductionScopesSubstitutions.keySet()) {
-            ReductionScopeCopied<?> rsSub = s.reductionScopesSubstitutions.get(rs);
-            compilationCtx.addScopeSubstitute(rs, rsSub);
-            Scope scope = rsSub.getEnclosingScope();
-            // If this is not enclosed in a reduction scope as reductions scopes are already being substituted here.
-            if(scope.getScopeType() != ScopeType.REDUCE)
-                compilationCtx.addScopeSubstitute(scope, GlobalScope.scope);
-        }
     }
 
     /**
@@ -604,14 +583,6 @@ class ScopeDescription {
         Substitutions s = c.substitutions.get(task);
         for(Variable<?> v:s.varSubstitutions.keySet())
             compilationCtx.removeSubstitute(v);
-        for(ReductionScope<?> rs:s.reductionScopesSubstitutions.keySet()) {
-            compilationCtx.removeScopeSubstitute(rs);
-            ReductionScopeCopied<?> rsSub = s.reductionScopesSubstitutions.get(rs);
-            Scope scope = rsSub.getEnclosingScope();
-            // If this is not enclosed in a reduction scope as reductions scopes are already being removed here.
-            if(scope.getScopeType() != ScopeType.REDUCE)
-                compilationCtx.removeScopeSubstitute(scope);
-        }
     }
 
     /**

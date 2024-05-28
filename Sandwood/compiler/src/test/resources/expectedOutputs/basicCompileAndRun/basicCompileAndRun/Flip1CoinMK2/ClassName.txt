@@ -67,13 +67,13 @@ public class ClassName extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed);
+                system$c.set$fixedFlag$sample18(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample11())
+            if(system$c.get$fixedFlag$sample18())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -181,7 +181,7 @@ public class ClassName extends Model {
         if(bias.isSet())
             newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
+            newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
     }
 
     /**

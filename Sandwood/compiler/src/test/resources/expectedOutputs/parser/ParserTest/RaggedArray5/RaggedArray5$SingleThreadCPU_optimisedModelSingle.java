@@ -8,18 +8,18 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Declare the variables for the model.
 	private double[][] a;
 	private double[] d;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample44 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample44 = false;
+	private boolean fixedFlag$sample42 = false;
+	private boolean fixedFlag$sample58 = false;
+	private boolean fixedProbFlag$sample42 = false;
+	private boolean fixedProbFlag$sample58 = false;
 	private int length$obs_measured;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
-	private double logProbability$var31;
-	private double logProbability$var34;
-	private double logProbability$var40;
+	private double logProbability$var38;
+	private double logProbability$var41;
+	private double logProbability$var54;
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private boolean setFlag$d = false;
@@ -52,57 +52,57 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		d = cv$value;
 		setFlag$d = true;
 		
-		// Unset the fixed probability flag for sample 35 as it depends on d.
-		fixedProbFlag$sample35 = false;
+		// Unset the fixed probability flag for sample 42 as it depends on d.
+		fixedProbFlag$sample42 = false;
 		
-		// Unset the fixed probability flag for sample 44 as it depends on d.
-		fixedProbFlag$sample44 = false;
+		// Unset the fixed probability flag for sample 58 as it depends on d.
+		fixedProbFlag$sample58 = false;
 	}
 
-	// Getter for fixedFlag$sample35.
+	// Getter for fixedFlag$sample42.
 	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
+	public final boolean get$fixedFlag$sample42() {
+		return fixedFlag$sample42;
 	}
 
-	// Setter for fixedFlag$sample35.
+	// Setter for fixedFlag$sample42.
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
+	public final void set$fixedFlag$sample42(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
 		// need to be updated.
-		fixedFlag$sample35 = cv$value;
+		fixedFlag$sample42 = cv$value;
 		
-		// Should the probability of sample 35 be set to fixed. This will only every change
+		// Should the probability of sample 42 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample35" with its value "cv$value".
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 		
-		// Should the probability of sample 44 be set to fixed. This will only every change
+		// Should the probability of sample 58 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample35" with its value "cv$value".
-		fixedProbFlag$sample44 = (cv$value && fixedProbFlag$sample44);
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
 	}
 
-	// Getter for fixedFlag$sample44.
+	// Getter for fixedFlag$sample58.
 	@Override
-	public final boolean get$fixedFlag$sample44() {
-		return fixedFlag$sample44;
+	public final boolean get$fixedFlag$sample58() {
+		return fixedFlag$sample58;
 	}
 
-	// Setter for fixedFlag$sample44.
+	// Setter for fixedFlag$sample58.
 	@Override
-	public final void set$fixedFlag$sample44(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample44 including if probabilities
+	public final void set$fixedFlag$sample58(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
 		// need to be updated.
-		fixedFlag$sample44 = cv$value;
+		fixedFlag$sample58 = cv$value;
 		
-		// Should the probability of sample 44 be set to fixed. This will only every change
+		// Should the probability of sample 58 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample44" with its value "cv$value".
-		fixedProbFlag$sample44 = (cv$value && fixedProbFlag$sample44);
+		// Substituted "fixedFlag$sample58" with its value "cv$value".
+		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
 	}
 
 	// Getter for length$obs_measured.
@@ -157,8 +157,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		obs = cv$value;
 		setFlag$obs = true;
 		
-		// Unset the fixed probability flag for sample 44 as it depends on obs.
-		fixedProbFlag$sample44 = false;
+		// Unset the fixed probability flag for sample 58 as it depends on obs.
+		fixedProbFlag$sample58 = false;
 	}
 
 	// Getter for obs_measured.
@@ -187,12 +187,12 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		y = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample35 using sampled
+	// Calculate the probability of the samples represented by sample42 using sampled
 	// values.
-	private final void logProbabilityValue$sample35() {
-		// Determine if we need to calculate the values for sample task 35 or if we should
+	private final void logProbabilityValue$sample42() {
+		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -222,7 +222,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var31 = cv$distributionAccumulator;
+			logProbability$var38 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$d = cv$distributionAccumulator;
@@ -245,7 +245,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -262,13 +262,13 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
+			fixedProbFlag$sample42 = fixedFlag$sample42;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var31 = logProbability$d;
+			logProbability$var38 = logProbability$d;
 			
 			// Add probability to model
 			// 
@@ -277,22 +277,22 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample44 using sampled
+	// Calculate the probability of the samples represented by sample58 using sampled
 	// values.
-	private final void logProbabilityValue$sample44() {
-		// Determine if we need to calculate the values for sample task 44 or if we should
+	private final void logProbabilityValue$sample58() {
+		// Determine if we need to calculate the values for sample task 58 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample44) {
+		if(!fixedProbFlag$sample58) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var39 = 0; var39 < length$obs_measured; var39 += 1)
+			for(int var53 = 0; var53 < length$obs_measured; var53 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -308,11 +308,11 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var39], d[y]));
-			logProbability$var34 = cv$sampleAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var53], d[y]));
+			logProbability$var41 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var40 = cv$sampleAccumulator;
+			logProbability$var54 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -338,32 +338,32 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample44 = (fixedFlag$sample44 && fixedFlag$sample35);
+			fixedProbFlag$sample58 = (fixedFlag$sample58 && fixedFlag$sample42);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var34 = logProbability$var40;
+			logProbability$var41 = logProbability$var54;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$obs = (logProbability$obs + logProbability$var40);
+			logProbability$obs = (logProbability$obs + logProbability$var54);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var40);
+			logProbability$$model = (logProbability$$model + logProbability$var54);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var40);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var54);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 35 drawn from Dirichlet 31. Inference was performed using Metropolis-Hastings.
-	private final void sample35() {
+	// by sample task 42 drawn from Dirichlet 38. Inference was performed using Metropolis-Hastings.
+	private final void sample42() {
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the probability of the random variable generating the original sampled
@@ -444,17 +444,17 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$var30" with its value "a[y]".
+			// Substituted "cv$temp$0$var37" with its value "a[y]".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y]);
 			
-			// Processing random variable 34.
+			// Processing random variable 41.
 			// 
-			// Processing sample task 44 of consumer random variable null.
-			for(int var39 = 0; var39 < length$obs_measured; var39 += 1)
+			// Processing sample task 58 of consumer random variable null.
+			for(int var53 = 0; var53 < length$obs_measured; var53 += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 44 with the current configuration.
+				// Recorded the probability of reaching sample task 58 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
@@ -464,9 +464,9 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$1$var33's comment
+				// cv$temp$1$var40's comment
 				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var39], d[y]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var53], d[y]) + cv$accumulatedProbabilities);
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
 			// in log space.
@@ -499,17 +499,17 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var30" with its value "a[y]".
+		// Substituted "cv$temp$0$var37" with its value "a[y]".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y]);
 		
-		// Processing random variable 34.
+		// Processing random variable 41.
 		// 
-		// Processing sample task 44 of consumer random variable null.
-		for(int var39 = 0; var39 < length$obs_measured; var39 += 1)
+		// Processing sample task 58 of consumer random variable null.
+		for(int var53 = 0; var53 < length$obs_measured; var53 += 1)
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 44 with the current configuration.
+			// Recorded the probability of reaching sample task 58 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
@@ -519,9 +519,9 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$1$var33's comment
+			// cv$temp$1$var40's comment
 			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var39], d[y]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var53], d[y]) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -590,13 +590,13 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample44) {
-			for(int var39 = 0; var39 < length$obs_measured; var39 += 1)
-				obs[var39] = DistributionSampling.sampleBernoulli(RNG$, d[y]);
+		if(!fixedFlag$sample58) {
+			for(int var53 = 0; var53 < length$obs_measured; var53 += 1)
+				obs[var53] = DistributionSampling.sampleBernoulli(RNG$, d[y]);
 		}
 	}
 
@@ -604,7 +604,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
 	}
 
@@ -612,7 +612,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
 	}
 
@@ -620,8 +620,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35)
-			sample35();
+		if(!fixedFlag$sample42)
+			sample42();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
@@ -634,10 +634,10 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		double[] var8 = a[0];
 		var8[0] = 0.4;
 		var8[1] = 0.6;
-		double[] var18 = a[1];
-		var18[0] = 0.2;
-		var18[1] = 0.3;
-		var18[2] = 0.5;
+		double[] var21 = a[1];
+		var21[0] = 0.2;
+		var21[1] = 0.3;
+		var21[2] = 0.5;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -650,13 +650,13 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var31 = 0.0;
-		if(!fixedProbFlag$sample35)
+		logProbability$var38 = 0.0;
+		if(!fixedProbFlag$sample42)
 			logProbability$d = 0.0;
-		logProbability$var34 = 0.0;
+		logProbability$var41 = 0.0;
 		logProbability$obs = 0.0;
-		if(!fixedProbFlag$sample44)
-			logProbability$var40 = 0.0;
+		if(!fixedProbFlag$sample58)
+			logProbability$var54 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -676,9 +676,9 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample35)
-			logProbabilityValue$sample35();
-		logProbabilityValue$sample44();
+		if(fixedFlag$sample42)
+			logProbabilityValue$sample42();
+		logProbabilityValue$sample58();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -696,8 +696,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample35();
-		logProbabilityValue$sample44();
+		logProbabilityValue$sample42();
+		logProbabilityValue$sample58();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -714,8 +714,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample35();
-		logProbabilityValue$sample44();
+		logProbabilityValue$sample42();
+		logProbabilityValue$sample58();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -723,7 +723,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample35)
+		if(!fixedFlag$sample42)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
 		
 		// Calculate the probabilities for every sample task in the model. These values are

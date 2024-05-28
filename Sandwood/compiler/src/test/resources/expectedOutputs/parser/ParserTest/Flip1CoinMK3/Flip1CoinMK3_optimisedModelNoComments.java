@@ -69,13 +69,13 @@ public class Flip1CoinMK3 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed);
+                system$c.set$fixedFlag$sample27(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(system$c.get$fixedFlag$sample27())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -212,7 +212,7 @@ public class Flip1CoinMK3 extends Model {
         if(bias.isSet())
             newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
+            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
     }
 
     /**

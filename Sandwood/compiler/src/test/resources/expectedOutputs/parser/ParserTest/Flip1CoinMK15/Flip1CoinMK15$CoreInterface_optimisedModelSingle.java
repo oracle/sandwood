@@ -17,11 +17,11 @@ interface Flip1CoinMK15$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Setter for fixedFlag$sample12.
 	public void set$fixedFlag$sample12(boolean cv$value);
 
-	// Getter for fixedFlag$sample40.
-	public boolean get$fixedFlag$sample40();
+	// Getter for fixedFlag$sample54.
+	public boolean get$fixedFlag$sample54();
 
-	// Setter for fixedFlag$sample40.
-	public void set$fixedFlag$sample40(boolean cv$value);
+	// Setter for fixedFlag$sample54.
+	public void set$fixedFlag$sample54(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

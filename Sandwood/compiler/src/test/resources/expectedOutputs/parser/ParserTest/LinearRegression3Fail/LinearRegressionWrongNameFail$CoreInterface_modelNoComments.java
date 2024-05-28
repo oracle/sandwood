@@ -11,8 +11,8 @@ interface LinearRegressionWrongNameFail$CoreInterface extends org.sandwood.runti
 	public void set$fixedFlag$sample18(boolean cv$value);
 	public boolean get$fixedFlag$sample22();
 	public void set$fixedFlag$sample22(boolean cv$value);
-	public boolean get$fixedFlag$sample31();
-	public void set$fixedFlag$sample31(boolean cv$value);
+	public boolean get$fixedFlag$sample38();
+	public void set$fixedFlag$sample38(boolean cv$value);
 	public double get$logProbability$b0();
 	public double get$logProbability$b1();
 	public double get$logProbability$variance();

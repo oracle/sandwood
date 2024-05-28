@@ -4,10 +4,10 @@ interface Flip2CoinsMK9$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double[] get$bias();
 	public void set$bias(double[] cv$value);
 	public int get$coins();
-	public boolean get$fixedFlag$sample20();
-	public void set$fixedFlag$sample20(boolean cv$value);
 	public boolean get$fixedFlag$sample27();
 	public void set$fixedFlag$sample27(boolean cv$value);
+	public boolean get$fixedFlag$sample40();
+	public void set$fixedFlag$sample40(boolean cv$value);
 	public boolean[][] get$flips();
 	public void set$flips(boolean[][] cv$value);
 	public boolean[][] get$flipsMeasured();

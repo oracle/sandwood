@@ -39,13 +39,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample86(fixed);
+                system$c.set$fixedFlag$sample137(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample86())
+            if(system$c.get$fixedFlag$sample137())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -74,13 +74,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample61(fixed);
+                system$c.set$fixedFlag$sample92(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample61())
+            if(system$c.get$fixedFlag$sample92())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -110,13 +110,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample25(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample25())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -146,13 +146,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample25(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample25())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -181,13 +181,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample53(fixed);
+                system$c.set$fixedFlag$sample77(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample53())
+            if(system$c.get$fixedFlag$sample77())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -217,13 +217,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample25(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample25())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -252,13 +252,13 @@ public class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample25(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample25())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -467,13 +467,13 @@ public class Vulcano2012basic extends Model {
 
         //Set fixed flags
         if(Sales.isSet())
-            newCore.set$fixedFlag$sample86(oldCore.get$fixedFlag$sample86());
+            newCore.set$fixedFlag$sample137(oldCore.get$fixedFlag$sample137());
         if(arrivals.isSet())
-            newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61());
+            newCore.set$fixedFlag$sample92(oldCore.get$fixedFlag$sample92());
         if(lambda.isSet())
-            newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
+            newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
         if(ut.isSet())
-            newCore.set$fixedFlag$sample25(oldCore.get$fixedFlag$sample25());
+            newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
     }
 
     /**

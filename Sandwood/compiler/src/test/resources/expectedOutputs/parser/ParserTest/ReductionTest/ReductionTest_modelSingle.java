@@ -34,13 +34,13 @@ public class ReductionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample30(fixed);
+                system$c.set$fixedFlag$sample51(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample30())
+            if(system$c.get$fixedFlag$sample51())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class ReductionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample54(fixed);
+                system$c.set$fixedFlag$sample91(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample54())
+            if(system$c.get$fixedFlag$sample91())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -109,13 +109,13 @@ public class ReductionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed);
+                system$c.set$fixedFlag$sample34(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(system$c.get$fixedFlag$sample34())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -144,13 +144,13 @@ public class ReductionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample38(fixed);
+                system$c.set$fixedFlag$sample66(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample38())
+            if(system$c.get$fixedFlag$sample66())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -304,13 +304,13 @@ public class ReductionTest extends Model {
 
         //Set fixed flags
         if(bias.isSet())
-            newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30());
+            newCore.set$fixedFlag$sample51(oldCore.get$fixedFlag$sample51());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample54(oldCore.get$fixedFlag$sample54());
+            newCore.set$fixedFlag$sample91(oldCore.get$fixedFlag$sample91());
         if(m.isSet())
-            newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
+            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
         if(st.isSet())
-            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
+            newCore.set$fixedFlag$sample66(oldCore.get$fixedFlag$sample66());
     }
 
     /**

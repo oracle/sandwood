@@ -61,7 +61,7 @@ public class ParFor extends Transformer {
         // Add the substitution statement
         VariableDescription<V> currentDesc = getSubstitution(v);
         stmts.add(initializeVariable(sub, load(getSubstitution(currentDesc)),
-                "Alternative value for " + currentDesc.name + " to make it effectively final."));
+                "Alternative name for " + currentDesc.name + " to make it effectively final."));
 
         // Store the substitution for when the tree is transformed.
         Stack<VariableDescription<?>> subs = substitutions.get(v);

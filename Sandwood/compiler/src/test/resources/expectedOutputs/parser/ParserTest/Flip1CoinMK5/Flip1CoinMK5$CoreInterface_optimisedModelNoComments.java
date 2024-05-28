@@ -5,10 +5,10 @@ interface Flip1CoinMK5$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$bias(double cv$value);
 	public boolean get$fixedFlag$sample17();
 	public void set$fixedFlag$sample17(boolean cv$value);
-	public boolean get$fixedFlag$sample23();
-	public void set$fixedFlag$sample23(boolean cv$value);
 	public boolean get$fixedFlag$sample30();
 	public void set$fixedFlag$sample30(boolean cv$value);
+	public boolean get$fixedFlag$sample44();
+	public void set$fixedFlag$sample44(boolean cv$value);
 	public boolean[] get$flips1();
 	public void set$flips1(boolean[] cv$value);
 	public boolean[] get$flips2();

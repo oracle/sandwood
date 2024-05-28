@@ -21,7 +21,7 @@ import org.sandwood.compiler.exceptions.CompilerException;
 /**
  * Handle class to ensure that traces are always copied when they are accessed. *
  */
-public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTaskArgDesc> {
+public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTaskArgDesc> {    
     private final Trace t;
 
     private TraceHandle(Trace t, boolean reverse) {
@@ -135,5 +135,46 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
 
     public static TraceHandle getReversedTraceHandle(Trace t) {
         return new TraceHandle(t, true);
+    }
+
+    /**
+     * A method to remove the prefix of a trace. This is useful if traces between two points hold a common prefix and only the suffixes are required.
+     * @param prefix The prefix to remove.
+     * @return A TraceHandle with the prefix removed.
+     */
+    public TraceHandle subTrace(TraceHandle prefix) {
+        int traceSize = size();
+        int prefixSize = prefix.size();
+        if(traceSize < prefixSize)
+            throw new CompilerException("Prefixed trace is not a subtrace of this trace.");
+        for(int i=0; i<prefixSize; i++) {
+            if(!t.get(i).equals(prefix.get(i)))
+                throw new CompilerException("Prefixed trace is not a subtrace of this trace.");
+        }
+            
+        Trace subTrace = new Trace();
+        for(int i = prefixSize-1; i<traceSize; i++)
+            subTrace.add(t.get(i));
+        
+        return getTraceHandle(subTrace);
+    }
+
+    /**
+     * A method for removing all elements from a trace before the value of i.
+     * @param i The point in the trace to start from.
+     * @return The resultant sub trace.
+     */
+    public TraceHandle subTrace(int i) {
+        Trace nt = new Trace();
+        int size = t.size();
+        while(i<size)
+            nt.add(t.get(i++));
+        return TraceHandle.getTraceHandle(nt);
+    }
+
+    private static final TraceHandle emptyTrace = new TraceHandle(new Trace(), false);
+    
+    public static TraceHandle emptyTrace() {
+        return emptyTrace;
     }
 }

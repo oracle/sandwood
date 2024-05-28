@@ -23,6 +23,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
+import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -34,6 +35,7 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
@@ -51,19 +53,26 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
     public final ArrayVariable<A> array;
     public final Variable<A> value;
     public final IntVariable index;
+    public final BooleanVariable scopeCondition;
     private final boolean implicit;
     private final List<SandwoodModelException> loggedErrors = new ArrayList<>();
 
     public PutTask(ArrayVariable<A> array, IntVariable index, Variable<A> value, boolean implicit, Location location) {
-        super(DFType.PUT, array.getType(), location, array.getCurrentInstance(), index, value);
+        super(DFType.PUT, array.getType(), location, array.getCurrentInstance(), index, value,
+                ScopeStack.getCurrentScope().getScopeCondition());
         this.array = array.getCurrentInstance();
         this.value = value.getCurrentInstance();
         this.index = index;
         inlineableTask = false;
         this.implicit = implicit;
-
+        // TODO restructure this once we can install code before the call to super.
+        scopeCondition = (BooleanVariable) inputs.get(3);
         // If the array only becomes a distribution now.
-        if(value.isDistribution() && !array.isDistribution()) {
+        // TODO As we have the set flags method used to set these flags when the traces are constructed we
+        // should be able to get rid of these methods here and in Array, VariableImplementations constructor,
+        // and DataflowImplementations constructor. Currently we cannot so clearly set flags is not setting
+        // all the flags. Once that is fixed the code should be simplified by removing this duplicate code.
+        if((value.isDistribution() || scopeCondition.isDistribution()) && !array.isDistribution()) {
             setDistributions();
         }
     }
@@ -131,6 +140,14 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
         testIndex(errors);
         testArray(errors);
         testValue(errors);
+        testScopeCondition(errors);
+    }
+
+    private void testScopeCondition(List<SandwoodModelException> errors) {
+        if(!scopeCondition.isDeterministic() && value.getType().isArray() && !isImplicit())
+            errors.add(new SandwoodModelException(
+                    "Arrays cannot be assigned to other arrays in a non deterministic way.", this));
+
     }
 
     public void assignmentToSameArrayElement() {
@@ -163,7 +180,7 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                 this));
     }
 
-    public void testArray(List<SandwoodModelException> errors) {
+    private void testArray(List<SandwoodModelException> errors) {
         if(array.isInput && !implicit) {// Implicit puts are ignored to prevent duplicate error messages.
             VariableName arrayName = getArraySourceName(array);
 
@@ -452,6 +469,11 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                     return backTraceInfo.getGetValue();
                 else
                     return IRTree.arrayGet(taskOutput, index.getForwardIR(compilationCtx));
+            case 3:
+                throw new CompilerException(
+                        "Unable to invert values based on a scope condition as the value being assigned to"
+                                + " this location in the array might not be unique and another put operation in a"
+                                + " different scope may assign the same value to the same location.");
         }
         throw new CompilerException("Unknown operation put only accepts arguments in positions 0-2");
     }
@@ -467,6 +489,10 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                         + "tasks cannot currently determine the index a value came from.";
             case 2:
                 return null;
+            case 3:
+                return "Unable to invert values based on a scope condition as the value being assigned to"
+                        + " this location in the array might not be unique and another put operation in a"
+                        + " different scope may assign the same value to the same location.";
         }
         throw new CompilerException("Unknown operation put only accepts arguments in positions 0-2");
     }

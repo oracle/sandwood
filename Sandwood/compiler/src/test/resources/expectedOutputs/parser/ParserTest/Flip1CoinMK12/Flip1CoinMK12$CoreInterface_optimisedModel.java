@@ -5,29 +5,29 @@ interface Flip1CoinMK12$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Getter for bias.
 	public double get$bias();
 
-	// Getter for fixedFlag$sample15.
-	public boolean get$fixedFlag$sample15();
+	// Getter for fixedFlag$sample20.
+	public boolean get$fixedFlag$sample20();
 
-	// Setter for fixedFlag$sample15.
-	public void set$fixedFlag$sample15(boolean cv$value);
+	// Setter for fixedFlag$sample20.
+	public void set$fixedFlag$sample20(boolean cv$value);
 
-	// Getter for fixedFlag$sample24.
-	public boolean get$fixedFlag$sample24();
+	// Getter for fixedFlag$sample32.
+	public boolean get$fixedFlag$sample32();
 
-	// Setter for fixedFlag$sample24.
-	public void set$fixedFlag$sample24(boolean cv$value);
+	// Setter for fixedFlag$sample32.
+	public void set$fixedFlag$sample32(boolean cv$value);
 
-	// Getter for fixedFlag$sample31.
-	public boolean get$fixedFlag$sample31();
+	// Getter for fixedFlag$sample39.
+	public boolean get$fixedFlag$sample39();
 
-	// Setter for fixedFlag$sample31.
-	public void set$fixedFlag$sample31(boolean cv$value);
+	// Setter for fixedFlag$sample39.
+	public void set$fixedFlag$sample39(boolean cv$value);
 
-	// Getter for fixedFlag$sample41.
-	public boolean get$fixedFlag$sample41();
+	// Getter for fixedFlag$sample56.
+	public boolean get$fixedFlag$sample56();
 
-	// Setter for fixedFlag$sample41.
-	public void set$fixedFlag$sample41(boolean cv$value);
+	// Setter for fixedFlag$sample56.
+	public void set$fixedFlag$sample56(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

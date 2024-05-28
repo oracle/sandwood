@@ -7,14 +7,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample72 = false;
-	private boolean fixedProbFlag$sample32 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private boolean[][] guard$sample32bernoulli71$global;
-	private boolean[][] guard$sample32put67$global;
+	private boolean fixedFlag$sample105 = false;
+	private boolean fixedFlag$sample46 = false;
+	private boolean fixedFlag$sample53 = false;
+	private boolean fixedProbFlag$sample105 = false;
+	private boolean fixedProbFlag$sample46 = false;
+	private boolean fixedProbFlag$sample53 = false;
+	private boolean[][] guard$sample46bernoulli104$global;
+	private boolean[][] guard$sample46put100$global;
 	private double[][] indicator;
 	private int k;
 	private double logProbability$$evidence;
@@ -22,11 +22,11 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$bias;
 	private double logProbability$indicator;
 	private double logProbability$p;
-	private double[] logProbability$sample32;
-	private double logProbability$var23;
-	private double logProbability$var34;
-	private double logProbability$var67;
-	private double logProbability$var68;
+	private double[] logProbability$sample46;
+	private double logProbability$var100;
+	private double logProbability$var101;
+	private double logProbability$var30;
+	private double logProbability$var48;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -56,73 +56,73 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// updated.
 		bias = cv$value;
 		
-		// Unset the fixed probability flag for sample 39 as it depends on bias.
-		fixedProbFlag$sample39 = false;
+		// Unset the fixed probability flag for sample 53 as it depends on bias.
+		fixedProbFlag$sample53 = false;
 		
-		// Unset the fixed probability flag for sample 72 as it depends on bias.
-		fixedProbFlag$sample72 = false;
+		// Unset the fixed probability flag for sample 105 as it depends on bias.
+		fixedProbFlag$sample105 = false;
 	}
 
-	// Getter for fixedFlag$sample32.
+	// Getter for fixedFlag$sample105.
 	@Override
-	public final boolean get$fixedFlag$sample32() {
-		return fixedFlag$sample32;
+	public final boolean get$fixedFlag$sample105() {
+		return fixedFlag$sample105;
 	}
 
-	// Setter for fixedFlag$sample32.
+	// Setter for fixedFlag$sample105.
 	@Override
-	public final void set$fixedFlag$sample32(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample32 including if probabilities
+	public final void set$fixedFlag$sample105(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample105 including if probabilities
 		// need to be updated.
-		fixedFlag$sample32 = cv$value;
+		fixedFlag$sample105 = cv$value;
 		
-		// Should the probability of sample 32 be set to fixed. This will only every change
+		// Should the probability of sample 105 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample32 = (fixedFlag$sample32 && fixedProbFlag$sample32);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample32 && fixedProbFlag$sample72);
+		fixedProbFlag$sample105 = (fixedFlag$sample105 && fixedProbFlag$sample105);
 	}
 
-	// Getter for fixedFlag$sample39.
+	// Getter for fixedFlag$sample46.
 	@Override
-	public final boolean get$fixedFlag$sample39() {
-		return fixedFlag$sample39;
+	public final boolean get$fixedFlag$sample46() {
+		return fixedFlag$sample46;
 	}
 
-	// Setter for fixedFlag$sample39.
+	// Setter for fixedFlag$sample46.
 	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
+	public final void set$fixedFlag$sample46(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample46 including if probabilities
 		// need to be updated.
-		fixedFlag$sample39 = cv$value;
+		fixedFlag$sample46 = cv$value;
 		
-		// Should the probability of sample 39 be set to fixed. This will only every change
+		// Should the probability of sample 46 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedProbFlag$sample39);
+		fixedProbFlag$sample46 = (fixedFlag$sample46 && fixedProbFlag$sample46);
 		
-		// Should the probability of sample 72 be set to fixed. This will only every change
+		// Should the probability of sample 105 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample39 && fixedProbFlag$sample72);
+		fixedProbFlag$sample105 = (fixedFlag$sample46 && fixedProbFlag$sample105);
 	}
 
-	// Getter for fixedFlag$sample72.
+	// Getter for fixedFlag$sample53.
 	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
+	public final boolean get$fixedFlag$sample53() {
+		return fixedFlag$sample53;
 	}
 
-	// Setter for fixedFlag$sample72.
+	// Setter for fixedFlag$sample53.
 	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
+	public final void set$fixedFlag$sample53(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
 		// need to be updated.
-		fixedFlag$sample72 = cv$value;
+		fixedFlag$sample53 = cv$value;
 		
-		// Should the probability of sample 72 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedProbFlag$sample72);
+		fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedProbFlag$sample53);
+		
+		// Should the probability of sample 105 be set to fixed. This will only every change
+		// the flag to false.
+		fixedProbFlag$sample105 = (fixedFlag$sample53 && fixedProbFlag$sample105);
 	}
 
 	// Getter for k.
@@ -183,11 +183,11 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		weights = cv$value;
 		setFlag$weights = true;
 		
-		// Unset the fixed probability flag for sample 32 as it depends on weights.
-		fixedProbFlag$sample32 = false;
+		// Unset the fixed probability flag for sample 46 as it depends on weights.
+		fixedProbFlag$sample46 = false;
 		
-		// Unset the fixed probability flag for sample 72 as it depends on weights.
-		fixedProbFlag$sample72 = false;
+		// Unset the fixed probability flag for sample 105 as it depends on weights.
+		fixedProbFlag$sample105 = false;
 	}
 
 	// Getter for x.
@@ -219,8 +219,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 72 as it depends on y.
-		fixedProbFlag$sample72 = false;
+		// Unset the fixed probability flag for sample 105 as it depends on y.
+		fixedProbFlag$sample105 = false;
 	}
 
 	// Getter for yMeasured.
@@ -237,421 +237,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample32 using sampled
+	// Calculate the probability of the samples represented by sample105 using sampled
 	// values.
-	private final void logProbabilityValue$sample32() {
-		// Determine if we need to calculate the values for sample task 32 or if we should
+	private final void logProbabilityValue$sample105() {
+		// Determine if we need to calculate the values for sample task 105 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample32) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			for(int var27 = 0; var27 < k; var27 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = weights[var27];
-					{
-						{
-							double var21 = 0.0;
-							double var22 = 10.0;
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var21) / Math.sqrt(var22))) - (0.5 * Math.log(var22))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Store the sample task probability
-				logProbability$sample32[((var27 - 0) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that indicator is only updated once for this probability.
-				boolean cv$guard$indicator = false;
-				
-				// Guard to ensure that p is only updated once for this probability.
-				boolean cv$guard$p = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 32 and consumer double[] 48.
-				{
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							for(int i = 0; i < n; i += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$indicator) {
-									// Set the guard so the update is only applied once.
-									cv$guard$indicator = true;
-									
-									// Update the variable probability
-									logProbability$indicator = (logProbability$indicator + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 32 and consumer double[] 63.
-				{
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							if((j$var42 == 0)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							if((j$var42 == 1)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							if((j$var42 == 2)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-								if((j$var42 == j$var60)) {
-									for(int i = 0; i < n; i += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var23 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample32)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample32 = fixedFlag$sample32;
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			for(int var27 = 0; var27 < k; var27 += 1) {
-				double cv$sampleValue = logProbability$sample32[((var27 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Guard to ensure that indicator is only updated once for this probability.
-				boolean cv$guard$indicator = false;
-				
-				// Guard to ensure that p is only updated once for this probability.
-				boolean cv$guard$p = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 32 and consumer double[] 48.
-				{
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							for(int i = 0; i < n; i += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$indicator) {
-									// Set the guard so the update is only applied once.
-									cv$guard$indicator = true;
-									
-									// Update the variable probability
-									logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 32 and consumer double[] 63.
-				{
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							if((j$var42 == 0)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							if((j$var42 == 1)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							if((j$var42 == 2)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-						if((var27 == j$var42)) {
-							for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-								if((j$var42 == j$var60)) {
-									for(int i = 0; i < n; i += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var23 = cv$rvAccumulator;
-			
-			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample32)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample39 using sampled
-	// values.
-	private final void logProbabilityValue$sample39() {
-		// Determine if we need to calculate the values for sample task 39 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample39) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// An accumulator for log probabilities.
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			
-			// An accumulator for the distributed probability space covered.
-			double cv$probabilityReached = 0.0;
-			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = bias;
-				{
-					{
-						double var32 = 0.0;
-						double var33 = 10.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var32) / Math.sqrt(var33))) - (0.5 * Math.log(var33))));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				// Return negative infinity if no distribution probability space is reached.
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				// Scale the probability relative to the observed distribution space.
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var34 = cv$sampleAccumulator;
-			
-			// Store the sample task probability
-			logProbability$bias = cv$sampleProbability;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample39 = fixedFlag$sample39;
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$bias;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var34 = cv$rvAccumulator;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample72 using sampled
-	// values.
-	private final void logProbabilityValue$sample72() {
-		// Determine if we need to calculate the values for sample task 72 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample72) {
+		if(!fixedProbFlag$sample105) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -659,7 +250,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
+				for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -667,13 +258,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					double cv$probabilityReached = 0.0;
 					{
 						// The sample value to calculate the probability of generating
-						boolean cv$sampleValue = y[i][j$var60];
+						boolean cv$sampleValue = y[i][j$var93];
 						{
 							{
-								double var66 = (p[((i - 0) / 1)][j$var60] + bias);
+								double var99 = (p[((i - 0) / 1)][j$var93] + bias);
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var66));
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var99));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -707,10 +298,10 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var67 = cv$sampleAccumulator;
+			logProbability$var100 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var68 = cv$accumulator;
+			logProbability$var101 = cv$accumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -721,7 +312,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = ((fixedFlag$sample72 && fixedFlag$sample32) && fixedFlag$sample39);
+			fixedProbFlag$sample105 = ((fixedFlag$sample105 && fixedFlag$sample46) && fixedFlag$sample53);
 		}
 		// Using cached values.
 		else {
@@ -729,10 +320,10 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var68;
+			double cv$sampleValue = logProbability$var101;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var67 = cv$rvAccumulator;
+			logProbability$var100 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -743,9 +334,418 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
+	// Calculate the probability of the samples represented by sample46 using sampled
+	// values.
+	private final void logProbabilityValue$sample46() {
+		// Determine if we need to calculate the values for sample task 46 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample46) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			for(int var41 = 0; var41 < k; var41 += 1) {
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = weights[var41];
+					{
+						{
+							double var28 = 0.0;
+							double var29 = 10.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				
+				// Store the sample task probability
+				logProbability$sample46[((var41 - 0) / 1)] = cv$sampleProbability;
+				
+				// Guard to ensure that indicator is only updated once for this probability.
+				boolean cv$guard$indicator = false;
+				
+				// Guard to ensure that p is only updated once for this probability.
+				boolean cv$guard$p = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				// 
+				// Looking for a path between Sample 46 and consumer double[] 75.
+				{
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							for(int i = 0; i < n; i += 1) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$indicator) {
+									// Set the guard so the update is only applied once.
+									cv$guard$indicator = true;
+									
+									// Update the variable probability
+									logProbability$indicator = (logProbability$indicator + cv$sampleProbability);
+								}
+							}
+						}
+					}
+				}
+				
+				// Looking for a path between Sample 46 and consumer double[] 96.
+				{
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							if((j$var69 == 0)) {
+								for(int i = 0; i < n; i += 1) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleProbability);
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							if((j$var69 == 1)) {
+								for(int i = 0; i < n; i += 1) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleProbability);
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							if((j$var69 == 2)) {
+								for(int i = 0; i < n; i += 1) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleProbability);
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+								if((j$var69 == j$var93)) {
+									for(int i = 0; i < n; i += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleProbability);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var30 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			logProbability$weights = (logProbability$weights + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample46)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample46 = fixedFlag$sample46;
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			for(int var41 = 0; var41 < k; var41 += 1) {
+				double cv$sampleValue = logProbability$sample46[((var41 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Guard to ensure that indicator is only updated once for this probability.
+				boolean cv$guard$indicator = false;
+				
+				// Guard to ensure that p is only updated once for this probability.
+				boolean cv$guard$p = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				// 
+				// Looking for a path between Sample 46 and consumer double[] 75.
+				{
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							for(int i = 0; i < n; i += 1) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$indicator) {
+									// Set the guard so the update is only applied once.
+									cv$guard$indicator = true;
+									
+									// Update the variable probability
+									logProbability$indicator = (logProbability$indicator + cv$sampleValue);
+								}
+							}
+						}
+					}
+				}
+				
+				// Looking for a path between Sample 46 and consumer double[] 96.
+				{
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							if((j$var69 == 0)) {
+								for(int i = 0; i < n; i += 1) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleValue);
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							if((j$var69 == 1)) {
+								for(int i = 0; i < n; i += 1) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleValue);
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							if((j$var69 == 2)) {
+								for(int i = 0; i < n; i += 1) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleValue);
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+						if((var41 == j$var69)) {
+							for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+								if((j$var69 == j$var93)) {
+									for(int i = 0; i < n; i += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$p) {
+											// Set the guard so the update is only applied once.
+											cv$guard$p = true;
+											
+											// Update the variable probability
+											logProbability$p = (logProbability$p + cv$sampleValue);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var30 = cv$rvAccumulator;
+			
+			// Update the variable probability
+			logProbability$weights = (logProbability$weights + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample46)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample53 using sampled
+	// values.
+	private final void logProbabilityValue$sample53() {
+		// Determine if we need to calculate the values for sample task 53 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample53) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = bias;
+				{
+					{
+						double var46 = 0.0;
+						double var47 = 10.0;
+						
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var46) / Math.sqrt(var47))) - (0.5 * Math.log(var47))));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
+					}
+				}
+			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var48 = cv$sampleAccumulator;
+			
+			// Store the sample task probability
+			logProbability$bias = cv$sampleProbability;
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample53)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample53 = fixedFlag$sample53;
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$bias;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var48 = cv$rvAccumulator;
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample53)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 32 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
-	private final void sample32(int var27) {
+	// by sample task 46 drawn from Gaussian 30. Inference was performed using Metropolis-Hastings.
+	private final void sample46(int var41) {
 		// Calculate the number of states to evaluate.
 		int cv$noStates = 0;
 		{
@@ -754,7 +754,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// The original value of the sample
-		double cv$originalValue = weights[var27];
+		double cv$originalValue = weights[var41];
 		
 		// The probability of the random variable generating the originally sampled value
 		double cv$originalProbability = 0.0;
@@ -794,82 +794,82 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				{
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
-					double var28 = cv$proposedValue;
-					weights[var27] = cv$currentValue;
+					double var42 = cv$proposedValue;
+					weights[var41] = cv$currentValue;
 					
 					// Guards to ensure that indicator is only updated when there is a valid path.
 					// 
-					// Looking for a path between Sample 32 and consumer double[] 48.
+					// Looking for a path between Sample 46 and consumer double[] 75.
 					{
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
 								for(int i = 0; i < n; i += 1)
-									indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+									indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 							}
 						}
 					}
 					
 					// Guards to ensure that p is only updated when there is a valid path.
 					// 
-					// Looking for a path between Sample 32 and consumer double[] 63.
+					// Looking for a path between Sample 46 and consumer double[] 96.
 					{
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						boolean[][] guard$sample32put67 = guard$sample32put67$global;
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 0)) {
+						boolean[][] guard$sample46put100 = guard$sample46put100$global;
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 0)) {
 									for(int i = 0; i < n; i += 1) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1)
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1)
 											// Set the flags to false
-											guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+											guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 1)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 1)) {
 									for(int i = 0; i < n; i += 1) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1)
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1)
 											// Set the flags to false
-											guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+											guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 2)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 2)) {
 									for(int i = 0; i < n; i += 1) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1)
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1)
 											// Set the flags to false
-											guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+											guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-									if((j$var42 == j$var60)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+									if((j$var69 == j$var93)) {
 										for(int i = 0; i < n; i += 1)
 											// Set the flags to false
-											guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+											guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 0)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 0)) {
 									for(int i = 0; i < n; i += 1) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-											if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+											if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
-												guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+												guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 												{
-													p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+													p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 												}
 											}
 										}
@@ -877,16 +877,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 1)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 1)) {
 									for(int i = 0; i < n; i += 1) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-											if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+											if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
-												guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+												guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 												{
-													p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+													p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 												}
 											}
 										}
@@ -894,16 +894,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 2)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 2)) {
 									for(int i = 0; i < n; i += 1) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-											if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+											if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
-												guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+												guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 												{
-													p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+													p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 												}
 											}
 										}
@@ -911,16 +911,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-									if((j$var42 == j$var60)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+									if((j$var69 == j$var93)) {
 										for(int i = 0; i < n; i += 1) {
-											if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+											if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
-												guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+												guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 												{
-													p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+													p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 												}
 											}
 										}
@@ -934,101 +934,101 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double cv$temp$0$var21;
+				double cv$temp$0$var28;
 				{
-					cv$temp$0$var21 = 0.0;
+					cv$temp$0$var28 = 0.0;
 				}
-				double cv$temp$1$var22;
+				double cv$temp$1$var29;
 				{
-					cv$temp$1$var22 = 10.0;
+					cv$temp$1$var29 = 10.0;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var21) / Math.sqrt(cv$temp$1$var22))) - (0.5 * Math.log(cv$temp$1$var22))));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var28) / Math.sqrt(cv$temp$1$var29))) - (0.5 * Math.log(cv$temp$1$var29))));
 				
-				// Processing random variable 67.
+				// Processing random variable 100.
 				{
-					// Looking for a path between Sample 32 and consumer Bernoulli 67.
+					// Looking for a path between Sample 46 and consumer Bernoulli 100.
 					{
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						boolean[][] guard$sample32bernoulli71 = guard$sample32bernoulli71$global;
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 0)) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
+						boolean[][] guard$sample46bernoulli104 = guard$sample46bernoulli104$global;
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 0)) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
 										for(int index$j$10_3 = 0; index$j$10_3 < k; index$j$10_3 += 1) {
-											if((j$var60 == index$j$10_3)) {
+											if((j$var93 == index$j$10_3)) {
 												for(int i = 0; i < n; i += 1)
 													// Set the flags to false
-													guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+													guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 1)) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 1)) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
 										for(int index$j$11_3 = 0; index$j$11_3 < k; index$j$11_3 += 1) {
-											if((j$var60 == index$j$11_3)) {
+											if((j$var93 == index$j$11_3)) {
 												for(int i = 0; i < n; i += 1)
 													// Set the flags to false
-													guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+													guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								if((j$var42 == 2)) {
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								if((j$var69 == 2)) {
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
 										for(int index$j$12_3 = 0; index$j$12_3 < k; index$j$12_3 += 1) {
-											if((j$var60 == index$j$12_3)) {
+											if((j$var93 == index$j$12_3)) {
 												for(int i = 0; i < n; i += 1)
 													// Set the flags to false
-													guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+													guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 							}
 						}
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-									if((j$var42 == j$var60)) {
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+									if((j$var69 == j$var93)) {
 										for(int index$j$13_3 = 0; index$j$13_3 < k; index$j$13_3 += 1) {
-											if((j$var60 == index$j$13_3)) {
+											if((j$var93 == index$j$13_3)) {
 												for(int i = 0; i < n; i += 1)
 													// Set the flags to false
-													guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+													guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 							}
 						}
-						double traceTempVariable$var43$14_1 = cv$currentValue;
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
+						double traceTempVariable$var70$14_1 = cv$currentValue;
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var50$14_4 = Math.exp((traceTempVariable$var43$14_1 * x[i][j$var42]));
-									if((j$var42 == 0)) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-											double traceTempVariable$var65$14_6 = (indicator[((i - 0) / 1)][j$var60] / ((traceTempVariable$var50$14_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+									double traceTempVariable$var77$14_4 = Math.exp((traceTempVariable$var70$14_1 * x[i][j$var69]));
+									if((j$var69 == 0)) {
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+											double traceTempVariable$var98$14_6 = (indicator[((i - 0) / 1)][j$var93] / ((traceTempVariable$var77$14_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 											for(int index$j$14_7 = 0; index$j$14_7 < k; index$j$14_7 += 1) {
-												if((j$var60 == index$j$14_7)) {
-													if(!guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+												if((j$var93 == index$j$14_7)) {
+													if(!guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
-														guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+														guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 														
-														// Processing sample task 72 of consumer random variable null.
+														// Processing sample task 105 of consumer random variable null.
 														{
 															// Set an accumulator to sum the probabilities for each possible configuration of
 															// inputs.
@@ -1041,25 +1041,25 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																{
 																	{
 																		{
-																			double cv$temp$2$var66;
+																			double cv$temp$2$var99;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var66 = (traceTempVariable$var65$14_6 + bias);
-																				cv$temp$2$var66 = var66;
+																				double var99 = (traceTempVariable$var98$14_6 + bias);
+																				cv$temp$2$var99 = var99;
 																			}
 																			
-																			// Record the probability of sample task 72 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var66)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var66)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			// Record the probability of sample task 105 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var99)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var99)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var66));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var99));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var66)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var66)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var99)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var99)));
 																			}
 																			
-																			// Recorded the probability of reaching sample task 72 with the current configuration.
+																			// Recorded the probability of reaching sample task 105 with the current configuration.
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
 																	}
@@ -1090,21 +1090,21 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						double traceTempVariable$var43$15_1 = cv$currentValue;
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
+						double traceTempVariable$var70$15_1 = cv$currentValue;
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var52$15_4 = Math.exp((traceTempVariable$var43$15_1 * x[i][j$var42]));
-									if((j$var42 == 1)) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-											double traceTempVariable$var65$15_6 = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var52$15_4) + indicator[((i - 0) / 1)][2]));
+									double traceTempVariable$var79$15_4 = Math.exp((traceTempVariable$var70$15_1 * x[i][j$var69]));
+									if((j$var69 == 1)) {
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+											double traceTempVariable$var98$15_6 = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var79$15_4) + indicator[((i - 0) / 1)][2]));
 											for(int index$j$15_7 = 0; index$j$15_7 < k; index$j$15_7 += 1) {
-												if((j$var60 == index$j$15_7)) {
-													if(!guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+												if((j$var93 == index$j$15_7)) {
+													if(!guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
-														guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+														guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 														
-														// Processing sample task 72 of consumer random variable null.
+														// Processing sample task 105 of consumer random variable null.
 														{
 															// Set an accumulator to sum the probabilities for each possible configuration of
 															// inputs.
@@ -1117,25 +1117,25 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																{
 																	{
 																		{
-																			double cv$temp$3$var66;
+																			double cv$temp$3$var99;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var66 = (traceTempVariable$var65$15_6 + bias);
-																				cv$temp$3$var66 = var66;
+																				double var99 = (traceTempVariable$var98$15_6 + bias);
+																				cv$temp$3$var99 = var99;
 																			}
 																			
-																			// Record the probability of sample task 72 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var66)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var66)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			// Record the probability of sample task 105 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var99)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var99)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var66));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var99));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var66)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var66)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var99)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var99)));
 																			}
 																			
-																			// Recorded the probability of reaching sample task 72 with the current configuration.
+																			// Recorded the probability of reaching sample task 105 with the current configuration.
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
 																	}
@@ -1166,21 +1166,21 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						double traceTempVariable$var43$16_1 = cv$currentValue;
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
+						double traceTempVariable$var70$16_1 = cv$currentValue;
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var55$16_4 = Math.exp((traceTempVariable$var43$16_1 * x[i][j$var42]));
-									if((j$var42 == 2)) {
-										for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-											double traceTempVariable$var65$16_6 = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var55$16_4));
+									double traceTempVariable$var82$16_4 = Math.exp((traceTempVariable$var70$16_1 * x[i][j$var69]));
+									if((j$var69 == 2)) {
+										for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+											double traceTempVariable$var98$16_6 = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var82$16_4));
 											for(int index$j$16_7 = 0; index$j$16_7 < k; index$j$16_7 += 1) {
-												if((j$var60 == index$j$16_7)) {
-													if(!guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+												if((j$var93 == index$j$16_7)) {
+													if(!guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
-														guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+														guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 														
-														// Processing sample task 72 of consumer random variable null.
+														// Processing sample task 105 of consumer random variable null.
 														{
 															// Set an accumulator to sum the probabilities for each possible configuration of
 															// inputs.
@@ -1193,25 +1193,25 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																{
 																	{
 																		{
-																			double cv$temp$4$var66;
+																			double cv$temp$4$var99;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var66 = (traceTempVariable$var65$16_6 + bias);
-																				cv$temp$4$var66 = var66;
+																				double var99 = (traceTempVariable$var98$16_6 + bias);
+																				cv$temp$4$var99 = var99;
 																			}
 																			
-																			// Record the probability of sample task 72 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var66)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var66)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			// Record the probability of sample task 105 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var99)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var99)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var66));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var99));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var66)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var66)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var99)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var99)));
 																			}
 																			
-																			// Recorded the probability of reaching sample task 72 with the current configuration.
+																			// Recorded the probability of reaching sample task 105 with the current configuration.
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
 																	}
@@ -1242,21 +1242,21 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						double traceTempVariable$var43$17_1 = cv$currentValue;
-						for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-							if((var27 == j$var42)) {
+						double traceTempVariable$var70$17_1 = cv$currentValue;
+						for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+							if((var41 == j$var69)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var61$17_4 = Math.exp((traceTempVariable$var43$17_1 * x[i][j$var42]));
-									for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-										if((j$var42 == j$var60)) {
-											double traceTempVariable$var65$17_6 = (traceTempVariable$var61$17_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+									double traceTempVariable$var94$17_4 = Math.exp((traceTempVariable$var70$17_1 * x[i][j$var69]));
+									for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+										if((j$var69 == j$var93)) {
+											double traceTempVariable$var98$17_6 = (traceTempVariable$var94$17_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 											for(int index$j$17_7 = 0; index$j$17_7 < k; index$j$17_7 += 1) {
-												if((j$var60 == index$j$17_7)) {
-													if(!guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+												if((j$var93 == index$j$17_7)) {
+													if(!guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
-														guard$sample32bernoulli71[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+														guard$sample46bernoulli104[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 														
-														// Processing sample task 72 of consumer random variable null.
+														// Processing sample task 105 of consumer random variable null.
 														{
 															// Set an accumulator to sum the probabilities for each possible configuration of
 															// inputs.
@@ -1269,25 +1269,25 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																{
 																	{
 																		{
-																			double cv$temp$5$var66;
+																			double cv$temp$5$var99;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var66 = (traceTempVariable$var65$17_6 + bias);
-																				cv$temp$5$var66 = var66;
+																				double var99 = (traceTempVariable$var98$17_6 + bias);
+																				cv$temp$5$var99 = var99;
 																			}
 																			
-																			// Record the probability of sample task 72 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var66)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var66)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			// Record the probability of sample task 105 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var99)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var99)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var66));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var99));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var66)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var66)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var99)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var99)));
 																			}
 																			
-																			// Recorded the probability of reaching sample task 72 with the current configuration.
+																			// Recorded the probability of reaching sample task 105 with the current configuration.
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
 																	}
@@ -1355,82 +1355,82 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Set the sample value
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			double var28 = cv$originalValue;
-			weights[var27] = var28;
+			double var42 = cv$originalValue;
+			weights[var41] = var42;
 			
 			// Guards to ensure that indicator is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 32 and consumer double[] 48.
+			// Looking for a path between Sample 46 and consumer double[] 75.
 			{
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
 						for(int i = 0; i < n; i += 1)
-							indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+							indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 					}
 				}
 			}
 			
 			// Guards to ensure that p is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 32 and consumer double[] 63.
+			// Looking for a path between Sample 46 and consumer double[] 96.
 			{
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				boolean[][] guard$sample32put67 = guard$sample32put67$global;
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						if((j$var42 == 0)) {
+				boolean[][] guard$sample46put100 = guard$sample46put100$global;
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						if((j$var69 == 0)) {
 							for(int i = 0; i < n; i += 1) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1)
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1)
 									// Set the flags to false
-									guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+									guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 							}
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						if((j$var42 == 1)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						if((j$var69 == 1)) {
 							for(int i = 0; i < n; i += 1) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1)
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1)
 									// Set the flags to false
-									guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+									guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 							}
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						if((j$var42 == 2)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						if((j$var69 == 2)) {
 							for(int i = 0; i < n; i += 1) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1)
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1)
 									// Set the flags to false
-									guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+									guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 							}
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-							if((j$var42 == j$var60)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+							if((j$var69 == j$var93)) {
 								for(int i = 0; i < n; i += 1)
 									// Set the flags to false
-									guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = false;
+									guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = false;
 							}
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						if((j$var42 == 0)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						if((j$var69 == 0)) {
 							for(int i = 0; i < n; i += 1) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-									if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+									if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
-										guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+										guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -1438,16 +1438,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						if((j$var42 == 1)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						if((j$var69 == 1)) {
 							for(int i = 0; i < n; i += 1) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-									if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+									if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
-										guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+										guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -1455,16 +1455,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						if((j$var42 == 2)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						if((j$var69 == 2)) {
 							for(int i = 0; i < n; i += 1) {
-								for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-									if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+								for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+									if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
-										guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+										guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -1472,16 +1472,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						}
 					}
 				}
-				for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-					if((var27 == j$var42)) {
-						for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-							if((j$var42 == j$var60)) {
+				for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+					if((var41 == j$var69)) {
+						for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+							if((j$var69 == j$var93)) {
 								for(int i = 0; i < n; i += 1) {
-									if(!guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)]) {
+									if(!guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
-										guard$sample32put67[((i - 0) / 1)][((j$var60 - 0) / 1)] = true;
+										guard$sample46put100[((i - 0) / 1)][((j$var93 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -1494,8 +1494,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 39 drawn from Gaussian 34. Inference was performed using Metropolis-Hastings.
-	private final void sample39() {
+	// by sample task 53 drawn from Gaussian 48. Inference was performed using Metropolis-Hastings.
+	private final void sample53() {
 		// Calculate the number of states to evaluate.
 		int cv$noStates = 0;
 		{
@@ -1549,27 +1549,27 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double cv$temp$0$var32;
+				double cv$temp$0$var46;
 				{
-					cv$temp$0$var32 = 0.0;
+					cv$temp$0$var46 = 0.0;
 				}
-				double cv$temp$1$var33;
+				double cv$temp$1$var47;
 				{
-					cv$temp$1$var33 = 10.0;
+					cv$temp$1$var47 = 10.0;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var32) / Math.sqrt(cv$temp$1$var33))) - (0.5 * Math.log(cv$temp$1$var33))));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var46) / Math.sqrt(cv$temp$1$var47))) - (0.5 * Math.log(cv$temp$1$var47))));
 				
-				// Processing random variable 67.
+				// Processing random variable 100.
 				{
 					{
 						for(int i = 0; i < n; i += 1) {
-							for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
+							for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
 								double traceTempVariable$bias$1_3 = cv$currentValue;
 								
-								// Processing sample task 72 of consumer random variable null.
+								// Processing sample task 105 of consumer random variable null.
 								{
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
@@ -1582,25 +1582,25 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 										{
 											{
 												{
-													double cv$temp$2$var66;
+													double cv$temp$2$var99;
 													{
 														// Constructing a random variable input for use later.
-														double var66 = (p[((i - 0) / 1)][j$var60] + traceTempVariable$bias$1_3);
-														cv$temp$2$var66 = var66;
+														double var99 = (p[((i - 0) / 1)][j$var93] + traceTempVariable$bias$1_3);
+														cv$temp$2$var99 = var99;
 													}
 													
-													// Record the probability of sample task 72 generating output with current configuration.
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var60], cv$temp$2$var66)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var60], cv$temp$2$var66)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													// Record the probability of sample task 105 generating output with current configuration.
+													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var93], cv$temp$2$var99)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var93], cv$temp$2$var99)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var60], cv$temp$2$var66));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var93], cv$temp$2$var99));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var60], cv$temp$2$var66)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var60], cv$temp$2$var66)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var93], cv$temp$2$var99)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var93], cv$temp$2$var99)));
 													}
 													
-													// Recorded the probability of reaching sample task 72 with the current configuration.
+													// Recorded the probability of reaching sample task 105 with the current configuration.
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
@@ -1671,7 +1671,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
-		// Constructor for guard$sample32put67$global
+		// Constructor for guard$sample46put100$global
 		{
 			// Calculate the largest index of i that is possible and allocate an array to hold
 			// the guard for each of these.
@@ -1679,16 +1679,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Calculate the largest index of j that is possible and allocate an array to hold
 			// the guard for each of these.
-			int cv$max_j$var60 = 0;
+			int cv$max_j$var93 = 0;
 			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var60 = Math.max(cv$max_j$var60, ((3 - 0) / 1));
+				cv$max_j$var93 = Math.max(cv$max_j$var93, ((3 - 0) / 1));
 			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
 			
-			// Allocation of guard$sample32put67$global for single threaded execution
-			guard$sample32put67$global = new boolean[cv$max_i][cv$max_j$var60];
+			// Allocation of guard$sample46put100$global for single threaded execution
+			guard$sample46put100$global = new boolean[cv$max_i][cv$max_j$var93];
 		}
 		
-		// Constructor for guard$sample32bernoulli71$global
+		// Constructor for guard$sample46bernoulli104$global
 		{
 			// Calculate the largest index of i that is possible and allocate an array to hold
 			// the guard for each of these.
@@ -1696,13 +1696,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Calculate the largest index of j that is possible and allocate an array to hold
 			// the guard for each of these.
-			int cv$max_j$var60 = 0;
+			int cv$max_j$var93 = 0;
 			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var60 = Math.max(cv$max_j$var60, ((3 - 0) / 1));
+				cv$max_j$var93 = Math.max(cv$max_j$var93, ((3 - 0) / 1));
 			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
 			
-			// Allocation of guard$sample32bernoulli71$global for single threaded execution
-			guard$sample32bernoulli71$global = new boolean[cv$max_i][cv$max_j$var60];
+			// Allocation of guard$sample46bernoulli104$global for single threaded execution
+			guard$sample46bernoulli104$global = new boolean[cv$max_i][cv$max_j$var93];
 		}
 	}
 
@@ -1714,8 +1714,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Constructor for y
 			{
 				y = new boolean[x.length][];
-				for(int var16 = 0; var16 < x.length; var16 += 1)
-					y[var16] = new boolean[3];
+				for(int var23 = 0; var23 < x.length; var23 += 1)
+					y[var23] = new boolean[3];
 			}
 		}
 		
@@ -1741,9 +1741,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				p[((i - 0) / 1)] = new double[3];
 		}
 		
-		// Constructor for logProbability$sample32
+		// Constructor for logProbability$sample46
 		{
-			logProbability$sample32 = new double[((((3 - 1) - 0) / 1) + 1)];
+			logProbability$sample46 = new double[((((3 - 1) - 0) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -1753,23 +1753,23 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int var27 = 0; var27 < k; var27 += 1) {
-			if(!fixedFlag$sample32)
-				weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var41 = 0; var41 < k; var41 += 1) {
+			if(!fixedFlag$sample46)
+				weights[var41] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample53)
 			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		for(int i = 0; i < n; i += 1) {
-			boolean[] var64 = y[i];
-			for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-				if(!fixedFlag$sample32)
-					indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+			boolean[] var97 = y[i];
+			for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+				if(!fixedFlag$sample46)
+					indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 			}
-			for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-				if(!fixedFlag$sample32)
-					p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-				if(!fixedFlag$sample72)
-					var64[j$var60] = DistributionSampling.sampleBernoulli(RNG$, (p[((i - 0) / 1)][j$var60] + bias));
+			for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+				if(!fixedFlag$sample46)
+					p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+				if(!fixedFlag$sample105)
+					var97[j$var93] = DistributionSampling.sampleBernoulli(RNG$, (p[((i - 0) / 1)][j$var93] + bias));
 			}
 		}
 	}
@@ -1778,20 +1778,20 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		for(int var27 = 0; var27 < k; var27 += 1) {
-			if(!fixedFlag$sample32)
-				weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var41 = 0; var41 < k; var41 += 1) {
+			if(!fixedFlag$sample46)
+				weights[var41] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample53)
 			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		for(int i = 0; i < n; i += 1) {
-			for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-				if(!fixedFlag$sample32)
-					indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+			for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+				if(!fixedFlag$sample46)
+					indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 			}
-			for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-				if(!fixedFlag$sample32)
-					p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+			for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+				if(!fixedFlag$sample46)
+					p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 			}
 		}
 	}
@@ -1800,20 +1800,20 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int var27 = 0; var27 < k; var27 += 1) {
-			if(!fixedFlag$sample32)
-				weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var41 = 0; var41 < k; var41 += 1) {
+			if(!fixedFlag$sample46)
+				weights[var41] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample53)
 			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		for(int i = 0; i < n; i += 1) {
-			for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-				if(!fixedFlag$sample32)
-					indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+			for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+				if(!fixedFlag$sample46)
+					indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 			}
-			for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-				if(!fixedFlag$sample32)
-					p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+			for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+				if(!fixedFlag$sample46)
+					p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 			}
 		}
 	}
@@ -1823,20 +1823,20 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			for(int var27 = 0; var27 < k; var27 += 1) {
-				if(!fixedFlag$sample32)
-					sample32(var27);
+			for(int var41 = 0; var41 < k; var41 += 1) {
+				if(!fixedFlag$sample46)
+					sample46(var41);
 			}
-			if(!fixedFlag$sample39)
-				sample39();
+			if(!fixedFlag$sample53)
+				sample53();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample39)
-				sample39();
-			for(int var27 = (k - ((((k - 1) - 0) % 1) + 1)); var27 >= ((0 - 1) + 1); var27 -= 1) {
-				if(!fixedFlag$sample32)
-					sample32(var27);
+			if(!fixedFlag$sample53)
+				sample53();
+			for(int var41 = (k - ((((k - 1) - 0) % 1) + 1)); var41 >= ((0 - 1) + 1); var41 -= 1) {
+				if(!fixedFlag$sample46)
+					sample46(var41);
 			}
 		}
 		
@@ -1862,21 +1862,21 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var23 = 0.0;
+		logProbability$var30 = 0.0;
 		logProbability$weights = 0.0;
-		logProbability$p = 0.0;
 		logProbability$indicator = 0.0;
-		if(!fixedProbFlag$sample32) {
-			for(int var27 = 0; var27 < k; var27 += 1)
-				logProbability$sample32[((var27 - 0) / 1)] = 0.0;
+		logProbability$p = 0.0;
+		if(!fixedProbFlag$sample46) {
+			for(int var41 = 0; var41 < k; var41 += 1)
+				logProbability$sample46[((var41 - 0) / 1)] = 0.0;
 		}
-		logProbability$var34 = 0.0;
-		if(!fixedProbFlag$sample39)
+		logProbability$var48 = 0.0;
+		if(!fixedProbFlag$sample53)
 			logProbability$bias = 0.0;
-		logProbability$var67 = 0.0;
+		logProbability$var100 = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample72)
-			logProbability$var68 = 0.0;
+		if(!fixedProbFlag$sample105)
+			logProbability$var101 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -1896,11 +1896,11 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample32)
-			logProbabilityValue$sample32();
-		if(fixedFlag$sample39)
-			logProbabilityValue$sample39();
-		logProbabilityValue$sample72();
+		if(fixedFlag$sample46)
+			logProbabilityValue$sample46();
+		if(fixedFlag$sample53)
+			logProbabilityValue$sample53();
+		logProbabilityValue$sample105();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1918,9 +1918,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample32();
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample72();
+		logProbabilityValue$sample46();
+		logProbabilityValue$sample53();
+		logProbabilityValue$sample105();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1937,9 +1937,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample32();
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample72();
+		logProbabilityValue$sample46();
+		logProbabilityValue$sample53();
+		logProbabilityValue$sample105();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1947,20 +1947,20 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		for(int var27 = 0; var27 < k; var27 += 1) {
-			if(!fixedFlag$sample32)
-				weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var41 = 0; var41 < k; var41 += 1) {
+			if(!fixedFlag$sample46)
+				weights[var41] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample39)
+		if(!fixedFlag$sample53)
 			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		for(int i = 0; i < n; i += 1) {
-			for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
-				if(!fixedFlag$sample32)
-					indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+			for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
+				if(!fixedFlag$sample46)
+					indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 			}
-			for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
-				if(!fixedFlag$sample32)
-					p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+			for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
+				if(!fixedFlag$sample46)
+					p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 			}
 		}
 		
@@ -1991,13 +1991,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void setIntermediates() {
 		for(int i = 0; i < n; i += 1) {
-			for(int j$var42 = 0; j$var42 < k; j$var42 += 1) {
+			for(int j$var69 = 0; j$var69 < k; j$var69 += 1) {
 				if(setFlag$weights)
-					indicator[((i - 0) / 1)][j$var42] = Math.exp((weights[j$var42] * x[i][j$var42]));
+					indicator[((i - 0) / 1)][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
 			}
-			for(int j$var60 = 0; j$var60 < k; j$var60 += 1) {
+			for(int j$var93 = 0; j$var93 < k; j$var93 += 1) {
 				if(setFlag$weights)
-					p[((i - 0) / 1)][j$var60] = (indicator[((i - 0) / 1)][j$var60] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+					p[((i - 0) / 1)][j$var93] = (indicator[((i - 0) / 1)][j$var93] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 			}
 		}
 	}

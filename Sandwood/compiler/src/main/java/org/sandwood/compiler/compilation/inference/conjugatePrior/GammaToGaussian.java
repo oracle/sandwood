@@ -44,6 +44,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -190,7 +191,10 @@ public class GammaToGaussian
                     DFType type = d.task.getType();
                     switch(type) {
                         case COPY:
+                            break;
                         case IF_ASSIGNMENT:
+                            if(d.argPos == 0)
+                                return false;
                             break;
                         case DIVISION: {
                             // division can only be used if the value is the denominator and the numerator is 1.
@@ -264,11 +268,11 @@ public class GammaToGaussian
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleStartIR(GammaToGaussianData funcData, SampleTask<?, ?> s, TreeBuilderInfo info,
+    protected void getPerConsumerStartIR(GammaToGaussianData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
-    protected void getPerSampleEndIR(GammaToGaussianData funcData, TreeBuilderInfo info,
+    protected void getPerConsumerEndIR(GammaToGaussianData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx) {}
 
     @Override
@@ -286,8 +290,7 @@ public class GammaToGaussian
 
     @Override
     protected void addDistributionProbabilities(GammaToGaussianData funcData, CompilationContext compilationCtx) {
-        throw new CompilerException(
-                "Unable to merge distributions in this inference method. This is a bug in Sandwood.");
+        throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
@@ -305,4 +308,11 @@ public class GammaToGaussian
     @Override
     protected void getPerDistributedSampleEndIR(GammaToGaussianData funcData, DistributionSampleTask<?, ?> s,
             TreeBuilderInfo info, CompilationContext compilationCtx) {}
+
+    @Override
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToGaussianData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
+        throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
+    }
 }

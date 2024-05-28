@@ -4,9 +4,9 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
-	private boolean fixedFlag$sample16 = false;
+	private boolean fixedFlag$sample23 = false;
 	private boolean fixedFlag$sample8 = false;
-	private boolean fixedProbFlag$sample16 = false;
+	private boolean fixedProbFlag$sample23 = false;
 	private boolean fixedProbFlag$sample8 = false;
 	private int length$observed;
 	private double logProbability$$evidence;
@@ -14,7 +14,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private double logProbability$bernoulli;
 	private double logProbability$output;
 	private double logProbability$prior;
-	private double logProbability$var14;
+	private double logProbability$var21;
 	private double logProbability$var6;
 	private boolean[] observed;
 	private boolean[] output;
@@ -37,14 +37,14 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		fixedFlag$sample16 = cv$value;
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		fixedFlag$sample23 = cv$value;
+		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$fixedFlag$sample8(boolean cv$value) {
 		fixedFlag$sample8 = cv$value;
 		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
+		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$output(boolean[] cv$value) {
 		output = cv$value;
 		setFlag$output = true;
-		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample23 = false;
 	}
 
 	@Override
@@ -125,25 +125,25 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$prior(double cv$value) {
 		prior = cv$value;
 		fixedProbFlag$sample8 = false;
-		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample23 = false;
 	}
 
-	private final void logProbabilityValue$sample16() {
-		if(!fixedProbFlag$sample16) {
+	private final void logProbabilityValue$sample23() {
+		if(!fixedProbFlag$sample23) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var13 = 0; var13 < length$observed; var13 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[var13], prior));
+			for(int var20 = 0; var20 < length$observed; var20 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[var20], prior));
 			logProbability$bernoulli = cv$sampleAccumulator;
-			logProbability$var14 = cv$sampleAccumulator;
+			logProbability$var21 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample8);
+			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample8);
 		} else {
-			logProbability$bernoulli = logProbability$var14;
-			logProbability$output = (logProbability$output + logProbability$var14);
-			logProbability$$model = (logProbability$$model + logProbability$var14);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var14);
+			logProbability$bernoulli = logProbability$var21;
+			logProbability$output = (logProbability$output + logProbability$var21);
+			logProbability$$model = (logProbability$$model + logProbability$var21);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var21);
 		}
 	}
 
@@ -173,14 +173,14 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			for(int var13 = 0; var13 < length$observed; var13 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var13], prior) + cv$accumulatedProbabilities);
+			for(int var20 = 0; var20 < length$observed; var20 += 1)
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var20], prior) + cv$accumulatedProbabilities);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		prior = cv$proposedValue;
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
-		for(int var13 = 0; var13 < length$observed; var13 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var13], cv$proposedValue) + cv$accumulatedProbabilities);
+		for(int var20 = 0; var20 < length$observed; var20 += 1)
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var20], cv$proposedValue) + cv$accumulatedProbabilities);
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			prior = cv$originalValue;
 	}
@@ -198,11 +198,11 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample8)
 			prior = DistributionSampling.sampleUniform(RNG$);
-		if(!fixedFlag$sample16)
+		if(!fixedFlag$sample23)
 			parallelFor(RNG$, 0, length$observed, 1,
-				(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							output[var13] = DistributionSampling.sampleBernoulli(RNG$1, prior);
+				(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1)
+							output[var20] = DistributionSampling.sampleBernoulli(RNG$1, prior);
 				}
 			);
 
@@ -238,8 +238,8 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			logProbability$prior = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$var14 = 0.0;
+		if(!fixedProbFlag$sample23)
+			logProbability$var21 = 0.0;
 	}
 
 	@Override
@@ -252,21 +252,21 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample8)
 			logProbabilityValue$sample8();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample8();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample8();
-		logProbabilityValue$sample16();
+		logProbabilityValue$sample23();
 	}
 
 	@Override

@@ -5,12 +5,12 @@ interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal
 	public void set$fixedFlag$sample12(boolean cv$value);
 	public boolean get$fixedFlag$sample16();
 	public void set$fixedFlag$sample16(boolean cv$value);
-	public boolean get$fixedFlag$sample22();
-	public void set$fixedFlag$sample22(boolean cv$value);
-	public boolean get$fixedFlag$sample28();
-	public void set$fixedFlag$sample28(boolean cv$value);
-	public boolean get$fixedFlag$sample35();
-	public void set$fixedFlag$sample35(boolean cv$value);
+	public boolean get$fixedFlag$sample30();
+	public void set$fixedFlag$sample30(boolean cv$value);
+	public boolean get$fixedFlag$sample43();
+	public void set$fixedFlag$sample43(boolean cv$value);
+	public boolean get$fixedFlag$sample50();
+	public void set$fixedFlag$sample50(boolean cv$value);
 	public int get$length$value();
 	public void set$length$value(int cv$value);
 	public double get$logProbability$c();

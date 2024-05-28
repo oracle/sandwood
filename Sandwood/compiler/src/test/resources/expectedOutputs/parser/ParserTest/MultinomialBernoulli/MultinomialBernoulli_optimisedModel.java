@@ -34,20 +34,20 @@ public class MultinomialBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed);
-                system$c.set$fixedFlag$sample47(fixed);
                 system$c.set$fixedFlag$sample52(fixed);
+                system$c.set$fixedFlag$sample64(fixed);
+                system$c.set$fixedFlag$sample76(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample42 = system$c.get$fixedFlag$sample42();
-            boolean fixedFlag$sample47 = system$c.get$fixedFlag$sample47();
             boolean fixedFlag$sample52 = system$c.get$fixedFlag$sample52();
-            if(fixedFlag$sample42 && fixedFlag$sample47 && fixedFlag$sample52)
+            boolean fixedFlag$sample64 = system$c.get$fixedFlag$sample64();
+            boolean fixedFlag$sample76 = system$c.get$fixedFlag$sample76();
+            if(fixedFlag$sample52 && fixedFlag$sample64 && fixedFlag$sample76)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample42 || fixedFlag$sample47 || fixedFlag$sample52)
+            else if(fixedFlag$sample52 || fixedFlag$sample64 || fixedFlag$sample76)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -76,13 +76,13 @@ public class MultinomialBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed);
+                system$c.set$fixedFlag$sample20(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample17())
+            if(system$c.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -111,13 +111,13 @@ public class MultinomialBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed);
+                system$c.set$fixedFlag$sample23(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(system$c.get$fixedFlag$sample23())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -277,14 +277,14 @@ public class MultinomialBernoulli extends Model {
 
         //Set fixed flags
         if(output.isSet()){
-            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
-            newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
             newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
+            newCore.set$fixedFlag$sample64(oldCore.get$fixedFlag$sample64());
+            newCore.set$fixedFlag$sample76(oldCore.get$fixedFlag$sample76());
         }
         if(p.isSet())
-            newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
-        if(prior.isSet())
             newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
+        if(prior.isSet())
+            newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
     }
 
     /**

@@ -865,6 +865,10 @@ public class CompilationContext {
     public void setInInference(boolean inInference) {
         inferenceRanges.setInInference(inInference);
     }
+    
+    public boolean inInference() {
+        return inferenceRanges.inInference;
+    }
 
     public boolean fullInferenceRequired() {
         return fullInferenceRequired;

@@ -94,18 +94,26 @@ public class ParallelIndexes extends Transformer {
                     parallelFors.pop();
                 scopedVars.pop();
 
-                if(d.usedInParallel) {
-                    // Create a new index name based on the existing index name, and initialize
-                    // the index name to the value of the new index name. When the for loop is
-                    // created it will use the new index name instead of the existing one. Append
-                    // the body to this, and use this as the new body. This is done to make the
-                    // value effectively final for any inner lambdas that use the index. This for
-                    // loop
-                    // will now have to create the index newIndex instead, though the range will be
-                    // the same.
+                if(d.usedInParallel && t.parallel) {
+                    /*
+                     * Create a new index name based on the existing index name, and initialise the index name to the
+                     * value of the new index name. When the for loop is created it will use the new index name instead
+                     * of the existing one. Append the body to this, and use this as the new body. This is done to make
+                     * the value effectively final for any inner lambdas that use the index. This for loop will now have
+                     * to create the index newIndex instead, though the range will be the same.
+                     */
                     VariableDescription<IntVariable> newIndex = VariableNames.indexName(t.indexDesc);
                     List<TransTreeVoid> parts = new ArrayList<>();
                     parts.add(initializeVariable(indexDesc, load(newIndex), Tree.NoComment));
+
+                    /*
+                     * Create a new copy of the parallel for thread ID so that when this is created by the parallel loop
+                     * from the index name the names match
+                     */
+                    VariableDescription<IntVariable> newThreadID = VariableNames.threadIdName(newIndex.name);
+                    VariableDescription<IntVariable> oldThreadID = VariableNames.threadIdName(t.indexDesc.name);
+                    parts.add(initializeVariable(oldThreadID, load(newThreadID), Tree.NoComment));
+
                     parts.add(body);
                     body = sequential(parts, Tree.NoComment);
                     // Add a substitution for the new index name when calculating the bound and

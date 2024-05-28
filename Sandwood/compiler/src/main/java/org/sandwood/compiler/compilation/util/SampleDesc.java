@@ -116,27 +116,27 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
      * @param compilationCtx The compilation context.
      */
     protected void setIntermediateValues(CompilationContext compilationCtx) {
-        // Clear the of arrays used in the traces to these intermediates.
-        // clearInitialisations(compilationCtx);
-
+        //Check if the compiler is doing inference, if it is observed variables should not be updated.
+        boolean inferring = compilationCtx.inInference();
+        
         // Mark a stop point so that the constructed trees do not go beyond this point
         output.markStopPoint();
 
-        // TODO work out if this can be simplified. To do this we will need to work out
-        // exactly
-        // which variables are in intermediates. I think some of the guards on populate
-        // can be removed
-        // and possibly this first call to populateValue.
+        /*
+         * TODO work out if this can be simplified. To do this we will need to work out exactly which variables are in
+         * intermediates. I think some of the guards on populate can be removed and possibly this first call to
+         * populateValue.
+         */
         populateValue(sampleVarDesc.sampleVariable, compilationCtx);
 
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(intermediates.getVariables());
         while(!p.isEmpty()) {
             Variable<?> v = p.poll();
-            if(v != sampleVarDesc.sampleVariable) {
-                // Add a guard so that the values are only updated if the configuration of the
-                // model
-                // would allow it. Without this array out of bounds errors are possible as well
-                // as serious inefficiency.
+            if(v != sampleVarDesc.sampleVariable && (!inferring || !intermediates.observedVariable(v))) {
+                /*
+                 * Add a guard so that the values are only updated if the configuration of the model would allow it.
+                 * Without this array out of bounds errors are possible as well as serious inefficiency.
+                 */
                 ScopeConstructor a = ScopeConstructor.construct(sample, GlobalScope.scope, "Guards to ensure that "
                         + v.getUniqueVarDesc() + " is only updated when there is a valid path.", compilationCtx);
                 a = a.addConstraints(intermediates.getTraces(v)); // TODO make this use variable passing to simplify the

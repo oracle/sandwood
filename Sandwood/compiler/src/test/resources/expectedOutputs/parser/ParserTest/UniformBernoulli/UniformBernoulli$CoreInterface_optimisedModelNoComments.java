@@ -3,8 +3,8 @@ package org.sandwood.compiler.tests.parser;
 interface UniformBernoulli$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double get$a();
 	public double get$b();
-	public boolean get$fixedFlag$sample16();
-	public void set$fixedFlag$sample16(boolean cv$value);
+	public boolean get$fixedFlag$sample23();
+	public void set$fixedFlag$sample23(boolean cv$value);
 	public boolean get$fixedFlag$sample8();
 	public void set$fixedFlag$sample8(boolean cv$value);
 	public int get$length$observed();

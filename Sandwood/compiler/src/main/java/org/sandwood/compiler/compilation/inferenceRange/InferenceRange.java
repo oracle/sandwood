@@ -68,13 +68,15 @@ public abstract class InferenceRange {
      * A method to determine if traces read from the sample task on more than one iteration of a loop. This method is
      * conservative, so may return false positives in the form of for loops that do not need to be executed as serial
      * code.
-     * @param sampleTask 
+     * 
+     * @param sampleTask
      *
      * @param hs           The set of traces from a sample to a given task.
      * @param serialScopes The set of for loops that need to be executed as serial code to be added to. This may include
      *                     loops that could execute as parallel code.
      */
-    private static void multiSampleDependency(SampleTask<?, ?> sampleTask, Set<TraceHandle> hs, Set<ForTask> serialScopes) {
+    private static void multiSampleDependency(SampleTask<?, ?> sampleTask, Set<TraceHandle> hs,
+            Set<ForTask> serialScopes) {
         Set<IntVariable> serialIndexes = new HashSet<>();
         // Look for indexes that need to be set to execute in serial in the each trace.
         for(TraceHandle h:hs)
@@ -412,6 +414,10 @@ public abstract class InferenceRange {
                                 putSerialIndexes.push(getSerialIndexes(getIndexMap, pt));
                             }
                             break;
+                        case 3:
+                            // At this point the trace is going via the scope guard and the value of the trace is no
+                            // longer relevant.
+                            return;
                         default:
                             throw new CompilerException("This case should never appear in a trace");
                     }
