@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -245,6 +245,9 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
         {
             for(ExternalFunction e:ExternalFunction.values()) {
                 switch(e) {
+                    case COS:
+                        externalDescriptions.put(e, new FunctionDesc("Cos", "Math", "cos"));
+                        break;
                     case EXP:
                         externalDescriptions.put(e, new FunctionDesc("Exponential", "Math", "exp"));
                         break;
@@ -261,10 +264,15 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
                     case LOG:
                         externalDescriptions.put(e, new FunctionDesc("Log", "Math", "log"));
                         break;
+                    case POW:
+                        externalDescriptions.put(e, new FunctionDesc("Pow", "Math", "pow"));
+                        break;
+                    case SIN:
+                        externalDescriptions.put(e, new FunctionDesc("Sin", "Math", "sin"));
+                        break;
                     case SQRT:
                         externalDescriptions.put(e, new FunctionDesc("Square Root", "Math", "sqrt"));
                         break;
-
                 }
             }
         }

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,6 +11,7 @@ package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -29,8 +30,8 @@ public class Min<A extends NumberVariable<A>> extends NumberProducingDataflowTas
     protected final A a;
     protected final A b;
 
-    private Min(VariableType.Type<A> outputType, Location location, A a, A b) {
-        super(DFType.MIN, outputType, location, a, b);
+    private Min(A a, A b, Location location) {
+        super(DFType.MIN, a.getType(), location, a, b);
         this.a = a;
         this.b = b;
     }
@@ -78,18 +79,14 @@ public class Min<A extends NumberVariable<A>> extends NumberProducingDataflowTas
     /* Factory methods for construction */
 
     public static DoubleVariable min(DoubleVariable a, double b) {
-        return min(a, Variable.doubleVariable(b), null);
+        return min(a, b, null);
     }
 
     public static DoubleVariable min(double a, DoubleVariable b) {
-        return min(Variable.doubleVariable(a), b, null);
+        return min(a, b, null);
     }
 
     public static DoubleVariable min(double a, double b) {
-        return min(Variable.doubleVariable(a), Variable.doubleVariable(b), null);
-    }
-
-    public static DoubleVariable min(DoubleVariable a, DoubleVariable b) {
         return min(a, b, null);
     }
 
@@ -105,23 +102,15 @@ public class Min<A extends NumberVariable<A>> extends NumberProducingDataflowTas
         return min(Variable.doubleVariable(a), Variable.doubleVariable(b), location);
     }
 
-    public static DoubleVariable min(DoubleVariable a, DoubleVariable b, Location location) {
-        return DoubleVariable.doubleVariable(new Min<>(VariableType.DoubleVariable, location, a, b));
-    }
-
     public static IntVariable min(IntVariable a, int b) {
-        return min(a, Variable.intVariable(b), null);
+        return min(a, b, null);
     }
 
     public static IntVariable min(int a, IntVariable b) {
-        return min(Variable.intVariable(a), b, null);
+        return min(a, b, null);
     }
 
     public static IntVariable min(int a, int b) {
-        return min(Variable.intVariable(a), Variable.intVariable(b), null);
-    }
-
-    public static IntVariable min(IntVariable a, IntVariable b) {
         return min(a, b, null);
     }
 
@@ -137,7 +126,18 @@ public class Min<A extends NumberVariable<A>> extends NumberProducingDataflowTas
         return min(Variable.intVariable(a), Variable.intVariable(b), location);
     }
 
-    public static IntVariable min(IntVariable a, IntVariable b, Location location) {
-        return IntVariable.intVariable(new Min<>(VariableType.IntVariable, location, a, b));
+    public static <A extends NumberVariable<A>> A min(A a, A b) {
+        return min(a, b, null);
+    }
+
+    public static <A extends NumberVariable<A>> A min(A a, A b, Location location) {
+        if(a.getType() == VariableType.DoubleVariable)
+            return (A) DoubleVariable
+                    .doubleVariable((NumberProducingDataflowTask<DoubleVariable>) new Min<A>(a, b, location));
+        else if(a.getType() == VariableType.IntVariable)
+            return (A) DoubleVariable
+                    .doubleVariable((NumberProducingDataflowTask<DoubleVariable>) new Min<A>(a, b, location));
+        else
+            throw new CompilerException("Unexpected number type " + a.getType());
     }
 }

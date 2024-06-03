@@ -458,7 +458,7 @@ public abstract class IRBinOp<L extends Variable<L>, R extends Variable<R>, RT e
         };
     }
 
-    static IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> getAnd(IRTreeReturn<BooleanVariable> left,
+    static IRTreeReturn<BooleanVariable> getAnd(IRTreeReturn<BooleanVariable> left,
             IRTreeReturn<BooleanVariable> right) {
         return new IRBinOp<>(left, right, true) {
             @Override

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -268,8 +268,7 @@ public class CollapseConstantsTransformer extends Transformer {
                     TransTreeReturn<IntVariable> newMin = TransTree.max(m.min, rMin);
                     bounds.addTransformedTree(right, newMin);
                     m.min = transform(newMin);
-                }
-                else
+                } else
                     m.min = transform(rMin);
                 bounds.addTransformedTree(right, m.min);
             }
@@ -648,11 +647,23 @@ public class CollapseConstantsTransformer extends Transformer {
 
     }
 
-    private <X extends Variable<X>> TransTreeReturn<X> collapseConstants(TransExternalFunctionCallReturn<X> tree) {
+    private <X extends Variable<X>, Y extends Variable<Y>, Z extends Variable<Z>> TransTreeReturn<X> collapseConstants(TransExternalFunctionCallReturn<X> tree) {
         ExternalFunction f = tree.func;
         switch(f) {
+            case COS: {
+                TransTreeReturn<Y> value = (TransTreeReturn<Y>) transform(tree.args[0]);
+                switch(value.type) {
+                    case CONST_DOUBLE:
+                        return (TransTreeReturn<X>) constant(Math.cos(((TransConstDouble) value).value));
+                    case CONST_INT:
+                        return (TransTreeReturn<X>) constant(Math.cos(((TransConstInt) value).value));
+                    default:
+                        break;
+                }
+                return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
             case EXP: {
-                TransTreeReturn<X> value = transform((TransTreeReturn<X>) tree.args[0]);
+                TransTreeReturn<Y> value = (TransTreeReturn<Y>) transform(tree.args[0]);
                 switch(value.type) {
                     case CONST_DOUBLE:
                         return (TransTreeReturn<X>) constant(Math.exp(((TransConstDouble) value).value));
@@ -688,7 +699,7 @@ public class CollapseConstantsTransformer extends Transformer {
                     return TransTree.functionCallReturn(f, tree.outputType, value);
             }
             case LOG: {
-                TransTreeReturn<X> value = (TransTreeReturn<X>) transform(tree.args[0]);
+                TransTreeReturn<Y> value = (TransTreeReturn<Y>) transform(tree.args[0]);
                 switch(value.type) {
                     case CONST_DOUBLE:
                         return (TransTreeReturn<X>) constant(Math.log(((TransConstDouble) value).value));
@@ -709,8 +720,55 @@ public class CollapseConstantsTransformer extends Transformer {
                 }
                 return TransTree.functionCallReturn(f, tree.outputType, value);
             }
+            case POW: {
+                TransTreeReturn<Y> l = (TransTreeReturn<Y>) transform(tree.args[0]);
+                TransTreeReturn<Z> r = (TransTreeReturn<Z>) transform(tree.args[1]);
+                switch(l.type) {
+                    case CONST_DOUBLE: {
+                        switch(l.type) {
+                            case CONST_DOUBLE:
+                                return (TransTreeReturn<X>) constant(
+                                        Math.pow(((TransConstDouble) l).value, ((TransConstDouble) r).value));
+                            case CONST_INT:
+                                return (TransTreeReturn<X>) constant(
+                                        Math.pow(((TransConstDouble) l).value, ((TransConstInt) r).value));
+                            default:
+                                break;
+                        }
+                        break;
+                    }
+                    case CONST_INT: {
+                        switch(l.type) {
+                            case CONST_DOUBLE:
+                                return (TransTreeReturn<X>) constant(
+                                        Math.pow(((TransConstInt) l).value, ((TransConstDouble) r).value));
+                            case CONST_INT:
+                                return (TransTreeReturn<X>) constant(
+                                        Math.pow(((TransConstInt) l).value, ((TransConstInt) r).value));
+                            default:
+                                break;
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return TransTree.functionCallReturn(f, tree.outputType, l, r);
+            }
+            case SIN: {
+                TransTreeReturn<Y> value = (TransTreeReturn<Y>) transform(tree.args[0]);
+                switch(value.type) {
+                    case CONST_DOUBLE:
+                        return (TransTreeReturn<X>) constant(Math.sin(((TransConstDouble) value).value));
+                    case CONST_INT:
+                        return (TransTreeReturn<X>) constant(Math.sin(((TransConstInt) value).value));
+                    default:
+                        break;
+                }
+                return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
             case SQRT: {
-                TransTreeReturn<X> value = (TransTreeReturn<X>) transform(tree.args[0]);
+                TransTreeReturn<Y> value = (TransTreeReturn<Y>) transform(tree.args[0]);
                 switch(value.type) {
                     case CONST_DOUBLE:
                         return (TransTreeReturn<X>) constant(Math.sqrt(((TransConstDouble) value).value));

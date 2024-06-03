@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -22,6 +22,7 @@ public enum DFType {
     CONSTANT_INT("Constant Int"),
     CONSTRUCT_INPUT("Construct an input."),
     COPY("Copy"),
+    COS("Cos"),
     DIRICHLET("Dirichlet"),
     DIVISION("Division"),
     DOUBLE_TO_INT_CAST("Double to int cast"),
@@ -55,12 +56,14 @@ public enum DFType {
     FOR("For"),
     PAR_FOR("Parallel for"),
     POISSON("Poisson"),
+    POW("Power"),
     PUT("Put"),
     REDUCTION_RETURN("Reduce return task"),
     REDUCE_INPUT("Reduce input"),
     REMAINDER("Remainder"),
     SIGMOID("Sigmoid"),
     SAMPLE("Sample"),
+    SIN("Sin"),
     SQRT("Sqrt"),
     STEPPING_RANGE("Stepping range"),
     STUDENT_T("StudentT"),

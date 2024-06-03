@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -16,25 +16,25 @@ import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImpl
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
-import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class Sqrt extends NumberProducingDataflowTaskImplementation<DoubleVariable> {
+public class Sqrt<A extends NumberVariable<A>> extends NumberProducingDataflowTaskImplementation<DoubleVariable> {
 
-    protected final DoubleVariable d;
+    protected final A a;
 
-    private Sqrt(Location location, DoubleVariable d) {
-        super(DFType.SQRT, VariableType.DoubleVariable, location, d);
-        this.d = d;
+    private Sqrt(A a, Location location) {
+        super(DFType.SQRT, VariableType.DoubleVariable, location, a);
+        this.a = a;
     }
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return "sqrt(" + d.getExpression(compressSandwoodCode) + ")";
+        return "sqrt(" + a.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Sqrt extends NumberProducingDataflowTaskImplementation<DoubleVariab
     @Override
     public IRTreeReturn<DoubleVariable> getForwardIRinternal(CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable,
-                d.getForwardIR(compilationCtx));
+                a.getForwardIR(compilationCtx));
     }
 
     @Override
@@ -63,26 +63,22 @@ public class Sqrt extends NumberProducingDataflowTaskImplementation<DoubleVariab
         if(this.getType() != other.getType())
             return false;
         Sqrt dft = (Sqrt) other;
-        return d.equivalent(dft.d);
+        return a.equivalent(dft.a);
     }
 
     @Override
     public IRTreeReturn<DoubleVariable> getMax(CompilationContext compilationCtx) {
-        return IRTree.functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable, d.getMax(compilationCtx));
+        return IRTree.functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable, a.getMax(compilationCtx));
     }
 
     @Override
     public IRTreeReturn<DoubleVariable> getMin(CompilationContext compilationCtx) {
-        return IRTree.functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable, d.getMin(compilationCtx));
+        return IRTree.functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable, a.getMin(compilationCtx));
     }
 
     /* Factory methods for construction */
 
     public static DoubleVariable sqrt(double d) {
-        return sqrt(Variable.doubleVariable(d), null);
-    }
-
-    public static DoubleVariable sqrt(DoubleVariable d) {
         return sqrt(d, null);
     }
 
@@ -90,23 +86,19 @@ public class Sqrt extends NumberProducingDataflowTaskImplementation<DoubleVariab
         return sqrt(Variable.doubleVariable(d), location);
     }
 
-    public static DoubleVariable sqrt(DoubleVariable d, Location location) {
-        return DoubleVariable.doubleVariable(new Sqrt(location, d));
+    public static DoubleVariable sqrt(int i) {
+        return sqrt(i, null);
     }
 
-    public static DoubleVariable sqrt(int d) {
-        return sqrt(Variable.doubleVariable(d), null);
+    public static DoubleVariable sqrt(int i, Location location) {
+        return sqrt(Variable.doubleVariable(i), location);
     }
 
-    public static DoubleVariable sqrt(IntVariable d) {
-        return sqrt(d.castToDouble(), null);
+    public static <A extends NumberVariable<A>> DoubleVariable sqrt(A a) {
+        return sqrt(a, null);
     }
 
-    public static DoubleVariable sqrt(int d, Location location) {
-        return sqrt(Variable.doubleVariable(d), location);
-    }
-
-    public static DoubleVariable sqrt(IntVariable d, Location location) {
-        return DoubleVariable.doubleVariable(new Sqrt(location, d.castToDouble(location)));
+    public static <A extends NumberVariable<A>> DoubleVariable sqrt(A a, Location location) {
+        return DoubleVariable.doubleVariable(new Sqrt(a, location));
     }
 }

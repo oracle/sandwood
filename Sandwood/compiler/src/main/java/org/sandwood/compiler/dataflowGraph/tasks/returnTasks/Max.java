@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,6 +11,7 @@ package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -29,8 +30,8 @@ public class Max<A extends NumberVariable<A>> extends NumberProducingDataflowTas
     protected final A a;
     protected final A b;
 
-    private Max(VariableType.Type<A> outputType, Location location, A a, A b) {
-        super(DFType.MAX, outputType, location, a, b);
+    private Max(A a, A b, Location location) {
+        super(DFType.MAX, a.getType(), location, a, b);
         this.a = a;
         this.b = b;
     }
@@ -78,18 +79,14 @@ public class Max<A extends NumberVariable<A>> extends NumberProducingDataflowTas
     /* Factory methods for construction */
 
     public static DoubleVariable max(DoubleVariable a, double b) {
-        return max(a, Variable.doubleVariable(b), null);
+        return max(a, b, null);
     }
 
     public static DoubleVariable max(double a, DoubleVariable b) {
-        return max(Variable.doubleVariable(a), b, null);
+        return max(a, b, null);
     }
 
     public static DoubleVariable max(double a, double b) {
-        return max(Variable.doubleVariable(a), Variable.doubleVariable(b), null);
-    }
-
-    public static DoubleVariable max(DoubleVariable a, DoubleVariable b) {
         return max(a, b, null);
     }
 
@@ -105,23 +102,15 @@ public class Max<A extends NumberVariable<A>> extends NumberProducingDataflowTas
         return max(Variable.doubleVariable(a), Variable.doubleVariable(b), location);
     }
 
-    public static DoubleVariable max(DoubleVariable a, DoubleVariable b, Location location) {
-        return DoubleVariable.doubleVariable(new Max<>(VariableType.DoubleVariable, location, a, b));
-    }
-
     public static IntVariable max(IntVariable a, int b) {
-        return max(a, Variable.intVariable(b), null);
+        return max(a, b, null);
     }
 
     public static IntVariable max(int a, IntVariable b) {
-        return max(Variable.intVariable(a), b, null);
+        return max(a, b, null);
     }
 
     public static IntVariable max(int a, int b) {
-        return max(Variable.intVariable(a), Variable.intVariable(b), null);
-    }
-
-    public static IntVariable max(IntVariable a, IntVariable b) {
         return max(a, b, null);
     }
 
@@ -137,7 +126,18 @@ public class Max<A extends NumberVariable<A>> extends NumberProducingDataflowTas
         return max(Variable.intVariable(a), Variable.intVariable(b), location);
     }
 
-    public static IntVariable max(IntVariable a, IntVariable b, Location location) {
-        return IntVariable.intVariable(new Max<>(VariableType.IntVariable, location, a, b));
+    public static <A extends NumberVariable<A>> A max(A a, A b) {
+        return max(a, b, null);
+    }
+
+    public static <A extends NumberVariable<A>> A max(A a, A b, Location location) {
+        if(a.getType() == VariableType.DoubleVariable)
+            return (A) DoubleVariable
+                    .doubleVariable((NumberProducingDataflowTask<DoubleVariable>) new Max<A>(a, b, location));
+        else if(a.getType() == VariableType.IntVariable)
+            return (A) DoubleVariable
+                    .doubleVariable((NumberProducingDataflowTask<DoubleVariable>) new Max<A>(a, b, location));
+        else
+            throw new CompilerException("Unexpected number type " + a.getType());
     }
 }

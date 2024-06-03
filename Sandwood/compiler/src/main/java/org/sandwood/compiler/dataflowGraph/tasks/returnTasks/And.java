@@ -53,8 +53,7 @@ public class And extends ProducingDataflowTaskImplementation<BooleanVariable> {
     }
 
     @Override
-    public IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> getForwardIRinternal(
-            CompilationContext compilationCtx) {
+    public IRTreeReturn<BooleanVariable> getForwardIRinternal(CompilationContext compilationCtx) {
         return IRTree.and(left.getForwardIR(compilationCtx), right.getForwardIR(compilationCtx));
     }
 
