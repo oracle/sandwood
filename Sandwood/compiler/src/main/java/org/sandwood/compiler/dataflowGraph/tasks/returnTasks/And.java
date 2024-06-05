@@ -39,7 +39,7 @@ public class And extends ProducingDataflowTaskImplementation<BooleanVariable> {
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return left.getExpression(compressSandwoodCode) + " && " + right.getExpression(compressSandwoodCode);
+        return "(" + left.getExpression(compressSandwoodCode) + " && " + right.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override

@@ -21,7 +21,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class Beta extends RandomVariableImplementation<DoubleVariable, Beta>
+public class Beta extends NumericRandomVariableImplementation<DoubleVariable, Beta>
         implements NumericRandomVariable<DoubleVariable, Beta> {
     public final DoubleVariable alpha;
     public final DoubleVariable beta;

@@ -162,4 +162,6 @@ public interface DataflowTask<A extends Variable<A>> extends Comparable<Dataflow
     boolean isDistribution();
 
     void setIsDistribution();
+    
+    boolean containsVariable(Variable<?> variable);
 }

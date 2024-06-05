@@ -67,8 +67,8 @@ public class IfElseAssignmentTask<A extends Variable<A>> extends ProducingDatafl
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return " = (" + guard.getExpression(compressSandwoodCode) + ")?" + ifValue.getExpression(compressSandwoodCode)
-                + ":" + elseValue.getExpression(compressSandwoodCode) + ";\n";
+        return "((" + guard.getExpression(compressSandwoodCode) + ")?" + ifValue.getExpression(compressSandwoodCode)
+                + ":" + elseValue.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override

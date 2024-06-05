@@ -20,7 +20,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class StudentT extends RandomVariableImplementation<DoubleVariable, StudentT>
+public class StudentT extends NumericRandomVariableImplementation<DoubleVariable, StudentT>
         implements NumericRandomVariable<DoubleVariable, StudentT> {
 
     public final DoubleVariable v;

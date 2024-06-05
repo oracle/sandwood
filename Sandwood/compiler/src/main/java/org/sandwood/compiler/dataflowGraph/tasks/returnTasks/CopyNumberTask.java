@@ -9,8 +9,13 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
+import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
@@ -69,4 +74,14 @@ public class CopyNumberTask<A extends NumberVariable<A>> extends CopyTask<A> imp
     public IRTreeReturn<A> getMin(CompilationContext compilationCtx) {
         return input.getMin(compilationCtx);
     }
+    
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	return input.getDifferentialInfo(variable);
+    }
+
+	@Override
+	protected DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+		return input.getDifferential(variable, compilationCtx);
+	}
 }

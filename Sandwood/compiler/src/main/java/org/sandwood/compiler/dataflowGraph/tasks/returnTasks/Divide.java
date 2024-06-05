@@ -17,6 +17,7 @@ import static org.sandwood.compiler.trees.irTree.IRTree.min;
 import static org.sandwood.compiler.trees.irTree.IRTree.negate;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
@@ -51,7 +52,7 @@ public abstract class Divide<A extends NumberVariable<A>, B extends NumberVariab
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return left.getExpression(compressSandwoodCode) + " / " + right.getExpression(compressSandwoodCode);
+        return "(" + left.getExpression(compressSandwoodCode) + " / " + right.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override
@@ -60,6 +61,41 @@ public abstract class Divide<A extends NumberVariable<A>, B extends NumberVariab
             return false;
         Divide<?, ?, ?> dft = (Divide<?, ?, ?>) other;
         return left.equivalent(dft.left) && right.equivalent(dft.right);
+    }
+    
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	DoubleVariable leftDifferential = left.getDifferential(variable, compilationCtx);
+    	DoubleVariable rightDifferential = right.getDifferential(variable, compilationCtx);
+    	DoubleVariable leftDifferentialTimesRight = right.times(leftDifferential);
+    	DoubleVariable rightDifferentialTimesLeft = left.times(rightDifferential);
+    	DoubleVariable subtractParts = leftDifferentialTimesRight.subtract(rightDifferentialTimesLeft);
+    	DoubleVariable rightPowTwo = getPowerOfTwo(right);
+    	
+    	// Apply the quotient rule: f(x)/g(x): (g(x)f'(x) - f(x)g'(x))/(g(x)*g(x)).
+    	return subtractParts.divide(rightPowTwo);
+    }
+    
+    private DoubleVariable getPowerOfTwo(B right) {
+
+    	if(right.getType() == VariableType.IntVariable) {
+    		IntVariable rightInt = (IntVariable) right;
+    		return (rightInt.times(rightInt)).castToDouble();
+    	} else {
+    		DoubleVariable rightDouble = (DoubleVariable) right;
+    		return rightDouble.times(rightDouble);
+    	}
+    }
+    
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	DifferentialInfo leftInfo = left.getDifferentialInfo(variable);
+    	DifferentialInfo rightInfo = right.getDifferentialInfo(variable);
+    	
+    	// Note: we need both left and right to be differentiable,
+    	// in case that any from left and right contains the differentiation variable.
+    	return new DifferentialInfo(leftInfo.isDifferentiable() && rightInfo.isDifferentiable(),
+    			leftInfo.containsVariable() || rightInfo.containsVariable());
     }
 
     /**

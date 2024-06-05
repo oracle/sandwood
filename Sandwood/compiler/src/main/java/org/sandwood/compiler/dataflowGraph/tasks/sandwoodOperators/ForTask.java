@@ -19,13 +19,16 @@ import java.util.Map;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
+import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
@@ -289,4 +292,24 @@ public class ForTask extends ScopedNumberProducingDataflowTask<IntVariable> {
         else
             return getEnd().getMin(compilationCtx);
     }
+	
+    @Override
+    public DoubleVariable getDifferential(Variable<?> variable, CompilationContext compilationCtx) {
+    	ScopeStack.pushScope(scope());
+    	DoubleVariable differential = DoubleVariable.doubleVariable(0.0);
+    	ScopeStack.popScope(scope());
+    	return differential;
+    }
+    
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		
+		boolean containsVariable = containsVariable(variable);
+		boolean isDifferentiable = !containsVariable;
+		
+		// If dependent on the variable we are differentiating on,
+		// then we set it as non-differentiable, as we cannot determine
+		// in compile time if the output will be differentiable or not.
+		return new DifferentialInfo(isDifferentiable, containsVariable);
+	}
 }

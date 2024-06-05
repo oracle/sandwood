@@ -37,7 +37,7 @@ public class Eq<A extends ScalarVariable<A>, B extends ScalarVariable<B>>
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return left.getExpression(compressSandwoodCode) + " == " + right.getExpression(compressSandwoodCode);
+        return "(" + left.getExpression(compressSandwoodCode) + " == " + right.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override

@@ -9,9 +9,11 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -79,5 +81,15 @@ public class Negate<A extends NumberVariable<A>> extends NumberProducingDataflow
     @Override
     public IRTreeReturn<A> getMin(CompilationContext compilationCtx) {
         return IRTree.negate(input.getMax(compilationCtx));
+    }
+    
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	return input.getDifferential(variable, compilationCtx).negate();
+    }
+    
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	return input.getDifferentialInfo(variable);
     }
 }

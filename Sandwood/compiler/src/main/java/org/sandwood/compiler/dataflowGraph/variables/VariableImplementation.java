@@ -97,6 +97,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     private boolean distribution;
 
     private VariableDescription<A> uniqueName;
+    
 
     /**
      * A flag to record if this variable can be determined from observed data. If this set is not empty the value of the
@@ -870,4 +871,9 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         else
             return location;
     }
+    
+	@Override
+	public boolean containsVariable(Variable<?> variable) {
+		return this == variable || getParent().containsVariable(variable);
+	}
 }

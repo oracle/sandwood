@@ -9,6 +9,7 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
@@ -74,6 +75,21 @@ public class Max<A extends NumberVariable<A>> extends NumberProducingDataflowTas
     @Override
     public IRTreeReturn<A> getMin(CompilationContext compilationCtx) {
         return IRTree.max(a.getMin(compilationCtx), b.getMin(compilationCtx));
+    }
+    
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	return DoubleVariable.doubleVariable(0.0);
+    }
+
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	boolean containsVariable = containsVariable(variable);
+    	
+    	// Continuity is broken in case left == right.
+    	// Differentiable only if variable not contained
+    	// in both left and right.
+    	return new DifferentialInfo(!containsVariable, containsVariable);
     }
 
     /* Factory methods for construction */

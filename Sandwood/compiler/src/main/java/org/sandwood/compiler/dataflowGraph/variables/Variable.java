@@ -386,6 +386,8 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
     void setNonDeterministic();
 
     boolean isDeterministic();
+    
+    boolean containsVariable(Variable<?> variable);
 
     /*
      * Arrays: Convenience methods that pass the call through to the factory in the relevant object.

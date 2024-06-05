@@ -9,10 +9,11 @@
 package org.sandwood.compiler.dataflowGraph;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.Differentiable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public interface NumberProperties<A extends NumberVariable<A>> {
+public interface NumberProperties<A extends NumberVariable<A>> extends Differentiable {
     IRTreeReturn<A> getMax(CompilationContext compilationCtx);
 
     IRTreeReturn<A> getMin(CompilationContext compilationCtx);

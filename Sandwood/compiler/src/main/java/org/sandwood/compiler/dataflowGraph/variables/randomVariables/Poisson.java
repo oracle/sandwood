@@ -21,7 +21,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class Poisson extends RandomVariableImplementation<IntVariable, Poisson>
+public class Poisson extends NumericRandomVariableImplementation<IntVariable, Poisson>
         implements NumericRandomVariable<IntVariable, Poisson> {
     public final DoubleVariable rate;
 

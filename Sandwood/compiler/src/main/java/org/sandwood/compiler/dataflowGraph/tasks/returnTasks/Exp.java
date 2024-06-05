@@ -9,9 +9,11 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -81,4 +83,15 @@ public class Exp<A extends NumberVariable<A>> extends NumberProducingDataflowTas
     public IRTreeReturn<DoubleVariable> getMin(CompilationContext compilationCtx) {
         return IRTree.exp(input.getMin(compilationCtx));
     }
+    
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	// e^f(x) differential is also e^f(x)*f'(x).
+    	return output.times(input.getDifferential(variable, compilationCtx));
+    }
+    
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		return input.getDifferentialInfo(variable);
+	}
 }

@@ -9,6 +9,7 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
@@ -43,7 +44,7 @@ public abstract class Add<A extends NumberVariable<A>, B extends NumberVariable<
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return left.getExpression(compressSandwoodCode) + " + " + right.getExpression(compressSandwoodCode);
+        return "(" + left.getExpression(compressSandwoodCode) + " + " + right.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override
@@ -55,6 +56,29 @@ public abstract class Add<A extends NumberVariable<A>, B extends NumberVariable<
                 || (left.equivalent(dft.right) && right.equivalent(dft.left));
     }
 
+	@Override
+	public boolean isDifferentiable(Variable<?> variable) {
+		return getDifferentialInfo(variable).isDifferentiable();
+	}
+	
+    @Override
+    protected DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	DoubleVariable leftDifferential = left.getDifferential(variable, compilationCtx);
+    	DoubleVariable rightDifferential = right.getDifferential(variable, compilationCtx);
+    	return leftDifferential.add(rightDifferential);
+    }
+
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	DifferentialInfo leftInfo = left.getDifferentialInfo(variable);
+    	DifferentialInfo rightInfo = right.getDifferentialInfo(variable);
+    	
+    	// Note: we need both left and right to be differentiable,
+    	// in case that any from left and right contains the differentiation variable.
+    	return new DifferentialInfo(leftInfo.isDifferentiable() && rightInfo.isDifferentiable(),
+    			leftInfo.containsVariable() || rightInfo.containsVariable());
+    }
+    
     private static class AddDD extends Add<DoubleVariable, DoubleVariable, DoubleVariable> {
         AddDD(DoubleVariable a, DoubleVariable b, Location location) {
             super(VariableType.DoubleVariable, location, a, b);

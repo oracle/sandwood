@@ -37,7 +37,7 @@ public class LessThanEqual<L extends NumberVariable<L>, R extends NumberVariable
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return left.getExpression(compressSandwoodCode) + " >= " + right.getExpression(compressSandwoodCode);
+        return "(" + left.getExpression(compressSandwoodCode) + " <= " + right.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override

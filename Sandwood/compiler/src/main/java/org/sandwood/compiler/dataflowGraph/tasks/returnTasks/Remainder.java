@@ -19,6 +19,7 @@ import static org.sandwood.compiler.trees.irTree.IRTree.negate;
 import static org.sandwood.compiler.trees.irTree.IRTree.subtractII;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
@@ -53,7 +54,7 @@ public abstract class Remainder<A extends NumberVariable<A>, B extends NumberVar
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        return left.getExpression(compressSandwoodCode) + " % " + right.getExpression(compressSandwoodCode);
+        return "(" + left.getExpression(compressSandwoodCode) + " % " + right.getExpression(compressSandwoodCode) + ")";
     }
 
     @Override
@@ -62,6 +63,21 @@ public abstract class Remainder<A extends NumberVariable<A>, B extends NumberVar
             return false;
         Remainder<?, ?, ?> dft = (Remainder<?, ?, ?>) other;
         return left.equivalent(dft.left) && right.equivalent(dft.right);
+    }
+    
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	return DoubleVariable.doubleVariable(0.0);
+    }
+    
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	boolean containsVariable = containsVariable(variable);
+
+    	// There is discontinuity in remainder for cases where a multiple of right
+    	// is reached by the left. It is differentiable only when the variable
+    	// differentiating upon is not contained to either left or right.
+    	return new DifferentialInfo(!containsVariable, containsVariable);
     }
 
     private static class RemainderDD extends Remainder<DoubleVariable, DoubleVariable, DoubleVariable> {
@@ -84,7 +100,7 @@ public abstract class Remainder<A extends NumberVariable<A>, B extends NumberVar
 
         @Override
         public IRTreeReturn<DoubleVariable> getMax(CompilationContext compilationCtx) {
-            return conditionalAssignment(lessThan(constant(0), left.getForwardIR(compilationCtx)),
+        	return conditionalAssignment(lessThan(constant(0), left.getForwardIR(compilationCtx)),
                     conditionalAssignment(lessThan(constant(0), right.getForwardIR(compilationCtx)),
                             min(left.getMax(compilationCtx), right.getMax(compilationCtx)),
                             min(left.getMax(compilationCtx), negate(right.getMin(compilationCtx)))),

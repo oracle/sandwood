@@ -183,4 +183,17 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
     public boolean isImplicit() {
         return implicit;
     }
+    
+    @Override
+    public boolean containsVariable(Variable<?> variable) {
+    	// Check if any of the put values contains variable.
+    	Set<PutTask<A>> puts = array.getPuts(scope(), id());
+    	
+    	for (PutTask<A> put : puts) {
+    		if (put.containsVariable(variable)) {
+    			return true;
+    		}
+    	}
+    	return array.instanceHandle().containsVariable(variable);
+    }
 }

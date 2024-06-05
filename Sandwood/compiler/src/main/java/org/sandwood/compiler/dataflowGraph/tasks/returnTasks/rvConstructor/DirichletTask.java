@@ -16,6 +16,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 
 public class DirichletTask extends RandomVariableConstructorTask<ArrayVariable<DoubleVariable>, Dirichlet> {
+    
     public final ArrayVariable<DoubleVariable> beta;
 
     public DirichletTask(ArrayVariable<DoubleVariable> beta, Location location) {

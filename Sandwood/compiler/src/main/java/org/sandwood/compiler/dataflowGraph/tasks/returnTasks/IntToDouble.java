@@ -9,9 +9,11 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -70,6 +72,19 @@ public class IntToDouble extends NumberProducingDataflowTaskImplementation<Doubl
     public IRTreeReturn<DoubleVariable> getMin(CompilationContext compilationCtx) {
         return IRTree.castToDouble(input.getMin(compilationCtx));
     }
+	
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	return DoubleVariable.doubleVariable(0.0);
+    }
+	
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		DifferentialInfo info = input.getDifferentialInfo(variable);
+		
+		return new DifferentialInfo(info.isDifferentiable() &&
+									!info.containsVariable(), info.containsVariable());
+	}
 
     /* Factory methods for construction */
     public static DoubleVariable intToDouble(IntVariable input) {
