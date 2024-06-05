@@ -9,9 +9,13 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
+import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.NumericDistributableRandomVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -32,4 +36,22 @@ public class NumericDistributionSampleTask<A extends NumberVariable<A>, B extend
     public IRTreeReturn<A> getMin(CompilationContext compilationCtx) {
         return ((NumericDistributableRandomVariable<A, B>) randomVariable).getMin(compilationCtx);
     }
+	
+	@Override
+	public DoubleVariable getDifferential(Variable<?> variable, CompilationContext compilationCtx) {
+		ScopeStack.pushScope(scope());
+		DoubleVariable differential = DoubleVariable.doubleVariable(0.0);
+		ScopeStack.popScope(scope());
+		return differential;
+	}
+
+	@Override
+	public boolean isDifferentiable(Variable<?> variable) {
+		return true;
+	}
+	
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		return new DifferentialInfo(true, false);
+	}
 }

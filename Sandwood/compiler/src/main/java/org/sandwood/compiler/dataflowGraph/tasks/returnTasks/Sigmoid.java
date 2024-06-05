@@ -9,9 +9,11 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -77,5 +79,17 @@ public class Sigmoid extends NumberProducingDataflowTaskImplementation<DoubleVar
         if(getType() != other.getType())
             return false;
         return input.equivalent(((Sigmoid) other).input);
+    }
+
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	// sigmoid'(f(x)) = f'(x) * sigmoid(f(x)) * (1 - sigmoid(f(x))).
+    	return input.getDifferential(variable, compilationCtx).times(output).
+    				times(Variable.doubleVariable(1.0).subtract(output));
+    }
+    
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	return input.getDifferentialInfo(variable);
     }
 }

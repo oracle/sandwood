@@ -9,8 +9,10 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -54,4 +56,9 @@ public class ConstantDoubleTask extends ConstantNumberValueTask<DoubleVariable> 
     public IRTreeReturn<DoubleVariable> getMin(CompilationContext compilationCtx) {
         return IRTree.constant(v);
     }
+
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		return new DifferentialInfo(true, false);
+	}
 }

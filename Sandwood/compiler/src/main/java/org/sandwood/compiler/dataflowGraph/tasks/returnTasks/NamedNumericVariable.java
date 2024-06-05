@@ -9,8 +9,11 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -33,4 +36,20 @@ public class NamedNumericVariable<A extends NumberVariable<A>> extends NamedVari
         throw new CompilerException("Unable to calculate the "
                 + "minimum value of a named variable. Reaching this point " + "is a bug in the compiler.");
     }
+	
+	@Override
+	public DoubleVariable getDifferential(Variable<?> variable, CompilationContext compilationCtx) {
+		throw new CompilerException("NamedNumericVariable is not differentiable.");
+	}
+
+	@Override
+	public boolean isDifferentiable(Variable<?> variable) {
+		return false;
+	}
+
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		throw new CompilerException("NamedNumericVariable is not differentiable.");
+	}
+
 }

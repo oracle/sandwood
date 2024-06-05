@@ -8,6 +8,7 @@
 
 package org.sandwood.compiler.dataflowGraph.variables.scalarVariables;
 
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
@@ -26,6 +27,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Negate;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Remainder;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Subtract;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant.ConstantIntTask;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.exceptions.ConstraintAlreadySetException;
@@ -64,6 +66,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Add.add(this, a, location);
     }
 
+    @Override
     public IntVariable add(IntVariable a) {
         return Add.add(this, a);
     }
@@ -72,6 +75,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Add.add(this, a, location);
     }
 
+    @Override
     public DoubleVariable add(DoubleVariable a) {
         return Add.add(this, a);
     }
@@ -96,6 +100,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Subtract.subtract(this, a, location);
     }
 
+    @Override
     public IntVariable subtract(IntVariable a) {
         return Subtract.subtract(this, a);
     }
@@ -104,6 +109,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Subtract.subtract(this, a, location);
     }
 
+    @Override
     public DoubleVariable subtract(DoubleVariable a) {
         return Subtract.subtract(this, a);
     }
@@ -128,6 +134,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Multiply.multiply(this, a, location);
     }
 
+    @Override
     public IntVariable times(IntVariable a) {
         return Multiply.multiply(this, a);
     }
@@ -136,6 +143,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Multiply.multiply(this, a, location);
     }
 
+    @Override
     public DoubleVariable times(DoubleVariable a) {
         return Multiply.multiply(this, a);
     }
@@ -160,6 +168,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Divide.divide(this, a, location);
     }
 
+    @Override
     public IntVariable divide(IntVariable a) {
         return Divide.divide(this, a);
     }
@@ -168,6 +177,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Divide.divide(this, a, location);
     }
 
+    @Override
     public DoubleVariable divide(DoubleVariable a) {
         return Divide.divide(this, a);
     }
@@ -176,6 +186,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Divide.divide(this, a, location);
     }
 
+    @Override
     public IntVariable remainder(IntVariable i) {
         return Remainder.remainder(this, i);
     }
@@ -184,6 +195,7 @@ public class IntVariable extends NumberVariable<IntVariable> {
         return Remainder.remainder(this, i, location);
     }
 
+    @Override
     public DoubleVariable remainder(DoubleVariable d) {
         return Remainder.remainder(this, d);
     }
@@ -342,6 +354,12 @@ public class IntVariable extends NumberVariable<IntVariable> {
 
     public BooleanVariable notEq(DoubleVariable v, Location location) {
         return Eq.eq(this, v, location).negate(location);
+    }
+    
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	boolean containsVariable = containsVariable(variable);
+    	return new DifferentialInfo(!containsVariable, containsVariable);
     }
 
     @Override

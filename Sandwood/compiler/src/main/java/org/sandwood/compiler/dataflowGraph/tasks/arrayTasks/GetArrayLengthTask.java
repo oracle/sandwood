@@ -9,12 +9,15 @@
 package org.sandwood.compiler.dataflowGraph.tasks.arrayTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -93,4 +96,16 @@ public class GetArrayLengthTask extends NumberProducingDataflowTaskImplementatio
     public IRTreeReturn<IntVariable> getMin(CompilationContext compilationCtx) {
         return array.getMinLength(compilationCtx);
     }
+    
+    @Override
+	protected DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	throw new CompilerException("GetArrayLength is not differentiable.");
+    }
+
+	@Override
+	public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+		boolean containsVariable = containsVariable(variable);
+		boolean isDifferentiable = !containsVariable;
+		return new DifferentialInfo(isDifferentiable, containsVariable);
+	}
 }

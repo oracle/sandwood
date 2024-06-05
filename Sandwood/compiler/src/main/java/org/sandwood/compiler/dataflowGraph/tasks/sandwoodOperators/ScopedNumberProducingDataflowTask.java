@@ -22,4 +22,9 @@ public abstract class ScopedNumberProducingDataflowTask<A extends NumberVariable
             Variable<?>... vars) {
         super(dfType, type, location, vars);
     }
+
+	@Override
+	public boolean isDifferentiable(Variable<?> variable) {
+		return getDifferentialInfo(variable).isDifferentiable();
+	}
 }

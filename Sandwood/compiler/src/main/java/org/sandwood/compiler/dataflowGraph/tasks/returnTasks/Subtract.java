@@ -9,6 +9,7 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
@@ -43,7 +44,6 @@ public abstract class Subtract<A extends NumberVariable<A>, B extends NumberVari
 
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
-        // Excessive bracketing to be sure
         return "(" + left.getExpression(compressSandwoodCode) + " - " + right.getExpression(compressSandwoodCode) + ")";
     }
 
@@ -53,6 +53,24 @@ public abstract class Subtract<A extends NumberVariable<A>, B extends NumberVari
             return false;
         Subtract<?, ?, ?> dft = (Subtract<?, ?, ?>) other;
         return left.equivalent(dft.left) && right.equivalent(dft.right);
+    }
+    
+    @Override
+    public DoubleVariable getDifferentialInternal(Variable<?> variable, CompilationContext compilationCtx) {
+    	DoubleVariable leftDifferential = left.getDifferential(variable, compilationCtx);
+    	DoubleVariable rightDifferential = right.getDifferential(variable, compilationCtx);
+    	return leftDifferential.subtract(rightDifferential);
+    }
+	
+    @Override
+    public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
+    	DifferentialInfo leftInfo = left.getDifferentialInfo(variable);
+    	DifferentialInfo rightInfo = right.getDifferentialInfo(variable);
+    	
+    	// Note: we need both left and right to be differentiable,
+    	// in case that any from left and right contains the differentiation variable.
+    	return new DifferentialInfo(leftInfo.isDifferentiable() && rightInfo.isDifferentiable(),
+    			leftInfo.containsVariable() || rightInfo.containsVariable());
     }
 
     private static class SubtractDD extends Subtract<DoubleVariable, DoubleVariable, DoubleVariable> {

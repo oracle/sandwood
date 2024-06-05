@@ -20,7 +20,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class HalfCauchy extends RandomVariableImplementation<DoubleVariable, HalfCauchy>
+public class HalfCauchy extends NumericRandomVariableImplementation<DoubleVariable, HalfCauchy>
         implements NumericRandomVariable<DoubleVariable, HalfCauchy> {
 
     public final DoubleVariable location;

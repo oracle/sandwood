@@ -294,4 +294,14 @@ public abstract class DataflowTaskImplementation<A extends Variable<A>> extends 
                 getOutput().setIsDistribution();
         }
     }
+
+	@Override
+	public boolean containsVariable(Variable<?> variable) {
+		for (Variable<?> input : inputs) {
+			if (input.containsVariable(variable)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

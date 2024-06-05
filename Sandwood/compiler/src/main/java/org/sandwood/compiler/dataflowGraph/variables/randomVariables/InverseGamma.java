@@ -21,7 +21,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class InverseGamma extends RandomVariableImplementation<DoubleVariable, InverseGamma>
+public class InverseGamma extends NumericRandomVariableImplementation<DoubleVariable, InverseGamma>
         implements NumericRandomVariable<DoubleVariable, InverseGamma> {
 
     public final DoubleVariable alpha;

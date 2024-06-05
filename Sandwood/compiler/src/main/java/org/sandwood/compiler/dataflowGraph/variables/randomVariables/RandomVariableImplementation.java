@@ -239,17 +239,17 @@ public abstract class RandomVariableImplementation<A extends Variable<A>, B exte
     @Override
     public B copy() {
         throw new SandwoodModelException("unable to assign random variable " + getAlias()
-        + " to another reference as random variables are reference types and currently"
-        + " only value types can be assigned to multiple variables.");
+                + " to another reference as random variables are reference types and currently"
+                + " only value types can be assigned to multiple variables.");
     }
 
     @Override
     public B copy(Location location) {
         throw new SandwoodModelException("unable to assign random variable " + getAlias()
-        + " to another reference as random variables are reference types and currently"
-        + " only value types can be assigned to multiple variables.", location);
+                + " to another reference as random variables are reference types and currently"
+                + " only value types can be assigned to multiple variables.", location);
     }
-    
+
     @Override
     public void constructTrace(DAGInfo dagInfo) {
         dagInfo.addRandomVariable(this);

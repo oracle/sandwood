@@ -20,7 +20,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class Cauchy extends RandomVariableImplementation<DoubleVariable, Cauchy>
+public class Cauchy extends NumericRandomVariableImplementation<DoubleVariable, Cauchy>
         implements NumericRandomVariable<DoubleVariable, Cauchy> {
 
     public final DoubleVariable location;

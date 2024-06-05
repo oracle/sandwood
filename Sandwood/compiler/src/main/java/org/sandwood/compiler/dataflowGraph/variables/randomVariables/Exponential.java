@@ -21,7 +21,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class Exponential extends RandomVariableImplementation<DoubleVariable, Exponential>
+public class Exponential extends NumericRandomVariableImplementation<DoubleVariable, Exponential>
         implements NumericRandomVariable<DoubleVariable, Exponential> {
 
     public final DoubleVariable lambda;

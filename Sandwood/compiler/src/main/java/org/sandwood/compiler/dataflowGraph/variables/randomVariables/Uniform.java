@@ -21,7 +21,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class Uniform extends RandomVariableImplementation<DoubleVariable, Uniform>
+public class Uniform extends NumericRandomVariableImplementation<DoubleVariable, Uniform>
         implements NumericRandomVariable<DoubleVariable, Uniform> {
 
     public final DoubleVariable start;

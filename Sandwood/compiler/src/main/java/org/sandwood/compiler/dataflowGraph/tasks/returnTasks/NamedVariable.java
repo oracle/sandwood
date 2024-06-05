@@ -66,9 +66,7 @@ public class NamedVariable<A extends Variable<A>> extends ProducingDataflowTaskI
         return "There is nowhere to go back from a named variable. The trace that lead here should not exist";
     }
 
-    // TODO ensure that when a variable is constrained by this the getSandwoodMethod
-    // is
-    // called.
+    // TODO ensure that when a variable is constrained by this the getSandwoodMethod is called.
     @Override
     public String getSandwoodExpression(boolean compressSandwoodCode) {
         return "Load field " + varDesc;
