@@ -76,6 +76,7 @@ public class DAGInfo {
     private final List<TraceSinkPair> allTraces = new ArrayList<>();
 
     private final Set<RandomVariable<?, ?>> randomVariables = new HashSet<>();
+    private final Set<Variable<?>> differentialVariables = new HashSet<>();
 
     /**
      * Add an observed variable as an end point, with a random variable, constant, or input as the source, and a trace
@@ -132,6 +133,21 @@ public class DAGInfo {
         randomVarTraces.add(p);
         allTraces.add(p);
     }
+    
+    /**
+     * Add a consuming random variable as an end point, with a random variable, constant, or input as the source, and a
+     * trace from the sink to the source such that the sample task from the random variable is on the top of the stack.
+     * This is opposite to the output from the Traces interface as it is reversed internally.
+     *
+     * @param trace The trace between the two random variables.
+     * @param sink  The variable that this trace ends at once it is reversed.
+     */
+    public void addDifferentialChild(Trace trace, Variable<?> sink) {
+        TraceHandle h = TraceHandle.getReversedTraceHandle(trace);
+        TraceSinkPair p = new TraceSinkPair(h, sink);
+        differentialTraces.add(p);
+        allTraces.add(p);
+    }
 
     /**
      * Adds a variable that is not consumed by anything else. This is added as a way of getting data out of the graph if
@@ -175,6 +191,10 @@ public class DAGInfo {
 
     public List<TraceSinkPair> terminalVarTraces() {
         return terminalVarTraces;
+    }
+    
+    public List<TraceSinkPair> differentialTraces() {
+        return differentialTraces;
     }
 
     public List<TraceSinkPair> scopeConstraintVarTraces() {
@@ -250,5 +270,18 @@ public class DAGInfo {
             allTraces.removeAll(toRemove);
             allTraces.addAll(toAdd);
         }
+    
+    /**
+     * Adds an encountered differential variable to be kept track of.
+     *
+     * @param v The observed variable to be recorded.
+     */
+    public void addDifferentialVariable(Variable<?> v) {
+        v = v.getCurrentInstance();
+        differentialVariables.add(v);
+    }
+
+    public Set<Variable<?>> getDifferentialVariables() {
+        return differentialVariables;
     }
 }

@@ -249,6 +249,36 @@ public abstract class Traces {
      * @return The set of variables whose value is fixed via an observation.
      */
     public abstract Set<Variable<?>> getAllObservedVariables();
+    
+    /**
+     * Return all the differential variables we meet.
+     * @return The set of differential variables.
+     */
+    public abstract Set<Variable<?>> getDifferentialVariables();
+    
+    /**
+     * Add an intermediate variable to the respective set of intermediate variables.
+     * @param variable the variable to be added.
+     */
+    public abstract void addDifferentialVariable(Variable<?> variable);
+  
+    
+    /**
+     * Add an intermediate variable to the respective set of intermediate variables.
+     * @param variable the variable to be added.
+     */
+    public abstract void addIntermediateDifferentialVariable(Variable<?> variable);
+    
+    /**
+     * Obtain the set of intermediate differential variables.
+     * @return the set of variables.
+     */
+    public abstract Set<Variable<?>> getIntermediateDifferentialVariables();
+    
+    /**
+     * Construct differential traces.
+     */
+    public abstract void constructDifferentialTraces();
 
     /**
      * Method to return the model inputs, this will not return observed inputs.

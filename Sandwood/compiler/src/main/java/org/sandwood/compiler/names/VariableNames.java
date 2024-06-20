@@ -364,4 +364,8 @@ public final class VariableNames {
     public static <A extends Variable<A>> GlobalVariableDescription<A> makeGlobal(VariableDescription<A> varDesc) {
         return new GlobalVariableDescription<A>(varDesc.name, varDesc.type);
     }
+    
+    public static VariableName getDifferentialName(ArrayVariable<?> array, Variable<?> variable) {
+    	return new VariableName("diff$" + array.getVarDesc().name.getName() + "$" + variable.getVarDesc().name.getName(), true);
+    }
 }

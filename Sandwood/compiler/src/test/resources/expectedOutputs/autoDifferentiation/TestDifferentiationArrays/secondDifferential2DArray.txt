@@ -1,0 +1,10 @@
+double[] diff$diff$inner0$a$a$var141 = diff$diff$arr$a$a$var140[0];
+diff$diff$inner0$a$a$var141[4] = ((((10.0 * 0.0) + (0.0 * 0.0)) + ((10.0 * 0.0) + (0.0 * 0.0))) + 0.0);
+$var17[0] = 0;
+double[] diff$diff$inner1$a$a$var162 = diff$diff$arr$a$a$var140[$var17[0]];
+double $var258;
+if(true)
+	$var258 = 0.0;
+else
+	$var258 = (((20.0 * (((20.0 * 0.0) + (0.0 * 0.0)) + ((20.0 * 0.0) + (0.0 * 0.0)))) + (((20.0 * 0.0) + (20.0 * 0.0)) * 0.0)) + (((20.0 * 20.0) * 0.0) + (0.0 * ((20.0 * 0.0) + (20.0 * 0.0)))));
+diff$diff$inner1$a$a$var162[6] = $var258;

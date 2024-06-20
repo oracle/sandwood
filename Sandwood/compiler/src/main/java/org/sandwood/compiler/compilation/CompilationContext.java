@@ -46,6 +46,7 @@ import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.traces.Traces;
@@ -595,6 +596,13 @@ public class CompilationContext {
     public final ExecutionType target;
 
     public final Traces traces;
+    
+    /** Map holding information about array differentials. */
+    private final Map<ArrayVariable<?>, Map<Variable<?>, Set<PutTask<?>>>> arrayDifferentialTasks = new HashMap<>(); 
+
+    private final Map<ArrayVariable<?>, Map<Variable<?>, ArrayVariable<?>>> arrayDifferentials = new HashMap<>();
+    
+    private final Map<Variable<?>, Map<Variable<?>, DoubleVariable>> scalarDifferentials = new HashMap<>(); 
 
     /** A set to record which sub arrays are required in locations where only some sub arrays are required. */
     private Set<ArrayVariable<?>> requiredArrays = null;
@@ -622,6 +630,134 @@ public class CompilationContext {
         options.apply(this);
         codeGuard.push(null);
         clearAll();
+    }
+    
+    /**
+     * Adds differential info about an array with respect to a variable differentiating upon to a map
+     * preserving all related information.
+     * 
+     * @param arrayVariable the array that the differentiation info are associated with.
+     * @param diffVariable the variable differentiating upon.
+     * @param differentialArray the differential array to be added.
+     */
+    public <A extends Variable<A>> void addDifferentialArray(
+    		ArrayVariable<A> arrayVariable,
+    		Variable<?> diffVariable,
+    		ArrayVariable<A> differentialArray) {
+    	
+    	arrayVariable = arrayVariable.instanceHandle();
+    	
+    	// Note: if no entry is found in variable differentials map across the array variable
+    	// and the variable differentiating upon, a new entry will be implicitly created.
+    	Map<Variable<?>, ArrayVariable<?>> variableDifferentials = 
+    		arrayDifferentials.computeIfAbsent(arrayVariable, av -> {
+    			return new HashMap<>();
+    		});
+    	
+    	variableDifferentials.computeIfAbsent(diffVariable, av -> {
+			return differentialArray;
+		});
+    }
+    
+    public <A extends Variable<A>> boolean containsPutTask(ArrayVariable<A> arrayVariable,
+    		Variable<?> diffVariable,
+    		PutTask<A> putTask) {
+    	
+    	arrayVariable = arrayVariable.instanceHandle();
+
+    	Map<Variable<?>, Set<PutTask<?>>> arrayVariableMap = arrayDifferentialTasks.get(arrayVariable);
+    	
+    	if (arrayVariableMap == null) {
+    		return false;
+    	}
+    	
+    	Set<PutTask<?>> putTasksSet = arrayVariableMap.get(diffVariable);
+    	
+    	if (putTasksSet == null) {
+    		return false;
+    	}
+    	
+    	return putTasksSet.contains(putTask);
+    }
+    
+    public <A extends Variable<A>> void addPutTask(ArrayVariable<A> arrayVariable,
+    		Variable<?> diffVariable,
+    		PutTask<A> putTask) {
+    	
+    	arrayVariable = arrayVariable.instanceHandle();
+
+    	Map<Variable<?>, Set<PutTask<?>>> differentialTasks = 
+			arrayDifferentialTasks.computeIfAbsent(arrayVariable, av -> {
+    			return new HashMap<>();
+    		});
+    	
+    	Set<PutTask<?>> differentialTasksSet = 
+    			differentialTasks.computeIfAbsent(diffVariable, av -> {
+    			return new HashSet<>();
+    		});
+
+    	differentialTasksSet.add(putTask);
+    }  
+    
+    public <A extends Variable<A>> ArrayVariable<A> getDifferentialArray(
+    		ArrayVariable<?> arrayVariable,
+    		Variable<A> diffVariable) {
+    	
+    	arrayVariable = arrayVariable.instanceHandle();
+
+    	Map<Variable<?>, ArrayVariable<?>> differentialArrayoMap = arrayDifferentials.get(arrayVariable);
+    	
+    	// Note: if there are no differential array map entries 
+    	//to array differentials, the method will return null.
+    	if (differentialArrayoMap == null) {
+    		return null;
+    	}
+    	
+    	return (ArrayVariable<A>) differentialArrayoMap.get(diffVariable);
+    }
+    
+    /**
+     * Adds differential info about an array with respect to a variable differentiating upon to a map
+     * preserving all related information.
+     * 
+     * @param variable the variable that the differentiation info are associated with.
+     * @param diffVariable the variable differentiating upon.
+     * @param differential the differential to be added.
+     */
+    public void addDifferentialScalar(
+    		Variable<?> baseVariable,
+    		Variable<?> diffVariable,
+    		DoubleVariable differential) {
+    	
+    	// Note: if no entry is found in variable differentials map across the array variable
+    	// and the variable differentiating upon, a new entry will be implicitly created.
+    	Map<Variable<?>, DoubleVariable> scalarDifferentialsMap = 
+    		scalarDifferentials.computeIfAbsent(baseVariable, av -> {
+    			return new HashMap<>();
+    		});
+    	
+    	scalarDifferentialsMap.put(diffVariable, differential);
+    }
+    
+    /**
+     * Gets differential scalar based on base variable and variable differentiating upon.
+     * @param baseVariable the base variable.
+     * @param variable the variable differentiating upon.
+     * @return the calculated differential.
+     */
+    public DoubleVariable getDifferentialScalar(
+    		Variable<?> baseVariable,
+    		Variable<?> variable) {
+
+    	Map<Variable<?>, DoubleVariable> scalarDifferentialsMap = scalarDifferentials.get(baseVariable);
+    	
+    	// Note: if there are no differential info map entries to array differentials,
+    	// the method will return null.
+    	if (scalarDifferentialsMap == null) {
+    		return null;
+    	}
+    	
+    	return scalarDifferentialsMap.get(variable);
     }
 
     /**

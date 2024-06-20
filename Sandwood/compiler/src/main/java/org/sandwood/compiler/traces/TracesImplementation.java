@@ -35,6 +35,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.transformations.DAGTransformations;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant.ConstantIntTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -143,6 +144,18 @@ public class TracesImplementation extends Traces {
     // A map from variables to the traces that lead to observed fixed.
     private final Map<Variable<?>, Set<TraceHandle>> observedVariableTraces = new HashMap<>();
 
+    // Set of all differential variables.
+    private final Set<Variable<?>> differentialVariables = new HashSet<>(); 
+
+    // Set of all intermediate differential variables.
+    private final Set<Variable<?>> intermediateDifferentialVariables = new HashSet<>();
+    
+    // Map of observed differential traces.
+    private final Map<SampleTask<?, ?>, Map<Variable<?>, Set<TraceHandle>>> observedDifferentialTraces = new HashMap<>();
+    
+    // Parent |-> Map(Intermediate Variable |-> Stack of tasks linking them).
+    private final Map<RandomVariable<?, ?>, Set<TraceHandle>> intermediateDifferentialTraces = new HashMap<>();
+    
     /**
      * TODO currently using a variable as a means of collecting the graph, a neater way would be nice, but I don't want
      * state to leak between programs, so some form of context object would be required, and a clean way of adding that
@@ -176,6 +189,27 @@ public class TracesImplementation extends Traces {
     @Override
     public Set<TraceHandle> getTraces(RandomVariable<?, ?> rv, int argIndex) {
         return randomTraces.get(rv).get(argIndex);
+    }
+    
+    @Override
+    public void constructDifferentialTraces() {
+
+        DAGInfo dagInfo = new DAGInfo();
+        
+        for(Variable<?> dv:differentialVariables) {
+        	dv.constructTrace(dagInfo, true);
+        }
+        
+        // Setup intermediate variables (arrays that are not sub-arrays).
+        for(Variable<?> dv:intermediateDifferentialVariables) {
+    		dv.setIntermediate();
+    		deterministicVars.add(dv);
+        }
+
+        for(TraceSinkPair p:dagInfo.differentialTraces()) {
+        	addDifferentialChild(p);
+        }
+
     }
 
     private void constructTraces(CompilationDesc compDesc, Variable<?>[] vs) {
@@ -260,8 +294,9 @@ public class TracesImplementation extends Traces {
         setIntermediates();
 
         // ingest traces
-        for(TraceSinkPair p:dagInfo.observedSourceTraces())
+        for(TraceSinkPair p:dagInfo.observedSourceTraces()) {
             addObservedSource(p);
+        }
         for(TraceSinkPair p:dagInfo.observedVarTraces())
             addObservedChild(p);
         for(TraceSinkPair p:dagInfo.randomVarTraces())
@@ -1223,6 +1258,22 @@ public class TracesImplementation extends Traces {
         if(namedVariables.containsKey(oldName.name))
             namedVariables.put(newName.name, namedVariables.remove(oldName.name));
     }
+    
+    /**
+     * Add an intermediate variable to the respective set of intermediate variables.
+     * @param variable the variable to be added.
+     */
+    public void addIntermediateDifferentialVariable(Variable<?> variable) {
+    	intermediateDifferentialVariables.add(variable);
+    }
+    
+    /**
+     * Obtain the set of intermediate differential variables.
+     * @return the set of variables.
+     */
+    public Set<Variable<?>> getIntermediateDifferentialVariables() {
+    	return intermediateDifferentialVariables;
+    }
 
     /**
      * Method used to add each random variable encountered to the data structures.
@@ -1239,7 +1290,6 @@ public class TracesImplementation extends Traces {
         }
         randomParents.put(randomVariable, inputSamples);
         randomTraces.put(randomVariable, inputTraces);
-
     }
 
     private void addObservedChild(TraceSinkPair p) {
@@ -1605,26 +1655,58 @@ public class TracesImplementation extends Traces {
             }
         }
     }
+    
+    // TODO: Revise/reimplement.
+    private void addDifferentialChild(TraceSinkPair p) {
+        TraceHandle handle = p.handle;
+        
+        Variable<?> sink = p.sink;
+
+        ProducingDataflowTask<?> sourceTask = handle.get(0).task;
+        switch(sourceTask.getType()) {
+            case SAMPLE: {
+                SampleTask<?, ?> sourceSample = (SampleTask<?, ?>) sourceTask;
+                RandomVariable<?, ?> sourceRV = sourceSample.randomVariable;
+
+                addIntermediates(handle);
+                addVariableSource(handle, sourceSample);
+
+                allSampleTasks.add(sourceSample);
+
+                Map<Variable<?>, Set<TraceHandle>> differentialChildren = observedDifferentialTraces
+                        .computeIfAbsent(sourceSample, k -> new HashMap<>());
+                Set<TraceHandle> differentialTraces = differentialChildren.computeIfAbsent(sink, k -> new HashSet<>());
+                differentialTraces.add(handle);
+
+                observedSampleTasks.add(sourceSample);
+                addToVarToSample(sink, sourceRV);
+
+                Set<TraceHandle> intermediateVariableTraces = intermediateDifferentialTraces.computeIfAbsent(sourceRV,
+                        k -> new HashSet<>());
+
+                SplitTrace splitTrace = splitTrace(handle);
+                TraceHandle toSampleHandle = TraceHandle.getTraceHandle(splitTrace.toSample);
+                intermediateVariableTraces.add(toSampleHandle);
+                
+                addToVarToSample(splitTrace.sampleVar, sourceRV);
+
+                SampleTraceDesc sampleTraceDesc = sampleTrace.get(sourceSample);
+                if(sampleTraceDesc == null) {
+                    sampleTraceDesc = new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle);
+                    sampleTrace.put(sourceSample, sampleTraceDesc);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
 
     private void findTerminalVariables(TraceHandle h) {
         for(DataflowTaskArgDesc d:h) {
             Variable<?> v = d.task.getOutput();
             if(v.getConsumers().isEmpty())
                 terminalVariables.add(v);
-        }
-    }
-
-    private static class SplitTrace {
-        // Splitting the trace into two parts, the part containing the gets and the part
-        // containing the puts
-        public final Trace fromConsumer = new Trace(); // Trace from the consuming task to the intermediate value.
-        public final Trace toSample = new Trace();
-        public Variable<?> sampleVar; // The variable holding the stored values.
-
-        @Override
-        public String toString() {
-            return "From the consumer:\n" + fromConsumer + "\nTo the sample task:\n" + toSample + "\nSample variable: "
-                    + sampleVar.getVarDesc() + "\n======\n";
         }
     }
 
@@ -1769,7 +1851,22 @@ public class TracesImplementation extends Traces {
         }
     }
 
-    // TODO make this filtering more generic
+    private static class SplitTrace {
+        // Splitting the trace into two parts, the part containing the gets and the part
+        // containing the puts
+        public final Trace fromConsumer = new Trace(); // Trace from the consuming task to the intermediate value.
+        public final Trace toSample = new Trace();
+        public Variable<?> sampleVar; // The variable holding the stored values.
+
+        @Override
+        public String toString() {
+            return "From the consumer:\n" + fromConsumer + "\nTo the sample task:\n" + toSample + "\nSample variable: "
+                    + sampleVar.getVarDesc() + "\n======\n";
+        }
+    }
+
+
+    //TODO make this filtering more generic
     private static boolean filterDistributedArgTrace(TraceHandle trace) {
         if(trace.get(0).task.getType() == DFType.SAMPLE)
             // Add anything that is from a sample
@@ -2021,6 +2118,22 @@ public class TracesImplementation extends Traces {
     @Override
     public Set<Variable<?>> getAllVariables() {
         return allVariables;
+    }
+    
+    /**
+     * Return all the differential variables we meet.
+     */
+    @Override
+    public Set<Variable<?>> getDifferentialVariables() {
+        return differentialVariables;
+    }
+    
+    /**
+     * Add an intermediate variable to the respective set of intermediate variables.
+     * @param variable the variable to be added.
+     */
+    public void addDifferentialVariable(Variable<?> variable) {
+    	differentialVariables.add(variable);
     }
 
     @Override

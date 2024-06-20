@@ -113,6 +113,15 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      *                                  to be thrown.
      */
     void setAlias(String alias) throws AliasAlreadySetException;
+    
+    /**
+     * Method to set the value of the alias for a variable from a VariableName instance.
+     *
+     * @param variableName The VariableName instance to extract name from.
+     * @throws AliasAlreadySetException Aliases can only be set once, trying to reset an alias will cause this exception
+     *                                  to be thrown.
+     */
+    void setAlias(VariableName variableName)  throws AliasAlreadySetException;
 
     /**
      * Method to set the location that the variable is declared in the model script.
@@ -305,7 +314,9 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      * @param traces
      */
     void constructTrace(DAGInfo traces);
-
+    
+    void constructTrace(DAGInfo traces, boolean isDifferential);
+    
     void constructTrace(TraceCallback c);
 
     void constructTrace(TraceConstructionDesc desc);

@@ -1,0 +1,6 @@
+double[][] inner0$var9 = arr$var7[0];
+double[] inner2$var13 = inner0$var9[0];
+inner2$var13[0] = (10.0 * 10.0);
+double[][] inner1$var11 = arr$var7[1];
+double[] inner3$var15 = inner1$var11[0];
+inner3$var15[0] = (20.0 * (20.0 * 20.0));

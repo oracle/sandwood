@@ -1,0 +1,9 @@
+for(int $var7 = 0; $var7 < 9; $var7 += 1) {
+	double[][] $var18 = arr$var5[$var7];
+	for(int $var11 = 0; $var11 < 9; $var11 += 1) {
+		for(int $var17 = 0; $var17 < 9; $var17 += 1) {
+			double[] $var19 = $var18[$var11];
+			$var19[$var17] = (10.0 * ($var7 * $var11));
+		}
+	}
+}
