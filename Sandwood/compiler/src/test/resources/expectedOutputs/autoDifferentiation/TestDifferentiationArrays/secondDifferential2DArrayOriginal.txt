@@ -1,0 +1,10 @@
+double[] inner0$var4 = arr$var2[0];
+inner0$var4[4] = ((10.0 * 10.0) + 10);
+$var17[0] = 0;
+double[] inner1$var6 = arr$var2[$var17[0]];
+double $var14;
+if(true)
+	$var14 = 10.0;
+else
+	$var14 = (20.0 * (20.0 * 20.0));
+inner1$var6[6] = $var14;

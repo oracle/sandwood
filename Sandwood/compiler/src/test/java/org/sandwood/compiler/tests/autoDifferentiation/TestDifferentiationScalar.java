@@ -10,9 +10,11 @@ package org.sandwood.compiler.tests.autoDifferentiation;
  
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.CompilationOptions;
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.Sandwood;
+import org.sandwood.compiler.dataflowGraph.Sandwood.LoopBody;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
@@ -38,6 +42,7 @@ import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.tests.util.CompilerState;
 import org.sandwood.compiler.tests.util.TestStringGenerator;
 import org.sandwood.compiler.traces.Traces;
 import org.sandwood.compiler.traces.TracesImplementation;
@@ -45,22 +50,24 @@ import org.sandwood.compiler.util.StringUtil;
 
 public class TestDifferentiationScalar {
 	
-    private final String sourceDir = "src" + File.separator + "test" + File.separator + "resources" + File.separator
-            + "expectedOutputs";
-    
+    private final String sourceDir = "src" + File.separator + "test" + File.separator +
+    								 "resources" + File.separator + "expectedOutputs";
+
     private final boolean constructingResults = false;
     private final TestStringGenerator tsg = new TestStringGenerator();
     
+    private final String calcOriginalTag = "calcOriginal";
+    private final String ifElseOriginalTag = "ifElseOriginal";
+    
     private final String firstDifferentialATag = "firstDifferentialA";
     private final String secondDifferentialATag = "secondDifferentialA";
-    
     private final String firstDifferentialBTag = "firstDifferentialB";
     private final String secondDifferentialBTag = "secondDifferentialB";
-    
+
     private final String ifElseDifferentialATag = "ifElseDifferentialA";
     private final String ifElseDifferentialBTag = "ifElseDifferentialB";
     private final String ifElseDifferentialETag = "ifElseDifferentialE";
-    
+
     private final ArrayList<Variable<?>> outputForCtx = new ArrayList<>();
     
 	private final CompilationOptions opts = new CompilationOptions();
@@ -68,8 +75,13 @@ public class TestDifferentiationScalar {
 	private final CompilationContext ctx = new CompilationContext(opts, traces, ExecutionType.SingleThreadCPU);
 
 	@BeforeEach
-	public void prepareEach() {
+	public void prepareEach() throws NoSuchMethodException,
+									 SecurityException, 
+									 IllegalAccessException, 
+									 IllegalArgumentException, 
+									 InvocationTargetException {
 		ctx.initialize();
+		CompilerState.reset();
 	}
 	
     @Test
@@ -101,7 +113,6 @@ public class TestDifferentiationScalar {
 	            break;
 	        default:
 	            assertFalse(true);
- 
         }
     }
  
@@ -215,8 +226,7 @@ public class TestDifferentiationScalar {
         ConstantDoubleTask doubleLeftC = (ConstantDoubleTask) taskC.left.getParent();
         ConstantDoubleTask doubleRightC = (ConstantDoubleTask) taskC.right.getParent();
         assertEquals(doubleLeftC.v, 0.0);
-        assertEquals(doubleRightC.v, 0.0);
-           
+        assertEquals(doubleRightC.v, 0.0);  
     }
     
     @Test
@@ -254,8 +264,7 @@ public class TestDifferentiationScalar {
     	DoubleVariable doubleVarC = Variable.doubleVariable(50.0);
     	
     	DoubleVariable div = doubleVarA.divide(doubleVarB);
-    	
-    	
+
     	DoubleVariable varADivDifferential = div.getDifferential(doubleVarA, ctx);
     	DoubleVariable varBDivDifferential = div.getDifferential(doubleVarB, ctx);
     	DoubleVariable varCDivDifferential = div.getDifferential(doubleVarC, ctx);
@@ -305,8 +314,13 @@ public class TestDifferentiationScalar {
         Traces traces = TracesImplementation.getTraces(outputForCtx.toArray(new Variable<?>[0]));
         CompilationContext ctx = new CompilationContext(opts, traces, ExecutionType.SingleThreadCPU);
         
+        String calcString = calc.getForwardIR(ctx).toString();
+        
         String firstDifferentialStringA = firstDifferentialA.getForwardIR(ctx).toString();
         String secondDifferentialStringA = secondDifferentialA.getForwardIR(ctx).toString();
+
+        String fileNameCalcOriginal = tsg.processString(this, sourceDir, calcOriginalTag, 
+        		calcString, constructingResults, "txt");
         
         String fileNameFirstDiffA = tsg.processString(this, sourceDir, firstDifferentialATag, 
         		firstDifferentialStringA, constructingResults, "txt");
@@ -327,8 +341,10 @@ public class TestDifferentiationScalar {
         }
         
         // Use this variable to print the proper file in case of an exception
-        String fileToOpen = fileNameFirstDiffA;
+        String fileToOpen = fileNameCalcOriginal;
         try {
+        	String calcOriginalBaseString = new String(Files.readAllBytes(Paths.get(fileToOpen)));
+        	fileToOpen = fileNameFirstDiffA;
         	String firstBaseStringA = new String(Files.readAllBytes(Paths.get(fileToOpen)));
         	fileToOpen = fileNameSecondDiffA;
         	String secondBaseStringA = new String(Files.readAllBytes(Paths.get(fileToOpen)));
@@ -345,11 +361,17 @@ public class TestDifferentiationScalar {
         	firstBaseStringB = StringUtil.normalizeNewLines(firstBaseStringB);
         	secondBaseStringB = StringUtil.normalizeNewLines(secondBaseStringB);
         	
+        	// Check original string.
+        	assertEquals(calcOriginalBaseString, calcString);
+        	
+        	// Check differential based on variable A.
         	assertEquals(firstBaseStringA, firstDifferentialStringA);
         	assertEquals(secondBaseStringA, secondDifferentialStringA);
         	
+        	// Check differential based on variable B.
         	assertEquals(firstBaseStringB, firstDifferentialStringB);
         	assertEquals(secondBaseStringB, secondDifferentialStringB);
+
         } catch(IOException e) {
             System.err.println("Failed to read file \"" + fileToOpen + "\"");
             assertFalse(true);
@@ -573,7 +595,7 @@ public class TestDifferentiationScalar {
    			 + "(1.0 / (1 + Math.exp((-((20.0 * 20.0) * 20.0)))))) * (1.0 - (1.0 / "
    			 + "(1 + Math.exp((-((20.0 * 20.0) * 20.0)))))))");
 	}
-  	
+
 	@Test
 	public void testConditionalAssignmentAdd() {
 		IntVariable intVarA = IntVariable.intVariable(1000);
@@ -615,50 +637,63 @@ public class TestDifferentiationScalar {
 		
 		// Test case: Guard does not contain variable, and both conditions are differentiable.
 		ctx.initialize();
-		DoubleVariable differentialA = ifElseTask.getDifferential(doubleVarA, ctx);
+		
+		DoubleVariable ifElseVar = DoubleVariable.doubleVariable(ifElseTask);
+		ifElseVar.getForwardIR(ctx);
+		
+		String ifElseOriginalString = ctx.getOutermostScopeTree().toString();
+		String fileNameIfElseOriginal = tsg.processString(this, sourceDir, ifElseOriginalTag, 
+				ifElseOriginalString, constructingResults, "txt");
+		
+		DoubleVariable differentialA = ifElseVar.getDifferential(doubleVarA, ctx);
     	differentialA.setAlias("diffA");
     	differentialA.getForwardIR(ctx);
     	String differentialAIRString = ctx.getOutermostScopeTree().toString();
-        String fileNameIfElseA = tsg.processString(this, sourceDir, ifElseDifferentialATag, 
+        String fileNameIfElseDifferentialA = tsg.processString(this, sourceDir, ifElseDifferentialATag, 
         		differentialAIRString, constructingResults, "txt");
         
         ctx.initialize();
-    	DoubleVariable differentialB = ifElseTask.getDifferential(doubleVarB, ctx);
+    	DoubleVariable differentialB = ifElseVar.getDifferential(doubleVarB, ctx);
     	differentialB.setAlias("diffB");
     	differentialB.getForwardIR(ctx);
     	String differentialBIRString = ctx.getOutermostScopeTree().toString();
-        String fileNameIfElseB = tsg.processString(this, sourceDir, ifElseDifferentialBTag, 
+        String fileNameIfElseDifferentialB = tsg.processString(this, sourceDir, ifElseDifferentialBTag, 
         		differentialBIRString, constructingResults, "txt");
         
         ctx.initialize();
-    	DoubleVariable differentialE = ifElseTask.getDifferential(doubleVarE, ctx);
+    	DoubleVariable differentialE = ifElseVar.getDifferential(doubleVarE, ctx);
     	differentialE.setAlias("diffE");
     	differentialE.getForwardIR(ctx);
     	String differentialCIRString = ctx.getOutermostScopeTree().toString();
     	String fileNameIfElseE = tsg.processString(this, sourceDir, ifElseDifferentialETag, 
     			differentialCIRString, constructingResults, "txt");
     	
-        String fileToOpen = fileNameIfElseA;
+    	
+        String fileToOpen = fileNameIfElseOriginal;
         try {
+        	String ifElseOriginalBaseString = new String(Files.readAllBytes(Paths.get(fileToOpen)));
+        	fileToOpen = fileNameIfElseDifferentialA;
         	String ifElseDifferentialAString = new String(Files.readAllBytes(Paths.get(fileToOpen)));
-        	fileToOpen = fileNameIfElseB;
+        	fileToOpen = fileNameIfElseDifferentialB;
         	String ifElseDifferentialBString = new String(Files.readAllBytes(Paths.get(fileToOpen)));
         	fileToOpen = fileNameIfElseE;
         	String ifElseDifferentialEString = new String(Files.readAllBytes(Paths.get(fileToOpen)));
             
-        	// Normalize newline characters This second use is required because GitHub
-            // rewrites the data files.
+        	// Normalize newline characters.
         	ifElseDifferentialAString = StringUtil.normalizeNewLines(ifElseDifferentialAString);
         	ifElseDifferentialBString = StringUtil.normalizeNewLines(ifElseDifferentialBString);
         	ifElseDifferentialEString = StringUtil.normalizeNewLines(ifElseDifferentialEString);
         	
-        	// doubleVarA is contained in both expressions.
+        	// Check original string.
+        	assertEquals(ifElseOriginalBaseString, ifElseOriginalString);
+        	
+        	// The doubleVarA variable is contained in both expressions.
         	assertEquals(differentialAIRString, ifElseDifferentialAString);
         	
-        	// doubleVarB is not contained in any expressions.
+        	// The doubleVarB variable is not contained in any expressions.
         	assertEquals(differentialBIRString, ifElseDifferentialBString);
         	
-        	// doubleVarE is contained in second expression only.
+        	// The doubleVarE variable is contained in second expression only.
         	assertEquals(differentialCIRString, ifElseDifferentialEString);
         	
         } catch(IOException e) {
@@ -668,7 +703,7 @@ public class TestDifferentiationScalar {
 	}
 	
 	@Test
-	public void testForTask() {
+	public void testForTaskNoBody() {
 		IntVariable intVar1 = IntVariable.intVariable(10);
 		IntVariable intVar2 = IntVariable.intVariable(20);
 		IntVariable intVar3 = IntVariable.intVariable(30);
@@ -688,5 +723,99 @@ public class TestDifferentiationScalar {
 		DoubleVariable taskDifferentialVar5 = task.getDifferential(intVar5, ctx);
 		ConstantDoubleTask doubleVar5DiffTask = (ConstantDoubleTask) taskDifferentialVar5.getParent();
 		assertEquals(doubleVar5DiffTask.v, 0.0);
+	}
+	
+	@Test
+	public void testForTaskBody() {
+		IntVariable intVar1 = IntVariable.intVariable(10);
+		IntVariable intVar2 = IntVariable.intVariable(20);
+		IntVariable intVar3 = IntVariable.intVariable(30);
+		IntVariable intVar4 = IntVariable.intVariable(40);
+		DoubleVariable doubleVar1 = DoubleVariable.doubleVariable(40.0);
+
+		LoopBody<IntVariable> body = new LoopBody<IntVariable>(){
+
+			@Override
+			public void body(IntVariable i) {
+				DoubleVariable calc = doubleVar1.add(intVar2.subtract(intVar3.times(intVar4.divide(10))));
+				DoubleVariable differential = calc.getDifferential(doubleVar1, ctx);
+				assertTrue(differential.isDifferentiable(doubleVar1));
+			};
+        };
+		
+		Sandwood.forLoop(intVar1, intVar2, IntVariable.intVariable(1), true, body);
+	}
+	
+	@Test
+	public void testIfScope() {
+
+		IntVariable intVarA = IntVariable.intVariable(1000);
+		intVarA.setAlias("intA");
+		IntVariable intVarB = IntVariable.intVariable(2000);
+		intVarB.setAlias("intB");
+		DoubleVariable doubleVarB = DoubleVariable.doubleVariable(30.0);
+		doubleVarB.setAlias("b");
+		DoubleVariable doubleVarC = DoubleVariable.doubleVariable(40.0);
+		doubleVarC.setAlias("c");
+		DoubleVariable doubleVarD = DoubleVariable.doubleVariable(50.0);
+		doubleVarD.setAlias("d");
+		DoubleVariable doubleVarE = DoubleVariable.doubleVariable(100.0);
+		doubleVarE.setAlias("e");
+
+		BooleanVariable guard = intVarA.lessThanEqual(intVarB);
+		
+		// If Block preparation.
+		IfScope ifScope = new IfScope(guard);
+		ScopeStack.pushScope(ifScope);
+		DoubleVariable doubleVarA = DoubleVariable.doubleVariable(20.0);
+		doubleVarA.setAlias("a");
+		ScopeStack.popScope(ifScope);
+		
+		// Else Block preparation.
+		ScopeStack.pushScope(ifScope.elseScope);
+		// calc = a + (a - b * (c / d));
+		DoubleVariable calc = doubleVarA.add(doubleVarA.subtract(doubleVarB.times(doubleVarC.divide(doubleVarD))));
+		calc.setAlias("calc");
+		ScopeStack.popScope(ifScope.elseScope);
+		
+		IfElseNumberAssignmentTask<DoubleVariable> ifElseTask = new IfElseNumberAssignmentTask<DoubleVariable>(
+				guard, doubleVarA, calc, null);
+		
+		DoubleVariable differentialIfElseTask = ifElseTask.getDifferential(calc, ctx);
+		
+		IfElseNumberAssignmentTask<DoubleVariable> ifElseTaskDifferential = (IfElseNumberAssignmentTask<DoubleVariable>) differentialIfElseTask.getParent();
+		
+		// Check that if and else expressions have different scopes.
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == ifElseTaskDifferential.elseValue.scope());
+		
+		// Check that if and else differentials have proper scopes.
+		assertTrue(ifElseTaskDifferential.ifValue.scope() == doubleVarA.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(ifElseTaskDifferential.elseValue.scope() == calc.getDifferential(doubleVarA, ctx).scope());
+
+		// For each of the variables, verify that differentials have the same scope
+		// as the base variable, and that it is neither if or else scope.
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == intVarA.getDifferential(doubleVarA, ctx).scope());
+		assertFalse(ifElseTaskDifferential.elseValue.scope() == intVarA.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(intVarA.scope() == intVarA.getDifferential(doubleVarA, ctx).scope());
+		
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == intVarB.getDifferential(doubleVarA, ctx).scope());
+		assertFalse(ifElseTaskDifferential.elseValue.scope() == intVarB.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(intVarB.scope() == intVarB.getDifferential(doubleVarA, ctx).scope());
+		
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == doubleVarB.getDifferential(doubleVarA, ctx).scope());
+		assertFalse(ifElseTaskDifferential.elseValue.scope() == doubleVarB.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(doubleVarB.scope() == doubleVarB.getDifferential(doubleVarA, ctx).scope());
+		
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == doubleVarC.getDifferential(doubleVarA, ctx).scope());
+		assertFalse(ifElseTaskDifferential.elseValue.scope() == doubleVarC.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(doubleVarC.scope() == doubleVarC.getDifferential(doubleVarA, ctx).scope());
+
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == doubleVarD.getDifferential(doubleVarA, ctx).scope());
+		assertFalse(ifElseTaskDifferential.elseValue.scope() == doubleVarD.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(doubleVarD.scope() == doubleVarD.getDifferential(doubleVarA, ctx).scope());
+		
+		assertFalse(ifElseTaskDifferential.ifValue.scope() == doubleVarE.getDifferential(doubleVarA, ctx).scope());
+		assertFalse(ifElseTaskDifferential.elseValue.scope() == doubleVarE.getDifferential(doubleVarA, ctx).scope());
+		assertTrue(doubleVarE.scope() == doubleVarE.getDifferential(doubleVarA, ctx).scope());
 	}
 }

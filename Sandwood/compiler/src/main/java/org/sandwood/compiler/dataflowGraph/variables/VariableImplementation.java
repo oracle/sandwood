@@ -307,6 +307,17 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     public void setAlias(VariableDescription<A> alias) {
         setAlias(alias.name.getName());
     }
+    
+    /**
+     * Method to set the value of the alias for a variable from a VariableName instance.
+     *
+     * @param variableName The VariableName instance to extract name from.
+     * @throws AliasAlreadySetException Aliases can only be set once, trying to reset an alias will cause this exception
+     *                                  to be thrown.
+     */
+    public void setAlias(VariableName variableName) {
+    	setAlias(variableName.getName());
+    }
 
     @Override
     public void setUniqueVarDesc(VariableDescription<A> uniqueName) {
@@ -668,7 +679,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     public Set<DataflowTask<?>> getConsumers() {
         return consumers;
     }
-
+    
     /**
      * Method to trigger the construction of traces. It does nothing for most variables, but will start a trace for
      * observed variables, and be overridden to start traces from RandomVariables initially, and later other types as
@@ -678,6 +689,18 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
      */
     @Override
     public void constructTrace(DAGInfo dagInfo) {
+    	constructTrace(dagInfo, false);
+    }
+    
+    /**
+     * Method to trigger the construction of traces. It does nothing for most variables, but will start a trace for
+     * observed variables, and be overridden to start traces from RandomVariables initially, and later other types as
+     * required.
+     *
+     * @param dagInfo A DAGInfo object to collect interesting points in the DAG.
+     */
+    @Override
+    public void constructTrace(DAGInfo dagInfo, boolean isDifferential) {
         // Observed variables.
         if(isObserved()) {
             // Extra call as if no RV is reached, this variable will never be added with a

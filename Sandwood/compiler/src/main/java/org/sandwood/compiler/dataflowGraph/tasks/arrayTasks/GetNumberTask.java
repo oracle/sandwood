@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
+import org.sandwood.compiler.dataflowGraph.StructureVerifier;
 import org.sandwood.compiler.dataflowGraph.autoDiff.DifferentialInfo;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
@@ -31,7 +32,6 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
-import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -269,10 +269,51 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
         }
         return IRTree.load(innerName);
     }
-    
+
+    /**
+     * Constructs a differential array from the get.array.
+     * 
+     * @param variable the variable differentiating upon.
+     * @param compilationCtx the compilation context.
+     * @return the differential array, containing the structure and value differentials.
+     * 
+     * Precondition: variable must not be null.
+     * Precondition: compilationCtx must not be null.
+     * 
+     * Postcondition: the differential array returned must have the same structure with the array argument.
+     */
     @Override
     public DoubleVariable getDifferential(Variable<?> variable, CompilationContext compilationCtx) {
-    	throw new CompilerException("Differentials for GetNumberTask not implemented yet.");
+    	
+    	assert variable != null;
+    	assert compilationCtx != null;
+
+    	DoubleVariable differential = null;
+    	
+    	// If the variable is not contained in the task (we check its puts for this),
+    	// then a double variable containing constant zero will be returned, as essentially 
+    	// the value computed for the GetNumber Task will evaluate to zero, so there is no need
+    	// to be computed.
+    	if (!containsVariable(variable)) {
+    		ScopeStack.pushScope(scope());
+    		differential = DoubleVariable.doubleVariable(0.0);
+    		ScopeStack.popScope(scope());
+        	return differential;
+    	}
+    	else {
+
+    		// Get the respective value, set a differential name to it and return it.
+    		ArrayVariable<DoubleVariable> differentialArray = (ArrayVariable<DoubleVariable>) 
+    				ArrayVariable.getDifferentialArray(array.getCurrentInstance(), variable, id(), compilationCtx);
+    		
+    		// Obtain the get(...) on the generated differential array.
+    		differential = differentialArray.getCurrentInstance().get(index);
+
+    		// TODO: Remove this upon development completion and move StructureVerifier to autoDiff tests package.
+    		// Postcondition: the differential array returned must have the same structure with the array argument.
+    		assert StructureVerifier.checkStructureEquality(array.getCurrentInstance(), differentialArray.getCurrentInstance());
+    		return differential;
+    	}
     }
 	
 	@Override

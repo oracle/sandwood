@@ -11,12 +11,16 @@ package org.sandwood.compiler.dataflowGraph.variables.arrayVariable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
+import org.sandwood.compiler.dataflowGraph.StructureVerifier;
+import org.sandwood.compiler.dataflowGraph.autoDiff.Differentiable;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
@@ -49,11 +53,13 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType.NumberType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.ConstraintAlreadySetException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
+import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -141,12 +147,15 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
      */
     private ArrayVariable<A> childInstance = null;
 
+    /** Set of lengths of arrays added to this array */
+    private final Set<VariableWrapper<IntVariable>> childLengths = new HashSet<>();
+
     /**
      * Set of possible lengths of this array. If there is more than one length in here we will have to fall back on the
      * classic array.length code, but it is useful to keep the whole set so a max can be performed over it during
      * allocation if required.
      */
-    private Set<VariableWrapper<IntVariable>> arrayLengths = null;
+    private final Set<VariableWrapper<IntVariable>> arrayLengths;
 
     /**
      * A flag to mark if this array is an input and so its value is fixed.
@@ -167,6 +176,8 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         super(parent);
         currentInstance = this;
         instanceHandle = this;
+        arrayLengths = parent.getPossibleLengths();
+        parentInstance = null;
         outerArrayDesc = new OuterArrayDesc<>();
 
         switch(parent.getType()) {
@@ -194,10 +205,46 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         isInput = source.isInput;
         instanceHandle = source.instanceHandle;
         instanceHandle.updateCurrentInstance(this);
+        parentInstance = source;
         alias = source.getAlias();
         comment = source.getComment();
         setScope(source.scope());
+        arrayLengths = parent.getPossibleLengths();
         outerArrayDesc = source.outerArrayDesc;
+
+        if(getElementType().getTypeSingleton() == VariableType.Array) {
+            switch(parent.getType()) {
+                case PUT:
+                    Set<VariableWrapper<IntVariable>> newChildLengths = ((ArrayVariable<?>) ((PutTask<A>) parent).value)
+                            .getPossibleLengths();
+                    addChildLengths(newChildLengths);
+                    Scope s = parent.scope();
+                    Scope lastIterating = null;
+                    while(s != GlobalScope.scope) {
+                        if(s.iterating())
+                            lastIterating = s;
+                        s = s.getEnclosingScope();
+                    }
+                    if(s != null)
+                        source.addChildLengths(newChildLengths, lastIterating);
+                    break;
+                default:
+                    throw new CompilerException("Currently, only puts are allowed to modify arrays.");
+            }
+        }
+    }
+
+    private void addChildLengths(Set<VariableWrapper<IntVariable>> newChildLengths, Scope lastIterating) {
+        Scope s = getParent().scope();
+        while(s != GlobalScope.scope) {
+            if(s == lastIterating) {
+                childLengths.addAll(newChildLengths);
+                if(parentInstance != null)
+                    parentInstance.addChildLengths(newChildLengths, lastIterating);
+                return;
+            }
+            s = s.getEnclosingScope();
+        }
     }
 
     // TODO remove this once the type of parent is generic.
@@ -554,8 +601,8 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         Scope varScope = getParent().scope();
         Set<Scope> knownScopes = new HashSet<>();
         while(varScope != null) {
-            knownScopes.add(varScope);
-            varScope = varScope.getEnclosingScope();
+        	knownScopes.add(varScope);
+        	varScope = varScope.getEnclosingScope();
         }
 
         Scope s = consumerScope;
@@ -801,17 +848,6 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                 + " value types can be assigned to multiple variables.", location);
     }
 
-    public ArrayVariable<?> getSourceInstance() {
-        ArrayVariable<?> a = this;
-        while(a.outerArrayDesc.array != null)
-            a = a.outerArrayDesc.array;
-        return a.instanceHandle;
-    }
-
-    public OuterArrayDesc<A> getOuterArrayDesc() {
-        return outerArrayDesc;
-    }
-
     @Override
     public void setAlias(VariableDescription<ArrayVariable<A>> alias) {
         super.setAlias(alias);
@@ -899,4 +935,286 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         ScopeStack.popScope(scope);
         return v;
     }
+
+    public ArrayVariable<?> getSourceInstance() {
+        ArrayVariable<?> a = this;
+        while(a.outerArrayDesc.array != null)
+            a = a.outerArrayDesc.array;
+        return a.instanceHandle;
+    }
+
+    public OuterArrayDesc<A> getOuterArrayDesc() {
+        return outerArrayDesc;
+    }
+    
+    /**
+     * Constructs a differential array of the same structure as a base array provided as argument.
+     * The differentials of the values of the innermost array are calculated and assigned to the 
+     * innermost differential array.
+     * @param array the base array on which the differential array will be constructed.
+     * @param variable the variable differentiating upon.
+     * @param compilationCtx the compilation context.
+     * @return the differential array, containing the structure and value differentials.
+     * Precondition: The base type of the variable must always be double.
+     * Precondition: array must not be null.
+     * Precondition: variable must not be null.
+     * Precondition: compilationCtx must not be null.
+     * 
+     * Postcondition: the differential array returned must not be null.
+     */
+    public static <A extends Variable<A>, B extends Variable<B>> ArrayVariable<A> getDifferentialArray(ArrayVariable<A> array,
+    		Variable<?> variable, int id, CompilationContext compilationCtx) {
+    	
+    	assert array != null;
+    	assert variable != null;
+    	assert compilationCtx != null;
+    	
+    	// Precondition: The base type of the variable must always be double.
+    	assert array.getElementType().getBaseType() == VariableType.DoubleVariable;
+    	
+    	ArrayVariable<A> differentialArray = (ArrayVariable<A>) compilationCtx.getDifferentialArray(array, variable);
+    	// If the differential array for the base array exists in compilation context,
+    	// obtain it, otherwise create it.
+    	if (differentialArray == null) {
+
+			ArrayProducingDataflowTask<A> arrayParentTask = array.instanceHandle().getParent();
+			
+			switch(arrayParentTask.getType()) {
+		    
+				// In case of array construction, an array of the same type and depth = (d - 1) 
+				// compared to the base array is constructed and registered to compilation context
+				// set using the element type of the initial array.
+			    case ARRAY_CONSTRUCTOR: {
+
+					Type<A> arrayType = array.getElementType();
+					IntVariable arrayLength = ((ArrayConstructTask<A>) arrayParentTask).length;
+					
+					ScopeStack.pushScope(arrayParentTask.scope());
+					
+					// The array is constructed here.
+					differentialArray =  
+							Variable.arrayVariable(null, arrayType, arrayLength);
+					differentialArray.setAlias(VariableNames.getDifferentialName(array, variable));
+			
+					ScopeStack.popScope(arrayParentTask.scope());
+
+					break;
+				}
+			    
+			    // Case GET - coming from a get(...) invocation.
+			    case GET: {
+			    	GetTask<A> getTask = (GetTask<A>) arrayParentTask;
+			    	ScopeStack.pushScope(arrayParentTask.scope());
+			    	
+			    	// This is needed in case of a subarray:
+			    	// obtain the outer array, generate its differential,
+			    	// then apply the get(...) operation to the differential.
+					OuterArrayDesc<A> outerArrayDesc = array.getOuterArrayDesc();
+					ArrayVariable<ArrayVariable<A>> outerArray = outerArrayDesc.getArray();
+
+					ArrayVariable<ArrayVariable<A>> outerDiffArray = getDifferentialArray(outerArray, variable, id, compilationCtx);;
+					// This will apply a get(...) on the whole differential array.
+					differentialArray = (ArrayVariable<A>) outerDiffArray.get(getTask.index);
+					
+
+					differentialArray.setAlias(VariableNames.getDifferentialName(array, variable));
+					ScopeStack.popScope(arrayParentTask.scope());
+					
+					break;
+			    }
+	
+				default:
+					throw new CompilerException("ArrayVariable differential supports only Get and Array Constructor tasks.");
+			}
+			
+			// Add differential array to the compilation context.
+			compilationCtx.addDifferentialArray(array, variable, differentialArray);
+			
+			// Add the array as a differential variable.
+    		compilationCtx.traces.addDifferentialVariable(differentialArray);
+    		
+    		// If not a sub-array, register it on traces as an intermediate as well.
+    		if (!differentialArray.isSubArray()) {
+    			compilationCtx.traces.addIntermediateDifferentialVariable(differentialArray);
+    		}
+
+    	}
+    	
+		// Obtain all array puts, to the extent of the differential array.
+    	//differentialArray.getId()
+    	Set<PutTask<A>> putsSet = array.getPuts(array.scope(), id);
+		Queue<PutTask<A>> putTaskQueue = new PriorityQueue<>(putsSet);
+
+		while (!putTaskQueue.isEmpty()) {
+			PutTask<A> put = (PutTask<A>) putTaskQueue.poll();
+
+			// Apply construction of the inner part, only if it is not already done for the respective put.
+			if (!compilationCtx.containsPutTask(put.array, variable, put)) {
+				
+				compilationCtx.addPutTask(put.array, variable, put);
+
+				// If the value is not an array, generate its differential,
+				// then set it as part of the differential array
+		    	if (!put.value.getType().isArray()) {
+
+		    		// Note: This registers differential variable to traces.
+		    		DoubleVariable value = ((Differentiable) put.value).getDifferential(variable, compilationCtx);
+					// Utilize current instance of internal arrays.
+					// in order to generate the proper differential value.
+					ScopeStack.pushScope(put.scope());
+					differentialArray.put(put.index, value);
+					ScopeStack.popScope(put.scope());
+					// Register the task to the compilation context.
+				}
+		    	
+		    	// If the value is an array, then handle accordingly:
+		    	// (1) In case of simple puts containing no get(...), fill the differential array
+		    	// in a recursive manner.
+		    	// (2) If there is a get(...).put(...) sequence, then the recursion will lead to stack overflow
+		    	// as it will bounce between the puts and the GET construction.
+		    	// For that matter, iterate bottom-up and construct the puts as you encounter a get(...).
+		    	else {
+		    		ArrayVariable<A> value = (ArrayVariable<A>) put.value;
+
+					if (value.getParent().getType() == DFType.ARRAY_CONSTRUCTOR ||
+							((PutTask<A>) value.getParent()).array.getParent().getType() != DFType.GET) {
+						
+						// Note: this recursion call will also handle the case of adding 
+						// outerArray -> outerDIffArray association to the compilation context.
+						ArrayVariable<A> valueDifferentialArray = (ArrayVariable<A>) compilationCtx.getDifferentialArray(value, variable);
+						if (valueDifferentialArray == null) {
+							ScopeStack.pushScope(put.scope());
+							valueDifferentialArray = (ArrayVariable<A>) getDifferentialArray((ArrayVariable<A>) value, variable, id, compilationCtx);
+							differentialArray.put(put.index, valueDifferentialArray);
+							ScopeStack.popScope(put.scope());
+						}
+
+					} else {
+						// Handle get(...).put(...) sequences recursively.
+						differentiateGetPutValueArrays(value, differentialArray, put, variable, compilationCtx);
+					}
+		    	}
+			}
+		}
+
+
+
+		assert differentialArray != null;
+		
+		return differentialArray;
+    }
+    
+    /**
+     * Generates the differentials for arrays in part, utilized to handle get(...).put(...) scenarios.
+     * @param <A> A variable generic type.
+     * @param putValueArray the value coming as an array variable.
+     * @param differentialArray the differential array to populate.
+     * @param put the corresponding put task.
+     * @param variable the variable to differentiate upon.
+     * @param compilationCtx the compilation context.
+     * 
+     * Precondition(s): All inputs must not be null.
+     */
+    private static <A extends Variable<A>> void differentiateGetPutValueArrays(ArrayVariable<A> putValueArray, 
+    		ArrayVariable<A> differentialArray, PutTask<A> put, Variable<?> variable, CompilationContext compilationCtx) {
+    	
+    	assert putValueArray != null;
+    	assert differentialArray != null;
+    	assert put != null;
+    	assert variable != null;
+    	assert compilationCtx != null;
+    	
+    	PutTask<A> putTask = (PutTask<A>) putValueArray.getParent();
+
+    	// if the value is not an array, then
+    	// compute its differential and populate the 
+    	// respective inner array in the differential array.
+    	if (!compilationCtx.containsPutTask(putValueArray, variable, putTask)) {
+    		
+    		compilationCtx.addPutTask(putValueArray, variable, putTask);
+    		
+    		ScopeStack.pushScope(put.scope());
+    		if (!putTask.value.getType().isArray()) {
+    			// Add put task to the compilation context
+
+				ArrayVariable<A> innerDifferential = (ArrayVariable<A>) differentialArray.get(put.index);
+				DoubleVariable differential = ((Differentiable) putTask.value).getDifferential(variable, compilationCtx);
+				innerDifferential.put(putTask.index, differential);
+			}
+
+			// In case value is an array, obtain the inner differential array and the
+			// array value from the put, then recursively populate in a bottom-up manner.
+    		else {
+    			ArrayVariable<A> putTaskValue = (ArrayVariable<A>) putTask.value;
+    			ArrayVariable<A> innerDifferential = (ArrayVariable<A>) differentialArray.get(put.index);
+			
+    			// Perform actions recursively for the cases of Puts.
+    			if (putTaskValue.getParent().getType() == DFType.PUT) {
+    				differentiateGetPutValueArrays(putTaskValue, innerDifferential, put, variable, compilationCtx);
+    			}
+    		}
+    		ScopeStack.popScope(put.scope());
+    	}
+    }
+    
+    /**
+     * Constructs the array differential, against a variable differentiating upon.
+     * @param variable the variable differentiating upon.
+     * @param compilationCtx the compilation context.
+     * @return the differential array.
+     * Precondition: variable must not be null.
+     * Precondition: compilationCtx must not be null.
+     * 
+     * Postcondition: the differential array returned has the same structure with the array argument.
+     */
+    @SuppressWarnings("unchecked")
+	public ArrayVariable<A> getDifferential(Variable<?> variable, CompilationContext compilationCtx) {	
+    	assert variable != null;
+    	assert compilationCtx != null;
+    	
+    	// If the differential array is already calculated,
+    	// obtain it from the compilation context and return it.
+    	ArrayVariable<A> ctxDifferentialArray = (ArrayVariable<A>) compilationCtx.getDifferentialArray(this, variable);
+    	if (ctxDifferentialArray != null) {
+    		return ctxDifferentialArray;
+    	}
+
+		ArrayVariable<A> differentialArray = getDifferentialArray(getCurrentInstance(), variable, 
+				getCurrentInstance().getParent().id(), compilationCtx);
+
+		// TODO: Construct trace on this step directly, so that the user does not have to do it explicitly.
+		// Add this on every <Differentiable>.getDifferential as well.
+
+		// TODO: Remove this upon development completion and move StructureVerifier to autoDiff tests package.
+		// Postcondition: the structure of the differential array must be identical to the array.
+		assert StructureVerifier.checkStructureEquality(getCurrentInstance(), differentialArray.getCurrentInstance());
+		return differentialArray;
+    }
+
+    /**
+     * Check if Array is differentiable. In order for an array to be differentiable,
+     * its values must be differentiable.
+     * @param variable the variable checking if its differentiable upon.
+     * @return if the array is differentiable.
+     */
+	public boolean isDifferentiable(Variable<?> variable) {
+		
+		// Iterate puts and check if values are differentiable.
+		Set<PutTask<A>> puts = getPuts(scope(), getCurrentInstance().getParent().id());
+		for (PutTask<A> put : puts) {
+			// If an array, call recursively.
+			if (put.value.getType().isArray()) {
+				if (!((ArrayVariable<A>) put.value).isDifferentiable(variable)) {
+					return false;
+				}
+			} else {
+				// Else, invoke check on Differentiable value.
+				Differentiable value = (Differentiable) put.value;
+				if(!value.isDifferentiable(variable)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }

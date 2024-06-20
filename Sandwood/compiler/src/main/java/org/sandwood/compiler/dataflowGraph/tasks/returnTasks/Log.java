@@ -101,7 +101,6 @@ public class Log<A extends NumberVariable<A>> extends NumberProducingDataflowTas
 
     @Override
     public DifferentialInfo getDifferentialInfo(Variable<?> variable) {
-    	
     	// NOTE: We are aware that this will return true for the case
     	// that the input is a 0, but the differential will essentially
     	// fail upon execution, due to divide-by-zero error.

@@ -1,0 +1,4 @@
+double[] diff$inner0$var1$var30 = diff$arr$var1$var29[0];
+diff$inner0$var1$var30[0] = ((10.0 * 1.0) + (10.0 * 1.0));
+double[] diff$inner1$var1$var37 = diff$arr$var1$var29[1];
+diff$inner1$var1$var37[0] = ((20.0 * ((20.0 * 0.0) + (20.0 * 0.0))) + ((20.0 * 20.0) * 0.0));

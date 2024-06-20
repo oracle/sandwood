@@ -1,0 +1,6 @@
+double[][] diff$inner0$var1$var68 = diff$arr$var1$var67[0];
+double[] diff$inner2$var1$var69 = diff$inner0$var1$var68[0];
+diff$inner2$var1$var69[4] = 0.0;
+double[][] diff$inner1$var1$var88 = diff$arr$var1$var67[1];
+double[] diff$inner3$var1$var89 = diff$inner1$var1$var88[0];
+diff$inner3$var1$var89[4] = ((1.0 * (1.0 / (1 + Math.exp((-10.0))))) * (1.0 - (1.0 / (1 + Math.exp((-10.0))))));
