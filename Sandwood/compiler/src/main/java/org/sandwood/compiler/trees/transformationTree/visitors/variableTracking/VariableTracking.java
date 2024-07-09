@@ -57,13 +57,20 @@ public class VariableTracking {
      * A map from names to a set of TreeIDs to record if the value is effectively final. This is only recording local
      * variables as global variables do not need to be effectively final for a lambda.
      */
-    protected final Map<VariableDescription<?>, Set<TreeID>> effectivelyFinal = new HashMap<>();
+    protected final Map<VariableDescription<?>, Set<TreeID>> effectivelyFinal;
+    
+    /**
+     * A map from tree id's to trees so that the trees identified as writing data can be recovered.
+     */
+    private final Map<TreeID, TransTree<?>> treeLookup;
 
     public VariableTracking() {
         inScopeVars = new HashMap<>();
         readVars = new HashMap<>();
         writtenVars = new HashMap<>();
         arraysModified = new HashMap<>();
+        effectivelyFinal = new HashMap<>();
+        treeLookup = new HashMap<>();
     }
 
     /**
@@ -147,6 +154,15 @@ public class VariableTracking {
     public Set<TransTree<?>> trackedTrees() {
         return readVars.keySet();
     }
+    
+    /**
+     * A method to get the tree with the corresponding ID.
+     * @param id The ID to lookup.
+     * @return The tree with the corresponding ID.
+     */
+    public TransTree<?> treeLookup(TreeID id) {
+        return treeLookup.get(id);
+    }
 
     public boolean effectivelyFinal(VariableDescription<?> desc, TreeID declaration) {
         assert (declaration != TreeID.global);
@@ -170,6 +186,7 @@ public class VariableTracking {
         readVars.put(tree, readVariables);
         writtenVars.put(tree, writtenVariables);
         arraysModified.put(tree, arraysChanged);
+        treeLookup.put(tree.id, tree);
     }
 
     @Override
