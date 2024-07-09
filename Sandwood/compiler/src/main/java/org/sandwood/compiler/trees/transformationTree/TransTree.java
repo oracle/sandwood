@@ -39,7 +39,6 @@ import org.sandwood.compiler.trees.Tag;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
-import org.sandwood.compiler.trees.transformationTree.TransTree.RNGLocation;
 import org.sandwood.compiler.trees.transformationTree.binop.TransAdd;
 import org.sandwood.compiler.trees.transformationTree.binop.TransAnd;
 import org.sandwood.compiler.trees.transformationTree.binop.TransBinOp;
@@ -61,6 +60,7 @@ import org.sandwood.compiler.trees.transformationTree.transformers.CollapseUnreq
 import org.sandwood.compiler.trees.transformationTree.transformers.CopyTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.ExtractCommonContraintsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.LocalRng;
+import org.sandwood.compiler.trees.transformationTree.transformers.LoopRearrangement;
 import org.sandwood.compiler.trees.transformationTree.transformers.LoopUnrollingTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.MoveConstraintsOutTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.MoveNegationTransformer;
@@ -357,6 +357,10 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
             tcd = tree.checkTree(tcd, modifiedTrees);
 
             modifiedTrees.clear();
+            tree = tree.loopRearrangement(modifiedTrees);
+            tcd = tree.checkTree(tcd, modifiedTrees);
+
+            modifiedTrees.clear();
             tree = tree.collapseConstants(args, knownValues, modifiedTrees);
             tcd = tree.checkTree(tcd, modifiedTrees);
 
@@ -424,6 +428,10 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
 
     protected T extractCommonConstraints(Set<TransTree<?>> visitedNodes) {
         return new ExtractCommonContraintsTransformer().transform(this, visitedNodes);
+    }
+
+    protected T loopRearrangement(Set<TransTree<?>> visitedNodes) {
+        return new LoopRearrangement(getVariableTracking()).transform(this, visitedNodes);
     }
 
     protected T moveNegation(Set<TransTree<?>> visitedNodes) {
