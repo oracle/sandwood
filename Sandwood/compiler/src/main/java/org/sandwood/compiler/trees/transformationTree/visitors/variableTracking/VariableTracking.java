@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.exceptions.CompilerException;
@@ -54,6 +55,12 @@ public class VariableTracking {
     private final Map<TransTree<?>, Set<VariableDescription<?>>> arraysModified;
 
     /**
+     * A map from trees to sets containing the variable names that reference arrays that may have been read during the
+     * execution of the provided tree.
+     */
+    private final Map<TransTree<?>, Set<VariableDescription<?>>> arraysRead;
+
+    /**
      * A map from names to a set of TreeIDs to record if the value is effectively final. This is only recording local
      * variables as global variables do not need to be effectively final for a lambda.
      */
@@ -64,6 +71,7 @@ public class VariableTracking {
         readVars = new HashMap<>();
         writtenVars = new HashMap<>();
         arraysModified = new HashMap<>();
+        arraysRead = new HashMap<>();
     }
 
     /**
@@ -118,6 +126,16 @@ public class VariableTracking {
     }
 
     /**
+     * Method to determine which referenced arrays may be read.
+     * 
+     * @param tree The tree we want to query.
+     * @return A set of variable names that reference arrays that may be read by this tree.
+     */
+    public Set<VariableDescription<?>> arraysRead(TransTree<?> tree) {
+        return arraysRead.get(tree);
+    }
+
+    /**
      * Method to determine if a variable set by a given tree is declared globally or locally.
      * 
      * @param tree The tree setting the Variable.
@@ -163,13 +181,17 @@ public class VariableTracking {
      * @param inScope          A map of the variables that are in scope for the tree.
      * @param readVariables    A map of the variables that are read by the tree, and the frequency of the reads.
      * @param writtenVariables The set of variables written by the tree.
+     * @param arraysModified   The set of arrays that may have been modified by the tree.
+     * @param arraysRead       The set of arrays that may have been read by the tree.
      */
     protected void addTree(TransTree<?> tree, ScopedVarSet inScope, ScopedVarSet readVariables,
-            Set<VariableDescription<?>> writtenVariables, Set<VariableDescription<?>> arraysChanged) {
+            Set<VariableDescription<?>> writtenVariables, Set<VariableDescription<?>> arraysModified,
+            Set<VariableDescription<?>> arraysRead) {
         inScopeVars.put(tree, inScope);
         readVars.put(tree, readVariables);
         writtenVars.put(tree, writtenVariables);
-        arraysModified.put(tree, arraysChanged);
+        this.arraysModified.put(tree, arraysModified);
+        this.arraysRead.put(tree, arraysRead);
     }
 
     @Override
@@ -179,6 +201,7 @@ public class VariableTracking {
         sb.append("readVars " + readVars + "\n");
         sb.append("writtenVars " + writtenVars + "\n");
         sb.append("arraysModified " + arraysModified + "\n");
+        sb.append("arraysRead " + arraysRead + "\n");
         return sb.toString();
     }
 
@@ -231,9 +254,13 @@ public class VariableTracking {
         // in scope vars.
         private final ScopedVarSet treeInScopeVars;
 
+        private final Stack<Set<VariableDescription<?>>> readArrays;
+
         public TreeInsertionVisitor(ScopedVarSet treeInScopeVars) {
             assert treeInScopeVars != null;
             this.treeInScopeVars = treeInScopeVars;
+            readArrays = new Stack<>();
+            readArrays.push(new HashSet<>());
         }
 
         @Override
@@ -249,14 +276,24 @@ public class VariableTracking {
                         TransLoad<?> load = (TransLoad<?>) tree;
                         VariableDescription<?> desc = load.varDesc;
                         treeReadVars.setVarDef(desc, treeInScopeVars.getVarDef(desc));
+                        // This is safe as this is a return tree, so cannot be a put. This will not capture array
+                        // aliases so is not safe to use for variable elimination on the basis of unused writes.
+                        if(desc.type.isArray())
+                            readArrays.peek().add(desc);
                         break;
                     }
-                    default:
-                        tree.traverseTree(this);
+                    default: {
+                        for(TransTree<?> child:tree.getChildren()) {
+                            readArrays.push(new HashSet<>());
+                            visit(child);
+                            Set<VariableDescription<?>> s = readArrays.pop();
+                            readArrays.peek().addAll(s);
+                        }
+                    }
                 }
 
                 // Save tree
-                addTree(tree, treeInScopeVars, treeReadVars, new HashSet<>(), new HashSet<>());
+                addTree(tree, treeInScopeVars, treeReadVars, new HashSet<>(), new HashSet<>(), readArrays.peek());
 
                 // Update the read variables for surrounding trees. This will not
                 // propagate the reads to sub trees. TODO fix this.

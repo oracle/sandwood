@@ -22,6 +22,7 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
@@ -408,6 +409,10 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
             }
         }
         return v.getVariableTrackingData();
+    }
+
+    public T removeStores(Set<VariableName> toRemove) {
+        return new RemoveStores(toRemove).transform(this, new HashSet<>());
     }
 
     // TODO make this protected again.

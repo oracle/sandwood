@@ -9,10 +9,12 @@
 package org.sandwood.compiler.trees.transformationTree;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
@@ -64,6 +66,8 @@ public abstract class TransFunction<T extends TransTree<T>> {
     }
 
     protected abstract TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants);
+    
+    public abstract TransFunction<?> removeUnusedUpdates(Set<VariableName> toRemove);
 
     protected abstract TransFunction<?> applyTransformation(Transformer t);
 }
