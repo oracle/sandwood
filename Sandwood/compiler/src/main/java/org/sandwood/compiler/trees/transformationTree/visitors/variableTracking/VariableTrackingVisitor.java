@@ -52,10 +52,10 @@ public class VariableTrackingVisitor implements TreeVisitor {
     private static class TreeData extends VariableTracking {}
 
     /**
-     * A class to track which arrays are modified when the value of a given array is changed. This class has imitations,
-     * among them are: * Multiple global references to arrays must not point to the same array as there is no way to
-     * detect this in the local code. * There must not be memory leaks, so references to memory allocations must be
-     * written out to other arrays before the references can be overwritten or go out of scope.
+     * A class to track which arrays are modified or observed when the value of a given array is changed or read. This
+     * class has imitations, among them are: * Multiple global references to arrays must not point to the same array as
+     * there is no way to detect this in the local code. * There must not be memory leaks, so references to memory
+     * allocations must be written out to other arrays before the references can be overwritten or go out of scope.
      * 
      * @author djgoodma
      *
@@ -72,7 +72,7 @@ public class VariableTrackingVisitor implements TreeVisitor {
         private final Map<VariableDescription<?>, Map<VariableDescription<?>, Integer>> subarrays = new HashMap<>();
         private final List<ArrayTracking> dependents = new ArrayList<>();
         private Set<VariableDescription<?>> dependentVars;
-        private Map<VariableDescription<?>, Map<ArrayModifications, Integer>> listeners = null;
+        private Map<VariableDescription<?>, Map<ArrayAliases, Integer>> listeners = null;
 
         public ArrayTracking() {
             dependentVars = Collections.emptySet();
@@ -273,7 +273,7 @@ public class VariableTrackingVisitor implements TreeVisitor {
             subarrays.put(name, m);
         }
 
-        public void exportArrayReferences(VariableDescription<?> name, int dimension, ArrayModifications am) {
+        public void exportArrayReferences(VariableDescription<?> name, int dimension, ArrayAliases am) {
             addListener(am, name, dimension);
             Set<VariableDescription<?>> sources = sourceArrays.get(name);
             Set<VariableDescription<?>> targets = new HashSet<>();
@@ -285,7 +285,7 @@ public class VariableTrackingVisitor implements TreeVisitor {
                             targets.add(subarrayName);
                 }
             }
-            am.addModifications(targets);
+            am.addAliases(targets);
         }
 
         public void updateDependents(ArrayTracking at) {
@@ -388,13 +388,13 @@ public class VariableTrackingVisitor implements TreeVisitor {
                 }
             }
 
-            // Update ArrayModification Objects.
+            // Update ArrayAlias Objects.
             if(listeners != null) {
                 for(VariableDescription<?> name:listeners.keySet()) {
-                    // Get the modifications to update
-                    Map<ArrayModifications, Integer> modifications = listeners.get(name);
-                    for(ArrayModifications am:modifications.keySet()) {
-                        Integer modificationDimension = modifications.get(am);
+                    // Get the aliases to update
+                    Map<ArrayAliases, Integer> aliases = listeners.get(name);
+                    for(ArrayAliases am:aliases.keySet()) {
+                        Integer aliasDimension = aliases.get(am);
 
                         // Add values from news sources to the set
                         Set<VariableDescription<?>> sources = additionalSources.get(name);
@@ -402,8 +402,8 @@ public class VariableTrackingVisitor implements TreeVisitor {
                             for(VariableDescription<?> sourceName:sources) {
                                 Map<VariableDescription<?>, Integer> children = subarrays.get(sourceName);
                                 for(VariableDescription<?> childName:children.keySet()) {
-                                    if(children.get(childName) > modificationDimension) {
-                                        am.addModification(childName);
+                                    if(children.get(childName) > aliasDimension) {
+                                        am.addAlias(childName);
                                     }
                                 }
                             }
@@ -414,8 +414,8 @@ public class VariableTrackingVisitor implements TreeVisitor {
                             Map<VariableDescription<?>, Integer> children = additionalChildren.get(sourceName);
                             if(children != null) {
                                 for(VariableDescription<?> childName:children.keySet()) {
-                                    if(children.get(childName) > modificationDimension) {
-                                        am.addModification(childName);
+                                    if(children.get(childName) > aliasDimension) {
+                                        am.addAlias(childName);
                                     }
                                 }
                             }
@@ -461,26 +461,11 @@ public class VariableTrackingVisitor implements TreeVisitor {
             }
         }
 
-        /*
-         * private void test() { { assert !sourceArrays.containsKey(null); Set<VariableDescription<?>> allSources = new
-         * HashSet<>(); for(VariableDescription<?> v:sourceArrays.keySet()) { Set<VariableDescription<?>> sources =
-         * sourceArrays.get(v); assert !sources.contains(null); for(VariableDescription<?> source:sources) { assert
-         * childArrays.containsKey(source); assert childArrays.get(source).containsKey(v); allSources.addAll(sources); }
-         * } assert allSources.size() == childArrays.size(); } { assert !childArrays.containsKey(null);
-         * Set<VariableDescription<?>> allChildren = new HashSet<>(); for(VariableDescription<?> v:childArrays.keySet())
-         * { assert ! childArrays.get(v).containsKey(null); Set<VariableDescription<?>> children =
-         * childArrays.get(v).keySet(); for(VariableDescription<?> child:children) { assert
-         * sourceArrays.containsKey(child); assert sourceArrays.get(child).contains(v); allChildren.addAll(children); }
-         * } assert allChildren.size() == sourceArrays.size(); } assert
-         * sourceArrays.keySet().containsAll(dependentVars); }
-         */
-
-        private void addListener(ArrayModifications arrayModifications, VariableDescription<?> name,
-                Integer dimension) {
+        private void addListener(ArrayAliases arrayAliases, VariableDescription<?> name, Integer dimension) {
             if(listeners == null)
                 listeners = new HashMap<>();
-            Map<ArrayModifications, Integer> m = listeners.computeIfAbsent(name, k -> new HashMap<>());
-            m.put(arrayModifications, dimension);
+            Map<ArrayAliases, Integer> m = listeners.computeIfAbsent(name, k -> new HashMap<>());
+            m.put(arrayAliases, dimension);
         }
 
         @Override
@@ -812,7 +797,7 @@ public class VariableTrackingVisitor implements TreeVisitor {
                     at.addArray(desc, desc.type.getDepth());
         }
 
-        public void exportArrayReferences(VariableDescription<?> name, int dimension, ArrayModifications am) {
+        public void exportArrayReferences(VariableDescription<?> name, int dimension, ArrayAliases am) {
             arrayTracking.peek().exportArrayReferences(name, dimension, am);
         }
     }
@@ -885,55 +870,55 @@ public class VariableTrackingVisitor implements TreeVisitor {
         }
     }
 
-    private static class ArrayModifications {
-        private final Set<VariableDescription<?>> arrayModifications = new HashSet<>();
+    private static class ArrayAliases {
+        private final Set<VariableDescription<?>> arrayAliases = new HashSet<>();
         private final ScopedVarSet inScopeVars;
-        private ArrayModifications parent = null;
+        private ArrayAliases parent = null;
 
-        public ArrayModifications(ScopedVarSet inScopeVars) {
+        public ArrayAliases(ScopedVarSet inScopeVars) {
             this.inScopeVars = inScopeVars;
         }
 
         public Set<VariableDescription<?>> get() {
-            return arrayModifications;
+            return arrayAliases;
         }
 
-        public void addModification(VariableDescription<?> additionalModification) {
-            if(inScopeVars.containsVar(additionalModification)) {
-                arrayModifications.add(additionalModification);
+        public void addAlias(VariableDescription<?> additionalAliases) {
+            if(inScopeVars.containsVar(additionalAliases)) {
+                arrayAliases.add(additionalAliases);
                 if(parent != null)
-                    parent.addModification(additionalModification);
+                    parent.addAlias(additionalAliases);
             }
         }
 
-        public void addModifications(Set<VariableDescription<?>> modifications) {
+        public void addAliases(Set<VariableDescription<?>> aliases) {
             boolean addition = false;
-            for(VariableDescription<?> desc:modifications) {
+            for(VariableDescription<?> desc:aliases) {
                 if(inScopeVars.containsVar(desc)) {
-                    arrayModifications.add(desc);
+                    arrayAliases.add(desc);
                     addition = true;
                 }
             }
             if(parent != null && addition)
-                parent.addModifications(modifications);
+                parent.addAliases(aliases);
         }
 
-        public void addAllInScope(ArrayModifications a) {
-            for(VariableDescription<?> desc:a.arrayModifications) {
+        public void addAllInScope(ArrayAliases a) {
+            for(VariableDescription<?> desc:a.arrayAliases) {
                 if(inScopeVars.containsVar(desc))
-                    arrayModifications.add(desc);
+                    arrayAliases.add(desc);
             }
             a.setParent(this);
         }
 
-        private void setParent(ArrayModifications parent) {
+        private void setParent(ArrayAliases parent) {
             assert this.parent == null;
             this.parent = parent;
         }
 
         @Override
         public String toString() {
-            return "ArrayModifications: " + arrayModifications;
+            return "ArrayAliases: " + arrayAliases;
         }
     }
 
@@ -956,7 +941,12 @@ public class VariableTrackingVisitor implements TreeVisitor {
     /**
      * A stack containing objects for recording the array modifications that have happened so far in the tree.
      */
-    private final Stack<ArrayModifications> arrayModifications = new Stack<>();
+    private final Stack<ArrayAliases> modifiedArrayAliases = new Stack<>();
+
+    /**
+     * A stack containing objects for recording the array modifications that have happened so far in the tree.
+     */
+    private final Stack<ArrayAliases> readArrayAliases = new Stack<>();
 
     /**
      * A map to record the effectively final variables.
@@ -987,7 +977,8 @@ public class VariableTrackingVisitor implements TreeVisitor {
             scopedVars.addGlobal(desc);
         writtenVariables.push(new WrittenVariables(new ScopedVarSet()));
         readVariables.push(new ReadVariables(new ScopedVarSet()));
-        arrayModifications.push(new ArrayModifications(new ScopedVarSet()));
+        modifiedArrayAliases.push(new ArrayAliases(new ScopedVarSet()));
+        readArrayAliases.push(new ArrayAliases(new ScopedVarSet()));
     }
 
     /**
@@ -1006,7 +997,8 @@ public class VariableTrackingVisitor implements TreeVisitor {
         // Create new data structures to store the reads and writes of this tree.
         readVariables.push(new ReadVariables(inScope));
         writtenVariables.push(new WrittenVariables(inScope));
-        arrayModifications.push(new ArrayModifications(inScope));
+        modifiedArrayAliases.push(new ArrayAliases(inScope));
+        readArrayAliases.push(new ArrayAliases(inScope));
 
         // Check the tree type and call the appropriate method to analyse it.
         switch(tree.type) {
@@ -1093,11 +1085,12 @@ public class VariableTrackingVisitor implements TreeVisitor {
 
         ReadVariables r = readVariables.pop();
         WrittenVariables w = writtenVariables.pop();
-        ArrayModifications a = arrayModifications.pop();
+        ArrayAliases am = modifiedArrayAliases.pop();
+        ArrayAliases ar = readArrayAliases.pop();
 
         // Record the variables that are currently in scope, and the variables used in
         // the traversal of the child trees.
-        variableTracking.addTree(tree, inScope, r.get(), w.get(), a.get());
+        variableTracking.addTree(tree, inScope, r.get(), w.get(), am.get(), ar.get());
 
         // Add all the read and written variables to the sets of variables already used
         // by the parent elsewhere.
@@ -1105,7 +1098,8 @@ public class VariableTrackingVisitor implements TreeVisitor {
         // point if they are now out of scope.
         readVariables.peek().addAllInScope(r);
         writtenVariables.peek().addAllInScope(w);
-        arrayModifications.peek().addAllInScope(a);
+        modifiedArrayAliases.peek().addAllInScope(am);
+        readArrayAliases.peek().addAllInScope(ar);
 
         if(outermostTree == tree)
             variableTracking.effectivelyFinal.putAll(effectivelyFinal);
@@ -1113,19 +1107,33 @@ public class VariableTrackingVisitor implements TreeVisitor {
 
     private void getVariableTracking(TransLocalFunctionCall tree) {
         for(TransTreeReturn<?> arg:tree.args()) {
-            if(arg.getOutputType().isArray())
-                throw new CompilerException(
-                        "Variable tracking needs extending for named variables that take arrays as arguments");
-            visit(arg);
+            if(arg.getOutputType().isArray()) {
+                getArrayName = true;
+                visit(arg);
+                getArrayName = false;
+                Type<?> type = arg.getOutputType();
+                int dimension = type.getDepth();
+                // As we know nothing about the function assume we read and write everything.
+                scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
+                scopedVars.exportArrayReferences(arrayName, 0, readArrayAliases.peek());
+            } else
+                visit(arg);
         }
     }
 
     private void getVariableTracking(TransExternalFunctionCallReturn<?> tree) {
         for(TransTreeReturn<?> arg:tree.args()) {
-            if(arg.getOutputType().isArray())
-                throw new CompilerException(
-                        "Variable tracking needs extending for named variables that take arrays as arguments");
-            visit(arg);
+            if(arg.getOutputType().isArray()) {
+                getArrayName = true;
+                visit(arg);
+                getArrayName = false;
+                Type<?> type = arg.getOutputType();
+                int dimension = type.getDepth();
+                // As we know nothing about the function assume we read and write everything.
+                scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
+                scopedVars.exportArrayReferences(arrayName, 0, readArrayAliases.peek());
+            } else
+                visit(arg);
         }
     }
 
@@ -1143,16 +1151,21 @@ public class VariableTrackingVisitor implements TreeVisitor {
                 getArrayName = false;
                 switch(tree.funcType) {
                     case ADD_DISTRIBUTION:
-                        if(i == 0)
-                            scopedVars.exportArrayReferences(arrayName, dimension, arrayModifications.peek());
+                        if(i == 0) {
+                            scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
+                            scopedVars.exportArrayReferences(arrayName, 0, readArrayAliases.peek());
+                        }
                         break;
                     case SAMPLE:
                     case CONJUGATE_SAMPLE:
                         if(i == noArgs - 1)
-                            scopedVars.exportArrayReferences(arrayName, dimension, arrayModifications.peek());
+                            scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
+                        else
+                            scopedVars.exportArrayReferences(arrayName, 0, readArrayAliases.peek());
                         break;
                     case LOG_PROBABILITY:
                     case PROBABILITY:
+                        scopedVars.exportArrayReferences(arrayName, 0, readArrayAliases.peek());
                         break;
                     default:
                         throw new CompilerException("Unknown function type");
@@ -1186,20 +1199,20 @@ public class VariableTrackingVisitor implements TreeVisitor {
                 case ALLOCATE_ARRAY: // This is overzealous as only arrays of higher dimension are
                     // actually updated, but as this is only used in the allocator this is not a
                     // problem.
-                    scopedVars.exportArrayReferences(arrayName, dimension, arrayModifications.peek());
+                    scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
                     break;
                 case ARRAY_GET:
                     throw new CompilerException("Attempting to assign the same sub-array to multiple"
                             + " parent arrays. This is not allowed in Sandwood code.\n\n" + tree.toString() + "\n");
                 case LOAD:
-                    scopedVars.exportArrayReferences(arrayName, dimension, arrayModifications.peek());
+                    scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
                     scopedVars.addArray(arrayName, ((TransLoad<?>) tree.value).varDesc, dimension);
                     break;
                 default:
                     throw new CompilerException("Unhandled tree type encountered " + tree.value.type);
             }
         } else {
-            scopedVars.exportArrayReferences(arrayName, dimension, arrayModifications.peek());
+            scopedVars.exportArrayReferences(arrayName, dimension, modifiedArrayAliases.peek());
         }
     }
 
@@ -1209,14 +1222,22 @@ public class VariableTrackingVisitor implements TreeVisitor {
      * @param tree
      */
     private void getVariableTracking(TransArrayGet<?> tree) {
-        // Record the status of getSource and then set it to false for the
-        // traversal of the index before restoring its value.
-        boolean getSource = this.getArrayName;
-        this.getArrayName = false;
-        visit(tree.index);
-        this.getArrayName = getSource;
+        if(getArrayName) {
+            getArrayName = false;
+            visit(tree.index);
+            getArrayName = true;
 
-        visit(tree.array);
+            visit(tree.array);
+        } else {
+            visit(tree.index);
+
+            getArrayName = true;
+            visit(tree.array);
+            getArrayName = false;
+
+            int dimension = tree.getOutputType().getDepth();
+            scopedVars.exportArrayReferences(arrayName, dimension, readArrayAliases.peek());
+        }
     }
 
     /**

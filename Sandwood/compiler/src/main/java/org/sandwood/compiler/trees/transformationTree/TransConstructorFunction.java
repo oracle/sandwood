@@ -9,9 +9,11 @@
 package org.sandwood.compiler.trees.transformationTree;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
@@ -46,6 +48,11 @@ public class TransConstructorFunction extends TransFunction<TransTreeVoid> {
     @Override
     protected TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
         return new TransConstructorFunction(visibility, name, args, body.applyConstants(constants), comment);
+    }
+    
+    @Override
+    public TransConstructorFunction removeUnusedUpdates(Set<VariableName> toRemove) {
+        return new TransConstructorFunction(visibility, name, args, body.removeStores(toRemove), comment);
     }
 
     @Override

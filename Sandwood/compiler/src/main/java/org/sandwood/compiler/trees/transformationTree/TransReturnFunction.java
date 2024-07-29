@@ -9,10 +9,12 @@
 package org.sandwood.compiler.trees.transformationTree;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.trees.ArgDesc;
@@ -25,6 +27,8 @@ import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
 public class TransReturnFunction<A extends Variable<A>> extends TransFunction<TransTreeReturn<A>> {
     private final Type<A> returnType;
+    // If this ever gets a return expression instead of just returning the body update the handling in
+    // TransSandwoodClassGenerator of the removal of unused fields.
 
     TransReturnFunction(Visibility visibility, Type<A> returnType, FunctionName name, ArgDesc<?>[] args,
             TransTreeReturn<A> body, boolean override, String comment, KnownValuesTrans knownValues) {
@@ -50,6 +54,12 @@ public class TransReturnFunction<A extends Variable<A>> extends TransFunction<Tr
         KnownValuesTrans newKnownValues = knownValues.applyOptimisations(args, constants);
         TransTreeReturn<A> newBody = body.applyConstants(constants);
         return TransTree.returnFunction(visibility, returnType, name, args, newBody, override, comment, newKnownValues);
+    }
+
+    @Override
+    public TransReturnFunction<A> removeUnusedUpdates(Set<VariableName> toRemove) {
+        return new TransReturnFunction<>(visibility, returnType, name, args, body.removeStores(toRemove), override,
+                comment, knownValues);
     }
 
     @Override
