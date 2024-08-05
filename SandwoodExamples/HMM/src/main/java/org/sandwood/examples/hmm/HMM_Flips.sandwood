@@ -1,0 +1,41 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+package org.sandwood.examples.hmm;
+
+model HMM_Flips(boolean[] flips_measured, int states) {
+		
+		// Construct arrays describing the probability of a move from 1 state to another.
+		double[] v = new double[states] <~ 0.1;
+		double[][] m = dirichlet(v).sample(states);
+		
+		// Construct the bias for each coin.
+		double[] bias = beta(1.0, 1.0).sample(states);
+
+		// Determine how many coin flips the model will need to produce.
+		int numFlips = flips_measured.length;
+		
+		// Allocate space for the state, i.e. which coin we are going to toss.
+		int[] st = new int[numFlips];
+
+		// Set the initial state by sampling from a categorical with uniform weightings.
+		double[] weights = new double[states] <~ 1.0/states;
+		int initialState = categorical(weights).sample();
+		st[0] = categorical(m[initialState]).sampleDistribution();
+
+		//Determine the remaining states based on the previous state.
+		for(int i:[1 .. numFlips))
+			st[i] = categorical(m[st[i-1]]).sampleDistribution();
+			
+		//Flip each coin.
+		boolean[] flips = new boolean[numFlips];
+		for(int i:[0 .. numFlips))
+			flips[i] = bernoulli(bias[st[i]]).sample();
+
+		//Tie the values of the flips to the values we have measured.
+		flips.observe(flips_measured);
+}

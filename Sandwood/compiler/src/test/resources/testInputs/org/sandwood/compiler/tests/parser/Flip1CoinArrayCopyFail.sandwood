@@ -1,0 +1,27 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Flip1CoinArrayCopyFail(int samples, boolean[] flipsMeasured) {
+	/*
+	 * This is a bad example as there is a separation between the size of 
+	 * flips measured, and the size of noSamples.
+	 */
+	double a = 1.0;
+	double b = 1.0;
+	double[] bias = new double[samples+1];
+	bias[0] = beta(a, b).sample();
+	boolean[] flips = new boolean[samples];
+	for(int i:[0..samples)) {
+		bias[i+1] = bias[i];
+		Bernoulli bernoulli = bernoulli(bias[i]);
+		flips[i] = bernoulli.sample();
+	}
+	flips.observe(flipsMeasured);
+}

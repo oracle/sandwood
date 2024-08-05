@@ -1,0 +1,33 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model ParallelMK4(int[] observed) {
+	int[] generated = new int[observed.length];
+	double[][] indirection1 = new double[observed.length][10];
+	double[][] indirection2 = new double[observed.length][10];
+
+	for(int i=0; i<observed.length; i++) {
+		for(int j=0; j<10; j++) {
+			indirection1[i][j] = uniform(0.0, 1.0).sample();
+		}
+	}
+	
+	for(int k=0; k<observed.length; k++) {
+		for(int l=0; l<10; l++) {
+			indirection2[k][l] = indirection1[k][l];
+		}
+	}
+	
+	for(int m=0; m<observed.length; m++) {
+		generated[m] = categorical(indirection2[m]).sample();
+	}
+
+	generated.observe(observed);
+}

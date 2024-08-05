@@ -1,0 +1,47 @@
+int noTopics = 5;
+int noTopics = 10;
+int[][] documents = new int[2][];
+int var5 = 10;
+int var6 = 1;
+int[] document = new int[var6];
+for(int var10=0; var10 < var6; var10 += 1) {
+	document[var10] = var5;
+}
+documents[0] = document;
+int var14 = 8;
+int var15 = 4;
+int[] document = new int[var15];
+for(int var19=0; var19 < var15; var19 += 1) {
+	document[var19] = var14;
+}
+documents[1] = document;
+double var23 = 0.1;
+double[] alpha = new double[noTopics];
+for(int var27=0; var27 < noTopics; var27 += 1) {
+	alpha[var27] = var23;
+}
+double var29 = 0.1;
+double[] beta = new double[noTopics];
+for(int var33=0; var33 < noTopics; var33 += 1) {
+	beta[var33] = var29;
+}
+Dirichlet var35 = new Dirichlet(beta);
+double[][] phi = new double[noTopics][];
+for(int var39=0; var39 < noTopics; var39 += 1) {
+	phi[var39] = var35.sample();
+}
+Dirichlet var42 = new Dirichlet(alpha);
+int var43 = documents.length;
+double[][] theta = new double[var43][];
+for(int var47=0; var47 < var43; var47 += 1) {
+	theta[var47] = var42.sample();
+}
+int[][] w = new int[documents.length][];
+for(int i=0; i < documents.length; i += 1) {
+	int[] t = new int[documents[i].length];
+	for(int j=0; j < documents[i].length; j += 1) {
+		t[j] = new Categorical(phi[new Categorical(theta[i]).sample()]).sample();
+	}
+	w[i] = t;
+}
+w.observe(documents);

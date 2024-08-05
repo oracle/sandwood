@@ -1,0 +1,45 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Flip2CoinsMK14Fail(boolean[][] flipsMeasured) {
+	int coins = flipsMeasured.length;
+		 
+	boolean[][] flips = new boolean[coins][];
+	boolean[][] measuredFlips = new boolean[coins][];
+	double [] bias = new double[coins];
+		
+	Beta beta = beta(1.0, 1.0);
+		
+	bias[0] = beta.sample();
+		
+	for(int i:[1..coins))
+		bias[i] = beta.sample();
+	
+	for(int j:[0..1)) {
+		int samples = flipsMeasured[j].length;
+		Bernoulli bernoulli1 = bernoulli(bias[j]);
+		flips[j] = bernoulli1.sample(samples);
+	}
+				
+	for(int k:[1..coins)) {
+		int samples = flipsMeasured[k].length;
+		Bernoulli bernoulli2 = bernoulli(bias[k]);
+		flips[k] = bernoulli2.sample(samples);
+	}
+		
+	for(int l:[0..coins))
+		measuredFlips[l] = flipsMeasured[l];
+		
+	for(int i:[0..coins)) {
+		boolean[] f = flips[i];
+		boolean[] m = measuredFlips[coins - (i+1)];
+		f.observe(m);
+	}
+}

@@ -1,0 +1,36 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+/**
+ * A model for the fairness work.
+ */
+public model Deterministic2(int n, boolean[] flipsMeasured) {
+	int states = 5;
+
+	double[] v = new double[states];
+	for(int i:[0..states))
+		v[i] = 0.1;
+	
+	double[][] m = dirichlet(v).sample(states);
+
+    int[] a = new int[n];
+    int[] b = new int[n];
+    a[0] = 0;
+    for(int i=1; i<n; i++) {
+    	b[i] = a[i-1];
+    	a[i] = categorical(m[b[i]]).sampleDistribution();
+    }
+    
+    boolean[] flips = new boolean[n];
+			
+	for(int j:[0..n))
+		flips[j] = bernoulli(1/a[j+1]).sample();
+		flips.observe(flipsMeasured);
+}

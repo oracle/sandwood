@@ -1,0 +1,34 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model HMMTestPart2(boolean[] flipsMeasured) {
+		int states = 2;
+
+		double[] v = new double[states];
+		for(int i:[0..states))
+			v[i] = 0.1;
+		
+		double[][] m = dirichlet(v).sample(states);
+		double[] bias = beta(1.0, 1.0).sample(states);
+
+		int samples = flipsMeasured.length;
+		int[] st = new int[samples];
+		st[0] = 0;
+		
+		boolean[] flips = new boolean[samples];
+
+		for(int i:[1..samples))
+			st[i] = categorical(m[st[i-1]]).sample();
+			
+		for(int j:[1..samples))
+			flips[j] = bernoulli(bias[st[j]]).sample();
+
+		flips.observe(flipsMeasured);
+}

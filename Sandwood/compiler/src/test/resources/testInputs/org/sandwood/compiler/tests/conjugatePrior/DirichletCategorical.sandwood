@@ -1,0 +1,17 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.conjugatePrior;
+
+public model DirichletCategorical(int[] observed) {
+	double[] v = new double[20] <~ 0.1;
+	double[] prior = dirichlet(v).sample();
+	Categorical categorical = categorical(prior);
+	int[] output = categorical.sample(observed.length);
+	output.observe(observed);
+}

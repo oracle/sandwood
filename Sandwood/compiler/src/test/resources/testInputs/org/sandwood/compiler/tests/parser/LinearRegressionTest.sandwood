@@ -1,0 +1,37 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model LinearRegressionTest(double[][] x, double[] yMeasured) {
+
+		int n = x.length;
+		int k = x[0].length;
+
+		double[] y = new double[n];
+
+		double[] weights = gaussian(0,10).sample(k);
+		double bias = gaussian(0,10).sample();
+		double tau = inverseGamma(3.0,1.0).sample();
+
+		for(int i:[0..n)) {
+			double[] phi = new double[k];
+			for(int j:[0..k,1))
+				phi[j] = weights[j] * x[i][j];
+			
+			y[i] = gaussian(sum(phi) + bias, tau).sample();
+		}
+		
+		y.observe(yMeasured);
+
+	private double sum(double[] a) {
+		return reduce(a, 0, (i,j) -> {
+			return i + j;
+		});
+	}
+}

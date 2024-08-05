@@ -1,0 +1,28 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model MultinomialBernoulli(boolean[] observed) {
+	double[] beta = {0.1, 0.1, 0.1};
+	double[] p = dirichlet(beta).sample();
+	int n = 10;
+	int[] prior = multinomial(p, n).sample();
+	Bernoulli b1 = new Bernoulli(prior[0]/n);
+	Bernoulli b2 = new Bernoulli(prior[1]/n);
+	Bernoulli b3 = new Bernoulli(prior[2]/n);
+	int length = observed.length;
+	boolean[] output = new boolean[length];
+	for(int i=0; i<length; i+=3)
+		output[i] = b1.sample();
+	for(int i=1; i<length; i+=3)
+		output[i] = b2.sample();
+	for(int i=2; i<length; i+=3)
+		output[i] = b3.sample();
+	output.observe(observed);
+}

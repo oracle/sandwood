@@ -1,0 +1,35 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model DiscreteChoiceAlt(int noProducts, int noObs, int[] ObsChoices) {
+    // we just need an uninformative prior for utility intercepts
+
+    // draw utilities
+    double[] ut = new double[noProducts];
+    ut[0] = 0.0;
+    for(int i=1; i<noProducts; i++) 
+    	ut[i]= gaussian(0, 10).sample();
+
+    // calculate choice probabilities
+    double[] exped = new double[noProducts];
+    for(int i : [0..noProducts)) {
+        exped[i] = exp(ut[i]);
+    }
+    double sum = reduce(exped, 0, (i, j) -> { return i + j; });
+    double[] prob = new double[noProducts];
+    for (int i : [0..noProducts)) {
+        prob[i] = exped[i] / sum;
+    }
+    // draw consumer choices according to the calculated probabilities
+    int[] choices = categorical(prob).sample(noObs);
+
+    // assert generated choices match observed choices
+    choices.observe(ObsChoices);
+}

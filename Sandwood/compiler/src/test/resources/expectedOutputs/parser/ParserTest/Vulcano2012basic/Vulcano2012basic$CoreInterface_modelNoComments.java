@@ -1,0 +1,44 @@
+package org.sandwood.compiler.tests.parser;
+
+interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+	public int[][] get$Avail();
+	public void set$Avail(int[][] cv$value);
+	public double[][] get$ObsSales();
+	public void set$ObsSales(double[][] cv$value);
+	public double[][] get$Sales();
+	public void set$Sales(double[][] cv$value);
+	public int get$T();
+	public void set$T(int cv$value);
+	public int[] get$arrivals();
+	public void set$arrivals(int[] cv$value);
+	public double get$denom();
+	public void set$denom(double cv$value);
+	public double[] get$exped();
+	public void set$exped(double[] cv$value);
+	public boolean get$fixedFlag$sample25();
+	public void set$fixedFlag$sample25(boolean cv$value);
+	public boolean get$fixedFlag$sample53();
+	public void set$fixedFlag$sample53(boolean cv$value);
+	public boolean get$fixedFlag$sample61();
+	public void set$fixedFlag$sample61(boolean cv$value);
+	public boolean get$fixedFlag$sample85();
+	public void set$fixedFlag$sample85(boolean cv$value);
+	public double[] get$lambda();
+	public void set$lambda(double[] cv$value);
+	public double get$logProbability$Sales();
+	public double get$logProbability$arrivals();
+	public double get$logProbability$denom();
+	public double get$logProbability$exped();
+	public double get$logProbability$lambda();
+	public double get$logProbability$sum();
+	public double get$logProbability$ut();
+	public int get$noProducts();
+	public void set$noProducts(int cv$value);
+	public int get$s();
+	public void set$s(int cv$value);
+	public double get$sum();
+	public void set$sum(double cv$value);
+	public double[] get$ut();
+	public void set$ut(double[] cv$value);
+	public void logEvidenceGeneration();
+}

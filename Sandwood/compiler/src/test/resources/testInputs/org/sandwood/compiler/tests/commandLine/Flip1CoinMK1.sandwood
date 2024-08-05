@@ -1,0 +1,37 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.commandLine;
+
+public model Flip1CoinMK1(int samples, boolean[] flipsMeasured) {
+	
+	/*
+	  object Flip {
+	    class sig(var bias: Double, var flips: Array[Int])
+	  
+	    val model = bayes { 
+	      (N: Int, a: Double, b: Double) => {      
+	        val bias = Beta(a,b).sample()
+	        val flips = Bernoulli(bias).sample(N) 
+	      
+	        observe(flips)
+	      }
+	    }
+	*/
+	
+		/*
+		 * This is a bad example as there is a separation between the size of 
+		 * flips measured, and the size of noSamples.
+		 */
+		double a = 1.0;
+		double b = 1.0;
+		double bias = beta(a, b).sample();
+		Bernoulli bernoulli = bernoulli(bias);
+		boolean[] flips = bernoulli.sample(samples);
+		flips.observe(flipsMeasured);
+}

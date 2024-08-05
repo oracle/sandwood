@@ -1,0 +1,41 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.commandLine;
+
+public model Flip2CoinsMK3(double a, double b, boolean[][] flipsMeasured) {		
+
+	/*
+  object Flip {
+    class sig(var bias: Array[Double], var flips: Array[Int])
+  
+    val model = bayes { 
+      (N: Int, K:Int, a: Double, b: Double) => {      
+        val bias = Beta(a,b).sample(K)
+        val flips = for (i <- 1 to N) {
+          for(j <- 1 to K) {
+            Bernoulli(bias(j)).sample() 
+          }
+        }
+      
+        observe(flips)
+      }
+    }
+	 */
+	 	
+	 	int coins = flipsMeasured.length;
+		double[] bias = beta(a, b).sample(coins);
+		boolean[][] flips = new boolean[coins][];
+		
+		for(int j:[0..coins)) {
+			int samples = flipsMeasured[j].length;
+			Functions.sample(flips, samples, j, bias);
+		}
+
+		flips.observe(flipsMeasured);
+}

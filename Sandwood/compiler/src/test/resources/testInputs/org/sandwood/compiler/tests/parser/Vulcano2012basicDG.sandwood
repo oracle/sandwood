@@ -1,0 +1,82 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+/*
+ * Model based on the paper Estimating Primary Demand for Substitutable Products from Sales Transaction 
+ * Data by Gustavo Vulcano, Garrett van Ryzin, and Richard Ratliff.
+ * https://business.columbia.edu/sites/default/files-efs/pubfiles/5397/vanRyzin_Estimating.pdf
+ */
+package org.sandwood.compiler.tests.parser;
+
+model Vulcano2012basicDG(int[][] ObsSales, boolean[][] avail) {
+   // avail is the availability matrix, numTimeSteps-by-numProducts
+   // r is the normalization constant here, number between 0 and 1. "Relative appeal of the outside option"
+   double r = 0.3;
+    
+   int numTimeSteps = avail.length;
+   if(numTimeSteps > 0) {
+      int numProducts = avail[0].length;
+
+      // draw utilities
+      double[] ut = gaussian(0, 1).sample(numProducts);
+
+      //exponentiate right here (in the non-basic models move to the for loop)
+      double[] exped = new double[numProducts];
+      for(int j : [0..numProducts))
+         exped[j] = exp(ut[j]);
+
+      //Choices includes the choice to not buy anything.
+      int numChoices = numProducts + 1;
+
+      //now normalize
+      double[] expedNorm = new double[numProducts];
+      double sum = reduce(exped, 0, (k, l) -> { return k + l; });
+      for(int j : [0..numProducts))
+         expedNorm[j] = exped[j]/(r*sum);
+
+      int[][] sales = new int[numTimeSteps][numProducts];
+
+      for (int t:[0..numTimeSteps)){
+         // Calculate the number of purchases made.
+         int numSales = reduce(ObsSales[t], 0, (k, l) -> { return k + l; });
+
+         // prior for the distribution of lambda for arrivals. These can be 
+         // supplied as a vector if RGBU has some estimates, or just use some priors.
+         public double lambda = gamma(10,10).sample();
+         public int arrivals = numSales + poisson(lambda).sample();
+
+         // for each period t calculate choice probabilities and sales
+         double[] weekly_rates = new double[numChoices];
+         double[] weekly_ut = new double[numChoices];
+
+         for(int j : [0..numProducts)) {
+            if(avail[t][j])
+               weekly_ut[j] = expedNorm[j];
+            else
+               weekly_ut[j] = 0.0;
+         }
+         // Moved v_0 to the end of the array to keep indexing consistent everywhere else in 
+         // the model and delayed the assignment of the value 1 to here. None of this is a 
+         // sandwood requirement, I just thought it made the model eaiser to follow.
+         weekly_ut[numProducts] = 1.0;
+
+         double denom = reduce(weekly_ut, 0, (k, l) -> { return k + l; });
+
+         for(int j : [0..numProducts]) 
+            weekly_rates[j] = weekly_ut[j]/denom ;
+
+         int[] weekly_sales = multinomial(weekly_rates, arrivals).sample();
+
+         //getting rid of the no purchase observation (last one in the vector of weekly_sales)
+         int[] observed_weekly_sales = sales[t];
+         for (int j : [0..numProducts))
+            observed_weekly_sales[j] = weekly_sales[j] ;
+      }
+      // assert that generated sales match observed sales
+      sales.observe(ObsSales);
+   }
+}

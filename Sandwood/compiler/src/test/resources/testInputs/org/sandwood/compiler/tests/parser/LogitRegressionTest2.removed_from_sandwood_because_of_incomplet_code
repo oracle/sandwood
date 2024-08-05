@@ -1,0 +1,31 @@
+package org.sandwood.tests.parser;
+
+model LogitRegressionTest2(double[][] x, boolean[][] y_measured, int k) {
+
+	int n = x.length;
+	boolean[][] y = new boolean[n][k];
+
+	double[] weights = gaussian(0,10).sample(k);
+	//TODO, change this to a beta distribution.
+	double bias = gaussian(0,10).sample();
+
+	for(int i:[0 .. n)) {
+		double[] indicator = new double[k];
+		for(int j:[0 .. k)) {
+			indicator[j] = exp(weights[j] * x[i][j]);
+		}
+		
+		//Single assignment semantics means a for loop cannot be used here.
+		double sum = reduce(indicator, 0, (a,b) -> { return a + b; });
+		double[] p = new double[k];
+
+		for(int j:[0 .. k)) {
+			p[j] = indicator[j]/sum;
+			//This really wants to be a Catergorical, but for now y will have 
+			//to be arrays with just a single value set.
+			y[i][j] = bernoulli(p[j] + bias).sample();
+		}	
+	}
+
+	y.observe(y_measured);
+}

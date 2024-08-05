@@ -1,0 +1,74 @@
+int var1 = 2;
+boolean var2 = false;
+int var3 = 100;
+boolean[] var4 = new boolean[var3];
+int var5 = 0;
+int var6 = 1;
+for(int var7=var5; var7 < var3; var7 += var6) {
+	var4[var7] = var2;
+}
+double var9 = 0.1;
+double[] var10 = new double[var1];
+int var11 = 0;
+int var12 = 1;
+for(int var13=var11; var13 < var1; var13 += var12) {
+	var10[var13] = var9;
+}
+Dirichlet var15 = new Dirichlet(var10);
+double[][] var16 = new double[var1][];
+int var17 = 0;
+int var18 = 1;
+for(int var19=var17; var19 < var1; var19 += var18) {
+	double[] var20 = var15.sample();
+	var16[var19] = var20;
+}
+double var22 = 1.0;
+double var23 = 1.0;
+Beta var24 = new Beta(var22, var23);
+double[] var25 = new double[var1];
+int var26 = 0;
+int var27 = 1;
+for(int var28=var26; var28 < var1; var28 += var27) {
+	double var29 = var24.sample();
+	var25[var28] = var29;
+}
+int var31 = var4.length;
+int var32 = 0;
+int[] var33 = new int[var31];
+int var34 = 0;
+int var35 = 1;
+for(int var36=var34; var36 < var31; var36 += var35) {
+	var33[var36] = var32;
+}
+int var38 = var4.length;
+boolean[] var39 = new boolean[var38];
+int var40 = 0;
+int var41 = var33[var40];
+double[] var42 = var16[var41];
+Categorical var43 = new Categorical(var42);
+int var44 = var43.sample();
+int var45 = 0;
+var33[var45] = var44;
+int var47 = 1;
+int var48 = var4.length;
+int var49 = 1;
+for(int var50=var47; var50 < var48; var50 += var49) {
+	int var51 = 1;
+	int var52 = (var50 - var51);
+	int var53 = var33[var52];
+	double[] var54 = var16[var53];
+	Categorical var55 = new Categorical(var54);
+	int var56 = var55.sample();
+	var33[var50] = var56;
+}
+int var58 = 0;
+int var59 = var4.length;
+int var60 = 1;
+for(int var61=var58; var61 < var59; var61 += var60) {
+	int var62 = var33[var61];
+	double var63 = var25[var62];
+	Bernoulli var64 = new Bernoulli(var63);
+	boolean var65 = var64.sample();
+	var39[var61] = var65;
+}
+var39.observe(var4);

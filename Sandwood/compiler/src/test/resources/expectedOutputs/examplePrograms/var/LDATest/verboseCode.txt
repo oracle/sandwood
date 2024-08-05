@@ -1,0 +1,80 @@
+int var1 = 5;
+int var2 = 10;
+int var3 = 2;
+int[][] var4 = new int[var3][];
+int var5 = 1;
+int var6 = 10;
+int[] var7 = new int[var6];
+int var8 = 0;
+int var9 = 1;
+for(int var10=var8; var10 < var6; var10 += var9) {
+	var7[var10] = var5;
+}
+int var12 = 0;
+var4[var12] = var7;
+int var14 = 8;
+int var15 = 4;
+int[] var16 = new int[var15];
+int var17 = 0;
+int var18 = 1;
+for(int var19=var17; var19 < var15; var19 += var18) {
+	var16[var19] = var14;
+}
+int var21 = 1;
+var4[var21] = var16;
+double var23 = 0.1;
+double[] var24 = new double[var1];
+int var25 = 0;
+int var26 = 1;
+for(int var27=var25; var27 < var1; var27 += var26) {
+	var24[var27] = var23;
+}
+double var29 = 0.1;
+double[] var30 = new double[var2];
+int var31 = 0;
+int var32 = 1;
+for(int var33=var31; var33 < var2; var33 += var32) {
+	var30[var33] = var29;
+}
+Dirichlet var35 = new Dirichlet(var30);
+double[][] var36 = new double[var1][];
+int var37 = 0;
+int var38 = 1;
+for(int var39=var37; var39 < var1; var39 += var38) {
+	double[] var40 = var35.sample();
+	var36[var39] = var40;
+}
+Dirichlet var42 = new Dirichlet(var24);
+int var43 = var4.length;
+double[][] var44 = new double[var43][];
+int var45 = 0;
+int var46 = 1;
+for(int var47=var45; var47 < var43; var47 += var46) {
+	double[] var48 = var42.sample();
+	var44[var47] = var48;
+}
+int var50 = var4.length;
+int[][] var51 = new int[var50][];
+int var52 = 0;
+int var53 = var4.length;
+int var54 = 1;
+for(int var55=var52; var55 < var53; var55 += var54) {
+	int[] var56 = var4[var55];
+	int var57 = var56.length;
+	int[] var58 = new int[var57];
+	int var59 = 0;
+	int[] var60 = var4[var55];
+	int var61 = var60.length;
+	int var62 = 1;
+	for(int var63=var59; var63 < var61; var63 += var62) {
+		double[] var64 = var44[var55];
+		Categorical var65 = new Categorical(var64);
+		int var66 = var65.sample();
+		double[] var67 = var36[var66];
+		Categorical var68 = new Categorical(var67);
+		int var69 = var68.sample();
+		var58[var63] = var69;
+	}
+	var51[var55] = var58;
+}
+var51.observe(var4);

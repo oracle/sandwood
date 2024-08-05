@@ -1,0 +1,24 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model ParallelMK3(double[] observed) {
+	double[] generated = new double[observed.length];
+	double[] indirection = new double[observed.length];
+	double[] v = new double[10] <~ 0.1;
+
+
+	double[] sample = dirichlet(v).sample();
+	for(int i=0; i<observed.length; i++) {
+		indirection[i] = sample[i];
+		generated[i] = gaussian(sample[i], indirection[i]).sample();
+	}
+
+	generated.observe(observed);
+}

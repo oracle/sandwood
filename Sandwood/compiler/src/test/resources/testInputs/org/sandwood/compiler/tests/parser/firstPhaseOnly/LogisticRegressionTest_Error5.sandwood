@@ -1,0 +1,38 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser.firstPhaseOnly;
+
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;
+
+model LogisticRegressionTest_Error5(double[][] x, boolean[] yMeasured) {
+
+	int n = x.length;
+	int k = x[0].length;
+	boolean[] y = new boolean[n];
+
+	doble[] weights = gaussian(0,10).sample(k);
+	double bias = gaussian(0,10).sample();
+
+	for(int i:[0..n)) {
+		double[] indicatorValues = new double[k];
+		for(int j:[0..k))
+			indicatorValues[j] = weights[j] * x[i][j];
+		double success = Sigmoid.sigmoid(sum(indicatorValues) + bias);
+		y[i] = bernoulli(success).sample();
+	}
+
+	y.observe(yMeasured);
+
+
+	private double sum(double[] a) {
+		return reduce(a, 0, (i,j) -> {
+			return i + j;
+		});
+	}
+}

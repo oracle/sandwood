@@ -1,0 +1,26 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Flip2CoinsMK2(double a, double b, boolean[][] flipsMeasured) {
+	int samples = flipsMeasured.length;
+	int coins = flipsMeasured[0].length;
+	double[] bias = beta(a, b).sample(coins);
+	boolean[][] flips = new boolean[samples][];
+	for(int i:[0..samples)) {
+		boolean[] sample = new boolean[coins];
+		for(int j:[0..coins)) {
+			Bernoulli bernoulli = bernoulli(bias[j]);
+			sample[j] = bernoulli.sample();
+		}
+		flips[i] = sample;
+	}
+
+	flips.observe(flipsMeasured);
+}

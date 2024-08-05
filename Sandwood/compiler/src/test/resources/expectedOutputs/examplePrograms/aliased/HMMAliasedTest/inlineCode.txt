@@ -1,0 +1,37 @@
+int states = 2;
+boolean var2 = false;
+int var3 = 100;
+boolean[] flipsMeasured = new boolean[var3];
+for(int var7=0; var7 < var3; var7 += 1) {
+	flipsMeasured[var7] = var2;
+}
+double var9 = 0.1;
+double[] v = new double[states];
+for(int var13=0; var13 < states; var13 += 1) {
+	v[var13] = var9;
+}
+Dirichlet var15 = new Dirichlet(v);
+double[][] m = new double[states][];
+for(int var19=0; var19 < states; var19 += 1) {
+	m[var19] = var15.sample();
+}
+Beta var24 = new Beta(1.0, 1.0);
+double[] bias = new double[states];
+for(int var28=0; var28 < states; var28 += 1) {
+	bias[var28] = var24.sample();
+}
+int var31 = flipsMeasured.length;
+int var32 = 0;
+int[] st = new int[var31];
+for(int var36=0; var36 < var31; var36 += 1) {
+	st[var36] = var32;
+}
+boolean[] flips = new boolean[flipsMeasured.length];
+st[0] = new Categorical(m[st[0]]).sample();
+for(int i=1; i < flipsMeasured.length; i += 1) {
+	st[i] = new Categorical(m[st[(i - 1)]]).sample();
+}
+for(int i=0; i < flipsMeasured.length; i += 1) {
+	flips[i] = new Bernoulli(bias[st[i]]).sample();
+}
+flips.observe(flipsMeasured);

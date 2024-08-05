@@ -1,0 +1,40 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model LogitRegressionTest(double[][] x, boolean[][] yMeasured) {
+	int k = 3;
+
+	int n = x.length;
+	boolean[][] y = new boolean[n][k];
+
+	double[] weights = gaussian(0,10).sample(k);
+	//TODO, change this to a beta distribution.
+	double bias = gaussian(0,10).sample();
+
+	for(int i:[0 .. n)) {
+		double[] indicator = new double[k];
+		for(int j:[0 .. k)) {
+			indicator[j] = exp(weights[j] * x[i][j]);
+		}
+		
+		//Single assignment semantics means a for loop cannot be used here.
+		double sum = indicator[0] + indicator[1] + indicator[2];
+		double[] p = new double[k];
+
+		for(int j:[0 .. k)) {
+			p[j] = indicator[j]/sum;
+			//This really wants to be a Categorical, but for now y will have
+			//to be arrays with just a single value set.
+			y[i][j] = bernoulli(p[j] + bias).sample();
+		}	
+	}
+
+	y.observe(yMeasured);
+}

@@ -1,0 +1,18 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.conjugatePrior;
+
+public model GaussianGaussian(double[] observed) {
+	double a = 1.0;
+	double b = 2.0;
+	double prior = gaussian(a, b).sample();
+	Gaussian gaussian = gaussian(prior, 2.5);
+	double[] output = gaussian.sample(observed.length);
+	output.observe(observed);
+}

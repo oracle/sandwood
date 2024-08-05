@@ -1,0 +1,2895 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  ERROR_REPORTING = false;
+  DEBUG_PARSER = false;
+  STATIC = false;
+  COMMON_TOKEN_ACTION = false;
+  TOKEN_FACTORY = "MyToken";
+  JDK_VERSION = "1.8";
+}
+
+PARSER_BEGIN(SandwoodParser)
+package org.sandwood.compiler.srcTools.sourceToSource;
+
+import static org.sandwood.compiler.srcTools.sourceToSource.TokenMap.tokenMap;
+
+import java.io.*;
+import org.sandwood.compiler.util.StringUtil;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType.*;
+import org.sandwood.compiler.exceptions.SandwoodModelException;
+import org.sandwood.compiler.names.ModelClassName;
+import org.sandwood.compiler.names.PackageName;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.Stack;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
+/**
+ * Grammar to parse Sandwood java code into api calls.
+ */
+public class SandwoodParser
+{
+   public SandwoodParser(String filename) throws IOException
+   {
+      this(System.in, "UTF-8");
+      String rawInput = new String(Files.readAllBytes(Paths.get(filename)));
+      //Remove tabs as they mess up the columns calculations
+      rawInput = rawInput.replace("\t", "    ");
+      inputString = StringUtil.escapeSpecialCharacters(StringUtil.normalizeNewLines(rawInput));
+      ReInit(new StringReader(rawInput));
+   }
+
+  public String constructClass() {
+    List<TokenMap> classBuilder = new ArrayList<TokenMap>(); 
+   //Reset indent to 0 now we are adding the top and bottom boilerplate code 
+   indent = 0;
+   
+    //Package
+    if(packageName != null)
+        classBuilder.addAll(packageTokens);
+
+   //Import
+   classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.Sandwood.*;\n"));
+   classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.Math.*;\n"));
+   classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.Number.*;\n"));
+   classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.variables.Variable.*;\n"));
+   classBuilder.add(tokenMap("\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.randomVariables.*;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.*;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.*;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.VariableType;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.dataflowGraph.variables.Variable;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.srcTools.sourceToSource.Location;\n"));
+   classBuilder.add(tokenMap("\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.CompilationOptions;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.compilation.GeneratedAPIBuilder;\n"));
+   classBuilder.add(tokenMap("import org.sandwood.compiler.compilation.util.CompilationDesc;\n"));
+   classBuilder.add(tokenMap("\n"));
+   classBuilder.add(tokenMap("import java.util.Collections;\n"));
+   classBuilder.add(tokenMap("import java.util.List;\n"));
+   classBuilder.add(tokenMap("import java.util.Set;\n"));
+   classBuilder.add(tokenMap("import java.util.HashSet;\n"));
+   if(!imports.isEmpty()) { 
+     classBuilder.add(tokenMap("\n"));
+     classBuilder.add(tokenMap("//User defined imports.\n"));
+     classBuilder.addAll(imports);
+   }
+   classBuilder.add(tokenMap("\n"));
+
+   //Class
+   classBuilder.add(tokenMap("public class "));
+   classBuilder.add(classToken);
+   classBuilder.add(tokenMap(" extends GeneratedAPIBuilder {\n"));
+   indent++;
+
+   //If Else helper classes 
+   if(!ifElseClasses.isEmpty()) {
+      classBuilder.add(tokenMap(indent() + "//Helper classes for if else statements.\n"));
+      PriorityQueue<String> p = new PriorityQueue<String>(ifElseClasses.keySet());
+      while(!p.isEmpty()) 
+        classBuilder.addAll(ifElseClasses.get(p.poll()));
+    }
+
+
+   //Build compile method
+   classBuilder.add(tokenMap(indent() + "@Override\n"));
+   classBuilder.add(tokenMap(indent() + "public CompilationDesc buildClass(CompilationOptions opts) {\n"));
+   indent++;
+
+   if(classBody.size() != 0) { 
+     //Main method body
+     classBuilder.addAll(classBody);
+
+     //Close compile method
+     String variableNamesList = "$variableNames";
+     //Variable names
+     classBuilder.add(tokenMap("\n" + indent() + "Variable<?>[] " +variableNamesList + " = {"));
+     boolean first = true;
+     for(String s:variableNames) {
+       if(first) 
+         first = false;
+       else
+         classBuilder.add(tokenMap(", "));
+       classBuilder.add(tokenMap(s));
+     }
+     classBuilder.add(tokenMap("};"));
+     
+     //Constructor arguments
+     String constructorArgsList = "$constructorArgs";
+     classBuilder.add(tokenMap("\n" + indent() + "String[] " + constructorArgsList + " = {"));
+     first = true;
+     for(String s:constructorArgs) {
+       if(first) 
+         first = false;
+       else
+         classBuilder.add(tokenMap(", "));
+       classBuilder.add(tokenMap("\"" + s +"\""));
+     }
+     classBuilder.add(tokenMap("};"));
+
+     //Construct helper classes
+     String helperClassesSet = "$helperClasses";
+     classBuilder.add(tokenMap("\n" + indent() + "Set<String> " + helperClassesSet + " = new HashSet<>();"));
+     addHelperClassNames(classBuilder, helperClassesSet);
+     
+     classBuilder.add(tokenMap("\n" + indent() + "return compileAPI(opts, " + variableNamesList + ", \"" + getClassName() +
+     "\", " + helperClassesSet + ", \"" + packageName + "\", " + constructorArgsList + ", getOriginalModel(), " +
+                               ((comment==null)?"null":"\"" + comment + "\"") + ");\n"));
+   } else {
+     classBuilder.add(tokenMap("\n" + indent() + "return new CompilationDesc();\n"));
+   } 
+   indent--;
+   classBuilder.add(tokenMap(indent() + "}\n"));
+
+   classBuilder.addAll(functions);
+
+   //Add original input string to the class
+   classBuilder.add(tokenMap("\n" + indent() +"private static String getOriginalModel() { \n"));
+   indent++;
+   classBuilder.add(tokenMap(indent() + "return \"" + inputString + "\";\n"));
+   indent--;
+   classBuilder.add(tokenMap(indent() + "}\n"));
+   indent--;
+   //Close the class
+   classBuilder.add(tokenMap("}"));
+
+    tokenMapping = new TokenMapping(classBuilder, inputString);
+    return TokenMap.tokensToString(classBuilder);
+  }
+
+  private String indent() {
+    String s = "";
+    for(int i=0; i<indent; i++)
+      s += "    ";
+    return s;
+  }
+
+  private String getJavadocComment(Token t) {
+      while (t.specialToken != null && t.specialToken.kind != FORMAL_COMMENT)
+          t = t.specialToken;
+      return (t.specialToken==null)?null:t.specialToken.image.replace("\n", "\\n").replace("\r","");   
+  }
+
+  private String getTypeConstructor(Type<?> type) {
+    if(type == VariableType.IntVariable)
+      return "VariableType.IntVariable";
+    if(type == VariableType.DoubleVariable)
+      return "VariableType.DoubleVariable";
+    if(type == VariableType.BooleanVariable)
+      return "VariableType.BooleanVariable";
+    if(type.isArray()) { 
+      ArrayType<?> vType = (ArrayType<?>) type;
+      return "VariableType.arrayType(" + getTypeConstructor(vType.getElementType()) + ")";     
+    }
+    throw new UnsupportedOperationException("This type is not supported yet!");
+  }
+
+  private String location(Token t) {
+    return location(t, t);
+  }
+
+  private String location(Token start, Token end) {
+    return "location(" + start.beginLine + ", " + start.beginColumn +
+         ", " + end.endLine + ", " + end.endColumn + ")";
+  }
+
+  private String location(TokenMap t) {
+    return location(t, t);
+  }
+
+  private String location(TokenMap start, TokenMap end) {
+    Token[] endTokens = end.getTokens();
+    return location(start.getTokens()[0], endTokens[endTokens.length-1]);
+  }   
+
+  private void createClass(Map<String, VarDesc > vars, int id) {
+    int originalIndent = indent;
+    indent = 1;
+    List<TokenMap > l = new ArrayList<TokenMap >();
+    String className = "$IfElseMods" + id;
+    l.add(tokenMap(indent() + "private static class " + className + " { \n"));
+
+    indent++;
+    PriorityQueue<String> names = new PriorityQueue<String>(vars.keySet());
+    while(!names.isEmpty()) {
+      String name = names.poll();
+      VarDesc varDesc = vars.get(name);
+      l.add(tokenMap(indent() + varDesc.type, varDesc.typeLocation));
+      l.add(tokenMap(" " + name + ";\n", varDesc.nameLocation));
+    }
+    indent--;
+    
+    l.add(tokenMap(indent() + "}\n\n"));
+    ifElseClasses.put(className, l);
+
+    indent = originalIndent;
+  }
+
+  public ModelClassName getClassName() { return ModelClassName.modelName(classToken.toString(), ifElseClasses.keySet()); }
+  public PackageName getPackageName() { return new PackageName(packageName); }
+  public TokenMapping getTokenMapping() {  return tokenMapping; }
+
+  private void addHelperClassNames(List<TokenMap> l, String setName) {
+    PriorityQueue<String> p = new PriorityQueue<String>(ifElseClasses.keySet());
+    while(!p.isEmpty())
+      l.add(tokenMap("\n" + indent() + setName + ".add(\"" + p.poll() + "\");"));
+  }
+
+  private String inputString;
+  private String packageName = "";
+  private List<TokenMap> packageTokens;
+  private TokenMap classToken;
+  private Set<String> variableNames = new LinkedHashSet<String>();
+  private List<TokenMap> imports;
+  private List<TokenMap> classBody;
+  private Map<String, List<TokenMap>> ifElseClasses;
+  private List<TokenMap> functions;
+  private boolean inFunction = false;
+  private String comment = null;
+  private String lastJavadoc = null;
+  
+  private Set<String> assignedValues = new LinkedHashSet<String>();
+  private int globalId = 1;
+  private Stack<String> conditionalTag = new Stack<String>();
+  private Stack<Map<String, VarDesc>> unsetVars = new Stack<Map<String, VarDesc>>();
+
+  private TokenMapping tokenMapping;
+
+  private List<String> constructorArgs = new ArrayList<String>(); 
+  //Initialize indent to depth required after the boilerplate code.
+  private int indent = 2;
+}
+
+PARSER_END(SandwoodParser)
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* COMMENTS */
+
+MORE :
+{
+  <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+|
+  "/*" : IN_MULTI_LINE_COMMENT
+}
+
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")?>
+}
+
+<IN_FORMAL_COMMENT>
+SPECIAL_TOKEN :
+{
+  <FORMAL_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <MULTI_LINE_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+MORE :
+{
+  < ~[] >
+}
+
+/* RESERVED WORDS AND LITERALS */
+
+TOKEN :
+{
+  < ABSTRACT: "abstract" >
+| < ASSERT: "assert" >
+| < BOOLEAN: "boolean" >
+| < BREAK: "break" >
+| < BYTE: "byte" >
+| < CASE: "case" >
+| < CATCH: "catch" >
+| < CHAR: "char" >
+| < CLASS: "class" >
+| < CONST: "const" >
+| < CONTINUE: "continue" >
+| < _DEFAULT: "default" >
+| < DO: "do" >
+| < DOUBLE: "double" >
+| < ELSE: "else" >
+| < ENUM: "enum" >
+| < EXTENDS: "extends" >
+| < FALSE: "false" >
+| < FINAL: "final" >
+| < FINALLY: "finally" >
+| < FLOAT: "float" >
+| < FOR: "for" >
+| < GOTO: "goto" >
+| < IF: "if" >
+| < IMPLEMENTS: "implements" >
+| < IMPORT: "import" >
+| < INSTANCEOF: "instanceof" >
+| < INT: "int" >
+| < INTERFACE: "interface" >
+| < LONG: "long" >
+| < MODEL: "model" >
+| < NATIVE: "native" >
+| < NEW: "new" >
+| < NULL: "null" >
+| < OBSERVE: "observe" >
+| < PACKAGE: "package">
+| < PRIVATE: "private" >
+| < PROTECTED: "protected" >
+| < PUBLIC: "public" >
+| < REDUCE: "reduce" >
+| < RETURN: "return" >
+| < SHORT: "short" >
+| < STATIC: "static" >
+| < STRICTFP: "strictfp" >
+| < SUPER: "super" >
+| < SWITCH: "switch" >
+| < SYNCHRONIZED: "synchronized" >
+| < THIS: "this" >
+| < THROW: "throw" >
+| < THROWS: "throws" >
+| < TRANSIENT: "transient" >
+| < TRUE: "true" >
+| < TRY: "try" >
+| < VOID: "void" >
+| < VOLATILE: "volatile" >
+| < WHILE: "while" >
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+  < INTEGER_LITERAL:
+        <DECIMAL_LITERAL> (["l","L"])?
+      | <HEX_LITERAL> (["l","L"])?
+      | <OCTAL_LITERAL> (["l","L"])?
+  >
+|
+  < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+|
+  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+|
+  < FLOATING_POINT_LITERAL:
+        <DECIMAL_FLOATING_POINT_LITERAL>
+      | <HEXADECIMAL_FLOATING_POINT_LITERAL>
+  >
+|
+  < #DECIMAL_FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])+ (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <DECIMAL_EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
+  >
+|
+  < #DECIMAL_EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+  < #HEXADECIMAL_FLOATING_POINT_LITERAL:
+        "0" ["x", "X"] (["0"-"9","a"-"f","A"-"F"])+ (".")? <HEXADECIMAL_EXPONENT> (["f","F","d","D"])?
+      | "0" ["x", "X"] (["0"-"9","a"-"f","A"-"F"])* "." (["0"-"9","a"-"f","A"-"F"])+ <HEXADECIMAL_EXPONENT> (["f","F","d","D"])?
+  >
+|
+  < #HEXADECIMAL_EXPONENT: ["p","P"] (["+","-"])? (["0"-"9"])+ >
+|
+  < CHARACTER_LITERAL:
+      "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )
+      "'"
+  >
+|
+  < STRING_LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+}
+
+/* IDENTIFIERS */
+
+TOKEN :
+{
+  < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
+|
+  < #LETTER:
+      [  // all chars for which Character.isIdentifierStart is true
+         "A"-"Z",
+         "_",
+         "a"-"z",
+         "\u00a2"-"\u00a5",
+         "\u00aa",
+         "\u00b5",
+         "\u00ba",
+         "\u00c0"-"\u00d6",
+         "\u00d8"-"\u00f6",
+         "\u00f8"-"\u021f",
+         "\u0222"-"\u0233",
+         "\u0250"-"\u02ad",
+         "\u02b0"-"\u02b8",
+         "\u02bb"-"\u02c1",
+         "\u02d0"-"\u02d1",
+         "\u02e0"-"\u02e4",
+         "\u02ee",
+         "\u037a",
+         "\u0386",
+         "\u0388"-"\u038a",
+         "\u038c",
+         "\u038e"-"\u03a1",
+         "\u03a3"-"\u03ce",
+         "\u03d0"-"\u03d7",
+         "\u03da"-"\u03f3",
+         "\u0400"-"\u0481",
+         "\u048c"-"\u04c4",
+         "\u04c7"-"\u04c8",
+         "\u04cb"-"\u04cc",
+         "\u04d0"-"\u04f5",
+         "\u04f8"-"\u04f9",
+         "\u0531"-"\u0556",
+         "\u0559",
+         "\u0561"-"\u0587",
+         "\u05d0"-"\u05ea",
+         "\u05f0"-"\u05f2",
+         "\u0621"-"\u063a",
+         "\u0640"-"\u064a",
+         "\u0671"-"\u06d3",
+         "\u06d5",
+         "\u06e5"-"\u06e6",
+         "\u06fa"-"\u06fc",
+         "\u0710",
+         "\u0712"-"\u072c",
+         "\u0780"-"\u07a5",
+         "\u0905"-"\u0939",
+         "\u093d",
+         "\u0950",
+         "\u0958"-"\u0961",
+         "\u0985"-"\u098c",
+         "\u098f"-"\u0990",
+         "\u0993"-"\u09a8",
+         "\u09aa"-"\u09b0",
+         "\u09b2",
+         "\u09b6"-"\u09b9",
+         "\u09dc"-"\u09dd",
+         "\u09df"-"\u09e1",
+         "\u09f0"-"\u09f3",
+         "\u0a05"-"\u0a0a",
+         "\u0a0f"-"\u0a10",
+         "\u0a13"-"\u0a28",
+         "\u0a2a"-"\u0a30",
+         "\u0a32"-"\u0a33",
+         "\u0a35"-"\u0a36",
+         "\u0a38"-"\u0a39",
+         "\u0a59"-"\u0a5c",
+         "\u0a5e",
+         "\u0a72"-"\u0a74",
+         "\u0a85"-"\u0a8b",
+         "\u0a8d",
+         "\u0a8f"-"\u0a91",
+         "\u0a93"-"\u0aa8",
+         "\u0aaa"-"\u0ab0",
+         "\u0ab2"-"\u0ab3",
+         "\u0ab5"-"\u0ab9",
+         "\u0abd",
+         "\u0ad0",
+         "\u0ae0",
+         "\u0b05"-"\u0b0c",
+         "\u0b0f"-"\u0b10",
+         "\u0b13"-"\u0b28",
+         "\u0b2a"-"\u0b30",
+         "\u0b32"-"\u0b33",
+         "\u0b36"-"\u0b39",
+         "\u0b3d",
+         "\u0b5c"-"\u0b5d",
+         "\u0b5f"-"\u0b61",
+         "\u0b85"-"\u0b8a",
+         "\u0b8e"-"\u0b90",
+         "\u0b92"-"\u0b95",
+         "\u0b99"-"\u0b9a",
+         "\u0b9c",
+         "\u0b9e"-"\u0b9f",
+         "\u0ba3"-"\u0ba4",
+         "\u0ba8"-"\u0baa",
+         "\u0bae"-"\u0bb5",
+         "\u0bb7"-"\u0bb9",
+         "\u0c05"-"\u0c0c",
+         "\u0c0e"-"\u0c10",
+         "\u0c12"-"\u0c28",
+         "\u0c2a"-"\u0c33",
+         "\u0c35"-"\u0c39",
+         "\u0c60"-"\u0c61",
+         "\u0c85"-"\u0c8c",
+         "\u0c8e"-"\u0c90",
+         "\u0c92"-"\u0ca8",
+         "\u0caa"-"\u0cb3",
+         "\u0cb5"-"\u0cb9",
+         "\u0cde",
+         "\u0ce0"-"\u0ce1",
+         "\u0d05"-"\u0d0c",
+         "\u0d0e"-"\u0d10",
+         "\u0d12"-"\u0d28",
+         "\u0d2a"-"\u0d39",
+         "\u0d60"-"\u0d61",
+         "\u0d85"-"\u0d96",
+         "\u0d9a"-"\u0db1",
+         "\u0db3"-"\u0dbb",
+         "\u0dbd",
+         "\u0dc0"-"\u0dc6",
+         "\u0e01"-"\u0e30",
+         "\u0e32"-"\u0e33",
+         "\u0e3f"-"\u0e46",
+         "\u0e81"-"\u0e82",
+         "\u0e84",
+         "\u0e87"-"\u0e88",
+         "\u0e8a",
+         "\u0e8d",
+         "\u0e94"-"\u0e97",
+         "\u0e99"-"\u0e9f",
+         "\u0ea1"-"\u0ea3",
+         "\u0ea5",
+         "\u0ea7",
+         "\u0eaa"-"\u0eab",
+         "\u0ead"-"\u0eb0",
+         "\u0eb2"-"\u0eb3",
+         "\u0ebd",
+         "\u0ec0"-"\u0ec4",
+         "\u0ec6",
+         "\u0edc"-"\u0edd",
+         "\u0f00",
+         "\u0f40"-"\u0f47",
+         "\u0f49"-"\u0f6a",
+         "\u0f88"-"\u0f8b",
+         "\u1000"-"\u1021",
+         "\u1023"-"\u1027",
+         "\u1029"-"\u102a",
+         "\u1050"-"\u1055",
+         "\u10a0"-"\u10c5",
+         "\u10d0"-"\u10f6",
+         "\u1100"-"\u1159",
+         "\u115f"-"\u11a2",
+         "\u11a8"-"\u11f9",
+         "\u1200"-"\u1206",
+         "\u1208"-"\u1246",
+         "\u1248",
+         "\u124a"-"\u124d",
+         "\u1250"-"\u1256",
+         "\u1258",
+         "\u125a"-"\u125d",
+         "\u1260"-"\u1286",
+         "\u1288",
+         "\u128a"-"\u128d",
+         "\u1290"-"\u12ae",
+         "\u12b0",
+         "\u12b2"-"\u12b5",
+         "\u12b8"-"\u12be",
+         "\u12c0",
+         "\u12c2"-"\u12c5",
+         "\u12c8"-"\u12ce",
+         "\u12d0"-"\u12d6",
+         "\u12d8"-"\u12ee",
+         "\u12f0"-"\u130e",
+         "\u1310",
+         "\u1312"-"\u1315",
+         "\u1318"-"\u131e",
+         "\u1320"-"\u1346",
+         "\u1348"-"\u135a",
+         "\u13a0"-"\u13f4",
+         "\u1401"-"\u166c",
+         "\u166f"-"\u1676",
+         "\u1681"-"\u169a",
+         "\u16a0"-"\u16ea",
+         "\u1780"-"\u17b3",
+         "\u17db",
+         "\u1820"-"\u1877",
+         "\u1880"-"\u18a8",
+         "\u1e00"-"\u1e9b",
+         "\u1ea0"-"\u1ef9",
+         "\u1f00"-"\u1f15",
+         "\u1f18"-"\u1f1d",
+         "\u1f20"-"\u1f45",
+         "\u1f48"-"\u1f4d",
+         "\u1f50"-"\u1f57",
+         "\u1f59",
+         "\u1f5b",
+         "\u1f5d",
+         "\u1f5f"-"\u1f7d",
+         "\u1f80"-"\u1fb4",
+         "\u1fb6"-"\u1fbc",
+         "\u1fbe",
+         "\u1fc2"-"\u1fc4",
+         "\u1fc6"-"\u1fcc",
+         "\u1fd0"-"\u1fd3",
+         "\u1fd6"-"\u1fdb",
+         "\u1fe0"-"\u1fec",
+         "\u1ff2"-"\u1ff4",
+         "\u1ff6"-"\u1ffc",
+         "\u203f"-"\u2040",
+         "\u207f",
+         "\u20a0"-"\u20af",
+         "\u2102",
+         "\u2107",
+         "\u210a"-"\u2113",
+         "\u2115",
+         "\u2119"-"\u211d",
+         "\u2124",
+         "\u2126",
+         "\u2128",
+         "\u212a"-"\u212d",
+         "\u212f"-"\u2131",
+         "\u2133"-"\u2139",
+         "\u2160"-"\u2183",
+         "\u3005"-"\u3007",
+         "\u3021"-"\u3029",
+         "\u3031"-"\u3035",
+         "\u3038"-"\u303a",
+         "\u3041"-"\u3094",
+         "\u309d"-"\u309e",
+         "\u30a1"-"\u30fe",
+         "\u3105"-"\u312c",
+         "\u3131"-"\u318e",
+         "\u31a0"-"\u31b7",
+         "\u3400"-"\u4db5",
+         "\u4e00"-"\u9fa5",
+         "\ua000"-"\ua48c",
+         "\uac00"-"\ud7a3",
+         "\uf900"-"\ufa2d",
+         "\ufb00"-"\ufb06",
+         "\ufb13"-"\ufb17",
+         "\ufb1d",
+         "\ufb1f"-"\ufb28",
+         "\ufb2a"-"\ufb36",
+         "\ufb38"-"\ufb3c",
+         "\ufb3e",
+         "\ufb40"-"\ufb41",
+         "\ufb43"-"\ufb44",
+         "\ufb46"-"\ufbb1",
+         "\ufbd3"-"\ufd3d",
+         "\ufd50"-"\ufd8f",
+         "\ufd92"-"\ufdc7",
+         "\ufdf0"-"\ufdfb",
+         "\ufe33"-"\ufe34",
+         "\ufe4d"-"\ufe4f",
+         "\ufe69",
+         "\ufe70"-"\ufe72",
+         "\ufe74",
+         "\ufe76"-"\ufefc",
+         "\uff04",
+         "\uff21"-"\uff3a",
+         "\uff3f",
+         "\uff41"-"\uff5a",
+         "\uff65"-"\uffbe",
+         "\uffc2"-"\uffc7",
+         "\uffca"-"\uffcf",
+         "\uffd2"-"\uffd7",
+         "\uffda"-"\uffdc",
+         "\uffe0"-"\uffe1",
+         "\uffe5"-"\uffe6"
+      ]
+  >
+|
+  < #PART_LETTER:
+      [  // all chars for which Character.isIdentifierPart is true
+         "\u0000"-"\u0008",
+         "\u000e"-"\u001b",
+         "0"-"9",
+         "A"-"Z",
+         "_",
+         "a"-"z",
+         "\u007f"-"\u009f",
+         "\u00a2"-"\u00a5",
+         "\u00aa",
+         "\u00b5",
+         "\u00ba",
+         "\u00c0"-"\u00d6",
+         "\u00d8"-"\u00f6",
+         "\u00f8"-"\u021f",
+         "\u0222"-"\u0233",
+         "\u0250"-"\u02ad",
+         "\u02b0"-"\u02b8",
+         "\u02bb"-"\u02c1",
+         "\u02d0"-"\u02d1",
+         "\u02e0"-"\u02e4",
+         "\u02ee",
+         "\u0300"-"\u034e",
+         "\u0360"-"\u0362",
+         "\u037a",
+         "\u0386",
+         "\u0388"-"\u038a",
+         "\u038c",
+         "\u038e"-"\u03a1",
+         "\u03a3"-"\u03ce",
+         "\u03d0"-"\u03d7",
+         "\u03da"-"\u03f3",
+         "\u0400"-"\u0481",
+         "\u0483"-"\u0486",
+         "\u048c"-"\u04c4",
+         "\u04c7"-"\u04c8",
+         "\u04cb"-"\u04cc",
+         "\u04d0"-"\u04f5",
+         "\u04f8"-"\u04f9",
+         "\u0531"-"\u0556",
+         "\u0559",
+         "\u0561"-"\u0587",
+         "\u0591"-"\u05a1",
+         "\u05a3"-"\u05b9",
+         "\u05bb"-"\u05bd",
+         "\u05bf",
+         "\u05c1"-"\u05c2",
+         "\u05c4",
+         "\u05d0"-"\u05ea",
+         "\u05f0"-"\u05f2",
+         "\u0621"-"\u063a",
+         "\u0640"-"\u0655",
+         "\u0660"-"\u0669",
+         "\u0670"-"\u06d3",
+         "\u06d5"-"\u06dc",
+         "\u06df"-"\u06e8",
+         "\u06ea"-"\u06ed",
+         "\u06f0"-"\u06fc",
+         "\u070f"-"\u072c",
+         "\u0730"-"\u074a",
+         "\u0780"-"\u07b0",
+         "\u0901"-"\u0903",
+         "\u0905"-"\u0939",
+         "\u093c"-"\u094d",
+         "\u0950"-"\u0954",
+         "\u0958"-"\u0963",
+         "\u0966"-"\u096f",
+         "\u0981"-"\u0983",
+         "\u0985"-"\u098c",
+         "\u098f"-"\u0990",
+         "\u0993"-"\u09a8",
+         "\u09aa"-"\u09b0",
+         "\u09b2",
+         "\u09b6"-"\u09b9",
+         "\u09bc",
+         "\u09be"-"\u09c4",
+         "\u09c7"-"\u09c8",
+         "\u09cb"-"\u09cd",
+         "\u09d7",
+         "\u09dc"-"\u09dd",
+         "\u09df"-"\u09e3",
+         "\u09e6"-"\u09f3",
+         "\u0a02",
+         "\u0a05"-"\u0a0a",
+         "\u0a0f"-"\u0a10",
+         "\u0a13"-"\u0a28",
+         "\u0a2a"-"\u0a30",
+         "\u0a32"-"\u0a33",
+         "\u0a35"-"\u0a36",
+         "\u0a38"-"\u0a39",
+         "\u0a3c",
+         "\u0a3e"-"\u0a42",
+         "\u0a47"-"\u0a48",
+         "\u0a4b"-"\u0a4d",
+         "\u0a59"-"\u0a5c",
+         "\u0a5e",
+         "\u0a66"-"\u0a74",
+         "\u0a81"-"\u0a83",
+         "\u0a85"-"\u0a8b",
+         "\u0a8d",
+         "\u0a8f"-"\u0a91",
+         "\u0a93"-"\u0aa8",
+         "\u0aaa"-"\u0ab0",
+         "\u0ab2"-"\u0ab3",
+         "\u0ab5"-"\u0ab9",
+         "\u0abc"-"\u0ac5",
+         "\u0ac7"-"\u0ac9",
+         "\u0acb"-"\u0acd",
+         "\u0ad0",
+         "\u0ae0",
+         "\u0ae6"-"\u0aef",
+         "\u0b01"-"\u0b03",
+         "\u0b05"-"\u0b0c",
+         "\u0b0f"-"\u0b10",
+         "\u0b13"-"\u0b28",
+         "\u0b2a"-"\u0b30",
+         "\u0b32"-"\u0b33",
+         "\u0b36"-"\u0b39",
+         "\u0b3c"-"\u0b43",
+         "\u0b47"-"\u0b48",
+         "\u0b4b"-"\u0b4d",
+         "\u0b56"-"\u0b57",
+         "\u0b5c"-"\u0b5d",
+         "\u0b5f"-"\u0b61",
+         "\u0b66"-"\u0b6f",
+         "\u0b82"-"\u0b83",
+         "\u0b85"-"\u0b8a",
+         "\u0b8e"-"\u0b90",
+         "\u0b92"-"\u0b95",
+         "\u0b99"-"\u0b9a",
+         "\u0b9c",
+         "\u0b9e"-"\u0b9f",
+         "\u0ba3"-"\u0ba4",
+         "\u0ba8"-"\u0baa",
+         "\u0bae"-"\u0bb5",
+         "\u0bb7"-"\u0bb9",
+         "\u0bbe"-"\u0bc2",
+         "\u0bc6"-"\u0bc8",
+         "\u0bca"-"\u0bcd",
+         "\u0bd7",
+         "\u0be7"-"\u0bef",
+         "\u0c01"-"\u0c03",
+         "\u0c05"-"\u0c0c",
+         "\u0c0e"-"\u0c10",
+         "\u0c12"-"\u0c28",
+         "\u0c2a"-"\u0c33",
+         "\u0c35"-"\u0c39",
+         "\u0c3e"-"\u0c44",
+         "\u0c46"-"\u0c48",
+         "\u0c4a"-"\u0c4d",
+         "\u0c55"-"\u0c56",
+         "\u0c60"-"\u0c61",
+         "\u0c66"-"\u0c6f",
+         "\u0c82"-"\u0c83",
+         "\u0c85"-"\u0c8c",
+         "\u0c8e"-"\u0c90",
+         "\u0c92"-"\u0ca8",
+         "\u0caa"-"\u0cb3",
+         "\u0cb5"-"\u0cb9",
+         "\u0cbe"-"\u0cc4",
+         "\u0cc6"-"\u0cc8",
+         "\u0cca"-"\u0ccd",
+         "\u0cd5"-"\u0cd6",
+         "\u0cde",
+         "\u0ce0"-"\u0ce1",
+         "\u0ce6"-"\u0cef",
+         "\u0d02"-"\u0d03",
+         "\u0d05"-"\u0d0c",
+         "\u0d0e"-"\u0d10",
+         "\u0d12"-"\u0d28",
+         "\u0d2a"-"\u0d39",
+         "\u0d3e"-"\u0d43",
+         "\u0d46"-"\u0d48",
+         "\u0d4a"-"\u0d4d",
+         "\u0d57",
+         "\u0d60"-"\u0d61",
+         "\u0d66"-"\u0d6f",
+         "\u0d82"-"\u0d83",
+         "\u0d85"-"\u0d96",
+         "\u0d9a"-"\u0db1",
+         "\u0db3"-"\u0dbb",
+         "\u0dbd",
+         "\u0dc0"-"\u0dc6",
+         "\u0dca",
+         "\u0dcf"-"\u0dd4",
+         "\u0dd6",
+         "\u0dd8"-"\u0ddf",
+         "\u0df2"-"\u0df3",
+         "\u0e01"-"\u0e3a",
+         "\u0e3f"-"\u0e4e",
+         "\u0e50"-"\u0e59",
+         "\u0e81"-"\u0e82",
+         "\u0e84",
+         "\u0e87"-"\u0e88",
+         "\u0e8a",
+         "\u0e8d",
+         "\u0e94"-"\u0e97",
+         "\u0e99"-"\u0e9f",
+         "\u0ea1"-"\u0ea3",
+         "\u0ea5",
+         "\u0ea7",
+         "\u0eaa"-"\u0eab",
+         "\u0ead"-"\u0eb9",
+         "\u0ebb"-"\u0ebd",
+         "\u0ec0"-"\u0ec4",
+         "\u0ec6",
+         "\u0ec8"-"\u0ecd",
+         "\u0ed0"-"\u0ed9",
+         "\u0edc"-"\u0edd",
+         "\u0f00",
+         "\u0f18"-"\u0f19",
+         "\u0f20"-"\u0f29",
+         "\u0f35",
+         "\u0f37",
+         "\u0f39",
+         "\u0f3e"-"\u0f47",
+         "\u0f49"-"\u0f6a",
+         "\u0f71"-"\u0f84",
+         "\u0f86"-"\u0f8b",
+         "\u0f90"-"\u0f97",
+         "\u0f99"-"\u0fbc",
+         "\u0fc6",
+         "\u1000"-"\u1021",
+         "\u1023"-"\u1027",
+         "\u1029"-"\u102a",
+         "\u102c"-"\u1032",
+         "\u1036"-"\u1039",
+         "\u1040"-"\u1049",
+         "\u1050"-"\u1059",
+         "\u10a0"-"\u10c5",
+         "\u10d0"-"\u10f6",
+         "\u1100"-"\u1159",
+         "\u115f"-"\u11a2",
+         "\u11a8"-"\u11f9",
+         "\u1200"-"\u1206",
+         "\u1208"-"\u1246",
+         "\u1248",
+         "\u124a"-"\u124d",
+         "\u1250"-"\u1256",
+         "\u1258",
+         "\u125a"-"\u125d",
+         "\u1260"-"\u1286",
+         "\u1288",
+         "\u128a"-"\u128d",
+         "\u1290"-"\u12ae",
+         "\u12b0",
+         "\u12b2"-"\u12b5",
+         "\u12b8"-"\u12be",
+         "\u12c0",
+         "\u12c2"-"\u12c5",
+         "\u12c8"-"\u12ce",
+         "\u12d0"-"\u12d6",
+         "\u12d8"-"\u12ee",
+         "\u12f0"-"\u130e",
+         "\u1310",
+         "\u1312"-"\u1315",
+         "\u1318"-"\u131e",
+         "\u1320"-"\u1346",
+         "\u1348"-"\u135a",
+         "\u1369"-"\u1371",
+         "\u13a0"-"\u13f4",
+         "\u1401"-"\u166c",
+         "\u166f"-"\u1676",
+         "\u1681"-"\u169a",
+         "\u16a0"-"\u16ea",
+         "\u1780"-"\u17d3",
+         "\u17db",
+         "\u17e0"-"\u17e9",
+         "\u180b"-"\u180e",
+         "\u1810"-"\u1819",
+         "\u1820"-"\u1877",
+         "\u1880"-"\u18a9",
+         "\u1e00"-"\u1e9b",
+         "\u1ea0"-"\u1ef9",
+         "\u1f00"-"\u1f15",
+         "\u1f18"-"\u1f1d",
+         "\u1f20"-"\u1f45",
+         "\u1f48"-"\u1f4d",
+         "\u1f50"-"\u1f57",
+         "\u1f59",
+         "\u1f5b",
+         "\u1f5d",
+         "\u1f5f"-"\u1f7d",
+         "\u1f80"-"\u1fb4",
+         "\u1fb6"-"\u1fbc",
+         "\u1fbe",
+         "\u1fc2"-"\u1fc4",
+         "\u1fc6"-"\u1fcc",
+         "\u1fd0"-"\u1fd3",
+         "\u1fd6"-"\u1fdb",
+         "\u1fe0"-"\u1fec",
+         "\u1ff2"-"\u1ff4",
+         "\u1ff6"-"\u1ffc",
+         "\u200c"-"\u200f",
+         "\u202a"-"\u202e",
+         "\u203f"-"\u2040",
+         "\u206a"-"\u206f",
+         "\u207f",
+         "\u20a0"-"\u20af",
+         "\u20d0"-"\u20dc",
+         "\u20e1",
+         "\u2102",
+         "\u2107",
+         "\u210a"-"\u2113",
+         "\u2115",
+         "\u2119"-"\u211d",
+         "\u2124",
+         "\u2126",
+         "\u2128",
+         "\u212a"-"\u212d",
+         "\u212f"-"\u2131",
+         "\u2133"-"\u2139",
+         "\u2160"-"\u2183",
+         "\u3005"-"\u3007",
+         "\u3021"-"\u302f",
+         "\u3031"-"\u3035",
+         "\u3038"-"\u303a",
+         "\u3041"-"\u3094",
+         "\u3099"-"\u309a",
+         "\u309d"-"\u309e",
+         "\u30a1"-"\u30fe",
+         "\u3105"-"\u312c",
+         "\u3131"-"\u318e",
+         "\u31a0"-"\u31b7",
+         "\u3400"-"\u4db5",
+         "\u4e00"-"\u9fa5",
+         "\ua000"-"\ua48c",
+         "\uac00"-"\ud7a3",
+         "\uf900"-"\ufa2d",
+         "\ufb00"-"\ufb06",
+         "\ufb13"-"\ufb17",
+         "\ufb1d"-"\ufb28",
+         "\ufb2a"-"\ufb36",
+         "\ufb38"-"\ufb3c",
+         "\ufb3e",
+         "\ufb40"-"\ufb41",
+         "\ufb43"-"\ufb44",
+         "\ufb46"-"\ufbb1",
+         "\ufbd3"-"\ufd3d",
+         "\ufd50"-"\ufd8f",
+         "\ufd92"-"\ufdc7",
+         "\ufdf0"-"\ufdfb",
+         "\ufe20"-"\ufe23",
+         "\ufe33"-"\ufe34",
+         "\ufe4d"-"\ufe4f",
+         "\ufe69",
+         "\ufe70"-"\ufe72",
+         "\ufe74",
+         "\ufe76"-"\ufefc",
+         "\ufeff",
+         "\uff04",
+         "\uff10"-"\uff19",
+         "\uff21"-"\uff3a",
+         "\uff3f",
+         "\uff41"-"\uff5a",
+         "\uff65"-"\uffbe",
+         "\uffc2"-"\uffc7",
+         "\uffca"-"\uffcf",
+         "\uffd2"-"\uffd7",
+         "\uffda"-"\uffdc",
+         "\uffe0"-"\uffe1",
+         "\uffe5"-"\uffe6",
+         "\ufff9"-"\ufffb"
+      ]
+  >
+}
+
+/* SEPARATORS */
+
+TOKEN :
+{
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < DOT: "." >
+| < AT: "@" >
+}
+
+/* OPERATORS */
+
+TOKEN :
+{
+  < ASSIGN: "=" >
+| < LT: "<" >
+| < GT: ">" >
+| < BANG: "!" >
+| < HOOK: "?" >
+| < COLON: ":" >
+| < EQ: "==" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < NE: "!=" >
+| < SC_OR: "||" >
+| < SC_AND: "&&" >
+| < INCR: "++" >
+| < DECR: "--" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
+| < REM: "%" >
+| < RANGE: ".." >
+| < ARRAYSET: "<~" >
+}
+
+/*********************************************
+ * THE SANDWOOD LANGUAGE GRAMMAR STARTS HERE *
+ *********************************************/
+
+/*
+ * Program structuring syntax follows.
+ */
+
+void parse():
+{
+    classBody = new ArrayList<TokenMap>();
+    ifElseClasses = new HashMap<String, List<TokenMap>>();
+    functions = new ArrayList<TokenMap>();
+    imports = new ArrayList<TokenMap>();
+    unsetVars.push(new HashMap<String, VarDesc>());
+}
+{
+  [ PackageDeclaration() ]
+  ( ImportDeclaration(imports) )*
+  ModelDeclaration(classBody, functions)
+  ( < "\u001a" > )?
+  ( <STUFF_TO_IGNORE: ~[]> )?
+  <EOF>
+}
+
+Token IndetifierIncSandwoodKeywords():
+{
+	Token t;
+}
+{
+	(
+	  t = <IDENTIFIER>
+	|
+	  t = "model"
+	|
+	  t = "reduce"
+	)
+	{ return t; }
+}
+
+void PackageDeclaration():
+{
+  Token t;
+  List<TokenMap> l = new ArrayList<TokenMap>();
+  List<TokenMap> packageParts; 
+}
+{
+  t = "package"
+  { l.add(tokenMap("package ", t)); }
+  packageParts = PackageName()
+  {
+    packageName = TokenMap.tokensToString(packageParts);
+    packageTokens = l;
+    packageTokens.addAll(packageParts);
+  }
+  t = ";"
+  { packageTokens.add(tokenMap(";\n\n", t)); }
+}
+
+void ImportDeclaration(List<TokenMap> sb):
+{
+  List<TokenMap > name;
+  Token t;
+}
+{
+  t="import"
+  { sb.add(tokenMap("import ", t)); }
+  [
+    t="static"
+    { sb.add(tokenMap("static ", t)); }
+  ]
+
+  name = PackageName()
+  { sb.addAll(name); }
+
+  [
+    t="." 
+    { sb.add(tokenMap(".", t)); }
+    t="*"
+    { sb.add(tokenMap("*", t)); }
+  ]
+  t=";"
+  { sb.add(tokenMap(";\n",t)); }
+}
+
+/*
+ * Declaration syntax follows.
+ */
+void ModelDeclaration(List<TokenMap> sb, List<TokenMap> fsb):
+{
+  Token t;
+}
+{
+  ( t = "public" "model" | t = "model" )
+  { comment = getJavadocComment(t); }
+  t = <IDENTIFIER>
+  { classToken = tokenMap(t.image, t); }
+  [ ObservedParameters(sb) ]
+  ModelBody(sb, fsb)
+}
+
+void ObservedParameters(List<TokenMap> sb):
+{}
+{
+    "(" [ ObservedParameterList(sb) ] ")"
+}
+
+void ObservedParameterList(List<TokenMap> sb):
+{}
+{
+    { sb.add(tokenMap(indent() + "//Allocating initial observed parameters\n")); }
+    ObservedParameter(sb) ( "," ObservedParameter(sb) )*
+    { sb.add(tokenMap("\n")); }
+}
+
+void ObservedParameter(List<TokenMap> l):
+{
+  Type<?> type;
+  Token name;
+  List<Token> tokens = new ArrayList<Token>();
+  StringBuilder sb = new StringBuilder();
+  lastJavadoc = null;
+}
+{
+    type = Type(tokens) name = < IDENTIFIER >
+    {
+        String typeName = type.getAPIType();
+        sb.append(indent() + typeName + " " + name.image + " = " + "observe" + typeName.split("Variable")[0] + "(\"" + name + "\"" + ((lastJavadoc==null)?"":", \"" + lastJavadoc + "\""));
+        if(type.getTypeSingleton() == VariableType.Array) {
+            sb.append(", ");
+            String postfix = "";
+
+            while(type.getTypeSingleton() == VariableType.Array) {
+                type = ((ArrayType<?>)type).getElementType();
+                sb.append("VariableType.arrayType(");
+                postfix += ")";
+            }
+
+            sb.append("VariableType." + type.getAPIType());
+            sb.append(postfix);
+        }
+        sb.append(", " + location(tokens.get(0), name));
+        sb.append(");\n");
+
+        Token[] ta =  tokens.toArray(new Token[tokens.size() + 1]);
+        ta[tokens.size()] = name;
+        l.add(tokenMap(sb.toString(), ta)); 
+        //Add the arguments to the constructor.
+        constructorArgs.add(name.image);
+        variableNames.add(name.image);
+    }
+}
+
+void ModelBody(List<TokenMap> sb, List<TokenMap> fsb):
+{
+}
+{  
+  {
+    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
+  }
+
+  "{" ModelBodyDeclaration(sb, fsb) "}"
+
+  {
+    unsetVars.pop();
+  }
+}
+
+void ModelBodyDeclaration(List<TokenMap> sb, List<TokenMap> fsb):
+{}
+{
+ (
+   LOOKAHEAD( [("private" | "public")] ResultType() <IDENTIFIER> ( "(" ) )
+   {
+     indent = 1;
+     fsb.add(tokenMap("\n" + indent()));
+     Token t;
+   }
+   [
+     (
+       t="private"
+       { fsb.add(tokenMap("private ", t)); }
+     |
+       t="public"
+       { fsb.add(tokenMap("public ", t)); }
+     )
+   ]
+   {       
+     fsb.add(tokenMap("static "));
+   }
+   MethodDeclaration(fsb)
+ | 
+   LOOKAHEAD(4)
+   { indent = 2; }
+   BlockStatement(sb)
+ )*
+}
+
+void VariableDeclarator(List<TokenMap> sb, Type<?> type, Token[] typeTokens, Token privateToken, Token publicToken):
+{
+  Token id;
+  Token t;
+  String typeName = type.getAPIType();
+  boolean semiColonRequired;
+}
+{
+  { sb.add(tokenMap(typeName + " ", typeTokens)); }
+  id = <IDENTIFIER>
+  {
+    sb.add(tokenMap(id.image, id));
+    if(indent==2 && !inFunction) //Check we are not in a block
+      variableNames.add(id.image);
+  }
+  (
+    t="="
+    { sb.add(tokenMap(" = ", t)); }
+    semiColonRequired = VariableInitializer(sb, type, id.image)
+    {
+      if(semiColonRequired)
+        sb.add(tokenMap(";\n"));
+      else
+        sb.add(tokenMap("\n"));
+        
+      sb.add(tokenMap(indent() + id + ".setAlias(\"" + id + "\");\n", id));
+      sb.add(tokenMap(indent() + id + ".setLocation(" + location(id) + ");\n", id));
+      
+      if (lastJavadoc != null) 
+        sb.add(tokenMap(indent() + id + ".setComment(\"" + lastJavadoc + "\");\n", id));
+        
+      if (privateToken != null) 
+        sb.add(tokenMap(indent() + id + ".setPrivate();\n", privateToken));
+         
+      if(publicToken != null)
+         sb.add(tokenMap(indent() + id + ".setPublic();\n", publicToken));
+
+      sb.add(tokenMap("\n"));
+    }
+  |
+    {
+      unsetVars.peek().put(id.image, new VarDesc(typeName, typeTokens, id));
+      sb.add(tokenMap(";\n"));
+    }
+  )
+}
+
+boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
+{}
+{
+  ArrayInitializer(sb, type, name)
+  { return false; }
+| 
+  AllocationExpression(sb)
+  [
+    LOOKAHEAD(2)
+    PrimarySuffixNonArrayReturn(sb)
+    (
+      LOOKAHEAD(2)
+      PrimarySuffixReturn(sb)
+    )*
+  ]
+  { return true; }
+| 
+  Expression(sb)
+  { return true; }
+}
+
+void ObservedValue(List<TokenMap> sb):
+{
+  Token observe, bracket;
+}
+{
+    observe="observe" bracket="("
+      { sb.add(tokenMap("observe" + "(", observe, bracket)); }
+    Expression(sb) bracket=")"
+    { 
+      sb.add(tokenMap(", " + location(observe, bracket) + ")", observe, bracket));
+    }
+}
+
+
+
+void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
+{
+  int i = 0;
+  List < TokenMap > arrayInitalize = new ArrayList <TokenMap> ();
+  Type <? > elementType = ((ArrayType <?>) type).getElementType();
+  boolean subarray = elementType.isArray();
+  boolean semiColonRequired;
+  Token ob, cb;
+}
+{
+  ob = "{"
+  [
+    {
+	  arrayInitalize.add(tokenMap(indent() + "{\n", ob));
+	  indent++;
+      String subarrayName = name + "$" + i;
+      if (subarray) 
+        arrayInitalize.add(tokenMap(indent() + elementType.getAPIType() + " " + subarrayName + " = ", ob));
+      else 
+        arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + "), ", ob));
+    }
+	    semiColonRequired = VariableInitializer(arrayInitalize, elementType, subarrayName)
+    {
+      if (subarray) {
+        if(semiColonRequired)
+          arrayInitalize.add(tokenMap(";\n", ob));
+        arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + ", " + 
+          location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + "), " + subarrayName + ");\n", ob));
+      } else
+        arrayInitalize.add(tokenMap(", " + location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + ");\n", ob));
+    }
+    (
+      {
+        subarrayName = name + "$" + ++i;
+        if (subarray) 
+          arrayInitalize.add(tokenMap("\n" + indent() + elementType.getAPIType() + " " + subarrayName + " = ", ob));
+        else 
+          arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + ", " + 
+            location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + "), ", ob));
+      }
+      "," semiColonRequired = VariableInitializer(arrayInitalize, elementType, subarrayName)
+      {
+        if (subarray) {
+          if(semiColonRequired)
+            arrayInitalize.add(tokenMap(";\n", ob));
+          arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + "), " + subarrayName + ");\n", ob));
+        } else
+          arrayInitalize.add(tokenMap(", " + location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + ");\n", ob));
+      }
+    )*
+    {
+      indent--;
+      arrayInitalize.add(tokenMap(indent() + "}\n", ob));
+    }
+  ]
+  cb = "}"
+  {
+    sb.add(tokenMap("Variable.arrayVariable(" + location(ob, cb) + ", " + 
+    getTypeConstructor(elementType) + ", " + (i + 1) + ");\n", ob, cb));
+    sb.addAll(arrayInitalize);
+  }
+}
+
+void MethodDeclaration(List<TokenMap> sb):
+{}
+{
+  { inFunction = true; }
+  ResultType(sb)
+  MethodDeclarator(sb)
+  Block(sb)
+  { inFunction = false; }
+}
+
+void MethodDeclarator(List<TokenMap> sb):
+{ Token name; }
+{
+ name = <IDENTIFIER>
+ { sb.add(tokenMap(name.image, name)); }
+ FormalParameters(sb)
+}
+
+void FormalParameters(List<TokenMap> sb):
+{
+  Token t;
+}
+{
+  t="("
+  { sb.add(tokenMap("(", t)); }
+  [
+    FormalParameter(sb)
+    (
+      t = ","
+      { sb.add(tokenMap(", ", t)); }
+      FormalParameter(sb)
+    )*
+  ]
+  t=")"
+  { sb.add(tokenMap(", Location $location)", t)); }
+}
+
+void FormalParameter(List<TokenMap> sb):
+{
+    Type<?> type;
+    List<Token> typeTokens = new ArrayList<Token>(); 
+    Token id;
+}
+{
+  type = Type(typeTokens) id = <IDENTIFIER>
+  {
+    sb.add(tokenMap(type.getAPIType() + " ", typeTokens.toArray(new Token[typeTokens.size()])));
+    sb.add(tokenMap(id.image, id));
+  }
+}
+
+/*
+ * Type, name and expression syntax follows.
+ */
+
+Type<?> Type(List<Token> typeTokens):
+{Type<?> type;}
+{
+  (
+    LOOKAHEAD(2) type = ReferenceType(typeTokens)
+ |
+   type = PrimitiveType(typeTokens)
+   )
+   {
+    return type;
+   }
+}
+
+Type<?> ReferenceType(List<Token> typeTokens):
+{
+  Type<?> type;
+  Token t, t1;
+}
+{
+  (  
+   type = PrimitiveType(typeTokens)
+   (
+     LOOKAHEAD(2) t="[" t1="]"
+     {
+       type = VariableType.arrayType(type);
+       typeTokens.add(t);
+       typeTokens.add(t1);
+     }
+   )+
+ |
+   type = ComplexType(typeTokens)
+   (
+     LOOKAHEAD(2) t="[" t1="]"
+     {
+       type = VariableType.arrayType(type);
+       typeTokens.add(t);
+       typeTokens.add(t1);
+     }
+   )*
+ )
+   {
+     return type;
+   }
+}
+
+Type<?> ComplexType(List<Token> typeTokens):
+{
+  Token name;
+}
+{
+  name = <IDENTIFIER>
+  {
+    typeTokens.add(name);
+    lastJavadoc = getJavadocComment(name);
+    Type<?> type = VariableType.getTypeFromJavaType(name.image);
+    if(type == null)
+        throw new SandwoodModelException("Unknown type: " + name.image, name);
+    return type;
+  }
+}
+
+Type<?> PrimitiveType(List<Token> typeTokens):
+{
+  Token t;
+  Type<?> type;
+}
+{
+  (
+    t="boolean"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = VariableType.BooleanVariable;
+    }
+  |
+    t="char"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = null;
+    }
+  |
+    t="byte"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = null;
+    }
+  |
+    t="short"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = null;
+    }
+  |
+    t="int"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = VariableType.IntVariable;
+    }
+  |
+    t="long"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = null;
+    }
+  |
+    t="float"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = null;
+    }
+  |
+    t="double"
+    {
+      typeTokens.add(t);
+      lastJavadoc = getJavadocComment(t);
+      type = VariableType.DoubleVariable;
+    }
+  )
+  {
+    if(type == null)
+      throw new SandwoodModelException("Unknown/unsupported type: " + t.image + ". Currently supported types are boolean, int, and double.", t);
+    else
+      return type;
+  }
+}
+
+void ResultType(List<TokenMap> sb):
+{
+  Type<?> type;
+  Token t;
+}
+{
+  t = "void"
+  { sb.add(tokenMap(" void ", t)); }
+|
+  { List<Token> tokens = new ArrayList<Token>(); }
+  type = Type(tokens)
+  { sb.add(tokenMap(type.getAPIType() + " ", tokens.toArray(new Token[tokens.size()]))); }
+}
+
+List<TokenMap> PackageName():
+/*
+ * A lookahead of 2 is required below since "Name" can be followed
+ * by a ".*" when used in the context of an "ImportDeclaration".
+ */
+{
+  List<TokenMap> tokens = new ArrayList<TokenMap>();
+  Token t;
+}
+{
+  t = IndetifierIncSandwoodKeywords()
+  { tokens.add(tokenMap(t.image,t)); }
+  (
+    LOOKAHEAD(2)
+    t = "."
+    { tokens.add(tokenMap(t.image,t)); }
+    t = IndetifierIncSandwoodKeywords()
+    { tokens.add(tokenMap(t.image,t)); }
+  )*
+  { return tokens; }
+}
+
+
+/*
+ * Expression syntax follows.
+ */
+void Expression(List<TokenMap> sb):
+{
+  List<TokenMap> conditionExpr = new ArrayList<TokenMap>();
+}
+{
+  ConditionalOrExpression(conditionExpr)
+  (
+    {
+      List<TokenMap> ifExpr = new ArrayList<TokenMap>();
+      List<TokenMap> elseExpr = new ArrayList<TokenMap>();
+      Token t1, t2;
+    }
+     t1 = "?" Expression(ifExpr) t2 = ":" Expression(elseExpr)
+    {
+      Token start = conditionExpr.get(0).getTokens()[0];
+      Token end;
+      { 
+        TokenMap endMap = elseExpr.get(elseExpr.size() - 1);
+        Token[] endTokens = endMap.getTokens();
+        end = endTokens[endTokens.length - 1];
+      }
+      sb.add(tokenMap("ifElseLambdaAssignment(", start, end));
+      sb.addAll(conditionExpr);
+      sb.add(tokenMap(", () -> { return ", t1, t2));
+      sb.addAll(ifExpr);
+      sb.add(tokenMap("; }, () -> { return ", t2, end));
+      sb.addAll(elseExpr);
+      sb.add(tokenMap("; }, " + location(start, end) + ")", start, end));
+    }
+  |
+    { sb.addAll(conditionExpr); }
+  )
+}
+
+void ConditionalOrExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  ConditionalAndExpression(sb)
+  (
+    t = "||"
+    { sb.add(tokenMap(".or(",t)); }
+    ConditionalAndExpression(sb)
+    {
+      sb.add(tokenMap(", " + location(t), t));
+      sb.add(tokenMap(")", t));
+    }
+  )*
+}
+
+void ConditionalAndExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  EqualityExpression(sb)
+  (
+    t = "&&"
+    { sb.add(tokenMap(".and(",t)); }
+      EqualityExpression(sb)
+    {
+      sb.add(tokenMap(", " + location(t) + ")", t));
+    }
+  )*
+}
+
+void EqualityExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  RelationalExpression(sb)
+  (
+    (
+      t = "=="
+      { sb.add(tokenMap(".eq(",t)); }
+    |
+      t = "!="
+      { sb.add(tokenMap(".notEq(",t)); }
+    )
+    RelationalExpression(sb)
+    {
+      sb.add(tokenMap(", " + location(t) + ")", t));
+    }
+  )*
+}
+
+void RelationalExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  AdditiveExpression(sb)
+  (
+    (
+      t = "<"
+      { sb.add(tokenMap(".lessThan(",t)); }
+    |
+      t = ">"
+      { sb.add(tokenMap(".greaterThan(",t)); }
+    |
+      t = "<="
+      { sb.add(tokenMap(".lessThanEqual(",t)); }
+    |
+      t = ">="
+      { sb.add(tokenMap(".greaterThanEqual(",t)); }
+    )
+    AdditiveExpression(sb)
+    {
+      sb.add(tokenMap(", " + location(t) + ")", t));
+    }
+  )*
+}
+
+void AdditiveExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  MultiplicativeExpression(sb) (
+    (
+      t = "+"
+      { sb.add(tokenMap(".add(", t)); }
+    |
+      t = "-"
+      {  sb.add(tokenMap(".subtract(", t)); }
+    ) MultiplicativeExpression(sb)
+    {
+      sb.add(tokenMap(", " + location(t) + ")", t));
+    }
+    )*
+}
+
+void MultiplicativeExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  UnaryExpression(sb)
+  (
+    (
+      t = "*"
+      {  sb.add(tokenMap(".times(", t)); }
+    |
+      t = "/"
+      {  sb.add(tokenMap(".divide(", t)); }
+    |
+      t = "%"
+      {  sb.add(tokenMap(".remainder(", t)); }
+    )
+    UnaryExpression(sb)
+    {
+      sb.add(tokenMap(", " + location(t) + ")", t));
+    }
+  )*
+}
+
+void UnaryExpression(List<TokenMap> sb):
+{ Token t; }
+{
+  t = "-"
+  UnaryExpression(sb)
+  { sb.add(tokenMap(".negate(" + location(t) + ")", t)); }
+|
+  UnaryExpressionNotPlusMinus(sb)
+}
+
+void UnaryExpressionNotPlusMinus(List<TokenMap> sb):
+{ Token t; }
+{
+  t = "!"
+  UnaryExpression(sb)
+  { sb.add(tokenMap(".negate(" + location(t) + ")", t)); }
+|
+  PrimaryExpressionReturn(sb)
+}
+
+void PrimaryExpressionReturn(List<TokenMap> sb):
+{}
+{
+  PrimaryPrefix(sb) ( LOOKAHEAD(2) PrimarySuffixReturn(sb) )*
+}
+
+void PrimaryPrefix(List<TokenMap> sb):
+{
+  Token t, bracket;
+  IdentiferDesc id;
+  List<TokenMap> tokens = new ArrayList<TokenMap>();
+}
+{
+  Literal(sb)
+|
+  t = "("
+  (
+    "double" bracket = ")" Expression(sb)
+    { sb.add(tokenMap(".castToDouble(" + location(t, bracket) + ")", t, bracket)); }
+  | 
+    "int" bracket = ")" Expression(sb)
+    { sb.add(tokenMap(".castToInteger(" + location(t, bracket) + ")", t, bracket)); }
+  |
+    { sb.add(tokenMap("(", t)); }
+    Expression(sb)
+    t = ")"
+    { 
+      /*TODO work out if a location needs adding here */
+      sb.add(tokenMap(")", t));
+    }
+  )
+| 
+  id = identifier()
+  { sb.add(tokenMap(id.name, id.source)); }
+  (
+      LOOKAHEAD(2)
+      t = "." id = identifier()
+      (
+        LOOKAHEAD(2)
+        { sb.add(tokenMap("." + id.name + "(" + location(id.source) + ")", t, id.source)); } 
+        t = "." id = identifier()
+      )*
+      {
+        sb.add(tokenMap("." + id.name + "(", t, id.source));
+      }
+    (
+       "("
+       [ ArgumentList(tokens) ]
+       bracket=")"
+       {
+         if(tokens.isEmpty())
+           sb.add(tokenMap(location(id.source, bracket) + ")", bracket));
+          else {
+              sb.addAll(tokens);
+             sb.add(tokenMap(", " + location(id.source, bracket) + ")", bracket));
+          }
+       }
+     | 
+      {
+        sb.add(tokenMap(location(id.source) + ")", t, id.source));
+      } 
+     )
+  |
+    LOOKAHEAD(2)
+    [ Arguments(sb, id.source) ]
+  )
+| 
+  ReductionExpression(sb)
+}
+
+void PrimarySuffixReturn(List<TokenMap> sb):
+{
+  Token t, bracket; 
+}
+{
+  (
+    PrimarySuffixNonArrayReturn(sb)
+  |
+    t = "[" { sb.add(tokenMap(".get(", t)); }
+    Expression(sb)
+    bracket = "]"
+    {
+      sb.add(tokenMap(", " + location(t, bracket) + ")", bracket));
+    }
+  )
+}
+
+void PrimarySuffixNonArrayReturn(List<TokenMap> sb):
+{
+  Token dot, bracket;
+  IdentiferDesc id;
+  List<TokenMap> args = new ArrayList<TokenMap>(); 
+}
+{
+  (
+    dot = "."
+    { sb.add(tokenMap(".", dot)); }
+
+      id = identifier()
+    {
+    sb.add(tokenMap(id.name, id.source));
+    sb.add(tokenMap("(", id.source));
+    }
+    (
+     "(" [ ArgumentList(args) ] bracket = ")" 
+      {
+        if(args.isEmpty())
+            sb.add(tokenMap(location(id.source, bracket) + ")", bracket));
+         else { 
+          sb.addAll(args);
+          sb.add(tokenMap(", " + location(id.source, bracket) + ")", bracket));
+         }
+      }
+    |
+      {
+        sb.add(tokenMap(location(id.source) + ")", id.source));
+      }
+    )
+  )
+}
+
+void Literal(List<TokenMap> sb):
+{Token value;}
+{
+  value = <INTEGER_LITERAL>
+  {
+    sb.add(tokenMap("intVariable(" + value.image + ", " + location(value) + ")", value));
+  }
+|
+  value = <FLOATING_POINT_LITERAL>
+  {
+    sb.add(tokenMap("doubleVariable(" + value.image + ", " + location(value) + ")", value));
+  }
+  |
+  value = <CHARACTER_LITERAL>
+  {
+    throw new SandwoodModelException("Char literals are not yet supported", value);
+  }
+|
+  value = <STRING_LITERAL>
+  {
+      sb.add(tokenMap(value.image, value));
+  }
+|
+    value = "true"
+  {
+    sb.add(tokenMap("booleanVariable(true, " + location(value) + ")", value));
+  }
+|
+  value = "false"
+  {
+    sb.add(tokenMap("booleanVariable(false, " + location(value) + ")", value));
+  }
+}
+
+void Arguments(List<TokenMap> sb, Token startToken):
+{
+  Token t;
+  List<TokenMap> args = new ArrayList<TokenMap>(); 
+}
+{
+  t = "("
+  { sb.add(tokenMap("(", t)); }
+  [ ArgumentList(args) ]
+  t = ")"
+  {
+    if(args.isEmpty())
+        sb.add(tokenMap(location(startToken, t) + ")", t));
+       else {
+         sb.addAll(args);
+      sb.add(tokenMap(", " + location(startToken, t) + ")", t));
+    }
+  }
+}
+
+void ArgumentList(List<TokenMap> sb):
+{ Token t; }
+{
+  Expression(sb) ( t = "," {  sb.add(tokenMap(", ", t)); } Expression(sb) )*
+}
+
+void AllocationExpression(List<TokenMap> sb):
+{
+  Type<?> type;
+  List<Token> typeTokens = new ArrayList<Token>();
+  Token newToken;
+}
+{
+  newToken = "new"
+  (
+    type = PrimitiveType(typeTokens) ArrayDimsAndInits(sb, type, typeTokens)
+  |
+    type = ComplexType(typeTokens)
+    (
+      ArrayDimsAndInits(sb, type, typeTokens)
+    |
+      {
+        //Convert the type name from the type to the factory method name.
+        String typeName = type.getAPIType();
+        char c = typeName.charAt(0);
+        if(c >='A' && c<='Z')
+            c += 'a' - 'A';
+        typeName = c + typeName.substring(1);
+        sb.add(tokenMap(typeName, typeTokens.toArray(new Token [typeTokens.size()])));
+      }
+      Arguments(sb, newToken)
+    )
+  )
+}
+
+void ArrayDimsAndInits(List<TokenMap> sb, Type<?> type, List<Token> typeTokens):
+{
+  List<TokenMap> subExp = new ArrayList<TokenMap>();
+  List<TokenMap> valueExp = new ArrayList<TokenMap>();
+  Token start, t, t1;
+}
+{
+  start = "[" Expression(subExp) t1 = "]"
+  {
+    typeTokens.add(start);
+    typeTokens.add(t1);
+  }
+  (
+    LOOKAHEAD(2)
+    {
+      type = VariableType.arrayType(type);
+      subExp.add(tokenMap(", ", t1));
+    }
+    t = "[" Expression(subExp) t1 = "]"
+    {
+      typeTokens.add(t);
+      typeTokens.add(t1);
+    }
+  )*
+  [
+    (
+      t = "<~"
+      { 
+        valueExp.add(tokenMap("() -> { return ", t));
+      }
+      Expression(valueExp)
+      { 
+        valueExp.add(tokenMap("; }, ", t));
+      }
+     )
+   |
+     (
+       LOOKAHEAD(2)
+       t = "[" t1 = "]"
+       {
+         type = VariableType.arrayType(type);
+         typeTokens.add(t);
+         typeTokens.add(t1);
+       }
+     )+
+   ]
+  {
+    sb.add(tokenMap("Variable.arrayVariable(" + location(start, t1) + ", " +
+             getTypeConstructor(type) + ", ",
+    typeTokens.toArray(new Token[typeTokens.size()])));
+             
+    sb.addAll(valueExp);
+    sb.addAll(subExp);
+    sb.add(tokenMap(")", t1));
+  }
+}
+
+void ReductionExpression(List<TokenMap> sb):
+{
+  Token reduce, t, t1;
+  List<TokenMap> lambdaTokens = new ArrayList<TokenMap>(); 
+}
+{
+  reduce = "reduce" t1 = "("
+  { sb.add(tokenMap("reduce(", reduce, t1)); }
+  Expression(sb)
+  t = ","
+  {    sb.add(tokenMap(", ", t)); }
+  Expression(sb)
+  t = ","
+  {    sb.add(tokenMap(", ", t)); }
+  Lambda2Arg(lambdaTokens)
+  t = ")"
+  {    sb.add(tokenMap(location(reduce, t) + ", ", t));
+    sb.addAll(lambdaTokens);
+    sb.add(tokenMap(")", t));    
+  }
+}
+
+void Lambda2Arg(List<TokenMap> sb):
+{Token t, name1, name2;}
+{ 
+  t = "("
+  {    sb.add(tokenMap("(", t)); }
+  name1 = <IDENTIFIER>
+  {    sb.add(tokenMap(name1.image, name1)); }
+  t=","
+  {    sb.add(tokenMap(", ", t)); }
+  name2 = <IDENTIFIER>
+  {    sb.add(tokenMap(name2.image, name2)); }
+  t = ")"
+  {    sb.add(tokenMap(") ", t)); }
+  t = "->"
+  {    sb.add(tokenMap("-> ", t)); }
+    t = "{"
+  {   
+    sb.add(tokenMap(" { \n", t));
+    indent++;
+    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
+    sb.add(tokenMap(indent() + name1 + ".setAlias(\"" + name1 +"\");\n", name1));
+    sb.add(tokenMap(indent() + name1 + ".setLocation(" + location(name1) + ");\n", name1));
+    
+    sb.add(tokenMap(indent() + name2 + ".setAlias(\"" + name2 +"\");\n", name2));
+    sb.add(tokenMap(indent() + name2 + ".setLocation(" + location(name2) + ");\n", name2));
+  }
+  ( BlockStatement(sb) )*
+  t = "}"
+  {
+    indent--;
+    unsetVars.pop();
+    sb.add(tokenMap(indent() + "}", t));
+  }
+}
+
+/*
+ * Statement syntax follows.
+ */
+void Statement(List<TokenMap> sb):
+{}
+{
+  {
+    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
+  }
+    (
+    LOOKAHEAD(2)
+    Block(sb)
+  |
+/*    EmptyStatement()
+  |*/
+    { Token t; }
+    StatementExpression(sb) t = ";"
+    { sb.add(tokenMap(";", t)); }
+  |
+    IfStatement(sb)
+  |
+    ForStatement(sb)
+  |
+    ReturnStatement(sb)
+  )
+  {
+    sb.add(tokenMap("\n"));
+    unsetVars.pop();
+  }
+}
+
+void StatementAlreadyBlocked(List<TokenMap> sb):
+{}
+{  {
+    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
+  }
+  (
+    LOOKAHEAD(2)
+    BlockAlreadyBlocked(sb)
+  |
+/*    EmptyStatement()
+  |*/
+    {
+      sb.add(tokenMap(indent()));
+      Token t;
+    }
+    StatementExpression(sb) t = ";"
+    { sb.add(tokenMap(";", t)); }
+  |
+    IfStatement(sb)
+  |
+    ForStatement(sb)
+  |
+    ReturnStatement(sb)
+  )
+  {
+    sb.add(tokenMap("\n"));
+    unsetVars.pop();
+  }
+}
+
+
+
+void Block(List<TokenMap> sb):
+{
+  Token t;
+}
+{
+  
+  t = "{"
+  {   
+    sb.add(tokenMap(" { \n", t));
+    indent++;
+  }
+  ( BlockStatement(sb) )*
+  t = "}"
+  {
+    indent--;
+    sb.add(tokenMap(indent() + "}\n", t));
+  }
+}
+
+void BlockAlreadyBlocked(List<TokenMap> sb):
+{}
+{
+  "{"
+  ( BlockStatement(sb) )*
+  "}"
+}
+
+void BlockStatement(List<TokenMap> sb):
+{
+    sb.add(tokenMap(indent()));
+}
+{
+  LOOKAHEAD( [ ("private" | "public") ] Type() <IDENTIFIER> )
+  LocalVariableDeclaration(sb) ";"
+|
+  Statement(sb)
+}
+
+void LocalVariableDeclaration(List<TokenMap> sb):
+{
+  Type<?> type;
+  Token privateToken = null, publicToken = null, t;
+  List<Token> typeTokens = new ArrayList<Token>();
+  lastJavadoc = null;
+}
+{
+  [
+    (
+      privateToken = "private"
+    |
+      publicToken = "public"
+    )
+  ]
+  type = Type(typeTokens)
+  VariableDeclarator(sb, type, typeTokens.toArray(new Token[typeTokens.size()]), privateToken, publicToken)
+  (
+    t = ","
+    { sb.add(tokenMap(indent(), t)); }
+    VariableDeclarator(sb, type, typeTokens.toArray(new Token[typeTokens.size()]), privateToken, publicToken)
+  )*
+}
+
+/*void EmptyStatement():
+{}
+{
+  ";"
+}*/
+
+void StatementExpression(List<TokenMap> sb):
+{
+    List<TokenMap> subExpression = new ArrayList<TokenMap>();
+    boolean arrayIndex = false;
+    boolean memberMethod = false;
+    Token t, ob=null, cb=null;
+    IdentiferDesc id=null;
+}
+{
+  (
+    LOOKAHEAD(2)
+    VariableAssignment(sb)
+  | 
+    PrimaryPrefix(sb)
+  
+  //(.name [([args])] | "[" exp "]" )* [(.observe) | "[" exp "]" for a put)
+  
+  (
+    LOOKAHEAD(2)
+    //Write out any values from the last iteration
+     {
+      if(memberMethod) {
+        memberMethod = false;
+
+        if(ob==null) {  
+          sb.add(tokenMap("(" + location(id.source) + ")"));
+        }
+        else {
+          sb.add(tokenMap("(", ob));
+          if(subExpression.isEmpty())
+              sb.add(tokenMap(location(id.source, cb) + ")", cb));
+          else { 
+            sb.addAll(subExpression);
+            sb.add(tokenMap(", " + location(id.source, cb) + ")", cb));
+           }
+          cb = null;
+          ob = null;
+        }
+        subExpression.clear();
+      }
+      else if(arrayIndex) {
+        arrayIndex = false;
+        
+        sb.add(tokenMap(".get(", ob));
+        sb.addAll(subExpression);
+        sb.add(tokenMap(", " + location(ob, cb) + ")", cb));
+        ob = null;
+        cb = null;
+        subExpression = new ArrayList<TokenMap>();
+      }
+    }
+    (
+      //Dereference a field or call a function.
+      t = "."
+      {
+        sb.add(tokenMap(".", t));
+        memberMethod = true;
+      }
+      id = identifier()
+      { sb.add(tokenMap(id.name, id.source)); }
+      [ ob = "(" [ ArgumentList(subExpression) ] cb = ")" ]
+    |
+      //Read from an array
+      { arrayIndex = true; }
+      ob = "[" Expression(subExpression) cb = "]"
+    )
+  )*
+  [
+    ( 
+      {
+        if(memberMethod) {
+          memberMethod = false;
+          
+          if(ob==null) {  
+            sb.add(tokenMap("(" + location(id.source) + ")"));
+          } else { 
+            if(subExpression.isEmpty())sb.add(tokenMap(location(id.source, cb) + ")", cb));
+            else { 
+              sb.addAll(subExpression);
+              sb.add(tokenMap(", " + location(id.source, cb) + ")", cb));
+             }
+            cb = null;
+            ob = null;
+          }
+        }
+        else if(arrayIndex) {
+          arrayIndex = false;
+        
+          sb.add(tokenMap(".get(", ob));
+          sb.addAll(subExpression);
+          sb.add(tokenMap(", " + location(ob, cb) + ")", cb));
+          ob = null;
+          cb = null;
+        }
+      }
+
+      //TODO make this optional and simplify this whole method.
+        t = "."
+        { sb.add(tokenMap(".", t)); }
+       
+        ObservedValue(sb)
+    |
+      {
+        List<TokenMap> assignExpression = new ArrayList<TokenMap>();
+        Token eq;
+      }
+        eq = "="
+        (
+          Expression(assignExpression)
+        |
+          LOOKAHEAD(2) AllocationExpression(assignExpression)
+        [ LOOKAHEAD(2) PrimarySuffixNonArrayReturn(sb) ( LOOKAHEAD(2) PrimarySuffixReturn(sb) )* ]
+      )
+
+        {
+          if(arrayIndex) {
+          arrayIndex = false;
+
+          Token[] tArray = assignExpression.get(assignExpression.size()-1).getTokens();
+          t = tArray[tArray.length-1];
+          
+          sb.add(tokenMap(".put(", ob));
+          sb.addAll(subExpression);
+          sb.add(tokenMap(", " , cb, eq));
+          sb.addAll(assignExpression);
+          sb.add(tokenMap(", " + location(ob, t) + ")", cb, eq));
+          ob = null; 
+          cb = null;
+        } else {
+          //This is only valid if there were no arguments to the member variable. This should be adjusted to enforce this.
+          //This will not be required as the compilation to java will catch and report such errors.
+          
+          Token[] tArray = assignExpression.get(assignExpression.size()-1).getTokens();
+          t = tArray[tArray.length-1];
+          sb.add(tokenMap(" = ", eq));
+          sb.addAll(assignExpression);
+        }
+      }
+    )
+  ]
+
+  {
+    if(memberMethod) {
+      memberMethod = false;
+
+      if(ob==null) {  
+        sb.add(tokenMap("("));
+        sb.addAll(subExpression);
+        sb.add(tokenMap(location(id.source) + ")"));
+      } else {
+        sb.add(tokenMap("(", ob));
+        if(subExpression.isEmpty())sb.add(tokenMap(location(id.source, cb) + ")", cb));
+        else { 
+          sb.addAll(subExpression);
+          sb.add(tokenMap(", " + location(id.source, cb) + ")", cb));
+        }
+        cb = null;
+        ob = null;
+      }
+      subExpression = new ArrayList<TokenMap>();
+    } else if(arrayIndex) {
+      arrayIndex = false;
+        
+      sb.add(tokenMap(".get(", ob));
+      sb.addAll(subExpression);
+      sb.add(tokenMap(", " + location(id.source, cb) + ")", cb));
+      ob = null;
+      cb = null;
+      subExpression = new ArrayList<TokenMap>();
+    }
+  }
+)
+}
+
+void VariableAssignment(List<TokenMap> sb):
+{
+  Token eq;
+  IdentiferDesc id;
+}
+{
+  id = identifier()
+  eq = "="
+  
+  {
+      VarDesc varDesc = unsetVars.peek().remove(id.source.image);
+      if(varDesc==null)
+          throw new SandwoodModelException("Assignment to \"" + id.source.image + "\" but this value has either " +
+              "already been assigned to in this code path, or has not been declared as an unset variable.", id.source);
+      else
+          //Leave the name, but remove the varDesc so the test will fail in future.
+          unsetVars.peek().put(id.source.image, null);
+
+      //Add the assignment    
+      sb.add(tokenMap(id.name + " ", varDesc.nameLocation));
+      sb.add(tokenMap("= ", eq));
+      assignedValues.add(id.source.image);
+  }
+  Expression(sb)
+}
+
+private void IfStatement(List<TokenMap> sb):
+/*
+ * The disambiguating algorithm of JavaCC automatically binds dangling
+ * else's to the innermost if statement.  The LOOKAHEAD specification
+ * is to tell JavaCC that we know what we are doing.
+ */
+{
+  int id = globalId++;
+  Token t, cb;
+  Set<String> outerAssignedValues = assignedValues;
+  Set<String> ifAssignedValues = new LinkedHashSet<String>();
+  Set<String> elseAssignedValues = new LinkedHashSet<String>();
+
+  List<TokenMap> ifElseTokens = new ArrayList<TokenMap>();
+}
+{
+  t = "if" "("
+  { ifElseTokens.add(tokenMap("BooleanVariable guard$" + id + " = ", t)); }
+  Expression(ifElseTokens)
+  cb = ")"
+  {
+    ifElseTokens.add(tokenMap(";\n" + indent()));
+    ifElseTokens.add(tokenMap("ifElse(guard$" + id +", () -> {\n"));
+    indent++;
+
+    //Collect the values for the if branch.
+    assignedValues = ifAssignedValues;
+
+    //Set a tag for newly assigned variables
+    conditionalTag.push("if" + id);
+  }
+  StatementAlreadyBlocked(ifElseTokens)
+  {
+    indent--;
+    ifElseTokens.add(tokenMap(indent() + "}, () -> {\n"));
+    indent++;
+
+    //Collect the values for the if branch.
+    assignedValues = elseAssignedValues;
+
+    //Set a tag for newly assignedVariables
+    conditionalTag.pop();
+    conditionalTag.push("else" + id);
+  }
+  [ LOOKAHEAD(1) "else" StatementAlreadyBlocked(ifElseTokens) ]
+  {
+    //remove tag
+    conditionalTag.pop();
+    
+    indent--;
+    ifElseTokens.add(tokenMap(indent() + "});"));
+
+    
+
+    //Test the branches are equal and restore the original outer set.
+    if(!ifAssignedValues.equals(elseAssignedValues))
+      throw new SandwoodModelException("If statement assigns to different variables in the if and else branches.\\\n"
+        + "The if branch assigns to: " + ifAssignedValues + "\\\n"
+        + "The else branch assigns to: " + elseAssignedValues, t);
+    outerAssignedValues.addAll(ifAssignedValues);
+    assignedValues = outerAssignedValues;
+
+    //Initialise classes for the variables that are assigned to.
+    if(!ifAssignedValues.isEmpty()) {
+      sb.add(tokenMap("$IfElseMods" + id + " $if" + id + " = new $IfElseMods" + id + "();\n" + indent()));
+      sb.add(tokenMap("$IfElseMods" + id + " $else" + id + " = new $IfElseMods" + id + "();\n" + indent()));
+
+      Map<String, VarDesc> vars = new HashMap<String, VarDesc>();
+      //Create the helper class
+      for(String assigned:ifAssignedValues)
+        vars.put(assigned, unsetVars.peek().remove(assigned));
+      createClass(vars, id);
+
+      sb.addAll(ifElseTokens);
+
+      for(String assigned:ifAssignedValues) {
+        //Set the mergings
+        sb.add(tokenMap("\n" + indent() + (conditionalTag.isEmpty()?"":"$" + conditionalTag.peek() + ".") + assigned +
+        " = ifElseAssignment(guard$" + id + ", " + "$if" + id + "." + assigned + ", " + "$else" + id + "." + assigned +
+        ", " + location(t, cb) + ");\n", t, cb));
+
+        //Set the aliases
+        if(conditionalTag.isEmpty()) {
+          	VarDesc varDesc = vars.get(assigned);
+        	sb.add(tokenMap(indent() + assigned + ".setAlias(\"" + assigned + "\");\n", varDesc.nameLocation));
+        	sb.add(tokenMap(indent() + assigned + ".setLocation(" + location(varDesc.nameLocation) + ");\n", varDesc.nameLocation));
+        }
+      }
+    } else {
+      sb.addAll(ifElseTokens);
+    }
+  }
+}
+
+void ForStatement(List<TokenMap> sb):
+{
+  Token forToken, name, t;
+  List<Token> typeTokens = new ArrayList<Token>();
+}
+{
+  forToken = "for"
+  { sb.add(tokenMap("parFor", forToken)); }
+  t = "("
+  { sb.add(tokenMap("(", t)); }
+  Type(typeTokens)
+  name = <IDENTIFIER>
+  (
+    "=" LoopParams(sb, name)
+  | 
+    ":" Range(sb)
+  )
+  t = ")"
+  { sb.add(tokenMap(", " + location(forToken, t) + ", " +
+        "(" + name.image + ")", name, t)); }
+  {
+    sb.add(tokenMap(" -> { \n", t));
+    indent++;
+    sb.add(tokenMap(indent() + name + ".setAlias(\"" + name +"\");\n", name));
+    sb.add(tokenMap(indent() + name + ".setLocation(" + location(name) + ");\n", name));
+  }
+  StatementAlreadyBlocked(sb)
+  {
+    indent--;
+    sb.add(tokenMap(indent() + "});\n"));
+  }
+}
+
+void Range(List<TokenMap> sb):
+{
+  List<TokenMap> end   = new ArrayList<TokenMap>();
+  List<TokenMap> step  = new ArrayList<TokenMap>();
+  boolean stepSet = false;
+  boolean startExcluded = false;
+  Token ob, dotdot, cb, comma = null;
+}
+{
+  ( ob = "[" | ob = "(" { startExcluded = true; } )
+  Expression(sb) dotdot = ".." Expression(end) [ comma = "," Expression(step) { stepSet = true; }]
+  {
+    if(startExcluded) {
+        sb.add(tokenMap(".add(", ob));
+        if(stepSet)
+            sb.addAll(step);
+        else
+            sb.add(tokenMap("intVariable(1, " + location(ob, dotdot) + ")", ob));
+        sb.add(tokenMap(", " + location(ob, dotdot) + ")", ob));
+    }
+    sb.add(tokenMap(", ", dotdot));
+  }
+  (
+    cb = ")"
+    { sb.addAll(end); }
+  |
+    cb = "]"
+    {
+      sb.addAll(end);
+      sb.add(tokenMap(".add(intVariable(1, " + location(dotdot, cb) + "), " +
+      location(dotdot, cb) + ")", cb));
+     }
+  )
+
+  {
+    if(stepSet) { 
+      sb.add(tokenMap(", ", comma));
+      sb.addAll(step);
+    } else {
+      sb.add(tokenMap(", ", cb));
+      sb.add(tokenMap("intVariable(1, " + location(ob, dotdot) + ")", cb));
+    }
+
+    sb.add(tokenMap(", true", cb));
+  }
+}
+
+void LoopParams(List<TokenMap> sb, Token name):
+{
+  List<TokenMap> step  = new ArrayList<TokenMap>();
+  Token t=null, s1, s2, i;
+  boolean includeEnd;
+}
+{ 
+  Expression(sb)
+  s1 = ";"
+  i = <IDENTIFIER>
+  {
+    if(!i.image.equals(name.image))
+      throw new SandwoodModelException("Left hand argument of for loop guard is not the identifier declared in the loop.", i);
+  }
+
+  (   
+    (
+      "<"
+         { includeEnd = false; }
+       |
+      t = "<="
+      { includeEnd = true; }
+    )
+    { sb.add(tokenMap(", ", s1)); }
+    Expression(sb)
+    s2 = ";"
+    {
+       if(includeEnd)
+         sb.add(tokenMap(".add(intVariable(1, " + location(t, s2) + "), " +
+         location(t, s2) + ")", s1));
+    }
+    (   
+       t = "++"
+       i = <IDENTIFIER>
+       {
+         if(!i.image.equals(name.image))
+           throw new SandwoodModelException("Value modified in the for loop " + i.image + " does not match the declared variable " + name.image, i);
+         step.add(tokenMap("intVariable(1, " + location(t, i) + ")", t));
+       }
+     |
+       i = <IDENTIFIER>
+       {
+         if(!i.image.equals(name.image))
+           throw new SandwoodModelException("Value modified in the for loop " + i.image + " does not match the declared variable " + name.image, i);
+       }
+       (
+         t = "++"
+         { 
+           step.add(tokenMap("intVariable(1, " + location(i, t) + ")", t));
+         }
+       |
+         "+=" Expression(step)
+       |
+         t = "="
+         (
+           i = <IDENTIFIER>
+           { 
+             if(!i.image.equals(name.image))
+               throw new SandwoodModelException("First argument when modifying the variable declared in a for loop must be the variable. " +
+                 "In this case it is " + i.image + " not the declared variable " + name.image, i);
+           }
+           ( 
+             "+"
+           |
+             {
+               t = getNextToken();
+               if(t!=null)
+                 throw new SandwoodModelException("The loop variable " + i.image + " must be incremented by a constant value.", t);
+             }             
+           )
+           Expression(step)
+         |
+           {
+             t = getNextToken();
+             if(t!=null)
+               throw new SandwoodModelException("First expression term when modifying the variable declared in a for loop must be the declared variable. " +
+                 "In this case " + name.image + ", not the token " + t.image + ".", t);
+           }
+         )
+       )
+     )
+
+     {
+       sb.add(tokenMap(", ", s2));
+       sb.addAll(step);
+       sb.add(tokenMap(", true", s2));    
+     }
+   |
+     (
+        t = ">="
+        { includeEnd = true; }
+     |
+        ">"
+        { includeEnd = false; }
+     )
+     { sb.add(tokenMap(", ", s1)); }
+     Expression(sb)
+     s2 = ";"
+     {
+       if(includeEnd)
+         sb.add(tokenMap(".subtract(intVariable(1, " + location(t, s2) + "), " +
+         location(t, s2) + ")", s1));
+     }
+     (   
+       t = "--"
+       i = <IDENTIFIER>
+       {
+         if(!i.image.equals(name.image))
+           throw new SandwoodModelException("Value modified in the for loop " + i.image + " does not match the declared variable " + name.image, i);
+         step.add(tokenMap("intVariable(1, " + location(t, i) + ")", t));
+       }
+     |
+       i = <IDENTIFIER>
+       {
+         if(!i.image.equals(name.image))
+           throw new SandwoodModelException("Value modified in the for loop " + i.image + " does not match the declared variable " + name.image, i);
+       }
+       (
+         t = "--"
+         { 
+           step.add(tokenMap("intVariable(1, " + location(i, t) + ")", t));
+         }
+       |
+         "-=" Expression(step)
+       |
+         "="
+          (
+           i=<IDENTIFIER>
+           { 
+             if(!i.image.equals(name.image))
+               throw new SandwoodModelException("First argument when modifying the variable declared in a for loop must be the variable. " +
+                 "In this case it is " + i.image + " not the declared variable " + name.image, i);
+           }
+           ( 
+             "-"
+           |
+             {
+               t = getNextToken();
+               if(s1!=null)
+                 throw new SandwoodModelException("The loop variable " + i.image + " must be decremented by a constant value.", t);
+             }             
+           )
+           Expression(step)
+         |
+           {
+             t = getNextToken();
+             if(t!=null)
+               throw new SandwoodModelException("First expression term when modifying the variable declared in a for loop must be the declared variable. " +
+                 "In this case " + name.image + ", not the token " + t.image + ".", t);
+           }
+         )
+       )
+     )
+       {
+         sb.add(tokenMap(", ", s2));
+         sb.addAll(step);
+         sb.add(tokenMap(", false", s2));
+       }
+   | 
+     t = "!="
+     {
+       throw new SandwoodModelException("Not equal is not a currently supported guard", t);
+     }  
+   )
+}
+
+void ReturnStatement(List<TokenMap> sb):
+{ Token t; }
+{
+  t="return" 
+  { sb.add(tokenMap("return ", t)); }
+  [ Expression(sb) ]
+  t = ";"
+  { sb.add(tokenMap(";", t)); }
+}
+
+IdentiferDesc identifier():
+{ Token t; }
+{
+  t = <IDENTIFIER>
+  {
+    if(unsetVars.peek().containsKey(t.image) && !conditionalTag.isEmpty()) {
+      String tag = conditionalTag.peek();
+      return new IdentiferDesc("$" + tag + "." + t.image, t);
+    } else
+      return new IdentiferDesc(t.image, t);
+  }
+}

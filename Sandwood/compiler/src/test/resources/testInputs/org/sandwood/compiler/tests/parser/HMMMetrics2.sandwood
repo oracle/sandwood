@@ -1,0 +1,71 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model HMMMetrics2(
+			   double[][] metric,
+			   boolean[][] metric_valid, 
+			   int noStates) {
+    
+	int noSamples = metric.length;
+
+	// Construct arrays describing the probability of a move from 1 state to another.
+	double[] v = new double[noStates] <~ 0.1;
+	double[] initialStateDistribution = dirichlet(v).sample();
+	double[][] m = dirichlet(v).sample(noStates);
+
+	//Allocate space for states
+	int[][] st = new int[noSamples][];
+
+	//Allocate space for generated metrics 
+	double[][] metric_g = new double[noSamples][];
+	boolean[][] metric_valid_g = new boolean[noSamples][];
+	
+	//Calculate priors for the metric
+	double[] metric_mean = uniform(0.0, 100.0).sample(noStates);
+	double[] metric_var = inverseGamma(1.0, 1.0).sample(noStates);
+	double[] metric_valid_bias = beta(1.0, 1.0).sample(noStates);
+	
+	// Compute the values of each metric value
+	for(int sample = 0; sample < noSamples; sample++) {
+		//Calculate all the state transitions
+		int streamLength = metric[sample].length;
+		
+		// Allocate space for the state.
+		st[sample] = new int[streamLength];
+		
+		// Set the initial state by sampling from a categorical with learnt weightings.
+		st[sample][0] = categorical(initialStateDistribution).sampleDistribution();
+		
+		// Calculate the remaining weightings
+		for(int timeStep = 1; timeStep < streamLength; timeStep++)
+			st[sample][timeStep] = categorical(m[st[sample][timeStep-1]]).sampleDistribution();
+		
+		//Calculate metric values
+		double[] metric_1d = new double[streamLength];
+		metric_g[sample] = metric_1d;
+
+		boolean[] metric_valid_1d = new boolean[streamLength];
+		metric_valid_g[sample] = metric_valid_1d;
+
+		//Generate values.
+		for(int timeStep = 0; timeStep < streamLength; timeStep++){
+			int currentState = st[sample][timeStep];
+			
+			metric_valid_1d[timeStep] = bernoulli(metric_valid_bias[currentState]).sample();
+			if(metric_valid_1d[timeStep])
+				metric_1d[timeStep] = gaussian(metric_mean[currentState], metric_var[currentState]).sample();
+			// Observing here as a cast is required and doing it inside the for loops removes the need duplicate them later.
+			metric_1d[timeStep].observe(metric[sample][timeStep]);
+		}
+	}
+
+	//Tie the values to the measured values.
+	metric_valid_g.observe(metric_valid);
+}

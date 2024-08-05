@@ -1,0 +1,97 @@
+double l = 0.0;
+double u = 10.0;
+int n = 2;
+int kInit = 7;
+double[][] xMeasured = new double[n][];
+double var6 = 1.0;
+double[] t = new double[kInit];
+int var8 = 0;
+int var9 = 1;
+for(int var10=var8; var10 < kInit; var10 += var9) {
+	t[var10] = var6;
+}
+int var12 = 0;
+xMeasured[var12] = t;
+double var14 = 4.0;
+double[] t = new double[kInit];
+int var16 = 0;
+int var17 = 1;
+for(int var18=var16; var18 < kInit; var18 += var17) {
+	t[var18] = var14;
+}
+int var20 = 1;
+xMeasured[var20] = t;
+double var22 = 3.5;
+double[] yMeasured = new double[n];
+int var24 = 0;
+int var25 = 1;
+for(int var26=var24; var26 < n; var26 += var25) {
+	yMeasured[var26] = var22;
+}
+int var28 = 0;
+double[] var29 = xMeasured[var28];
+int k = var29.length;
+int var31 = xMeasured.length;
+double[] y = new double[var31];
+int var33 = xMeasured.length;
+double[][] x = new double[var33][];
+double var35 = 0.0;
+double var36 = 10.0;
+Gaussian var37 = new Gaussian(var35, var36);
+double[] weights = new double[k];
+int var39 = 0;
+int var40 = 1;
+for(int var41=var39; var41 < k; var41 += var40) {
+	double var42 = var37.sample();
+	weights[var41] = var42;
+}
+double var44 = 0.0;
+double var45 = 10.0;
+Gaussian var46 = new Gaussian(var44, var45);
+double bias = var46.sample();
+double var48 = 3.0;
+double var49 = 1.0;
+InverseGamma var50 = new Inverse Gamma(var48, var49);
+double tau = var50.sample();
+int var52 = 0;
+int var53 = xMeasured.length;
+int var54 = 1;
+for(int i=var52; i < var53; i += var54) {
+	Uniform uniform = new Uniform(l, u);
+	double[] var57 = new double[k];
+	int var58 = 0;
+	int var59 = 1;
+	for(int var60=var58; var60 < k; var60 += var59) {
+		double var61 = uniform.sample();
+		var57[var60] = var61;
+	}
+	x[i] = var57;
+}
+int var64 = 0;
+int var65 = xMeasured.length;
+int var66 = 1;
+for(int i=var64; i < var65; i += var66) {
+	double[] phi = new double[k];
+	int var69 = 0;
+	int var70 = 1;
+	for(int j=var69; j < k; j += var70) {
+		double var72 = weights[j];
+		double[] var73 = x[i];
+		double var74 = var73[j];
+		double var75 = var72 * var74;
+		phi[j] = var75;
+	}
+	int var77 = 0;
+	int var78 = phi.length;
+	double var79 = 0.0;
+	double var83 = reduce(phi, var77, var78, var79) (double var80, double var81) -> {
+		double var82 = var80 + var81;
+	}
+	return var82;
+	double var84 = var83 + bias;
+	Gaussian var85 = new Gaussian(var84, tau);
+	double var86 = var85.sample();
+	y[i] = var86;
+}
+x.observe(xMeasured);
+y.observe(yMeasured);

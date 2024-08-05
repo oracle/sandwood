@@ -1,0 +1,38 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model HMM_Paper(boolean[] measured, int nCoins) {
+  //Construct a transistion matrix m.
+  double[] v = new double[nCoins] <~ 0.1;
+  double[][] m = dirichlet(v).sample(nCoins);
+  
+  //Construct weighting for which coin to start at.
+  double[] initialCoin = dirichlet(v).sample;
+	
+  //Construct biases for each coin	
+  double[] bias = beta(1.0, 1.0).sample(nCoins);
+
+  //Allocate space to record which coin is flipped
+  int nFlips = measured.length;
+  int[] st = new int[nFlips];
+
+  //Calculate the movements between coins		
+  st[0] = categorical(initialCoin).sample();
+  for (int i: [1..nFlips) )
+    st[i] = categorical(m[st[i - 1]]).sample();
+
+  //Flip the coins
+  boolean[] flips = new boolean[nFlips];
+  for (int j: [0..nFlips) )
+    flips[j] = bernoulli(bias[st[j]]).sample();
+    
+  //Assert that the flips match the measured data.
+  flips.observe(measured);
+}

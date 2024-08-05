@@ -1,0 +1,52 @@
+double var1 = 0.0;
+double var2 = 10.0;
+int var3 = 2;
+int var4 = 7;
+double[][] var5 = new double[var3][];
+double var6 = 1.0;
+double[] var7 = new double[var4];
+for(int var10=0; var10 < var4; var10 += 1) {
+	var7[var10] = var6;
+}
+var5[0] = var7;
+double var14 = 4.0;
+double[] var15 = new double[var4];
+for(int var18=0; var18 < var4; var18 += 1) {
+	var15[var18] = var14;
+}
+var5[1] = var15;
+boolean var22 = true;
+boolean[] var23 = new boolean[var3];
+for(int var26=0; var26 < var3; var26 += 1) {
+	var23[var26] = var22;
+}
+int var30 = var5[0].length;
+boolean[] var32 = new boolean[var5.length];
+double[][] var34 = new double[var5.length][];
+Gaussian var37 = new Gaussian(0.0, 10.0);
+double[] var38 = new double[var30];
+for(int var41=0; var41 < var30; var41 += 1) {
+	var38[var41] = var37.sample();
+}
+double var47 = new Gaussian(0.0, 10.0).sample();
+for(int var51=0; var51 < var5.length; var51 += 1) {
+	Uniform var52 = new Uniform(var1, var2);
+	double[] var53 = new double[var30];
+	for(int var56=0; var56 < var30; var56 += 1) {
+		var53[var56] = var52.sample();
+	}
+	var34[var51] = var53;
+}
+for(int var63=0; var63 < var5.length; var63 += 1) {
+	double[] var64 = new double[var30];
+	for(int var67=0; var67 < var30; var67 += 1) {
+		var64[var67] = var38[var67] * var34[var63][var67];
+	}
+	double var79 = reduce(var64, 0, var64.length, 0.0) (double var76, double var77) -> {
+		double var78 = var76 + var77;
+	}
+	return var78;
+	var32[var63] = new Bernoulli(Sigmoid(var79 + var47)).sample();
+}
+var34.observe(var5);
+var32.observe(var23);

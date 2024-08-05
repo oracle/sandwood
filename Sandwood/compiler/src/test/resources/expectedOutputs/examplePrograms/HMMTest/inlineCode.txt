@@ -1,0 +1,37 @@
+int var1 = 2;
+boolean var2 = false;
+int var3 = 100;
+boolean[] var4 = new boolean[var3];
+for(int var7=0; var7 < var3; var7 += 1) {
+	var4[var7] = var2;
+}
+double var9 = 0.1;
+double[] var10 = new double[var1];
+for(int var13=0; var13 < var1; var13 += 1) {
+	var10[var13] = var9;
+}
+Dirichlet var15 = new Dirichlet(var10);
+double[][] var16 = new double[var1][];
+for(int var19=0; var19 < var1; var19 += 1) {
+	var16[var19] = var15.sample();
+}
+Beta var24 = new Beta(1.0, 1.0);
+double[] var25 = new double[var1];
+for(int var28=0; var28 < var1; var28 += 1) {
+	var25[var28] = var24.sample();
+}
+int var31 = var4.length;
+int var32 = 0;
+int[] var33 = new int[var31];
+for(int var36=0; var36 < var31; var36 += 1) {
+	var33[var36] = var32;
+}
+boolean[] var39 = new boolean[var4.length];
+var33[0] = new Categorical(var16[var33[0]]).sample();
+for(int var50=1; var50 < var4.length; var50 += 1) {
+	var33[var50] = new Categorical(var16[var33[(var50 - 1)]]).sample();
+}
+for(int var61=1; var61 < var4.length; var61 += 1) {
+	var39[var61] = new Bernoulli(var25[var33[var61]]).sample();
+}
+var39.observe(var4);

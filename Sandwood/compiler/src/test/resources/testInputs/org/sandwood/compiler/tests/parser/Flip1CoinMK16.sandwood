@@ -1,0 +1,18 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Flip1CoinMK16(boolean flipMeasured, double guard) {
+	if(isNaN(guard)) {
+		double bias = beta(1.0, 1.0).sample();
+		Bernoulli bernoulli = bernoulli(bias);
+		boolean flip = bernoulli.sample();
+		flip.observe(flipMeasured);
+	}
+}

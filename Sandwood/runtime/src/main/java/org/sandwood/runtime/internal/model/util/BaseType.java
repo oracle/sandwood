@@ -1,0 +1,21 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.runtime.internal.model.util;
+
+/**
+ * An enumeration used to describe the base type of arrays. This should never be used in user code.
+ */
+public enum BaseType {
+    /** Integer */
+    INT,
+    /** Double precision floating point */
+    DOUBLE,
+    /** Boolean value */
+    BOOLEAN
+}

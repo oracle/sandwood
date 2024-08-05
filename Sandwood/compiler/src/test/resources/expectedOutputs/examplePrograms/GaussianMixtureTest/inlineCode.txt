@@ -1,0 +1,29 @@
+int var1 = 5;
+double var2 = 1.0;
+int var3 = 10;
+double[] var4 = new double[var3];
+for(int var7=0; var7 < var3; var7 += 1) {
+	var4[var7] = var2;
+}
+double var9 = 1.0;
+double[] var10 = new double[var1];
+for(int var13=0; var13 < var1; var13 += 1) {
+	var10[var13] = var9;
+}
+double[] var16 = new Dirichlet(var10).sample();
+Gaussian var19 = new Gaussian(0.0, 20.0);
+double[] var20 = new double[var1];
+for(int var23=0; var23 < var1; var23 += 1) {
+	var20[var23] = var19.sample();
+}
+InverseGamma var28 = new Inverse Gamma(1.0, 1.0);
+double[] var29 = new double[var1];
+for(int var32=0; var32 < var1; var32 += 1) {
+	var29[var32] = var28.sample();
+}
+double[] var36 = new double[var4.length];
+for(int var40=0; var40 < var4.length; var40 += 1) {
+	int var42 = new Categorical(var16).sample();
+	var36[var40] = new Gaussian(var20[var42], var29[var42]).sample();
+}
+var36.observe(var4);

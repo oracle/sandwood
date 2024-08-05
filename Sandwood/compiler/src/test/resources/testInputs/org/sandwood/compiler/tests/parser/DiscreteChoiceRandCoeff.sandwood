@@ -1,0 +1,45 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+
+model DiscreteChoiceRandCoeff(int noProducts, int noObs, int[] ObsChoices, int[][] Prices) {
+    // we just need an uninformative prior for utility intercepts
+
+    // draw utilities
+    double[] ut = gaussian(0, 10).sample(noProducts);
+    //can we set the first element to 0? like ut[0] <~ 0
+
+    //priors for distribution of beta
+    double b = gaussian(0,10).sample();
+    double sigma =  inverseGamma(2,2).sample();
+
+    double[] beta = gaussian(b, sigma).sample(noObs);
+
+    int[] choices = new int[noObs];
+
+    for (int i:[0..noObs)){
+        // calculate choice probabilities for consumer i
+
+        double[] exped = new double[noProducts];
+        for(int j : [0..noProducts)) {
+            exped[j] = exp(ut[j]- beta[i]*Prices[i][j]);
+            }
+        double sum = reduce(exped, 0, (k, l) -> { return k + l; });
+        public double[] prob = new double[noProducts];
+        for (int j : [0..noProducts)) {
+            prob[j] = exped[j] / sum;
+        }
+        // emit choices of consumer i
+        choices[i] = categorical(prob).sample();
+                                }
+
+    // assert that generated choices match observed choices
+    choices.observe(ObsChoices);
+}

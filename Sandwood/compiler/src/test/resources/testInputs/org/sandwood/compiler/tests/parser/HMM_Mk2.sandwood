@@ -1,0 +1,58 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model HMM_Mk2(int[][] eventsMeasured, int noStates, int noEvents) {
+		
+		// Construct arrays describing the probability of a move from 1 state to another.
+		double[] v = new double[noStates] <~ 0.1;
+		double[] v2 = new double[noEvents] <~ 0.1;
+		double[][] m = dirichlet(v).sample(noStates);
+		
+		// Construct the bias for each webpage.
+		double[][] bias = dirichlet(v2).sample(noStates);
+
+		// Determine how many samples the model will need to produce.
+		int samples = eventsMeasured.length;
+		
+		// Allocate space for the state, i.e. which webpage we are going to trigger an event on.
+		int[][] st = new int[samples][];
+		for(int i:[0 .. samples)){
+			int streamLength = eventsMeasured[i].length;
+			st[i] = new int[streamLength];
+		}
+
+		// Set the initial state by sampling from a categorical with learnt weightings.
+		double[] weights = dirichlet(v).sample();
+		int initialState = categorical(weights).sample();
+		for(int i:[0..samples)) {
+			st[i][0] = categorical(m[initialState]).sample();
+		}
+
+		//Determine the remaining states based on the previous state.
+		for(int i:[0 .. samples)){
+			int streamLength = eventsMeasured[i].length;
+			for(int j:[1..streamLength)){
+				st[i][j] = categorical(m[st[i][j-1]]).sample();
+			}
+		}
+			
+		//Generate each event.
+		int[][] events = new int[samples][];
+		for(int i:[0 .. samples)) {
+			int streamLength = eventsMeasured[i].length;
+			events[i] = new int[streamLength];
+			for(int j:[1..streamLength)){
+				events[i][j] = categorical(bias[st[i][j]]).sample() + 1;
+			}
+		}
+
+		//Tie the values of the flips to the values we have measured.
+		events.observe(eventsMeasured);
+}

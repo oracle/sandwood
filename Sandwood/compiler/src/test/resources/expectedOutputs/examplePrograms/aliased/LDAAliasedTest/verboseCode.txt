@@ -1,0 +1,80 @@
+int noTopics = 5;
+int noTopics = 10;
+int var3 = 2;
+int[][] documents = new int[var3][];
+int var5 = 10;
+int var6 = 1;
+int[] document = new int[var6];
+int var8 = 0;
+int var9 = 1;
+for(int var10=var8; var10 < var6; var10 += var9) {
+	document[var10] = var5;
+}
+int var12 = 0;
+documents[var12] = document;
+int var14 = 8;
+int var15 = 4;
+int[] document = new int[var15];
+int var17 = 0;
+int var18 = 1;
+for(int var19=var17; var19 < var15; var19 += var18) {
+	document[var19] = var14;
+}
+int var21 = 1;
+documents[var21] = document;
+double var23 = 0.1;
+double[] alpha = new double[noTopics];
+int var25 = 0;
+int var26 = 1;
+for(int var27=var25; var27 < noTopics; var27 += var26) {
+	alpha[var27] = var23;
+}
+double var29 = 0.1;
+double[] beta = new double[noTopics];
+int var31 = 0;
+int var32 = 1;
+for(int var33=var31; var33 < noTopics; var33 += var32) {
+	beta[var33] = var29;
+}
+Dirichlet var35 = new Dirichlet(beta);
+double[][] phi = new double[noTopics][];
+int var37 = 0;
+int var38 = 1;
+for(int var39=var37; var39 < noTopics; var39 += var38) {
+	double[] var40 = var35.sample();
+	phi[var39] = var40;
+}
+Dirichlet var42 = new Dirichlet(alpha);
+int var43 = documents.length;
+double[][] theta = new double[var43][];
+int var45 = 0;
+int var46 = 1;
+for(int var47=var45; var47 < var43; var47 += var46) {
+	double[] var48 = var42.sample();
+	theta[var47] = var48;
+}
+int var50 = documents.length;
+int[][] w = new int[var50][];
+int var52 = 0;
+int var53 = documents.length;
+int var54 = 1;
+for(int i=var52; i < var53; i += var54) {
+	int[] var56 = documents[i];
+	int var57 = var56.length;
+	int[] t = new int[var57];
+	int var59 = 0;
+	int[] var60 = documents[i];
+	int var61 = var60.length;
+	int var62 = 1;
+	for(int j=var59; j < var61; j += var62) {
+		double[] var64 = theta[i];
+		Categorical var65 = new Categorical(var64);
+		int z = var65.sample();
+		double[] var67 = phi[z];
+		Categorical var68 = new Categorical(var67);
+		int var69 = var68.sample();
+		t[j] = var69;
+	}
+	w[i] = t;
+}
+w.observe(documents);

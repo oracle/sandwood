@@ -1,0 +1,40 @@
+package org.sandwood.compiler.tests.parser;
+
+interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+	public double[] get$bias();
+	public void set$bias(double[] cv$value);
+	public boolean get$fixedFlag$sample17();
+	public void set$fixedFlag$sample17(boolean cv$value);
+	public boolean get$fixedFlag$sample20();
+	public void set$fixedFlag$sample20(boolean cv$value);
+	public boolean get$fixedFlag$sample28();
+	public void set$fixedFlag$sample28(boolean cv$value);
+	public boolean get$fixedFlag$sample35();
+	public void set$fixedFlag$sample35(boolean cv$value);
+	public boolean get$fixedFlag$sample45();
+	public void set$fixedFlag$sample45(boolean cv$value);
+	public boolean get$fixedFlag$sample54();
+	public void set$fixedFlag$sample54(boolean cv$value);
+	public boolean[] get$flips();
+	public void set$flips(boolean[] cv$value);
+	public double[] get$initialCoin();
+	public void set$initialCoin(double[] cv$value);
+	public int get$length$measured();
+	public void set$length$measured(int cv$value);
+	public double get$logProbability$bias();
+	public double get$logProbability$flips();
+	public double get$logProbability$initialCoin();
+	public double get$logProbability$m();
+	public double get$logProbability$st();
+	public double[][] get$m();
+	public void set$m(double[][] cv$value);
+	public boolean[] get$measured();
+	public void set$measured(boolean[] cv$value);
+	public int get$nCoins();
+	public void set$nCoins(int cv$value);
+	public int get$nFlips();
+	public int[] get$st();
+	public void set$st(int[] cv$value);
+	public double[] get$v();
+	public void logEvidenceGeneration();
+}

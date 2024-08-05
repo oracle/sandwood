@@ -1,0 +1,74 @@
+int states = 2;
+boolean var2 = false;
+int var3 = 100;
+boolean[] flipsMeasured = new boolean[var3];
+int var5 = 0;
+int var6 = 1;
+for(int var7=var5; var7 < var3; var7 += var6) {
+	flipsMeasured[var7] = var2;
+}
+double var9 = 0.1;
+double[] v = new double[states];
+int var11 = 0;
+int var12 = 1;
+for(int var13=var11; var13 < states; var13 += var12) {
+	v[var13] = var9;
+}
+Dirichlet var15 = new Dirichlet(v);
+double[][] m = new double[states][];
+int var17 = 0;
+int var18 = 1;
+for(int var19=var17; var19 < states; var19 += var18) {
+	double[] var20 = var15.sample();
+	m[var19] = var20;
+}
+double var22 = 1.0;
+double var23 = 1.0;
+Beta var24 = new Beta(var22, var23);
+double[] bias = new double[states];
+int var26 = 0;
+int var27 = 1;
+for(int var28=var26; var28 < states; var28 += var27) {
+	double var29 = var24.sample();
+	bias[var28] = var29;
+}
+int var31 = flipsMeasured.length;
+int var32 = 0;
+int[] st = new int[var31];
+int var34 = 0;
+int var35 = 1;
+for(int var36=var34; var36 < var31; var36 += var35) {
+	st[var36] = var32;
+}
+int var38 = flipsMeasured.length;
+boolean[] flips = new boolean[var38];
+int var40 = 0;
+int var41 = st[var40];
+double[] var42 = m[var41];
+Categorical var43 = new Categorical(var42);
+int var44 = var43.sample();
+int var45 = 0;
+st[var45] = var44;
+int var47 = 1;
+int var48 = flipsMeasured.length;
+int var49 = 1;
+for(int i=var47; i < var48; i += var49) {
+	int var51 = 1;
+	int var52 = (i - var51);
+	int var53 = st[var52];
+	double[] var54 = m[var53];
+	Categorical var55 = new Categorical(var54);
+	int var56 = var55.sample();
+	st[i] = var56;
+}
+int var58 = 0;
+int var59 = flipsMeasured.length;
+int var60 = 1;
+for(int i=var58; i < var59; i += var60) {
+	int var62 = st[i];
+	double var63 = bias[var62];
+	Bernoulli var64 = new Bernoulli(var63);
+	boolean var65 = var64.sample();
+	flips[i] = var65;
+}
+flips.observe(flipsMeasured);

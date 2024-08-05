@@ -1,0 +1,56 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+/*
+ * Model based on the paper Estimating Primary Demand for Substitutable Products from Sales Transaction 
+ * Data by Gustavo Vulcano, Garrett van Ryzin, and Richard Ratliff.
+ * https://business.columbia.edu/sites/default/files-efs/pubfiles/5397/vanRyzin_Estimating.pdf
+ */
+package org.sandwood.compiler.tests.parser;
+
+
+model Vulcano2012basic(int noProducts, int T, int s, double[][] ObsSales, int[][] Avail) {
+    // Avail is the availability matrix, T-by-noProducts
+    // s is the normalization constant (market share), number between 0 and 1
+
+    // draw utilities
+    double[] ut = gaussian(0, 10).sample(noProducts);
+
+    //exponentiate right here (in the non-basic models move to the for loop)
+    double[] exped = new double[noProducts];
+    for(int j : [0..noProducts)) {
+    exped[j] = exp(ut[j]);
+    }
+    double sum = reduce(exped, 0, (k, l) -> { return k + l; });
+    double denom = sum/s;   // this is the sum of utilities plus normalized by s outside options
+
+    // priors for the distribution of lambdas (for arrivals). They can be supplied as a vector, or just use some priors
+    double[ ] lambda = gamma(10,10).sample(T);
+
+    // draw arrivals
+    int[] arrivals = new int[T];
+    for (int t : [0..T)){
+    arrivals[t]= poisson(lambda[t]).sample();
+    }
+
+    double[][] Sales = new double[T][noProducts];
+
+    for (int t:[0..T)){
+        // for each period t calculate choice probabilities
+        // (does it matter if choice probabilities or individual choices?)
+        // let's try aggregate first
+
+        double[] weekly_sales = new double[noProducts];
+        for (int j : [0..noProducts)) {
+            weekly_sales[j] = gaussian(exped[j]*Avail[t][j] /denom *arrivals[t], 0.2).sample();
+        }
+        // record sales for period t
+        Sales[t] = weekly_sales;
+                                }
+    // assert that generated sales match observed sales
+    Sales.observe(ObsSales);
+}

@@ -1,0 +1,28 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+package org.sandwood.examples.coin;
+
+/**
+ * Specifies a simple model of a coin, using a uniform Beta prior and a
+ * Bernoulli likelihood distribution.
+ */
+public model CoinModel(boolean[] observedFlips /** observed_flips heads and tails data observed from flipping the coin */) {
+    
+    // The coin's bias is what we want to learn. Our prior is it's fair
+    double bias = beta(1.0, 1.0).sample();
+
+    // The number of flips in our data
+    int nSamples = observedFlips.length;
+
+    // Model the coin flip as a probability distribution
+    Bernoulli bernoulli = bernoulli(bias);
+
+    // Update the probability distribution, constrained by the observed flips
+    boolean[] flips = bernoulli.sample(nSamples);
+    flips.observe(observedFlips);
+}

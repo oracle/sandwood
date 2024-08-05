@@ -1,0 +1,29 @@
+int k = 5;
+double var2 = 1.0;
+int var3 = 10;
+double[] xMeasured = new double[var3];
+for(int var7=0; var7 < var3; var7 += 1) {
+	xMeasured[var7] = var2;
+}
+double var9 = 1.0;
+double[] alpha = new double[k];
+for(int var13=0; var13 < k; var13 += 1) {
+	alpha[var13] = var9;
+}
+double[] phi = new Dirichlet(alpha).sample();
+Gaussian var19 = new Gaussian(0.0, 20.0);
+double[] mu = new double[k];
+for(int var23=0; var23 < k; var23 += 1) {
+	mu[var23] = var19.sample();
+}
+InverseGamma var28 = new Inverse Gamma(1.0, 1.0);
+double[] sigma = new double[k];
+for(int var32=0; var32 < k; var32 += 1) {
+	sigma[var32] = var28.sample();
+}
+double[] x = new double[xMeasured.length];
+for(int i=0; i < xMeasured.length; i += 1) {
+	int z = new Categorical(phi).sample();
+	x[i] = new Gaussian(mu[z], sigma[z]).sample();
+}
+x.observe(xMeasured);

@@ -1,0 +1,23 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model NullModelMK3(double eta, int observedSampleCount, int observedPositiveCount) {
+		double min = eta * 4.0/5.0;	
+		double bias = new Uniform(min, 1.0).sample();
+		
+		//Construct a binomial
+		Binomial binomial = new Binomial(bias, observedSampleCount);
+				
+		//Sample from it
+		int positiveCount = binomial.sample();
+		
+		//Link the sampled values to the observed values
+		positiveCount.observe(observedPositiveCount);
+}

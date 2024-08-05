@@ -1,0 +1,30 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model GaussianMixtureTest(double[] xMeasured) {
+
+		int k = 5;
+
+		double[] alpha = new double[k];
+		for(int i:[0..k)) 
+			alpha[i] = 1.0;
+		
+		double[] phi = dirichlet(alpha).sample();
+		double[] mu = gaussian(0, 20).sample(k);
+		double[] sigma = inverseGamma(1, 1).sample(k);
+		
+		double[] x = new double[xMeasured.length];
+		for(int i:[0..xMeasured.length)) {
+			int z = categorical(phi).sample();
+			x[i] = gaussian(mu[z], sigma[z]).sample();
+		}
+		
+		x.observe(xMeasured);
+}

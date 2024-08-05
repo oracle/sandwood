@@ -1,0 +1,19 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model ExponentialDecayMK1(double[] decayDetected, double a, double b) {
+	
+		int samples = decayDetected.length;
+		double rate = gamma(a, b).sample();
+		
+		Exponential exponential = exponential(rate);
+		double[] decay = exponential.sample(samples);
+		decay.observe(decayDetected);
+}

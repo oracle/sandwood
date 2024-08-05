@@ -1,0 +1,31 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model DistributionTest5(double[] weightings, boolean[] value) {
+	int size = value.length;
+	
+	int v1 = categorical(weightings).sampleDistribution();
+	
+	int[] v2 = new int[size + 1];
+	v2[0] = categorical(weightings).sampleDistribution();
+	for(int i:[0..size))
+		v2[i + 1] = categorical(weightings).sampleDistribution();
+		
+		
+	int[] v3 = new int[size + 1];
+	for(int k:[0..size]) 
+		v3[k] = v2[k];
+		
+	boolean[] v = new boolean[size];
+	for(int j:[0..size))
+		v[j] = bernoulli(((1.0*v1) + v2[j] + v3[j+1])/v2[j+1]).sample();
+		
+	v.observe(value);
+}

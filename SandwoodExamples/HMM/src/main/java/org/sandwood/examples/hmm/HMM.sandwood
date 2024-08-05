@@ -1,0 +1,41 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+package org.sandwood.examples.hmm;
+
+model HMM(int[] events_measured, int noStates, int noEvents) {
+		
+		// Construct arrays describing the probability of a move from 1 state to another.
+		double[] v = new double[noStates] <~ 0.1;
+		double[] v2 = new double[noEvents] <~ 0.1;
+		double[][] m = dirichlet(v).sample(noStates);
+		
+		// Construct the bias for each event.
+		double[][] bias = dirichlet(v2).sample(noStates);
+		
+		// Allocate space for the states
+		int streamLength = events_measured.length;
+		int[] st = new int[streamLength];
+
+		// Set the initial state by sampling from a categorical with learnt weightings.
+		double[] initialStateDistribution = dirichlet(v).sample();
+		st[0] = categorical(initialStateDistribution).sampleDistribution();
+
+		//Determine the remaining states based on the previous state.
+		for(int i:[1..streamLength)){
+			st[i] = categorical(m[st[i-1]]).sampleDistribution();
+		}
+			
+		//Generate each event.
+		int[] events = new int[streamLength];
+		for(int i:[0..streamLength)){
+			events[i] = categorical(bias[st[i]]).sample();
+		}
+
+		//Tie the values of the events to the values we have measured.
+		events.observe(events_measured);
+}

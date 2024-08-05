@@ -1,0 +1,4 @@
+int a = 5;
+int b = 10;
+int d = b + a + b;
+int e = b + a;

@@ -1,0 +1,35 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+# This version uses the Oracle setup script which supports both Java 19 and Java 17
+
+name: Java CI with Maven (Oracle)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Test on java-version ${{ matrix.java_version }} and os ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java_version: ['17', '21']
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Oracle Java SE
+      uses: oracle-actions/setup-java@v1
+      with:
+        website: oracle.com
+        release: ${{ matrix.java_version }}
+   
+    - name: Build with Maven
+      run: |
+        mvn -B install --file Sandwood/pom.xml
+        mvn -B install --file SandwoodMavenPlugin/pom.xml
+        mvn -B test --file SandwoodExamples/pom.xml

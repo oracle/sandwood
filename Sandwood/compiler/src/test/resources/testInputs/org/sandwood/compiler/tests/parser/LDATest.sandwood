@@ -1,0 +1,35 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model LDATest(int noTopics, int vocabSize, int[][] documents) {
+
+	double[] alpha = new double[noTopics];
+	for(int i:[0..noTopics))
+		alpha[i] = 0.1;
+
+	double[] beta = new double[vocabSize];
+	for(int i:[0..vocabSize))
+		beta[i] = 0.1;
+
+	double[][] phi = dirichlet(beta).sample(noTopics);
+	double[][] theta = dirichlet(alpha).sample(documents.length);
+	int[][] w = new int[documents.length][];
+
+	for(int i:[0..documents.length)) {
+		int[] t = new int[documents[i].length];
+		for(int j:[0..documents[i].length)) {
+			int z = categorical(theta[i]).sample();
+			t[j] = categorical(phi[z]).sample();
+		}
+		w[i] = t;
+	}
+
+	w.observe(documents);
+}
