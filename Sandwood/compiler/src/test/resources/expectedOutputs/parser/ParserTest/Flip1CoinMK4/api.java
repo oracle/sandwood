@@ -45,7 +45,7 @@ public class Flip1CoinMK4 extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(15, 15, 15, 19));
 
-        parFor(samples.subtract(intVariable(1, location(17, 23, 17, 23)), location(17, 22, 17, 22)), intVariable(0, location(17, 29, 17, 29)).subtract(intVariable(1, location(17, 27, 17, 30)), location(17, 27, 17, 30)), intVariable(1, location(17, 32, 17, 34)), false, location(17, 5, 17, 35), (i) -> { 
+        parFor(samples.subtract(intVariable(1, location(17, 23, 17, 23)), location(17, 22, 17, 22)), intVariable(0, location(17, 29, 17, 29)).subtract(intVariable(1, location(17, 27, 17, 30)), location(17, 27, 17, 30)), intVariable(1, location(17, 32, 17, 34)), false, location(17, 5, 17, 35), (i) -> {
             i.setAlias("i");
             i.setLocation(location(17, 13, 17, 13));
             flips.get(i, location(18, 14, 18, 16)).observe(flipsMeasured.get(i, location(18, 39, 18, 41)), location(18, 18, 18, 42));
@@ -58,7 +58,26 @@ public class Flip1CoinMK4 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK4", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK4(boolean[] flipsMeasured) {\n    int samples = flipsMeasured.length;\n    double bias = beta(1.0, 1.0).sample();\n    private Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = bernoulli.sample(samples);\n        \n    for(int i=samples-1; i>=0; i--)\n        flips[i].observe(flipsMeasured[i]);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK4(boolean[] flipsMeasured) {\n"
+             + "    int samples = flipsMeasured.length;\n"
+             + "    double bias = beta(1.0, 1.0).sample();\n"
+             + "    private Bernoulli bernoulli = bernoulli(bias);\n"
+             + "    boolean[] flips = bernoulli.sample(samples);\n"
+             + "        \n"
+             + "    for(int i=samples-1; i>=0; i--)\n"
+             + "        flips[i].observe(flipsMeasured[i]);\n"
+             + "}\n"
+             + "";
     }
 }

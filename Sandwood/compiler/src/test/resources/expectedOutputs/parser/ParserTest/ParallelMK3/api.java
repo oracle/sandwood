@@ -44,7 +44,7 @@ public class ParallelMK3 extends GeneratedAPIBuilder {
         sample.setAlias("sample");
         sample.setLocation(location(17, 14, 17, 19));
 
-        parFor(intVariable(0, location(18, 15, 18, 15)), observed.length(location(18, 29, 18, 34)), intVariable(1, location(18, 37, 18, 39)), true, location(18, 5, 18, 40), (i) -> { 
+        parFor(intVariable(0, location(18, 15, 18, 15)), observed.length(location(18, 29, 18, 34)), intVariable(1, location(18, 37, 18, 39)), true, location(18, 5, 18, 40), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 13, 18, 13));
             indirection.put(i, sample.get(i, location(19, 32, 19, 34)), location(19, 20, 19, 34));
@@ -60,7 +60,30 @@ public class ParallelMK3 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "ParallelMK3", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model ParallelMK3(double[] observed) {\n    double[] generated = new double[observed.length];\n    double[] indirection = new double[observed.length];\n    double[] v = new double[10] <~ 0.1;\n\n\n    double[] sample = dirichlet(v).sample();\n    for(int i=0; i<observed.length; i++) {\n        indirection[i] = sample[i];\n        generated[i] = gaussian(sample[i], indirection[i]).sample();\n    }\n\n    generated.observe(observed);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model ParallelMK3(double[] observed) {\n"
+             + "    double[] generated = new double[observed.length];\n"
+             + "    double[] indirection = new double[observed.length];\n"
+             + "    double[] v = new double[10] <~ 0.1;\n"
+             + "\n"
+             + "\n"
+             + "    double[] sample = dirichlet(v).sample();\n"
+             + "    for(int i=0; i<observed.length; i++) {\n"
+             + "        indirection[i] = sample[i];\n"
+             + "        generated[i] = gaussian(sample[i], indirection[i]).sample();\n"
+             + "    }\n"
+             + "\n"
+             + "    generated.observe(observed);\n"
+             + "}";
     }
 }

@@ -1584,6 +1584,35 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK12(boolean[] flipsMeasured, boolean guard1, int guard2) {\n    int samples = flipsMeasured.length;\n        \n    double bias;\n    if(guard1)\n      bias = beta(1.0, 1).sample();\n    else { \n        if(guard2 <= 2) {\n            bias = beta(1.0, 1).sample()/2;\n        } else\n            bias = beta(1.0, 1).sample()/3;\n    }\n        \n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = bernoulli.sample(samples);\n\n    for(int i:[0..samples))\n        flips[i].observe(flipsMeasured[i]);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip1CoinMK12(boolean[] flipsMeasured, boolean guard1, int guard2) {\n"
+		     + "    int samples = flipsMeasured.length;\n"
+		     + "        \n"
+		     + "    double bias;\n"
+		     + "    if(guard1)\n"
+		     + "      bias = beta(1.0, 1).sample();\n"
+		     + "    else { \n"
+		     + "        if(guard2 <= 2) {\n"
+		     + "            bias = beta(1.0, 1).sample()/2;\n"
+		     + "        } else\n"
+		     + "            bias = beta(1.0, 1).sample()/3;\n"
+		     + "    }\n"
+		     + "        \n"
+		     + "    Bernoulli bernoulli = bernoulli(bias);\n"
+		     + "    boolean[] flips = bernoulli.sample(samples);\n"
+		     + "\n"
+		     + "    for(int i:[0..samples))\n"
+		     + "        flips[i].observe(flipsMeasured[i]);\n"
+		     + "}\n"
+		     + "";
 	}
 }

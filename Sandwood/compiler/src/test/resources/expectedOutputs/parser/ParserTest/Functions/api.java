@@ -29,15 +29,33 @@ public class Functions extends GeneratedAPIBuilder {
         return new CompilationDesc();
     }
 
-    private static  void sample(ArrayVariable<ArrayVariable<BooleanVariable>> flips, IntVariable samples, IntVariable i, ArrayVariable<DoubleVariable> bias, Location $location) { 
+    private static  void sample(ArrayVariable<ArrayVariable<BooleanVariable>> flips, IntVariable samples, IntVariable i, ArrayVariable<DoubleVariable> bias, Location $location) {
         Bernoulli bernoulli = bernoulli(bias.get(i, location(14, 49, 14, 51)), location(14, 35, 14, 52));
         bernoulli.setAlias("bernoulli");
         bernoulli.setLocation(location(14, 23, 14, 31));
+        bernoulli.setPrivate();
 
         flips.put(i, bernoulli.sample(samples, location(15, 34, 15, 48)), location(15, 18, 15, 48));
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Functions {        \n         \n    private void sample(boolean[][] flips, int samples, int i, double[] bias) {\n            Bernoulli bernoulli = bernoulli(bias[i]);\n            flips[i] = bernoulli.sample(samples);\n    }\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Functions {        \n"
+             + "         \n"
+             + "    private void sample(boolean[][] flips, int samples, int i, double[] bias) {\n"
+             + "            Bernoulli bernoulli = bernoulli(bias[i]);\n"
+             + "            flips[i] = bernoulli.sample(samples);\n"
+             + "    }\n"
+             + "}\n"
+             + "";
     }
 }

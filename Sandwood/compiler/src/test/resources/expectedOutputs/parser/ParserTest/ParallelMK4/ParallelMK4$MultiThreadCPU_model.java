@@ -1144,6 +1144,38 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model ParallelMK4(int[] observed) {\n    int[] generated = new int[observed.length];\n    double[][] indirection1 = new double[observed.length][10];\n    double[][] indirection2 = new double[observed.length][10];\n\n    for(int i=0; i<observed.length; i++) {\n        for(int j=0; j<10; j++) {\n            indirection1[i][j] = uniform(0.0, 1.0).sample();\n        }\n    }\n    \n    for(int k=0; k<observed.length; k++) {\n        for(int l=0; l<10; l++) {\n            indirection2[k][l] = indirection1[k][l];\n        }\n    }\n    \n    for(int m=0; m<observed.length; m++) {\n        generated[m] = categorical(indirection2[m]).sample();\n    }\n\n    generated.observe(observed);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model ParallelMK4(int[] observed) {\n"
+		     + "    int[] generated = new int[observed.length];\n"
+		     + "    double[][] indirection1 = new double[observed.length][10];\n"
+		     + "    double[][] indirection2 = new double[observed.length][10];\n"
+		     + "\n"
+		     + "    for(int i=0; i<observed.length; i++) {\n"
+		     + "        for(int j=0; j<10; j++) {\n"
+		     + "            indirection1[i][j] = uniform(0.0, 1.0).sample();\n"
+		     + "        }\n"
+		     + "    }\n"
+		     + "    \n"
+		     + "    for(int k=0; k<observed.length; k++) {\n"
+		     + "        for(int l=0; l<10; l++) {\n"
+		     + "            indirection2[k][l] = indirection1[k][l];\n"
+		     + "        }\n"
+		     + "    }\n"
+		     + "    \n"
+		     + "    for(int m=0; m<observed.length; m++) {\n"
+		     + "        generated[m] = categorical(indirection2[m]).sample();\n"
+		     + "    }\n"
+		     + "\n"
+		     + "    generated.observe(observed);\n"
+		     + "}";
 	}
 }

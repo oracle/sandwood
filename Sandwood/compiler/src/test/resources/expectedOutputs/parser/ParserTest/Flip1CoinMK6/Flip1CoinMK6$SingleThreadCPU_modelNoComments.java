@@ -494,6 +494,32 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK6(boolean[] flipsMeasured1, boolean[] flipsMeasured2) {\n    int samples1 = flipsMeasured1.length;\n    int samples2 = flipsMeasured2.length;\n        \n    double bias = beta(1.0, 1).sample();\n        \n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips1 = bernoulli.sample(samples1);\n    boolean[] flips2 = bernoulli.sample(samples2);\n\n    for(int i:[0..samples1))\n        flips1[i].observe(flipsMeasured1[i]);\n\n    for(int i:[0..samples2))\n        flips2[i].observe(flipsMeasured2[i]);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip1CoinMK6(boolean[] flipsMeasured1, boolean[] flipsMeasured2) {\n"
+		     + "    int samples1 = flipsMeasured1.length;\n"
+		     + "    int samples2 = flipsMeasured2.length;\n"
+		     + "        \n"
+		     + "    double bias = beta(1.0, 1).sample();\n"
+		     + "        \n"
+		     + "    Bernoulli bernoulli = bernoulli(bias);\n"
+		     + "    boolean[] flips1 = bernoulli.sample(samples1);\n"
+		     + "    boolean[] flips2 = bernoulli.sample(samples2);\n"
+		     + "\n"
+		     + "    for(int i:[0..samples1))\n"
+		     + "        flips1[i].observe(flipsMeasured1[i]);\n"
+		     + "\n"
+		     + "    for(int i:[0..samples2))\n"
+		     + "        flips2[i].observe(flipsMeasured2[i]);\n"
+		     + "}\n"
+		     + "";
 	}
 }

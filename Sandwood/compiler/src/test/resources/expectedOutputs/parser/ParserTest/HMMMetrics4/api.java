@@ -51,7 +51,7 @@ public class HMMMetrics4 extends GeneratedAPIBuilder {
         st.setAlias("st");
         st.setLocation(location(25, 13, 25, 14));
 
-        parFor(intVariable(0, location(26, 22, 26, 22)), noSamples, intVariable(1, location(26, 45, 26, 52)), true, location(26, 5, 26, 53), (sample) -> { 
+        parFor(intVariable(0, location(26, 22, 26, 22)), noSamples, intVariable(1, location(26, 45, 26, 52)), true, location(26, 5, 26, 53), (sample) -> {
             sample.setAlias("sample");
             sample.setLocation(location(26, 13, 26, 18));
             IntVariable streamLength = metric.get(sample, location(27, 34, 27, 41)).get(intVariable(0, location(27, 43, 27, 43)), location(27, 42, 27, 44)).length(location(27, 46, 27, 51));
@@ -60,7 +60,7 @@ public class HMMMetrics4 extends GeneratedAPIBuilder {
 
             st.put(sample, Variable.arrayVariable(location(30, 29, 30, 42), VariableType.IntVariable, streamLength), location(30, 11, 30, 42));
             st.get(sample, location(33, 11, 33, 18)).put(intVariable(0, location(33, 20, 33, 20)), categorical(initialStateDistribution, location(33, 25, 33, 61)).sampleDistribution(location(33, 63, 33, 82)), location(33, 19, 33, 82));
-            parFor(intVariable(1, location(36, 28, 36, 28)), streamLength, intVariable(1, location(36, 56, 36, 65)), true, location(36, 9, 36, 66), (timeStep) -> { 
+            parFor(intVariable(1, location(36, 28, 36, 28)), streamLength, intVariable(1, location(36, 56, 36, 65)), true, location(36, 9, 36, 66), (timeStep) -> {
                 timeStep.setAlias("timeStep");
                 timeStep.setLocation(location(36, 17, 36, 24));
                 st.get(sample, location(37, 15, 37, 22)).put(timeStep, categorical(m.get(st.get(sample, location(37, 52, 37, 59)).get(timeStep.subtract(intVariable(1, location(37, 70, 37, 70)), location(37, 69, 37, 69)), location(37, 60, 37, 71)), location(37, 49, 37, 72)), location(37, 36, 37, 73)).sampleDistribution(location(37, 75, 37, 94)), location(37, 23, 37, 94));
@@ -93,14 +93,14 @@ public class HMMMetrics4 extends GeneratedAPIBuilder {
         current_metric_valid_bias.setAlias("current_metric_valid_bias");
         current_metric_valid_bias.setLocation(location(50, 16, 50, 40));
 
-        parFor(intVariable(0, location(53, 22, 53, 22)), noSamples, intVariable(1, location(53, 45, 53, 52)), true, location(53, 5, 53, 53), (sample) -> { 
+        parFor(intVariable(0, location(53, 22, 53, 22)), noSamples, intVariable(1, location(53, 45, 53, 52)), true, location(53, 5, 53, 53), (sample) -> {
             sample.setAlias("sample");
             sample.setLocation(location(53, 13, 53, 18));
             IntVariable streamLength = metric.get(sample, location(54, 34, 54, 41)).get(intVariable(0, location(54, 43, 54, 43)), location(54, 42, 54, 44)).length(location(54, 46, 54, 51));
             streamLength.setAlias("streamLength");
             streamLength.setLocation(location(54, 13, 54, 24));
 
-            parFor(intVariable(0, location(55, 26, 55, 26)), noServers, intVariable(1, location(55, 49, 55, 56)), true, location(55, 9, 55, 57), (server) -> { 
+            parFor(intVariable(0, location(55, 26, 55, 26)), noServers, intVariable(1, location(55, 49, 55, 56)), true, location(55, 9, 55, 57), (server) -> {
                 server.setAlias("server");
                 server.setLocation(location(55, 17, 55, 22));
                 ArrayVariable<DoubleVariable> metric_inner = Variable.arrayVariable(location(57, 47, 57, 60), VariableType.DoubleVariable, streamLength);
@@ -113,7 +113,7 @@ public class HMMMetrics4 extends GeneratedAPIBuilder {
                 metric_valid_inner.setLocation(location(60, 23, 60, 40));
 
                 metric_valid_g.get(sample, location(61, 27, 61, 34)).put(server, metric_valid_inner, location(61, 35, 61, 63));
-                parFor(intVariable(0, location(64, 32, 64, 32)), streamLength, intVariable(1, location(64, 60, 64, 69)), true, location(64, 13, 64, 70), (timeStep) -> { 
+                parFor(intVariable(0, location(64, 32, 64, 32)), streamLength, intVariable(1, location(64, 60, 64, 69)), true, location(64, 13, 64, 70), (timeStep) -> {
                     timeStep.setAlias("timeStep");
                     timeStep.setLocation(location(64, 21, 64, 28));
                     IntVariable currentState = st.get(sample, location(65, 38, 65, 45)).get(timeStep, location(65, 46, 65, 55));
@@ -144,7 +144,83 @@ public class HMMMetrics4 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "HMMMetrics4", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n *\n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel HMMMetrics4(\n               double[][][] metric,\n               boolean[][][] metric_valid, \n               int max_metric,\n               int noStates) {\n    \n    int noSamples = metric.length;\n\n    // Construct arrays describing the probability of a move from 1 state to another.\n    double[] v = new double[noStates] <~ 0.1;\n    double[] initialStateDistribution = dirichlet(v).sample();\n    double[][] m = dirichlet(v).sample(noStates);\n    \n    //Calculate all the state transitions\n    int[][] st = new int[noSamples][];\n    for(int sample = 0; sample < noSamples; sample++) {\n        int streamLength = metric[sample][0].length;\n        \n        // Allocate space for the state.\n        st[sample] = new int[streamLength];\n        \n        // Set the initial state by sampling from a categorical with learnt weightings.\n        st[sample][0] = categorical(initialStateDistribution).sampleDistribution();\n        \n        // Calculate the remaining weightings\n        for(int timeStep = 1; timeStep < streamLength; timeStep++)\n            st[sample][timeStep] = categorical(m[st[sample][timeStep-1]]).sampleDistribution();\n    }\n    \n    // Calculate the number of servers\n    int noServers = metric[0].length;    \n    \n    // Allocate space for each generated metric.    \n    double[][][] metric_g = new double[noSamples][noServers][];\n    boolean[][][] metric_valid_g = new boolean[noSamples][noServers][];\n\n    // Calculate metric parameters\n    double[][] current_metric_mean = uniform(0.0, (double) max_metric).sample(noServers, noStates);\n    double[][] current_metric_var = inverseGamma(1.0, 1.0).sample(noServers, noStates);\n    double[][] current_metric_valid_bias = beta(1.0, 1.0).sample(noServers, noStates);\n    \n    // Compute the values of each metric\n    for(int sample = 0; sample < noSamples; sample++) {\n        int streamLength = metric[sample][0].length;\n        for(int server = 0; server < noServers; server++) {\n            //Allocate space for the time series\n            double[] metric_inner = new double[streamLength];\n            metric_g[sample][server] = metric_inner;\n            \n            boolean[] metric_valid_inner = new boolean[streamLength];\n            metric_valid_g[sample][server] = metric_valid_inner;\n            \n            //Generate values.\n            for(int timeStep = 0; timeStep < streamLength; timeStep++){\n                int currentState = st[sample][timeStep];\n                \n                metric_valid_inner[timeStep] = bernoulli(current_metric_valid_bias[server][currentState]).sample();\n                if(metric_valid_inner[timeStep])\n                    metric_inner[timeStep] = gaussian(current_metric_mean[server][currentState], current_metric_var[server][currentState]).sample();\n            }\n        }\n    }\n\n    //Tie the values to the measured values.\n    metric_valid_g.observe(metric_valid);\n    metric_g.observe(metric);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " *\n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model HMMMetrics4(\n"
+             + "               double[][][] metric,\n"
+             + "               boolean[][][] metric_valid, \n"
+             + "               int max_metric,\n"
+             + "               int noStates) {\n"
+             + "    \n"
+             + "    int noSamples = metric.length;\n"
+             + "\n"
+             + "    // Construct arrays describing the probability of a move from 1 state to another.\n"
+             + "    double[] v = new double[noStates] <~ 0.1;\n"
+             + "    double[] initialStateDistribution = dirichlet(v).sample();\n"
+             + "    double[][] m = dirichlet(v).sample(noStates);\n"
+             + "    \n"
+             + "    //Calculate all the state transitions\n"
+             + "    int[][] st = new int[noSamples][];\n"
+             + "    for(int sample = 0; sample < noSamples; sample++) {\n"
+             + "        int streamLength = metric[sample][0].length;\n"
+             + "        \n"
+             + "        // Allocate space for the state.\n"
+             + "        st[sample] = new int[streamLength];\n"
+             + "        \n"
+             + "        // Set the initial state by sampling from a categorical with learnt weightings.\n"
+             + "        st[sample][0] = categorical(initialStateDistribution).sampleDistribution();\n"
+             + "        \n"
+             + "        // Calculate the remaining weightings\n"
+             + "        for(int timeStep = 1; timeStep < streamLength; timeStep++)\n"
+             + "            st[sample][timeStep] = categorical(m[st[sample][timeStep-1]]).sampleDistribution();\n"
+             + "    }\n"
+             + "    \n"
+             + "    // Calculate the number of servers\n"
+             + "    int noServers = metric[0].length;    \n"
+             + "    \n"
+             + "    // Allocate space for each generated metric.    \n"
+             + "    double[][][] metric_g = new double[noSamples][noServers][];\n"
+             + "    boolean[][][] metric_valid_g = new boolean[noSamples][noServers][];\n"
+             + "\n"
+             + "    // Calculate metric parameters\n"
+             + "    double[][] current_metric_mean = uniform(0.0, (double) max_metric).sample(noServers, noStates);\n"
+             + "    double[][] current_metric_var = inverseGamma(1.0, 1.0).sample(noServers, noStates);\n"
+             + "    double[][] current_metric_valid_bias = beta(1.0, 1.0).sample(noServers, noStates);\n"
+             + "    \n"
+             + "    // Compute the values of each metric\n"
+             + "    for(int sample = 0; sample < noSamples; sample++) {\n"
+             + "        int streamLength = metric[sample][0].length;\n"
+             + "        for(int server = 0; server < noServers; server++) {\n"
+             + "            //Allocate space for the time series\n"
+             + "            double[] metric_inner = new double[streamLength];\n"
+             + "            metric_g[sample][server] = metric_inner;\n"
+             + "            \n"
+             + "            boolean[] metric_valid_inner = new boolean[streamLength];\n"
+             + "            metric_valid_g[sample][server] = metric_valid_inner;\n"
+             + "            \n"
+             + "            //Generate values.\n"
+             + "            for(int timeStep = 0; timeStep < streamLength; timeStep++){\n"
+             + "                int currentState = st[sample][timeStep];\n"
+             + "                \n"
+             + "                metric_valid_inner[timeStep] = bernoulli(current_metric_valid_bias[server][currentState]).sample();\n"
+             + "                if(metric_valid_inner[timeStep])\n"
+             + "                    metric_inner[timeStep] = gaussian(current_metric_mean[server][currentState], current_metric_var[server][currentState]).sample();\n"
+             + "            }\n"
+             + "        }\n"
+             + "    }\n"
+             + "\n"
+             + "    //Tie the values to the measured values.\n"
+             + "    metric_valid_g.observe(metric_valid);\n"
+             + "    metric_g.observe(metric);\n"
+             + "}";
     }
 }

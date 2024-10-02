@@ -38,7 +38,7 @@ public class Flip2CoinsMK8 extends GeneratedAPIBuilder {
         bias.setAlias("bias");
         bias.setLocation(location(14, 14, 14, 17));
 
-        parFor(intVariable(0, location(15, 16, 15, 16)), coins, intVariable(1, location(15, 15, 15, 18)), true, location(15, 5, 15, 25), (i) -> { 
+        parFor(intVariable(0, location(15, 16, 15, 16)), coins, intVariable(1, location(15, 15, 15, 18)), true, location(15, 5, 15, 25), (i) -> {
             i.setAlias("i");
             i.setLocation(location(15, 13, 15, 13));
             bias.put(i, beta(a, b, location(16, 19, 16, 28)).sample(location(16, 30, 16, 37)), location(16, 13, 16, 37));
@@ -48,7 +48,7 @@ public class Flip2CoinsMK8 extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(18, 17, 18, 21));
 
-        parFor(intVariable(0, location(20, 16, 20, 16)), coins, intVariable(1, location(20, 15, 20, 18)), true, location(20, 5, 20, 25), (j) -> { 
+        parFor(intVariable(0, location(20, 16, 20, 16)), coins, intVariable(1, location(20, 15, 20, 18)), true, location(20, 5, 20, 25), (j) -> {
             j.setAlias("j");
             j.setLocation(location(20, 13, 20, 13));
             IntVariable samples = flipsMeasured.get(j, location(21, 36, 21, 38)).length(location(21, 40, 21, 45));
@@ -71,7 +71,34 @@ public class Flip2CoinsMK8 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip2CoinsMK8", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip2CoinsMK8(double a, double b, boolean[][] flipsMeasured) {\n     \n    int coins = flipsMeasured.length;\n    double[] bias = new double[coins];\n    for(int i:[0..coins)) \n        bias[i] = beta(a, b).sample();\n            \n    boolean[][] flips = new boolean[coins][];\n    \n    for(int j:[0..coins)) {\n        int samples = flipsMeasured[j].length;\n        Bernoulli bernoulli = bernoulli(1 - bias[j]);\n        flips[j] = bernoulli.sample(samples);\n    }\n\n    flips.observe(flipsMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip2CoinsMK8(double a, double b, boolean[][] flipsMeasured) {\n"
+             + "     \n"
+             + "    int coins = flipsMeasured.length;\n"
+             + "    double[] bias = new double[coins];\n"
+             + "    for(int i:[0..coins)) \n"
+             + "        bias[i] = beta(a, b).sample();\n"
+             + "            \n"
+             + "    boolean[][] flips = new boolean[coins][];\n"
+             + "    \n"
+             + "    for(int j:[0..coins)) {\n"
+             + "        int samples = flipsMeasured[j].length;\n"
+             + "        Bernoulli bernoulli = bernoulli(1 - bias[j]);\n"
+             + "        flips[j] = bernoulli.sample(samples);\n"
+             + "    }\n"
+             + "\n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

@@ -35,7 +35,7 @@ public class DiscreteChoiceAlt extends GeneratedAPIBuilder {
         ut.setLocation(location(15, 14, 15, 15));
 
         ut.put(intVariable(0, location(16, 8, 16, 8)), doubleVariable(0.0, location(16, 13, 16, 15)), location(16, 7, 16, 15));
-        parFor(intVariable(1, location(17, 15, 17, 15)), noProducts, intVariable(1, location(17, 32, 17, 34)), true, location(17, 5, 17, 35), (i) -> { 
+        parFor(intVariable(1, location(17, 15, 17, 15)), noProducts, intVariable(1, location(17, 32, 17, 34)), true, location(17, 5, 17, 35), (i) -> {
             i.setAlias("i");
             i.setLocation(location(17, 13, 17, 13));
             ut.put(i, gaussian(intVariable(0, location(18, 25, 18, 25)), intVariable(10, location(18, 28, 18, 29)), location(18, 16, 18, 30)).sample(location(18, 32, 18, 39)), location(18, 11, 18, 39));
@@ -45,14 +45,14 @@ public class DiscreteChoiceAlt extends GeneratedAPIBuilder {
         exped.setAlias("exped");
         exped.setLocation(location(21, 14, 21, 18));
 
-        parFor(intVariable(0, location(22, 18, 22, 18)), noProducts, intVariable(1, location(22, 17, 22, 20)), true, location(22, 5, 22, 32), (i) -> { 
+        parFor(intVariable(0, location(22, 18, 22, 18)), noProducts, intVariable(1, location(22, 17, 22, 20)), true, location(22, 5, 22, 32), (i) -> {
             i.setAlias("i");
             i.setLocation(location(22, 13, 22, 13));
             exped.put(i, exp(ut.get(i, location(23, 26, 23, 28)), location(23, 20, 23, 29)), location(23, 14, 23, 29));
 
         });
 
-        DoubleVariable sum = reduce(exped, intVariable(0, location(25, 32, 25, 32)), location(25, 18, 25, 62), (i, j) ->  { 
+        DoubleVariable sum = reduce(exped, intVariable(0, location(25, 32, 25, 32)), location(25, 18, 25, 62), (i, j) -> {
             i.setAlias("i");
             i.setLocation(location(25, 36, 25, 36));
             j.setAlias("j");
@@ -66,7 +66,7 @@ public class DiscreteChoiceAlt extends GeneratedAPIBuilder {
         prob.setAlias("prob");
         prob.setLocation(location(26, 14, 26, 17));
 
-        parFor(intVariable(0, location(27, 19, 27, 19)), noProducts, intVariable(1, location(27, 18, 27, 21)), true, location(27, 5, 27, 33), (i) -> { 
+        parFor(intVariable(0, location(27, 19, 27, 19)), noProducts, intVariable(1, location(27, 18, 27, 21)), true, location(27, 5, 27, 33), (i) -> {
             i.setAlias("i");
             i.setLocation(location(27, 14, 27, 14));
             prob.put(i, exped.get(i, location(28, 24, 28, 26)).divide(sum, location(28, 28, 28, 28)), location(28, 13, 28, 28));
@@ -85,7 +85,41 @@ public class DiscreteChoiceAlt extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "DiscreteChoiceAlt", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model DiscreteChoiceAlt(int noProducts, int noObs, int[] ObsChoices) {\n    // we just need an uninformative prior for utility intercepts\n\n    // draw utilities\n    double[] ut = new double[noProducts];\n    ut[0] = 0.0;\n    for(int i=1; i<noProducts; i++) \n        ut[i]= gaussian(0, 10).sample();\n\n    // calculate choice probabilities\n    double[] exped = new double[noProducts];\n    for(int i : [0..noProducts)) {\n        exped[i] = exp(ut[i]);\n    }\n    double sum = reduce(exped, 0, (i, j) -> { return i + j; });\n    double[] prob = new double[noProducts];\n    for (int i : [0..noProducts)) {\n        prob[i] = exped[i] / sum;\n    }\n    // draw consumer choices according to the calculated probabilities\n    int[] choices = categorical(prob).sample(noObs);\n\n    // assert generated choices match observed choices\n    choices.observe(ObsChoices);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model DiscreteChoiceAlt(int noProducts, int noObs, int[] ObsChoices) {\n"
+             + "    // we just need an uninformative prior for utility intercepts\n"
+             + "\n"
+             + "    // draw utilities\n"
+             + "    double[] ut = new double[noProducts];\n"
+             + "    ut[0] = 0.0;\n"
+             + "    for(int i=1; i<noProducts; i++) \n"
+             + "        ut[i]= gaussian(0, 10).sample();\n"
+             + "\n"
+             + "    // calculate choice probabilities\n"
+             + "    double[] exped = new double[noProducts];\n"
+             + "    for(int i : [0..noProducts)) {\n"
+             + "        exped[i] = exp(ut[i]);\n"
+             + "    }\n"
+             + "    double sum = reduce(exped, 0, (i, j) -> { return i + j; });\n"
+             + "    double[] prob = new double[noProducts];\n"
+             + "    for (int i : [0..noProducts)) {\n"
+             + "        prob[i] = exped[i] / sum;\n"
+             + "    }\n"
+             + "    // draw consumer choices according to the calculated probabilities\n"
+             + "    int[] choices = categorical(prob).sample(noObs);\n"
+             + "\n"
+             + "    // assert generated choices match observed choices\n"
+             + "    choices.observe(ObsChoices);\n"
+             + "}";
     }
 }

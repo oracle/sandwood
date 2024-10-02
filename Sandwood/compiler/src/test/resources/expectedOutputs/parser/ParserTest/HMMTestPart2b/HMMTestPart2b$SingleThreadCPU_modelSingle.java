@@ -1373,6 +1373,40 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel HMMTestPart2b(boolean[] flipsMeasured) {\n        int states = 2;\n\n        double[] v = new double[states];\n        for(int i:[0..states))\n            v[i] = 0.1;\n        \n        double[][] m = dirichlet(v).sample(states);\n        double[] bias = beta(1.0, 1.0).sample(states);\n\n        int samples = flipsMeasured.length;\n        int[] st = new int[samples];\n        st[0] = 0;\n        \n        boolean[] flips = new boolean[samples];\n\n        for(int i:[0..samples-1))\n            st[i+1] = categorical(m[st[i]]).sample();\n            \n        for(int j:[1..samples))\n            flips[j] = bernoulli(bias[st[j]]).sample();\n\n        flips.observe(flipsMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "model HMMTestPart2b(boolean[] flipsMeasured) {\n"
+		     + "        int states = 2;\n"
+		     + "\n"
+		     + "        double[] v = new double[states];\n"
+		     + "        for(int i:[0..states))\n"
+		     + "            v[i] = 0.1;\n"
+		     + "        \n"
+		     + "        double[][] m = dirichlet(v).sample(states);\n"
+		     + "        double[] bias = beta(1.0, 1.0).sample(states);\n"
+		     + "\n"
+		     + "        int samples = flipsMeasured.length;\n"
+		     + "        int[] st = new int[samples];\n"
+		     + "        st[0] = 0;\n"
+		     + "        \n"
+		     + "        boolean[] flips = new boolean[samples];\n"
+		     + "\n"
+		     + "        for(int i:[0..samples-1))\n"
+		     + "            st[i+1] = categorical(m[st[i]]).sample();\n"
+		     + "            \n"
+		     + "        for(int j:[1..samples))\n"
+		     + "            flips[j] = bernoulli(bias[st[j]]).sample();\n"
+		     + "\n"
+		     + "        flips.observe(flipsMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

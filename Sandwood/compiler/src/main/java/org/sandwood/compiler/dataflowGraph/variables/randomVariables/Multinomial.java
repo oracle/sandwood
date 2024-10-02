@@ -66,14 +66,6 @@ public class Multinomial extends ArrayRandomVariable<IntVariable, Multinomial> {
                 p.getForwardIR(compilationCtx), n.getForwardIR(compilationCtx), sample));
     }
 
-    public static Multinomial multinomial(ArrayVariable<DoubleVariable> p, IntVariable n) {
-        return new Multinomial(p, n, new MultinomialTask(p, n, null));
-    }
-
-    public static Multinomial multinomial(ArrayVariable<DoubleVariable> p, IntVariable n, Location location) {
-        return new Multinomial(p, n, new MultinomialTask(p, n, location));
-    }
-
     @Override
     public IRTreeReturn<IntVariable> getMaxLength(CompilationContext compilationCtx) {
         return p.getMaxLength(compilationCtx);
@@ -82,5 +74,13 @@ public class Multinomial extends ArrayRandomVariable<IntVariable, Multinomial> {
     @Override
     public IRTreeReturn<IntVariable> getMinLength(CompilationContext compilationCtx) {
         return p.getMinLength(compilationCtx);
+    }
+
+    public static Multinomial multinomial(ArrayVariable<DoubleVariable> p, IntVariable n) {
+        return new Multinomial(p, n, new MultinomialTask(p, n, null));
+    }
+
+    public static Multinomial multinomial(ArrayVariable<DoubleVariable> p, IntVariable n, Location location) {
+        return new Multinomial(p, n, new MultinomialTask(p, n, location));
     }
 }

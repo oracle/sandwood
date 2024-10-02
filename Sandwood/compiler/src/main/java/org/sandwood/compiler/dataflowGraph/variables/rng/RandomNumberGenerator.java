@@ -12,7 +12,6 @@ import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.dataflowGraph.variables.VariableImplementation;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
-import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 
 /**
@@ -21,11 +20,10 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
  * @author djgoodma
  *
  */
-public class RandomNumberGenerator extends VariableImplementation<RandomNumberGenerator> {
+public abstract class RandomNumberGenerator extends VariableImplementation<RandomNumberGenerator> {
 
     private RandomNumberGenerator() {
         super(null);
-        throw new CompilerException("RNG cannot be created.");
     }
 
     @Override

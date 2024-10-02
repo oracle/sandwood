@@ -1,0 +1,36 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Conditional2d(double[] observedValue)  {
+		
+	//Construct a bernoulli
+	Bernoulli bernoulli = bernoulli(0.5);
+				
+	//Sample from it
+	boolean guard = bernoulli.sample();
+	
+	double value;
+	
+	double u;
+	u = uniform(0.0, 1.0).sample();
+	
+	if(guard)
+		value = 1.0;
+	else {
+		value = u;
+	}
+	
+	double[] value2 = new double[1];
+	
+	value2[0] = value;
+	
+	//Link the sampled value to the observed value
+	value2.observe(observedValue);
+}

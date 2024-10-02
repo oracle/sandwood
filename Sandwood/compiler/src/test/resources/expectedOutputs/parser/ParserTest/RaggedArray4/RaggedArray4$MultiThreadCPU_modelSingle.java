@@ -1793,6 +1793,23 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2025, Oracle and/or its affiliates\n *\n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n \n package org.sandwood.compiler.tests.parser;\n\npublic model RaggedArray4(int[] obs_measured) {\n    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n    double[] b = { 0.35, 0.65 };\n    int y = categorical(b).sampleDistribution();\n    double[] d = dirichlet(a[y]).sample();\n    int[] obs = categorical(d).sample(obs_measured.length);\n    obs.observe(obs_measured);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
+		     + " *\n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + " \n"
+		     + " package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model RaggedArray4(int[] obs_measured) {\n"
+		     + "    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n"
+		     + "    double[] b = { 0.35, 0.65 };\n"
+		     + "    int y = categorical(b).sampleDistribution();\n"
+		     + "    double[] d = dirichlet(a[y]).sample();\n"
+		     + "    int[] obs = categorical(d).sample(obs_measured.length);\n"
+		     + "    obs.observe(obs_measured);\n"
+		     + "}";
 	}
 }

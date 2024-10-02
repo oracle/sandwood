@@ -58,10 +58,9 @@ class CompilerTest {
         String[] expectedFiles = { "Flip2CoinsMK3$CoreInterface.class", "Flip2CoinsMK3$SingleThreadCPU.class",
                 "Flip2CoinsMK3$MultiThreadCPU.class", "Flip2CoinsMK3.class", "Flip2CoinsMK3$1.class",
                 "Flip2CoinsMK3$2.class", "Flip2CoinsMK3$3.class", "Flip2CoinsMK3$4.class", "Flip2CoinsMK3$5.class",
-                "Flip2CoinsMK3$6.class", "Flip2CoinsMK3$7.class", "Flip2CoinsMK3$AllInputs.class",
-                "Flip2CoinsMK3$InferValueInputs.class", "Flip2CoinsMK3$InferredValueOutputs.class",
-                "Flip2CoinsMK3$Probabilities.class", "Flip2CoinsMK3$LogProbabilities.class",
-                "Flip2CoinsMK3$InferredModelOutputs.class" };
+                "Flip2CoinsMK3$6.class", "Flip2CoinsMK3$AllInputs.class", "Flip2CoinsMK3$InferValueInputs.class",
+                "Flip2CoinsMK3$InferredValueOutputs.class", "Flip2CoinsMK3$Probabilities.class",
+                "Flip2CoinsMK3$LogProbabilities.class", "Flip2CoinsMK3$InferredModelOutputs.class" };
         String[] inputFiles = { "Flip2CoinsMK3.sandwood", "Functions.sandwood" };
         try {
             runCompilation(expectedFiles, inputFiles);

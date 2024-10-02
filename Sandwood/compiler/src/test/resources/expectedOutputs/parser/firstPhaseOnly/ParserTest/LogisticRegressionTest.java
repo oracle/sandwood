@@ -52,14 +52,14 @@ public class LogisticRegressionTest extends GeneratedAPIBuilder {
         bias.setAlias("bias");
         bias.setLocation(location(20, 12, 20, 15));
 
-        parFor(intVariable(0, location(22, 16, 22, 16)), n, intVariable(1, location(22, 15, 22, 18)), true, location(22, 5, 22, 21), (i) -> { 
+        parFor(intVariable(0, location(22, 16, 22, 16)), n, intVariable(1, location(22, 15, 22, 18)), true, location(22, 5, 22, 21), (i) -> {
             i.setAlias("i");
             i.setLocation(location(22, 13, 22, 13));
             ArrayVariable<DoubleVariable> indicatorValues = Variable.arrayVariable(location(23, 46, 23, 48), VariableType.DoubleVariable, k);
             indicatorValues.setAlias("indicatorValues");
             indicatorValues.setLocation(location(23, 18, 23, 32));
 
-            parFor(intVariable(0, location(24, 20, 24, 20)), k, intVariable(1, location(24, 19, 24, 22)), true, location(24, 9, 24, 25), (j) -> { 
+            parFor(intVariable(0, location(24, 20, 24, 20)), k, intVariable(1, location(24, 19, 24, 22)), true, location(24, 9, 24, 25), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(24, 17, 24, 17));
                 indicatorValues.put(j, weights.get(j, location(25, 41, 25, 43)).times(x.get(i, location(25, 48, 25, 50)).get(j, location(25, 51, 25, 53)), location(25, 45, 25, 45)), location(25, 28, 25, 45));
@@ -81,8 +81,8 @@ public class LogisticRegressionTest extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LogisticRegressionTest", $helperClasses, "org.sandwood.compiler.tests.parser.firstPhaseOnly", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static DoubleVariable sum(ArrayVariable<DoubleVariable> a, Location $location) { 
-        return reduce(a, intVariable(0, location(34, 26, 34, 26)), location(34, 16, 36, 10), (i, j) ->  { 
+    private static DoubleVariable sum(ArrayVariable<DoubleVariable> a, Location $location) {
+        return reduce(a, intVariable(0, location(34, 26, 34, 26)), location(34, 16, 36, 10), (i, j) -> {
             i.setAlias("i");
             i.setLocation(location(34, 30, 34, 30));
             j.setAlias("j");
@@ -91,7 +91,45 @@ public class LogisticRegressionTest extends GeneratedAPIBuilder {
         });
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser.firstPhaseOnly;\n\nimport org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n\nmodel LogisticRegressionTest(double[][] x, boolean[] yMeasured) {\n\n    int n = x.length;\n    int k = x[0].length;\n    boolean[] y = new boolean[n];\n\n    double[] weights = gaussian(0,10).sample(k);\n    double bias = gaussian(0,10).sample();\n\n    for(int i:[0..n)) {\n        double[] indicatorValues = new double[k];\n        for(int j:[0..k))\n            indicatorValues[j] = weights[j] * x[i][j];\n        double success = Sigmoid.sigmoid(sum(indicatorValues) + bias);\n        y[i] = bernoulli(success).sample();\n    }\n\n    y.observe(yMeasured);\n\n\n    private double sum(double[] a) {\n        return reduce(a, 0, (i,j) -> {\n            return i + j;\n        });\n    }\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser.firstPhaseOnly;\n"
+             + "\n"
+             + "import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n"
+             + "\n"
+             + "model LogisticRegressionTest(double[][] x, boolean[] yMeasured) {\n"
+             + "\n"
+             + "    int n = x.length;\n"
+             + "    int k = x[0].length;\n"
+             + "    boolean[] y = new boolean[n];\n"
+             + "\n"
+             + "    double[] weights = gaussian(0,10).sample(k);\n"
+             + "    double bias = gaussian(0,10).sample();\n"
+             + "\n"
+             + "    for(int i:[0..n)) {\n"
+             + "        double[] indicatorValues = new double[k];\n"
+             + "        for(int j:[0..k))\n"
+             + "            indicatorValues[j] = weights[j] * x[i][j];\n"
+             + "        double success = Sigmoid.sigmoid(sum(indicatorValues) + bias);\n"
+             + "        y[i] = bernoulli(success).sample();\n"
+             + "    }\n"
+             + "\n"
+             + "    y.observe(yMeasured);\n"
+             + "\n"
+             + "\n"
+             + "    private double sum(double[] a) {\n"
+             + "        return reduce(a, 0, (i,j) -> {\n"
+             + "            return i + j;\n"
+             + "        });\n"
+             + "    }\n"
+             + "}\n"
+             + "";
     }
 }

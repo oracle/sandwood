@@ -985,6 +985,29 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model ParallelMK3(double[] observed) {\n    double[] generated = new double[observed.length];\n    double[] indirection = new double[observed.length];\n    double[] v = new double[10] <~ 0.1;\n\n\n    double[] sample = dirichlet(v).sample();\n    for(int i=0; i<observed.length; i++) {\n        indirection[i] = sample[i];\n        generated[i] = gaussian(sample[i], indirection[i]).sample();\n    }\n\n    generated.observe(observed);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model ParallelMK3(double[] observed) {\n"
+		     + "    double[] generated = new double[observed.length];\n"
+		     + "    double[] indirection = new double[observed.length];\n"
+		     + "    double[] v = new double[10] <~ 0.1;\n"
+		     + "\n"
+		     + "\n"
+		     + "    double[] sample = dirichlet(v).sample();\n"
+		     + "    for(int i=0; i<observed.length; i++) {\n"
+		     + "        indirection[i] = sample[i];\n"
+		     + "        generated[i] = gaussian(sample[i], indirection[i]).sample();\n"
+		     + "    }\n"
+		     + "\n"
+		     + "    generated.observe(observed);\n"
+		     + "}";
 	}
 }

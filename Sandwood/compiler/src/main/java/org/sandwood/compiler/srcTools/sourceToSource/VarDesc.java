@@ -8,14 +8,7 @@
 
 package org.sandwood.compiler.srcTools.sourceToSource;
 
-public class VarDesc {
-    final String type;
-    final Token[] typeLocation;
-    final Token nameLocation;
+import java.util.List;
 
-    VarDesc(String type, Token[] typeLocation, Token nameLocation) {
-        this.type = type;
-        this.typeLocation = typeLocation;
-        this.nameLocation = nameLocation;
-    }
-}
+public record VarDesc(String type, List<Token> typeLocation, Token nameLocation, Token permissionsToken,
+        String lastJavadoc) {}

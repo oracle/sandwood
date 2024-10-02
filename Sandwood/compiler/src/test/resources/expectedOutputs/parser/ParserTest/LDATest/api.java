@@ -34,7 +34,7 @@ public class LDATest extends GeneratedAPIBuilder {
         alpha.setAlias("alpha");
         alpha.setLocation(location(13, 14, 13, 18));
 
-        parFor(intVariable(0, location(14, 16, 14, 16)), noTopics, intVariable(1, location(14, 15, 14, 18)), true, location(14, 5, 14, 28), (i) -> { 
+        parFor(intVariable(0, location(14, 16, 14, 16)), noTopics, intVariable(1, location(14, 15, 14, 18)), true, location(14, 5, 14, 28), (i) -> {
             i.setAlias("i");
             i.setLocation(location(14, 13, 14, 13));
             alpha.put(i, doubleVariable(0.1, location(15, 20, 15, 22)), location(15, 14, 15, 22));
@@ -44,7 +44,7 @@ public class LDATest extends GeneratedAPIBuilder {
         beta.setAlias("beta");
         beta.setLocation(location(17, 14, 17, 17));
 
-        parFor(intVariable(0, location(18, 16, 18, 16)), vocabSize, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 29), (i) -> { 
+        parFor(intVariable(0, location(18, 16, 18, 16)), vocabSize, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 29), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 13, 18, 13));
             beta.put(i, doubleVariable(0.1, location(19, 19, 19, 21)), location(19, 13, 19, 21));
@@ -62,14 +62,14 @@ public class LDATest extends GeneratedAPIBuilder {
         w.setAlias("w");
         w.setLocation(location(23, 13, 23, 13));
 
-        parFor(intVariable(0, location(25, 16, 25, 16)), documents.length(location(25, 29, 25, 34)), intVariable(1, location(25, 15, 25, 18)), true, location(25, 5, 25, 36), (i) -> { 
+        parFor(intVariable(0, location(25, 16, 25, 16)), documents.length(location(25, 29, 25, 34)), intVariable(1, location(25, 15, 25, 18)), true, location(25, 5, 25, 36), (i) -> {
             i.setAlias("i");
             i.setLocation(location(25, 13, 25, 13));
             ArrayVariable<IntVariable> t = Variable.arrayVariable(location(26, 26, 26, 46), VariableType.IntVariable, documents.get(i, location(26, 36, 26, 38)).length(location(26, 40, 26, 45)));
             t.setAlias("t");
             t.setLocation(location(26, 15, 26, 15));
 
-            parFor(intVariable(0, location(27, 20, 27, 20)), documents.get(i, location(27, 32, 27, 34)).length(location(27, 36, 27, 41)), intVariable(1, location(27, 19, 27, 22)), true, location(27, 9, 27, 43), (j) -> { 
+            parFor(intVariable(0, location(27, 20, 27, 20)), documents.get(i, location(27, 32, 27, 34)).length(location(27, 36, 27, 41)), intVariable(1, location(27, 19, 27, 22)), true, location(27, 9, 27, 43), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(27, 17, 27, 17));
                 IntVariable z = categorical(theta.get(i, location(28, 38, 28, 40)), location(28, 21, 28, 41)).sample(location(28, 43, 28, 50));
@@ -92,7 +92,42 @@ public class LDATest extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LDATest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel LDATest(int noTopics, int vocabSize, int[][] documents) {\n\n    double[] alpha = new double[noTopics];\n    for(int i:[0..noTopics))\n        alpha[i] = 0.1;\n\n    double[] beta = new double[vocabSize];\n    for(int i:[0..vocabSize))\n        beta[i] = 0.1;\n\n    double[][] phi = dirichlet(beta).sample(noTopics);\n    double[][] theta = dirichlet(alpha).sample(documents.length);\n    int[][] w = new int[documents.length][];\n\n    for(int i:[0..documents.length)) {\n        int[] t = new int[documents[i].length];\n        for(int j:[0..documents[i].length)) {\n            int z = categorical(theta[i]).sample();\n            t[j] = categorical(phi[z]).sample();\n        }\n        w[i] = t;\n    }\n\n    w.observe(documents);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model LDATest(int noTopics, int vocabSize, int[][] documents) {\n"
+             + "\n"
+             + "    double[] alpha = new double[noTopics];\n"
+             + "    for(int i:[0..noTopics))\n"
+             + "        alpha[i] = 0.1;\n"
+             + "\n"
+             + "    double[] beta = new double[vocabSize];\n"
+             + "    for(int i:[0..vocabSize))\n"
+             + "        beta[i] = 0.1;\n"
+             + "\n"
+             + "    double[][] phi = dirichlet(beta).sample(noTopics);\n"
+             + "    double[][] theta = dirichlet(alpha).sample(documents.length);\n"
+             + "    int[][] w = new int[documents.length][];\n"
+             + "\n"
+             + "    for(int i:[0..documents.length)) {\n"
+             + "        int[] t = new int[documents[i].length];\n"
+             + "        for(int j:[0..documents[i].length)) {\n"
+             + "            int z = categorical(theta[i]).sample();\n"
+             + "            t[j] = categorical(phi[z]).sample();\n"
+             + "        }\n"
+             + "        w[i] = t;\n"
+             + "    }\n"
+             + "\n"
+             + "    w.observe(documents);\n"
+             + "}\n"
+             + "";
     }
 }

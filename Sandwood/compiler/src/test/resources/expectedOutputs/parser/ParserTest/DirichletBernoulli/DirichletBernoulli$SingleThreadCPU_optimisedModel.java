@@ -919,6 +919,29 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model DirichletBernoulli(boolean[] observed) {\n    double[] v = new double[2] <~ 0.1;\n    double[] prior = dirichlet(v).sample();\n    Bernoulli b1 = new Bernoulli(prior[0]);\n    Bernoulli b2 = new Bernoulli(prior[1]);\n    int length = observed.length;\n    boolean[] output = new boolean[length];\n    for(int i=0; i<length/2; i++)\n        output[i] = b1.sample();\n    for(int i=length/2; i<length; i++)\n        output[i] = b2.sample();\n    output.observe(observed);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model DirichletBernoulli(boolean[] observed) {\n"
+		     + "    double[] v = new double[2] <~ 0.1;\n"
+		     + "    double[] prior = dirichlet(v).sample();\n"
+		     + "    Bernoulli b1 = new Bernoulli(prior[0]);\n"
+		     + "    Bernoulli b2 = new Bernoulli(prior[1]);\n"
+		     + "    int length = observed.length;\n"
+		     + "    boolean[] output = new boolean[length];\n"
+		     + "    for(int i=0; i<length/2; i++)\n"
+		     + "        output[i] = b1.sample();\n"
+		     + "    for(int i=length/2; i<length; i++)\n"
+		     + "        output[i] = b2.sample();\n"
+		     + "    output.observe(observed);\n"
+		     + "}\n"
+		     + "";
 	}
 }

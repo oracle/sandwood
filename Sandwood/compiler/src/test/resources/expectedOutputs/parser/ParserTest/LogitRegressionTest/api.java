@@ -49,14 +49,14 @@ public class LogitRegressionTest extends GeneratedAPIBuilder {
         bias.setAlias("bias");
         bias.setLocation(location(19, 12, 19, 15));
 
-        parFor(intVariable(0, location(21, 16, 21, 16)), n, intVariable(1, location(21, 15, 21, 19)), true, location(21, 5, 21, 23), (i) -> { 
+        parFor(intVariable(0, location(21, 16, 21, 16)), n, intVariable(1, location(21, 15, 21, 19)), true, location(21, 5, 21, 23), (i) -> {
             i.setAlias("i");
             i.setLocation(location(21, 13, 21, 13));
             ArrayVariable<DoubleVariable> indicator = Variable.arrayVariable(location(22, 40, 22, 42), VariableType.DoubleVariable, k);
             indicator.setAlias("indicator");
             indicator.setLocation(location(22, 18, 22, 26));
 
-            parFor(intVariable(0, location(23, 20, 23, 20)), k, intVariable(1, location(23, 19, 23, 23)), true, location(23, 9, 23, 27), (j) -> { 
+            parFor(intVariable(0, location(23, 20, 23, 20)), k, intVariable(1, location(23, 19, 23, 23)), true, location(23, 9, 23, 27), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(23, 17, 23, 17));
                 indicator.put(j, exp(weights.get(j, location(24, 39, 24, 41)).times(x.get(i, location(24, 46, 24, 48)).get(j, location(24, 49, 24, 51)), location(24, 43, 24, 43)), location(24, 28, 24, 52)), location(24, 22, 24, 52));
@@ -71,7 +71,7 @@ public class LogitRegressionTest extends GeneratedAPIBuilder {
             p.setAlias("p");
             p.setLocation(location(29, 18, 29, 18));
 
-            parFor(intVariable(0, location(31, 20, 31, 20)), k, intVariable(1, location(31, 19, 31, 23)), true, location(31, 9, 31, 27), (j) -> { 
+            parFor(intVariable(0, location(31, 20, 31, 20)), k, intVariable(1, location(31, 19, 31, 23)), true, location(31, 9, 31, 27), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(31, 17, 31, 17));
                 p.put(j, indicator.get(j, location(32, 29, 32, 31)).divide(sum, location(32, 32, 32, 32)), location(32, 14, 32, 32));
@@ -90,7 +90,47 @@ public class LogitRegressionTest extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LogitRegressionTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel LogitRegressionTest(double[][] x, boolean[][] yMeasured) {\n    int k = 3;\n\n    int n = x.length;\n    boolean[][] y = new boolean[n][k];\n\n    double[] weights = gaussian(0,10).sample(k);\n    //TODO, change this to a beta distribution.\n    double bias = gaussian(0,10).sample();\n\n    for(int i:[0 .. n)) {\n        double[] indicator = new double[k];\n        for(int j:[0 .. k)) {\n            indicator[j] = exp(weights[j] * x[i][j]);\n        }\n        \n        //Single assignment semantics means a for loop cannot be used here.\n        double sum = indicator[0] + indicator[1] + indicator[2];\n        double[] p = new double[k];\n\n        for(int j:[0 .. k)) {\n            p[j] = indicator[j]/sum;\n            //This really wants to be a Categorical, but for now y will have\n            //to be arrays with just a single value set.\n            y[i][j] = bernoulli(p[j] + bias).sample();\n        }    \n    }\n\n    y.observe(yMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model LogitRegressionTest(double[][] x, boolean[][] yMeasured) {\n"
+             + "    int k = 3;\n"
+             + "\n"
+             + "    int n = x.length;\n"
+             + "    boolean[][] y = new boolean[n][k];\n"
+             + "\n"
+             + "    double[] weights = gaussian(0,10).sample(k);\n"
+             + "    //TODO, change this to a beta distribution.\n"
+             + "    double bias = gaussian(0,10).sample();\n"
+             + "\n"
+             + "    for(int i:[0 .. n)) {\n"
+             + "        double[] indicator = new double[k];\n"
+             + "        for(int j:[0 .. k)) {\n"
+             + "            indicator[j] = exp(weights[j] * x[i][j]);\n"
+             + "        }\n"
+             + "        \n"
+             + "        //Single assignment semantics means a for loop cannot be used here.\n"
+             + "        double sum = indicator[0] + indicator[1] + indicator[2];\n"
+             + "        double[] p = new double[k];\n"
+             + "\n"
+             + "        for(int j:[0 .. k)) {\n"
+             + "            p[j] = indicator[j]/sum;\n"
+             + "            //This really wants to be a Categorical, but for now y will have\n"
+             + "            //to be arrays with just a single value set.\n"
+             + "            y[i][j] = bernoulli(p[j] + bias).sample();\n"
+             + "        }    \n"
+             + "    }\n"
+             + "\n"
+             + "    y.observe(yMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

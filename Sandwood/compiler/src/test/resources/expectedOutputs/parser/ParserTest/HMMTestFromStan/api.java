@@ -36,7 +36,7 @@ public class HMMTestFromStan extends GeneratedAPIBuilder {
         v.setAlias("v");
         v.setLocation(location(14, 18, 14, 18));
 
-        parFor(intVariable(0, location(15, 20, 15, 20)), states, intVariable(1, location(15, 19, 15, 22)), true, location(15, 9, 15, 30), (i) -> { 
+        parFor(intVariable(0, location(15, 20, 15, 20)), states, intVariable(1, location(15, 19, 15, 22)), true, location(15, 9, 15, 30), (i) -> {
             i.setAlias("i");
             i.setLocation(location(15, 17, 15, 17));
             v.put(i, doubleVariable(0.1, location(16, 20, 16, 22)), location(16, 14, 16, 22));
@@ -63,13 +63,13 @@ public class HMMTestFromStan extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(35, 19, 35, 23));
 
-        parFor(intVariable(1, location(38, 20, 38, 20)), samples, intVariable(1, location(38, 19, 38, 22)), true, location(38, 9, 38, 31), (i) -> { 
+        parFor(intVariable(1, location(38, 20, 38, 20)), samples, intVariable(1, location(38, 19, 38, 22)), true, location(38, 9, 38, 31), (i) -> {
             i.setAlias("i");
             i.setLocation(location(38, 17, 38, 17));
             st.put(i, categorical(m.get(st.get(i.subtract(intVariable(1, location(39, 42, 39, 42)), location(39, 40, 39, 40)), location(39, 37, 39, 43)), location(39, 34, 39, 44)), location(39, 21, 39, 45)).sample(location(39, 47, 39, 54)), location(39, 15, 39, 54));
         });
 
-        parFor(intVariable(0, location(42, 20, 42, 20)), samples, intVariable(1, location(42, 19, 42, 22)), true, location(42, 9, 42, 31), (j) -> { 
+        parFor(intVariable(0, location(42, 20, 42, 20)), samples, intVariable(1, location(42, 19, 42, 22)), true, location(42, 9, 42, 31), (j) -> {
             j.setAlias("j");
             j.setLocation(location(42, 17, 42, 17));
             flips.put(j, bernoulli(bias.get(st.get(j, location(43, 41, 43, 43)), location(43, 38, 43, 44)), location(43, 24, 43, 45)).sample(location(43, 47, 43, 54)), location(43, 18, 43, 54));
@@ -83,7 +83,53 @@ public class HMMTestFromStan extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "HMMTestFromStan", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel HMMTestFromStan(boolean[] flipsMeasured) {\n        int states = 2;\n\n        double[] v = new double[states];\n        for(int i:[0..states))\n            v[i] = 0.1;\n        \n        double[][] m = dirichlet(v).sample(states);\n        double[] bias = beta(1.0, 1.0).sample(states);\n\n        int samples = flipsMeasured.length;\n        int[] st = new int[samples];\n        //Commented lines are the lines missing in the Stan example. \n        //This seems to make sense, as there is no transition from state 0 to state 0,\n        //Just a possible state being picked based on the observed data.\n        //\n        //Forward execution is more complex now as st[0] is used but never set.\n        //we could add:\n        st[0] = categorical(m[0]).sample();  \n        \n        //Original code commented out below.\n        \n        //st[0] = 0;\n                \n        boolean[] flips = new boolean[samples];\n\n        //st[0] = categorical(m[st[0]]).sample(); \n        for(int i:[1..samples))\n            st[i] = categorical(m[st[i - 1]]).sample();\n\n\n        for(int j:[0..samples))\n            flips[j] = bernoulli(bias[st[j]]).sample();\n\n        flips.observe(flipsMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model HMMTestFromStan(boolean[] flipsMeasured) {\n"
+             + "        int states = 2;\n"
+             + "\n"
+             + "        double[] v = new double[states];\n"
+             + "        for(int i:[0..states))\n"
+             + "            v[i] = 0.1;\n"
+             + "        \n"
+             + "        double[][] m = dirichlet(v).sample(states);\n"
+             + "        double[] bias = beta(1.0, 1.0).sample(states);\n"
+             + "\n"
+             + "        int samples = flipsMeasured.length;\n"
+             + "        int[] st = new int[samples];\n"
+             + "        //Commented lines are the lines missing in the Stan example. \n"
+             + "        //This seems to make sense, as there is no transition from state 0 to state 0,\n"
+             + "        //Just a possible state being picked based on the observed data.\n"
+             + "        //\n"
+             + "        //Forward execution is more complex now as st[0] is used but never set.\n"
+             + "        //we could add:\n"
+             + "        st[0] = categorical(m[0]).sample();  \n"
+             + "        \n"
+             + "        //Original code commented out below.\n"
+             + "        \n"
+             + "        //st[0] = 0;\n"
+             + "                \n"
+             + "        boolean[] flips = new boolean[samples];\n"
+             + "\n"
+             + "        //st[0] = categorical(m[st[0]]).sample(); \n"
+             + "        for(int i:[1..samples))\n"
+             + "            st[i] = categorical(m[st[i - 1]]).sample();\n"
+             + "\n"
+             + "\n"
+             + "        for(int j:[0..samples))\n"
+             + "            flips[j] = bernoulli(bias[st[j]]).sample();\n"
+             + "\n"
+             + "        flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

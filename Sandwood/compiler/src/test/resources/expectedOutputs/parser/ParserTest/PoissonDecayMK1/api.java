@@ -54,7 +54,25 @@ public class PoissonDecayMK1 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "PoissonDecayMK1", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model PoissonDecayMK1(int[] decayDetected, double a, double b) {\n    \n        int samples = decayDetected.length;\n        double rate = gamma(a, b).sample();\n        \n        Poisson poisson = poisson(rate);\n        int[] decay = poisson.sample(samples);\n        decay.observe(decayDetected);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model PoissonDecayMK1(int[] decayDetected, double a, double b) {\n"
+             + "    \n"
+             + "        int samples = decayDetected.length;\n"
+             + "        double rate = gamma(a, b).sample();\n"
+             + "        \n"
+             + "        Poisson poisson = poisson(rate);\n"
+             + "        int[] decay = poisson.sample(samples);\n"
+             + "        decay.observe(decayDetected);\n"
+             + "}";
     }
 }

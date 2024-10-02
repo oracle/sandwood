@@ -49,13 +49,13 @@ public class Flip2CoinsMK14Fail extends GeneratedAPIBuilder {
         beta.setLocation(location(18, 10, 18, 13));
 
         bias.put(intVariable(0, location(20, 10, 20, 10)), beta.sample(location(20, 20, 20, 27)), location(20, 9, 20, 27));
-        parFor(intVariable(1, location(22, 16, 22, 16)), coins, intVariable(1, location(22, 15, 22, 18)), true, location(22, 5, 22, 25), (i) -> { 
+        parFor(intVariable(1, location(22, 16, 22, 16)), coins, intVariable(1, location(22, 15, 22, 18)), true, location(22, 5, 22, 25), (i) -> {
             i.setAlias("i");
             i.setLocation(location(22, 13, 22, 13));
             bias.put(i, beta.sample(location(23, 24, 23, 31)), location(23, 13, 23, 31));
         });
 
-        parFor(intVariable(0, location(25, 16, 25, 16)), intVariable(1, location(25, 19, 25, 19)), intVariable(1, location(25, 15, 25, 18)), true, location(25, 5, 25, 21), (j) -> { 
+        parFor(intVariable(0, location(25, 16, 25, 16)), intVariable(1, location(25, 19, 25, 19)), intVariable(1, location(25, 15, 25, 18)), true, location(25, 5, 25, 21), (j) -> {
             j.setAlias("j");
             j.setLocation(location(25, 13, 25, 13));
             IntVariable samples = flipsMeasured.get(j, location(26, 36, 26, 38)).length(location(26, 40, 26, 45));
@@ -70,7 +70,7 @@ public class Flip2CoinsMK14Fail extends GeneratedAPIBuilder {
 
         });
 
-        parFor(intVariable(1, location(31, 16, 31, 16)), coins, intVariable(1, location(31, 15, 31, 18)), true, location(31, 5, 31, 25), (k) -> { 
+        parFor(intVariable(1, location(31, 16, 31, 16)), coins, intVariable(1, location(31, 15, 31, 18)), true, location(31, 5, 31, 25), (k) -> {
             k.setAlias("k");
             k.setLocation(location(31, 13, 31, 13));
             IntVariable samples = flipsMeasured.get(k, location(32, 36, 32, 38)).length(location(32, 40, 32, 45));
@@ -85,13 +85,13 @@ public class Flip2CoinsMK14Fail extends GeneratedAPIBuilder {
 
         });
 
-        parFor(intVariable(0, location(37, 16, 37, 16)), coins, intVariable(1, location(37, 15, 37, 18)), true, location(37, 5, 37, 25), (l) -> { 
+        parFor(intVariable(0, location(37, 16, 37, 16)), coins, intVariable(1, location(37, 15, 37, 18)), true, location(37, 5, 37, 25), (l) -> {
             l.setAlias("l");
             l.setLocation(location(37, 13, 37, 13));
             measuredFlips.put(l, flipsMeasured.get(l, location(38, 41, 38, 43)), location(38, 22, 38, 43));
         });
 
-        parFor(intVariable(0, location(40, 16, 40, 16)), coins, intVariable(1, location(40, 15, 40, 18)), true, location(40, 5, 40, 25), (i) -> { 
+        parFor(intVariable(0, location(40, 16, 40, 16)), coins, intVariable(1, location(40, 15, 40, 18)), true, location(40, 5, 40, 25), (i) -> {
             i.setAlias("i");
             i.setLocation(location(40, 13, 40, 13));
             ArrayVariable<BooleanVariable> f = flips.get(i, location(41, 28, 41, 30));
@@ -113,7 +113,51 @@ public class Flip2CoinsMK14Fail extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip2CoinsMK14Fail", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip2CoinsMK14Fail(boolean[][] flipsMeasured) {\n    int coins = flipsMeasured.length;\n         \n    boolean[][] flips = new boolean[coins][];\n    boolean[][] measuredFlips = new boolean[coins][];\n    double [] bias = new double[coins];\n        \n    Beta beta = beta(1.0, 1.0);\n        \n    bias[0] = beta.sample();\n        \n    for(int i:[1..coins))\n        bias[i] = beta.sample();\n    \n    for(int j:[0..1)) {\n        int samples = flipsMeasured[j].length;\n        Bernoulli bernoulli1 = bernoulli(bias[j]);\n        flips[j] = bernoulli1.sample(samples);\n    }\n                \n    for(int k:[1..coins)) {\n        int samples = flipsMeasured[k].length;\n        Bernoulli bernoulli2 = bernoulli(bias[k]);\n        flips[k] = bernoulli2.sample(samples);\n    }\n        \n    for(int l:[0..coins))\n        measuredFlips[l] = flipsMeasured[l];\n        \n    for(int i:[0..coins)) {\n        boolean[] f = flips[i];\n        boolean[] m = measuredFlips[coins - (i+1)];\n        f.observe(m);\n    }\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip2CoinsMK14Fail(boolean[][] flipsMeasured) {\n"
+             + "    int coins = flipsMeasured.length;\n"
+             + "         \n"
+             + "    boolean[][] flips = new boolean[coins][];\n"
+             + "    boolean[][] measuredFlips = new boolean[coins][];\n"
+             + "    double [] bias = new double[coins];\n"
+             + "        \n"
+             + "    Beta beta = beta(1.0, 1.0);\n"
+             + "        \n"
+             + "    bias[0] = beta.sample();\n"
+             + "        \n"
+             + "    for(int i:[1..coins))\n"
+             + "        bias[i] = beta.sample();\n"
+             + "    \n"
+             + "    for(int j:[0..1)) {\n"
+             + "        int samples = flipsMeasured[j].length;\n"
+             + "        Bernoulli bernoulli1 = bernoulli(bias[j]);\n"
+             + "        flips[j] = bernoulli1.sample(samples);\n"
+             + "    }\n"
+             + "                \n"
+             + "    for(int k:[1..coins)) {\n"
+             + "        int samples = flipsMeasured[k].length;\n"
+             + "        Bernoulli bernoulli2 = bernoulli(bias[k]);\n"
+             + "        flips[k] = bernoulli2.sample(samples);\n"
+             + "    }\n"
+             + "        \n"
+             + "    for(int l:[0..coins))\n"
+             + "        measuredFlips[l] = flipsMeasured[l];\n"
+             + "        \n"
+             + "    for(int i:[0..coins)) {\n"
+             + "        boolean[] f = flips[i];\n"
+             + "        boolean[] m = measuredFlips[coins - (i+1)];\n"
+             + "        f.observe(m);\n"
+             + "    }\n"
+             + "}";
     }
 }

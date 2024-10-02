@@ -50,7 +50,24 @@ public class Flip1CoinMK1c extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK1c", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK1c(boolean[] flipsMeasured, double a, double b) {\n    int samples = flipsMeasured.length;\n        \n    Bernoulli bernoulli = bernoulli(beta(a, b).sample());\n    boolean[] flips = bernoulli.sample(samples);\n    flips.observe(flipsMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK1c(boolean[] flipsMeasured, double a, double b) {\n"
+             + "    int samples = flipsMeasured.length;\n"
+             + "        \n"
+             + "    Bernoulli bernoulli = bernoulli(beta(a, b).sample());\n"
+             + "    boolean[] flips = bernoulli.sample(samples);\n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

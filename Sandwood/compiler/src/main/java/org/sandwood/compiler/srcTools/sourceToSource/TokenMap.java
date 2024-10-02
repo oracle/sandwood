@@ -32,6 +32,10 @@ public class TokenMap {
     public static TokenMap tokenMap(String output, Token... tokens) {
         return new TokenMap(output, tokens);
     }
+    
+    public static TokenMap tokenMap(String output, List<Token> tokens) {
+        return new TokenMap(output, tokens.toArray(new Token[tokens.size()]));
+    }
 
     public static TokenMap tokenMap(IdentiferDesc desc) {
         return new TokenMap(desc.name, desc.source);

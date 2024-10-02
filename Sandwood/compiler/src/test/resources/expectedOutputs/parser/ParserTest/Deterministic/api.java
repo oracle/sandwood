@@ -37,7 +37,7 @@ public class Deterministic extends GeneratedAPIBuilder {
         v.setAlias("v");
         v.setLocation(location(17, 14, 17, 14));
 
-        parFor(intVariable(0, location(18, 16, 18, 16)), states, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 26), (i) -> { 
+        parFor(intVariable(0, location(18, 16, 18, 16)), states, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 26), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 13, 18, 13));
             v.put(i, doubleVariable(0.1, location(19, 16, 19, 18)), location(19, 10, 19, 18));
@@ -56,7 +56,7 @@ public class Deterministic extends GeneratedAPIBuilder {
         b.setLocation(location(24, 11, 24, 11));
 
         a.put(intVariable(0, location(25, 7, 25, 7)), intVariable(0, location(25, 12, 25, 12)), location(25, 6, 25, 12));
-        parFor(intVariable(1, location(26, 15, 26, 15)), n, intVariable(1, location(26, 23, 26, 25)), true, location(26, 5, 26, 26), (i) -> { 
+        parFor(intVariable(1, location(26, 15, 26, 15)), n, intVariable(1, location(26, 23, 26, 25)), true, location(26, 5, 26, 26), (i) -> {
             i.setAlias("i");
             i.setLocation(location(26, 13, 26, 13));
             b.put(i, a.get(i.subtract(intVariable(1, location(27, 20, 27, 20)), location(27, 19, 27, 19)), location(27, 17, 27, 21)), location(27, 10, 27, 21));
@@ -68,7 +68,7 @@ public class Deterministic extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(31, 15, 31, 19));
 
-        parFor(intVariable(0, location(33, 16, 33, 16)), n, intVariable(1, location(33, 15, 33, 18)), true, location(33, 5, 33, 21), (j) -> { 
+        parFor(intVariable(0, location(33, 16, 33, 16)), n, intVariable(1, location(33, 15, 33, 18)), true, location(33, 5, 33, 21), (j) -> {
             j.setAlias("j");
             j.setLocation(location(33, 13, 33, 13));
             flips.put(j, bernoulli(intVariable(1, location(34, 30, 34, 30)).divide(a.get(j.add(intVariable(1, location(34, 36, 34, 36)), location(34, 35, 34, 35)), location(34, 33, 34, 37)), location(34, 31, 34, 31)), location(34, 20, 34, 38)).sample(location(34, 40, 34, 47)), location(34, 14, 34, 47));
@@ -82,7 +82,42 @@ public class Deterministic extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Deterministic", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "/**\n * A model for the fairness work.\n */");
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\n/**\n * A model for the fairness work.\n */\npublic model Deterministic(int n, boolean[] flipsMeasured) {\n    int states = 5;\n\n    double[] v = new double[states];\n    for(int i:[0..states))\n        v[i] = 0.1;\n    \n    double[][] m = dirichlet(v).sample(states);\n\n    int[] a = new int[n];\n    int[] b = new int[n];\n    a[0] = 0;\n    for(int i=1; i<n; i++) {\n        b[i] = a[i-1];\n        a[i] = categorical(m[b[i]]).sample();\n    }\n    \n    boolean[] flips = new boolean[n];\n            \n    for(int j:[0..n))\n        flips[j] = bernoulli(1/a[j+1]).sample();\n        flips.observe(flipsMeasured);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "/**\n"
+             + " * A model for the fairness work.\n"
+             + " */\n"
+             + "public model Deterministic(int n, boolean[] flipsMeasured) {\n"
+             + "    int states = 5;\n"
+             + "\n"
+             + "    double[] v = new double[states];\n"
+             + "    for(int i:[0..states))\n"
+             + "        v[i] = 0.1;\n"
+             + "    \n"
+             + "    double[][] m = dirichlet(v).sample(states);\n"
+             + "\n"
+             + "    int[] a = new int[n];\n"
+             + "    int[] b = new int[n];\n"
+             + "    a[0] = 0;\n"
+             + "    for(int i=1; i<n; i++) {\n"
+             + "        b[i] = a[i-1];\n"
+             + "        a[i] = categorical(m[b[i]]).sample();\n"
+             + "    }\n"
+             + "    \n"
+             + "    boolean[] flips = new boolean[n];\n"
+             + "            \n"
+             + "    for(int j:[0..n))\n"
+             + "        flips[j] = bernoulli(1/a[j+1]).sample();\n"
+             + "        flips.observe(flipsMeasured);\n"
+             + "}";
     }
 }

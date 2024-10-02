@@ -50,7 +50,7 @@ public class LinearRegression2Fail extends GeneratedAPIBuilder {
         y.setAlias("y");
         y.setLocation(location(17, 18, 17, 18));
 
-        parFor(intVariable(0, location(18, 20, 18, 20)), noSamples, intVariable(1, location(18, 19, 18, 22)), true, location(18, 9, 18, 33), (i) -> { 
+        parFor(intVariable(0, location(18, 20, 18, 20)), noSamples, intVariable(1, location(18, 19, 18, 22)), true, location(18, 9, 18, 33), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 17, 18, 17));
             y.put(i, gaussian(b0.add(b1.times(x.get(i, location(19, 39, 19, 41)), location(19, 36, 19, 36)), location(19, 31, 19, 31)), variance, location(19, 19, 19, 52)).sample(location(19, 54, 19, 61)), location(19, 13, 19, 61));
@@ -65,7 +65,29 @@ public class LinearRegression2Fail extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LinearRegression2Fail", $helperClasses, "", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\nimport org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n\npublic model LinearRegression2Fail(double[] x, double[] yMeasured) {\n    \n        int noSamples = x.length;\n        double b0 = gaussian(0.0, 2.0).sample();\n        double b1 = gaussian(1.0, 5.0).sample();\n        double variance = inverseGamma(1.0, 1.0).sample();\n        double[] y = new double[noSamples];\n        for(int i:[0..noSamples)) {\n           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n        }\n        y.observe(yMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n"
+             + "\n"
+             + "public model LinearRegression2Fail(double[] x, double[] yMeasured) {\n"
+             + "    \n"
+             + "        int noSamples = x.length;\n"
+             + "        double b0 = gaussian(0.0, 2.0).sample();\n"
+             + "        double b1 = gaussian(1.0, 5.0).sample();\n"
+             + "        double variance = inverseGamma(1.0, 1.0).sample();\n"
+             + "        double[] y = new double[noSamples];\n"
+             + "        for(int i:[0..noSamples)) {\n"
+             + "           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n"
+             + "        }\n"
+             + "        y.observe(yMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

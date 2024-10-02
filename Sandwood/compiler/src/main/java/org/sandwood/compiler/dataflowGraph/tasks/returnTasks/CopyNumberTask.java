@@ -9,9 +9,8 @@
 package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
-import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTaskImplementation;
+import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
@@ -22,7 +21,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
  *
  * @param <A>
  */
-public class CopyNumberTask<A extends NumberVariable<A>> extends NumberProducingDataflowTaskImplementation<A> {
+public class CopyNumberTask<A extends NumberVariable<A>> extends CopyTask<A> implements NumberProducingDataflowTask<A> {
 
     public final A input;
 
@@ -31,7 +30,7 @@ public class CopyNumberTask<A extends NumberVariable<A>> extends NumberProducing
     }
 
     public CopyNumberTask(A input, Location location) {
-        super(DFType.COPY, input.getType(), location, input);
+        super(input, location);
         this.input = input;
     }
 

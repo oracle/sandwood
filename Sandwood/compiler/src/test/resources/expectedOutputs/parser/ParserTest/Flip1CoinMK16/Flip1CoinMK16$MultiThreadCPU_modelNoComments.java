@@ -376,6 +376,24 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK16(boolean flipMeasured, double guard) {\n    if(isNaN(guard)) {\n        double bias = beta(1.0, 1.0).sample();\n        Bernoulli bernoulli = bernoulli(bias);\n        boolean flip = bernoulli.sample();\n        flip.observe(flipMeasured);\n    }\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip1CoinMK16(boolean flipMeasured, double guard) {\n"
+		     + "    if(isNaN(guard)) {\n"
+		     + "        double bias = beta(1.0, 1.0).sample();\n"
+		     + "        Bernoulli bernoulli = bernoulli(bias);\n"
+		     + "        boolean flip = bernoulli.sample();\n"
+		     + "        flip.observe(flipMeasured);\n"
+		     + "    }\n"
+		     + "}\n"
+		     + "";
 	}
 }

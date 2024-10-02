@@ -1142,6 +1142,41 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\n/**\n * A model for the fairness work.\n */\npublic model Deterministic(int n, boolean[] flipsMeasured) {\n    int states = 5;\n\n    double[] v = new double[states];\n    for(int i:[0..states))\n        v[i] = 0.1;\n    \n    double[][] m = dirichlet(v).sample(states);\n\n    int[] a = new int[n];\n    int[] b = new int[n];\n    a[0] = 0;\n    for(int i=1; i<n; i++) {\n        b[i] = a[i-1];\n        a[i] = categorical(m[b[i]]).sample();\n    }\n    \n    boolean[] flips = new boolean[n];\n            \n    for(int j:[0..n))\n        flips[j] = bernoulli(1/a[j+1]).sample();\n        flips.observe(flipsMeasured);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "/**\n"
+		     + " * A model for the fairness work.\n"
+		     + " */\n"
+		     + "public model Deterministic(int n, boolean[] flipsMeasured) {\n"
+		     + "    int states = 5;\n"
+		     + "\n"
+		     + "    double[] v = new double[states];\n"
+		     + "    for(int i:[0..states))\n"
+		     + "        v[i] = 0.1;\n"
+		     + "    \n"
+		     + "    double[][] m = dirichlet(v).sample(states);\n"
+		     + "\n"
+		     + "    int[] a = new int[n];\n"
+		     + "    int[] b = new int[n];\n"
+		     + "    a[0] = 0;\n"
+		     + "    for(int i=1; i<n; i++) {\n"
+		     + "        b[i] = a[i-1];\n"
+		     + "        a[i] = categorical(m[b[i]]).sample();\n"
+		     + "    }\n"
+		     + "    \n"
+		     + "    boolean[] flips = new boolean[n];\n"
+		     + "            \n"
+		     + "    for(int j:[0..n))\n"
+		     + "        flips[j] = bernoulli(1/a[j+1]).sample();\n"
+		     + "        flips.observe(flipsMeasured);\n"
+		     + "}";
 	}
 }

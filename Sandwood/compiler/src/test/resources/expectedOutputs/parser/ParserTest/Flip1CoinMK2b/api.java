@@ -52,7 +52,7 @@ public class Flip1CoinMK2b extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(19, 15, 19, 19));
 
-        parFor(intVariable(0, location(20, 15, 20, 15)), samples, intVariable(1, location(20, 27, 20, 29)), true, location(20, 5, 20, 30), (i) -> { 
+        parFor(intVariable(0, location(20, 15, 20, 15)), samples, intVariable(1, location(20, 27, 20, 29)), true, location(20, 5, 20, 30), (i) -> {
             i.setAlias("i");
             i.setLocation(location(20, 13, 20, 13));
             flips.put(i, bernoulli.sample(location(21, 30, 21, 37)), location(21, 14, 21, 37));
@@ -66,7 +66,29 @@ public class Flip1CoinMK2b extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK2b", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK2b(boolean[] flipsMeasured) {\n    double a = 1.0;\n    double b = 1.0;\n    double bias = beta(a, b).sample();\n        \n    int samples = flipsMeasured.length;\n        \n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = new boolean[samples];\n    for(int i=0;i<samples;i++)\n        flips[i] = bernoulli.sample();\n    flips.observe(flipsMeasured);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK2b(boolean[] flipsMeasured) {\n"
+             + "    double a = 1.0;\n"
+             + "    double b = 1.0;\n"
+             + "    double bias = beta(a, b).sample();\n"
+             + "        \n"
+             + "    int samples = flipsMeasured.length;\n"
+             + "        \n"
+             + "    Bernoulli bernoulli = bernoulli(bias);\n"
+             + "    boolean[] flips = new boolean[samples];\n"
+             + "    for(int i=0;i<samples;i++)\n"
+             + "        flips[i] = bernoulli.sample();\n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "}";
     }
 }

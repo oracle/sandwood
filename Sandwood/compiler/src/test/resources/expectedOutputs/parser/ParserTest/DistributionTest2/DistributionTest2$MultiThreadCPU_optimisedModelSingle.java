@@ -2226,6 +2226,32 @@ class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel DistributionTest2(double[] weightings, boolean[] value) {\n    int size = value.length;\n    \n    int v1 = categorical(weightings).sampleDistribution();\n    \n    int[] v2 = new int[size];\n    v2[0] = categorical(weightings).sampleDistribution();\n    for(int i:[1..size))\n        v2[i] = categorical(weightings).sampleDistribution();\n        \n    boolean[] v = new boolean[size];\n    for(int j:[0..size))\n        v[j] = bernoulli((1.0*v1)/v2[j]).sample();\n        \n    v.observe(value);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "model DistributionTest2(double[] weightings, boolean[] value) {\n"
+		     + "    int size = value.length;\n"
+		     + "    \n"
+		     + "    int v1 = categorical(weightings).sampleDistribution();\n"
+		     + "    \n"
+		     + "    int[] v2 = new int[size];\n"
+		     + "    v2[0] = categorical(weightings).sampleDistribution();\n"
+		     + "    for(int i:[1..size))\n"
+		     + "        v2[i] = categorical(weightings).sampleDistribution();\n"
+		     + "        \n"
+		     + "    boolean[] v = new boolean[size];\n"
+		     + "    for(int j:[0..size))\n"
+		     + "        v[j] = bernoulli((1.0*v1)/v2[j]).sample();\n"
+		     + "        \n"
+		     + "    v.observe(value);\n"
+		     + "}\n"
+		     + "";
 	}
 }

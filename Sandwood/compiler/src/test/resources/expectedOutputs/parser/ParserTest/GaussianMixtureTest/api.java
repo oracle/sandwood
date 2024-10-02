@@ -36,7 +36,7 @@ public class GaussianMixtureTest extends GeneratedAPIBuilder {
         alpha.setAlias("alpha");
         alpha.setLocation(location(15, 18, 15, 22));
 
-        parFor(intVariable(0, location(16, 20, 16, 20)), k, intVariable(1, location(16, 19, 16, 22)), true, location(16, 9, 16, 25), (i) -> { 
+        parFor(intVariable(0, location(16, 20, 16, 20)), k, intVariable(1, location(16, 19, 16, 22)), true, location(16, 9, 16, 25), (i) -> {
             i.setAlias("i");
             i.setLocation(location(16, 17, 16, 17));
             alpha.put(i, doubleVariable(1.0, location(17, 24, 17, 26)), location(17, 18, 17, 26));
@@ -58,7 +58,7 @@ public class GaussianMixtureTest extends GeneratedAPIBuilder {
         x.setAlias("x");
         x.setLocation(location(23, 18, 23, 18));
 
-        parFor(intVariable(0, location(24, 20, 24, 20)), xMeasured.length(location(24, 33, 24, 38)), intVariable(1, location(24, 19, 24, 22)), true, location(24, 9, 24, 40), (i) -> { 
+        parFor(intVariable(0, location(24, 20, 24, 20)), xMeasured.length(location(24, 33, 24, 38)), intVariable(1, location(24, 19, 24, 22)), true, location(24, 9, 24, 40), (i) -> {
             i.setAlias("i");
             i.setLocation(location(24, 17, 24, 17));
             IntVariable z = categorical(phi, location(25, 21, 25, 36)).sample(location(25, 38, 25, 45));
@@ -77,7 +77,37 @@ public class GaussianMixtureTest extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "GaussianMixtureTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel GaussianMixtureTest(double[] xMeasured) {\n\n        int k = 5;\n\n        double[] alpha = new double[k];\n        for(int i:[0..k)) \n            alpha[i] = 1.0;\n        \n        double[] phi = dirichlet(alpha).sample();\n        double[] mu = gaussian(0, 20).sample(k);\n        double[] sigma = inverseGamma(1, 1).sample(k);\n        \n        double[] x = new double[xMeasured.length];\n        for(int i:[0..xMeasured.length)) {\n            int z = categorical(phi).sample();\n            x[i] = gaussian(mu[z], sigma[z]).sample();\n        }\n        \n        x.observe(xMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model GaussianMixtureTest(double[] xMeasured) {\n"
+             + "\n"
+             + "        int k = 5;\n"
+             + "\n"
+             + "        double[] alpha = new double[k];\n"
+             + "        for(int i:[0..k)) \n"
+             + "            alpha[i] = 1.0;\n"
+             + "        \n"
+             + "        double[] phi = dirichlet(alpha).sample();\n"
+             + "        double[] mu = gaussian(0, 20).sample(k);\n"
+             + "        double[] sigma = inverseGamma(1, 1).sample(k);\n"
+             + "        \n"
+             + "        double[] x = new double[xMeasured.length];\n"
+             + "        for(int i:[0..xMeasured.length)) {\n"
+             + "            int z = categorical(phi).sample();\n"
+             + "            x[i] = gaussian(mu[z], sigma[z]).sample();\n"
+             + "        }\n"
+             + "        \n"
+             + "        x.observe(xMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

@@ -70,19 +70,19 @@ public class MultinomialBernoulli extends GeneratedAPIBuilder {
         output.setAlias("output");
         output.setLocation(location(20, 15, 20, 20));
 
-        parFor(intVariable(0, location(21, 15, 21, 15)), length, intVariable(3, location(21, 31, 21, 31)), true, location(21, 5, 21, 32), (i) -> { 
+        parFor(intVariable(0, location(21, 15, 21, 15)), length, intVariable(3, location(21, 31, 21, 31)), true, location(21, 5, 21, 32), (i) -> {
             i.setAlias("i");
             i.setLocation(location(21, 13, 21, 13));
             output.put(i, b1.sample(location(22, 24, 22, 31)), location(22, 15, 22, 31));
         });
 
-        parFor(intVariable(1, location(23, 15, 23, 15)), length, intVariable(3, location(23, 31, 23, 31)), true, location(23, 5, 23, 32), (i) -> { 
+        parFor(intVariable(1, location(23, 15, 23, 15)), length, intVariable(3, location(23, 31, 23, 31)), true, location(23, 5, 23, 32), (i) -> {
             i.setAlias("i");
             i.setLocation(location(23, 13, 23, 13));
             output.put(i, b2.sample(location(24, 24, 24, 31)), location(24, 15, 24, 31));
         });
 
-        parFor(intVariable(2, location(25, 15, 25, 15)), length, intVariable(3, location(25, 31, 25, 31)), true, location(25, 5, 25, 32), (i) -> { 
+        parFor(intVariable(2, location(25, 15, 25, 15)), length, intVariable(3, location(25, 31, 25, 31)), true, location(25, 5, 25, 32), (i) -> {
             i.setAlias("i");
             i.setLocation(location(25, 13, 25, 13));
             output.put(i, b3.sample(location(26, 24, 26, 31)), location(26, 15, 26, 31));
@@ -96,7 +96,35 @@ public class MultinomialBernoulli extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "MultinomialBernoulli", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model MultinomialBernoulli(boolean[] observed) {\n    double[] beta = {0.1, 0.1, 0.1};\n    double[] p = dirichlet(beta).sample();\n    int n = 10;\n    int[] prior = multinomial(p, n).sample();\n    Bernoulli b1 = new Bernoulli(prior[0]/n);\n    Bernoulli b2 = new Bernoulli(prior[1]/n);\n    Bernoulli b3 = new Bernoulli(prior[2]/n);\n    int length = observed.length;\n    boolean[] output = new boolean[length];\n    for(int i=0; i<length; i+=3)\n        output[i] = b1.sample();\n    for(int i=1; i<length; i+=3)\n        output[i] = b2.sample();\n    for(int i=2; i<length; i+=3)\n        output[i] = b3.sample();\n    output.observe(observed);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model MultinomialBernoulli(boolean[] observed) {\n"
+             + "    double[] beta = {0.1, 0.1, 0.1};\n"
+             + "    double[] p = dirichlet(beta).sample();\n"
+             + "    int n = 10;\n"
+             + "    int[] prior = multinomial(p, n).sample();\n"
+             + "    Bernoulli b1 = new Bernoulli(prior[0]/n);\n"
+             + "    Bernoulli b2 = new Bernoulli(prior[1]/n);\n"
+             + "    Bernoulli b3 = new Bernoulli(prior[2]/n);\n"
+             + "    int length = observed.length;\n"
+             + "    boolean[] output = new boolean[length];\n"
+             + "    for(int i=0; i<length; i+=3)\n"
+             + "        output[i] = b1.sample();\n"
+             + "    for(int i=1; i<length; i+=3)\n"
+             + "        output[i] = b2.sample();\n"
+             + "    for(int i=2; i<length; i+=3)\n"
+             + "        output[i] = b3.sample();\n"
+             + "    output.observe(observed);\n"
+             + "}\n"
+             + "";
     }
 }

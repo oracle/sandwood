@@ -24,11 +24,11 @@ import java.util.HashSet;
 
 public class Flip1CoinMK13 extends GeneratedAPIBuilder {
     //Helper classes for if else statements.
-    private static class $IfElseMods1 { 
+    private static class $IfElseMods1 {
         DoubleVariable bias;
     }
 
-    private static class $IfElseMods2 { 
+    private static class $IfElseMods2 {
         DoubleVariable bias;
     }
 
@@ -79,7 +79,7 @@ public class Flip1CoinMK13 extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(26, 15, 26, 19));
 
-        parFor(intVariable(0, location(28, 16, 28, 16)), samples, intVariable(1, location(28, 15, 28, 18)), true, location(28, 5, 28, 27), (i) -> { 
+        parFor(intVariable(0, location(28, 16, 28, 16)), samples, intVariable(1, location(28, 15, 28, 18)), true, location(28, 5, 28, 27), (i) -> {
             i.setAlias("i");
             i.setLocation(location(28, 13, 28, 13));
             flips.get(i, location(29, 14, 29, 16)).observe(flipsMeasured.get(i, location(29, 39, 29, 41)), location(29, 18, 29, 42));
@@ -94,7 +94,37 @@ public class Flip1CoinMK13 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK13", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK13(boolean[] flipsMeasured, boolean guard1, boolean guard2) {\n    int samples = flipsMeasured.length;\n        \n    double b = beta(1.0, 1).sample();\n    double bias;\n    if(guard1)\n      bias = b;\n    else { \n        if(guard2) {\n            bias = b/2;\n        } else\n            bias = b/3;\n    }\n        \n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = bernoulli.sample(samples);\n\n    for(int i:[0..samples))\n        flips[i].observe(flipsMeasured[i]);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK13(boolean[] flipsMeasured, boolean guard1, boolean guard2) {\n"
+             + "    int samples = flipsMeasured.length;\n"
+             + "        \n"
+             + "    double b = beta(1.0, 1).sample();\n"
+             + "    double bias;\n"
+             + "    if(guard1)\n"
+             + "      bias = b;\n"
+             + "    else { \n"
+             + "        if(guard2) {\n"
+             + "            bias = b/2;\n"
+             + "        } else\n"
+             + "            bias = b/3;\n"
+             + "    }\n"
+             + "        \n"
+             + "    Bernoulli bernoulli = bernoulli(bias);\n"
+             + "    boolean[] flips = bernoulli.sample(samples);\n"
+             + "\n"
+             + "    for(int i:[0..samples))\n"
+             + "        flips[i].observe(flipsMeasured[i]);\n"
+             + "}\n"
+             + "";
     }
 }

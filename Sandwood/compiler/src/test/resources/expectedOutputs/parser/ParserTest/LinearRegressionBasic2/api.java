@@ -49,7 +49,7 @@ public class LinearRegressionBasic2 extends GeneratedAPIBuilder {
         y.setAlias("y");
         y.setLocation(location(17, 18, 17, 18));
 
-        parFor(intVariable(0, location(18, 20, 18, 20)), noSamples, intVariable(1, location(18, 19, 18, 22)), true, location(18, 9, 18, 33), (i) -> { 
+        parFor(intVariable(0, location(18, 20, 18, 20)), noSamples, intVariable(1, location(18, 19, 18, 22)), true, location(18, 9, 18, 33), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 17, 18, 17));
             y.put(i, gaussian(b0.add(b1.times(x.get(i, location(19, 39, 19, 41)), location(19, 36, 19, 36)), location(19, 31, 19, 31)), variance, location(19, 19, 19, 52)).sample(location(19, 54, 19, 61)), location(19, 13, 19, 61));
@@ -64,7 +64,29 @@ public class LinearRegressionBasic2 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LinearRegressionBasic2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model LinearRegressionBasic2(double[] x, double[] yMeasured) {\n    \n        int noSamples = x.length;\n        double b0 = gaussian(0.0, 2.0).sample();\n        double b1 = gaussian(1.0, 5.0).sample();\n        double variance = 1/gamma(1.0, 1.0).sample();\n        double[] y = new double[noSamples];\n        for(int i:[0..noSamples)) {\n           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n        }\n        y.observe(yMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model LinearRegressionBasic2(double[] x, double[] yMeasured) {\n"
+             + "    \n"
+             + "        int noSamples = x.length;\n"
+             + "        double b0 = gaussian(0.0, 2.0).sample();\n"
+             + "        double b1 = gaussian(1.0, 5.0).sample();\n"
+             + "        double variance = 1/gamma(1.0, 1.0).sample();\n"
+             + "        double[] y = new double[noSamples];\n"
+             + "        for(int i:[0..noSamples)) {\n"
+             + "           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n"
+             + "        }\n"
+             + "        y.observe(yMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

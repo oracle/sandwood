@@ -67,7 +67,33 @@ public class Flip1CoinMK19 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK19", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2025, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK19(int samples, int a, int b, boolean[] flipsMeasured) {\n    \n    double q = beta(1,1).sample();\n    double t = beta(1,1).sample();\n    \n    double[][] bias = new double[1][];\n    private double[] inner = new double[2];\n    inner[0] = q;\n    bias[0] = inner;\n    bias[0][1] = t;\n    \n    Bernoulli bernoulli = bernoulli(inner[b]);\n    boolean[] flips = bernoulli.sample(samples);\n    \n    flips.observe(flipsMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK19(int samples, int a, int b, boolean[] flipsMeasured) {\n"
+             + "    \n"
+             + "    double q = beta(1,1).sample();\n"
+             + "    double t = beta(1,1).sample();\n"
+             + "    \n"
+             + "    double[][] bias = new double[1][];\n"
+             + "    private double[] inner = new double[2];\n"
+             + "    inner[0] = q;\n"
+             + "    bias[0] = inner;\n"
+             + "    bias[0][1] = t;\n"
+             + "    \n"
+             + "    Bernoulli bernoulli = bernoulli(inner[b]);\n"
+             + "    boolean[] flips = bernoulli.sample(samples);\n"
+             + "    \n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "";
     }
 }
