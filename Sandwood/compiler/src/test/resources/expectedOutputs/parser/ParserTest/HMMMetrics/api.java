@@ -52,7 +52,7 @@ public class HMMMetrics extends GeneratedAPIBuilder {
         initialStateDistribution.setLocation(location(16, 14, 16, 37));
 
         st.put(intVariable(0, location(17, 8, 17, 8)), categorical(initialStateDistribution, location(17, 13, 17, 49)).sampleDistribution(location(17, 51, 17, 70)), location(17, 7, 17, 70));
-        parFor(intVariable(1, location(20, 16, 20, 16)), samples, intVariable(1, location(20, 15, 20, 19)), true, location(20, 5, 20, 29), (i) -> { 
+        parFor(intVariable(1, location(20, 16, 20, 16)), samples, intVariable(1, location(20, 15, 20, 19)), true, location(20, 5, 20, 29), (i) -> {
             i.setAlias("i");
             i.setLocation(location(20, 13, 20, 13));
             st.put(i, categorical(m.get(st.get(i.subtract(intVariable(1, location(21, 36, 21, 36)), location(21, 35, 21, 35)), location(21, 33, 21, 37)), location(21, 30, 21, 38)), location(21, 17, 21, 39)).sampleDistribution(location(21, 41, 21, 60)), location(21, 11, 21, 60));
@@ -94,7 +94,7 @@ public class HMMMetrics extends GeneratedAPIBuilder {
         pageFaultsVar.setAlias("pageFaultsVar");
         pageFaultsVar.setLocation(location(34, 14, 34, 26));
 
-        parFor(intVariable(0, location(36, 16, 36, 16)), samples, intVariable(1, location(36, 15, 36, 19)), true, location(36, 5, 36, 29), (i) -> { 
+        parFor(intVariable(0, location(36, 16, 36, 16)), samples, intVariable(1, location(36, 15, 36, 19)), true, location(36, 5, 36, 29), (i) -> {
             i.setAlias("i");
             i.setLocation(location(36, 13, 36, 13));
             IntVariable s = st.get(i, location(37, 19, 37, 21));
@@ -117,7 +117,54 @@ public class HMMMetrics extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "HMMMetrics", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "package org.sandwood.compiler.tests.parser;\n\nmodel HMMMetrics(double[] cpu_measured, double[] mem_measured, double[] pageFaults_measured, int noStates) {\n    \n    // Construct vectors describing the probability of a move from 1 state to another.\n    double[] v = new double[noStates] <~ 0.1;\n    double[][] m = dirichlet(v).sample(noStates);\n    \n    // Determine how many samples the model will need to produce.\n    int samples = cpu_measured.length;\n    \n    // Allocate space for the state.\n    int[] st = new int[samples];\n\n    // Set the initial state by sampling from a categorical with learnt weightings.\n    double[] initialStateDistribution = dirichlet(v).sample();\n    st[0] = categorical(initialStateDistribution).sampleDistribution();\n\n    //Determine the remaining states based on the previous state.\n    for(int i:[1 .. samples))\n        st[i] = categorical(m[st[i-1]]).sampleDistribution();\n        \n    //Generate each metric.\n    double[] cpu = new double[samples];\n    double[] mem = new double[samples];\n    double[] pageFaults = new double[samples];\n    \n    double[] cpuMean = gaussian(16, 8.6).sample(noStates);\n    double[] memMean = gaussian(94, 1).sample(noStates);\n    double[] pageFaultsMean = gaussian(814, 335550).sample(noStates);\n    \n    double[] cpuVar = inverseGamma(5, 0.5).sample(noStates);\n    double[] memVar = inverseGamma(5, 0.5).sample(noStates);\n    double[] pageFaultsVar = inverseGamma(5, 0.5).sample(noStates);\n    \n    for(int i:[0 .. samples)) {\n        int s = st[i];\n        cpu[i] = gaussian(cpuMean[s], cpuVar[s]).sample();\n        mem[i] = gaussian(memMean[s], memVar[s]).sample();\n        pageFaults[i] = gaussian(pageFaultsMean[s], pageFaultsVar[s]).sample();\n    }\n\n    //Tie the values to the values we have measured.\n    cpu.observe(cpu_measured);\n    mem.observe(mem_measured);\n    pageFaults.observe(pageFaults_measured);\n}\n";
+    private static String getOriginalModel() {
+        return "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model HMMMetrics(double[] cpu_measured, double[] mem_measured, double[] pageFaults_measured, int noStates) {\n"
+             + "    \n"
+             + "    // Construct vectors describing the probability of a move from 1 state to another.\n"
+             + "    double[] v = new double[noStates] <~ 0.1;\n"
+             + "    double[][] m = dirichlet(v).sample(noStates);\n"
+             + "    \n"
+             + "    // Determine how many samples the model will need to produce.\n"
+             + "    int samples = cpu_measured.length;\n"
+             + "    \n"
+             + "    // Allocate space for the state.\n"
+             + "    int[] st = new int[samples];\n"
+             + "\n"
+             + "    // Set the initial state by sampling from a categorical with learnt weightings.\n"
+             + "    double[] initialStateDistribution = dirichlet(v).sample();\n"
+             + "    st[0] = categorical(initialStateDistribution).sampleDistribution();\n"
+             + "\n"
+             + "    //Determine the remaining states based on the previous state.\n"
+             + "    for(int i:[1 .. samples))\n"
+             + "        st[i] = categorical(m[st[i-1]]).sampleDistribution();\n"
+             + "        \n"
+             + "    //Generate each metric.\n"
+             + "    double[] cpu = new double[samples];\n"
+             + "    double[] mem = new double[samples];\n"
+             + "    double[] pageFaults = new double[samples];\n"
+             + "    \n"
+             + "    double[] cpuMean = gaussian(16, 8.6).sample(noStates);\n"
+             + "    double[] memMean = gaussian(94, 1).sample(noStates);\n"
+             + "    double[] pageFaultsMean = gaussian(814, 335550).sample(noStates);\n"
+             + "    \n"
+             + "    double[] cpuVar = inverseGamma(5, 0.5).sample(noStates);\n"
+             + "    double[] memVar = inverseGamma(5, 0.5).sample(noStates);\n"
+             + "    double[] pageFaultsVar = inverseGamma(5, 0.5).sample(noStates);\n"
+             + "    \n"
+             + "    for(int i:[0 .. samples)) {\n"
+             + "        int s = st[i];\n"
+             + "        cpu[i] = gaussian(cpuMean[s], cpuVar[s]).sample();\n"
+             + "        mem[i] = gaussian(memMean[s], memVar[s]).sample();\n"
+             + "        pageFaults[i] = gaussian(pageFaultsMean[s], pageFaultsVar[s]).sample();\n"
+             + "    }\n"
+             + "\n"
+             + "    //Tie the values to the values we have measured.\n"
+             + "    cpu.observe(cpu_measured);\n"
+             + "    mem.observe(mem_measured);\n"
+             + "    pageFaults.observe(pageFaults_measured);\n"
+             + "}\n"
+             + "";
     }
 }

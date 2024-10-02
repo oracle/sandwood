@@ -601,6 +601,22 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2025, Oracle and/or its affiliates\n *\n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model RaggedArray3(int y, int[] obs_measured) {\n    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n    \n    double[] d = dirichlet(a[y]).sample();\n    int[] obs = categorical(d).sample(obs_measured.length);\n    obs.observe(obs_measured);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
+		     + " *\n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model RaggedArray3(int y, int[] obs_measured) {\n"
+		     + "    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n"
+		     + "    \n"
+		     + "    double[] d = dirichlet(a[y]).sample();\n"
+		     + "    int[] obs = categorical(d).sample(obs_measured.length);\n"
+		     + "    obs.observe(obs_measured);\n"
+		     + "}";
 	}
 }

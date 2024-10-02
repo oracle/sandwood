@@ -51,21 +51,21 @@ public class DiscreteChoiceRandCoeff extends GeneratedAPIBuilder {
         choices.setAlias("choices");
         choices.setLocation(location(25, 11, 25, 17));
 
-        parFor(intVariable(0, location(27, 17, 27, 17)), noObs, intVariable(1, location(27, 16, 27, 19)), true, location(27, 5, 27, 26), (i) -> { 
+        parFor(intVariable(0, location(27, 17, 27, 17)), noObs, intVariable(1, location(27, 16, 27, 19)), true, location(27, 5, 27, 26), (i) -> {
             i.setAlias("i");
             i.setLocation(location(27, 14, 27, 14));
             ArrayVariable<DoubleVariable> exped = Variable.arrayVariable(location(30, 36, 30, 47), VariableType.DoubleVariable, noProducts);
             exped.setAlias("exped");
             exped.setLocation(location(30, 18, 30, 22));
 
-            parFor(intVariable(0, location(31, 22, 31, 22)), noProducts, intVariable(1, location(31, 21, 31, 24)), true, location(31, 9, 31, 36), (j) -> { 
+            parFor(intVariable(0, location(31, 22, 31, 22)), noProducts, intVariable(1, location(31, 21, 31, 24)), true, location(31, 9, 31, 36), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(31, 17, 31, 17));
                 exped.put(j, exp(ut.get(j, location(32, 30, 32, 32)).subtract(beta.get(i, location(32, 39, 32, 41)).times(Prices.get(i, location(32, 49, 32, 51)).get(j, location(32, 52, 32, 54)), location(32, 42, 32, 42)), location(32, 33, 32, 33)), location(32, 24, 32, 55)), location(32, 18, 32, 55));
 
             });
 
-            DoubleVariable sum = reduce(exped, intVariable(0, location(34, 36, 34, 36)), location(34, 22, 34, 66), (k, l) ->  { 
+            DoubleVariable sum = reduce(exped, intVariable(0, location(34, 36, 34, 36)), location(34, 22, 34, 66), (k, l) -> {
                 k.setAlias("k");
                 k.setLocation(location(34, 40, 34, 40));
                 l.setAlias("l");
@@ -80,7 +80,7 @@ public class DiscreteChoiceRandCoeff extends GeneratedAPIBuilder {
             prob.setLocation(location(35, 25, 35, 28));
             prob.setPublic();
 
-            parFor(intVariable(0, location(36, 23, 36, 23)), noProducts, intVariable(1, location(36, 22, 36, 25)), true, location(36, 9, 36, 37), (j) -> { 
+            parFor(intVariable(0, location(36, 23, 36, 23)), noProducts, intVariable(1, location(36, 22, 36, 25)), true, location(36, 9, 36, 37), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(36, 18, 36, 18));
                 prob.put(j, exped.get(j, location(37, 28, 37, 30)).divide(sum, location(37, 32, 37, 32)), location(37, 17, 37, 32));
@@ -99,7 +99,51 @@ public class DiscreteChoiceRandCoeff extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "DiscreteChoiceRandCoeff", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\n\nmodel DiscreteChoiceRandCoeff(int noProducts, int noObs, int[] ObsChoices, int[][] Prices) {\n    // we just need an uninformative prior for utility intercepts\n\n    // draw utilities\n    double[] ut = gaussian(0, 10).sample(noProducts);\n    //can we set the first element to 0? like ut[0] <~ 0\n\n    //priors for distribution of beta\n    double b = gaussian(0,10).sample();\n    double sigma =  inverseGamma(2,2).sample();\n\n    double[] beta = gaussian(b, sigma).sample(noObs);\n\n    int[] choices = new int[noObs];\n\n    for (int i:[0..noObs)){\n        // calculate choice probabilities for consumer i\n\n        double[] exped = new double[noProducts];\n        for(int j : [0..noProducts)) {\n            exped[j] = exp(ut[j]- beta[i]*Prices[i][j]);\n            }\n        double sum = reduce(exped, 0, (k, l) -> { return k + l; });\n        public double[] prob = new double[noProducts];\n        for (int j : [0..noProducts)) {\n            prob[j] = exped[j] / sum;\n        }\n        // emit choices of consumer i\n        choices[i] = categorical(prob).sample();\n                                }\n\n    // assert that generated choices match observed choices\n    choices.observe(ObsChoices);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "\n"
+             + "model DiscreteChoiceRandCoeff(int noProducts, int noObs, int[] ObsChoices, int[][] Prices) {\n"
+             + "    // we just need an uninformative prior for utility intercepts\n"
+             + "\n"
+             + "    // draw utilities\n"
+             + "    double[] ut = gaussian(0, 10).sample(noProducts);\n"
+             + "    //can we set the first element to 0? like ut[0] <~ 0\n"
+             + "\n"
+             + "    //priors for distribution of beta\n"
+             + "    double b = gaussian(0,10).sample();\n"
+             + "    double sigma =  inverseGamma(2,2).sample();\n"
+             + "\n"
+             + "    double[] beta = gaussian(b, sigma).sample(noObs);\n"
+             + "\n"
+             + "    int[] choices = new int[noObs];\n"
+             + "\n"
+             + "    for (int i:[0..noObs)){\n"
+             + "        // calculate choice probabilities for consumer i\n"
+             + "\n"
+             + "        double[] exped = new double[noProducts];\n"
+             + "        for(int j : [0..noProducts)) {\n"
+             + "            exped[j] = exp(ut[j]- beta[i]*Prices[i][j]);\n"
+             + "            }\n"
+             + "        double sum = reduce(exped, 0, (k, l) -> { return k + l; });\n"
+             + "        public double[] prob = new double[noProducts];\n"
+             + "        for (int j : [0..noProducts)) {\n"
+             + "            prob[j] = exped[j] / sum;\n"
+             + "        }\n"
+             + "        // emit choices of consumer i\n"
+             + "        choices[i] = categorical(prob).sample();\n"
+             + "                                }\n"
+             + "\n"
+             + "    // assert that generated choices match observed choices\n"
+             + "    choices.observe(ObsChoices);\n"
+             + "}";
     }
 }

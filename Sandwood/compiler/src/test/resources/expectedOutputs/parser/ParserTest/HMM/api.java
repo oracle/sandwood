@@ -50,7 +50,7 @@ public class HMM extends GeneratedAPIBuilder {
         st.setLocation(location(19, 9, 19, 10));
 
         st.put(intVariable(0, location(21, 6, 21, 6)), categorical(m.get(intVariable(0, location(21, 25, 21, 25)), location(21, 24, 21, 26)), location(21, 11, 21, 27)).sample(location(21, 29, 21, 36)), location(21, 5, 21, 36));
-        parFor(intVariable(1, location(23, 14, 23, 14)), samples, intVariable(1, location(23, 13, 23, 16)), true, location(23, 3, 23, 25), (i) -> { 
+        parFor(intVariable(1, location(23, 14, 23, 14)), samples, intVariable(1, location(23, 13, 23, 16)), true, location(23, 3, 23, 25), (i) -> {
             i.setAlias("i");
             i.setLocation(location(23, 11, 23, 11));
             st.put(i, categorical(m.get(st.get(i.subtract(intVariable(1, location(24, 34, 24, 34)), location(24, 32, 24, 32)), location(24, 29, 24, 35)), location(24, 26, 24, 36)), location(24, 13, 24, 37)).sample(location(24, 39, 24, 46)), location(24, 7, 24, 46));
@@ -60,7 +60,7 @@ public class HMM extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(26, 13, 26, 17));
 
-        parFor(intVariable(0, location(27, 14, 27, 14)), samples, intVariable(1, location(27, 13, 27, 16)), true, location(27, 3, 27, 25), (j) -> { 
+        parFor(intVariable(0, location(27, 14, 27, 14)), samples, intVariable(1, location(27, 13, 27, 16)), true, location(27, 3, 27, 25), (j) -> {
             j.setAlias("j");
             j.setLocation(location(27, 11, 27, 11));
             flips.put(j, bernoulli(bias.get(st.get(j, location(28, 33, 28, 35)), location(28, 30, 28, 36)), location(28, 16, 28, 37)).sample(location(28, 39, 28, 46)), location(28, 10, 28, 46));
@@ -74,7 +74,37 @@ public class HMM extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "HMM", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel HMM(boolean[] measured, int states) {\n\n  double[] v = new double[states] <~ 0.1;\n  double[][] m = dirichlet(v).sample(states);\n    \n  double[] bias = beta(1.0, 1.0).sample(states);\n\n  int samples = measured.length;\n  int[] st = new int[samples];\n        \n  st[0] = categorical(m[0]).sample();\n \n  for(int i:[1..samples))\n    st[i] = categorical(m[st[i - 1]]).sample();\n\n  boolean[] flips = new boolean[samples];\n  for(int j:[0..samples))\n    flips[j] = bernoulli(bias[st[j]]).sample();\n\n  flips.observe(measured);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model HMM(boolean[] measured, int states) {\n"
+             + "\n"
+             + "  double[] v = new double[states] <~ 0.1;\n"
+             + "  double[][] m = dirichlet(v).sample(states);\n"
+             + "    \n"
+             + "  double[] bias = beta(1.0, 1.0).sample(states);\n"
+             + "\n"
+             + "  int samples = measured.length;\n"
+             + "  int[] st = new int[samples];\n"
+             + "        \n"
+             + "  st[0] = categorical(m[0]).sample();\n"
+             + " \n"
+             + "  for(int i:[1..samples))\n"
+             + "    st[i] = categorical(m[st[i - 1]]).sample();\n"
+             + "\n"
+             + "  boolean[] flips = new boolean[samples];\n"
+             + "  for(int j:[0..samples))\n"
+             + "    flips[j] = bernoulli(bias[st[j]]).sample();\n"
+             + "\n"
+             + "  flips.observe(measured);\n"
+             + "}";
     }
 }

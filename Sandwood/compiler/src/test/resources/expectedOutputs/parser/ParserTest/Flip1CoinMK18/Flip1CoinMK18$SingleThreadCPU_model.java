@@ -1989,6 +1989,27 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2025, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK18(int samples, int a, int b, int c, boolean[] flipsMeasured) {\n    \n    double q = beta(1,1).sample();\n    double t = beta(1,1).sample();\n    double[][][] bias = {{{t, 1-t},{1-q, t}},{{t, 1-q},{1-q, q}}};\n    \n    Bernoulli bernoulli = bernoulli(bias[a][b][c]);\n    boolean[] flips = bernoulli.sample(samples);\n    \n    flips.observe(flipsMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip1CoinMK18(int samples, int a, int b, int c, boolean[] flipsMeasured) {\n"
+		     + "    \n"
+		     + "    double q = beta(1,1).sample();\n"
+		     + "    double t = beta(1,1).sample();\n"
+		     + "    double[][][] bias = {{{t, 1-t},{1-q, t}},{{t, 1-q},{1-q, q}}};\n"
+		     + "    \n"
+		     + "    Bernoulli bernoulli = bernoulli(bias[a][b][c]);\n"
+		     + "    boolean[] flips = bernoulli.sample(samples);\n"
+		     + "    \n"
+		     + "    flips.observe(flipsMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

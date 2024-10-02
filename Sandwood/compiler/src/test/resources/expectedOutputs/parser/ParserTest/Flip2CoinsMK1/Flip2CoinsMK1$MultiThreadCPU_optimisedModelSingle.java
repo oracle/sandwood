@@ -661,6 +661,30 @@ class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip2CoinsMK1(boolean[][] flipsMeasured) {\n    int coins = flipsMeasured.length;\n    double[] bias = beta(1.0, 1.0).sample(coins);\n        \n    boolean[][] flips = new boolean[coins][];\n        \n    for(int j:[0..coins)) {\n        int samples = flipsMeasured[j].length;\n        Bernoulli bernoulli = bernoulli(bias[j]);\n        flips[j] = bernoulli.sample(samples);\n    }\n        \n    flips.observe(flipsMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip2CoinsMK1(boolean[][] flipsMeasured) {\n"
+		     + "    int coins = flipsMeasured.length;\n"
+		     + "    double[] bias = beta(1.0, 1.0).sample(coins);\n"
+		     + "        \n"
+		     + "    boolean[][] flips = new boolean[coins][];\n"
+		     + "        \n"
+		     + "    for(int j:[0..coins)) {\n"
+		     + "        int samples = flipsMeasured[j].length;\n"
+		     + "        Bernoulli bernoulli = bernoulli(bias[j]);\n"
+		     + "        flips[j] = bernoulli.sample(samples);\n"
+		     + "    }\n"
+		     + "        \n"
+		     + "    flips.observe(flipsMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

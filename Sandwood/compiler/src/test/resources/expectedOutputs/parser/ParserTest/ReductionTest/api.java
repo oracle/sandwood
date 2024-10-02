@@ -41,7 +41,7 @@ public class ReductionTest extends GeneratedAPIBuilder {
         v.setAlias("v");
         v.setLocation(location(15, 14, 15, 14));
 
-        parFor(intVariable(0, location(16, 16, 16, 16)), noStates, intVariable(1, location(16, 15, 16, 18)), true, location(16, 5, 16, 28), (i) -> { 
+        parFor(intVariable(0, location(16, 16, 16, 16)), noStates, intVariable(1, location(16, 15, 16, 18)), true, location(16, 5, 16, 28), (i) -> {
             i.setAlias("i");
             i.setLocation(location(16, 13, 16, 13));
             v.put(i, doubleVariable(0.1, location(17, 16, 17, 18)), location(17, 10, 17, 18));
@@ -59,7 +59,7 @@ public class ReductionTest extends GeneratedAPIBuilder {
         st.setAlias("st");
         st.setLocation(location(23, 11, 23, 12));
 
-        parFor(intVariable(0, location(26, 16, 26, 16)), noCats, intVariable(1, location(26, 15, 26, 18)), true, location(26, 5, 26, 26), (i) -> { 
+        parFor(intVariable(0, location(26, 16, 26, 16)), noCats, intVariable(1, location(26, 15, 26, 18)), true, location(26, 5, 26, 26), (i) -> {
             i.setAlias("i");
             i.setLocation(location(26, 13, 26, 13));
             st.put(i, categorical(m.get(i, location(27, 30, 27, 32)), location(27, 17, 27, 33)).sample(location(27, 35, 27, 42)), location(27, 11, 27, 42));
@@ -69,7 +69,7 @@ public class ReductionTest extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(29, 15, 29, 19));
 
-        parFor(intVariable(0, location(31, 16, 31, 16)), noFlips, intVariable(1, location(31, 15, 31, 18)), true, location(31, 5, 31, 27), (j) -> { 
+        parFor(intVariable(0, location(31, 16, 31, 16)), noFlips, intVariable(1, location(31, 15, 31, 18)), true, location(31, 5, 31, 27), (j) -> {
             j.setAlias("j");
             j.setLocation(location(31, 13, 31, 13));
             flips.put(j, bernoulli(bias.get(sum(st, location(32, 35, 32, 41)), location(32, 34, 32, 42)), location(32, 20, 32, 43)).sample(location(32, 45, 32, 52)), location(32, 14, 32, 52));
@@ -83,8 +83,8 @@ public class ReductionTest extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "ReductionTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static IntVariable sum(ArrayVariable<IntVariable> a, Location $location) { 
-        return reduce(a, intVariable(0, location(37, 26, 37, 26)), location(37, 16, 39, 10), (i, j) ->  { 
+    private static IntVariable sum(ArrayVariable<IntVariable> a, Location $location) {
+        return reduce(a, intVariable(0, location(37, 26, 37, 26)), location(37, 16, 39, 10), (i, j) -> {
             i.setAlias("i");
             i.setLocation(location(37, 30, 37, 30));
             j.setAlias("j");
@@ -93,7 +93,47 @@ public class ReductionTest extends GeneratedAPIBuilder {
         });
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel ReductionTest(boolean[] flipsMeasured, int noCats) {\n    int noFlips = flipsMeasured.length;\n    int noStates = noFlips/noCats;\n    \n    double[] v = new double[noStates];\n    for(int i:[0..noStates))\n        v[i] = 0.1;\n    \n    double[][] m = dirichlet(v).sample(noCats);\n    \n    double[] bias = beta(1.0, 1.0).sample(noFlips);\n    \n    int[] st = new int[noCats];\n\n\n    for(int i:[0..noCats))\n        st[i] = categorical(m[i]).sample();\n            \n    boolean[] flips = new boolean[noFlips];\n            \n    for(int j:[0..noFlips))\n        flips[j] = bernoulli(bias[sum(st)]).sample();\n\n    flips.observe(flipsMeasured);\n    \n    private int sum(int[] a) {\n        return reduce(a, 0, (i,j) -> {\n            return i + j;\n        });\n    }\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model ReductionTest(boolean[] flipsMeasured, int noCats) {\n"
+             + "    int noFlips = flipsMeasured.length;\n"
+             + "    int noStates = noFlips/noCats;\n"
+             + "    \n"
+             + "    double[] v = new double[noStates];\n"
+             + "    for(int i:[0..noStates))\n"
+             + "        v[i] = 0.1;\n"
+             + "    \n"
+             + "    double[][] m = dirichlet(v).sample(noCats);\n"
+             + "    \n"
+             + "    double[] bias = beta(1.0, 1.0).sample(noFlips);\n"
+             + "    \n"
+             + "    int[] st = new int[noCats];\n"
+             + "\n"
+             + "\n"
+             + "    for(int i:[0..noCats))\n"
+             + "        st[i] = categorical(m[i]).sample();\n"
+             + "            \n"
+             + "    boolean[] flips = new boolean[noFlips];\n"
+             + "            \n"
+             + "    for(int j:[0..noFlips))\n"
+             + "        flips[j] = bernoulli(bias[sum(st)]).sample();\n"
+             + "\n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "    \n"
+             + "    private int sum(int[] a) {\n"
+             + "        return reduce(a, 0, (i,j) -> {\n"
+             + "            return i + j;\n"
+             + "        });\n"
+             + "    }\n"
+             + "}";
     }
 }

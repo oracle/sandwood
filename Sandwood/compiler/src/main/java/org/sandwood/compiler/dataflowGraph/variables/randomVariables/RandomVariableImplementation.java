@@ -30,7 +30,8 @@ public abstract class RandomVariableImplementation<A extends Variable<A>, B exte
         extends VariableImplementation<B> implements RandomVariable<A, B> {
     protected final VariableType.Type<A> sampleType;
 
-    protected RandomVariableImplementation(RandomVariableConstructorTask<A, B> parent, VariableType.Type<A> outputType) {
+    protected RandomVariableImplementation(RandomVariableConstructorTask<A, B> parent,
+            VariableType.Type<A> outputType) {
         super(parent);
         this.sampleType = outputType;
         this.setPublic();
@@ -237,12 +238,16 @@ public abstract class RandomVariableImplementation<A extends Variable<A>, B exte
 
     @Override
     public B copy() {
-        throw new SandwoodModelException("Random variables cannot be assigned to multiple references.");
+        throw new SandwoodModelException("unable to assign random variable " + getAlias()
+        + " to another reference as random variables are reference types and currently"
+        + " only value types can be assigned to multiple variables.");
     }
 
     @Override
     public B copy(Location location) {
-        throw new SandwoodModelException("Random variables cannot be assigned to multiple references.", location);
+        throw new SandwoodModelException("unable to assign random variable " + getAlias()
+        + " to another reference as random variables are reference types and currently"
+        + " only value types can be assigned to multiple variables.", location);
     }
     
     @Override
@@ -255,7 +260,7 @@ public abstract class RandomVariableImplementation<A extends Variable<A>, B exte
     public RandomVariableType<A, B> getType() {
         return getParent().getOutputType();
     }
-    
+
     @Override
     public RandomVariableConstructorTask<A, B> getParent() {
         return (RandomVariableConstructorTask<A, B>) super.getParent();

@@ -24,7 +24,7 @@ import java.util.HashSet;
 
 public class Flip1CoinMK15 extends GeneratedAPIBuilder {
     //Helper classes for if else statements.
-    private static class $IfElseMods1 { 
+    private static class $IfElseMods1 {
         DoubleVariable bias;
     }
 
@@ -55,7 +55,7 @@ public class Flip1CoinMK15 extends GeneratedAPIBuilder {
 
             c.put(intVariable(0, location(20, 9, 20, 9)), b.divide(intVariable(2, location(20, 16, 20, 16)), location(20, 15, 20, 15)), location(20, 8, 20, 15));
             c.put(intVariable(1, location(21, 9, 21, 9)), b.divide(intVariable(2, location(21, 16, 21, 16)), location(21, 15, 21, 15)), location(21, 8, 21, 15));
-            $else1.bias = reduce(c, intVariable(0, location(22, 24, 22, 24)), location(22, 14, 24, 10), (i, j) ->  { 
+            $else1.bias = reduce(c, intVariable(0, location(22, 24, 22, 24)), location(22, 14, 24, 10), (i, j) -> {
                 i.setAlias("i");
                 i.setLocation(location(22, 28, 22, 28));
                 j.setAlias("j");
@@ -76,7 +76,7 @@ public class Flip1CoinMK15 extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(28, 15, 28, 19));
 
-        parFor(intVariable(0, location(30, 16, 30, 16)), samples, intVariable(1, location(30, 15, 30, 18)), true, location(30, 5, 30, 27), (i) -> { 
+        parFor(intVariable(0, location(30, 16, 30, 16)), samples, intVariable(1, location(30, 15, 30, 18)), true, location(30, 5, 30, 27), (i) -> {
             i.setAlias("i");
             i.setLocation(location(30, 13, 30, 13));
             flips.get(i, location(31, 14, 31, 16)).observe(flipsMeasured.get(i, location(31, 39, 31, 41)), location(31, 18, 31, 42));
@@ -90,7 +90,39 @@ public class Flip1CoinMK15 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK15", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK15(boolean[] flipsMeasured, boolean guard1) {\n    int samples = flipsMeasured.length;\n        \n    double b = beta(1.0, 1).sample();\n    double bias;\n    if(guard1)\n      bias = b;\n    else {\n      double[] c = new double[2];\n      c[0] = b/2;\n      c[1] = b/2;\n      bias = reduce(c, 0, (i,j) -> {\n            return i + j;\n        });\n    }\n        \n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = bernoulli.sample(samples);\n\n    for(int i:[0..samples))\n        flips[i].observe(flipsMeasured[i]);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK15(boolean[] flipsMeasured, boolean guard1) {\n"
+             + "    int samples = flipsMeasured.length;\n"
+             + "        \n"
+             + "    double b = beta(1.0, 1).sample();\n"
+             + "    double bias;\n"
+             + "    if(guard1)\n"
+             + "      bias = b;\n"
+             + "    else {\n"
+             + "      double[] c = new double[2];\n"
+             + "      c[0] = b/2;\n"
+             + "      c[1] = b/2;\n"
+             + "      bias = reduce(c, 0, (i,j) -> {\n"
+             + "            return i + j;\n"
+             + "        });\n"
+             + "    }\n"
+             + "        \n"
+             + "    Bernoulli bernoulli = bernoulli(bias);\n"
+             + "    boolean[] flips = bernoulli.sample(samples);\n"
+             + "\n"
+             + "    for(int i:[0..samples))\n"
+             + "        flips[i].observe(flipsMeasured[i]);\n"
+             + "}\n"
+             + "";
     }
 }

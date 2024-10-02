@@ -1341,6 +1341,41 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel LDATest(int noTopics, int vocabSize, int[][] documents) {\n\n    double[] alpha = new double[noTopics];\n    for(int i:[0..noTopics))\n        alpha[i] = 0.1;\n\n    double[] beta = new double[vocabSize];\n    for(int i:[0..vocabSize))\n        beta[i] = 0.1;\n\n    double[][] phi = dirichlet(beta).sample(noTopics);\n    double[][] theta = dirichlet(alpha).sample(documents.length);\n    int[][] w = new int[documents.length][];\n\n    for(int i:[0..documents.length)) {\n        int[] t = new int[documents[i].length];\n        for(int j:[0..documents[i].length)) {\n            int z = categorical(theta[i]).sample();\n            t[j] = categorical(phi[z]).sample();\n        }\n        w[i] = t;\n    }\n\n    w.observe(documents);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "model LDATest(int noTopics, int vocabSize, int[][] documents) {\n"
+		     + "\n"
+		     + "    double[] alpha = new double[noTopics];\n"
+		     + "    for(int i:[0..noTopics))\n"
+		     + "        alpha[i] = 0.1;\n"
+		     + "\n"
+		     + "    double[] beta = new double[vocabSize];\n"
+		     + "    for(int i:[0..vocabSize))\n"
+		     + "        beta[i] = 0.1;\n"
+		     + "\n"
+		     + "    double[][] phi = dirichlet(beta).sample(noTopics);\n"
+		     + "    double[][] theta = dirichlet(alpha).sample(documents.length);\n"
+		     + "    int[][] w = new int[documents.length][];\n"
+		     + "\n"
+		     + "    for(int i:[0..documents.length)) {\n"
+		     + "        int[] t = new int[documents[i].length];\n"
+		     + "        for(int j:[0..documents[i].length)) {\n"
+		     + "            int z = categorical(theta[i]).sample();\n"
+		     + "            t[j] = categorical(phi[z]).sample();\n"
+		     + "        }\n"
+		     + "        w[i] = t;\n"
+		     + "    }\n"
+		     + "\n"
+		     + "    w.observe(documents);\n"
+		     + "}\n"
+		     + "";
 	}
 }

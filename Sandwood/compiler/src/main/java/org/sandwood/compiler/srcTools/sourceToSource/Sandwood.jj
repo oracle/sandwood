@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.LinkedHashSet;
-import java.util.HashSet;
 import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
@@ -162,9 +161,9 @@ public class SandwoodParser
    classBuilder.addAll(functions);
 
    //Add original input string to the class
-   classBuilder.add(tokenMap("\n" + indent() +"private static String getOriginalModel() { \n"));
+   classBuilder.add(tokenMap("\n" + indent() +"private static String getOriginalModel() {\n"));
    indent++;
-   classBuilder.add(tokenMap(indent() + "return \"" + inputString + "\";\n"));
+   classBuilder.add(tokenMap(indent() + "return " + processInputString(inputString) + ";\n"));
    indent--;
    classBuilder.add(tokenMap(indent() + "}\n"));
    indent--;
@@ -173,6 +172,16 @@ public class SandwoodParser
 
     tokenMapping = new TokenMapping(classBuilder, inputString);
     return TokenMap.tokensToString(classBuilder);
+  }
+
+  private String processInputString(String input) {
+    StringBuilder sb = new StringBuilder();
+    String[] parts = input.split("\\\\n", -1);
+    sb.append("\"" + parts[0]);
+    for(int i=1; i<parts.length; i++)
+      sb.append("\\n\"\n" + indent() + "     + \"" + parts[i]);
+    sb.append("\"");
+    return sb.toString();
   }
 
   private String indent() {
@@ -225,15 +234,15 @@ public class SandwoodParser
     indent = 1;
     List<TokenMap > l = new ArrayList<TokenMap >();
     String className = "$IfElseMods" + id;
-    l.add(tokenMap(indent() + "private static class " + className + " { \n"));
+    l.add(tokenMap(indent() + "private static class " + className + " {\n"));
 
     indent++;
     PriorityQueue<String> names = new PriorityQueue<String>(vars.keySet());
     while(!names.isEmpty()) {
       String name = names.poll();
       VarDesc varDesc = vars.get(name);
-      l.add(tokenMap(indent() + varDesc.type, varDesc.typeLocation));
-      l.add(tokenMap(" " + name + ";\n", varDesc.nameLocation));
+      l.add(tokenMap(indent() + varDesc.type(), varDesc.typeLocation()));
+      l.add(tokenMap(" " + name + ";\n", varDesc.nameLocation()));
     }
     indent--;
     
@@ -241,6 +250,133 @@ public class SandwoodParser
     ifElseClasses.put(className, l);
 
     indent = originalIndent;
+  }
+
+  private static class Scopes {
+    // TODO add tracking of set vars so that if a variable is declared again in a for loop the error
+    // will be thrown by the parser, not the Java compiler as the java compiler message will include
+    // information about internal lambdas.
+    static class Scope {
+      private final Map<String, VarDesc> unsetVars;
+
+      Scope() {
+        unsetVars = new HashMap<String, VarDesc>();
+      }
+
+      Scope(Scope outer) {
+        unsetVars = new HashMap<String, VarDesc>(outer.unsetVars);
+      }
+
+      Set<String> varNames() {
+        return unsetVars.keySet();
+      }
+
+      boolean containsVar(String id) {
+        return unsetVars.containsKey(id);
+      }
+
+      VarDesc varDesc(String id) {
+        return unsetVars.get(id);
+      }
+
+      void addVar(String id, VarDesc varDesc) {
+        unsetVars.put(id, varDesc);
+      }
+
+      void setVar(String id) {
+        unsetVars.put(id, null);
+      }
+
+      @Override
+      public String toString() {
+        return unsetVars.toString();
+      }
+    }
+
+    private Stack<Scope> scopes = new Stack<Scope>();
+
+    private void enterScope() {
+      scopes.push(new Scope(scopes.peek()));
+    }
+  
+    private void leaveScope() {
+      Scope innerScope = scopes.pop();
+      Scope outerScope = scopes.peek();
+
+      for(String id:innerScope.varNames()) {
+        VarDesc varDesc = innerScope.varDesc(id);
+        if(outerScope.containsVar(id))
+            outerScope.addVar(id, varDesc);
+          else if(varDesc != null)
+            throw new SandwoodModelException("Variable " + id + " is never initialised.", varDesc.nameLocation()); 
+        }
+    }
+  
+    private void enterIterativeScope() {
+      scopes.push(new Scope());
+    }
+
+    private void leaveIterativeScope() {
+      leaveNewScope();
+    }
+
+    private void enterNewScope() {
+      scopes.push(new Scope());
+    }
+
+    private void leaveNewScope() {
+      Scope scope = scopes.pop();
+      for(String id:scope.varNames()) {
+        VarDesc varDesc = scope.varDesc(id);
+        if(varDesc != null)
+          throw new SandwoodModelException("Variable " + id + " is never initialised.", varDesc.nameLocation()); 
+      }
+    }
+
+    // Leaving an if scope does nothing as the same operations will be applied to the else scope.
+    public void leaveIfScope() {
+       scopes.pop();
+    }
+
+    private Scope getScope() {
+      return scopes.peek();
+    } 
+
+    private VarDesc varDesc(String id) {
+      return scopes.peek().varDesc(id);
+    }
+
+    private boolean containsVar(String id) {
+      return scopes.peek().containsVar(id);
+    }
+
+    private void setUnsetVar(String id) {
+      scopes.peek().setVar(id);
+    }
+
+    private void addUnsetVar(String id, VarDesc varDesc) {
+      scopes.peek().addVar(id, varDesc);
+    }
+
+    @Override
+    public String toString() {
+      return scopes.toString();
+    }
+  }
+
+  private static class ConditionalTag {
+	final String tag;
+	final Set<String> vars;
+
+	ConditionalTag(String tag, Set<String> vars) {
+		this.tag = tag;
+		this.vars = vars;
+	}
+
+	@Override
+	public String toString() {
+		return "tag: " + tag + " vars: " + vars;
+	}
   }
 
   public ModelClassName getClassName() { return ModelClassName.modelName(classToken.toString(), ifElseClasses.keySet()); }
@@ -251,6 +387,37 @@ public class SandwoodParser
     PriorityQueue<String> p = new PriorityQueue<String>(ifElseClasses.keySet());
     while(!p.isEmpty())
       l.add(tokenMap("\n" + indent() + setName + ".add(\"" + p.poll() + "\");"));
+  }
+
+  private void setProperties(List<TokenMap> sb, Token id, Token permissionsToken){
+    sb.add(tokenMap(indent() + id + ".setAlias(\"" + id + "\");\n", id));
+    sb.add(tokenMap(indent() + id + ".setLocation(" + location(id) + ");\n", id));
+
+    if(lastJavadoc != null) 
+      sb.add(tokenMap(indent() + id + ".setComment(\"" + lastJavadoc + "\");\n", id));
+
+    if(inFunction) {
+      if(permissionsToken == null)
+        sb.add(tokenMap(indent() + id + ".setPrivate();\n", id));
+      else {
+        switch(permissionsToken.kind) {
+          case PUBLIC:
+            throw new SandwoodModelException("Public variables cannot be set in functions.", id);
+          case PRIVATE:
+            sb.add(tokenMap(indent() + id + ".setPrivate();\n", permissionsToken));
+            break;
+        }
+      }
+   } else if(permissionsToken != null) {
+       switch(permissionsToken.kind) {
+         case PUBLIC:
+           sb.add(tokenMap(indent() + id + ".setPublic();\n", permissionsToken));
+           break;
+         case PRIVATE:
+           sb.add(tokenMap(indent() + id + ".setPrivate();\n", permissionsToken));
+           break;
+      }
+    }
   }
 
   private String inputString;
@@ -268,18 +435,15 @@ public class SandwoodParser
   
   private Set<String> assignedValues = new LinkedHashSet<String>();
   private int globalId = 1;
-  private Stack<String> conditionalTag = new Stack<String>();
-  private Stack<Map<String, VarDesc>> unsetVars = new Stack<Map<String, VarDesc>>();
+  private Stack<ConditionalTag> conditionalTags = new Stack<ConditionalTag>();
+  private Scopes scopes = new Scopes();
+  private boolean assignment = false;
 
   private TokenMapping tokenMapping;
 
   private List<String> constructorArgs = new ArrayList<String>(); 
-  // Initialize indent to depth required after the boilerplate code.
+  //Initialize indent to depth required after the boilerplate code.
   private int indent = 2;
-  // Record an array is being initialised.
-  private int arrayInitDepth = 0;
-  // Record the value that could be set before entering the last conditional.
-  Stack<Set<String>> ifAssignableVars = new Stack<Set<String >>();
 }
 
 PARSER_END(SandwoodParser)
@@ -1158,8 +1322,6 @@ void parse():
     ifElseClasses = new HashMap<String, List<TokenMap>>();
     functions = new ArrayList<TokenMap>();
     imports = new ArrayList<TokenMap>();
-    unsetVars.push(new HashMap<String, VarDesc>());
-    ifAssignableVars.push(new HashSet<String>());
 }
 {
   [ PackageDeclaration() ]
@@ -1301,13 +1463,13 @@ void ModelBody(List<TokenMap> sb, List<TokenMap> fsb):
 }
 {  
   {
-    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
+    scopes.enterNewScope();
   }
 
   "{" ModelBodyDeclaration(sb, fsb) "}"
 
   {
-    unsetVars.pop();
+    scopes.leaveNewScope();
   }
 }
 
@@ -1341,57 +1503,61 @@ void ModelBodyDeclaration(List<TokenMap> sb, List<TokenMap> fsb):
  )*
 }
 
-void VariableDeclarator(List<TokenMap> sb, Type<?> type, Token[] typeTokens, Token privateToken, Token publicToken):
+void VariableDeclarator(List<TokenMap> sb, Type<?> type, List<Token> typeTokens, Token permissionsToken):
 {
-  Token id;
+  Token id, value;
   Token t;
-  String typeName = type.getAPIType();
   boolean semiColonRequired;
 }
 {
-  { sb.add(tokenMap(typeName + " ", typeTokens)); }
+  { sb.add(tokenMap(type.getAPIType() + " ", typeTokens)); }
   id = <IDENTIFIER>
   {
     sb.add(tokenMap(id.image, id));
     if(indent==2 && !inFunction) //Check we are not in a block
       variableNames.add(id.image);
   }
+  
   (
-    t="="
+    t = "="
     { sb.add(tokenMap(" = ", t)); }
-    semiColonRequired = VariableInitializer(sb, type, id.image)
-    {
-      if(semiColonRequired)
-        sb.add(tokenMap(";\n"));
-      else
-        sb.add(tokenMap("\n"));
-        
-      sb.add(tokenMap(indent() + id + ".setAlias(\"" + id + "\");\n", id));
-      sb.add(tokenMap(indent() + id + ".setLocation(" + location(id) + ");\n", id));
-      
-      if (lastJavadoc != null) 
-        sb.add(tokenMap(indent() + id + ".setComment(\"" + lastJavadoc + "\");\n", id));
-        
-      if (privateToken != null) 
-        sb.add(tokenMap(indent() + id + ".setPrivate();\n", privateToken));
-         
-      if(publicToken != null)
-         sb.add(tokenMap(indent() + id + ".setPublic();\n", publicToken));
+    (
+        LOOKAHEAD( <IDENTIFIER> (";" | ","))
+        value = <IDENTIFIER>
+        {
+          sb.add(tokenMap(value.image + ".copy(" + location(t) + ");\n", t, value));
+          setProperties(sb, id, permissionsToken); 
+          sb.add(tokenMap("\n"));
+        }
+    |
+      semiColonRequired = VariableInitializer(sb, type, id.image)
+      {
+        if(semiColonRequired)
+          sb.add(tokenMap(";\n"));
+        else
+          sb.add(tokenMap("\n"));
 
-      sb.add(tokenMap("\n"));
-    }
+        setProperties(sb, id, permissionsToken); 
+        sb.add(tokenMap("\n"));
+      }
+    )
   |
     {
-      unsetVars.peek().put(id.image, new VarDesc(typeName, typeTokens, id));
+      scopes.addUnsetVar(id.image, new VarDesc(type.getAPIType(), typeTokens, id, permissionsToken, lastJavadoc));
       sb.add(tokenMap(";\n"));
     }
+  )
+  (
+    ";"
+  |
+    ","
+    { sb.add(tokenMap(indent())); }
+    VariableDeclarator(sb, type, typeTokens, permissionsToken)
   )
 }
 
 boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
-{
-  Token id;
-}
+{}
 {
   ArrayInitializer(sb, type, name)
   { return false; }
@@ -1406,13 +1572,6 @@ boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
     )*
   ]
   { return true; }
-|
-  LOOKAHEAD(<IDENTIFIER> ("," | ";"))
-  id = <IDENTIFIER>
-  {
-   sb.add(tokenMap(id + ((arrayInitDepth==0)?".copy(" + location(id) + ")":""), id));
-   return true;
-  }
 | 
   Expression(sb)
   { return true; }
@@ -1444,7 +1603,6 @@ void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
 }
 {
   ob = "{"
-  { arrayInitDepth++; }
   [
     {
 	  arrayInitalize.add(tokenMap(indent() + "{\n", ob));
@@ -1489,7 +1647,6 @@ void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
       arrayInitalize.add(tokenMap(indent() + "}\n", ob));
     }
   ]
-  { arrayInitDepth--; }
   cb = "}"
   {
     sb.add(tokenMap("Variable.arrayVariable(" + location(ob, cb) + ", " + 
@@ -1504,8 +1661,12 @@ void MethodDeclaration(List<TokenMap> sb):
   { inFunction = true; }
   ResultType(sb)
   MethodDeclarator(sb)
+  { scopes.enterNewScope(); }
   Block(sb)
-  { inFunction = false; }
+  {
+    scopes.leaveNewScope();
+    inFunction = false;
+  }
 }
 
 void MethodDeclarator(List<TokenMap> sb):
@@ -1532,7 +1693,7 @@ void FormalParameters(List<TokenMap> sb):
     )*
   ]
   t=")"
-  { sb.add(tokenMap(", Location $location)", t)); }
+  { sb.add(tokenMap(", Location $location) ", t)); }
 }
 
 void FormalParameter(List<TokenMap> sb):
@@ -2171,10 +2332,15 @@ void ReductionExpression(List<TokenMap> sb):
   {    sb.add(tokenMap(", ", t)); }
   Expression(sb)
   t = ","
-  {    sb.add(tokenMap(", ", t)); }
+  {
+    sb.add(tokenMap(", ", t));
+    scopes.enterIterativeScope();
+  }
   Lambda2Arg(lambdaTokens)
   t = ")"
-  {    sb.add(tokenMap(location(reduce, t) + ", ", t));
+  {
+    scopes.leaveIterativeScope();
+    sb.add(tokenMap(location(reduce, t) + ", ", t));
     sb.addAll(lambdaTokens);
     sb.add(tokenMap(")", t));    
   }
@@ -2197,9 +2363,9 @@ void Lambda2Arg(List<TokenMap> sb):
   {    sb.add(tokenMap("-> ", t)); }
     t = "{"
   {   
-    sb.add(tokenMap(" { \n", t));
+    sb.add(tokenMap("{\n", t));
     indent++;
-    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
+    scopes.enterScope();
     sb.add(tokenMap(indent() + name1 + ".setAlias(\"" + name1 +"\");\n", name1));
     sb.add(tokenMap(indent() + name1 + ".setLocation(" + location(name1) + ");\n", name1));
     
@@ -2210,7 +2376,7 @@ void Lambda2Arg(List<TokenMap> sb):
   t = "}"
   {
     indent--;
-    unsetVars.pop();
+    scopes.leaveScope();
     sb.add(tokenMap(indent() + "}", t));
   }
 }
@@ -2221,13 +2387,13 @@ void Lambda2Arg(List<TokenMap> sb):
 void Statement(List<TokenMap> sb):
 {}
 {
-  {
-    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
-  }
-    (
+  (
     LOOKAHEAD(2)
     Block(sb)
   |
+    LOOKAHEAD(2)
+    VariableAssignment(sb)
+  | 
 /*    EmptyStatement()
   |*/
     { Token t; }
@@ -2242,19 +2408,23 @@ void Statement(List<TokenMap> sb):
   )
   {
     sb.add(tokenMap("\n"));
-    unsetVars.pop();
   }
 }
 
 void StatementAlreadyBlocked(List<TokenMap> sb):
 {}
-{  {
-    unsetVars.push(new HashMap<String, VarDesc>(unsetVars.peek()));
-  }
+{  
   (
     LOOKAHEAD(2)
     BlockAlreadyBlocked(sb)
   |
+  
+    LOOKAHEAD(2)
+    {
+      sb.add(tokenMap(indent()));
+    }
+    VariableAssignment(sb)
+  | 
 /*    EmptyStatement()
   |*/
     {
@@ -2272,7 +2442,6 @@ void StatementAlreadyBlocked(List<TokenMap> sb):
   )
   {
     sb.add(tokenMap("\n"));
-    unsetVars.pop();
   }
 }
 
@@ -2285,8 +2454,9 @@ void Block(List<TokenMap> sb):
 {
   
   t = "{"
-  {   
-    sb.add(tokenMap(" { \n", t));
+  {
+    scopes.enterScope(); 
+    sb.add(tokenMap("{\n", t));
     indent++;
   }
   ( BlockStatement(sb) )*
@@ -2294,6 +2464,7 @@ void Block(List<TokenMap> sb):
   {
     indent--;
     sb.add(tokenMap(indent() + "}\n", t));
+    scopes.leaveScope();
   }
 }
 
@@ -2311,7 +2482,7 @@ void BlockStatement(List<TokenMap> sb):
 }
 {
   LOOKAHEAD( [ ("private" | "public") ] Type() <IDENTIFIER> )
-  LocalVariableDeclaration(sb) ";"
+  LocalVariableDeclaration(sb)
 |
   Statement(sb)
 }
@@ -2319,25 +2490,16 @@ void BlockStatement(List<TokenMap> sb):
 void LocalVariableDeclaration(List<TokenMap> sb):
 {
   Type<?> type;
-  Token privateToken = null, publicToken = null, t;
+  Token permissionsToken = null, t;
   List<Token> typeTokens = new ArrayList<Token>();
   lastJavadoc = null;
 }
 {
   [
-    (
-      privateToken = "private"
-    |
-      publicToken = "public"
-    )
+    ( permissionsToken = "private" | permissionsToken = "public" )
   ]
   type = Type(typeTokens)
-  VariableDeclarator(sb, type, typeTokens.toArray(new Token[typeTokens.size()]), privateToken, publicToken)
-  (
-    t = ","
-    { sb.add(tokenMap(indent(), t)); }
-    VariableDeclarator(sb, type, typeTokens.toArray(new Token[typeTokens.size()]), privateToken, publicToken)
-  )*
+  VariableDeclarator(sb, type, typeTokens, permissionsToken)
 }
 
 /*void EmptyStatement():
@@ -2355,10 +2517,6 @@ void StatementExpression(List<TokenMap> sb):
     IdentiferDesc id=null;
 }
 {
-  (
-    LOOKAHEAD(2)
-    VariableAssignment(sb)
-  | 
     PrimaryPrefix(sb)
   
   //(.name [([args])] | "[" exp "]" )* [(.observe) | "[" exp "]" for a put)
@@ -2454,15 +2612,11 @@ void StatementExpression(List<TokenMap> sb):
       }
         eq = "="
         (
-          LOOKAHEAD(<IDENTIFIER> ";")
-          t = <IDENTIFIER>
-          { assignExpression.add(tokenMap(t + ((!arrayIndex)?".copy(" + location(t) + ")":""), t)); }
-        | 
           Expression(assignExpression)
         |
           LOOKAHEAD(2) AllocationExpression(assignExpression)
-        [ LOOKAHEAD(2) PrimarySuffixNonArrayReturn(sb) ( LOOKAHEAD(2) PrimarySuffixReturn(sb) )* ]
-      )
+          [ LOOKAHEAD(2) PrimarySuffixNonArrayReturn(sb) ( LOOKAHEAD(2) PrimarySuffixReturn(sb) )* ]
+        )
 
         {
           if(arrayIndex) {
@@ -2521,47 +2675,72 @@ void StatementExpression(List<TokenMap> sb):
       subExpression = new ArrayList<TokenMap>();
     }
   }
-)
 }
 
 void VariableAssignment(List<TokenMap> sb):
 {
-  Token eq, val;
+  Token eq, value;
   IdentiferDesc id;
+  assignment = true;
 }
 {
   id = identifier()
   eq = "="
   
   {
-      VarDesc varDesc = unsetVars.peek().remove(id.source.image);
-      if(varDesc==null)
-          throw new SandwoodModelException("Assignment to \"" + id.source.image + "\" but this value has either " +
-              "already been assigned to in this code path, or has not been declared as a variable.", id.source);
-      else
+      assignment = false;
+      VarDesc varDesc = scopes.varDesc(id.source.image);
+      if(varDesc==null) {
+        if(scopes.containsVar(id.source.image)) 
+          throw new SandwoodModelException("Assignment to \"" + id.source.image + "\" but this value has " +
+              "already been assigned to in this code path.", id.source);
+        else
+          throw new SandwoodModelException("Assignment to \"" + id.source.image + "\" but this value has " +
+              "not been declared, or is declared out of scope, for example outside of a for loop encloding this assignment.", id.source);
+      } else
           //Leave the name, but remove the varDesc so the test will fail in future.
-          unsetVars.peek().put(id.source.image, null);
+          scopes.setUnsetVar(id.source.image);
 
       //Add the assignment    
-      sb.add(tokenMap(id.name, varDesc.nameLocation));
-      sb.add(tokenMap(" = ", eq));
-  }
-  (    LOOKAHEAD(<IDENTIFIER> ";")
-    val = <IDENTIFIER>
-    {
-      if(ifAssignableVars.peek().contains(id.source.image)) { 
-        assignedValues.add(id.source.image);
-        sb.add(tokenMap(val.image, val));
-      }
-      else
-        sb.add(tokenMap(val.image + ".copy(" + location(val) + ")", val));
-    }
-  |
-    {
+      sb.add(tokenMap(id.name + " ", varDesc.nameLocation()));
+      sb.add(tokenMap("= ", eq));
       assignedValues.add(id.source.image);
+  }
+  (
+    LOOKAHEAD(2)
+    value = <IDENTIFIER> ";"
+    {
+      if(id.name.charAt(0) != '$')
+        sb.add(tokenMap(value.image + ".copy();", eq, value));
+      else
+        sb.add(tokenMap(value.image + ";", eq, value));
     }
-    Expression(sb)
+  | 
+    Expression(sb) ";"
+    { sb.add(tokenMap(";")); }
   )
+  {
+   // If the variable is not constructed by the parser set the required flags. The parser will add a
+   // newline at the end, hence the odd call handling.
+   if(id.name.charAt(0) != '$') { 
+     sb.add(tokenMap("\n" + indent() + id.name + ".setAlias(\"" + id.name + "\");", varDesc.nameLocation()));
+
+     if(varDesc.lastJavadoc() != null) 
+       sb.add(tokenMap("\n" + indent() + id.name + ".setComment(\"" + varDesc.lastJavadoc() + "\");", varDesc.nameLocation()));
+
+       Token permissionsToken = varDesc.permissionsToken();
+       if(permissionsToken != null) { 
+          switch(permissionsToken.kind) {
+            case PRIVATE:
+              sb.add(tokenMap("\n" + indent() + id.name + ".setPrivate();", permissionsToken));
+              break;
+            case PUBLIC:
+              sb.add(tokenMap("\n" + indent() + id.name + ".setPublic();", permissionsToken));
+              break;
+       }
+     }
+    }
+  }
 }
 
 private void IfStatement(List<TokenMap> sb):
@@ -2578,6 +2757,8 @@ private void IfStatement(List<TokenMap> sb):
   Set<String> elseAssignedValues = new LinkedHashSet<String>();
 
   List<TokenMap> ifElseTokens = new ArrayList<TokenMap>();
+
+  Scopes.Scope outerScope = scopes.getScope(); 
 }
 {
   t = "if" "("
@@ -2589,17 +2770,20 @@ private void IfStatement(List<TokenMap> sb):
     ifElseTokens.add(tokenMap("IfScope ifScope$" + id + " = ifElse(guard$" + id +", () -> {\n"));
     indent++;
 
-    // record the set of variables available to set.
-    ifAssignableVars.push(unsetVars.peek().keySet());
-
-    //Collect the values for the if branch.
+    // Collect the values for the if branch.
     assignedValues = ifAssignedValues;
 
-    //Set a tag for newly assigned variables
-    conditionalTag.push("if" + id);
+    // Set a tag for newly assigned variables
+    conditionalTags.push(new ConditionalTag("if" + id, outerScope.varNames()));
+
+    // Enter a new scope
+    scopes.enterScope();
   }
   StatementAlreadyBlocked(ifElseTokens)
   {
+    //Leaving an if scope is a special case as the else scope will start from the same situation as the if scope.
+	scopes.leaveIfScope();
+    
     indent--;
     ifElseTokens.add(tokenMap(indent() + "}, () -> {\n"));
     indent++;
@@ -2608,21 +2792,35 @@ private void IfStatement(List<TokenMap> sb):
     assignedValues = elseAssignedValues;
 
     //Set a tag for newly assignedVariables
-    conditionalTag.pop();
-    conditionalTag.push("else" + id);
+    conditionalTags.pop();
+    conditionalTags.push(new ConditionalTag("else" + id, outerScope.varNames()));
+
+	// Create a scope for the else branch.
+    scopes.enterScope();
   }
   [ LOOKAHEAD(1) "else" StatementAlreadyBlocked(ifElseTokens) ]
   {
-    //Restore the outer set of variables available to set.
-    ifAssignableVars.pop();
     
     //remove tag
-    conditionalTag.pop();
+    conditionalTags.pop();
     
     indent--;
     ifElseTokens.add(tokenMap(indent() + "});"));
 
+    // Filter out assignments to values declared in the if or else branches
+    List<String> toRemove = new ArrayList<String>();
+    for(String s:ifAssignedValues) {
+       if(!outerScope.containsVar(s))
+         toRemove.add(s);
+    }
+    ifAssignedValues.removeAll(toRemove);
     
+    toRemove.clear();
+    for(String s:elseAssignedValues) {
+       if(!outerScope.containsVar(s))
+         toRemove.add(s);
+    }
+    elseAssignedValues.removeAll(toRemove);
 
     //Test the branches are equal and restore the original outer set.
     if(!ifAssignedValues.equals(elseAssignedValues))
@@ -2640,27 +2838,50 @@ private void IfStatement(List<TokenMap> sb):
       Map<String, VarDesc> vars = new HashMap<String, VarDesc>();
       //Create the helper class
       for(String assigned:ifAssignedValues)
-        vars.put(assigned, unsetVars.peek().remove(assigned));
+        vars.put(assigned, outerScope.varDesc(assigned));
       createClass(vars, id);
 
       sb.addAll(ifElseTokens);
 
+      ConditionalTag tag = conditionalTags.isEmpty()?null:conditionalTags.peek();
       for(String assigned:ifAssignedValues) {
-        //Set the mergings
-        sb.add(tokenMap("\n" + indent() + (conditionalTag.isEmpty()?"":"$" + conditionalTag.peek() + ".") + assigned +
-        " = ifElseAssignment(guard$" + id + ", " + "$if" + id + "." + assigned + ", " + "$else" + id + "." + assigned +
-        ", ifScope$" + id + ", " + location(t, cb) + ");\n", t, cb));
+        boolean setDeclaredVar = tag == null || !tag.vars.contains(assigned);
+        //Merge the variables.
+          sb.add(tokenMap("\n" + indent() + (setDeclaredVar?"":"$" + tag.tag + ".") + assigned +
+          " = ifElseAssignment(guard$" + id + ", " + "$if" + id + "." + assigned + ", " + "$else" + id + "." + assigned +
+          ", ifScope$" + id + ", " + location(t, cb) + ");\n", t, cb));
 
         //Set the aliases
-        if(conditionalTag.isEmpty()) {
-          	VarDesc varDesc = vars.get(assigned);
-        	sb.add(tokenMap(indent() + assigned + ".setAlias(\"" + assigned + "\");\n", varDesc.nameLocation));
-        	sb.add(tokenMap(indent() + assigned + ".setLocation(" + location(varDesc.nameLocation) + ");\n", varDesc.nameLocation));
+        if(setDeclaredVar) {
+            VarDesc varDesc = vars.get(assigned);
+            sb.add(tokenMap(indent() + assigned + ".setAlias(\"" + assigned + "\");\n", varDesc.nameLocation()));
+            sb.add(tokenMap(indent() + assigned + ".setLocation(" + location(varDesc.nameLocation()) + ");\n", varDesc.nameLocation()));
+
+            if (varDesc.lastJavadoc() != null) 
+              sb.add(tokenMap(indent() + assigned + ".setComment(\"" + varDesc.lastJavadoc() + "\");\n", varDesc.nameLocation()));
+        
+            Token permissionsToken = varDesc.permissionsToken();
+            if(permissionsToken != null) { 
+            switch(permissionsToken.kind) {
+              case PRIVATE:
+                sb.add(tokenMap("\n" + indent() + assigned + ".setPrivate();", permissionsToken));
+                break;
+              case PUBLIC:
+                if(tag==null) { 
+                  sb.add(tokenMap("\n" + indent() + assigned + ".setPublic();", permissionsToken));
+                  break;
+                } else
+                  throw new SandwoodModelException("Variables " + assigned + " cannot be decalred public in a if else statement.", permissionsToken);
+            }
+          }
         }
       }
     } else {
       sb.addAll(ifElseTokens);
     }
+
+    // Leave the scope for the else branch
+    scopes.leaveScope();
   }
 }
 
@@ -2685,13 +2906,17 @@ void ForStatement(List<TokenMap> sb):
   { sb.add(tokenMap(", " + location(forToken, t) + ", " +
         "(" + name.image + ")", name, t)); }
   {
-    sb.add(tokenMap(" -> { \n", t));
+    sb.add(tokenMap(" -> {\n", t));
     indent++;
     sb.add(tokenMap(indent() + name + ".setAlias(\"" + name +"\");\n", name));
     sb.add(tokenMap(indent() + name + ".setLocation(" + location(name) + ");\n", name));
+    
+    scopes.enterIterativeScope();
   }
   StatementAlreadyBlocked(sb)
   {
+    scopes.leaveIterativeScope();
+    
     indent--;
     sb.add(tokenMap(indent() + "});\n"));
   }
@@ -2925,8 +3150,10 @@ IdentiferDesc identifier():
 {
   t = <IDENTIFIER>
   {
-    if(unsetVars.peek().containsKey(t.image) && !conditionalTag.isEmpty()) {
-      String tag = conditionalTag.peek();
+    if(!conditionalTags.isEmpty() && conditionalTags.peek().vars.contains(t.image) &&
+        // True if the value is being assigned to, or has been assigned to in this if else.
+       (assignment || assignedValues.contains(t.image))) {
+      String tag = conditionalTags.peek().tag;
       return new IdentiferDesc("$" + tag + "." + t.image, t);
     } else
       return new IdentiferDesc(t.image, t);

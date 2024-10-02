@@ -49,7 +49,28 @@ public class AlternativeModelMK3 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "AlternativeModelMK3", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model AlternativeModelMK3(int observedSampleCount, int observedPositiveCount)  {    \n    double bias = new Beta(1.0, 1.0).sample();\n        \n    //Construct a binomial\n    Binomial binomial = new Binomial(bias, observedSampleCount);\n                \n    //Sample from it\n    int positiveCount = binomial.sample();\n        \n    //Link the sampled values to the observed values\n    positiveCount.observe(observedPositiveCount);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model AlternativeModelMK3(int observedSampleCount, int observedPositiveCount)  {    \n"
+             + "    double bias = new Beta(1.0, 1.0).sample();\n"
+             + "        \n"
+             + "    //Construct a binomial\n"
+             + "    Binomial binomial = new Binomial(bias, observedSampleCount);\n"
+             + "                \n"
+             + "    //Sample from it\n"
+             + "    int positiveCount = binomial.sample();\n"
+             + "        \n"
+             + "    //Link the sampled values to the observed values\n"
+             + "    positiveCount.observe(observedPositiveCount);\n"
+             + "}";
     }
 }

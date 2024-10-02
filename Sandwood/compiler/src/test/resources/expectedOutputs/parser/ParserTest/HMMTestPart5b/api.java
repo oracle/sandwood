@@ -36,7 +36,7 @@ public class HMMTestPart5b extends GeneratedAPIBuilder {
         v.setAlias("v");
         v.setLocation(location(14, 18, 14, 18));
 
-        parFor(intVariable(0, location(15, 20, 15, 20)), states, intVariable(1, location(15, 19, 15, 22)), true, location(15, 9, 15, 30), (i) -> { 
+        parFor(intVariable(0, location(15, 20, 15, 20)), states, intVariable(1, location(15, 19, 15, 22)), true, location(15, 9, 15, 30), (i) -> {
             i.setAlias("i");
             i.setLocation(location(15, 17, 15, 17));
             v.put(i, doubleVariable(0.1, location(16, 20, 16, 22)), location(16, 14, 16, 22));
@@ -59,7 +59,7 @@ public class HMMTestPart5b extends GeneratedAPIBuilder {
         st.setLocation(location(22, 15, 22, 16));
 
         st.put(intVariable(0, location(24, 12, 24, 12)), states.times(categorical(m.get(intVariable(0, location(24, 40, 24, 40)), location(24, 39, 24, 41)), location(24, 26, 24, 42)).sample(location(24, 44, 24, 51)), location(24, 24, 24, 24)), location(24, 11, 24, 24));
-        parFor(intVariable(4, location(26, 20, 26, 20)), samples.add(intVariable(3, location(26, 33, 26, 33)), location(26, 31, 26, 31)), intVariable(1, location(26, 19, 26, 22)), true, location(26, 9, 26, 35), (i) -> { 
+        parFor(intVariable(4, location(26, 20, 26, 20)), samples.add(intVariable(3, location(26, 33, 26, 33)), location(26, 31, 26, 31)), intVariable(1, location(26, 19, 26, 22)), true, location(26, 9, 26, 35), (i) -> {
             i.setAlias("i");
             i.setLocation(location(26, 17, 26, 17));
             st.put(i.subtract(intVariable(3, location(27, 18, 27, 18)), location(27, 17, 27, 17)), states.times(categorical(m.get(st.get(i.subtract(intVariable(4, location(27, 51, 27, 51)), location(27, 50, 27, 50)), location(27, 48, 27, 52)), location(27, 45, 27, 53)), location(27, 32, 27, 54)).sample(location(27, 56, 27, 63)), location(27, 30, 27, 30)), location(27, 15, 27, 30));
@@ -69,7 +69,7 @@ public class HMMTestPart5b extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(29, 19, 29, 23));
 
-        parFor(intVariable(5, location(31, 20, 31, 20)), samples.add(intVariable(5, location(31, 31, 31, 31)), location(31, 30, 31, 30)), intVariable(1, location(31, 19, 31, 22)), true, location(31, 9, 31, 33), (j) -> { 
+        parFor(intVariable(5, location(31, 20, 31, 20)), samples.add(intVariable(5, location(31, 31, 31, 31)), location(31, 30, 31, 30)), intVariable(1, location(31, 19, 31, 22)), true, location(31, 9, 31, 33), (j) -> {
             j.setAlias("j");
             j.setLocation(location(31, 17, 31, 17));
             flips.put(j.subtract(intVariable(5, location(32, 21, 32, 21)), location(32, 20, 32, 20)), bernoulli(bias.get(st.get(j.subtract(intVariable(5, location(32, 46, 32, 46)), location(32, 45, 32, 45)), location(32, 43, 32, 47)), location(32, 40, 32, 48)), location(32, 26, 32, 49)).sample(location(32, 51, 32, 58)), location(32, 18, 32, 58));
@@ -83,7 +83,42 @@ public class HMMTestPart5b extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "HMMTestPart5b", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel HMMTestPart5b(boolean[] flipsMeasured) {\n        int states = 2;\n\n        double[] v = new double[states];\n        for(int i:[0..states))\n            v[i] = 0.1;\n        \n        double[][] m = dirichlet(v).sample(states);\n        double[] bias = beta(1.0, 1.0).sample(states);\n\n        int samples = flipsMeasured.length;\n        int[] st = new int[samples];\n\n        st[0] = states * categorical(m[0]).sample();\n\n        for(int i:[4..samples + 3))\n            st[i-3] = states * categorical(m[st[i-4]]).sample();\n            \n        boolean[] flips = new boolean[samples];\n            \n        for(int j:[5..samples+5))\n            flips[j-5] = bernoulli(bias[st[j-5]]).sample();\n\n        flips.observe(flipsMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model HMMTestPart5b(boolean[] flipsMeasured) {\n"
+             + "        int states = 2;\n"
+             + "\n"
+             + "        double[] v = new double[states];\n"
+             + "        for(int i:[0..states))\n"
+             + "            v[i] = 0.1;\n"
+             + "        \n"
+             + "        double[][] m = dirichlet(v).sample(states);\n"
+             + "        double[] bias = beta(1.0, 1.0).sample(states);\n"
+             + "\n"
+             + "        int samples = flipsMeasured.length;\n"
+             + "        int[] st = new int[samples];\n"
+             + "\n"
+             + "        st[0] = states * categorical(m[0]).sample();\n"
+             + "\n"
+             + "        for(int i:[4..samples + 3))\n"
+             + "            st[i-3] = states * categorical(m[st[i-4]]).sample();\n"
+             + "            \n"
+             + "        boolean[] flips = new boolean[samples];\n"
+             + "            \n"
+             + "        for(int j:[5..samples+5))\n"
+             + "            flips[j-5] = bernoulli(bias[st[j-5]]).sample();\n"
+             + "\n"
+             + "        flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

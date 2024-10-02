@@ -41,7 +41,7 @@ public class Flip2CoinsMK5 extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(16, 17, 16, 21));
 
-        parFor(intVariable(0, location(18, 16, 18, 16)), coins, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 25), (j) -> { 
+        parFor(intVariable(0, location(18, 16, 18, 16)), coins, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 25), (j) -> {
             j.setAlias("j");
             j.setLocation(location(18, 13, 18, 13));
             IntVariable samples = shape.get(j, location(19, 28, 19, 30));
@@ -64,7 +64,33 @@ public class Flip2CoinsMK5 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip2CoinsMK5", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip2CoinsMK5(boolean[][] flipsMeasured, int[] shape) {\n \n    int coins = shape.length;\n    double[] bias = beta(1.0, 1.0).sample(coins);\n        \n    boolean[][] flips = new boolean[coins][];\n        \n    for(int j:[0..coins)) {\n        int samples = shape[j];\n        Bernoulli bernoulli = bernoulli(bias[j]);\n        flips[j] = bernoulli.sample(samples);\n    }\n        \n    flips.observe(flipsMeasured);\n}\n\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip2CoinsMK5(boolean[][] flipsMeasured, int[] shape) {\n"
+             + " \n"
+             + "    int coins = shape.length;\n"
+             + "    double[] bias = beta(1.0, 1.0).sample(coins);\n"
+             + "        \n"
+             + "    boolean[][] flips = new boolean[coins][];\n"
+             + "        \n"
+             + "    for(int j:[0..coins)) {\n"
+             + "        int samples = shape[j];\n"
+             + "        Bernoulli bernoulli = bernoulli(bias[j]);\n"
+             + "        flips[j] = bernoulli.sample(samples);\n"
+             + "    }\n"
+             + "        \n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "\n"
+             + "";
     }
 }

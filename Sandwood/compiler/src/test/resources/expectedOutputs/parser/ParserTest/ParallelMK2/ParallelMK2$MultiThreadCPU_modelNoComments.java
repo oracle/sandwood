@@ -604,6 +604,28 @@ class ParallelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model ParallelMK2(double[] observed) {\n    double[] generated = new double[observed.length];\n    double[] indirection = new double[observed.length + 1];\n    indirection[0] = 1.0;\n\n    for(int i=0; i<observed.length; i++) {\n        double sample = uniform(0.0, 1.0).sample();\n        indirection[i + 1] = sample;\n        generated[i] = gaussian(sample, indirection[i]).sample();\n    }\n\n    generated.observe(observed);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model ParallelMK2(double[] observed) {\n"
+		     + "    double[] generated = new double[observed.length];\n"
+		     + "    double[] indirection = new double[observed.length + 1];\n"
+		     + "    indirection[0] = 1.0;\n"
+		     + "\n"
+		     + "    for(int i=0; i<observed.length; i++) {\n"
+		     + "        double sample = uniform(0.0, 1.0).sample();\n"
+		     + "        indirection[i + 1] = sample;\n"
+		     + "        generated[i] = gaussian(sample, indirection[i]).sample();\n"
+		     + "    }\n"
+		     + "\n"
+		     + "    generated.observe(observed);\n"
+		     + "}";
 	}
 }

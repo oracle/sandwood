@@ -577,6 +577,24 @@ class Flip1CoinMK1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK1b(boolean[] flipsMeasured, double a, double b) {\n    int samples = flipsMeasured.length;\n    double bias = beta(a, b).sample();\n        \n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = bernoulli.sample(samples);\n    flips.observe(flipsMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip1CoinMK1b(boolean[] flipsMeasured, double a, double b) {\n"
+		     + "    int samples = flipsMeasured.length;\n"
+		     + "    double bias = beta(a, b).sample();\n"
+		     + "        \n"
+		     + "    Bernoulli bernoulli = bernoulli(bias);\n"
+		     + "    boolean[] flips = bernoulli.sample(samples);\n"
+		     + "    flips.observe(flipsMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

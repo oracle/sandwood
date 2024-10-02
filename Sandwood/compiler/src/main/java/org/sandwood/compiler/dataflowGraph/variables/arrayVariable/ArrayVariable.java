@@ -795,12 +795,16 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
 
     @Override
     public ArrayVariable<A> copy() {
-        throw new SandwoodModelException("Array variables cannot be assigned to multiple references.");
+        throw new SandwoodModelException("unable to assign array " + getAlias()
+        + " to another reference as arrays are reference types and currently only"
+        + " value types can be assigned to multiple variables.");
     }
 
     @Override
-    public ArrayVariable<A> copy(Location location) {
-        throw new SandwoodModelException("Array variables cannot be assigned to multiple references.", location);
+    public final ArrayVariable<A> copy(Location location) {
+        throw new SandwoodModelException("unable to assign array " + getAlias()
+                + " to another reference as arrays are reference types and currently only"
+                + " value types can be assigned to multiple variables.", location);
     }
 
     /* parent */

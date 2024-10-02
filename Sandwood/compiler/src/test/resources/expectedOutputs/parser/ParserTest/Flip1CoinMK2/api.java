@@ -49,7 +49,7 @@ public class Flip1CoinMK2 extends GeneratedAPIBuilder {
         flips.setAlias("flips");
         flips.setLocation(location(20, 15, 20, 19));
 
-        parFor(intVariable(0, location(21, 16, 21, 16)), samples, intVariable(1, location(21, 15, 21, 18)), true, location(21, 5, 21, 27), (i) -> { 
+        parFor(intVariable(0, location(21, 16, 21, 16)), samples, intVariable(1, location(21, 15, 21, 18)), true, location(21, 5, 21, 27), (i) -> {
             i.setAlias("i");
             i.setLocation(location(21, 13, 21, 13));
             flips.put(i, bernoulli.sample(location(22, 30, 22, 37)), location(22, 14, 22, 37));
@@ -64,7 +64,32 @@ public class Flip1CoinMK2 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Flip1CoinMK2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip1CoinMK2(int samples, boolean[] flipsMeasured) {\n    /*\n     * This is a bad example as there is a separation between the size of \n     * flips measured, and the size of noSamples.\n     */\n    double a = 1.0;\n    double b = 1.0;\n    double bias = beta(a, b).sample();\n    Bernoulli bernoulli = bernoulli(bias);\n    boolean[] flips = new boolean[samples];\n    for(int i:[0..samples)) {\n        flips[i] = bernoulli.sample();\n    }\n    flips.observe(flipsMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Flip1CoinMK2(int samples, boolean[] flipsMeasured) {\n"
+             + "    /*\n"
+             + "     * This is a bad example as there is a separation between the size of \n"
+             + "     * flips measured, and the size of noSamples.\n"
+             + "     */\n"
+             + "    double a = 1.0;\n"
+             + "    double b = 1.0;\n"
+             + "    double bias = beta(a, b).sample();\n"
+             + "    Bernoulli bernoulli = bernoulli(bias);\n"
+             + "    boolean[] flips = new boolean[samples];\n"
+             + "    for(int i:[0..samples)) {\n"
+             + "        flips[i] = bernoulli.sample();\n"
+             + "    }\n"
+             + "    flips.observe(flipsMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

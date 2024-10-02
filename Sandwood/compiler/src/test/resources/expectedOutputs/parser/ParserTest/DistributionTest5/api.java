@@ -42,7 +42,7 @@ public class DistributionTest5 extends GeneratedAPIBuilder {
         v2.setLocation(location(16, 11, 16, 12));
 
         v2.put(intVariable(0, location(17, 8, 17, 8)), categorical(weightings, location(17, 13, 17, 35)).sampleDistribution(location(17, 37, 17, 56)), location(17, 7, 17, 56));
-        parFor(intVariable(0, location(18, 16, 18, 16)), size, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 24), (i) -> { 
+        parFor(intVariable(0, location(18, 16, 18, 16)), size, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 24), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 13, 18, 13));
             v2.put(i.add(intVariable(1, location(19, 16, 19, 16)), location(19, 14, 19, 14)), categorical(weightings, location(19, 21, 19, 43)).sampleDistribution(location(19, 45, 19, 64)), location(19, 11, 19, 64));
@@ -52,7 +52,7 @@ public class DistributionTest5 extends GeneratedAPIBuilder {
         v3.setAlias("v3");
         v3.setLocation(location(22, 11, 22, 12));
 
-        parFor(intVariable(0, location(23, 16, 23, 16)), size.add(intVariable(1, location(23, 17, 23, 23)), location(23, 17, 23, 23)), intVariable(1, location(23, 15, 23, 18)), true, location(23, 5, 23, 24), (k) -> { 
+        parFor(intVariable(0, location(23, 16, 23, 16)), size.add(intVariable(1, location(23, 17, 23, 23)), location(23, 17, 23, 23)), intVariable(1, location(23, 15, 23, 18)), true, location(23, 5, 23, 24), (k) -> {
             k.setAlias("k");
             k.setLocation(location(23, 13, 23, 13));
             v3.put(k, v2.get(k, location(24, 19, 24, 21)), location(24, 11, 24, 21));
@@ -62,7 +62,7 @@ public class DistributionTest5 extends GeneratedAPIBuilder {
         v.setAlias("v");
         v.setLocation(location(26, 15, 26, 15));
 
-        parFor(intVariable(0, location(27, 16, 27, 16)), size, intVariable(1, location(27, 15, 27, 18)), true, location(27, 5, 27, 24), (j) -> { 
+        parFor(intVariable(0, location(27, 16, 27, 16)), size, intVariable(1, location(27, 15, 27, 18)), true, location(27, 5, 27, 24), (j) -> {
             j.setAlias("j");
             j.setLocation(location(27, 13, 27, 13));
             v.put(j, bernoulli(((doubleVariable(1.0, location(28, 28, 28, 30)).times(v1, location(28, 31, 28, 31))).add(v2.get(j, location(28, 40, 28, 42)), location(28, 36, 28, 36)).add(v3.get(j.add(intVariable(1, location(28, 51, 28, 51)), location(28, 50, 28, 50)), location(28, 48, 28, 52)), location(28, 44, 28, 44))).divide(v2.get(j.add(intVariable(1, location(28, 60, 28, 60)), location(28, 59, 28, 59)), location(28, 57, 28, 61)), location(28, 54, 28, 54)), location(28, 16, 28, 62)).sample(location(28, 64, 28, 71)), location(28, 10, 28, 71));
@@ -76,7 +76,38 @@ public class DistributionTest5 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "DistributionTest5", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel DistributionTest5(double[] weightings, boolean[] value) {\n    int size = value.length;\n    \n    int v1 = categorical(weightings).sampleDistribution();\n    \n    int[] v2 = new int[size + 1];\n    v2[0] = categorical(weightings).sampleDistribution();\n    for(int i:[0..size))\n        v2[i + 1] = categorical(weightings).sampleDistribution();\n        \n        \n    int[] v3 = new int[size + 1];\n    for(int k:[0..size]) \n        v3[k] = v2[k];\n        \n    boolean[] v = new boolean[size];\n    for(int j:[0..size))\n        v[j] = bernoulli(((1.0*v1) + v2[j] + v3[j+1])/v2[j+1]).sample();\n        \n    v.observe(value);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model DistributionTest5(double[] weightings, boolean[] value) {\n"
+             + "    int size = value.length;\n"
+             + "    \n"
+             + "    int v1 = categorical(weightings).sampleDistribution();\n"
+             + "    \n"
+             + "    int[] v2 = new int[size + 1];\n"
+             + "    v2[0] = categorical(weightings).sampleDistribution();\n"
+             + "    for(int i:[0..size))\n"
+             + "        v2[i + 1] = categorical(weightings).sampleDistribution();\n"
+             + "        \n"
+             + "        \n"
+             + "    int[] v3 = new int[size + 1];\n"
+             + "    for(int k:[0..size]) \n"
+             + "        v3[k] = v2[k];\n"
+             + "        \n"
+             + "    boolean[] v = new boolean[size];\n"
+             + "    for(int j:[0..size))\n"
+             + "        v[j] = bernoulli(((1.0*v1) + v2[j] + v3[j+1])/v2[j+1]).sample();\n"
+             + "        \n"
+             + "    v.observe(value);\n"
+             + "}\n"
+             + "";
     }
 }

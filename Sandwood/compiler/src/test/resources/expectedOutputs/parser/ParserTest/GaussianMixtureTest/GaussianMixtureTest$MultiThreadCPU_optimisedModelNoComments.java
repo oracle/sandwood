@@ -743,6 +743,36 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel GaussianMixtureTest(double[] xMeasured) {\n\n        int k = 5;\n\n        double[] alpha = new double[k];\n        for(int i:[0..k)) \n            alpha[i] = 1.0;\n        \n        double[] phi = dirichlet(alpha).sample();\n        double[] mu = gaussian(0, 20).sample(k);\n        double[] sigma = inverseGamma(1, 1).sample(k);\n        \n        double[] x = new double[xMeasured.length];\n        for(int i:[0..xMeasured.length)) {\n            int z = categorical(phi).sample();\n            x[i] = gaussian(mu[z], sigma[z]).sample();\n        }\n        \n        x.observe(xMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "model GaussianMixtureTest(double[] xMeasured) {\n"
+		     + "\n"
+		     + "        int k = 5;\n"
+		     + "\n"
+		     + "        double[] alpha = new double[k];\n"
+		     + "        for(int i:[0..k)) \n"
+		     + "            alpha[i] = 1.0;\n"
+		     + "        \n"
+		     + "        double[] phi = dirichlet(alpha).sample();\n"
+		     + "        double[] mu = gaussian(0, 20).sample(k);\n"
+		     + "        double[] sigma = inverseGamma(1, 1).sample(k);\n"
+		     + "        \n"
+		     + "        double[] x = new double[xMeasured.length];\n"
+		     + "        for(int i:[0..xMeasured.length)) {\n"
+		     + "            int z = categorical(phi).sample();\n"
+		     + "            x[i] = gaussian(mu[z], sigma[z]).sample();\n"
+		     + "        }\n"
+		     + "        \n"
+		     + "        x.observe(xMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

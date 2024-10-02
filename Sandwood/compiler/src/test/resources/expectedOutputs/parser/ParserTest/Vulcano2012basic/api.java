@@ -40,14 +40,14 @@ public class Vulcano2012basic extends GeneratedAPIBuilder {
         exped.setAlias("exped");
         exped.setLocation(location(24, 14, 24, 18));
 
-        parFor(intVariable(0, location(25, 18, 25, 18)), noProducts, intVariable(1, location(25, 17, 25, 20)), true, location(25, 5, 25, 32), (j) -> { 
+        parFor(intVariable(0, location(25, 18, 25, 18)), noProducts, intVariable(1, location(25, 17, 25, 20)), true, location(25, 5, 25, 32), (j) -> {
             j.setAlias("j");
             j.setLocation(location(25, 13, 25, 13));
             exped.put(j, exp(ut.get(j, location(26, 22, 26, 24)), location(26, 16, 26, 25)), location(26, 10, 26, 25));
 
         });
 
-        DoubleVariable sum = reduce(exped, intVariable(0, location(28, 32, 28, 32)), location(28, 18, 28, 62), (k, l) ->  { 
+        DoubleVariable sum = reduce(exped, intVariable(0, location(28, 32, 28, 32)), location(28, 18, 28, 62), (k, l) -> {
             k.setAlias("k");
             k.setLocation(location(28, 36, 28, 36));
             l.setAlias("l");
@@ -69,7 +69,7 @@ public class Vulcano2012basic extends GeneratedAPIBuilder {
         arrivals.setAlias("arrivals");
         arrivals.setLocation(location(35, 11, 35, 18));
 
-        parFor(intVariable(0, location(36, 19, 36, 19)), T, intVariable(1, location(36, 18, 36, 21)), true, location(36, 5, 36, 24), (t) -> { 
+        parFor(intVariable(0, location(36, 19, 36, 19)), T, intVariable(1, location(36, 18, 36, 21)), true, location(36, 5, 36, 24), (t) -> {
             t.setAlias("t");
             t.setLocation(location(36, 14, 36, 14));
             arrivals.put(t, poisson(lambda.get(t, location(37, 32, 37, 34)), location(37, 18, 37, 35)).sample(location(37, 37, 37, 44)), location(37, 13, 37, 44));
@@ -80,14 +80,14 @@ public class Vulcano2012basic extends GeneratedAPIBuilder {
         Sales.setAlias("Sales");
         Sales.setLocation(location(40, 16, 40, 20));
 
-        parFor(intVariable(0, location(42, 17, 42, 17)), T, intVariable(1, location(42, 16, 42, 19)), true, location(42, 5, 42, 22), (t) -> { 
+        parFor(intVariable(0, location(42, 17, 42, 17)), T, intVariable(1, location(42, 16, 42, 19)), true, location(42, 5, 42, 22), (t) -> {
             t.setAlias("t");
             t.setLocation(location(42, 14, 42, 14));
             ArrayVariable<DoubleVariable> weekly_sales = Variable.arrayVariable(location(47, 43, 47, 54), VariableType.DoubleVariable, noProducts);
             weekly_sales.setAlias("weekly_sales");
             weekly_sales.setLocation(location(47, 18, 47, 29));
 
-            parFor(intVariable(0, location(48, 23, 48, 23)), noProducts, intVariable(1, location(48, 22, 48, 25)), true, location(48, 9, 48, 37), (j) -> { 
+            parFor(intVariable(0, location(48, 23, 48, 23)), noProducts, intVariable(1, location(48, 22, 48, 25)), true, location(48, 9, 48, 37), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(48, 18, 48, 18));
                 weekly_sales.put(j, gaussian(exped.get(j, location(49, 45, 49, 47)).times(Avail.get(t, location(49, 54, 49, 56)).get(j, location(49, 57, 49, 59)), location(49, 48, 49, 48)).divide(denom, location(49, 61, 49, 61)).times(arrivals.get(t, location(49, 77, 49, 79)), location(49, 68, 49, 68)), doubleVariable(0.2, location(49, 82, 49, 84)), location(49, 31, 49, 85)).sample(location(49, 87, 49, 94)), location(49, 25, 49, 94));
@@ -106,7 +106,62 @@ public class Vulcano2012basic extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Vulcano2012basic", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n/*\n * Model based on the paper Estimating Primary Demand for Substitutable Products from Sales Transaction \n * Data by Gustavo Vulcano, Garrett van Ryzin, and Richard Ratliff.\n * https://business.columbia.edu/sites/default/files-efs/pubfiles/5397/vanRyzin_Estimating.pdf\n */\npackage org.sandwood.compiler.tests.parser;\n\n\nmodel Vulcano2012basic(int noProducts, int T, int s, double[][] ObsSales, int[][] Avail) {\n    // Avail is the availability matrix, T-by-noProducts\n    // s is the normalization constant (market share), number between 0 and 1\n\n    // draw utilities\n    double[] ut = gaussian(0, 10).sample(noProducts);\n\n    //exponentiate right here (in the non-basic models move to the for loop)\n    double[] exped = new double[noProducts];\n    for(int j : [0..noProducts)) {\n    exped[j] = exp(ut[j]);\n    }\n    double sum = reduce(exped, 0, (k, l) -> { return k + l; });\n    double denom = sum/s;   // this is the sum of utilities plus normalized by s outside options\n\n    // priors for the distribution of lambdas (for arrivals). They can be supplied as a vector, or just use some priors\n    double[ ] lambda = gamma(10,10).sample(T);\n\n    // draw arrivals\n    int[] arrivals = new int[T];\n    for (int t : [0..T)){\n    arrivals[t]= poisson(lambda[t]).sample();\n    }\n\n    double[][] Sales = new double[T][noProducts];\n\n    for (int t:[0..T)){\n        // for each period t calculate choice probabilities\n        // (does it matter if choice probabilities or individual choices?)\n        // let's try aggregate first\n\n        double[] weekly_sales = new double[noProducts];\n        for (int j : [0..noProducts)) {\n            weekly_sales[j] = gaussian(exped[j]*Avail[t][j] /denom *arrivals[t], 0.2).sample();\n        }\n        // record sales for period t\n        Sales[t] = weekly_sales;\n                                }\n    // assert that generated sales match observed sales\n    Sales.observe(ObsSales);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "/*\n"
+             + " * Model based on the paper Estimating Primary Demand for Substitutable Products from Sales Transaction \n"
+             + " * Data by Gustavo Vulcano, Garrett van Ryzin, and Richard Ratliff.\n"
+             + " * https://business.columbia.edu/sites/default/files-efs/pubfiles/5397/vanRyzin_Estimating.pdf\n"
+             + " */\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "\n"
+             + "model Vulcano2012basic(int noProducts, int T, int s, double[][] ObsSales, int[][] Avail) {\n"
+             + "    // Avail is the availability matrix, T-by-noProducts\n"
+             + "    // s is the normalization constant (market share), number between 0 and 1\n"
+             + "\n"
+             + "    // draw utilities\n"
+             + "    double[] ut = gaussian(0, 10).sample(noProducts);\n"
+             + "\n"
+             + "    //exponentiate right here (in the non-basic models move to the for loop)\n"
+             + "    double[] exped = new double[noProducts];\n"
+             + "    for(int j : [0..noProducts)) {\n"
+             + "    exped[j] = exp(ut[j]);\n"
+             + "    }\n"
+             + "    double sum = reduce(exped, 0, (k, l) -> { return k + l; });\n"
+             + "    double denom = sum/s;   // this is the sum of utilities plus normalized by s outside options\n"
+             + "\n"
+             + "    // priors for the distribution of lambdas (for arrivals). They can be supplied as a vector, or just use some priors\n"
+             + "    double[ ] lambda = gamma(10,10).sample(T);\n"
+             + "\n"
+             + "    // draw arrivals\n"
+             + "    int[] arrivals = new int[T];\n"
+             + "    for (int t : [0..T)){\n"
+             + "    arrivals[t]= poisson(lambda[t]).sample();\n"
+             + "    }\n"
+             + "\n"
+             + "    double[][] Sales = new double[T][noProducts];\n"
+             + "\n"
+             + "    for (int t:[0..T)){\n"
+             + "        // for each period t calculate choice probabilities\n"
+             + "        // (does it matter if choice probabilities or individual choices?)\n"
+             + "        // let's try aggregate first\n"
+             + "\n"
+             + "        double[] weekly_sales = new double[noProducts];\n"
+             + "        for (int j : [0..noProducts)) {\n"
+             + "            weekly_sales[j] = gaussian(exped[j]*Avail[t][j] /denom *arrivals[t], 0.2).sample();\n"
+             + "        }\n"
+             + "        // record sales for period t\n"
+             + "        Sales[t] = weekly_sales;\n"
+             + "                                }\n"
+             + "    // assert that generated sales match observed sales\n"
+             + "    Sales.observe(ObsSales);\n"
+             + "}";
     }
 }

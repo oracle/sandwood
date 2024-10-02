@@ -42,7 +42,7 @@ public class DistributionTest6 extends GeneratedAPIBuilder {
         v2.setLocation(location(16, 11, 16, 12));
 
         v2.put(intVariable(0, location(17, 8, 17, 8)), categorical(weightings, location(17, 13, 17, 35)).sampleDistribution(location(17, 37, 17, 56)), location(17, 7, 17, 56));
-        parFor(intVariable(0, location(18, 16, 18, 16)), size, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 24), (i) -> { 
+        parFor(intVariable(0, location(18, 16, 18, 16)), size, intVariable(1, location(18, 15, 18, 18)), true, location(18, 5, 18, 24), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 13, 18, 13));
             v2.put(i.add(intVariable(1, location(19, 16, 19, 16)), location(19, 14, 19, 14)), categorical(weightings, location(19, 21, 19, 43)).sampleDistribution(location(19, 45, 19, 64)), location(19, 11, 19, 64));
@@ -52,7 +52,7 @@ public class DistributionTest6 extends GeneratedAPIBuilder {
         v.setAlias("v");
         v.setLocation(location(21, 15, 21, 15));
 
-        parFor(intVariable(0, location(22, 16, 22, 16)), size, intVariable(1, location(22, 15, 22, 18)), true, location(22, 5, 22, 24), (j) -> { 
+        parFor(intVariable(0, location(22, 16, 22, 16)), size, intVariable(1, location(22, 15, 22, 18)), true, location(22, 5, 22, 24), (j) -> {
             j.setAlias("j");
             j.setLocation(location(22, 13, 22, 13));
             v.put(j, bernoulli(((doubleVariable(1.0, location(23, 28, 23, 30)).times(v1, location(23, 31, 23, 31))).add(v2.get(j, location(23, 40, 23, 42)), location(23, 36, 23, 36)).add(v2.get(j, location(23, 48, 23, 50)), location(23, 44, 23, 44))).divide(v2.get(j, location(23, 55, 23, 57)), location(23, 52, 23, 52)), location(23, 16, 23, 58)).sample(location(23, 60, 23, 67)), location(23, 10, 23, 67));
@@ -66,7 +66,33 @@ public class DistributionTest6 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "DistributionTest6", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel DistributionTest6(double[] weightings, boolean[] value) {\n    int size = value.length;\n    \n    int v1 = categorical(weightings).sampleDistribution();\n    \n    int[] v2 = new int[size + 1];\n    v2[0] = categorical(weightings).sampleDistribution();\n    for(int i:[0..size))\n        v2[i + 1] = categorical(weightings).sampleDistribution();\n        \n    boolean[] v = new boolean[size];\n    for(int j:[0..size))\n        v[j] = bernoulli(((1.0*v1) + v2[j] + v2[j])/v2[j]).sample();\n        \n    v.observe(value);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model DistributionTest6(double[] weightings, boolean[] value) {\n"
+             + "    int size = value.length;\n"
+             + "    \n"
+             + "    int v1 = categorical(weightings).sampleDistribution();\n"
+             + "    \n"
+             + "    int[] v2 = new int[size + 1];\n"
+             + "    v2[0] = categorical(weightings).sampleDistribution();\n"
+             + "    for(int i:[0..size))\n"
+             + "        v2[i + 1] = categorical(weightings).sampleDistribution();\n"
+             + "        \n"
+             + "    boolean[] v = new boolean[size];\n"
+             + "    for(int j:[0..size))\n"
+             + "        v[j] = bernoulli(((1.0*v1) + v2[j] + v2[j])/v2[j]).sample();\n"
+             + "        \n"
+             + "    v.observe(value);\n"
+             + "}\n"
+             + "";
     }
 }

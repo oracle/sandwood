@@ -52,7 +52,7 @@ public class LinearRegressionWrongNameFail extends GeneratedAPIBuilder {
         y.setAlias("y");
         y.setLocation(location(19, 18, 19, 18));
 
-        parFor(intVariable(0, location(20, 20, 20, 20)), noSamples, intVariable(1, location(20, 19, 20, 22)), true, location(20, 9, 20, 33), (i) -> { 
+        parFor(intVariable(0, location(20, 20, 20, 20)), noSamples, intVariable(1, location(20, 19, 20, 22)), true, location(20, 9, 20, 33), (i) -> {
             i.setAlias("i");
             i.setLocation(location(20, 17, 20, 17));
             y.put(i, gaussian(b0.add(b1.times(x.get(i, location(21, 39, 21, 41)), location(21, 36, 21, 36)), location(21, 31, 21, 31)), variance, location(21, 19, 21, 52)).sample(location(21, 54, 21, 61)), location(21, 13, 21, 61));
@@ -67,7 +67,31 @@ public class LinearRegressionWrongNameFail extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LinearRegressionWrongNameFail", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nimport org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n\npublic model LinearRegressionWrongNameFail(double[] x, double[] yMeasured) {\n    \n        int noSamples = x.length;\n        double b0 = gaussian(0.0, 2.0).sample();\n        double b1 = gaussian(1.0, 5.0).sample();\n        double variance = inverseGamma(1.0, 1.0).sample();\n        double[] y = new double[noSamples];\n        for(int i:[0..noSamples)) {\n           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n        }\n        y.observe(yMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n"
+             + "\n"
+             + "public model LinearRegressionWrongNameFail(double[] x, double[] yMeasured) {\n"
+             + "    \n"
+             + "        int noSamples = x.length;\n"
+             + "        double b0 = gaussian(0.0, 2.0).sample();\n"
+             + "        double b1 = gaussian(1.0, 5.0).sample();\n"
+             + "        double variance = inverseGamma(1.0, 1.0).sample();\n"
+             + "        double[] y = new double[noSamples];\n"
+             + "        for(int i:[0..noSamples)) {\n"
+             + "           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n"
+             + "        }\n"
+             + "        y.observe(yMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

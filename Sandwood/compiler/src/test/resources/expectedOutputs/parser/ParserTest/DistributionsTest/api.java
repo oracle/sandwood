@@ -45,7 +45,7 @@ public class DistributionsTest extends GeneratedAPIBuilder {
         y.setAlias("y");
         y.setLocation(location(15, 14, 15, 14));
 
-        parFor(intVariable(0, location(16, 16, 16, 16)), noSamples, intVariable(1, location(16, 15, 16, 18)), true, location(16, 5, 16, 29), (i) -> { 
+        parFor(intVariable(0, location(16, 16, 16, 16)), noSamples, intVariable(1, location(16, 15, 16, 18)), true, location(16, 5, 16, 29), (i) -> {
             i.setAlias("i");
             i.setLocation(location(16, 13, 16, 13));
             y.put(i, studentT(b0.add(b1.times(x.get(i, location(17, 35, 17, 37)), location(17, 32, 17, 32)), location(17, 27, 17, 27)), location(17, 15, 17, 38)).sample(location(17, 40, 17, 47)), location(17, 9, 17, 47));
@@ -60,7 +60,27 @@ public class DistributionsTest extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "DistributionsTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model DistributionsTest(double[] x, double[] yMeasured) {\n    int noSamples = x.length;\n    double b0 = cauchy(0.0, 2.0).sample();\n    double b1 = halfCauchy(1.0, 5.0).sample();\n    double[] y = new double[noSamples];\n    for(int i:[0..noSamples)) {\n       y[i] = studentT(b0 + b1 * x[i]).sample();\n    }\n    y.observe(yMeasured);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model DistributionsTest(double[] x, double[] yMeasured) {\n"
+             + "    int noSamples = x.length;\n"
+             + "    double b0 = cauchy(0.0, 2.0).sample();\n"
+             + "    double b1 = halfCauchy(1.0, 5.0).sample();\n"
+             + "    double[] y = new double[noSamples];\n"
+             + "    for(int i:[0..noSamples)) {\n"
+             + "       y[i] = studentT(b0 + b1 * x[i]).sample();\n"
+             + "    }\n"
+             + "    y.observe(yMeasured);\n"
+             + "}\n"
+             + "";
     }
 }

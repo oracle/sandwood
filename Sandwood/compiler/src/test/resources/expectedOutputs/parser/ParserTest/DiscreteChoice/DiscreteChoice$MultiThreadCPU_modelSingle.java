@@ -1633,6 +1633,41 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model DiscreteChoice(int noProducts, int noObs, int[] ObsChoices) {\n    // we just need an uninformative prior for utility intercepts\n\n    // draw utilities\n    double[] ut = new double[noProducts];\n    ut[0] = 0.0;\n    for(int i=1; i<noProducts; i++) {\n        ut[i]= gaussian(0, 10).sample();\n    }\n\n    // calculate choice probabilities\n    double[] exped = new double[noProducts];\n    for(int i : [0..noProducts)) {\n        exped[i] = exp(ut[i]);\n    }\n    double sum = reduce(exped, 0, (i, j) -> { return i + j; });\n    double[] prob = new double[noProducts];\n    for (int i : [0..noProducts)) {\n        prob[i] = exped[i] / sum;\n    }\n    // draw consumer choices according to the calculated probabilities\n    int[] choices = categorical(prob).sample(noObs);\n\n    // assert generated choices match observed choices\n    choices.observe(ObsChoices);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model DiscreteChoice(int noProducts, int noObs, int[] ObsChoices) {\n"
+		     + "    // we just need an uninformative prior for utility intercepts\n"
+		     + "\n"
+		     + "    // draw utilities\n"
+		     + "    double[] ut = new double[noProducts];\n"
+		     + "    ut[0] = 0.0;\n"
+		     + "    for(int i=1; i<noProducts; i++) {\n"
+		     + "        ut[i]= gaussian(0, 10).sample();\n"
+		     + "    }\n"
+		     + "\n"
+		     + "    // calculate choice probabilities\n"
+		     + "    double[] exped = new double[noProducts];\n"
+		     + "    for(int i : [0..noProducts)) {\n"
+		     + "        exped[i] = exp(ut[i]);\n"
+		     + "    }\n"
+		     + "    double sum = reduce(exped, 0, (i, j) -> { return i + j; });\n"
+		     + "    double[] prob = new double[noProducts];\n"
+		     + "    for (int i : [0..noProducts)) {\n"
+		     + "        prob[i] = exped[i] / sum;\n"
+		     + "    }\n"
+		     + "    // draw consumer choices according to the calculated probabilities\n"
+		     + "    int[] choices = categorical(prob).sample(noObs);\n"
+		     + "\n"
+		     + "    // assert generated choices match observed choices\n"
+		     + "    choices.observe(ObsChoices);\n"
+		     + "}";
 	}
 }

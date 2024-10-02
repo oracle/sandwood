@@ -91,7 +91,25 @@ public class RaggedArray extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "RaggedArray", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2025, Oracle and/or its affiliates\n *\n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model RaggedArray(int y, boolean[] obs_measured) {\n    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n    double[][] b = {{0.2, 0.8}, {0.4, 0.2, 0.6}};\n    \n    int i = categorical(a[y]).sample();\n    double p = b[y][i];\n    boolean[] obs = bernoulli(p).sample(obs_measured.length);\n    obs.observe(obs_measured);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
+             + " *\n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model RaggedArray(int y, boolean[] obs_measured) {\n"
+             + "    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n"
+             + "    double[][] b = {{0.2, 0.8}, {0.4, 0.2, 0.6}};\n"
+             + "    \n"
+             + "    int i = categorical(a[y]).sample();\n"
+             + "    double p = b[y][i];\n"
+             + "    boolean[] obs = bernoulli(p).sample(obs_measured.length);\n"
+             + "    obs.observe(obs_measured);\n"
+             + "}";
     }
 }

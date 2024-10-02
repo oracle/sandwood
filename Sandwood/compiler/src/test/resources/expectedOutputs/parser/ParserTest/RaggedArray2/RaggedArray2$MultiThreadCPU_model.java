@@ -3433,6 +3433,25 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2025, Oracle and/or its affiliates\n *\n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n \n package org.sandwood.compiler.tests.parser;\n\npublic model RaggedArray2(boolean[] obs_measured) {\n    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n    double[][] b = {{0.2, 0.8}, {0.4, 0.2, 0.6}};\n    double[] c = { 0.35, 0.65 };\n    int y = categorical(c).sampleDistribution();\n    int i = categorical(a[y]).sample();\n    double p = b[y][i];\n    boolean[] obs = bernoulli(p).sample(obs_measured.length);\n    obs.observe(obs_measured);\n}";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
+		     + " *\n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + " \n"
+		     + " package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model RaggedArray2(boolean[] obs_measured) {\n"
+		     + "    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n"
+		     + "    double[][] b = {{0.2, 0.8}, {0.4, 0.2, 0.6}};\n"
+		     + "    double[] c = { 0.35, 0.65 };\n"
+		     + "    int y = categorical(c).sampleDistribution();\n"
+		     + "    int i = categorical(a[y]).sample();\n"
+		     + "    double p = b[y][i];\n"
+		     + "    boolean[] obs = bernoulli(p).sample(obs_measured.length);\n"
+		     + "    obs.observe(obs_measured);\n"
+		     + "}";
 	}
 }

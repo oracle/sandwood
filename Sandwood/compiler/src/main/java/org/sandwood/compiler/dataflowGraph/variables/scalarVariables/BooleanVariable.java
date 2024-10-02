@@ -14,7 +14,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.And;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.ConstructInput;
-import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.CopyBooleanTask;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.CopyTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Eq;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.NamedVariable;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.NegateBoolean;
@@ -101,12 +101,12 @@ public class BooleanVariable extends ScalarVariable<BooleanVariable> {
 
     @Override
     public BooleanVariable copy() {
-        return booleanVariable(new CopyBooleanTask(this));
+        return booleanVariable(new CopyTask<>(this));
     }
 
     @Override
     public BooleanVariable copy(Location location) {
-        return booleanVariable(new CopyBooleanTask(this, location));
+        return booleanVariable(new CopyTask<>(this, location));
     }
 
     /* Factory methods for construction */

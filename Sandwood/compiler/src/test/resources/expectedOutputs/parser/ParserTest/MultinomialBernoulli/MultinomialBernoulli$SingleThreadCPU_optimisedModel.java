@@ -1274,6 +1274,34 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model MultinomialBernoulli(boolean[] observed) {\n    double[] beta = {0.1, 0.1, 0.1};\n    double[] p = dirichlet(beta).sample();\n    int n = 10;\n    int[] prior = multinomial(p, n).sample();\n    Bernoulli b1 = new Bernoulli(prior[0]/n);\n    Bernoulli b2 = new Bernoulli(prior[1]/n);\n    Bernoulli b3 = new Bernoulli(prior[2]/n);\n    int length = observed.length;\n    boolean[] output = new boolean[length];\n    for(int i=0; i<length; i+=3)\n        output[i] = b1.sample();\n    for(int i=1; i<length; i+=3)\n        output[i] = b2.sample();\n    for(int i=2; i<length; i+=3)\n        output[i] = b3.sample();\n    output.observe(observed);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model MultinomialBernoulli(boolean[] observed) {\n"
+		     + "    double[] beta = {0.1, 0.1, 0.1};\n"
+		     + "    double[] p = dirichlet(beta).sample();\n"
+		     + "    int n = 10;\n"
+		     + "    int[] prior = multinomial(p, n).sample();\n"
+		     + "    Bernoulli b1 = new Bernoulli(prior[0]/n);\n"
+		     + "    Bernoulli b2 = new Bernoulli(prior[1]/n);\n"
+		     + "    Bernoulli b3 = new Bernoulli(prior[2]/n);\n"
+		     + "    int length = observed.length;\n"
+		     + "    boolean[] output = new boolean[length];\n"
+		     + "    for(int i=0; i<length; i+=3)\n"
+		     + "        output[i] = b1.sample();\n"
+		     + "    for(int i=1; i<length; i+=3)\n"
+		     + "        output[i] = b2.sample();\n"
+		     + "    for(int i=2; i<length; i+=3)\n"
+		     + "        output[i] = b3.sample();\n"
+		     + "    output.observe(observed);\n"
+		     + "}\n"
+		     + "";
 	}
 }

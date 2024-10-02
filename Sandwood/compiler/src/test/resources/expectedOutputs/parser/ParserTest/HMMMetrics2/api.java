@@ -70,7 +70,7 @@ public class HMMMetrics2 extends GeneratedAPIBuilder {
         metric_valid_bias.setAlias("metric_valid_bias");
         metric_valid_bias.setLocation(location(33, 14, 33, 30));
 
-        parFor(intVariable(0, location(36, 22, 36, 22)), noSamples, intVariable(1, location(36, 45, 36, 52)), true, location(36, 5, 36, 53), (sample) -> { 
+        parFor(intVariable(0, location(36, 22, 36, 22)), noSamples, intVariable(1, location(36, 45, 36, 52)), true, location(36, 5, 36, 53), (sample) -> {
             sample.setAlias("sample");
             sample.setLocation(location(36, 13, 36, 18));
             IntVariable streamLength = metric.get(sample, location(38, 34, 38, 41)).length(location(38, 43, 38, 48));
@@ -79,7 +79,7 @@ public class HMMMetrics2 extends GeneratedAPIBuilder {
 
             st.put(sample, Variable.arrayVariable(location(41, 29, 41, 42), VariableType.IntVariable, streamLength), location(41, 11, 41, 42));
             st.get(sample, location(44, 11, 44, 18)).put(intVariable(0, location(44, 20, 44, 20)), categorical(initialStateDistribution, location(44, 25, 44, 61)).sampleDistribution(location(44, 63, 44, 82)), location(44, 19, 44, 82));
-            parFor(intVariable(1, location(47, 28, 47, 28)), streamLength, intVariable(1, location(47, 56, 47, 65)), true, location(47, 9, 47, 66), (timeStep) -> { 
+            parFor(intVariable(1, location(47, 28, 47, 28)), streamLength, intVariable(1, location(47, 56, 47, 65)), true, location(47, 9, 47, 66), (timeStep) -> {
                 timeStep.setAlias("timeStep");
                 timeStep.setLocation(location(47, 17, 47, 24));
                 st.get(sample, location(48, 15, 48, 22)).put(timeStep, categorical(m.get(st.get(sample, location(48, 52, 48, 59)).get(timeStep.subtract(intVariable(1, location(48, 70, 48, 70)), location(48, 69, 48, 69)), location(48, 60, 48, 71)), location(48, 49, 48, 72)), location(48, 36, 48, 73)).sampleDistribution(location(48, 75, 48, 94)), location(48, 23, 48, 94));
@@ -95,7 +95,7 @@ public class HMMMetrics2 extends GeneratedAPIBuilder {
             metric_valid_1d.setLocation(location(54, 19, 54, 33));
 
             metric_valid_g.put(sample, metric_valid_1d, location(55, 23, 55, 48));
-            parFor(intVariable(0, location(58, 28, 58, 28)), streamLength, intVariable(1, location(58, 56, 58, 65)), true, location(58, 9, 58, 66), (timeStep) -> { 
+            parFor(intVariable(0, location(58, 28, 58, 28)), streamLength, intVariable(1, location(58, 56, 58, 65)), true, location(58, 9, 58, 66), (timeStep) -> {
                 timeStep.setAlias("timeStep");
                 timeStep.setLocation(location(58, 17, 58, 24));
                 IntVariable currentState = st.get(sample, location(59, 34, 59, 41)).get(timeStep, location(59, 42, 59, 51));
@@ -123,7 +123,77 @@ public class HMMMetrics2 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "HMMMetrics2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n *\n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel HMMMetrics2(\n               double[][] metric,\n               boolean[][] metric_valid, \n               int noStates) {\n    \n    int noSamples = metric.length;\n\n    // Construct arrays describing the probability of a move from 1 state to another.\n    double[] v = new double[noStates] <~ 0.1;\n    double[] initialStateDistribution = dirichlet(v).sample();\n    double[][] m = dirichlet(v).sample(noStates);\n\n    //Allocate space for states\n    int[][] st = new int[noSamples][];\n\n    //Allocate space for generated metrics \n    double[][] metric_g = new double[noSamples][];\n    boolean[][] metric_valid_g = new boolean[noSamples][];\n    \n    //Calculate priors for the metric\n    double[] metric_mean = uniform(0.0, 100.0).sample(noStates);\n    double[] metric_var = inverseGamma(1.0, 1.0).sample(noStates);\n    double[] metric_valid_bias = beta(1.0, 1.0).sample(noStates);\n    \n    // Compute the values of each metric value\n    for(int sample = 0; sample < noSamples; sample++) {\n        //Calculate all the state transitions\n        int streamLength = metric[sample].length;\n        \n        // Allocate space for the state.\n        st[sample] = new int[streamLength];\n        \n        // Set the initial state by sampling from a categorical with learnt weightings.\n        st[sample][0] = categorical(initialStateDistribution).sampleDistribution();\n        \n        // Calculate the remaining weightings\n        for(int timeStep = 1; timeStep < streamLength; timeStep++)\n            st[sample][timeStep] = categorical(m[st[sample][timeStep-1]]).sampleDistribution();\n        \n        //Calculate metric values\n        double[] metric_1d = new double[streamLength];\n        metric_g[sample] = metric_1d;\n\n        boolean[] metric_valid_1d = new boolean[streamLength];\n        metric_valid_g[sample] = metric_valid_1d;\n\n        //Generate values.\n        for(int timeStep = 0; timeStep < streamLength; timeStep++){\n            int currentState = st[sample][timeStep];\n            \n            metric_valid_1d[timeStep] = bernoulli(metric_valid_bias[currentState]).sample();\n            if(metric_valid_1d[timeStep])\n                metric_1d[timeStep] = gaussian(metric_mean[currentState], metric_var[currentState]).sample();\n            // Observing here as a cast is required and doing it inside the for loops removes the need duplicate them later.\n            metric_1d[timeStep].observe(metric[sample][timeStep]);\n        }\n    }\n\n    //Tie the values to the measured values.\n    metric_valid_g.observe(metric_valid);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " *\n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model HMMMetrics2(\n"
+             + "               double[][] metric,\n"
+             + "               boolean[][] metric_valid, \n"
+             + "               int noStates) {\n"
+             + "    \n"
+             + "    int noSamples = metric.length;\n"
+             + "\n"
+             + "    // Construct arrays describing the probability of a move from 1 state to another.\n"
+             + "    double[] v = new double[noStates] <~ 0.1;\n"
+             + "    double[] initialStateDistribution = dirichlet(v).sample();\n"
+             + "    double[][] m = dirichlet(v).sample(noStates);\n"
+             + "\n"
+             + "    //Allocate space for states\n"
+             + "    int[][] st = new int[noSamples][];\n"
+             + "\n"
+             + "    //Allocate space for generated metrics \n"
+             + "    double[][] metric_g = new double[noSamples][];\n"
+             + "    boolean[][] metric_valid_g = new boolean[noSamples][];\n"
+             + "    \n"
+             + "    //Calculate priors for the metric\n"
+             + "    double[] metric_mean = uniform(0.0, 100.0).sample(noStates);\n"
+             + "    double[] metric_var = inverseGamma(1.0, 1.0).sample(noStates);\n"
+             + "    double[] metric_valid_bias = beta(1.0, 1.0).sample(noStates);\n"
+             + "    \n"
+             + "    // Compute the values of each metric value\n"
+             + "    for(int sample = 0; sample < noSamples; sample++) {\n"
+             + "        //Calculate all the state transitions\n"
+             + "        int streamLength = metric[sample].length;\n"
+             + "        \n"
+             + "        // Allocate space for the state.\n"
+             + "        st[sample] = new int[streamLength];\n"
+             + "        \n"
+             + "        // Set the initial state by sampling from a categorical with learnt weightings.\n"
+             + "        st[sample][0] = categorical(initialStateDistribution).sampleDistribution();\n"
+             + "        \n"
+             + "        // Calculate the remaining weightings\n"
+             + "        for(int timeStep = 1; timeStep < streamLength; timeStep++)\n"
+             + "            st[sample][timeStep] = categorical(m[st[sample][timeStep-1]]).sampleDistribution();\n"
+             + "        \n"
+             + "        //Calculate metric values\n"
+             + "        double[] metric_1d = new double[streamLength];\n"
+             + "        metric_g[sample] = metric_1d;\n"
+             + "\n"
+             + "        boolean[] metric_valid_1d = new boolean[streamLength];\n"
+             + "        metric_valid_g[sample] = metric_valid_1d;\n"
+             + "\n"
+             + "        //Generate values.\n"
+             + "        for(int timeStep = 0; timeStep < streamLength; timeStep++){\n"
+             + "            int currentState = st[sample][timeStep];\n"
+             + "            \n"
+             + "            metric_valid_1d[timeStep] = bernoulli(metric_valid_bias[currentState]).sample();\n"
+             + "            if(metric_valid_1d[timeStep])\n"
+             + "                metric_1d[timeStep] = gaussian(metric_mean[currentState], metric_var[currentState]).sample();\n"
+             + "            // Observing here as a cast is required and doing it inside the for loops removes the need duplicate them later.\n"
+             + "            metric_1d[timeStep].observe(metric[sample][timeStep]);\n"
+             + "        }\n"
+             + "    }\n"
+             + "\n"
+             + "    //Tie the values to the measured values.\n"
+             + "    metric_valid_g.observe(metric_valid);\n"
+             + "}";
     }
 }

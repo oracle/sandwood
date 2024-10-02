@@ -954,6 +954,26 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model DistributionsTest(double[] x, double[] yMeasured) {\n    int noSamples = x.length;\n    double b0 = cauchy(0.0, 2.0).sample();\n    double b1 = halfCauchy(1.0, 5.0).sample();\n    double[] y = new double[noSamples];\n    for(int i:[0..noSamples)) {\n       y[i] = studentT(b0 + b1 * x[i]).sample();\n    }\n    y.observe(yMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model DistributionsTest(double[] x, double[] yMeasured) {\n"
+		     + "    int noSamples = x.length;\n"
+		     + "    double b0 = cauchy(0.0, 2.0).sample();\n"
+		     + "    double b1 = halfCauchy(1.0, 5.0).sample();\n"
+		     + "    double[] y = new double[noSamples];\n"
+		     + "    for(int i:[0..noSamples)) {\n"
+		     + "       y[i] = studentT(b0 + b1 * x[i]).sample();\n"
+		     + "    }\n"
+		     + "    y.observe(yMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

@@ -58,6 +58,44 @@ class ParserTest {
         errors.put(
                 sourceDir + File.separator + "org" + File.separator + "sandwood" + File.separator + "compiler"
                         + File.separator + "tests" + File.separator + "parser" + File.separator + "firstPhaseOnly"
+                        + File.separator + "AssignmentTest_Error1.sandwood",
+                "-----\n" + "\n" + "src" + File.separator + "test" + File.separator + "resources" + File.separator
+                        + "testInputs" + File.separator + "org" + File.separator + "sandwood" + File.separator
+                        + "compiler" + File.separator + "tests" + File.separator + "parser" + File.separator
+                        + "firstPhaseOnly" + File.separator + "AssignmentTest_Error1.sandwood\n"
+                        + "Error on line: 21 between columns 5 and 9\n"
+                        + "Assignment to \"guard\" but this value has already been assigned to in this code path.\n"
+                        + "\n" + "\"\tguard = false;\"\n" + "\n" + "-----\n" + "\n" + "1 Error found.\n");
+        errors.put(
+                sourceDir + File.separator + "org" + File.separator + "sandwood" + File.separator + "compiler"
+                        + File.separator + "tests" + File.separator + "parser" + File.separator + "firstPhaseOnly"
+                        + File.separator + "AssignmentTest_Error2.sandwood",
+                "-----\n" + "\n" + "src" + File.separator + "test" + File.separator + "resources" + File.separator
+                        + "testInputs" + File.separator + "org" + File.separator + "sandwood" + File.separator
+                        + "compiler" + File.separator + "tests" + File.separator + "parser" + File.separator
+                        + "firstPhaseOnly" + File.separator + "AssignmentTest_Error2.sandwood\n"
+                        + "Error on line: 18 between columns 13 and 18\n" + "Variable guard2 is never initialised.\n"
+                        + "\n" + "\"\tboolean guard2;\"\n" + "\n" + "-----\n" + "\n" + "1 Error found.\n");
+        errors.put(
+                sourceDir + File.separator + "org" + File.separator + "sandwood" + File.separator + "compiler"
+                        + File.separator + "tests" + File.separator + "parser" + File.separator + "firstPhaseOnly"
+                        + File.separator + "AssignmentTest_Error3.sandwood",
+                "-----\n" + "\n" + "src" + File.separator + "test" + File.separator + "resources" + File.separator
+                        + "testInputs" + File.separator + "org" + File.separator + "sandwood" + File.separator
+                        + "compiler" + File.separator + "tests" + File.separator + "parser" + File.separator
+                        + "firstPhaseOnly" + File.separator + "AssignmentTest_Error3.sandwood\n"
+                        + "Error on line: 20 between columns 9 and 13\n"
+                        + "Assignment to \"guard\" but this value has not been declared, or is declared out of scope, for\n"
+                        + "example outside of a for loop encloding this assignment.\n"
+                        + "\n"
+                        + "\"\t\tguard = bernoulli.sample();\"\n"
+                        + "\n"
+                        + "-----\n"
+                        + "\n"
+                        + "1 Error found.\n");
+        errors.put(
+                sourceDir + File.separator + "org" + File.separator + "sandwood" + File.separator + "compiler"
+                        + File.separator + "tests" + File.separator + "parser" + File.separator + "firstPhaseOnly"
                         + File.separator + "LogisticRegressionTest_Error1.sandwood",
                 "-----\n" + "\n" + sourceDir + File.separator + "org" + File.separator + "sandwood" + File.separator
                         + "compiler" + File.separator + "tests" + File.separator + "parser" + File.separator

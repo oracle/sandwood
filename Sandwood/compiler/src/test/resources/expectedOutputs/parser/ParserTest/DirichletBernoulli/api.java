@@ -52,13 +52,13 @@ public class DirichletBernoulli extends GeneratedAPIBuilder {
         output.setAlias("output");
         output.setLocation(location(17, 15, 17, 20));
 
-        parFor(intVariable(0, location(18, 15, 18, 15)), length.divide(intVariable(2, location(18, 27, 18, 27)), location(18, 26, 18, 26)), intVariable(1, location(18, 30, 18, 32)), true, location(18, 5, 18, 33), (i) -> { 
+        parFor(intVariable(0, location(18, 15, 18, 15)), length.divide(intVariable(2, location(18, 27, 18, 27)), location(18, 26, 18, 26)), intVariable(1, location(18, 30, 18, 32)), true, location(18, 5, 18, 33), (i) -> {
             i.setAlias("i");
             i.setLocation(location(18, 13, 18, 13));
             output.put(i, b1.sample(location(19, 24, 19, 31)), location(19, 15, 19, 31));
         });
 
-        parFor(length.divide(intVariable(2, location(20, 22, 20, 22)), location(20, 21, 20, 21)), length, intVariable(1, location(20, 35, 20, 37)), true, location(20, 5, 20, 38), (i) -> { 
+        parFor(length.divide(intVariable(2, location(20, 22, 20, 22)), location(20, 21, 20, 21)), length, intVariable(1, location(20, 35, 20, 37)), true, location(20, 5, 20, 38), (i) -> {
             i.setAlias("i");
             i.setLocation(location(20, 13, 20, 13));
             output.put(i, b2.sample(location(21, 24, 21, 31)), location(21, 15, 21, 31));
@@ -72,7 +72,30 @@ public class DirichletBernoulli extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "DirichletBernoulli", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model DirichletBernoulli(boolean[] observed) {\n    double[] v = new double[2] <~ 0.1;\n    double[] prior = dirichlet(v).sample();\n    Bernoulli b1 = new Bernoulli(prior[0]);\n    Bernoulli b2 = new Bernoulli(prior[1]);\n    int length = observed.length;\n    boolean[] output = new boolean[length];\n    for(int i=0; i<length/2; i++)\n        output[i] = b1.sample();\n    for(int i=length/2; i<length; i++)\n        output[i] = b2.sample();\n    output.observe(observed);\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model DirichletBernoulli(boolean[] observed) {\n"
+             + "    double[] v = new double[2] <~ 0.1;\n"
+             + "    double[] prior = dirichlet(v).sample();\n"
+             + "    Bernoulli b1 = new Bernoulli(prior[0]);\n"
+             + "    Bernoulli b2 = new Bernoulli(prior[1]);\n"
+             + "    int length = observed.length;\n"
+             + "    boolean[] output = new boolean[length];\n"
+             + "    for(int i=0; i<length/2; i++)\n"
+             + "        output[i] = b1.sample();\n"
+             + "    for(int i=length/2; i<length; i++)\n"
+             + "        output[i] = b2.sample();\n"
+             + "    output.observe(observed);\n"
+             + "}\n"
+             + "";
     }
 }

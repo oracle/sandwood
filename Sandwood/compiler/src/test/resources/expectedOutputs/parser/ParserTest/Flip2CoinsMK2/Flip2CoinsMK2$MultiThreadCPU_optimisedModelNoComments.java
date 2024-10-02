@@ -394,6 +394,32 @@ class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Flip2CoinsMK2(double a, double b, boolean[][] flipsMeasured) {\n    int samples = flipsMeasured.length;\n    int coins = flipsMeasured[0].length;\n    double[] bias = beta(a, b).sample(coins);\n    boolean[][] flips = new boolean[samples][];\n    for(int i:[0..samples)) {\n        boolean[] sample = new boolean[coins];\n        for(int j:[0..coins)) {\n            Bernoulli bernoulli = bernoulli(bias[j]);\n            sample[j] = bernoulli.sample();\n        }\n        flips[i] = sample;\n    }\n\n    flips.observe(flipsMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "public model Flip2CoinsMK2(double a, double b, boolean[][] flipsMeasured) {\n"
+		     + "    int samples = flipsMeasured.length;\n"
+		     + "    int coins = flipsMeasured[0].length;\n"
+		     + "    double[] bias = beta(a, b).sample(coins);\n"
+		     + "    boolean[][] flips = new boolean[samples][];\n"
+		     + "    for(int i:[0..samples)) {\n"
+		     + "        boolean[] sample = new boolean[coins];\n"
+		     + "        for(int j:[0..coins)) {\n"
+		     + "            Bernoulli bernoulli = bernoulli(bias[j]);\n"
+		     + "            sample[j] = bernoulli.sample();\n"
+		     + "        }\n"
+		     + "        flips[i] = sample;\n"
+		     + "    }\n"
+		     + "\n"
+		     + "    flips.observe(flipsMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }

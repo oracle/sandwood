@@ -123,7 +123,18 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodClass {
      */
     private void addModelCode(StringBuilder sb) {
         sb.append("\t@Override\n\tpublic String modelCode() {\n\t\treturn "
-                + ((modelCode.equals("")) ? "null" : "\"" + StringUtil.escapeSpecialCharacters(modelCode) + "\"")
+                + ((modelCode.equals("")) ? "null"
+                        : processInputString(StringUtil.escapeSpecialCharacters(modelCode)))
                 + ";\n\t}\n");
+    }
+
+    private String processInputString(String input) {
+        StringBuilder sb = new StringBuilder();
+        String[] parts = input.split("\\\\n", -1);
+        sb.append("\"" + parts[0]);
+        for(int i = 1; i < parts.length; i++)
+            sb.append("\\n\"\n\t\t     + \"" + parts[i]);
+        sb.append("\"");
+        return sb.toString();
     }
 }

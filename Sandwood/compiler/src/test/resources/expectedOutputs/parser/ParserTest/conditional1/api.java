@@ -48,7 +48,29 @@ public class Conditional1 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Conditional1", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Conditional1(double observedValue)  {\n        \n    //Construct a bernoulli\n    Bernoulli bernoulli = bernoulli(0.5);\n                \n    //Sample from it\n    boolean guard = bernoulli.sample();\n        \n    double value = guard?1.0:uniform(0.0, 1.0).sample();\n    \n    //Link the sampled value to the observed value\n    value.observe(observedValue);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Conditional1(double observedValue)  {\n"
+             + "        \n"
+             + "    //Construct a bernoulli\n"
+             + "    Bernoulli bernoulli = bernoulli(0.5);\n"
+             + "                \n"
+             + "    //Sample from it\n"
+             + "    boolean guard = bernoulli.sample();\n"
+             + "        \n"
+             + "    double value = guard?1.0:uniform(0.0, 1.0).sample();\n"
+             + "    \n"
+             + "    //Link the sampled value to the observed value\n"
+             + "    value.observe(observedValue);\n"
+             + "}";
     }
 }

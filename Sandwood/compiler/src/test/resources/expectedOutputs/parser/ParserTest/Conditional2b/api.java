@@ -64,7 +64,41 @@ public class Conditional2b extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "Conditional2b", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model Conditional2b(double[] observedValue)  {\n        \n    //Construct a bernoulli\n    Bernoulli bernoulli = bernoulli(0.5);\n                \n    //Sample from it\n    boolean guard = bernoulli.sample();\n    \n    double[] value = new double[1];\n    \n    double u = uniform(0.0, 1.0).sample();\n\n    if(guard)\n        value[0] = 1.0;\n    else {\n        value[0] = u;\n    }\n    \n    double [] value2 = new double[1];\n    \n    value2[0] = value[0];\n    \n    //Link the sampled value to the observed value\n    value2.observe(observedValue);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model Conditional2b(double[] observedValue)  {\n"
+             + "        \n"
+             + "    //Construct a bernoulli\n"
+             + "    Bernoulli bernoulli = bernoulli(0.5);\n"
+             + "                \n"
+             + "    //Sample from it\n"
+             + "    boolean guard = bernoulli.sample();\n"
+             + "    \n"
+             + "    double[] value = new double[1];\n"
+             + "    \n"
+             + "    double u = uniform(0.0, 1.0).sample();\n"
+             + "\n"
+             + "    if(guard)\n"
+             + "        value[0] = 1.0;\n"
+             + "    else {\n"
+             + "        value[0] = u;\n"
+             + "    }\n"
+             + "    \n"
+             + "    double [] value2 = new double[1];\n"
+             + "    \n"
+             + "    value2[0] = value[0];\n"
+             + "    \n"
+             + "    //Link the sampled value to the observed value\n"
+             + "    value2.observe(observedValue);\n"
+             + "}";
     }
 }

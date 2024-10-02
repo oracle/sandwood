@@ -36,7 +36,7 @@ public class ParallelMK1 extends GeneratedAPIBuilder {
         indirection.setAlias("indirection");
         indirection.setLocation(location(13, 14, 13, 24));
 
-        parFor(intVariable(0, location(15, 15, 15, 15)), observed.length(location(15, 29, 15, 34)), intVariable(1, location(15, 37, 15, 39)), true, location(15, 5, 15, 40), (i) -> { 
+        parFor(intVariable(0, location(15, 15, 15, 15)), observed.length(location(15, 29, 15, 34)), intVariable(1, location(15, 37, 15, 39)), true, location(15, 5, 15, 40), (i) -> {
             i.setAlias("i");
             i.setLocation(location(15, 13, 15, 13));
             DoubleVariable sample = uniform(doubleVariable(0.0, location(16, 33, 16, 35)), doubleVariable(1.0, location(16, 38, 16, 40)), location(16, 25, 16, 41)).sample(location(16, 43, 16, 50));
@@ -56,7 +56,28 @@ public class ParallelMK1 extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "ParallelMK1", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\npublic model ParallelMK1(double[] observed) {\n    double[] generated = new double[observed.length];\n    double[] indirection = new double[observed.length];\n\n    for(int i=0; i<observed.length; i++) {\n        double sample = uniform(0.0, 1.0).sample();\n        indirection[i] = sample;\n        generated[i] = gaussian(sample, indirection[i]).sample();\n    }\n\n    generated.observe(observed);\n}";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "public model ParallelMK1(double[] observed) {\n"
+             + "    double[] generated = new double[observed.length];\n"
+             + "    double[] indirection = new double[observed.length];\n"
+             + "\n"
+             + "    for(int i=0; i<observed.length; i++) {\n"
+             + "        double sample = uniform(0.0, 1.0).sample();\n"
+             + "        indirection[i] = sample;\n"
+             + "        generated[i] = gaussian(sample, indirection[i]).sample();\n"
+             + "    }\n"
+             + "\n"
+             + "    generated.observe(observed);\n"
+             + "}";
     }
 }

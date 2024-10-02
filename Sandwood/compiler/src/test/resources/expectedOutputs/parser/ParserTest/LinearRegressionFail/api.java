@@ -57,10 +57,10 @@ public class LinearRegressionFail extends GeneratedAPIBuilder {
         phi.setAlias("phi");
         phi.setLocation(location(22, 18, 22, 20));
 
-        parFor(intVariable(0, location(23, 20, 23, 20)), n, intVariable(1, location(23, 19, 23, 22)), true, location(23, 9, 23, 25), (i) -> { 
+        parFor(intVariable(0, location(23, 20, 23, 20)), n, intVariable(1, location(23, 19, 23, 22)), true, location(23, 9, 23, 25), (i) -> {
             i.setAlias("i");
             i.setLocation(location(23, 17, 23, 17));
-            parFor(intVariable(0, location(24, 24, 24, 24)), k, intVariable(1, location(24, 29, 24, 29)), true, location(24, 13, 24, 31), (j) -> { 
+            parFor(intVariable(0, location(24, 24, 24, 24)), k, intVariable(1, location(24, 29, 24, 29)), true, location(24, 13, 24, 31), (j) -> {
                 j.setAlias("j");
                 j.setLocation(location(24, 21, 24, 21));
                 phi.put(j, weights.get(j, location(25, 33, 25, 35)).times(x.get(i, location(25, 40, 25, 42)).get(j, location(25, 43, 25, 45)), location(25, 37, 25, 37)), location(25, 20, 25, 37));
@@ -78,8 +78,8 @@ public class LinearRegressionFail extends GeneratedAPIBuilder {
         return compileAPI(opts, $variableNames, "LinearRegressionFail", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
-    private static DoubleVariable sum(ArrayVariable<DoubleVariable> a, Location $location) { 
-        return reduce(a, intVariable(0, location(33, 26, 33, 26)), location(33, 16, 35, 10), (i, j) ->  { 
+    private static DoubleVariable sum(ArrayVariable<DoubleVariable> a, Location $location) {
+        return reduce(a, intVariable(0, location(33, 26, 33, 26)), location(33, 16, 35, 10), (i, j) -> {
             i.setAlias("i");
             i.setLocation(location(33, 30, 33, 30));
             j.setAlias("j");
@@ -88,7 +88,44 @@ public class LinearRegressionFail extends GeneratedAPIBuilder {
         });
     }
 
-    private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel LinearRegressionFail(double[][] x, double[] yMeasured) {\n\n        int n = x.length;\n        int k = x[0].length;\n\n        double[] y = new double[n];\n\n        double[] weights = gaussian(0,10).sample(k);\n        double bias = gaussian(0,10).sample();\n        double tau = inverseGamma(3.0,1.0).sample();\n\n        double[] phi = new double[k];\n        for(int i:[0..n)) {\n            for(int j:[0..k,1))\n                phi[j] = weights[j] * x[i][j];\n            \n            y[i] = gaussian(sum(phi) + bias, tau).sample();\n        }\n        \n        y.observe(yMeasured);\n\n    private double sum(double[] a) {\n        return reduce(a, 0, (i,j) -> {\n            return i + j;\n        });\n    }\n}\n";
+    private static String getOriginalModel() {
+        return "/*\n"
+             + " * Sandwood\n"
+             + " *\n"
+             + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+             + " * \n"
+             + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+             + " */\n"
+             + "\n"
+             + "package org.sandwood.compiler.tests.parser;\n"
+             + "\n"
+             + "model LinearRegressionFail(double[][] x, double[] yMeasured) {\n"
+             + "\n"
+             + "        int n = x.length;\n"
+             + "        int k = x[0].length;\n"
+             + "\n"
+             + "        double[] y = new double[n];\n"
+             + "\n"
+             + "        double[] weights = gaussian(0,10).sample(k);\n"
+             + "        double bias = gaussian(0,10).sample();\n"
+             + "        double tau = inverseGamma(3.0,1.0).sample();\n"
+             + "\n"
+             + "        double[] phi = new double[k];\n"
+             + "        for(int i:[0..n)) {\n"
+             + "            for(int j:[0..k,1))\n"
+             + "                phi[j] = weights[j] * x[i][j];\n"
+             + "            \n"
+             + "            y[i] = gaussian(sum(phi) + bias, tau).sample();\n"
+             + "        }\n"
+             + "        \n"
+             + "        y.observe(yMeasured);\n"
+             + "\n"
+             + "    private double sum(double[] a) {\n"
+             + "        return reduce(a, 0, (i,j) -> {\n"
+             + "            return i + j;\n"
+             + "        });\n"
+             + "    }\n"
+             + "}\n"
+             + "";
     }
 }

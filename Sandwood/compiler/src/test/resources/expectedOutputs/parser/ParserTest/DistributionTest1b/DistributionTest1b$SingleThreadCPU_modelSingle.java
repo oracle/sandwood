@@ -1955,6 +1955,24 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel DistributionTest1b(double[] weightings, boolean value) {\n    int v1 = categorical(weightings).sampleDistribution();\n    Categorical c = new Categorical(weightings);\n    int v2 = c.sampleDistribution();\n    int v3 = c.sample();\n    boolean v = bernoulli((1.0*v1)/(v2 + v3)).sample();\n    v.observe(value);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
+		     + "\n"
+		     + "model DistributionTest1b(double[] weightings, boolean value) {\n"
+		     + "    int v1 = categorical(weightings).sampleDistribution();\n"
+		     + "    Categorical c = new Categorical(weightings);\n"
+		     + "    int v2 = c.sampleDistribution();\n"
+		     + "    int v3 = c.sample();\n"
+		     + "    boolean v = bernoulli((1.0*v1)/(v2 + v3)).sample();\n"
+		     + "    v.observe(value);\n"
+		     + "}\n"
+		     + "";
 	}
 }

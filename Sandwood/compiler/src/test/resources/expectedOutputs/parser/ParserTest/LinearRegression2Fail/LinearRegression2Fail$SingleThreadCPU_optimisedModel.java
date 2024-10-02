@@ -1023,6 +1023,28 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	@Override
 	public String modelCode() {
-		return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\nimport org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n\npublic model LinearRegression2Fail(double[] x, double[] yMeasured) {\n    \n        int noSamples = x.length;\n        double b0 = gaussian(0.0, 2.0).sample();\n        double b1 = gaussian(1.0, 5.0).sample();\n        double variance = inverseGamma(1.0, 1.0).sample();\n        double[] y = new double[noSamples];\n        for(int i:[0..noSamples)) {\n           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n        }\n        y.observe(yMeasured);\n}\n";
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+		     + " * \n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Sigmoid;\n"
+		     + "\n"
+		     + "public model LinearRegression2Fail(double[] x, double[] yMeasured) {\n"
+		     + "    \n"
+		     + "        int noSamples = x.length;\n"
+		     + "        double b0 = gaussian(0.0, 2.0).sample();\n"
+		     + "        double b1 = gaussian(1.0, 5.0).sample();\n"
+		     + "        double variance = inverseGamma(1.0, 1.0).sample();\n"
+		     + "        double[] y = new double[noSamples];\n"
+		     + "        for(int i:[0..noSamples)) {\n"
+		     + "           y[i] = gaussian(b0 + b1 * x[i], variance).sample();\n"
+		     + "        }\n"
+		     + "        y.observe(yMeasured);\n"
+		     + "}\n"
+		     + "";
 	}
 }
