@@ -18882,7 +18882,15 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public String modelCode() {
-		return "package org.sandwood.compiler.tests.parser;\n"
+		return "/*\n"
+		     + " * Sandwood\n"
+		     + " *\n"
+		     + " * Copyright (c) 2019-2024, Oracle and/or its affiliates\n"
+		     + " *\n"
+		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
+		     + " */\n"
+		     + "\n"
+		     + "package org.sandwood.compiler.tests.parser;\n"
 		     + "\n"
 		     + "model HMMMetrics(double[] cpu_measured, double[] mem_measured, double[] pageFaults_measured, int noStates) {\n"
 		     + "    \n"
