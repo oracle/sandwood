@@ -1,0 +1,91 @@
+package org.sandwood.compiler.tests.knownErrors;
+
+// adding arrivals as a separate observation
+// volumes and arrivals are observed
+// two cohorts, multiple levels of acuity
+// parameters are specific for acuity levels
+// A number transition! not a proportion, with a priority for the highest acuity
+
+public model EDVolumes_v8(int[][] ObsV_c1, int[][] ObsV_c2, int[][] ObsArr, double[][] TimeFeat) {
+    //first dimension is time, second is acuity 1,...,5
+    int T = ObsV_c1.length;
+    int n_ac = ObsV_c1[0].length;
+    int time_dim = TimeFeat[0].length; //length of the feature vector
+
+    //one set of parameters for all 5 levels of acuity
+    double[] alpha = gamma(1,1).sample(n_ac);
+    double[] beta = gamma(1,1).sample(n_ac);
+    double[] time_arrival = gaussian(0,1).sample(time_dim);
+    double[] time_transition = gaussian(0,1).sample(time_dim);
+
+    //use mean arrivals as prior means for the time_coeff?
+
+    int[][] vol_c1 = new int[T][n_ac];
+    int[][] vol_c2 = new int[T][n_ac];
+
+    int[][] arr = new int[T][n_ac];
+
+
+    // let's pick random initial states
+    double[] time_impact_0 = new double[time_dim];
+    for (int j : [0..time_dim)){
+        time_impact_0[j] = TimeFeat[0][j]*time_arrival[j];
+    }
+    double t_0 = reduce(time_impact_0, 0, (i, j) -> { return i + j; });
+    arr[0]=poisson(exp(t_0)).sample(n_ac);
+
+    vol_c1[0]=poisson(2 + exp(t_0)).sample(n_ac);
+    vol_c2[0]=poisson(2 ).sample(n_ac);
+
+
+    for (int t : (0..T)) {
+    // calculate impact of time features, and total transitions
+    double[] time_impact = new double[time_dim];
+    double[] trans = new double[time_dim];
+        for (int j : [0..time_dim)){
+        time_impact[j] = TimeFeat[t][j]*time_arrival[j];
+        trans[j] = TimeFeat[t][j]*time_transition[j];
+        }
+    //calculate sums
+    double sum_t = reduce(time_impact, 0, (i, j) -> { return i + j; });
+    double trans_t = reduce(trans, 0, (i, j) -> { return i + j; });
+    int prev_vol = reduce(vol_c1[t-1], 0, (i, j) -> { return i + j; });
+    int prev_vol_mild = prev_vol - vol_c1[t-1][0] ; // will give priority to acuity 1, but the rest will be divided proportionally
+    int total_trans = poisson(exp(trans_t)).sample();  //that many transitions will happen in total
+    double[] m = new double[n_ac];
+    if (total_trans >= prev_vol){
+        for (int i : [0..n_ac)){
+                            m[i] = 1.0;
+                            }
+        }
+    else {                      //can only happen if total_trans < prev_vol, i.e., prev_vol is positive
+        if (total_trans <= vol_c1[t-1][0]  ){
+                m[0] = total_trans/vol_c1[t-1][0];
+                for (int i : [1..n_ac)){
+                    m[i] = 0.0;
+                    }
+                }
+        else{
+            m[0] =1.0;
+            for (int i : [1..n_ac)){
+                                m[i] = (total_trans -vol_c1[t-1][0] )/ (prev_vol - vol_c1[t-1][0]);
+                                }
+
+        }
+    }
+
+    // now populate volumes by acuity level
+        for (int i : [0..n_ac)){
+        arr[t][i] = poisson(exp(sum_t)).sample(); //draw arrivals
+
+        vol_c1[t][i] = poisson(vol_c1[t-1][i]*(1 - m[i]) + arr[t][i]).sample();
+        vol_c2[t][i] = poisson(beta[i]*vol_c2[t-1][i] + m[i]*vol_c1[t-1][i]).sample();
+        }
+
+    }
+
+    // assert generated data match observed data
+    vol_c1.observe(ObsV_c1);
+    vol_c2.observe(ObsV_c2);
+    arr.observe(ObsArr);
+}
