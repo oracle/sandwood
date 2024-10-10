@@ -1,0 +1,32 @@
+package org.sandwood.compiler.tests.knownErrors;
+
+
+public model ED_for_WITS(int[][] ObsV_c1, int[][] ObsV_c2, int[][] ObsArr, int T, int n_lev) {
+    //first dimension is time, second is acuity 1,...,5
+    //priors for cohort transition variables
+    double[] alpha = beta(1,1).sample(n_lev);
+    double[] b = beta(1,1).sample(n_lev);
+    double lam_arr = gamma(2,0.5).sample();
+
+    int[][] vol_c1 = new int[T][n_lev];
+    int[][] vol_c2 = new int[T][n_lev];
+    int[][] arr = new int[T][n_lev];
+
+    //define initial states
+    arr[0][] = poisson(lam_arr).sample(n_lev);
+    vol_c1[0] = poisson(lam_arr).sample(n_lev);
+    vol_c2[0] = poisson(lam_arr).sample(n_lev);
+
+    for (int t : (0..T)) {       //update states
+        for (int i : [0..n_lev)){
+        arr[t][i] = poisson(lam_arr).sample();
+        vol_c1[t][i] = poisson(alpha[i]*vol_c1[t-1][i] + arr[t][i]).sample();
+        vol_c2[t][i] = poisson(b[i]*vol_c2[t-1][i] + (1-alpha[i])* vol_c1[t-1][i]).sample();
+        }
+    }
+
+    // assert generated data match observed data
+    vol_c1.observe(ObsV_c1);
+    vol_c2.observe(ObsV_c2);
+    arr.observe(ObsArr);
+}
