@@ -21,9 +21,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup Oracle Java SE
-      uses: oracle-actions/setup-java@v1
+      uses: oracle-actions/setup-java@v4
       with:
         website: oracle.com
         release: ${{ matrix.java_version }}
