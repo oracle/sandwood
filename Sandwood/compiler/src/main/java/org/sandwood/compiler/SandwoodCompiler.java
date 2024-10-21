@@ -95,7 +95,7 @@ public class SandwoodCompiler {
             return new FileInputStream("." + File.separator + "src" + File.separator + "main" + File.separator
                     + "resources" + File.separator + filename);
         } catch(FileNotFoundException e) {
-            throw new CompilerException("Unable to fine the file " + filename + " as a resource or in the "
+            throw new CompilerException("Unable to find the file " + filename + " as a resource or in the "
                     + "directory ." + File.separator + "src" + File.separator + "main" + File.separator + "resources.");
         }
     }
