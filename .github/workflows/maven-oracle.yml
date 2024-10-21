@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-# This version uses the Oracle setup script which supports both Java 19 and Java 17
+# This version uses the Oracle setup script which supports Java 17, 21, and 23.
 
 name: Java CI with Maven (Oracle)
 
@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup Oracle Java SE
-      uses: oracle-actions/setup-java@v4
+      uses: oracle-actions/setup-java@v1
       with:
         website: oracle.com
         release: ${{ matrix.java_version }}
