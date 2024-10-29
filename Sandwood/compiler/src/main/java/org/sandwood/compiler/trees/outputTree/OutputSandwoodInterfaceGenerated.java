@@ -44,7 +44,7 @@ public class OutputSandwoodInterfaceGenerated extends OutputSandwoodClass {
 
     @Override
     public void toJava(StringBuilder sb) {
-        if(packageName != null)
+        if(!packageName.isEmpty())
             sb.append("package " + packageName + ";\n\n");
 
         sb.append("interface " + name);

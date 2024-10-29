@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -16,8 +16,6 @@ public abstract class Name implements Comparable<Name> {
     protected final String name;
 
     protected Name(String name) {
-
-        assert !name.equals("");
         this.name = Objects.requireNonNull(name);
     }
 

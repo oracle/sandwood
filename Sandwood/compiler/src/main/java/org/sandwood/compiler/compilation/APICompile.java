@@ -139,7 +139,7 @@ public class APICompile {
         CompilationDesc compDesc = new CompilationDesc();
 
         try {
-            PackageName targetPackageName = packageName == null ? null : new PackageName(packageName);
+            PackageName targetPackageName = new PackageName(packageName);
             ModelClassName className = ModelClassName.modelName(modelName, helperClasses);
             ClassName modelInterface = className.interfaceName();
 

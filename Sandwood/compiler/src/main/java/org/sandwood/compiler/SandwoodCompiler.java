@@ -167,8 +167,9 @@ public class SandwoodCompiler {
             for(String dir:opts.modelPath()) {
                 String absoluteDir = new File(dir).getAbsolutePath();
                 if(absoluteExpectedDir.startsWith(absoluteDir)) {
-                    String expectedPackageName = absoluteExpectedDir.substring(absoluteDir.length() + 1)
-                            .replace(File.separator, ".");
+                    int dirLength = absoluteDir.length();
+                    String expectedPackageName = dirLength == absoluteExpectedDir.length() ? ""
+                            : absoluteExpectedDir.substring(dirLength + 1).replace(File.separator, ".");
 
                     if(!expectedPackageName.equals(packageName.getName())) {
                         compilationOutput.addError(new SandwoodCompileError("Model " + apiClassName
@@ -212,7 +213,7 @@ public class SandwoodCompiler {
         ChildFirstClassLoader cl = new ChildFirstClassLoader(urls);
         for(ClassDesc apiClassDesc:apiClasses) {
             // Load the class
-            String className = ((apiClassDesc.packageName != null) ? apiClassDesc.packageName + "." : "")
+            String className = ((apiClassDesc.packageName.isEmpty()) ? "" : apiClassDesc.packageName + ".")
                     + apiClassDesc.className;
             GeneratedAPIBuilder apiClass;
             try {
