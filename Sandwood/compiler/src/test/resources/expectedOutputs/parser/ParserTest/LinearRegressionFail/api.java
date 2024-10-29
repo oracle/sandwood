@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
-public class LinearRegressionFailTest extends GeneratedAPIBuilder {
+public class LinearRegressionFail extends GeneratedAPIBuilder {
     @Override
     public CompilationDesc buildClass(CompilationOptions opts) {
         //Allocating initial observed parameters
-        ArrayVariable<ArrayVariable<DoubleVariable>> x = observeArray("x", VariableType.arrayType(VariableType.arrayType(VariableType.DoubleVariable)), location(11, 32, 11, 43));
-        ArrayVariable<DoubleVariable> yMeasured = observeArray("yMeasured", VariableType.arrayType(VariableType.DoubleVariable), location(11, 46, 11, 63));
+        ArrayVariable<ArrayVariable<DoubleVariable>> x = observeArray("x", VariableType.arrayType(VariableType.arrayType(VariableType.DoubleVariable)), location(11, 28, 11, 39));
+        ArrayVariable<DoubleVariable> yMeasured = observeArray("yMeasured", VariableType.arrayType(VariableType.DoubleVariable), location(11, 42, 11, 59));
 
         IntVariable n = x.length(location(13, 19, 13, 24));
         n.setAlias("n");
@@ -74,7 +74,7 @@ public class LinearRegressionFailTest extends GeneratedAPIBuilder {
         Variable<?>[] $variableNames = {x, yMeasured, n, k, y, weights, bias, tau, phi};
         String[] $constructorArgs = {"x", "yMeasured"};
         Set<String> $helperClasses = new HashSet<>();
-        return compileAPI(opts, $variableNames, "LinearRegressionFailTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
+        return compileAPI(opts, $variableNames, "LinearRegressionFail", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), null);
     }
 
     private static DoubleVariable sum(ArrayVariable<DoubleVariable> a, Location $location) { 
@@ -88,6 +88,6 @@ public class LinearRegressionFailTest extends GeneratedAPIBuilder {
     }
 
     private static String getOriginalModel() { 
-        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2023, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel LinearRegressionFailTest(double[][] x, double[] yMeasured) {\n\n        int n = x.length;\n        int k = x[0].length;\n\n        double[] y = new double[n];\n\n        double[] weights = gaussian(0,10).sample(k);\n        double bias = gaussian(0,10).sample();\n        double tau = inverseGamma(3.0,1.0).sample();\n\n        double[] phi = new double[k];\n        for(int i:[0..n)) {\n            for(int j:[0..k,1))\n                phi[j] = weights[j] * x[i][j];\n            \n            y[i] = gaussian(sum(phi) + bias, tau).sample();\n        }\n        \n        y.observe(yMeasured);\n\n    private double sum(double[] a) {\n        return reduce(a, 0, (i,j) -> {\n            return i + j;\n        });\n    }\n}\n";
+        return "/*\n * Sandwood\n *\n * Copyright (c) 2019-2024, Oracle and/or its affiliates\n * \n * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n */\n\npackage org.sandwood.compiler.tests.parser;\n\nmodel LinearRegressionFail(double[][] x, double[] yMeasured) {\n\n        int n = x.length;\n        int k = x[0].length;\n\n        double[] y = new double[n];\n\n        double[] weights = gaussian(0,10).sample(k);\n        double bias = gaussian(0,10).sample();\n        double tau = inverseGamma(3.0,1.0).sample();\n\n        double[] phi = new double[k];\n        for(int i:[0..n)) {\n            for(int j:[0..k,1))\n                phi[j] = weights[j] * x[i][j];\n            \n            y[i] = gaussian(sum(phi) + bias, tau).sample();\n        }\n        \n        y.observe(yMeasured);\n\n    private double sum(double[] a) {\n        return reduce(a, 0, (i,j) -> {\n            return i + j;\n        });\n    }\n}\n";
     }
 }

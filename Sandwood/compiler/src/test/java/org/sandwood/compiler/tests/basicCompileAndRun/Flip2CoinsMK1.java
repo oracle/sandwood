@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -94,7 +94,7 @@ public class Flip2CoinsMK1 extends ModelTestSkeleton {
         flips.observe(flipsMeasured);
 
         String[] constructorArgs = { "flipsMeasured" };
-        return compileAPI(opts, flips, "ClassName", null, constructorArgs, "", null);
+        return compileAPI(opts, flips, "ClassName", "", constructorArgs, "", null);
     }
 
     @Override

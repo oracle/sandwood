@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -72,7 +72,7 @@ public class Flip1CoinMK0 extends ModelTestSkeleton {
         BooleanVariable flipMeasured = observeBoolean("flipMeasured");
         flip.observe(flipMeasured);
         String[] constructorArgs = { "flipMeasured" };
-        return compileAPI(opts, flip, "ClassName", null, constructorArgs, "", null);
+        return compileAPI(opts, flip, "ClassName", "", constructorArgs, "", null);
     }
 
     @Override

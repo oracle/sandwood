@@ -66,7 +66,7 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodClass {
     public void toJava(StringBuilder sb) {
         Set<String> requiredImports = new HashSet<>();
 
-        if(packageName != null)
+        if(!packageName.isEmpty())
             sb.append("package " + packageName + ";\n\n");
 
         StringBuilder bodySB = new StringBuilder();

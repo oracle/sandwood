@@ -61,9 +61,8 @@ public class SandwoodParser
    //Reset indent to 0 now we are adding the top and bottom boilerplate code 
    indent = 0;
    
-    //Package
-    if(packageName != null)
-        classBuilder.addAll(packageTokens);
+   //Package
+   classBuilder.addAll(packageTokens);
 
    //Import
    classBuilder.add(tokenMap("import static org.sandwood.compiler.dataflowGraph.Sandwood.*;\n"));
@@ -254,7 +253,7 @@ public class SandwoodParser
 
   private String inputString;
   private String packageName = "";
-  private List<TokenMap> packageTokens;
+  private List<TokenMap> packageTokens = new ArrayList<TokenMap>();
   private TokenMap classToken;
   private Set<String> variableNames = new LinkedHashSet<String>();
   private List<TokenMap> imports;
@@ -1182,16 +1181,14 @@ Token IndetifierIncSandwoodKeywords():
 void PackageDeclaration():
 {
   Token t;
-  List<TokenMap> l = new ArrayList<TokenMap>();
   List<TokenMap> packageParts; 
 }
 {
   t = "package"
-  { l.add(tokenMap("package ", t)); }
+  { packageTokens.add(tokenMap("package ", t)); }
   packageParts = PackageName()
   {
     packageName = TokenMap.tokensToString(packageParts);
-    packageTokens = l;
     packageTokens.addAll(packageParts);
   }
   t = ";"

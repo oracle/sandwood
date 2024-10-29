@@ -18,27 +18,18 @@ public class ExpectedErrors {
     public static class ErrorDesc {
         public final List<String> messages;
         public final List<String> annotatedMessages;
-        public final boolean apiExcluded;
 
-        public ErrorDesc(List<String> messages, List<String> annotatedMessages, boolean apiExcluded) {
+        public ErrorDesc(List<String> messages, List<String> annotatedMessages) {
             this.messages = messages;
-            this.apiExcluded = apiExcluded;
             this.annotatedMessages = annotatedMessages;
         }
 
-        public ErrorDesc(String message, String annotatedMessage, boolean apiExcluded) {
+        public ErrorDesc(String message, String annotatedMessage) {
             this.messages = new ArrayList<>();
             messages.add(message);
 
             this.annotatedMessages = new ArrayList<>();
             annotatedMessages.add(annotatedMessage);
-
-            this.apiExcluded = apiExcluded;
-        }
-
-        public static boolean getAPIPass(String file) {
-            ErrorDesc e = errors.get(file);
-            return e.apiExcluded;
         }
     }
 
@@ -56,11 +47,11 @@ public class ExpectedErrors {
                     + "many iterations of these loops are needed when constructing inverse operations for the model.\n"
                     + "\n"
                     + "\"        bias[i+1] = bias[i];\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
         }
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
-                    + File.separator + "parser" + File.separator + "LinearRegressionFailTest.sandwood";
+                    + File.separator + "parser" + File.separator + "LinearRegressionFail.sandwood";
             String message = "Missing reference to index \"i\" when writing to array \"phi\". All loop indexes between the "
                     + "declaration of the array and the assignment to it must be used to ensure single assignment "
                     + "semantics are maintained.";
@@ -70,7 +61,25 @@ public class ExpectedErrors {
                     + "semantics are maintained.\n"
                     + "\n"
                     + "\"                phi[j] = weights[j] * x[i][j];\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
+        }
+        {
+            String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
+                    + File.separator + "parser" + File.separator + "LinearRegression2Fail.sandwood";
+            String message = "";
+            String annotatedMessage = "General Error\n"
+                    + "Model LinearRegression2Fail should be in the directory:\n"
+                    + "src/test/resources/testInputs/, not:\n"
+                    + "src/test/resources/testInputs/org/sandwood/compiler/tests/parser";
+            errors.put(file, new ErrorDesc(message, annotatedMessage + "\n"));
+        }
+        {
+            String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
+                    + File.separator + "parser" + File.separator + "LinearRegression3Fail.sandwood";
+            String message = "";
+            String annotatedMessage = "General Error\n"
+                    + "Model LinearRegressionWrongNameFail should be in a file called LinearRegressionWrongNameFail.sandwood, not LinearRegression3Fail.sandwood";
+            errors.put(file, new ErrorDesc(message, annotatedMessage + "\n"));
         }
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
@@ -80,7 +89,7 @@ public class ExpectedErrors {
                     + "Unable to write to \"flipsMeasured\" via \"source\" as it is an input and therefore a constant.\n"
                     + "\n"
                     + "\"            source[m] = target[m];\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
         }
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
@@ -92,7 +101,7 @@ public class ExpectedErrors {
                     + "to measuredFlips and flipsMeasured.\n"
                     + "\n"
                     + "\"        measuredFlips[l] = flipsMeasured[l];\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
         }
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
@@ -104,7 +113,7 @@ public class ExpectedErrors {
                     + "array's internal state.\n"
                     + "\n"
                     + "\"        flips[j] = f;\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
         }
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
@@ -114,7 +123,7 @@ public class ExpectedErrors {
                     + "There is no inverse to an \"or\" operation.\n"
                     + "\n"
                     + "\"        (false || flips[i]).observe(flipsMeasured[i]);\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
         }
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
@@ -124,7 +133,7 @@ public class ExpectedErrors {
                     + "Incompatible types, type double[] cannot be assigned to an array of type int[][].\n"
                     + "\n"
                     + "\"\t\tmetric_g[sample] = metric_1d;\"";
-            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n", true));
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
         }
     }
 

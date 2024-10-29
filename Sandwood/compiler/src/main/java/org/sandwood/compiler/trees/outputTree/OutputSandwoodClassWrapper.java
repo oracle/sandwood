@@ -170,7 +170,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     @Override
     public void toJava(StringBuilder sb) {
 
-        if(packageName != null)
+        if(!packageName.isEmpty())
             sb.append("package " + packageName + ";\n\n");
 
         sb.append("import org.sandwood.runtime.model.Model;\n");

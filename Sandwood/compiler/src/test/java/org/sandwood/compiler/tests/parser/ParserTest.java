@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -52,7 +52,6 @@ import org.sandwood.compiler.tests.util.CompilerState;
 import org.sandwood.compiler.tests.util.TestStringGenerator;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
-import org.sandwood.compiler.util.Pair;
 import org.sandwood.compiler.util.StringUtil;
 
 class ParserTest {
@@ -92,7 +91,7 @@ class ParserTest {
 
     @BeforeEach
     void resetStaticValues() throws NoSuchMethodException, SecurityException, IllegalAccessException,
-    IllegalArgumentException, InvocationTargetException {
+            IllegalArgumentException, InvocationTargetException {
         CompilerState.reset();
     }
 
@@ -105,15 +104,15 @@ class ParserTest {
             // System.out.println("File Content:\n" + new
             // String(Files.readAllBytes(Paths.get(file))));
 
-            Pair<GeneratedAPIBuilder, ClassName> p = buildAPI(file);
+            GeneratedAPIBuilder api = buildAPI(file);
 
             // Build the unoptimised Sandwood class from the api.
-            List<SandwoodModelException> errors = buildCode(p.a, p.b, "_model", false, true, true, constructingModel);
+            List<SandwoodModelException> errors = buildCode(api, getDir(file), "_model", false, true, true, constructingModel);
 
             assertFalse(constructingModel, "Results are being written to files, this invalidates the tests.");
 
             ErrorDesc ed = ExpectedErrors.getErrorDesc(file.substring(sourceDir.length() + 1));
-            if(ed != null) {
+            if(ed != null && !ed.messages.get(0).isEmpty()) {
                 assertEquals(ed.messages.size(), errors.size());
                 for(int i = 0; i < errors.size(); i++)
                     assertEquals(ed.messages.get(i), errors.get(i).getMessage());
@@ -140,25 +139,36 @@ class ParserTest {
             // System.out.println("File Content:\n" + new
             // String(Files.readAllBytes(Paths.get(file))));
 
-            Pair<GeneratedAPIBuilder, ClassName> p = buildAPI(file);
+            GeneratedAPIBuilder api = buildAPI(file);
 
             // Build the unoptimised Sandwood class from the api.
-            List<SandwoodModelException> errors = buildCode(p.a, p.b, "_modelNoComments", false, true, false,
+            List<SandwoodModelException> errors = buildCode(api, getDir(file), "_modelNoComments", false, true, false,
                     constructingModelNoComments);
 
             assertFalse(constructingModelNoComments, "Results are being written to files, this invalidates the tests.");
 
             ErrorDesc ed = ExpectedErrors.getErrorDesc(file.substring(sourceDir.length() + 1));
             if(ed != null) {
-                assertEquals(ed.messages.size(), errors.size());
-                for(int i = 0; i < errors.size(); i++)
-                    assertEquals(ed.messages.get(i), errors.get(i).getMessage());
+                int reportedSize = errors.size();
+                int expectedSize = ed.messages.size();
+                int i = 0;
+                int j = 0;
+                while(i < reportedSize) {
+                    // Skip empty messages
+                    while(j < expectedSize && ed.messages.get(j).isEmpty())
+                        j++;
+                    assert (j < expectedSize);
+                    assertEquals(ed.messages.get(j++), errors.get(i++).getMessage());
+                }
+                // Skip empty messages
+                while(j < expectedSize && ed.messages.get(j).isEmpty())
+                    j++;
+                assertEquals(j, expectedSize);
             } else {
                 for(SandwoodModelException e:errors)
                     System.out.println(e);
                 assertTrue(errors.isEmpty());
             }
-
         } catch(Exception e) {
             System.err.println("Error with file: " + file);
             System.err.println(e.getMessage());
@@ -181,19 +191,31 @@ class ParserTest {
             // System.out.println("File Content:\n" + new
             // String(Files.readAllBytes(Paths.get(file))));
 
-            Pair<GeneratedAPIBuilder, ClassName> p = buildAPI(file);
+            GeneratedAPIBuilder api = buildAPI(file);
 
             // Build the optimised Sandwood class from the api.
-            List<SandwoodModelException> errors = buildCode(p.a, p.b, "_optimisedModel", true, true, true,
+            List<SandwoodModelException> errors = buildCode(api, getDir(file), "_optimisedModel", true, true, true,
                     constructingOptimisedModel);
 
             assertFalse(constructingOptimisedModel, "Results are being written to files, this invalidates the tests.");
 
             ErrorDesc ed = ExpectedErrors.getErrorDesc(file.substring(sourceDir.length() + 1));
             if(ed != null) {
-                assertEquals(ed.messages.size(), errors.size());
-                for(int i = 0; i < errors.size(); i++)
-                    assertEquals(ed.messages.get(i), errors.get(i).getMessage());
+                int reportedSize = errors.size();
+                int expectedSize = ed.messages.size();
+                int i = 0;
+                int j = 0;
+                while(i < reportedSize) {
+                    // Skip empty messages
+                    while(j < expectedSize && ed.messages.get(j).isEmpty())
+                        j++;
+                    assert (j < expectedSize);
+                    assertEquals(ed.messages.get(j++), errors.get(i++).getMessage());
+                }
+                // Skip empty messages
+                while(j < expectedSize && ed.messages.get(j).isEmpty())
+                    j++;
+                assertEquals(j, expectedSize);
             } else {
                 for(SandwoodModelException e:errors)
                     System.out.println(e);
@@ -217,10 +239,10 @@ class ParserTest {
             // System.out.println("File Content:\n" + new
             // String(Files.readAllBytes(Paths.get(file))));
 
-            Pair<GeneratedAPIBuilder, ClassName> p = buildAPI(file);
+            GeneratedAPIBuilder api = buildAPI(file);
 
             // Build the optimised Sandwood class from the api.
-            List<SandwoodModelException> errors = buildCode(p.a, p.b, "_optimisedModelNoComments", true, true, false,
+            List<SandwoodModelException> errors = buildCode(api, getDir(file), "_optimisedModelNoComments", true, true, false,
                     constructingOptimisedModelNoComments);
 
             assertFalse(constructingOptimisedModelNoComments,
@@ -228,9 +250,21 @@ class ParserTest {
 
             ErrorDesc ed = ExpectedErrors.getErrorDesc(file.substring(sourceDir.length() + 1));
             if(ed != null) {
-                assertEquals(ed.messages.size(), errors.size());
-                for(int i = 0; i < errors.size(); i++)
-                    assertEquals(ed.messages.get(i), errors.get(i).getMessage());
+                int reportedSize = errors.size();
+                int expectedSize = ed.messages.size();
+                int i = 0;
+                int j = 0;
+                while(i < reportedSize) {
+                    // Skip empty messages
+                    while(j < expectedSize && ed.messages.get(j).isEmpty())
+                        j++;
+                    assert (j < expectedSize);
+                    assertEquals(ed.messages.get(j++), errors.get(i++).getMessage());
+                }
+                // Skip empty messages
+                while(j < expectedSize && ed.messages.get(j).isEmpty())
+                    j++;
+                assertEquals(j, expectedSize);
             } else {
                 for(SandwoodModelException e:errors)
                     System.out.println(e);
@@ -254,19 +288,31 @@ class ParserTest {
             // System.out.println("File Content:\n" + new
             // String(Files.readAllBytes(Paths.get(file))));
 
-            Pair<GeneratedAPIBuilder, ClassName> p = buildAPI(file);
+            GeneratedAPIBuilder api = buildAPI(file);
 
             // Build the unoptimised Sandwood class from the api.
-            List<SandwoodModelException> errors = buildCode(p.a, p.b, "_modelSingle", false, false, true,
+            List<SandwoodModelException> errors = buildCode(api, getDir(file), "_modelSingle", false, false, true,
                     constructingModelSingle);
 
             assertFalse(constructingModelSingle, "Results are being written to files, this invalidates the tests.");
 
             ErrorDesc ed = ExpectedErrors.getErrorDesc(file.substring(sourceDir.length() + 1));
             if(ed != null) {
-                assertEquals(ed.messages.size(), errors.size());
-                for(int i = 0; i < errors.size(); i++)
-                    assertEquals(ed.messages.get(i), errors.get(i).getMessage());
+                int reportedSize = errors.size();
+                int expectedSize = ed.messages.size();
+                int i = 0;
+                int j = 0;
+                while(i < reportedSize) {
+                    // Skip empty messages
+                    while(j < expectedSize && ed.messages.get(j).isEmpty())
+                        j++;
+                    assert (j < expectedSize);
+                    assertEquals(ed.messages.get(j++), errors.get(i++).getMessage());
+                }
+                // Skip empty messages
+                while(j < expectedSize && ed.messages.get(j).isEmpty())
+                    j++;
+                assertEquals(j, expectedSize);
             } else {
                 for(SandwoodModelException e:errors)
                     System.out.println(e);
@@ -295,10 +341,10 @@ class ParserTest {
             // System.out.println("File Content:\n" + new
             // String(Files.readAllBytes(Paths.get(file))));
 
-            Pair<GeneratedAPIBuilder, ClassName> p = buildAPI(file);
+            GeneratedAPIBuilder api = buildAPI(file);
 
             // Build the optimised Sandwood class from the api.
-            List<SandwoodModelException> errors = buildCode(p.a, p.b, "_optimisedModelSingle", true, false, true,
+            List<SandwoodModelException> errors = buildCode(api, getDir(file), "_optimisedModelSingle", true, false, true,
                     constructingOptimisedModelSingle);
 
             assertFalse(constructingOptimisedModelSingle,
@@ -306,9 +352,21 @@ class ParserTest {
 
             ErrorDesc ed = ExpectedErrors.getErrorDesc(file.substring(sourceDir.length() + 1));
             if(ed != null) {
-                assertEquals(ed.messages.size(), errors.size());
-                for(int i = 0; i < errors.size(); i++)
-                    assertEquals(ed.messages.get(i), errors.get(i).getMessage());
+                int reportedSize = errors.size();
+                int expectedSize = ed.messages.size();
+                int i = 0;
+                int j = 0;
+                while(i < reportedSize) {
+                    // Skip empty messages
+                    while(j < expectedSize && ed.messages.get(j).isEmpty())
+                        j++;
+                    assert (j < expectedSize);
+                    assertEquals(ed.messages.get(j++), errors.get(i++).getMessage());
+                }
+                // Skip empty messages
+                while(j < expectedSize && ed.messages.get(j).isEmpty())
+                    j++;
+                assertEquals(j, expectedSize);
             } else {
                 for(SandwoodModelException e:errors)
                     System.out.println(e);
@@ -323,7 +381,7 @@ class ParserTest {
         }
     }
 
-    private Pair<GeneratedAPIBuilder, ClassName> buildAPI(String file)
+    private GeneratedAPIBuilder buildAPI(String file)
             throws IOException, ParseException, ClassNotFoundException, NoSuchMethodException, SecurityException,
             InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         // Parse input
@@ -357,7 +415,7 @@ class ParserTest {
         GeneratedAPIBuilder apiClass = (GeneratedAPIBuilder) cons.newInstance();
         cl.close();
 
-        return new Pair<>(apiClass, apiClassName);
+        return apiClass;
     }
 
     @ParameterizedTest
@@ -374,19 +432,12 @@ class ParserTest {
             p.parse();
             String apiBody = p.constructClass();
 
-            ClassName apiClassName = p.getClassName();
-
             String[] fileParts = file.split(File.separator.equals("\\") ? "\\\\" : File.separator);
             String expectedModelName = fileParts[fileParts.length - 1].split("\\.")[0];
-            assertEquals(expectedModelName, apiClassName.getName());
-
             // Assert api file is as expected
-            String expectedApiFilename = tsg.processString(this, outputDir, apiClassName.getName(), "api", apiBody,
-                    constructingAPI, "java"); // Tool to make
-            // changes to the
-            // expected result
-            // easier to
-            // incorporate.
+            // Tool to make changes to the expected result easier to incorporate.
+            String expectedApiFilename = tsg.processString(this, outputDir, expectedModelName, "api", apiBody,
+                    constructingAPI, "java");
             String expectedApiCode = new String(Files.readAllBytes(Paths.get(expectedApiFilename)));
 
             // Normalize new lines
@@ -398,10 +449,6 @@ class ParserTest {
 
             assertFalse(constructingAPI, "Results are being written to files, this invalidates the tests.");
 
-            // OutputDesc ed = ExpectedOutputs.getExceptionDesc(file);
-            // if(ed != null && !ed.apiExcluded)
-            // assertEquals(ed.message, errContent.toString());
-
         } catch(Exception e) {
             System.err.println("Error with file: " + file);
             System.err.println(e.getMessage());
@@ -410,7 +457,7 @@ class ParserTest {
         }
     }
 
-    private List<SandwoodModelException> buildCode(GeneratedAPIBuilder apiClass, ClassName className, String tag,
+    private List<SandwoodModelException> buildCode(GeneratedAPIBuilder apiClass, String modelName, String tag,
             boolean optimised, boolean individualProbs, boolean comments, boolean rebuild) throws IOException {
         DiagnosticCollector<JavaFileObject> diagnostics;
         CompilationOptions opts = new CompilationOptions();
@@ -444,7 +491,7 @@ class ParserTest {
                 // Normalise newline characters.
                 modelJavaCode = StringUtil.normalizeNewLines(modelJavaCode);
                 // Tool to make changes to the expected result easier to incorporate.
-                String expectedModelFilename = tsg.processString(this, outputDir, className.getName(),
+                String expectedModelFilename = tsg.processString(this, outputDir, modelName,
                         c.getName() + tag, modelJavaCode, rebuild, "java");
 
                 String expectedModelJavaCode;
@@ -477,6 +524,12 @@ class ParserTest {
 
         OutputTree.includeComments = true;
         return compDesc.errors;
+    }
+    
+    private String getDir(String filename) {
+        File f = new File(filename);
+        String name = f.getName();
+        return name.split("\\.")[0];
     }
 
     @AfterEach
