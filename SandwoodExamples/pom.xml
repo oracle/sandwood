@@ -28,6 +28,7 @@
 		<module>fairness</module>
 		<module>HMM</module>
 		<module>LDA</module>
+		<module>linearRegression</module>
 	</modules>
 
 	<licenses>
