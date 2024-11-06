@@ -274,35 +274,6 @@ double actionsProbability = model.actions.getProbability();
 double modelProbability = model.getProbability()
 ```
 
-**Train and execute a Liner Regression model**
-
-```java
-//Load parameters
-double[] xs = loadXs(....);
-double[] ys = loadYs(....);
-
-//Construct the model
-LinearRegression model = new LinearRegression(xs, ys);
-…
-//Run 2000 inference steps to c, m, and sigma.
-model.inferValues(2000);
-
-//Fix the inferred values
-model.c.setFixed(true);
-model.m.setFixed(true);
-model.sigma.setFixed(true);
-
-//Set new input values
-double[] new_xs = loadXs(....);
-model.xs.setValue(new_xs);
-
-//Run the model to generate sequences of actions using the inferred values
-model.execute(1000);
-
-//Recover the generated values
-double[][] new_ys = model.ys.getSamples();
-```
-
 ## Help
 For help with Sandwood please start or join a discussion on the [discussions page](https://github.com/oracle/sandwood/discussions).
 
