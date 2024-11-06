@@ -294,7 +294,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						{
 							double var15 = 0.0;
 							double var16 = 20.0;
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var15, var16));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var15) / Math.sqrt(var16))) - (0.5 * Math.log(var16))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -402,7 +402,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					int cv$sampleValue = z[((i$var40 - 0) / 1)];
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, phi));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < phi.length))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -459,7 +459,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						{
 							double var43 = mu[z[((i$var40 - 0) / 1)]];
 							double var44 = sigma[z[((i$var40 - 0) / 1)]];
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var43, var44));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var43) / Math.sqrt(var44))) - (0.5 * Math.log(var44))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -601,7 +601,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				{
 					cv$temp$0$phi = phi;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$phi));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$phi.length))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						boolean guard$sample45gaussian48 = false;
@@ -624,13 +624,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 													double var44 = sigma[cv$currentValue];
 													cv$temp$2$var44 = var44;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$1$var43, cv$temp$2$var44)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$1$var43, cv$temp$2$var44)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$1$var43) / Math.sqrt(cv$temp$2$var44))) - (0.5 * Math.log(cv$temp$2$var44)))) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$1$var43) / Math.sqrt(cv$temp$2$var44))) - (0.5 * Math.log(cv$temp$2$var44)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$1$var43, cv$temp$2$var44));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$1$var43) / Math.sqrt(cv$temp$2$var44))) - (0.5 * Math.log(cv$temp$2$var44))));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$1$var43, cv$temp$2$var44)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$1$var43, cv$temp$2$var44)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$1$var43) / Math.sqrt(cv$temp$2$var44))) - (0.5 * Math.log(cv$temp$2$var44)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$1$var43) / Math.sqrt(cv$temp$2$var44))) - (0.5 * Math.log(cv$temp$2$var44)))));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -667,13 +667,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 													double var44 = sigma[cv$currentValue];
 													cv$temp$4$var44 = var44;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$3$var43, cv$temp$4$var44)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$3$var43, cv$temp$4$var44)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$3$var43) / Math.sqrt(cv$temp$4$var44))) - (0.5 * Math.log(cv$temp$4$var44)))) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$3$var43) / Math.sqrt(cv$temp$4$var44))) - (0.5 * Math.log(cv$temp$4$var44)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$3$var43, cv$temp$4$var44));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$3$var43) / Math.sqrt(cv$temp$4$var44))) - (0.5 * Math.log(cv$temp$4$var44))));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$3$var43, cv$temp$4$var44)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(x[i$var40], cv$temp$3$var43, cv$temp$4$var44)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$3$var43) / Math.sqrt(cv$temp$4$var44))) - (0.5 * Math.log(cv$temp$4$var44)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var40] - cv$temp$3$var43) / Math.sqrt(cv$temp$4$var44))) - (0.5 * Math.log(cv$temp$4$var44)))));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -794,7 +794,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		for(int var21 = 0; var21 < k; var21 += 1) {
 			if(!fixedFlag$sample23)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		for(int var32 = 0; var32 < k; var32 += 1) {
 			if(!fixedFlag$sample34)
@@ -804,7 +804,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(!fixedFlag$sample45)
 				z[((i$var40 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi);
 			if(!fixedFlag$sample49)
-				x[i$var40] = DistributionSampling.sampleGaussian(RNG$, mu[z[((i$var40 - 0) / 1)]], sigma[z[((i$var40 - 0) / 1)]]);
+				x[i$var40] = ((Math.sqrt(sigma[z[((i$var40 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[((i$var40 - 0) / 1)]]);
 		}
 	}
 
@@ -814,7 +814,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		for(int var21 = 0; var21 < k; var21 += 1) {
 			if(!fixedFlag$sample23)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		for(int var32 = 0; var32 < k; var32 += 1) {
 			if(!fixedFlag$sample34)
@@ -832,7 +832,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		for(int var21 = 0; var21 < k; var21 += 1) {
 			if(!fixedFlag$sample23)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		for(int var32 = 0; var32 < k; var32 += 1) {
 			if(!fixedFlag$sample34)
@@ -962,7 +962,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			DistributionSampling.sampleDirichlet(RNG$, alpha, phi);
 		for(int var21 = 0; var21 < k; var21 += 1) {
 			if(!fixedFlag$sample23)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		for(int var32 = 0; var32 < k; var32 += 1) {
 			if(!fixedFlag$sample34)

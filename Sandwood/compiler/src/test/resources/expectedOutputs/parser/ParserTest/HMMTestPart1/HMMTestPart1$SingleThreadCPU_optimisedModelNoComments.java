@@ -220,7 +220,8 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample28() {
 		if(!fixedProbFlag$sample28) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st, m[0]);
+			double[] var26 = m[0];
+			double cv$distributionAccumulator = (((0.0 <= st) && (st < var26.length))?Math.log(var26[st]):Double.NEGATIVE_INFINITY);
 			logProbability$var27 = cv$distributionAccumulator;
 			logProbability$st = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -270,10 +271,14 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample28() {
-		st = 0;
-		cv$var28$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + DistributionSampling.logProbabilityCategorical(0, m[0]));
+		{
+			st = 0;
+			double[] cv$temp$0$var26 = m[0];
+			cv$var28$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + ((0 < cv$temp$0$var26.length)?Math.log(cv$temp$0$var26[0]):Double.NEGATIVE_INFINITY));
+		}
 		st = 1;
-		cv$var28$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + DistributionSampling.logProbabilityCategorical(1, m[0]));
+		double[] cv$temp$0$var26 = m[0];
+		cv$var28$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + ((1 < cv$temp$0$var26.length)?Math.log(cv$temp$0$var26[1]):Double.NEGATIVE_INFINITY));
 		double cv$logSum;
 		double cv$lseMax = cv$var28$stateProbabilityGlobal[0];
 		for(int cv$lseIndex = 1; cv$lseIndex < cv$var28$stateProbabilityGlobal.length; cv$lseIndex += 1) {

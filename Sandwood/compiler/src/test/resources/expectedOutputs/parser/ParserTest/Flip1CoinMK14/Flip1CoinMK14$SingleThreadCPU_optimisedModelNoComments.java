@@ -209,7 +209,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		double cv$var = ((b * b) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, b, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			if(guard1) {
@@ -237,7 +237,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int var24 = 0; var24 < samples; var24 += 1)
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var24], traceTempVariable$var18$5_2) + cv$accumulatedProbabilities);
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			b = cv$originalValue;
 			c[0] = (cv$originalValue / 2);
 			if(guard1)

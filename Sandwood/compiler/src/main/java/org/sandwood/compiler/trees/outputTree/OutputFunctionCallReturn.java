@@ -22,36 +22,21 @@ import org.sandwood.compiler.exceptions.CompilerException;
 
 public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeReturn<X> {
 
-    protected static class FunctionDesc {
+    private static class FunctionDesc {
         final String name;
         final String javaClass;
         final String javaMethodName;
-        final boolean random;
-        // Static arguments are no longer used, and probably should be removed.
-        final String[] staticArgs;
 
-        FunctionDesc(String name, String javaClass, String javaMethodName, boolean random, String[] staticArgs) {
+        FunctionDesc(String name, String javaClass, String javaMethodName) {
             this.name = name;
             this.javaClass = javaClass;
             this.javaMethodName = javaMethodName;
-            this.random = random;
-            this.staticArgs = staticArgs;
-        }
-
-        FunctionDesc(String name, String javaClass, String javaMethodName, boolean random) {
-            this.name = name;
-            this.javaClass = javaClass;
-            this.javaMethodName = javaMethodName;
-            this.random = random;
-            this.staticArgs = new String[0];
         }
 
         FunctionDesc(String javaMethodName) {
             this.name = javaMethodName;
             this.javaClass = null;
             this.javaMethodName = javaMethodName;
-            this.random = false;
-            this.staticArgs = new String[0];
         }
     }
 
@@ -77,15 +62,6 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
         }
         sb.append(f.javaMethodName + "(");
         boolean first = true;
-
-        for(String arg:f.staticArgs) {
-            if(first)
-                first = false;
-            else
-                sb.append(", ");
-            sb.append(arg);
-        }
-
         for(OutputTreeReturn<?> t:args) {
             if(first)
                 first = false;
@@ -163,7 +139,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
         Map<RandomVariableType<?, ?>, FunctionDesc> samples = RVFunctionDescriptions.get(FunctionType.SAMPLE);
         String name = rv.getAPIType();
         FunctionDesc f = new FunctionDesc(name + " Sample",
-                "org.sandwood.runtime.internal.numericTools.DistributionSampling", "sample" + name, true);
+                "org.sandwood.runtime.internal.numericTools.DistributionSampling", "sample" + name);
         samples.put(rv, f);
     }
 
@@ -174,8 +150,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
         String sourceName = source.getAPIType();
         String sinkName = sink.getAPIType();
         FunctionDesc desc = new FunctionDesc(sourceName + " " + sinkName + " Conjugate",
-                "org.sandwood.runtime.internal.numericTools.Conjugates", "sampleConjugate" + sourceName + sinkName,
-                true);
+                "org.sandwood.runtime.internal.numericTools.Conjugates", "sampleConjugate" + sourceName + sinkName);
         m.put(sink, desc);
     }
 
@@ -184,7 +159,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
                 .get(FunctionType.PROBABILITY);
         String name = rv.getAPIType();
         FunctionDesc f = new FunctionDesc(name + " Probability",
-                "org.sandwood.runtime.internal.numericTools.DistributionSampling", "probability" + name, false);
+                "org.sandwood.runtime.internal.numericTools.DistributionSampling", "probability" + name);
         probabilities.put(rv, f);
     }
 
@@ -193,7 +168,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
                 .get(FunctionType.LOG_PROBABILITY);
         String name = rv.getAPIType();
         FunctionDesc f = new FunctionDesc(name + " Log Probability",
-                "org.sandwood.runtime.internal.numericTools.DistributionSampling", "logProbability" + name, false);
+                "org.sandwood.runtime.internal.numericTools.DistributionSampling", "logProbability" + name);
         logProbabilities.put(rv, f);
     }
 
@@ -217,6 +192,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addSampleFunc(VariableType.InverseGamma);
             addSampleFunc(VariableType.Poisson);
             addSampleFunc(VariableType.StudentT);
+            addSampleFunc(VariableType.TruncatedGaussian);
             addSampleFunc(VariableType.Uniform);
         }
         {
@@ -233,10 +209,8 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addProbabilityFunc(VariableType.Bernoulli);
             addProbabilityFunc(VariableType.Beta);
             addProbabilityFunc(VariableType.Binomial);
-            addProbabilityFunc(VariableType.Categorical);
             addProbabilityFunc(VariableType.Cauchy);
             addProbabilityFunc(VariableType.Dirichlet);
-            addProbabilityFunc(VariableType.Exponential);
             addProbabilityFunc(VariableType.Gamma);
             addProbabilityFunc(VariableType.Gaussian);
             addProbabilityFunc(VariableType.HalfCauchy);
@@ -252,10 +226,8 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addLogProbabilityFunc(VariableType.Bernoulli);
             addLogProbabilityFunc(VariableType.Beta);
             addLogProbabilityFunc(VariableType.Binomial);
-            addLogProbabilityFunc(VariableType.Categorical);
             addLogProbabilityFunc(VariableType.Cauchy);
             addLogProbabilityFunc(VariableType.Dirichlet);
-            addLogProbabilityFunc(VariableType.Exponential);
             addLogProbabilityFunc(VariableType.Gamma);
             addLogProbabilityFunc(VariableType.Gaussian);
             addLogProbabilityFunc(VariableType.HalfCauchy);
@@ -266,7 +238,30 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addLogProbabilityFunc(VariableType.Uniform);
         }
         {
-            externalDescriptions.put(ExternalFunction.IS_NAN, new FunctionDesc("IsNaN", "Double", "isNaN", false));
+            for(ExternalFunction e:ExternalFunction.values()) {
+                switch(e) {
+                    case EXP:
+                        externalDescriptions.put(e, new FunctionDesc("Exponential",
+                                "Math", "exp"));
+                        break;
+                    case GAUSSIAN_CDF:
+                        externalDescriptions.put(e, new FunctionDesc("Gaussian CDF",
+                                "org.sandwood.runtime.internal.numericTools.Gaussian", "cdf"));
+                        break;
+                    case IS_NAN:
+                        externalDescriptions.put(e, new FunctionDesc("IsNaN", "Double", "isNaN"));
+                        break;
+                    case LOG:
+                        externalDescriptions.put(e, new FunctionDesc("Log",
+                                "Math", "log"));
+                        break;
+                    case SQRT:
+                        externalDescriptions.put(e, new FunctionDesc("Square Root",
+                                "Math", "sqrt"));
+                        break;
+
+                }
+            }
         }
     }
 

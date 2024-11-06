@@ -130,6 +130,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     public enum TransTreeType {
         ADD,
         ALLOCATE_ARRAY,
+        AND,
         ARRAY_GET,
         ARRAY_PUT,
         CAST_DOUBLE,
@@ -138,16 +139,11 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         CONST_BOOLEAN,
         CONST_DOUBLE,
         CONST_INT,
-        AND,
-        OR,
-        EXP,
-        FOR,
         DIVIDE,
-        SUBTRACT,
-        MULTIPLY,
-        REMAINDER,
-        NAMED_FUNCTION_CALL,
-        RV_FUNCTION_CALL_RETURN,
+        EQUALITY,
+        EXTERNAL_FUNCTION_CALL_RETURN,
+        FOR,
+        FORK_JOIN_FOR,
         GET_FIELD,
         IF,
         INITIALIZE,
@@ -155,21 +151,23 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         LESS_THAN,
         LESS_THAN_EQUAL,
         LOAD,
-        LOG,
+        LOCAL_FUNCTION_CALL,
+        LOCAL_FUNCTION_CALL_RETURN,
         MAX,
         MIN,
+        MULTIPLY,
         NEGATE,
+        NEGATE_BOOLEAN,
         NOP,
+        OR,
+        PAR_FOR_LAMBDA,
+        REMAINDER,
+        RV_FUNCTION_CALL,
+        RV_FUNCTION_CALL_RETURN,
         SCOPE,
         SEQUENTIAL,
         STORE,
-        NEGATE_BOOLEAN,
-        EQUALITY,
-        PAR_FOR_LAMBDA,
-        FORK_JOIN_FOR,
-        NAMED_FUNCTION_CALL_RETURN,
-        LOCAL_FUNCTION_CALL_RETURN,
-        RV_FUNCTION_CALL
+        SUBTRACT
     }
 
     public final TransTreeType type;
@@ -466,8 +464,8 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         return new TransRVFunctionCall(t, source, sink, args, comment);
     }
 
-    public static TransFunctionCall functionCall(FunctionName name, TransTreeReturn<?>[] args, String comment) {
-        return new TransFunctionCall(name, args, comment);
+    public static TransLocalFunctionCall functionCall(FunctionName name, TransTreeReturn<?>[] args, String comment) {
+        return new TransLocalFunctionCall(name, args, comment);
     }
 
     public static <X extends Variable<X>> TransRVFunctionCallReturn<X> functionCallReturn(FunctionType t,
@@ -476,9 +474,9 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         return new TransRVFunctionCallReturn<>(t, outputType, source, sink, args);
     }
 
-    public static <X extends Variable<X>> TransFunctionCallReturn<X> functionCallReturn(ExternalFunction func,
+    public static <X extends Variable<X>> TransExternalFunctionCallReturn<X> functionCallReturn(ExternalFunction func,
             VariableType.Type<X> outputType, TransTreeReturn<?>... args) {
-        return new TransFunctionCallReturn<X>(func, outputType, args);
+        return new TransExternalFunctionCallReturn<X>(func, outputType, args);
     }
 
     public static <X extends Variable<X>> TransLocalFunctionCallReturn<X> functionCallReturn(
@@ -757,14 +755,6 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
 
     public static TransNOP nop() {
         return TransNOP.nop;
-    }
-
-    public static <A extends NumberVariable<A>> TransExp<A> exp(TransTreeReturn<A> input) {
-        return TransExp.getExp(input);
-    }
-
-    public static <A extends NumberVariable<A>> TransLog<A> log(TransTreeReturn<A> input) {
-        return TransLog.getLog(input);
     }
 
     public static TransTreeReturn<BooleanVariable> and(List<TransTreeReturn<BooleanVariable>> constraints) {

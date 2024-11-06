@@ -46,6 +46,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.InverseGamm
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Poisson;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.StudentT;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.TruncatedGaussian;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Uniform;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
@@ -956,6 +957,165 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
         return StudentT.studentT(v, location);
     }
 
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, double lower, double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, double lower,
+            double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, double lower,
+            double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, DoubleVariable lower,
+            double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, double lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance, double lower,
+            double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, DoubleVariable lower,
+            double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, double lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, DoubleVariable lower,
+            double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, double lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, DoubleVariable lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance,
+            DoubleVariable lower, double upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance, double lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, DoubleVariable lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, DoubleVariable lower,
+            DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance,
+            DoubleVariable lower, DoubleVariable upper) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, double lower, double upper,
+            Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, double lower, double upper,
+            Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, double lower, double upper,
+            Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, DoubleVariable lower, double upper,
+            Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, double lower, DoubleVariable upper,
+            Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance, double lower,
+            double upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, DoubleVariable lower,
+            double upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, double lower,
+            DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, DoubleVariable lower,
+            double upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, double lower,
+            DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, double variance, DoubleVariable lower,
+            DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance,
+            DoubleVariable lower, double upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance, double lower,
+            DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, double variance, DoubleVariable lower,
+            DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(double mean, DoubleVariable variance, DoubleVariable lower,
+            DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+
+    public static TruncatedGaussian truncatedGaussian(DoubleVariable mean, DoubleVariable variance,
+            DoubleVariable lower, DoubleVariable upper, Location location) {
+        return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
+    }
+    
     static Uniform uniform(double start, double end) {
         return Uniform.uniform(doubleVariable(start), doubleVariable(end));
     }

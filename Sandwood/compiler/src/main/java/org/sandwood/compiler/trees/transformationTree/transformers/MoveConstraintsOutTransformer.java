@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -64,7 +64,7 @@ public class MoveConstraintsOutTransformer extends Transformer {
                 return moveConstraintsOut((TransSequential) tree);
             case INITIALIZE:
             case INITIALIZE_UNSET:
-            case NAMED_FUNCTION_CALL:
+            case LOCAL_FUNCTION_CALL:
             case RV_FUNCTION_CALL:
             case NOP:
             case STORE:
@@ -130,15 +130,13 @@ public class MoveConstraintsOutTransformer extends Transformer {
             case CONST_INT:
             case CONDITIONAL_ASSIGNMENT:
             case EQUALITY:
-            case EXP:
             case LOCAL_FUNCTION_CALL_RETURN:
-            case NAMED_FUNCTION_CALL_RETURN:
+            case EXTERNAL_FUNCTION_CALL_RETURN:
             case RV_FUNCTION_CALL_RETURN:
             case GET_FIELD:
             case LESS_THAN:
             case LESS_THAN_EQUAL:
             case LOAD:
-            case LOG:
             case MAX:
             case MIN:
             case NEGATE:

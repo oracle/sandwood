@@ -276,7 +276,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(!fixedProbFlag$sample25) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var22 = 0; var22 < noProducts; var22 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var22], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var22] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				logProbability$sample25[var22] = cv$distributionAccumulator;
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
@@ -360,7 +360,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			double cv$accumulator = 0.0;
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(Sales[t$var68][j$var72], (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]), 0.2);
+					double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68])) / 0.4472135954999579)) + 0.8047189562170501);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var81[t$var68][j$var72] = cv$distributionAccumulator;
 					logProbability$sample85[t$var68][j$var72] = cv$distributionAccumulator;
@@ -391,9 +391,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
 					guard$sample25gaussian84$global[t$var68][j$var72] = false;
@@ -410,14 +410,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
 					if(!guard$sample25gaussian84$global[t$var68][j$var72]) {
 						guard$sample25gaussian84$global[t$var68][j$var72] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(Sales[t$var68][j$var72], (((exped[j$var72] * Avail[t$var68][j$var72]) / (reduceVar$sum$9 / s)) * arrivals[t$var68]), 0.2) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - (((exped[j$var72] * Avail[t$var68][j$var72]) / (reduceVar$sum$9 / s)) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 					}
 				}
 			}
 			double traceTempVariable$var73$7_3 = Math.exp(cv$originalValue);
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				if(!guard$sample25gaussian84$global[t$var68][var22])
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(Sales[t$var68][var22], (((traceTempVariable$var73$7_3 * Avail[t$var68][var22]) / denom) * arrivals[t$var68]), 0.2) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][var22] - (((traceTempVariable$var73$7_3 * Avail[t$var68][var22]) / denom) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -428,7 +428,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction450Index]);
 		sum = reduceVar$sum$8;
 		denom = (reduceVar$sum$8 / s);
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
 				guard$sample25gaussian84$global[t$var68][j$var72] = false;
@@ -445,7 +445,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
 				if(!guard$sample25gaussian84$global[t$var68][j$var72]) {
 					guard$sample25gaussian84$global[t$var68][j$var72] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(Sales[t$var68][j$var72], (((exped[j$var72] * Avail[t$var68][j$var72]) / (reduceVar$sum$9 / s)) * arrivals[t$var68]), 0.2) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][j$var72] - (((exped[j$var72] * Avail[t$var68][j$var72]) / (reduceVar$sum$9 / s)) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 				}
 			}
 		}
@@ -453,10 +453,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 			if(!guard$sample25gaussian84$global[t$var68][var22]) {
 				guard$sample25gaussian84$global[t$var68][var22] = true;
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(Sales[t$var68][var22], (((traceTempVariable$var73$7_3 * Avail[t$var68][var22]) / denom) * arrivals[t$var68]), 0.2) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var68][var22] - (((traceTempVariable$var73$7_3 * Avail[t$var68][var22]) / denom) * arrivals[t$var68])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			ut[var22] = cv$originalValue;
 			exped[var22] = Math.exp(ut[var22]);
 			double reduceVar$sum$10 = 0.0;
@@ -477,20 +477,20 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 1.0))
 			cv$var = 1.0;
-		double cv$offset = DistributionSampling.sampleGaussian(RNG$, 0.0, cv$var);
+		double cv$offset = (Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$));
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
 		int cv$proposedValue = (cv$originalValue + (int)cv$offset);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var55]);
 			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(Sales[t$var55][j$var72], (((exped[j$var72] * Avail[t$var55][j$var72]) / denom) * cv$originalValue), 0.2) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var55][j$var72] - (((exped[j$var72] * Avail[t$var55][j$var72]) / denom) * cv$originalValue)) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		arrivals[t$var55] = cv$proposedValue;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$proposedValue, lambda[t$var55]);
 		for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(Sales[t$var55][j$var72], (((exped[j$var72] * Avail[t$var55][j$var72]) / denom) * cv$proposedValue), 0.2) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var55][j$var72] - (((exped[j$var72] * Avail[t$var55][j$var72]) / denom) * cv$proposedValue)) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			arrivals[t$var55] = cv$originalValue;
 	}
 
@@ -537,7 +537,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
@@ -577,7 +577,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 							parallelFor(RNG$1, 0, noProducts, 1,
 								(int forStart$j$var72, int forEnd$j$var72, int threadID$j$var72, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j$var72 = forStart$j$var72; j$var72 < forEnd$j$var72; j$var72 += 1)
-											weekly_sales[j$var72] = DistributionSampling.sampleGaussian(RNG$2, (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]), 0.2);
+											weekly_sales[j$var72] = ((DistributionSampling.sampleGaussian(RNG$2) * 0.4472135954999579) + (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]));
 								}
 							);
 						}
@@ -592,7 +592,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
@@ -631,7 +631,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
@@ -792,7 +792,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var22, int forEnd$var22, int threadID$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var22 = forStart$var22; var22 < forEnd$var22; var22 += 1)
-							ut[var22] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var22] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,

@@ -657,6 +657,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// just use cached values.
 		if(!fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
+			// The sample value to calculate the probability of generating
+			int cv$sampleValue = st[0];
+			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -664,8 +667,6 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -678,9 +679,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[0], initialCoin);
+			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < initialCoin.length))?Math.log(initialCoin[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -777,6 +776,10 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			for(int i = 1; i < nFlips; i += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = st[i];
+				double[] var41 = m[st[(i - 1)]];
+				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -784,8 +787,6 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -798,9 +799,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i], m[st[(i - 1)]]);
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1049,12 +1048,22 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$initialCoin" with its value "initialCoin".
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, initialCoin);
+			double cv$accumulatedProbabilities = ((cv$valuePos < initialCoin.length)?Math.log(initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "i" with its value "1".
-			if((1 < nFlips))
+			if((1 < nFlips)) {
 				// Processing sample task 45 of consumer random variable null.
+				// Variable declaration of cv$temp$1$var41 moved.
 				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 42.
+				// 
+				// Looking for a path between Sample 35 and consumer Categorical 42.
+				// 
+				// Value of the variable at this index
+				double[] cv$temp$1$var41 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1069,18 +1078,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// inputs.
 				// 
 				// Substituted "i" with its value "1".
-				// 
-				// cv$temp$1$var41's comment
-				// Variable declaration of cv$temp$1$var41 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 42.
-				// 
-				// Looking for a path between Sample 35 and consumer Categorical 42.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[1], m[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Substituted "j" with its value "0".
 			if((0 < nFlips))
@@ -1199,18 +1198,30 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Value of the variable at this index
 			st[i] = cv$valuePos;
 			
+			// Variable declaration of cv$temp$0$var41 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var41 = m[st[(i - 1)]];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			// 
-			// cv$temp$0$var41's comment
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[st[(i - 1)]]);
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var41.length)?Math.log(cv$temp$0$var41[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$1_2 = (i + 1);
-			if((index$i$1_2 < nFlips))
+			if((index$i$1_2 < nFlips)) {
 				// Processing sample task 45 of consumer random variable null.
+				// Variable declaration of cv$temp$1$var41 moved.
 				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 42.
+				// 
+				// Looking for a path between Sample 45 and consumer Categorical 42.
+				// 
+				// Value of the variable at this index
+				double[] cv$temp$1$var41 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1223,18 +1234,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$1$var41's comment
-				// Variable declaration of cv$temp$1$var41 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 42.
-				// 
-				// Looking for a path between Sample 45 and consumer Categorical 42.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[index$i$1_2], m[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.

@@ -332,7 +332,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							{
 								double[] var53 = m[initialState];
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var53));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var53.length))?Math.log(var53[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -400,7 +400,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												if((var24 == st[i$var60][(j$var66 - 1)])) {
 													{
 														double[] var72 = m[st[i$var60][(j$var66 - 1)]];
-														double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var72));
+														double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 														if((cv$weightedProbability < cv$distributionAccumulator))
 															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 														else {
@@ -429,7 +429,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 														if((var24 == traceTempVariable$var71$9_1)) {
 															{
 																double[] var72 = m[traceTempVariable$var71$9_1];
-																double cv$weightedProbability = (Math.log(cv$probabilitySample58Value7) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var72));
+																double cv$weightedProbability = (Math.log(cv$probabilitySample58Value7) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																if((cv$weightedProbability < cv$distributionAccumulator))
 																	cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 																else {
@@ -455,7 +455,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										if((var24 == traceTempVariable$var71$12_1)) {
 											{
 												double[] var72 = m[traceTempVariable$var71$12_1];
-												double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var72));
+												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 												if((cv$weightedProbability < cv$distributionAccumulator))
 													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 												else {
@@ -479,7 +479,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 													if((var24 == st[i$var60][(j$var66 - 1)])) {
 														{
 															double[] var72 = m[st[i$var60][(j$var66 - 1)]];
-															double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var72));
+															double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 															if((cv$weightedProbability < cv$distributionAccumulator))
 																cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 															else {
@@ -510,7 +510,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 															if((var24 == traceTempVariable$var71$19_1)) {
 																{
 																	double[] var72 = m[traceTempVariable$var71$19_1];
-																	double cv$weightedProbability = (Math.log(cv$probabilitySample78Value17) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var72));
+																	double cv$weightedProbability = (Math.log(cv$probabilitySample78Value17) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																	if((cv$weightedProbability < cv$distributionAccumulator))
 																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 																	else {
@@ -586,7 +586,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 											if((var31 == st[i$var80][j$var88])) {
 												{
 													double[] var92 = bias[st[i$var80][j$var88]];
-													double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var92));
+													double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 													if((cv$weightedProbability < cv$distributionAccumulator))
 														cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 													else {
@@ -615,7 +615,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 													if((var31 == traceTempVariable$var91$7_1)) {
 														{
 															double[] var92 = bias[traceTempVariable$var91$7_1];
-															double cv$weightedProbability = (Math.log(cv$probabilitySample58Value5) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var92));
+															double cv$weightedProbability = (Math.log(cv$probabilitySample58Value5) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 															if((cv$weightedProbability < cv$distributionAccumulator))
 																cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 															else {
@@ -643,7 +643,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												if((var31 == st[i$var80][j$var88])) {
 													{
 														double[] var92 = bias[st[i$var80][j$var88]];
-														double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var92));
+														double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 														if((cv$weightedProbability < cv$distributionAccumulator))
 															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 														else {
@@ -674,7 +674,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 														if((var31 == traceTempVariable$var91$16_1)) {
 															{
 																double[] var92 = bias[traceTempVariable$var91$16_1];
-																double cv$weightedProbability = (Math.log(cv$probabilitySample78Value14) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var92));
+																double cv$weightedProbability = (Math.log(cv$probabilitySample78Value14) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																if((cv$weightedProbability < cv$distributionAccumulator))
 																	cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 																else {
@@ -892,7 +892,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				int cv$sampleValue = initialState;
 				{
 					{
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, weights));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weights.length))?Math.log(weights[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -944,7 +944,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						{
 							double[] var53 = m[initialState];
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var53));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var53.length))?Math.log(var53[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -1003,7 +1003,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							{
 								double[] var72 = m[st[i$var60][(j$var66 - 1)]];
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var72));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -1063,7 +1063,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							{
 								double[] var92 = bias[st[i$var80][j$var88]];
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var92));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -1593,7 +1593,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					cv$temp$0$weights = weights;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$weights));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$weights.length))?Math.log(cv$temp$0$weights[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
@@ -1612,13 +1612,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 														double[] var53 = m[traceTempVariable$initialState$1_2];
 														cv$temp$1$var53 = var53;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var50][0], cv$temp$1$var53)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var50][0], cv$temp$1$var53)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var50][0], cv$temp$1$var53));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var50][0], cv$temp$1$var53)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var50][0], cv$temp$1$var53)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
@@ -1736,7 +1736,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					double[] var53 = m[initialState];
 					cv$temp$0$var53 = var53;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var53));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var53.length))?Math.log(cv$temp$0$var53[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$var71$2_1 = cv$currentValue;
@@ -1760,13 +1760,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 																		double[] var72 = m[traceTempVariable$var71$2_1];
 																		cv$temp$1$var72 = var72;
 																	}
-																	if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], cv$temp$1$var72)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], cv$temp$1$var72)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], cv$temp$1$var72));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], cv$temp$1$var72)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], cv$temp$1$var72)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)));
 																	}
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
@@ -1811,13 +1811,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 																	double[] var92 = bias[traceTempVariable$var91$8_1];
 																	cv$temp$2$var92 = var92;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$2$var92)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$2$var92)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$2$var92));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$2$var92)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$2$var92)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -1953,7 +1953,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										double[] var72 = m[st[i$var60][(j$var66 - 1)]];
 										cv$temp$0$var72 = var72;
 									}
-									double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var72));
+									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var72.length))?Math.log(cv$temp$0$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									{
 										{
 											int traceTempVariable$var71$20_1 = cv$currentValue;
@@ -1979,13 +1979,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 																						double[] var92 = bias[traceTempVariable$var91$24_1];
 																						cv$temp$4$var92 = var92;
 																					}
-																					if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$4$var92)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$4$var92)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																					if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$4$var92.length))?Math.log(cv$temp$4$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$4$var92.length))?Math.log(cv$temp$4$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																					else {
 																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$4$var92));
+																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$4$var92.length))?Math.log(cv$temp$4$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY));
 																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$4$var92)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$4$var92)));
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$4$var92.length))?Math.log(cv$temp$4$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$4$var92.length))?Math.log(cv$temp$4$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 																					}
 																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																				}
@@ -2039,7 +2039,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												double[] var72 = m[traceTempVariable$var71$8_1];
 												cv$temp$1$var72 = var72;
 											}
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample58Value6) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$1$var72));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample58Value6) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											{
 												{
 													int traceTempVariable$var71$21_1 = cv$currentValue;
@@ -2065,13 +2065,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 																								double[] var92 = bias[traceTempVariable$var91$25_1];
 																								cv$temp$5$var92 = var92;
 																							}
-																							if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$5$var92)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$5$var92)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$5$var92.length))?Math.log(cv$temp$5$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$5$var92.length))?Math.log(cv$temp$5$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$5$var92));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$5$var92.length))?Math.log(cv$temp$5$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$5$var92)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$5$var92)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$5$var92.length))?Math.log(cv$temp$5$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$5$var92.length))?Math.log(cv$temp$5$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 																							}
 																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																						}
@@ -2122,7 +2122,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								double[] var72 = m[traceTempVariable$var71$11_1];
 								cv$temp$2$var72 = var72;
 							}
-							double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$2$var72));
+							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var72.length))?Math.log(cv$temp$2$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 							{
 								{
 									int traceTempVariable$var71$22_1 = cv$currentValue;
@@ -2148,13 +2148,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 																				double[] var92 = bias[traceTempVariable$var91$26_1];
 																				cv$temp$6$var92 = var92;
 																			}
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$6$var92)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$6$var92)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$6$var92.length))?Math.log(cv$temp$6$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$6$var92.length))?Math.log(cv$temp$6$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$6$var92));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$6$var92.length))?Math.log(cv$temp$6$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$6$var92)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$6$var92)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$6$var92.length))?Math.log(cv$temp$6$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$6$var92.length))?Math.log(cv$temp$6$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 																			}
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
@@ -2207,7 +2207,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												double[] var72 = m[traceTempVariable$var71$17_1];
 												cv$temp$3$var72 = var72;
 											}
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample78Value15) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$3$var72));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample78Value15) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$var72.length))?Math.log(cv$temp$3$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											{
 												{
 													int traceTempVariable$var71$23_1 = cv$currentValue;
@@ -2233,13 +2233,13 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 																								double[] var92 = bias[traceTempVariable$var91$27_1];
 																								cv$temp$7$var92 = var92;
 																							}
-																							if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$7$var92)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$7$var92)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$7$var92.length))?Math.log(cv$temp$7$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$7$var92.length))?Math.log(cv$temp$7$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$7$var92));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$7$var92.length))?Math.log(cv$temp$7$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$7$var92)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), cv$temp$7$var92)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$7$var92.length))?Math.log(cv$temp$7$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$7$var92.length))?Math.log(cv$temp$7$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 																							}
 																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																						}
@@ -2594,7 +2594,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double[] cv$distribution$sample58 = distribution$sample58[((i$var50 - 0) / 1)];
 			double[] var53 = m[initialState];
 			for(int index$var54 = 0; index$var54 < noStates; index$var54 += 1) {
-				double cv$value = DistributionSampling.probabilityCategorical(index$var54, var53);
+				double cv$value = (((0.0 <= index$var54) && (index$var54 < var53.length))?var53[index$var54]:0.0);
 				if(!fixedFlag$sample58)
 					cv$distribution$sample58[index$var54] = cv$value;
 			}
@@ -2616,7 +2616,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 											if(!fixedFlag$sample78) {
 												double[] var72 = m[st[i$var60][(j$var66 - 1)]];
 												for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
-													cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (1.0 * DistributionSampling.probabilityCategorical(index$var73, var72)));
+													cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (1.0 * (((0.0 <= index$var73) && (index$var73 < var72.length))?var72[index$var73]:0.0)));
 											}
 										}
 									}
@@ -2639,7 +2639,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 													if(!fixedFlag$sample78) {
 														double[] var72 = m[traceTempVariable$var71$6_1];
 														for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
-															cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (cv$probabilitySample58Value4 * DistributionSampling.probabilityCategorical(index$var73, var72)));
+															cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (cv$probabilitySample58Value4 * (((0.0 <= index$var73) && (index$var73 < var72.length))?var72[index$var73]:0.0)));
 													}
 												}
 											}
@@ -2661,7 +2661,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												if(!fixedFlag$sample78) {
 													double[] var72 = m[st[i$var60][(j$var66 - 1)]];
 													for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
-														cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (1.0 * DistributionSampling.probabilityCategorical(index$var73, var72)));
+														cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (1.0 * (((0.0 <= index$var73) && (index$var73 < var72.length))?var72[index$var73]:0.0)));
 												}
 											}
 										}
@@ -2686,7 +2686,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 														if(!fixedFlag$sample78) {
 															double[] var72 = m[traceTempVariable$var71$15_1];
 															for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
-																cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (cv$probabilitySample78Value13 * DistributionSampling.probabilityCategorical(index$var73, var72)));
+																cv$distribution$sample78[index$var73] = (cv$distribution$sample78[index$var73] + (cv$probabilitySample78Value13 * (((0.0 <= index$var73) && (index$var73 < var72.length))?var72[index$var73]:0.0)));
 														}
 													}
 												}

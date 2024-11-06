@@ -25,8 +25,8 @@ import org.sandwood.compiler.trees.TreeID;
 import org.sandwood.compiler.trees.transformationTree.TransArrayGet;
 import org.sandwood.compiler.trees.transformationTree.TransArrayPut;
 import org.sandwood.compiler.trees.transformationTree.TransFor;
-import org.sandwood.compiler.trees.transformationTree.TransFunctionCall;
-import org.sandwood.compiler.trees.transformationTree.TransFunctionCallReturn;
+import org.sandwood.compiler.trees.transformationTree.TransLocalFunctionCall;
+import org.sandwood.compiler.trees.transformationTree.TransExternalFunctionCallReturn;
 import org.sandwood.compiler.trees.transformationTree.TransIfElse;
 import org.sandwood.compiler.trees.transformationTree.TransInitialize;
 import org.sandwood.compiler.trees.transformationTree.TransInitializeUnset;
@@ -1050,12 +1050,12 @@ public class VariableTrackingVisitor implements TreeVisitor {
                 getVariableTracking((TransRVFunctionCall) tree);
                 break;
 
-            case NAMED_FUNCTION_CALL:
-                getVariableTracking((TransFunctionCall) tree);
+            case LOCAL_FUNCTION_CALL:
+                getVariableTracking((TransLocalFunctionCall) tree);
                 break;
 
-            case NAMED_FUNCTION_CALL_RETURN:
-                getVariableTracking((TransFunctionCallReturn<?>) tree);
+            case EXTERNAL_FUNCTION_CALL_RETURN:
+                getVariableTracking((TransExternalFunctionCallReturn<?>) tree);
                 break;
 
             case ALLOCATE_ARRAY:
@@ -1067,13 +1067,11 @@ public class VariableTrackingVisitor implements TreeVisitor {
             case CONST_DOUBLE:
             case CONST_INT:
             case EQUALITY:
-            case EXP:
             case LOCAL_FUNCTION_CALL_RETURN:
             case RV_FUNCTION_CALL_RETURN:
             case GET_FIELD:
             case LESS_THAN:
             case LESS_THAN_EQUAL:
-            case LOG:
             case MAX:
             case MIN:
             case NEGATE:
@@ -1113,7 +1111,7 @@ public class VariableTrackingVisitor implements TreeVisitor {
             variableTracking.effectivelyFinal.putAll(effectivelyFinal);
     }
 
-    private void getVariableTracking(TransFunctionCall tree) {
+    private void getVariableTracking(TransLocalFunctionCall tree) {
         for(TransTreeReturn<?> arg:tree.args()) {
             if(arg.getOutputType().isArray())
                 throw new CompilerException(
@@ -1122,7 +1120,7 @@ public class VariableTrackingVisitor implements TreeVisitor {
         }
     }
 
-    private void getVariableTracking(TransFunctionCallReturn<?> tree) {
+    private void getVariableTracking(TransExternalFunctionCallReturn<?> tree) {
         for(TransTreeReturn<?> arg:tree.args()) {
             if(arg.getOutputType().isArray())
                 throw new CompilerException(

@@ -613,14 +613,12 @@ public class SubstituteKnownValuesTransformer extends Transformer {
             case CONST_BOOLEAN:
             case CONST_DOUBLE:
             case CONST_INT:
-            case EXP:
             case LOCAL_FUNCTION_CALL_RETURN:
-            case NAMED_FUNCTION_CALL_RETURN:
+            case EXTERNAL_FUNCTION_CALL_RETURN:
             case RV_FUNCTION_CALL_RETURN:
             case GET_FIELD:
             case LESS_THAN:
             case LESS_THAN_EQUAL:
-            case LOG:
             case MAX:
             case MIN:
             case NEGATE:
@@ -759,7 +757,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
                 toReturn = transformTree((TransIfElse) tree);
                 break;
 
-            case NAMED_FUNCTION_CALL:
+            case LOCAL_FUNCTION_CALL:
             case RV_FUNCTION_CALL:
             case NOP:
                 toReturn = tree.applyTransformation(this);

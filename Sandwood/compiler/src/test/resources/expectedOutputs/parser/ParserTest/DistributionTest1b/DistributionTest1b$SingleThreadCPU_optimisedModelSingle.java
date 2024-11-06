@@ -455,7 +455,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v1, weightings);
+				double cv$distributionAccumulator = (((0.0 <= v1) && (v1 < weightings.length))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -554,7 +554,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v2, weightings);
+				double cv$distributionAccumulator = (((0.0 <= v2) && (v2 < weightings.length))?Math.log(weightings[v2]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -650,7 +650,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v3, weightings);
+			double cv$distributionAccumulator = (((0.0 <= v3) && (v3 < weightings.length))?Math.log(weightings[v3]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -835,7 +835,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v1, weightings);
+			double cv$distributionAccumulator = (((0.0 <= v1) && (v1 < weightings.length))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -930,7 +930,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v2, weightings);
+			double cv$distributionAccumulator = (((0.0 <= v2) && (v2 < weightings.length))?Math.log(weightings[v2]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -1009,7 +1009,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$weightings" with its value "weightings".
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weightings);
+			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Processing sample task 16 of consumer random variable null.
 			// 
@@ -1233,7 +1233,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$weightings" with its value "weightings".
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weightings);
+			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Processing sample task 16 of consumer random variable null.
 			// 
@@ -1394,7 +1394,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$weightings" with its value "weightings".
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weightings);
+			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Processing sample task 16 of consumer random variable null.
 			// 
@@ -1606,7 +1606,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// cv$distribution$sample7's comment
 				// Create local copy of variable probabilities.
-				distribution$sample7[index$var5] = DistributionSampling.probabilityCategorical(index$var5, weightings);
+				distribution$sample7[index$var5] = weightings[index$var5];
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1616,7 +1616,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// cv$distribution$sample9's comment
 				// Create local copy of variable probabilities.
-				distribution$sample9[index$c] = DistributionSampling.probabilityCategorical(index$c, weightings);
+				distribution$sample9[index$c] = weightings[index$c];
 		}
 		if(!fixedFlag$sample10)
 			v3 = DistributionSampling.sampleCategorical(RNG$, weightings);

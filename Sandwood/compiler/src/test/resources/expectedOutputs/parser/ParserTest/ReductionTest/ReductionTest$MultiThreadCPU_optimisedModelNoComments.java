@@ -262,7 +262,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample37) {
 			double cv$accumulator = 0.0;
 			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i$var32], m[i$var32]);
+				int cv$sampleValue = st[i$var32];
+				double[] var33 = m[i$var32];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var33.length))?Math.log(var33[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var34[i$var32] = cv$distributionAccumulator;
 				logProbability$sample37[i$var32] = cv$distributionAccumulator;
@@ -342,7 +344,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void sample37(int i$var32) {
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			st[i$var32] = cv$valuePos;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[i$var32]);
+			double[] cv$temp$0$var33 = m[i$var32];
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var33.length)?Math.log(cv$temp$0$var33[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int reduceVar$var47$5 = 0;
 			for(int cv$reduction242Index = 0; cv$reduction242Index < i$var32; cv$reduction242Index += 1)
 				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction242Index]);

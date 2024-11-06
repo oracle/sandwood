@@ -206,7 +206,9 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(!fixedProbFlag$sample35) {
 			double cv$accumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(a[i$var26], m[b[i$var26]]);
+				int cv$sampleValue = a[i$var26];
+				double[] var32 = m[b[i$var26]];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var33[(i$var26 - 1)] = cv$distributionAccumulator;
 				logProbability$sample35[(i$var26 - 1)] = cv$distributionAccumulator;
@@ -276,10 +278,13 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			int index$i$1_1 = (i$var26 + 1);
 			if((index$i$1_1 < n))
 				b[index$i$1_1] = a[(index$i$1_1 - 1)];
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[b[i$var26]]);
+			double[] cv$temp$0$var32 = m[b[i$var26]];
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var32.length)?Math.log(cv$temp$0$var32[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$2_2 = (i$var26 + 1);
-			if((index$i$2_2 < n))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(a[index$i$2_2], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			if((index$i$2_2 < n)) {
+				double[] var32 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$2_2]) && (a[index$i$2_2] < var32.length))?Math.log(var32[a[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var26 - 1)], (1 / cv$valuePos)) + cv$accumulatedProbabilities);
 			cv$var34$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}

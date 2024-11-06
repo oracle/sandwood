@@ -8,43 +8,27 @@
 
 package org.sandwood.compiler.trees.transformationTree;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
-import org.sandwood.compiler.compilation.ExternalFunction;
-import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
-import org.sandwood.compiler.exceptions.CompilerException;
-import org.sandwood.compiler.trees.outputTree.OutputFunctionCallReturn;
+import org.sandwood.compiler.names.FunctionName;
+import org.sandwood.compiler.trees.outputTree.OutputFunctionCall;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
 import org.sandwood.compiler.trees.outputTree.OutputTreeReturn;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
-import org.sandwood.compiler.trees.transformationTree.util.Bounds;
 import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
-public class TransFunctionCallReturn<X extends Variable<X>> extends TransTreeReturn<X> {
+public class TransLocalFunctionCall extends TransTreeVoid {
 
-    public final ExternalFunction func;
-    public final TransTreeReturn<?>[] args;
-    public final Type<X> outputType;
+    private final FunctionName name;
+    private final TransTreeReturn<?>[] args;
 
-    TransFunctionCallReturn(ExternalFunction func, Type<X> outputType, TransTreeReturn<?>... args) {
-        super(TransTreeType.NAMED_FUNCTION_CALL_RETURN, treeSize(args));
-        this.func = func;
-        this.outputType = outputType;
+    TransLocalFunctionCall(FunctionName name, TransTreeReturn<?>[] args, String comment) {
+        super(TransTreeType.LOCAL_FUNCTION_CALL, comment);
+        this.name = name;
         this.args = args;
-
-        assert func != null;
-        assert args != null;
-        for(TransTreeReturn<?> arg:args)
-            assert arg != null;
-    }
-
-    private static int treeSize(TransTreeReturn<?>... args) {
-        int treeSize = 1;
-        for(TransTreeReturn<?> t:args)
-            treeSize += t.treeSize();
-        return treeSize;
     }
 
     @Override
@@ -53,15 +37,12 @@ public class TransFunctionCallReturn<X extends Variable<X>> extends TransTreeRet
     }
 
     @Override
-    public boolean deterministic() {
-        return super.deterministic();
-    }
-
-    @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(func + "(");
+        sb.append(name);
+        sb.append("(");
+
         boolean first = true;
         for(int i = 0; i < args.length; i++) {
             if(first)
@@ -76,11 +57,11 @@ public class TransFunctionCallReturn<X extends Variable<X>> extends TransTreeRet
     }
 
     @Override
-    public OutputFunctionCallReturn<X> toOutputTreeReturnInternal() {
+    public OutputFunctionCall toOutputTreeInternal() {
         OutputTreeReturn<?>[] outputArgs = new OutputTreeReturn<?>[args.length];
         for(int i = 0; i < args.length; i++)
             outputArgs[i] = args[i].toOutputTreeReturnInternal();
-        return OutputTree.functionCallReturn(func, outputArgs);
+        return OutputTree.functionCall(name, outputArgs, comment);
     }
 
     @Override
@@ -88,7 +69,7 @@ public class TransFunctionCallReturn<X extends Variable<X>> extends TransTreeRet
         final int prime = 31;
         int result = 1;
         result = prime * result + equivalentHashCode(args);
-        result = prime * result + func.hashCode();
+        result = prime * result + name.hashCode();
         return result;
     }
 
@@ -98,31 +79,25 @@ public class TransFunctionCallReturn<X extends Variable<X>> extends TransTreeRet
             return true;
         if((tree == null) || (type != tree.type))
             return false;
-        TransFunctionCallReturn<?> other = (TransFunctionCallReturn<?>) tree;
+        TransLocalFunctionCall other = (TransLocalFunctionCall) tree;
         if(args.length != other.args.length)
             return false;
         for(int i = 0; i < args.length; i++)
             if(!args[i].equivalent(other.args[i], substitutions))
                 return false;
-        return func == other.func;
+        return name.equals(other.name);
     }
 
     /*
-     * This should just be applyTransformation, but the cast and the method using a raw type are required to get it to
-     * work with the Oracle compiler.
+     * Cast required to get the Oracle compiler to accept the types are correct.
      */
     @Override
-    public TransFunctionCallReturn<X> applyTransformationInternal(Transformer t) {
+    public TransLocalFunctionCall applyTransformationInternal(Transformer t) {
         int size = args.length;
         TransTreeReturn<?>[] a = new TransTreeReturn[size];
         for(int i = 0; i < size; i++)
             a[i] = (TransTreeReturn<?>) t.transform(args[i]);
-        return new TransFunctionCallReturn<>(func, outputType, a);
-    }
-
-    @Override
-    public Type<X> getOutputType() {
-        return outputType;
+        return new TransLocalFunctionCall(name, a, comment);
     }
 
     @Override
@@ -133,13 +108,8 @@ public class TransFunctionCallReturn<X extends Variable<X>> extends TransTreeRet
     }
 
     @Override
-    public TransTreeReturn<X> maxValue(Bounds bounds) {
-        throw new CompilerException("Function " + func + " not supported.");
-    }
-
-    @Override
-    public TransTreeReturn<X> minValue(Bounds bounds) {
-        throw new CompilerException("Function " + func + " not supported.");
+    public Set<String> declaredAllVariablesInternal() {
+        return Collections.emptySet();
     }
 
     public TransTreeReturn<?>[] args() {

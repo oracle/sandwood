@@ -204,7 +204,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					double cv$sampleValue = decay[var13];
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityExponential(cv$sampleValue, rate));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -282,7 +282,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1) {
 						if(!fixedFlag$sample16)
-							decay[var13] = DistributionSampling.sampleExponential(RNG$1, rate);
+							decay[var13] = (DistributionSampling.sampleExponential(RNG$1) / rate);
 					}
 			}
 		);

@@ -208,7 +208,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void sample13() {
 		double cv$originalProbability;
 		int cv$arrayLength = prior.length;
-		int cv$indexToChange = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$arrayLength);
+		int cv$indexToChange = (int)((double)cv$arrayLength * DistributionSampling.sampleUniform(RNG$));
 		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
 		double cv$proposedDifference;
 		if((cv$movementRatio < 0))
@@ -246,7 +246,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var25], prior[0]) + cv$accumulatedProbabilities);
 		for(int i$var31 = (length / 2); i$var31 < length; i$var31 += 1)
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var31], prior[1]) + cv$accumulatedProbabilities);
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				prior[cv$loopIndex] = (prior[cv$loopIndex] + cv$rebalanceValue);
 			prior[cv$indexToChange] = (prior[cv$indexToChange] - cv$proposedDifference);

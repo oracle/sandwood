@@ -193,7 +193,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						{
 							double var15 = 0.0;
 							double var16 = 10.0;
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var15, var16));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var15) / Math.sqrt(var16))) - (0.5 * Math.log(var16))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -358,7 +358,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					int cv$sampleValue = choices[var46];
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, prob));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < prob.length))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -404,7 +404,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 		if((cv$var < (0.1 * 0.1)))
 			cv$var = (0.1 * 0.1);
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
 		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -509,7 +509,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					cv$temp$1$var16 = 10.0;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$currentValue, cv$temp$0$var15, cv$temp$1$var16));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var15) / Math.sqrt(cv$temp$1$var16))) - (0.5 * Math.log(cv$temp$1$var16))));
 				{
 					{
 						boolean guard$sample19categorical44 = false;
@@ -548,13 +548,13 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 																		{
 																			cv$temp$2$prob = prob;
 																		}
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$2$prob)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$2$prob)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var46]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var46]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$2$prob));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var46]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$2$prob)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$2$prob)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var46]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var46]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																	}
@@ -598,13 +598,13 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 																	{
 																		cv$temp$3$prob = prob;
 																	}
-																	if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$3$prob)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$3$prob)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var46]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var46]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$3$prob));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var46]]):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$3$prob)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(choices[var46], cv$temp$3$prob)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var46]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var46]) && (choices[var46] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var46]]):Double.NEGATIVE_INFINITY)));
 																	}
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
@@ -644,7 +644,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 		}
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio))) {
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var18 = cv$originalValue;
 			ut[i$var12] = var18;
 			{
@@ -773,7 +773,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1) {
 						if(!fixedFlag$sample19)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
@@ -818,7 +818,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1) {
 						if(!fixedFlag$sample19)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
@@ -855,7 +855,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1) {
 						if(!fixedFlag$sample19)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
@@ -959,7 +959,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1) {
 						if(!fixedFlag$sample19)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);

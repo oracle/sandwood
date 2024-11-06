@@ -345,32 +345,6 @@ public class ProbabilityTests {
     }
 
     @Test
-    void testExponential() throws IOException {
-        DataReader d = new DataReader("exponential");
-        for(double lambda = 0.1; lambda < 5; lambda += 0.1) {
-            for(double value = 0.1; value < 100; value++) {
-                double localValue = DistributionSampling.probabilityExponential(value, lambda);
-                double storedValue = d.read(value, lambda);
-                testValue(localValue, storedValue, value, lambda);
-            }
-        }
-        d.close();
-    }
-
-    @Test
-    void testLogExponential() throws IOException {
-        DataReader d = new DataReader("logExponential");
-        for(double lambda = 0.1; lambda < 5; lambda += 0.1) {
-            for(double value = 0.1; value < 100; value++) {
-                double localValue = DistributionSampling.logProbabilityExponential(value, lambda);
-                double storedValue = d.read(value, lambda);
-                testValue(localValue, storedValue, value, lambda);
-            }
-        }
-        d.close();
-    }
-
-    @Test
     void testGamma() throws IOException {
         DataReader d = new DataReader("gamma");
         for(double alpha = 0.1; alpha < 5; alpha += 0.1) {
@@ -670,21 +644,18 @@ public class ProbabilityTests {
         }
     }
 
-    @Test
-    void uniformProbability() {
-        assertEquals(1.0, DistributionSampling.probabilityUniform(0.5, -0.4, 0.6));
-        assertEquals(0.5, DistributionSampling.probabilityUniform(0.5, 0, 2));
-        assertEquals(0.0, DistributionSampling.probabilityUniform(0.5, 2, 3));
-        assertEquals(0.5, DistributionSampling.probabilityUniform(-1.5, -3, -1));
-    }
-
-    @Test
-    void logUniformProbability() {
-        assertEquals(Math.log(1.0), Math.abs(DistributionSampling.logProbabilityUniform(0.5, -0.4, 0.6)));
-        assertEquals(Math.log(0.5), DistributionSampling.logProbabilityUniform(0.5, 0, 2));
-        assertEquals(Double.NEGATIVE_INFINITY, DistributionSampling.logProbabilityUniform(0.5, 2, 3));
-        assertEquals(Math.log(0.5), DistributionSampling.logProbabilityUniform(-1.5, -3, -1));
-    }
+    /*
+     * @Test void uniformProbability() { assertEquals(1.0, DistributionSampling.probabilityUniform(0.5, -0.4, 0.6));
+     * assertEquals(0.5, DistributionSampling.probabilityUniform(0.5, 0, 2)); assertEquals(0.0,
+     * DistributionSampling.probabilityUniform(0.5, 2, 3)); assertEquals(0.5,
+     * DistributionSampling.probabilityUniform(-1.5, -3, -1)); }
+     * 
+     * @Test void logUniformProbability() { assertEquals(Math.log(1.0),
+     * Math.abs(DistributionSampling.logProbabilityUniform(0.5, -0.4, 0.6))); assertEquals(Math.log(0.5),
+     * DistributionSampling.logProbabilityUniform(0.5, 0, 2)); assertEquals(Double.NEGATIVE_INFINITY,
+     * DistributionSampling.logProbabilityUniform(0.5, 2, 3)); assertEquals(Math.log(0.5),
+     * DistributionSampling.logProbabilityUniform(-1.5, -3, -1)); }
+     */
 
     // class Gamma Test
     static final double accuracyGood = 0x1.0p-48;

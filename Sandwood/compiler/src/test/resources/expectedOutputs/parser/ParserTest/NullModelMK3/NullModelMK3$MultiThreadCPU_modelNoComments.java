@@ -140,7 +140,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					{
 						double var8 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityUniform(cv$sampleValue, min, var8));
+						double cv$weightedProbability = (Math.log(1.0) + (((min <= cv$sampleValue) && (cv$sampleValue <= var8))?(-Math.log((var8 - min))):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -232,7 +232,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 		if((cv$var < (0.1 * 0.1)))
 			cv$var = (0.1 * 0.1);
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
 		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -257,7 +257,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					cv$temp$1$var8 = 1.0;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityUniform(cv$currentValue, cv$temp$0$min, cv$temp$1$var8));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$min <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var8))?(-Math.log((cv$temp$1$var8 - cv$temp$0$min))):Double.NEGATIVE_INFINITY));
 				{
 					{
 						double traceTempVariable$bias$1_1 = cv$currentValue;
@@ -316,7 +316,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 		}
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio)))
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
 			bias = cv$originalValue;
 	}
 
@@ -329,7 +329,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 		if(!fixedFlag$sample12)
 			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
@@ -337,13 +337,13 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
@@ -404,7 +404,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 		logModelProbabilitiesVal();
 	}
 

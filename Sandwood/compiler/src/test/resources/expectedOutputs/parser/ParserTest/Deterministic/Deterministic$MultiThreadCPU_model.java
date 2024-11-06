@@ -369,7 +369,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							double[] var32 = m[b[i$var26]];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var32));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -690,7 +690,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var32));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var32.length))?Math.log(cv$temp$0$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 33.
 				{
@@ -723,14 +723,14 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 															}
 															
 															// Record the probability of sample task 35 generating output with current configuration.
-															if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(a[index$i$2_4], cv$temp$1$var32)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(a[index$i$2_4], cv$temp$1$var32)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$1$var32.length))?Math.log(cv$temp$1$var32[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$1$var32.length))?Math.log(cv$temp$1$var32[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																// If the second value is -infinity.
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(a[index$i$2_4], cv$temp$1$var32));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$1$var32.length))?Math.log(cv$temp$1$var32[a[index$i$2_4]]):Double.NEGATIVE_INFINITY));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(a[index$i$2_4], cv$temp$1$var32)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(a[index$i$2_4], cv$temp$1$var32)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$1$var32.length))?Math.log(cv$temp$1$var32[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$1$var32.length))?Math.log(cv$temp$1$var32[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)));
 															}
 															
 															// Recorded the probability of reaching sample task 35 with the current configuration.

@@ -229,7 +229,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void logProbabilityDistribution$sample35() {
 		if(!fixedProbFlag$sample35) {
 			if(fixedFlag$sample35) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[0], m[0]);
+				int cv$sampleValue = st[0];
+				double[] var31 = m[0];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var31.length))?Math.log(var31[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				logProbability$var32 = cv$distributionAccumulator;
 				logProbability$var33 = cv$distributionAccumulator;
 				logProbability$st = (logProbability$st + cv$distributionAccumulator);
@@ -259,13 +261,15 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						if(fixedFlag$sample35) {
 							int var15 = st[0];
 							if(((0 <= var15) && (var15 < 5))) {
-								cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(cv$sampleValue, m[st[0]]);
+								double[] var41 = m[st[0]];
+								cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 								cv$probabilityReached = 1.0;
 							}
 						} else {
 							for(int index$sample35$4 = 0; index$sample35$4 < 5; index$sample35$4 += 1) {
 								double cv$probabilitySample35Value5 = distribution$sample35[index$sample35$4];
-								double cv$weightedProbability = (Math.log(cv$probabilitySample35Value5) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, m[index$sample35$4]));
+								double[] var41 = m[index$sample35$4];
+								double cv$weightedProbability = (Math.log(cv$probabilitySample35Value5) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -281,7 +285,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					if((2 <= i$var37)) {
 						int var15 = st[(i$var37 - 1)];
 						if(((0 <= var15) && (var15 < 5))) {
-							double cv$weightedProbability = DistributionSampling.logProbabilityCategorical(cv$sampleValue, m[st[(i$var37 - 1)]]);
+							double[] var41 = m[st[(i$var37 - 1)]];
+							double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -451,7 +456,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void logProbabilityValue$sample35() {
 		if(!fixedProbFlag$sample35) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[0], m[0]);
+			int cv$sampleValue = st[0];
+			double[] var31 = m[0];
+			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var31.length))?Math.log(var31[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			logProbability$var32 = cv$distributionAccumulator;
 			logProbability$var33 = cv$distributionAccumulator;
 			logProbability$st = (logProbability$st + cv$distributionAccumulator);
@@ -472,7 +479,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample45) {
 			double cv$accumulator = 0.0;
 			for(int i$var37 = 1; i$var37 < samples; i$var37 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i$var37], m[st[(i$var37 - 1)]]);
+				int cv$sampleValue = st[i$var37];
+				double[] var41 = m[st[(i$var37 - 1)]];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var42[(i$var37 - 1)] = cv$distributionAccumulator;
 				logProbability$sample45[(i$var37 - 1)] = cv$distributionAccumulator;
@@ -617,9 +626,12 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void sample35() {
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			double cv$accumulatedDistributionProbabilities = 0.0;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[0]);
-			if((fixedFlag$sample45 && (1 < samples)))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[1], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			double[] cv$temp$0$var31 = m[0];
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var31.length)?Math.log(cv$temp$0$var31[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			if((fixedFlag$sample45 && (1 < samples))) {
+				double[] cv$temp$1$var41 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			if((0 < samples))
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[cv$valuePos]) + cv$accumulatedProbabilities);
 			if((!fixedFlag$sample45 && (1 < samples))) {
@@ -674,13 +686,15 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					int var15 = st[0];
 					if(((0 <= var15) && (var15 < 5))) {
 						cv$reachedDistributionSourceRV = 1.0;
-						cv$stateProbabilityValue = (DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]) + DistributionSampling.logProbabilityCategorical(cv$valuePos, m[st[0]]));
+						double[] cv$temp$0$var41 = m[st[0]];
+						cv$stateProbabilityValue = (DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]) + ((cv$valuePos < cv$temp$0$var41.length)?Math.log(cv$temp$0$var41[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					}
 				} else {
 					for(int index$sample35$3 = 0; index$sample35$3 < 5; index$sample35$3 += 1) {
 						double cv$probabilitySample35Value4 = distribution$sample35[index$sample35$3];
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample35Value4);
-						double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]) + Math.log(cv$probabilitySample35Value4)) + DistributionSampling.logProbabilityCategorical(cv$valuePos, m[index$sample35$3]));
+						double[] cv$temp$1$var41 = m[index$sample35$3];
+						double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]) + Math.log(cv$probabilitySample35Value4)) + ((cv$valuePos < cv$temp$1$var41.length)?Math.log(cv$temp$1$var41[cv$valuePos]):Double.NEGATIVE_INFINITY));
 						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
 							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
 						else {
@@ -697,7 +711,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				for(int index$sample45$11 = 0; index$sample45$11 < 5; index$sample45$11 += 1) {
 					double cv$probabilitySample45Value12 = distribution$sample45[(index$i$10 - 1)][index$sample45$11];
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample45Value12);
-					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[i$var37], bias[cv$valuePos]) + Math.log(cv$probabilitySample45Value12)) + DistributionSampling.logProbabilityCategorical(cv$valuePos, m[index$sample45$11]));
+					double[] cv$temp$3$var41 = m[index$sample45$11];
+					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[i$var37], bias[cv$valuePos]) + Math.log(cv$probabilitySample45Value12)) + ((cv$valuePos < cv$temp$3$var41.length)?Math.log(cv$temp$3$var41[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
 						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
 					else {
@@ -859,7 +874,7 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample35) {
 			double[] var31 = m[0];
 			for(int index$var32 = 0; index$var32 < 5; index$var32 += 1)
-				distribution$sample35[index$var32] = DistributionSampling.probabilityCategorical(index$var32, var31);
+				distribution$sample35[index$var32] = ((index$var32 < var31.length)?var31[index$var32]:0.0);
 		}
 		if(!fixedFlag$sample45) {
 			for(int i$var37 = 1; i$var37 < samples; i$var37 += 1) {
@@ -872,14 +887,14 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						if(((0 <= var15) && (var15 < 5))) {
 							double[] var41 = m[st[0]];
 							for(int index$var42 = 0; index$var42 < 5; index$var42 += 1)
-								cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + DistributionSampling.probabilityCategorical(index$var42, var41));
+								cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + ((index$var42 < var41.length)?var41[index$var42]:0.0));
 						}
 					} else {
 						for(int index$sample35$2 = 0; index$sample35$2 < 5; index$sample35$2 += 1) {
 							double cv$probabilitySample35Value3 = distribution$sample35[index$sample35$2];
 							double[] var41 = m[index$sample35$2];
 							for(int index$var42 = 0; index$var42 < 5; index$var42 += 1)
-								cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample35Value3 * DistributionSampling.probabilityCategorical(index$var42, var41)));
+								cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample35Value3 * ((index$var42 < var41.length)?var41[index$var42]:0.0)));
 						}
 					}
 				}
@@ -889,7 +904,7 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double cv$probabilitySample45Value11 = distribution$sample45[(index$i$9 - 1)][index$sample45$10];
 						double[] var41 = m[index$sample45$10];
 						for(int index$var42 = 0; index$var42 < 5; index$var42 += 1)
-							cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample45Value11 * DistributionSampling.probabilityCategorical(index$var42, var41)));
+							cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample45Value11 * ((index$var42 < var41.length)?var41[index$var42]:0.0)));
 					}
 				}
 				double cv$var42$sum = 0.0;

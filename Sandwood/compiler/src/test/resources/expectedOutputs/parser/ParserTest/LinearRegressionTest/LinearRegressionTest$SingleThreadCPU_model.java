@@ -286,7 +286,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 							double var18 = 10.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var17, var18));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var17) / Math.sqrt(var18))) - (0.5 * Math.log(var18))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -440,7 +440,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 						double var29 = 10.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var28, var29));
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -653,7 +653,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 							double var56 = (reduceVar$var55$3 + bias);
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var56, tau));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var56) / Math.sqrt(tau))) - (0.5 * Math.log(tau))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1032,10 +1032,10 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void forwardGeneration() {
 		for(int var23 = 0; var23 < k; var23 += 1) {
 			if(!fixedFlag$sample28)
-				weights[var23] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		if(!fixedFlag$sample35)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample39)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
@@ -1065,7 +1065,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 					reduceVar$var55$4 = (i$var52 + j$var53);
 			}
 			if(!fixedFlag$sample63)
-				y[i$var38] = DistributionSampling.sampleGaussian(RNG$, (reduceVar$var55$4 + bias), tau);
+				y[i$var38] = ((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + (reduceVar$var55$4 + bias));
 		}
 	}
 
@@ -1075,10 +1075,10 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void forwardGenerationDistributionsNoOutputs() {
 		for(int var23 = 0; var23 < k; var23 += 1) {
 			if(!fixedFlag$sample28)
-				weights[var23] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		if(!fixedFlag$sample35)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample39)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
@@ -1095,10 +1095,10 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void forwardGenerationValuesNoOutputs() {
 		for(int var23 = 0; var23 < k; var23 += 1) {
 			if(!fixedFlag$sample28)
-				weights[var23] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		if(!fixedFlag$sample35)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample39)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {
@@ -1253,10 +1253,10 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		// Generate sample values for every call to sample in the model.
 		for(int var23 = 0; var23 < k; var23 += 1) {
 			if(!fixedFlag$sample28)
-				weights[var23] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
 		if(!fixedFlag$sample35)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample39)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		for(int i$var38 = 0; i$var38 < n; i$var38 += 1) {

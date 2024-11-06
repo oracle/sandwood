@@ -97,8 +97,8 @@ public abstract class OutputTree extends Tree<OutputTree> {
         CAST_TO_INT,
         CONDITIONAL_ASSIGNMENT,
         CONST,
-        EXP,
         FOR,
+        FORK_JOIN_FOR,
         FUNCTION_CALL,
         FUNCTION_CALL_RETURN,
         GET_FIELD,
@@ -106,14 +106,12 @@ public abstract class OutputTree extends Tree<OutputTree> {
         INITIALIZE,
         INITIALIZE_UNSET,
         LOAD,
-        LOG,
         NEGATE,
         NOP,
         PAR_FOR_LAMBDA,
         SCOPE,
         SEQUENTIAL,
-        STORE,
-        FORK_JOIN_FOR
+        STORE
     }
 
     public final OutputTreeType type;
@@ -361,14 +359,6 @@ public abstract class OutputTree extends Tree<OutputTree> {
 
     public static OutputNOP nop() {
         return OutputNOP.nop;
-    }
-
-    public static <A extends NumberVariable<A>> OutputExp<A> exp(OutputTreeReturn<A> input) {
-        return OutputExp.getExp(input);
-    }
-
-    public static <A extends NumberVariable<A>> OutputLog<A> log(OutputTreeReturn<A> input) {
-        return OutputLog.getLog(input);
     }
 
     public static OutputTree parForLambda(int parDepth, VariableDescription<IntVariable> startDesc,

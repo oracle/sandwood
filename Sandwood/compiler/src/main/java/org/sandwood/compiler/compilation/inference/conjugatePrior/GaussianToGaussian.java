@@ -53,8 +53,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Multiply;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Negate;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Subtract;
-import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionReturnTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
+import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionReturnTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -69,7 +69,6 @@ import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -119,7 +118,7 @@ public class GaussianToGaussian
      * @return The intermediate representation tree for generating a sample value based on the function data.
      */
     @Override
-    protected IRRVFunctionCallReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
             GaussianToGaussianData funcData) {
         // TODO adjust this so we trace back to find the constructor, and get the values
         // from them. This will allow us to have arrays of random variables.
@@ -128,7 +127,7 @@ public class GaussianToGaussian
         IRTreeReturn<DoubleVariable> variance0 = funcData.sourceRandom.variance.getForwardIR(compilationCtx);
 
         // Construct a tree to construct the sample variable.
-        IRRVFunctionCallReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
+        IRTreeReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
                 VariableType.DoubleVariable, VariableType.Gaussian, VariableType.Gaussian, mean0, variance0,
                 load(funcData.sigmaValueName), load(funcData.sumName), load(funcData.denominatorSquareSumName));
         return mean;
@@ -396,7 +395,7 @@ public class GaussianToGaussian
                     break;
                 }
                 case REDUCTION_RETURN: {
-                    ReductionReturnTask<?> rrt = (ReductionReturnTask<?>)t;
+                    ReductionReturnTask<?> rrt = (ReductionReturnTask<?>) t;
                     ReductionScope<?> reductionScope = rrt.getReductionScope();
                     compilationCtx.removeScopeSubstitute(reductionScope);
                     compilationCtx.removeSubstitute(reductionScope.j);

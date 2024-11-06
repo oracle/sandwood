@@ -453,7 +453,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(mu[var21], 0.0, 20.0));
+				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var21] / 4.47213595499958))) - 1.4978661367769954);
 			logProbability$var17 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -605,7 +605,10 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
+			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = z[i$var40];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -619,9 +622,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(z[i$var40], phi));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < phi.length))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var41 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -681,7 +683,9 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1)
+			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
+				double var44 = sigma[z[i$var40]];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -697,7 +701,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(x[i$var40], mu[z[i$var40]], sigma[z[i$var40]]));
+				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((x[i$var40] - mu[z[i$var40]]) / Math.sqrt(var44)))) - (Math.log(var44) * 0.5));
+			}
 			logProbability$var45 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -883,6 +888,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Value of the variable at this index
 			z[i$var40] = cv$valuePos;
 			
+			// Variable declaration of cv$temp$2$var44 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Value of the variable at this index
+			double cv$temp$2$var44 = sigma[cv$valuePos];
+			
 			// Save the calculated index value into the array of index value probabilities
 			// 
 			// Get a local reference to the scratch space.
@@ -903,7 +915,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$phi" with its value "phi".
-			cv$var42$stateProbabilityGlobal[cv$valuePos] = (DistributionSampling.logProbabilityGaussian(x[i$var40], mu[cv$valuePos], sigma[cv$valuePos]) + DistributionSampling.logProbabilityCategorical(cv$valuePos, phi));
+			cv$var42$stateProbabilityGlobal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var40] - mu[cv$valuePos]) / Math.sqrt(cv$temp$2$var44))) + ((cv$valuePos < phi.length)?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY)) - (Math.log(cv$temp$2$var44) * 0.5));
 		}
 		
 		// This value is not used before it is set again, so removing the value declaration.
@@ -1032,7 +1044,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample23) {
 			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1044,7 +1056,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(!fixedFlag$sample45)
 				z[i$var40] = DistributionSampling.sampleCategorical(RNG$, phi);
 			if(!fixedFlag$sample49)
-				x[i$var40] = DistributionSampling.sampleGaussian(RNG$, mu[z[i$var40]], sigma[z[i$var40]]);
+				x[i$var40] = ((Math.sqrt(sigma[z[i$var40]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[i$var40]]);
 		}
 	}
 
@@ -1058,7 +1070,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample23) {
 			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1084,7 +1096,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample23) {
 			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1273,7 +1285,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample23) {
 			for(int var21 = 0; var21 < 5; var21 += 1)
-				mu[var21] = DistributionSampling.sampleGaussian(RNG$, 0.0, 20.0);
+				mu[var21] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.

@@ -470,7 +470,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, weightings));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -568,7 +568,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, weightings));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -750,7 +750,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				{
 					{
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, weightings));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -843,7 +843,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				{
 					{
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, weightings));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -945,7 +945,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$weightings));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$weightings.length))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 13.
 				{
@@ -1145,7 +1145,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$weightings));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$weightings.length))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 13.
 				{
@@ -1403,7 +1403,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		double[] cv$distribution$sample7 = distribution$sample7;
 		for(int index$var5 = 0; index$var5 < weightings.length; index$var5 += 1) {
 			// Probability for this value
-			double cv$value = DistributionSampling.probabilityCategorical(index$var5, weightings);
+			double cv$value = (((0.0 <= index$var5) && (index$var5 < weightings.length))?weightings[index$var5]:0.0);
 			if(!fixedFlag$sample7)
 				// Save the probability of each value
 				cv$distribution$sample7[index$var5] = cv$value;
@@ -1413,7 +1413,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		double[] cv$distribution$sample9 = distribution$sample9;
 		for(int index$var7 = 0; index$var7 < weightings.length; index$var7 += 1) {
 			// Probability for this value
-			double cv$value = DistributionSampling.probabilityCategorical(index$var7, weightings);
+			double cv$value = (((0.0 <= index$var7) && (index$var7 < weightings.length))?weightings[index$var7]:0.0);
 			if(!fixedFlag$sample9)
 				// Save the probability of each value
 				cv$distribution$sample9[index$var7] = cv$value;

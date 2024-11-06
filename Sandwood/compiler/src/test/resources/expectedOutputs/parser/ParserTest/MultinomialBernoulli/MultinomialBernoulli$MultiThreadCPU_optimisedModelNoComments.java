@@ -320,13 +320,13 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			if(!(prior[cv$loopIndex] == 0))
 				cv$nonZeroCount = (cv$nonZeroCount + 1);
 		}
-		int cv$sourceIndex = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$nonZeroCount);
+		int cv$sourceIndex = (int)((double)cv$nonZeroCount * DistributionSampling.sampleUniform(RNG$));
 		for(int cv$loopIndex = 0; cv$loopIndex <= cv$sourceIndex; cv$loopIndex += 1) {
 			if((prior[cv$loopIndex] == 0))
 				cv$sourceIndex = (cv$sourceIndex + 1);
 		}
-		int cv$changeValue = (int)DistributionSampling.sampleUniform(RNG$, 1.0, (1.0 + prior[cv$sourceIndex]));
-		int cv$destinationIndex = (int)DistributionSampling.sampleUniform(RNG$, 0.0, (prior.length - 1));
+		int cv$changeValue = (int)(((double)prior[cv$sourceIndex] * DistributionSampling.sampleUniform(RNG$)) + 1.0);
+		int cv$destinationIndex = (int)((double)(prior.length - 1) * DistributionSampling.sampleUniform(RNG$));
 		if((cv$sourceIndex <= cv$destinationIndex))
 			cv$destinationIndex = (cv$destinationIndex + 1);
 		{
@@ -348,7 +348,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var44], (prior[1] / 10)) + cv$accumulatedProbabilities);
 		for(int i$var49 = 2; i$var49 < length; i$var49 += 3)
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var49], (prior[2] / 10)) + cv$accumulatedProbabilities);
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			prior[cv$sourceIndex] = (prior[cv$sourceIndex] + cv$changeValue);
 			prior[cv$destinationIndex] = (prior[cv$destinationIndex] - cv$changeValue);
 		}

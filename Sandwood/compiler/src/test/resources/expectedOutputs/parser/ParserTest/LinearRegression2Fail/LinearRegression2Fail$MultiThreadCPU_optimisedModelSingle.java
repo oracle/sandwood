@@ -287,7 +287,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(b0, 0.0, 2.0);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b0 / 1.4142135623730951)) - 0.34657359027997264);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -383,7 +383,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(b1, 1.0, 5.0);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((b1 - 1.0) / 2.23606797749979)) - 0.8047189562170501);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -570,7 +570,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(y[i], (b0 + (b1 * x[i])), variance));
+				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance)))) - (Math.log(variance) * 0.5));
 			logProbability$var27 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -787,9 +787,9 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		
@@ -802,7 +802,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1)
-							y[i] = DistributionSampling.sampleGaussian(RNG$1, (b0 + (b1 * x[i])), variance);
+							y[i] = (((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$1)) + b0) + (b1 * x[i]));
 				}
 			);
 
@@ -813,9 +813,9 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
@@ -825,9 +825,9 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
@@ -963,9 +963,9 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		

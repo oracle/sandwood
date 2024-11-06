@@ -407,7 +407,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var27], 0.0, 1.0);
+					double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var27]);
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -899,7 +899,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// Unrolled loop
 		{
@@ -909,7 +909,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Substituted "cv$temp$1$var22" with its value "1.0".
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 1.0);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue);
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1435,7 +1435,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$1$var22" with its value "1.0".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 1.0);
+		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1617,7 +1617,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -2029,7 +2029,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			cv$var = 1.0;
 		
 		// An offset for the current value
-		double cv$offset = DistributionSampling.sampleGaussian(RNG$, 0.0, cv$var);
+		double cv$offset = (Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$));
 		
 		// Make sure the offset is not 0
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
@@ -2125,7 +2125,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -2305,7 +2305,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample34) {
 				for(int var27 = 0; var27 < avail[0].length; var27 += 1)
-					ut[var27] = DistributionSampling.sampleGaussian(RNG$, 0.0, 1.0);
+					ut[var27] = DistributionSampling.sampleGaussian(RNG$);
 				for(int j$var33 = 0; j$var33 < avail[0].length; j$var33 += 1)
 					exped[j$var33] = Math.exp(ut[j$var33]);
 				
@@ -2396,7 +2396,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample34) {
 				for(int var27 = 0; var27 < avail[0].length; var27 += 1)
-					ut[var27] = DistributionSampling.sampleGaussian(RNG$, 0.0, 1.0);
+					ut[var27] = DistributionSampling.sampleGaussian(RNG$);
 				for(int j$var33 = 0; j$var33 < avail[0].length; j$var33 += 1)
 					exped[j$var33] = Math.exp(ut[j$var33]);
 				
@@ -2479,7 +2479,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample34) {
 				for(int var27 = 0; var27 < avail[0].length; var27 += 1)
-					ut[var27] = DistributionSampling.sampleGaussian(RNG$, 0.0, 1.0);
+					ut[var27] = DistributionSampling.sampleGaussian(RNG$);
 				for(int j$var33 = 0; j$var33 < avail[0].length; j$var33 += 1)
 					exped[j$var33] = Math.exp(ut[j$var33]);
 				
@@ -2733,7 +2733,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample34) {
 				for(int var27 = 0; var27 < avail[0].length; var27 += 1)
-					ut[var27] = DistributionSampling.sampleGaussian(RNG$, 0.0, 1.0);
+					ut[var27] = DistributionSampling.sampleGaussian(RNG$);
 				for(int j$var33 = 0; j$var33 < avail[0].length; j$var33 += 1)
 					exped[j$var33] = Math.exp(ut[j$var33]);
 				

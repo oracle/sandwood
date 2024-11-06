@@ -13,7 +13,6 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
-import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.outputTree.OutputBinOp;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
@@ -21,7 +20,7 @@ import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.Bounds;
 
 public abstract class TransDivide<L extends NumberVariable<L>, R extends NumberVariable<R>, RT extends NumberVariable<RT>>
-extends TransBinOp<L, R, RT> {
+        extends TransBinOp<L, R, RT> {
     public TransDivide(TransTreeReturn<L> left, TransTreeReturn<R> right) {
         super(left, right, false, TransTreeType.DIVIDE);
     }
@@ -87,14 +86,14 @@ extends TransBinOp<L, R, RT> {
 
         return rangeTree(leftMin, leftMax,
                 // Non-negative left
-                rangeTree(rightMin, rightMax, op.apply(leftMin, rightMax),
-                        op.apply(leftMax, rightMax), op.apply(leftMax, rightMax)),
+                rangeTree(rightMin, rightMax, op.apply(leftMin, rightMax), op.apply(leftMax, rightMax),
+                        op.apply(leftMax, rightMax)),
                 // Negative left
-                rangeTree(rightMin, rightMax, op.apply(leftMin, rightMin),
-                        op.apply(leftMax, rightMin), (TransTreeReturn<RT>) constant(Double.NEGATIVE_INFINITY)),
+                rangeTree(rightMin, rightMax, op.apply(leftMin, rightMin), op.apply(leftMax, rightMin),
+                        (TransTreeReturn<RT>) constant(Double.NEGATIVE_INFINITY)),
                 // Positive or negative left
-                rangeTree(rightMin, rightMax, op.apply(leftMin, rightMin),
-                        op.apply(leftMax, rightMin), (TransTreeReturn<RT>) constant(Double.NEGATIVE_INFINITY)));
+                rangeTree(rightMin, rightMax, op.apply(leftMin, rightMin), op.apply(leftMax, rightMin),
+                        (TransTreeReturn<RT>) constant(Double.NEGATIVE_INFINITY)));
     }
 
     public static TransDivide<DoubleVariable, DoubleVariable, DoubleVariable> getDivideDD(

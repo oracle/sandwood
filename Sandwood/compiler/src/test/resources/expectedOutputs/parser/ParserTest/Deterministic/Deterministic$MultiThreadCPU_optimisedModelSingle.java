@@ -345,6 +345,10 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = a[i$var26];
+				double[] var32 = m[b[i$var26]];
+				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -352,8 +356,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -366,9 +368,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(a[i$var26], m[b[i$var26]]);
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -572,16 +572,27 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((index$i$1_1 < n))
 				b[index$i$1_1] = a[(index$i$1_1 - 1)];
 			
+			// Variable declaration of cv$temp$0$var32 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var32 = m[b[i$var26]];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			// 
-			// cv$temp$0$var32's comment
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[b[i$var26]]);
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var32.length)?Math.log(cv$temp$0$var32[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$2_2 = (i$var26 + 1);
-			if((index$i$2_2 < n))
+			if((index$i$2_2 < n)) {
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 33.
+				// 
+				// Looking for a path between Sample 35 and consumer Categorical 33.
+				// 
+				// Value of the variable at this index
+				double[] var32 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -600,15 +611,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Substituted "index$i$2_4" with its value "index$i$2_2".
 				// 
 				// Substituted "cv$temp$1$var32" with its value "var32".
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 33.
-				// 
-				// Looking for a path between Sample 35 and consumer Categorical 33.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(a[index$i$2_2], m[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$2_2]) && (a[index$i$2_2] < var32.length))?Math.log(var32[a[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.

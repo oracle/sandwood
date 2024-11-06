@@ -376,7 +376,7 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 
 	private final void logProbabilityValue$sample50() {
 		if(!fixedProbFlag$sample50) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(initialState, weights);
+			double cv$distributionAccumulator = (((0.0 <= initialState) && (initialState < weights.length))?Math.log(weights[initialState]):Double.NEGATIVE_INFINITY);
 			logProbability$var46 = cv$distributionAccumulator;
 			logProbability$initialState = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -395,7 +395,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		if(!fixedProbFlag$sample58) {
 			double cv$accumulator = 0.0;
 			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i$var50][0], m[initialState]);
+				int cv$sampleValue = st[i$var50][0];
+				double[] var53 = m[initialState];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var53.length))?Math.log(var53[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var54[i$var50] = cv$distributionAccumulator;
 				logProbability$sample58[i$var50] = cv$distributionAccumulator;
@@ -424,7 +426,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			double cv$accumulator = 0.0;
 			for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 				for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], m[st[i$var60][(j$var66 - 1)]]);
+					int cv$sampleValue = st[i$var60][j$var66];
+					double[] var72 = m[st[i$var60][(j$var66 - 1)]];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var73[i$var60][(j$var66 - 1)] = cv$distributionAccumulator;
 					logProbability$sample78[i$var60][(j$var66 - 1)] = cv$distributionAccumulator;
@@ -456,7 +460,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			double cv$accumulator = 0.0;
 			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
 				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), bias[st[i$var80][j$var88]]);
+					int cv$sampleValue = (events[i$var80][j$var88] - 1);
+					double[] var92 = bias[st[i$var80][j$var88]];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var93[i$var80][(j$var88 - 1)] = cv$distributionAccumulator;
 					logProbability$sample99[i$var80][(j$var88 - 1)] = cv$distributionAccumulator;
@@ -521,9 +527,11 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private final void sample50() {
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			initialState = cv$valuePos;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weights);
-			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[i$var50][0], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			double cv$accumulatedProbabilities = ((cv$valuePos < weights.length)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
+				double[] cv$temp$1$var53 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			cv$var47$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;
@@ -555,9 +563,12 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		double[] cv$stateProbabilityLocal = cv$var55$stateProbabilityGlobal[threadID$cv$i$var50];
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			st[i$var50][0] = cv$valuePos;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[initialState]);
-			if((1 < length$eventsMeasured[i$var50]))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[i$var50][1], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			double[] cv$temp$0$var53 = m[initialState];
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var53.length)?Math.log(cv$temp$0$var53[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			if((1 < length$eventsMeasured[i$var50])) {
+				double[] cv$temp$1$var72 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var50][1]) && (st[i$var50][1] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var50][1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			cv$stateProbabilityLocal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;
@@ -589,11 +600,15 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		double[] cv$stateProbabilityLocal = cv$var74$stateProbabilityGlobal[threadID$cv$i$var60];
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			st[i$var60][j$var66] = cv$valuePos;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[st[i$var60][(j$var66 - 1)]]);
+			double[] cv$temp$0$var72 = m[st[i$var60][(j$var66 - 1)]];
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var72.length)?Math.log(cv$temp$0$var72[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$j$1_3 = (j$var66 + 1);
-			if((index$j$1_3 < length$eventsMeasured[i$var60]))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[i$var60][index$j$1_3], m[cv$valuePos]) + cv$accumulatedProbabilities);
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical((events[i$var60][j$var66] - 1), bias[cv$valuePos]) + cv$accumulatedProbabilities);
+			if((index$j$1_3 < length$eventsMeasured[i$var60])) {
+				double[] cv$temp$1$var72 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var60][index$j$1_3]) && (st[i$var60][index$j$1_3] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][index$j$1_3]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double[] cv$temp$2$var92 = bias[cv$valuePos];
+			cv$accumulatedProbabilities = ((((1.0 <= events[i$var60][j$var66]) && (events[i$var60][j$var66] < (cv$temp$2$var92.length + 1)))?Math.log(cv$temp$2$var92[(events[i$var60][j$var66] - 1)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$stateProbabilityLocal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;

@@ -489,6 +489,8 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// just use cached values.
 		if(!fixedProbFlag$sample28) {
 			// Generating probabilities for sample task
+			double[] var26 = m[0];
+			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -512,7 +514,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st, m[0]);
+			double cv$distributionAccumulator = (((0.0 <= st) && (st < var26.length))?Math.log(var26[st]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -736,66 +738,83 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// by sample task 28 drawn from Categorical 27. Inference was performed using variable
 	// marginalization.
 	private final void sample28() {
-		// Write out the new value of the sample.
-		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "0".
-		st = 0;
-		
-		// Save the calculated index value into the array of index value probabilities
-		// 
-		// Get a local reference to the scratch space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// Variable declaration of cv$accumulatedProbabilities moved.
-		// Declaration comment was:
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// cv$temp$0$var26's comment
-		// Constructing a random variable input for use later.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 31 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// cv$temp$0$var26's comment
-		// Constructing a random variable input for use later.
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Processing sample task 31 of consumer random variable null.
-		// 
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Substituted "cv$temp$1$var29" with its value "var29".
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "0".
-		cv$var28$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + DistributionSampling.logProbabilityCategorical(0, m[0]));
+		{
+			// Write out the new value of the sample.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			st = 0;
+			
+			// Variable declaration of cv$temp$0$var26 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var26 = m[0];
+			
+			// Save the calculated index value into the array of index value probabilities
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// Variable declaration of cv$accumulatedProbabilities moved.
+			// Declaration comment was:
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 31 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			// 
+			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+			// Declaration comment was:
+			// Processing sample task 31 of consumer random variable null.
+			// 
+			// Set an accumulator to sum the probabilities for each possible configuration of
+			// inputs.
+			// 
+			// Substituted "cv$temp$1$var29" with its value "var29".
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			cv$var28$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + ((0 < cv$temp$0$var26.length)?Math.log(cv$temp$0$var26[0]):Double.NEGATIVE_INFINITY));
+		}
 		
 		// Write out the new value of the sample.
 		// 
@@ -808,6 +827,11 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Substituted "cv$valuePos" with its value "1".
 		st = 1;
 		
+		// Variable declaration of cv$temp$0$var26 moved.
+		// 
+		// Constructing a random variable input for use later.
+		double[] cv$temp$0$var26 = m[0];
+		
 		// Save the calculated index value into the array of index value probabilities
 		// 
 		// Get a local reference to the scratch space.
@@ -821,8 +845,13 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// cv$temp$0$var26's comment
-		// Constructing a random variable input for use later.
+		// Variable declaration of cv$currentValue moved.
+		// Declaration comment was:
+		// The value currently being tested
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -835,8 +864,13 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// cv$temp$0$var26's comment
-		// Constructing a random variable input for use later.
+		// Variable declaration of cv$currentValue moved.
+		// Declaration comment was:
+		// The value currently being tested
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
@@ -856,7 +890,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		cv$var28$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + DistributionSampling.logProbabilityCategorical(1, m[0]));
+		cv$var28$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + ((1 < cv$temp$0$var26.length)?Math.log(cv$temp$0$var26[1]):Double.NEGATIVE_INFINITY));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 

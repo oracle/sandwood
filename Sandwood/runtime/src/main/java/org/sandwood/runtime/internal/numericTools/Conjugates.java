@@ -34,7 +34,7 @@ public class Conjugates {
      * @param n     The total number of samples from the Bernoulli and Binomial distributions.
      * @return A value randomly sampled from the distribution described by the inputs.
      */
-    public static double sampleConjugateBetaBinomial(Rng rng, double alpha, double beta, double sum, double n) {
+    public static final double sampleConjugateBetaBinomial(Rng rng, double alpha, double beta, double sum, double n) {
         alpha += sum;
         beta += n - sum;
         double x = DistributionSampling.sampleGamma(rng, alpha);
@@ -51,7 +51,7 @@ public class Conjugates {
      * @param count A count of the number of times each possible output was sampled from the Categorical distributions.
      * @param p     An array that will be populated with a value sampled from the distribution described by the inputs.
      */
-    public static void sampleConjugateDirichletCategorical(Rng rng, double[] hyper, double[] count, double[] p) {
+    public static final void sampleConjugateDirichletCategorical(Rng rng, double[] hyper, double[] count, double[] p) {
         double sum = 0.0;
         int N = p.length;
         for(int i = 0; i < N; i++) {
@@ -81,7 +81,7 @@ public class Conjugates {
      * @param n     The number of samples from the Exponential distributions.
      * @return A value randomly sampled from the distribution described by the inputs.
      */
-    public static double sampleConjugateGammaExponential(Rng rng, double alpha, double beta, double sum, int n) {
+    public static final double sampleConjugateGammaExponential(Rng rng, double alpha, double beta, double sum, int n) {
         return DistributionSampling.sampleGamma(rng, alpha + n, beta + sum);
     }
 
@@ -112,7 +112,7 @@ public class Conjugates {
      * @param n     The number of samples from the Poisson distributions.
      * @return A value randomly sampled from the distribution described by the inputs.
      */
-    public static double sampleConjugateGammaPoisson(Rng rng, double alpha, double beta, double sum, double n) {
+    public static final double sampleConjugateGammaPoisson(Rng rng, double alpha, double beta, double sum, double n) {
         alpha += sum;
         beta += n;
         return DistributionSampling.sampleGamma(rng, alpha, beta);
@@ -130,13 +130,13 @@ public class Conjugates {
      * @param denominator The number of samples from the consuming Gaussian distributions.
      * @return A value randomly sampled from the distribution described by the inputs.
      */
-    public static double sampleConjugateGaussianGaussian(Rng rng, double mu0, double variance0, double variance,
+    public static final double sampleConjugateGaussianGaussian(Rng rng, double mu0, double variance0, double variance,
             double sum, double denominator) {
         double variance0Inv = 1.0 / variance0;
         double varianceInv = 1.0 / variance;
         double postSigma = 1.0 / (variance0Inv + denominator * varianceInv);
         double postMean = (mu0 * variance0Inv + sum * varianceInv) * postSigma;
-        return DistributionSampling.sampleGaussian(rng, postMean, postSigma);
+        return rng.normal() * Math.sqrt(postSigma) + postMean;
     }
 
     /**
@@ -150,7 +150,8 @@ public class Conjugates {
      * @param n     The number of samples from the Gaussian distributions.
      * @return A value randomly sampled from the distribution described by the inputs.
      */
-    public static double sampleConjugateInverseGammaGaussian(Rng rng, double alpha, double beta, double sum, int n) {
+    public static final double sampleConjugateInverseGammaGaussian(Rng rng, double alpha, double beta, double sum,
+            int n) {
         alpha += ((double) n) / 2;
         beta += sum / 2;
         return DistributionSampling.sampleInverseGamma(rng, alpha, beta);

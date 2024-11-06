@@ -336,7 +336,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							double var24 = indirection[i];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var23, var24));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var23) / Math.sqrt(var24))) - (0.5 * Math.log(var24))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -422,7 +422,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		int cv$arrayLength = cv$targetLocal.length;
 		
 		// Pick a value in the array to adjust.
-		int cv$indexToChange = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$arrayLength);
+		int cv$indexToChange = (int)(0.0 + ((cv$arrayLength - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		
 		// Pick how much the value should be moved by. Initially this value is proposed as
 		// a ratio of the current magnitude of the value, we will check to make sure the adjustment
@@ -574,14 +574,14 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 													}
 													
 													// Record the probability of sample task 30 generating output with current configuration.
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[i], cv$temp$1$var23, cv$temp$2$var24)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[i], cv$temp$1$var23, cv$temp$2$var24)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var23) / Math.sqrt(cv$temp$2$var24))) - (0.5 * Math.log(cv$temp$2$var24)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var23) / Math.sqrt(cv$temp$2$var24))) - (0.5 * Math.log(cv$temp$2$var24)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[i], cv$temp$1$var23, cv$temp$2$var24));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var23) / Math.sqrt(cv$temp$2$var24))) - (0.5 * Math.log(cv$temp$2$var24))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[i], cv$temp$1$var23, cv$temp$2$var24)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[i], cv$temp$1$var23, cv$temp$2$var24)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var23) / Math.sqrt(cv$temp$2$var24))) - (0.5 * Math.log(cv$temp$2$var24)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var23) / Math.sqrt(cv$temp$2$var24))) - (0.5 * Math.log(cv$temp$2$var24)))));
 													}
 													
 													// Recorded the probability of reaching sample task 30 with the current configuration.
@@ -644,14 +644,14 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 															}
 															
 															// Record the probability of sample task 30 generating output with current configuration.
-															if(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[index$i$5_3], cv$temp$3$var23, cv$temp$4$var24)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[index$i$5_3], cv$temp$3$var23, cv$temp$4$var24)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var23) / Math.sqrt(cv$temp$4$var24))) - (0.5 * Math.log(cv$temp$4$var24)))) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var23) / Math.sqrt(cv$temp$4$var24))) - (0.5 * Math.log(cv$temp$4$var24)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																// If the second value is -infinity.
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[index$i$5_3], cv$temp$3$var23, cv$temp$4$var24));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var23) / Math.sqrt(cv$temp$4$var24))) - (0.5 * Math.log(cv$temp$4$var24))));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[index$i$5_3], cv$temp$3$var23, cv$temp$4$var24)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(generated[index$i$5_3], cv$temp$3$var23, cv$temp$4$var24)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var23) / Math.sqrt(cv$temp$4$var24))) - (0.5 * Math.log(cv$temp$4$var24)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var23) / Math.sqrt(cv$temp$4$var24))) - (0.5 * Math.log(cv$temp$4$var24)))));
 															}
 															
 															// Recorded the probability of reaching sample task 30 with the current configuration.
@@ -712,7 +712,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if(((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)))))) {
 			// If it is not revert the sample value and intermediates to their original values.
 			// 
 			// Set the sample value
@@ -808,7 +808,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if(!fixedFlag$sample19)
 				indirection[i] = sample[i];
 			if(!fixedFlag$sample30)
-				generated[i] = DistributionSampling.sampleGaussian(RNG$, sample[i], indirection[i]);
+				generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
 		}
 	}
 

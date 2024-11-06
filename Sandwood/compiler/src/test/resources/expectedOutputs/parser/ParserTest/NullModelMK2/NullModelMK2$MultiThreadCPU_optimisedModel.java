@@ -200,7 +200,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityUniform(bias, min, 1.0);
+			double cv$distributionAccumulator = (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -374,7 +374,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, bias, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -400,12 +400,12 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var8" with its value "1.0".
+		// Substituted "cv$temp$0$min" with its value "min".
 		// 
 		// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
-		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + DistributionSampling.logProbabilityUniform(bias, min, 1.0));
+		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		
 		// Update Sample and intermediate values
 		// 
@@ -417,7 +417,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var8" with its value "1.0".
+		// Substituted "cv$temp$0$min" with its value "min".
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -430,8 +430,8 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var8" with its value "1.0".
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + DistributionSampling.logProbabilityUniform(cv$proposedValue, min, 1.0));
+		// Substituted "cv$temp$0$min" with its value "min".
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -449,7 +449,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -472,7 +472,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 		if(!fixedFlag$sample12)
 			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
@@ -482,7 +482,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -490,7 +490,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -594,7 +594,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample10)
-			bias = DistributionSampling.sampleUniform(RNG$, min, 1.0);
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

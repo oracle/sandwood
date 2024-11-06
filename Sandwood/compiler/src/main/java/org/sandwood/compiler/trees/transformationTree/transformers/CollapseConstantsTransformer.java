@@ -8,20 +8,18 @@
 
 package org.sandwood.compiler.trees.transformationTree.transformers;
 
-import static org.sandwood.compiler.trees.transformationTree.TransTree.castToDouble;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.add;
+import static org.sandwood.compiler.trees.transformationTree.TransTree.castToDouble;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.castToInteger;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.conditionalAssignment;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.constant;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.divide;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.eq;
-import static org.sandwood.compiler.trees.transformationTree.TransTree.exp;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.forStmt;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.ifElse;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.lessThan;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.lessThanEqual;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.load;
-import static org.sandwood.compiler.trees.transformationTree.TransTree.log;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.max;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.min;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.multiply;
@@ -41,6 +39,8 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
+import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -61,13 +61,12 @@ import org.sandwood.compiler.trees.transformationTree.TransConditionalAssignment
 import org.sandwood.compiler.trees.transformationTree.TransConstBoolean;
 import org.sandwood.compiler.trees.transformationTree.TransConstDouble;
 import org.sandwood.compiler.trees.transformationTree.TransConstInt;
-import org.sandwood.compiler.trees.transformationTree.TransExp;
+import org.sandwood.compiler.trees.transformationTree.TransExternalFunctionCallReturn;
 import org.sandwood.compiler.trees.transformationTree.TransFor;
 import org.sandwood.compiler.trees.transformationTree.TransIfElse;
 import org.sandwood.compiler.trees.transformationTree.TransInitialize;
 import org.sandwood.compiler.trees.transformationTree.TransInitializeUnset;
 import org.sandwood.compiler.trees.transformationTree.TransLoad;
-import org.sandwood.compiler.trees.transformationTree.TransLog;
 import org.sandwood.compiler.trees.transformationTree.TransNOP;
 import org.sandwood.compiler.trees.transformationTree.TransNegate;
 import org.sandwood.compiler.trees.transformationTree.TransNegateBoolean;
@@ -98,6 +97,7 @@ import org.sandwood.compiler.trees.transformationTree.util.RearrangeTree;
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.ScopedVarSet;
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.VarDef;
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.VariableTracking;
+import org.sandwood.runtime.internal.numericTools.Gaussian;
 
 public class CollapseConstantsTransformer extends Transformer {
     private class GuardBounds {
@@ -428,7 +428,7 @@ public class CollapseConstantsTransformer extends Transformer {
                 return collapseConstants((TransStore<?>) tree);
 
             case ARRAY_PUT: // TODO Add code to add the constraint that the index is positive so 0 can be a lower bound.
-            case NAMED_FUNCTION_CALL:
+            case LOCAL_FUNCTION_CALL:
             case RV_FUNCTION_CALL:
             case NOP:
             case SEQUENTIAL:
@@ -465,14 +465,9 @@ public class CollapseConstantsTransformer extends Transformer {
                 }
                 break;
 
-            case EXP:
+            case EXTERNAL_FUNCTION_CALL_RETURN:
                 visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransExp<?>) tree);
-                break;
-
-            case LOG:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransLog<?>) tree);
+                toReturn = collapseConstants((TransExternalFunctionCallReturn<X>) tree);
                 break;
 
             case MAX:
@@ -536,14 +531,13 @@ public class CollapseConstantsTransformer extends Transformer {
                 break;
 
             case ALLOCATE_ARRAY: // TODO Add code to add the constraint that the index is positive so 0 can be a lower
-                                 // bound.
+                // bound.
             case AND: // Constants are collapsed at construction time
             case ARRAY_GET: // TODO Add code to add the constraint the that index is positive so 0 can be a lower bound.
             case CONST_BOOLEAN:
             case CONST_DOUBLE:
             case CONST_INT:
             case LOCAL_FUNCTION_CALL_RETURN:
-            case NAMED_FUNCTION_CALL_RETURN:
             case RV_FUNCTION_CALL_RETURN:
             case GET_FIELD:
             case LOAD:
@@ -560,6 +554,95 @@ public class CollapseConstantsTransformer extends Transformer {
         else
             toReturn = tree;
         return toReturn;
+    }
+
+    private <X extends Variable<X>> TransTreeReturn<X> collapseConstants(TransExternalFunctionCallReturn<X> tree) {
+        ExternalFunction f = tree.func;
+        switch(f) {
+            case EXP: {
+                TransTreeReturn<X> value = transform((TransTreeReturn<X>) tree.args[0]);
+                switch(value.type) {
+                    case CONST_DOUBLE:
+                        return (TransTreeReturn<X>) constant(Math.exp(((TransConstDouble) value).value));
+                    case CONST_INT:
+                        return (TransTreeReturn<X>) constant(Math.exp(((TransConstInt) value).value));
+                    case EXTERNAL_FUNCTION_CALL_RETURN: {
+                        TransExternalFunctionCallReturn<X> arg = (TransExternalFunctionCallReturn<X>) value;
+                        if(arg.func == ExternalFunction.LOG) {
+                            if(arg.args[0].getOutputType() == VariableType.DoubleVariable)
+                                return (TransTreeReturn<X>) arg.args[0];
+                            else
+                                return (TransTreeReturn<X>) castToDouble((TransTreeReturn<IntVariable>) arg.args[0]);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
+            case GAUSSIAN_CDF: {
+                TransTreeReturn<DoubleVariable> value = transform((TransTreeReturn<DoubleVariable>) tree.args[0]);
+                if(value.type == TransTreeType.CONST_DOUBLE)
+                    return (TransTreeReturn<X>) constant(Gaussian.cdf(((TransConstDouble) value).value));
+                else
+                    return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
+            case IS_NAN: {
+                TransTreeReturn<DoubleVariable> value = (TransTreeReturn<DoubleVariable>) transform(tree.args[0]);
+                if(value.type == TransTreeType.CONST_DOUBLE)
+                    return (TransTreeReturn<X>) constant(Double.isNaN(((TransConstDouble) value).value));
+                else
+                    return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
+            case LOG: {
+                TransTreeReturn<X> value = (TransTreeReturn<X>)transform(tree.args[0]);
+                switch(value.type) {
+                    case CONST_DOUBLE:
+                        return (TransTreeReturn<X>) constant(Math.log(((TransConstDouble) value).value));
+                    case CONST_INT:
+                        return (TransTreeReturn<X>) constant(Math.log(((TransConstInt) value).value));
+                    case EXTERNAL_FUNCTION_CALL_RETURN: {
+                        TransExternalFunctionCallReturn<X> arg = (TransExternalFunctionCallReturn<X>) value;
+                        if(arg.func == ExternalFunction.EXP) {
+                            if(arg.args[0].getOutputType() == VariableType.DoubleVariable)
+                                return (TransTreeReturn<X>) arg.args[0];
+                            else
+                                return (TransTreeReturn<X>) castToDouble((TransTreeReturn<IntVariable>) arg.args[0]);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
+            case SQRT: {
+                TransTreeReturn<X> value = (TransTreeReturn<X>)transform(tree.args[0]);
+                switch(value.type) {
+                    case CONST_DOUBLE:
+                        return (TransTreeReturn<X>) constant(Math.sqrt(((TransConstDouble) value).value));
+                    case CONST_INT:
+                        return (TransTreeReturn<X>) constant(Math.sqrt(((TransConstInt) value).value));
+                    case MULTIPLY: {
+                        TransMultiply<?, ?, ?> arg = (TransMultiply<?, ?, ?>) value;
+                        if(arg.left.equivalent(arg.right)) {
+                            if(arg.left.getOutputType() == VariableType.DoubleVariable)
+                                return (TransTreeReturn<X>) arg.left;
+                            else
+                                return (TransTreeReturn<X>) castToDouble((TransTreeReturn<IntVariable>) arg.left);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return TransTree.functionCallReturn(f, tree.outputType, value);
+            }
+            default: {
+                throw new SandwoodException("Unknown Function type " + f);
+            }
+        }
     }
 
     private <X extends Variable<X>> TransTreeReturn<X> collapseBooleanEq(TransEq<BooleanVariable, BooleanVariable> eq) {
@@ -676,44 +759,6 @@ public class CollapseConstantsTransformer extends Transformer {
         left.mergeConstants(right);
         return TransTree.eq(left.getTree(), right.getTree());
         // In generate nodes in the tree should never appear twice.
-    }
-
-    @SuppressWarnings("unchecked")
-    private <A extends NumberVariable<A>> TransTreeReturn<DoubleVariable> collapseConstants(TransExp<A> tree) {
-        TransTreeReturn<A> value = transform(tree.input);
-        switch(value.type) {
-            case CONST_DOUBLE:
-                return constant(Math.exp(((TransConstDouble) value).value));
-            case CONST_INT:
-                return constant(Math.exp(((TransConstInt) value).value));
-            case LOG:
-                TransLog<?> log = (TransLog<?>) value;
-                if(log.input.getOutputType() == VariableType.DoubleVariable)
-                    return (TransTreeReturn<DoubleVariable>) log.input;
-                else
-                    return castToDouble((TransTreeReturn<IntVariable>) log.input);
-            default:
-                return exp(value);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <A extends NumberVariable<A>> TransTreeReturn<DoubleVariable> collapseConstants(TransLog<A> tree) {
-        TransTreeReturn<A> value = transform(tree.input);
-        switch(value.type) {
-            case CONST_DOUBLE:
-                return constant(Math.log(((TransConstDouble) value).value));
-            case CONST_INT:
-                return constant(Math.log(((TransConstInt) value).value));
-            case EXP:
-                TransExp<?> exp = (TransExp<?>) value;
-                if(exp.input.getOutputType() == VariableType.DoubleVariable)
-                    return (TransTreeReturn<DoubleVariable>) exp.input;
-                else
-                    return castToDouble((TransTreeReturn<IntVariable>) exp.input);
-            default:
-                return log(value);
-        }
     }
 
     private VariableDescription<?> getTargetDesc(TransTreeReturn<?> t) {
@@ -1719,22 +1764,31 @@ public class CollapseConstantsTransformer extends Transformer {
                     }
                 }
             }
-            case EXP: {
-                Set<TransTreeReturn<X>> input = splitMinsInternal(((TransExp<X>) tree).input);
-                if(input == null)
+            case EXTERNAL_FUNCTION_CALL_RETURN: {
+                TransExternalFunctionCallReturn<X> t = (TransExternalFunctionCallReturn<X>) tree;
+                List<Set<TransTreeReturn<A>>> args = new ArrayList<>();
+                if(t.func.monotonic) {
+                    if(t.func.increasing) {
+                        for(TransTreeReturn<?> arg:t.args) {
+                            Set<TransTreeReturn<A>> input = splitMinsInternal((TransTreeReturn<A>) arg);
+                            if(input == null)
+                                return null;
+                            args.add(input);
+                        }
+                    } else {
+                        for(TransTreeReturn<?> arg:t.args) {
+                            Set<TransTreeReturn<A>> input = splitMaxesInternal((TransTreeReturn<A>) arg);
+                            if(input == null)
+                                return null;
+                            args.add(input);
+                        }
+                    }
+                } else
                     return null;
+                Set<TransTreeReturn<A>[]> inputs = crossProduct(args);
                 Set<TransTreeReturn<X>> toReturn = new HashSet<>();
-                for(TransTreeReturn<X> i:input)
-                    toReturn.add((TransTreeReturn<X>) exp(i));
-                return toReturn;
-            }
-            case LOG: {
-                Set<TransTreeReturn<X>> input = splitMinsInternal(((TransLog<X>) tree).input);
-                if(input == null)
-                    return null;
-                Set<TransTreeReturn<X>> toReturn = new HashSet<>();
-                for(TransTreeReturn<X> i:input)
-                    toReturn.add((TransTreeReturn<X>) log(i));
+                for(TransTreeReturn<A>[] i:inputs)
+                    toReturn.add((TransTreeReturn<X>) TransTree.functionCallReturn(t.func, t.outputType, i));
                 return toReturn;
             }
             case MIN: {
@@ -1841,22 +1895,31 @@ public class CollapseConstantsTransformer extends Transformer {
                     }
                 }
             }
-            case EXP: {
-                Set<TransTreeReturn<X>> input = splitMaxesInternal(((TransExp<X>) tree).input);
-                if(input == null)
+            case EXTERNAL_FUNCTION_CALL_RETURN: {
+                TransExternalFunctionCallReturn<X> t = (TransExternalFunctionCallReturn<X>) tree;
+                List<Set<TransTreeReturn<A>>> args = new ArrayList<>();
+                if(t.func.monotonic) {
+                    if(t.func.increasing) {
+                        for(TransTreeReturn<?> arg:t.args) {
+                            Set<TransTreeReturn<A>> input = splitMaxesInternal((TransTreeReturn<A>) arg);
+                            if(input == null)
+                                return null;
+                            args.add(input);
+                        }
+                    } else {
+                        for(TransTreeReturn<?> arg:t.args) {
+                            Set<TransTreeReturn<A>> input = splitMinsInternal((TransTreeReturn<A>) arg);
+                            if(input == null)
+                                return null;
+                            args.add(input);
+                        }
+                    }
+                } else
                     return null;
+                Set<TransTreeReturn<A>[]> inputs = crossProduct(args);
                 Set<TransTreeReturn<X>> toReturn = new HashSet<>();
-                for(TransTreeReturn<X> i:input)
-                    toReturn.add((TransTreeReturn<X>) exp(i));
-                return toReturn;
-            }
-            case LOG: {
-                Set<TransTreeReturn<X>> input = splitMaxesInternal(((TransLog<X>) tree).input);
-                if(input == null)
-                    return null;
-                Set<TransTreeReturn<X>> toReturn = new HashSet<>();
-                for(TransTreeReturn<X> i:input)
-                    toReturn.add((TransTreeReturn<X>) log(i));
+                for(TransTreeReturn<A>[] i:inputs)
+                    toReturn.add((TransTreeReturn<X>) TransTree.functionCallReturn(t.func, t.outputType, i));
                 return toReturn;
             }
             case MAX: {
@@ -1922,6 +1985,25 @@ public class CollapseConstantsTransformer extends Transformer {
             }
             default:
                 return null;
+        }
+    }
+
+    private <A extends NumberVariable<A>> Set<TransTreeReturn<A>[]> crossProduct(List<Set<TransTreeReturn<A>>> args) {
+        Set<TransTreeReturn<A>[]> inputs = new HashSet<>();
+        crossProduct(new ArrayList<>(), inputs, args, 0);
+        return inputs;
+    }
+
+    private <A extends NumberVariable<A>> void crossProduct(ArrayList<TransTreeReturn<A>> current,
+            Set<TransTreeReturn<A>[]> inputs, List<Set<TransTreeReturn<A>>> args, int i) {
+        if(i < args.size()) {
+            for(TransTreeReturn<A> t:args.get(i)) {
+                current.add(t);
+                crossProduct(current, inputs, args, i + 1);
+                current.remove(i);
+            }
+        } else {
+            inputs.add((TransTreeReturn<A>[]) current.toArray(new TransTreeReturn<?>[current.size()]));
         }
     }
 }

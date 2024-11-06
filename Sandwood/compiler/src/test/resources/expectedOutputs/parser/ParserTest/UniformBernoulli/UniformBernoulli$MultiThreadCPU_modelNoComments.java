@@ -188,7 +188,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				double cv$sampleValue = prior;
 				{
 					{
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityUniform(cv$sampleValue, a, b));
+						double cv$weightedProbability = (Math.log(1.0) + (((a <= cv$sampleValue) && (cv$sampleValue <= b))?(-Math.log((b - a))):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -233,7 +233,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 		if((cv$var < (0.1 * 0.1)))
 			cv$var = (0.1 * 0.1);
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
 		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -258,7 +258,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				{
 					cv$temp$1$b = b;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityUniform(cv$currentValue, cv$temp$0$a, cv$temp$1$b));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$a <= cv$currentValue) && (cv$currentValue <= cv$temp$1$b))?(-Math.log((cv$temp$1$b - cv$temp$0$a))):Double.NEGATIVE_INFINITY));
 				{
 					{
 						double traceTempVariable$prior$1_1 = cv$currentValue;
@@ -315,7 +315,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 		}
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio)))
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
 			prior = cv$originalValue;
 	}
 
@@ -334,7 +334,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1) {
@@ -348,13 +348,13 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
@@ -417,7 +417,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 		logModelProbabilitiesVal();
 	}
 

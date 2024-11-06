@@ -341,7 +341,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							double[] var31 = m[0];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var31));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var31.length))?Math.log(var31[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -462,7 +462,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 											double[] var41 = m[st[(i$var37 - 1)]];
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var41));
+											double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -497,7 +497,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													double[] var41 = m[traceTempVariable$var40$7_1];
 													
 													// Store the value of the function call, so the function call is only made once.
-													double cv$weightedProbability = (Math.log(cv$probabilitySample35Value5) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var41));
+													double cv$weightedProbability = (Math.log(cv$probabilitySample35Value5) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 													
 													// Add the probability of this sample task to the distribution accumulator.
 													if((cv$weightedProbability < cv$distributionAccumulator))
@@ -529,7 +529,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 										double[] var41 = m[traceTempVariable$var40$10_1];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var41));
+										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -557,7 +557,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 												double[] var41 = m[st[(i$var37 - 1)]];
 												
 												// Store the value of the function call, so the function call is only made once.
-												double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var41));
+												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 												
 												// Add the probability of this sample task to the distribution accumulator.
 												if((cv$weightedProbability < cv$distributionAccumulator))
@@ -594,7 +594,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 														double[] var41 = m[traceTempVariable$var40$16_1];
 														
 														// Store the value of the function call, so the function call is only made once.
-														double cv$weightedProbability = (Math.log(cv$probabilitySample45Value14) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var41));
+														double cv$weightedProbability = (Math.log(cv$probabilitySample45Value14) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 														
 														// Add the probability of this sample task to the distribution accumulator.
 														if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1127,7 +1127,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var31 = m[0];
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var31));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var31.length))?Math.log(var31[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1232,7 +1232,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							double[] var41 = m[st[(i$var37 - 1)]];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var41));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1946,7 +1946,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var31));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var31.length))?Math.log(cv$temp$0$var31[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 42.
 				{
@@ -1983,14 +1983,14 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 															}
 															
 															// Record the probability of sample task 45 generating output with current configuration.
-															if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var37], cv$temp$1$var41)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var37], cv$temp$1$var41)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (((0.0 <= st[i$var37]) && (st[i$var37] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[i$var37]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var37]) && (st[i$var37] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[i$var37]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																// If the second value is -infinity.
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var37], cv$temp$1$var41));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var37]) && (st[i$var37] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[i$var37]]):Double.NEGATIVE_INFINITY));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var37], cv$temp$1$var41)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[i$var37], cv$temp$1$var41)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var37]) && (st[i$var37] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[i$var37]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var37]) && (st[i$var37] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[i$var37]]):Double.NEGATIVE_INFINITY)));
 															}
 															
 															// Recorded the probability of reaching sample task 45 with the current configuration.
@@ -2292,7 +2292,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							
 							// An accumulator to allow the value for each distribution to be constructed before
 							// it is added to the index probabilities.
-							double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var41));
+							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var41.length))?Math.log(cv$temp$0$var41[cv$currentValue]):Double.NEGATIVE_INFINITY));
 							
 							// Processing random variable 42.
 							{
@@ -2409,7 +2409,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 									
 									// An accumulator to allow the value for each distribution to be constructed before
 									// it is added to the index probabilities.
-									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample35Value4) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$1$var41));
+									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample35Value4) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									
 									// Processing random variable 42.
 									{
@@ -2523,7 +2523,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
-						double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$2$var41));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var41.length))?Math.log(cv$temp$2$var41[cv$currentValue]):Double.NEGATIVE_INFINITY));
 						
 						// Processing random variable 42.
 						{
@@ -2640,7 +2640,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 									
 									// An accumulator to allow the value for each distribution to be constructed before
 									// it is added to the index probabilities.
-									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample45Value12) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$3$var41));
+									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample45Value12) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$var41.length))?Math.log(cv$temp$3$var41[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									
 									// Processing random variable 42.
 									{
@@ -3082,7 +3082,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		double[] var31 = m[0];
 		for(int index$var32 = 0; index$var32 < states; index$var32 += 1) {
 			// Probability for this value
-			double cv$value = DistributionSampling.probabilityCategorical(index$var32, var31);
+			double cv$value = (((0.0 <= index$var32) && (index$var32 < var31.length))?var31[index$var32]:0.0);
 			if(!fixedFlag$sample35)
 				// Save the probability of each value
 				cv$distribution$sample35[index$var32] = cv$value;
@@ -3108,7 +3108,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 									double[] var41 = m[st[(i$var37 - 1)]];
 									for(int index$var42 = 0; index$var42 < states; index$var42 += 1)
 										// Save the probability of each value
-										cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (1.0 * DistributionSampling.probabilityCategorical(index$var42, var41)));
+										cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (1.0 * (((0.0 <= index$var42) && (index$var42 < var41.length))?var41[index$var42]:0.0)));
 								}
 							}
 						}
@@ -3131,7 +3131,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 											double[] var41 = m[traceTempVariable$var40$5_1];
 											for(int index$var42 = 0; index$var42 < states; index$var42 += 1)
 												// Save the probability of each value
-												cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample35Value3 * DistributionSampling.probabilityCategorical(index$var42, var41)));
+												cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample35Value3 * (((0.0 <= index$var42) && (index$var42 < var41.length))?var41[index$var42]:0.0)));
 										}
 									}
 								}
@@ -3152,7 +3152,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 										double[] var41 = m[st[(i$var37 - 1)]];
 										for(int index$var42 = 0; index$var42 < states; index$var42 += 1)
 											// Save the probability of each value
-											cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (1.0 * DistributionSampling.probabilityCategorical(index$var42, var41)));
+											cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (1.0 * (((0.0 <= index$var42) && (index$var42 < var41.length))?var41[index$var42]:0.0)));
 									}
 								}
 							}
@@ -3177,7 +3177,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 												double[] var41 = m[traceTempVariable$var40$13_1];
 												for(int index$var42 = 0; index$var42 < states; index$var42 += 1)
 													// Save the probability of each value
-													cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample45Value11 * DistributionSampling.probabilityCategorical(index$var42, var41)));
+													cv$distribution$sample45[index$var42] = (cv$distribution$sample45[index$var42] + (cv$probabilitySample45Value11 * (((0.0 <= index$var42) && (index$var42 < var41.length))?var41[index$var42]:0.0)));
 											}
 										}
 									}

@@ -166,7 +166,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedProbFlag$sample31) {
 			double cv$sampleAccumulator;
 			{
-				double cv$weightedProbability = DistributionSampling.logProbabilityGaussian(weights[0], 0.0, 10.0);
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = cv$weightedProbability;
 				logProbability$sample31[0] = cv$weightedProbability;
 				if((0 < n)) {
@@ -175,7 +175,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 			{
-				double cv$weightedProbability = DistributionSampling.logProbabilityGaussian(weights[1], 0.0, 10.0);
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
 				logProbability$sample31[1] = cv$weightedProbability;
 				if((0 < n)) {
@@ -183,7 +183,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					logProbability$p = (logProbability$p + cv$weightedProbability);
 				}
 			}
-			double cv$weightedProbability = DistributionSampling.logProbabilityGaussian(weights[2], 0.0, 10.0);
+			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
 			logProbability$sample31[2] = cv$weightedProbability;
 			if((0 < n)) {
@@ -230,7 +230,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	private final void logProbabilityValue$sample38() {
 		if(!fixedProbFlag$sample38) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(bias, 0.0, 10.0);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
 			logProbability$var34 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -299,9 +299,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			if((var27 == 0)) {
 				for(int i = 0; i < n; i += 1)
 					guard$sample31bernoulli70$global[i][0] = false;
@@ -533,7 +533,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 		}
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		if((var27 == 0)) {
 			for(int i = 0; i < n; i += 1)
 				guard$sample31bernoulli70$global[i][0] = false;
@@ -645,7 +645,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			weights[var27] = cv$originalValue;
 			if((var27 == 0)) {
 				for(int i = 0; i < n; i += 1)
@@ -773,9 +773,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		double cv$var = ((bias * bias) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, bias, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(bias, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
 			for(int i = 0; i < n; i += 1) {
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], (p[i][0] + bias)) + cv$accumulatedProbabilities);
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], (p[i][1] + bias)) + cv$accumulatedProbabilities);
@@ -784,13 +784,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		bias = cv$proposedValue;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int i = 0; i < n; i += 1) {
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], (p[i][0] + cv$proposedValue)) + cv$accumulatedProbabilities);
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], (p[i][1] + cv$proposedValue)) + cv$accumulatedProbabilities);
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], (p[i][2] + cv$proposedValue)) + cv$accumulatedProbabilities);
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			bias = cv$originalValue;
 	}
 
@@ -836,12 +836,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample31) {
-			weights[0] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[1] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[2] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		for(int i = 0; i < n; i += 1) {
 			boolean[] var64 = y[i];
 			if(!fixedFlag$sample31) {
@@ -866,12 +866,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample31) {
-			weights[0] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[1] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[2] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample31) {
 			for(int i = 0; i < n; i += 1) {
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
@@ -887,12 +887,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample31) {
-			weights[0] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[1] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[2] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample31) {
 			for(int i = 0; i < n; i += 1) {
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
@@ -996,12 +996,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample31) {
-			weights[0] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[1] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
-			weights[2] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample31) {
 			for(int i = 0; i < n; i += 1) {
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));

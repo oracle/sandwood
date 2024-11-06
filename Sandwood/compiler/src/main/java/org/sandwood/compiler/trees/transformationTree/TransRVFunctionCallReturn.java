@@ -184,6 +184,8 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(Integer.MAX_VALUE);
                 } else if(source == VariableType.StudentT) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
+                } else if(source == VariableType.TruncatedGaussian) {
+                    throw new CompilerException("Method not implemented for type " + source);
                 } else if(source == VariableType.Uniform) {
                     throw new CompilerException("Method not implemented for type " + source);
                 } else
@@ -217,8 +219,10 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(Integer.MAX_VALUE);
                 } else if(source == VariableType.StudentT) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
+                } else if(source == VariableType.TruncatedGaussian) {
+                    tree = (TransTreeReturn<X>) args[5];
                 } else if(source == VariableType.Uniform) {
-                    tree = (TransTreeReturn<X>) args[2];
+                    tree = (TransTreeReturn<X>) constant(1.0);
                 } else
                     throw new CompilerException("Method not implemented for type " + source);
                 break;
@@ -275,6 +279,8 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(0);
                 } else if(source == VariableType.StudentT) {
                     tree = (TransTreeReturn<X>) constant(Double.NEGATIVE_INFINITY);
+                } else if(source == VariableType.TruncatedGaussian) {
+                    throw new CompilerException("Method not implemented for type " + source);
                 } else if(source == VariableType.Uniform) {
                     throw new CompilerException("Method not implemented for type " + source);
                 } else
@@ -308,8 +314,10 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(0);
                 } else if(source == VariableType.StudentT) {
                     tree = (TransTreeReturn<X>) constant(Double.NEGATIVE_INFINITY);
+                } else if(source == VariableType.TruncatedGaussian) {
+                    tree = (TransTreeReturn<X>) args[3];
                 } else if(source == VariableType.Uniform) {
-                    tree = (TransTreeReturn<X>) args[1];
+                    tree = (TransTreeReturn<X>) constant(0.0);
                 } else
                     throw new CompilerException("Method not implemented for type " + source);
                 break;

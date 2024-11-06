@@ -24,7 +24,6 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -66,7 +65,7 @@ public class Binomial extends NumericDistributableRandomVariable<IntVariable, Bi
     }
 
     @Override
-    public IRRVFunctionCallReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
+    public IRTreeReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(FunctionType.SAMPLE, VariableType.IntVariable, getType(),
                 p.getForwardIR(compilationCtx), length.getForwardIR(compilationCtx));
     }

@@ -300,7 +300,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				{
 					{
 						double[] var26 = m[0];
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var26));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var26.length))?Math.log(var26[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -459,7 +459,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					double[] var26 = m[0];
 					cv$temp$0$var26 = var26;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var26));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var26.length))?Math.log(cv$temp$0$var26[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$st$1_1 = cv$currentValue;

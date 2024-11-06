@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -10,7 +10,7 @@ package org.sandwood.compiler.trees.irTree;
 
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.trees.irTree.transformations.TreeTransformation;
-import org.sandwood.compiler.trees.transformationTree.TransFunctionCall;
+import org.sandwood.compiler.trees.transformationTree.TransLocalFunctionCall;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
 
@@ -51,7 +51,7 @@ public class IRFunctionCall extends IRTreeVoid {
     }
 
     @Override
-    public TransFunctionCall toTransformationTree() {
+    public TransLocalFunctionCall toTransformationTree() {
         TransTreeReturn<?>[] outputArgs = new TransTreeReturn<?>[args.length];
         for(int i = 0; i < args.length; i++)
             outputArgs[i] = args[i].toTransformationTree();

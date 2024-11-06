@@ -786,7 +786,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 		
 		// Pick a value in the array to adjust.
-		int cv$sourceIndex = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$nonZeroCount);
+		int cv$sourceIndex = (int)((double)cv$nonZeroCount * DistributionSampling.sampleUniform(RNG$));
 		for(int cv$loopIndex = 0; cv$loopIndex <= cv$sourceIndex; cv$loopIndex += 1) {
 			// A reference local to the function for the sample variable.
 			if((prior[cv$loopIndex] == 0))
@@ -796,12 +796,12 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		// Select the number of trials to remove from the selected category.
 		// 
 		// A reference local to the function for the sample variable.
-		int cv$changeValue = (int)DistributionSampling.sampleUniform(RNG$, 1.0, (1.0 + prior[cv$sourceIndex]));
+		int cv$changeValue = (int)(((double)prior[cv$sourceIndex] * DistributionSampling.sampleUniform(RNG$)) + 1.0);
 		
 		// Select the destination of the moved trials.
 		// 
 		// A reference local to the function for the sample variable.
-		int cv$destinationIndex = (int)DistributionSampling.sampleUniform(RNG$, 0.0, (prior.length - 1));
+		int cv$destinationIndex = (int)((double)(prior.length - 1) * DistributionSampling.sampleUniform(RNG$));
 		
 		// Ensure the source and target are not equal
 		if((cv$sourceIndex <= cv$destinationIndex))
@@ -978,7 +978,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			// If it is not revert the sample value and intermediates to their original values.
 			// 
 			// Set the sample value

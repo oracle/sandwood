@@ -164,8 +164,10 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var13 = 0; var13 < samples; var13 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityExponential(decay[var13], rate));
+			for(int var13 = 0; var13 < samples; var13 += 1) {
+				double cv$sampleValue = decay[var13];
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$exponential = cv$sampleAccumulator;
 			logProbability$var14 = cv$sampleAccumulator;
 			logProbability$decay = (logProbability$decay + cv$sampleAccumulator);
@@ -207,7 +209,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			parallelFor(RNG$, 0, samples, 1,
 				(int forStart$var13, int forEnd$var13, int threadID$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							decay[var13] = DistributionSampling.sampleExponential(RNG$1, rate);
+							decay[var13] = (DistributionSampling.sampleExponential(RNG$1) / rate);
 				}
 			);
 

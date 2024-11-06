@@ -184,7 +184,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(!fixedProbFlag$sample19) {
 			double cv$accumulator = 0.0;
 			for(int i$var12 = 1; i$var12 < noProducts; i$var12 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[i$var12], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[i$var12] / 3.1622776601683795)) - 1.151292546497023);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var17[(i$var12 - 1)] = cv$distributionAccumulator;
 				logProbability$sample19[(i$var12 - 1)] = cv$distributionAccumulator;
@@ -217,8 +217,10 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample49() {
 		if(!fixedProbFlag$sample49) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(choices[var46], prob));
+			for(int var46 = 0; var46 < noObs; var46 += 1) {
+				int cv$sampleValue = choices[var46];
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < prob.length))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var42 = cv$sampleAccumulator;
 			logProbability$var47 = cv$sampleAccumulator;
 			logProbability$choices = (logProbability$choices + cv$sampleAccumulator);
@@ -239,11 +241,11 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			for(int var46 = 0; var46 < noObs; var46 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var46], prob) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= choices[var46]) && (choices[var46] < prob.length))?Math.log(prob[choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		ut[i$var12] = cv$proposedValue;
@@ -265,10 +267,10 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			guard$sample19put43$global[i$var12] = true;
 			prob[i$var12] = (exped[i$var12] / reduceVar$sum$8);
 		}
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int var46 = 0; var46 < noObs; var46 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var46], prob) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+			cv$accumulatedProbabilities = ((((0.0 <= choices[var46]) && (choices[var46] < prob.length))?Math.log(prob[choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			ut[i$var12] = cv$originalValue;
 			exped[i$var12] = Math.exp(ut[i$var12]);
 			double reduceVar$sum$10 = 0.0;
@@ -317,7 +319,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			parallelFor(RNG$, 1, noProducts, 1,
 				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
@@ -354,7 +356,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			parallelFor(RNG$, 1, noProducts, 1,
 				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
@@ -383,7 +385,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			parallelFor(RNG$, 1, noProducts, 1,
 				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,
@@ -477,7 +479,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			parallelFor(RNG$, 1, noProducts, 1,
 				(int forStart$i$var12, int forEnd$i$var12, int threadID$i$var12, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			parallelFor(RNG$, 0, noProducts, 1,

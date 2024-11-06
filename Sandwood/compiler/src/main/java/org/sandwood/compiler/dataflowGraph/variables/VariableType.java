@@ -31,6 +31,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Poisson;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.StudentT;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.TruncatedGaussian;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Uniform;
 import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
@@ -177,7 +178,7 @@ public class VariableType {
         public boolean equals(Object obj) {
             return obj == this;
         }
-        
+
         /**
          * Method to determine if this type is a member of the family of array types. All other types are represented by
          * singleton objects and so do not need this check.
@@ -531,6 +532,8 @@ public class VariableType {
             "Poisson");
     public static final RandomVariableType<DoubleVariable, StudentT> StudentT = new RandomVariableType<>(true, true,
             "StudentT");
+    public static final RandomVariableType<DoubleVariable, TruncatedGaussian> TruncatedGaussian = new RandomVariableType<>(
+            true, true, "TruncatedGaussian");
     public static final RandomVariableType<DoubleVariable, Uniform> Uniform = new RandomVariableType<>(true, true,
             "Uniform");
 

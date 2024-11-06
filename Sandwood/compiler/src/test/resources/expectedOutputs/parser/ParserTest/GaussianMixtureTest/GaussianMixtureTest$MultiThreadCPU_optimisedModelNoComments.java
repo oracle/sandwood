@@ -253,7 +253,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample23) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var21 = 0; var21 < 5; var21 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(mu[var21], 0.0, 20.0));
+				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var21] / 4.47213595499958))) - 1.4978661367769954);
 			logProbability$var17 = cv$sampleAccumulator;
 			logProbability$var22 = cv$sampleAccumulator;
 			logProbability$mu = (logProbability$mu + cv$sampleAccumulator);
@@ -295,7 +295,8 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample45) {
 			double cv$accumulator = 0.0;
 			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(z[i$var40], phi);
+				int cv$sampleValue = z[i$var40];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < phi.length))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var41[i$var40] = cv$distributionAccumulator;
 				logProbability$sample45[i$var40] = cv$distributionAccumulator;
@@ -323,7 +324,8 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample49) {
 			double cv$accumulator = 0.0;
 			for(int i$var40 = 0; i$var40 < length$xMeasured; i$var40 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(x[i$var40], mu[z[i$var40]], sigma[z[i$var40]]);
+				double var44 = sigma[z[i$var40]];
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((x[i$var40] - mu[z[i$var40]]) / Math.sqrt(var44))) - (Math.log(var44) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var45[i$var40] = cv$distributionAccumulator;
 				logProbability$sample49[i$var40] = cv$distributionAccumulator;
@@ -388,7 +390,8 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		double[] cv$stateProbabilityLocal = cv$var42$stateProbabilityGlobal[threadID$cv$i$var40];
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			z[i$var40] = cv$valuePos;
-			cv$stateProbabilityLocal[cv$valuePos] = (DistributionSampling.logProbabilityGaussian(x[i$var40], mu[cv$valuePos], sigma[cv$valuePos]) + DistributionSampling.logProbabilityCategorical(cv$valuePos, phi));
+			double cv$temp$2$var44 = sigma[cv$valuePos];
+			cv$stateProbabilityLocal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var40] - mu[cv$valuePos]) / Math.sqrt(cv$temp$2$var44))) + ((cv$valuePos < phi.length)?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY)) - (Math.log(cv$temp$2$var44) * 0.5));
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$stateProbabilityLocal[0];
@@ -452,7 +455,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			parallelFor(RNG$, 0, 5, 1,
 				(int forStart$var21, int forEnd$var21, int threadID$var21, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var21 = forStart$var21; var21 < forEnd$var21; var21 += 1)
-							mu[var21] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 20.0);
+							mu[var21] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
 				}
 			);
 
@@ -470,7 +473,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						if(!fixedFlag$sample45)
 							z[i$var40] = DistributionSampling.sampleCategorical(RNG$1, phi);
 						if(!fixedFlag$sample49)
-							x[i$var40] = DistributionSampling.sampleGaussian(RNG$1, mu[z[i$var40]], sigma[z[i$var40]]);
+							x[i$var40] = ((Math.sqrt(sigma[z[i$var40]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[i$var40]]);
 					}
 			}
 		);
@@ -484,7 +487,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			parallelFor(RNG$, 0, 5, 1,
 				(int forStart$var21, int forEnd$var21, int threadID$var21, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var21 = forStart$var21; var21 < forEnd$var21; var21 += 1)
-							mu[var21] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 20.0);
+							mu[var21] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
 				}
 			);
 
@@ -514,7 +517,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			parallelFor(RNG$, 0, 5, 1,
 				(int forStart$var21, int forEnd$var21, int threadID$var21, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var21 = forStart$var21; var21 < forEnd$var21; var21 += 1)
-							mu[var21] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 20.0);
+							mu[var21] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
 				}
 			);
 
@@ -683,7 +686,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			parallelFor(RNG$, 0, 5, 1,
 				(int forStart$var21, int forEnd$var21, int threadID$var21, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var21 = forStart$var21; var21 < forEnd$var21; var21 += 1)
-							mu[var21] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 20.0);
+							mu[var21] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
 				}
 			);
 

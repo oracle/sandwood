@@ -400,7 +400,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var19], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var19] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -511,7 +511,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(b, 0.0, 10.0);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -706,7 +706,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(beta[var38], b, sigma);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((beta[var38] - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -806,7 +806,10 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < noObs; i += 1)
+			for(int i = 0; i < noObs; i += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = choices[i];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -820,9 +823,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(choices[i], prob[i]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < prob[i].length))?Math.log(prob[i][cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var72 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -899,7 +901,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// Unrolled loop
 		{
@@ -909,7 +911,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Substituted "cv$temp$1$var14" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			for(int i = 0; i < noObs; i += 1)
 				// Set the flags to false
 				// 
@@ -925,6 +927,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// variable instance.
 					guard$sample22categorical75$global[i] = true;
 					
+					// Variable declaration of cv$temp$2$prob moved.
+					double[] cv$temp$2$prob = prob[i];
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -939,14 +944,15 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					// 
-					// Substituted "cv$temp$2$prob" with its value "prob[i]".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			for(int i = 0; i < noObs; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample22categorical75$global[i])
+				if(!guard$sample22categorical75$global[i]) {
+					// Variable declaration of cv$temp$3$prob moved.
+					double[] cv$temp$3$prob = prob[i];
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -961,9 +967,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					// 
-					// Substituted "cv$temp$3$prob" with its value "prob[i]".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -1071,7 +1076,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$1$var14" with its value "10.0".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int i = 0; i < noObs; i += 1)
 			// Set the flags to false
 			// 
@@ -1087,33 +1092,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// variable instance.
 				guard$sample22categorical75$global[i] = true;
 				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 76 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 76 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				// 
-				// Substituted "cv$temp$2$prob" with its value "prob[i]".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
-			}
-		}
-		for(int i = 0; i < noObs; i += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard$sample22categorical75$global[i]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample22categorical75$global[i] = true;
+				// Variable declaration of cv$temp$2$prob moved.
+				double[] cv$temp$2$prob = prob[i];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -1129,9 +1109,36 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+		}
+		for(int i = 0; i < noObs; i += 1) {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!guard$sample22categorical75$global[i]) {
+				// The body will execute, so should not be executed again
 				// 
-				// Substituted "cv$temp$3$prob" with its value "prob[i]".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample22categorical75$global[i] = true;
+				
+				// Variable declaration of cv$temp$3$prob moved.
+				double[] cv$temp$3$prob = prob[i];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 76 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Processing sample task 76 of consumer random variable null.
+				// 
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 		}
 		
@@ -1147,7 +1154,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -1346,7 +1353,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// Unrolled loop
 		{
@@ -1356,7 +1363,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Substituted "cv$temp$1$sigma" with its value "sigma".
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, b, sigma);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$originalValue - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 < noProducts)) {
@@ -1372,33 +1379,10 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// variable instance.
 					guard$sample41categorical75$global[var38] = true;
 					
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 76 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 76 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
+					// Variable declaration of cv$temp$2$prob moved.
 					// 
 					// Substituted "i" with its value "var38".
-					// 
-					// cv$temp$2$prob's comment
-					// Substituted "i" with its value "var38".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample41categorical75$global[var38]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample41categorical75$global[var38] = true;
+					double[] cv$temp$2$prob = prob[var38];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1416,10 +1400,37 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// inputs.
 					// 
 					// Substituted "i" with its value "var38".
+					cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+				if(!guard$sample41categorical75$global[var38]) {
+					// The body will execute, so should not be executed again
 					// 
-					// cv$temp$3$prob's comment
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample41categorical75$global[var38] = true;
+					
+					// Variable declaration of cv$temp$3$prob moved.
+					// 
 					// Substituted "i" with its value "var38".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
+					double[] cv$temp$3$prob = prob[var38];
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 76 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Processing sample task 76 of consumer random variable null.
+					// 
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Substituted "i" with its value "var38".
+					cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -1536,7 +1547,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$1$sigma" with its value "sigma".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, b, sigma);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 < noProducts)) {
@@ -1552,33 +1563,10 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// variable instance.
 				guard$sample41categorical75$global[var38] = true;
 				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 76 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 76 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
+				// Variable declaration of cv$temp$2$prob moved.
 				// 
 				// Substituted "i" with its value "var38".
-				// 
-				// cv$temp$2$prob's comment
-				// Substituted "i" with its value "var38".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
-			}
-			if(!guard$sample41categorical75$global[var38]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample41categorical75$global[var38] = true;
+				double[] cv$temp$2$prob = prob[var38];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -1596,10 +1584,37 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				// inputs.
 				// 
 				// Substituted "i" with its value "var38".
+				cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			if(!guard$sample41categorical75$global[var38]) {
+				// The body will execute, so should not be executed again
 				// 
-				// cv$temp$3$prob's comment
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample41categorical75$global[var38] = true;
+				
+				// Variable declaration of cv$temp$3$prob moved.
+				// 
 				// Substituted "i" with its value "var38".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
+				double[] cv$temp$3$prob = prob[var38];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 76 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Processing sample task 76 of consumer random variable null.
+				// 
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Substituted "i" with its value "var38".
+				cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 		}
 		
@@ -1615,7 +1630,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -1823,17 +1838,17 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample22) {
 			for(int var19 = 0; var19 < noProducts; var19 += 1)
-				ut[var19] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var19] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample41) {
 			for(int var38 = 0; var38 < noObs; var38 += 1)
-				beta[var38] = DistributionSampling.sampleGaussian(RNG$, b, sigma);
+				beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		}
 		for(int i = 0; i < noObs; i += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1870,17 +1885,17 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample22) {
 			for(int var19 = 0; var19 < noProducts; var19 += 1)
-				ut[var19] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var19] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample41) {
 			for(int var38 = 0; var38 < noObs; var38 += 1)
-				beta[var38] = DistributionSampling.sampleGaussian(RNG$, b, sigma);
+				beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1916,17 +1931,17 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample22) {
 			for(int var19 = 0; var19 < noProducts; var19 += 1)
-				ut[var19] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var19] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample41) {
 			for(int var38 = 0; var38 < noObs; var38 += 1)
-				beta[var38] = DistributionSampling.sampleGaussian(RNG$, b, sigma);
+				beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2119,17 +2134,17 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample22) {
 			for(int var19 = 0; var19 < noProducts; var19 += 1)
-				ut[var19] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var19] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample41) {
 			for(int var38 = 0; var38 < noObs; var38 += 1)
-				beta[var38] = DistributionSampling.sampleGaussian(RNG$, b, sigma);
+				beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.

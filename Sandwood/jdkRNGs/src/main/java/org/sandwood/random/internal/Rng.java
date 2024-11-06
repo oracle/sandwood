@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -22,15 +22,13 @@ public interface Rng {
     /**
      * Returns a double picked from a normal distribution.
      *
-     * @param mean     The mean value of the distribution.
-     * @param variance The variance of the distribution.
-     *
-     * @return Pseudorandom number picked from a normal or Gaussian distribution with the provided mean and variance.
+     * @return Pseudorandom number picked from a normal or Gaussian distribution with the mean 0 and variance 1.
      */
-    double normal(double mean, double variance);
-    
+    double normal();
+
     /**
      * Returns a value picked from an exponential distribution with mean of 1.
+     * 
      * @return Pseudorandom number picked from an exponential distribution with a mean of 1.
      */
     double exponential();

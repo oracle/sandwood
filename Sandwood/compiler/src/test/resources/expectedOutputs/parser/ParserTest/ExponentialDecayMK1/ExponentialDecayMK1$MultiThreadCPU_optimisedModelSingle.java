@@ -296,23 +296,19 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var13 = 0; var13 < samples; var13 += 1)
+			for(int var13 = 0; var13 < samples; var13 += 1) {
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = decay[var13];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
+				// The sample value to calculate the probability of generating
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityExponential(decay[var13], rate));
+				// 
+				// The sample value to calculate the probability of generating
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$exponential = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -421,7 +417,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var13 = forStart$var13; var13 < forEnd$var13; var13 += 1)
-							decay[var13] = DistributionSampling.sampleExponential(RNG$1, rate);
+							decay[var13] = (DistributionSampling.sampleExponential(RNG$1) / rate);
 				}
 			);
 

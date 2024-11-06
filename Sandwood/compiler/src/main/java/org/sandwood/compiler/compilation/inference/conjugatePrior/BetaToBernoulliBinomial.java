@@ -50,7 +50,6 @@ import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -60,7 +59,7 @@ public class BetaToBernoulliBinomial
     protected static class BetaToBernoulliBinomialData
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, Beta> {
         // Names for the different variables that will be needed to construct for this
-        // function.
+        // function.s
         final VariableDescription<IntVariable> noTrueName;
         final VariableDescription<IntVariable> noTrialsName;
 
@@ -103,7 +102,7 @@ public class BetaToBernoulliBinomial
      * @return The intermediate tree representation of the method to infer a sample value.
      */
     @Override
-    protected IRRVFunctionCallReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
             BetaToBernoulliBinomialData funcData) {
         // TODO adjust this so it traces back to find the constructor, and get the
         // values
