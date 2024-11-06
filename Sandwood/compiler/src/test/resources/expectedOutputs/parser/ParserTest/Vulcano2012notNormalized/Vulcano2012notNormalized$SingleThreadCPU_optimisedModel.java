@@ -393,7 +393,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var22], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var22] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -780,7 +780,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// Unrolled loop
 		{
@@ -790,7 +790,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 			// Substituted "cv$temp$1$var17" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
 				// Set the flags to false
 				// 
@@ -963,7 +963,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$1$var17" with its value "10.0".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
 			// Set the flags to false
 			// 
@@ -1041,7 +1041,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -1174,7 +1174,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 			cv$var = 1.0;
 		
 		// An offset for the current value
-		double cv$offset = DistributionSampling.sampleGaussian(RNG$, 0.0, cv$var);
+		double cv$offset = (Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$));
 		
 		// Make sure the offset is not 0
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
@@ -1252,7 +1252,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -1367,7 +1367,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}
@@ -1428,7 +1428,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}
@@ -1481,7 +1481,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}
@@ -1695,7 +1695,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}

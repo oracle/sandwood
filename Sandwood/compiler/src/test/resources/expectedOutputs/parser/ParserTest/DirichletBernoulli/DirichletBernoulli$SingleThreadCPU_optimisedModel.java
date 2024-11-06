@@ -476,7 +476,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		int cv$arrayLength = prior.length;
 		
 		// Pick a value in the array to adjust.
-		int cv$indexToChange = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$arrayLength);
+		int cv$indexToChange = (int)((double)cv$arrayLength * DistributionSampling.sampleUniform(RNG$));
 		
 		// Pick how much the value should be moved by. Initially this value is proposed as
 		// a ratio of the current magnitude of the value, we will check to make sure the adjustment
@@ -681,7 +681,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			// If it is not revert the sample value and intermediates to their original values.
 			// 
 			// Set the sample value

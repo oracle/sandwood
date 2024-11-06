@@ -265,7 +265,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample22) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var19 = 0; var19 < noProducts; var19 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var19], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var19] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				logProbability$sample22[var19] = cv$distributionAccumulator;
 				if((0 < noObs)) {
@@ -299,7 +299,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	private final void logProbabilityValue$sample29() {
 		if(!fixedProbFlag$sample29) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(b, 0.0, 10.0);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b / 3.1622776601683795)) - 1.151292546497023);
 			logProbability$var26 = cv$distributionAccumulator;
 			logProbability$b = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -335,7 +335,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample41) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var38 = 0; var38 < noObs; var38 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(beta[var38], b, sigma);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((beta[var38] - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				logProbability$sample41[var38] = cv$distributionAccumulator;
 				if((0 < noProducts)) {
@@ -371,7 +371,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample76) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noObs; i += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(choices[i], prob[i]);
+				int cv$sampleValue = choices[i];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < prob[i].length))?Math.log(prob[i][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var72[i] = cv$distributionAccumulator;
 				logProbability$sample76[i] = cv$distributionAccumulator;
@@ -399,20 +400,23 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			for(int i = 0; i < noObs; i += 1)
 				guard$sample22categorical75$global[i] = false;
 			for(int i = 0; i < noObs; i += 1) {
 				if(!guard$sample22categorical75$global[i]) {
 					guard$sample22categorical75$global[i] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+					double[] cv$temp$2$prob = prob[i];
+					cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			for(int i = 0; i < noObs; i += 1) {
-				if(!guard$sample22categorical75$global[i])
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+				if(!guard$sample22categorical75$global[i]) {
+					double[] cv$temp$3$prob = prob[i];
+					cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -445,22 +449,24 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				prob[i][var19] = (exped[i][var19] / reduceVar$sum$16);
 			}
 		}
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int i = 0; i < noObs; i += 1)
 			guard$sample22categorical75$global[i] = false;
 		for(int i = 0; i < noObs; i += 1) {
 			if(!guard$sample22categorical75$global[i]) {
 				guard$sample22categorical75$global[i] = true;
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+				double[] cv$temp$2$prob = prob[i];
+				cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 		}
 		for(int i = 0; i < noObs; i += 1) {
 			if(!guard$sample22categorical75$global[i]) {
 				guard$sample22categorical75$global[i] = true;
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[i], prob[i]) + cv$accumulatedProbabilities);
+				double[] cv$temp$3$prob = prob[i];
+				cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			ut[var19] = cv$originalValue;
 			for(int i = 0; i < noObs; i += 1)
 				exped[i][var19] = Math.exp((ut[var19] - (beta[i] * Prices[i][var19])));
@@ -526,21 +532,23 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability;
 		{
 			{
-				double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, b, sigma);
+				double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$originalValue - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 				if((0 < noProducts)) {
 					boolean[] guard$sample41categorical75 = guard$sample41categorical75$global[threadID$cv$var38];
 					guard$sample41categorical75[var38] = false;
 					if(!guard$sample41categorical75[var38]) {
 						guard$sample41categorical75[var38] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
+						double[] cv$temp$2$prob = prob[var38];
+						cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample41categorical75[var38]) {
 						guard$sample41categorical75[var38] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
+						double[] cv$temp$3$prob = prob[var38];
+						cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 				cv$originalProbability = cv$accumulatedProbabilities;
@@ -575,22 +583,24 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					prob[var38][j$var48] = (exped[var38][j$var48] / reduceVar$sum$21);
 				}
 			}
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, b, sigma);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 			if((0 < noProducts)) {
 				boolean[] guard$sample41categorical75 = guard$sample41categorical75$global[threadID$cv$var38];
 				guard$sample41categorical75[var38] = false;
 				if(!guard$sample41categorical75[var38]) {
 					guard$sample41categorical75[var38] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
+					double[] cv$temp$2$prob = prob[var38];
+					cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$2$prob.length))?Math.log(cv$temp$2$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample41categorical75[var38]) {
 					guard$sample41categorical75[var38] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var38], prob[var38]) + cv$accumulatedProbabilities);
+					double[] cv$temp$3$prob = prob[var38];
+					cv$accumulatedProbabilities = ((((0.0 <= choices[var38]) && (choices[var38] < cv$temp$3$prob.length))?Math.log(cv$temp$3$prob[choices[var38]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			cv$proposedProbability = cv$accumulatedProbabilities;
 		}
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$proposedProbability - cv$originalProbability)))) {
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$proposedProbability - cv$originalProbability)))) {
 			beta[var38] = cv$originalValue;
 			for(int j$var48 = 0; j$var48 < noProducts; j$var48 += 1)
 				exped[var38][j$var48] = Math.exp((ut[j$var48] - (beta[var38] * Prices[var38][j$var48])));
@@ -679,19 +689,19 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-							ut[var19] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var19] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		if(!fixedFlag$sample41)
 			parallelFor(RNG$, 0, noObs, 1,
 				(int forStart$var38, int forEnd$var38, int threadID$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var38 = forStart$var38; var38 < forEnd$var38; var38 += 1)
-							beta[var38] = DistributionSampling.sampleGaussian(RNG$1, b, sigma);
+							beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
 				}
 			);
 
@@ -730,19 +740,19 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-							ut[var19] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var19] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		if(!fixedFlag$sample41)
 			parallelFor(RNG$, 0, noObs, 1,
 				(int forStart$var38, int forEnd$var38, int threadID$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var38 = forStart$var38; var38 < forEnd$var38; var38 += 1)
-							beta[var38] = DistributionSampling.sampleGaussian(RNG$1, b, sigma);
+							beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
 				}
 			);
 
@@ -779,19 +789,19 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-							ut[var19] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var19] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		if(!fixedFlag$sample41)
 			parallelFor(RNG$, 0, noObs, 1,
 				(int forStart$var38, int forEnd$var38, int threadID$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var38 = forStart$var38; var38 < forEnd$var38; var38 += 1)
-							beta[var38] = DistributionSampling.sampleGaussian(RNG$1, b, sigma);
+							beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
 				}
 			);
 
@@ -942,19 +952,19 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-							ut[var19] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[var19] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
 		if(!fixedFlag$sample29)
-			b = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
 		if(!fixedFlag$sample41)
 			parallelFor(RNG$, 0, noObs, 1,
 				(int forStart$var38, int forEnd$var38, int threadID$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var38 = forStart$var38; var38 < forEnd$var38; var38 += 1)
-							beta[var38] = DistributionSampling.sampleGaussian(RNG$1, b, sigma);
+							beta[var38] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
 				}
 			);
 

@@ -281,7 +281,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					{
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityUniform(cv$sampleValue, a, b));
+						double cv$weightedProbability = (Math.log(1.0) + (((a <= cv$sampleValue) && (cv$sampleValue <= b))?(-Math.log((b - a))):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -368,7 +368,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			cv$var = (0.1 * 0.1);
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
@@ -411,7 +411,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityUniform(cv$currentValue, cv$temp$0$a, cv$temp$1$b));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$a <= cv$currentValue) && (cv$currentValue <= cv$temp$1$b))?(-Math.log((cv$temp$1$b - cv$temp$0$a))):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 8.
 				{
@@ -503,7 +503,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio)))
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -534,7 +534,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 		for(int var13 = 0; var13 < length$observed; var13 += 1) {
 			if(!fixedFlag$sample16)
 				output[var13] = DistributionSampling.sampleBernoulli(RNG$, prior);
@@ -546,7 +546,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -554,7 +554,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -667,7 +667,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, a, b);
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

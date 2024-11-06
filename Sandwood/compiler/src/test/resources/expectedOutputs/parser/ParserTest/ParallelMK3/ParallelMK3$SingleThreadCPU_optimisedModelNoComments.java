@@ -163,7 +163,8 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample30) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(generated[i], sample[i], indirection[i]);
+				double var24 = indirection[i];
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var24))) - (Math.log(var24) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var25[i] = cv$distributionAccumulator;
 				logProbability$sample30[i] = cv$distributionAccumulator;
@@ -188,7 +189,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void sample19() {
 		double cv$originalProbability;
 		int cv$arrayLength = sample.length;
-		int cv$indexToChange = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$arrayLength);
+		int cv$indexToChange = (int)((double)cv$arrayLength * DistributionSampling.sampleUniform(RNG$));
 		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
 		double cv$proposedDifference;
 		if((cv$movementRatio < 0))
@@ -215,12 +216,15 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int i = 0; i < length$observed; i += 1) {
 				if(!guard$sample19gaussian29$global[i]) {
 					guard$sample19gaussian29$global[i] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(generated[i], sample[i], indirection[i]) + cv$accumulatedProbabilities);
+					double cv$temp$2$var24 = indirection[i];
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(cv$temp$2$var24))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$2$var24) * 0.5));
 				}
 			}
 			for(int i = 0; i < length$observed; i += 1) {
-				if(!guard$sample19gaussian29$global[i])
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(generated[i], sample[i], sample[i]) + cv$accumulatedProbabilities);
+				if(!guard$sample19gaussian29$global[i]) {
+					double traceTempVariable$var24$5_2 = sample[i];
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(traceTempVariable$var24$5_2))) + cv$accumulatedProbabilities) - (Math.log(traceTempVariable$var24$5_2) * 0.5));
+				}
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -237,16 +241,18 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		for(int i = 0; i < length$observed; i += 1) {
 			if(!guard$sample19gaussian29$global[i]) {
 				guard$sample19gaussian29$global[i] = true;
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(generated[i], sample[i], indirection[i]) + cv$accumulatedProbabilities);
+				double cv$temp$2$var24 = indirection[i];
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(cv$temp$2$var24))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$2$var24) * 0.5));
 			}
 		}
 		for(int i = 0; i < length$observed; i += 1) {
 			if(!guard$sample19gaussian29$global[i]) {
+				double traceTempVariable$var24$5_2 = sample[i];
 				guard$sample19gaussian29$global[i] = true;
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(generated[i], sample[i], sample[i]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(traceTempVariable$var24$5_2))) + cv$accumulatedProbabilities) - (Math.log(traceTempVariable$var24$5_2) * 0.5));
 			}
 		}
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				sample[cv$loopIndex] = (sample[cv$loopIndex] + cv$rebalanceValue);
 			sample[cv$indexToChange] = (sample[cv$indexToChange] - cv$proposedDifference);
@@ -284,7 +290,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if(!fixedFlag$sample19)
 				indirection[i] = sample[i];
 			if(!fixedFlag$sample30)
-				generated[i] = DistributionSampling.sampleGaussian(RNG$, sample[i], indirection[i]);
+				generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
 		}
 	}
 

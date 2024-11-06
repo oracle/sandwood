@@ -324,7 +324,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 
 	private final void logProbabilityValue$sample35() {
 		if(!fixedProbFlag$sample35) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[0], initialCoin);
+			int cv$sampleValue = st[0];
+			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < initialCoin.length))?Math.log(initialCoin[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			logProbability$var32 = cv$distributionAccumulator;
 			logProbability$var33 = cv$distributionAccumulator;
 			logProbability$st = (logProbability$st + cv$distributionAccumulator);
@@ -345,7 +346,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		if(!fixedProbFlag$sample45) {
 			double cv$accumulator = 0.0;
 			for(int i = 1; i < nFlips; i += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i], m[st[(i - 1)]]);
+				int cv$sampleValue = st[i];
+				double[] var41 = m[st[(i - 1)]];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var42[(i - 1)] = cv$distributionAccumulator;
 				logProbability$sample45[(i - 1)] = cv$distributionAccumulator;
@@ -429,9 +432,11 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private final void sample35() {
 		for(int cv$valuePos = 0; cv$valuePos < nCoins; cv$valuePos += 1) {
 			st[0] = cv$valuePos;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, initialCoin);
-			if((1 < nFlips))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[1], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			double cv$accumulatedProbabilities = ((cv$valuePos < initialCoin.length)?Math.log(initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			if((1 < nFlips)) {
+				double[] cv$temp$1$var41 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			if((0 < nFlips))
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[cv$valuePos]) + cv$accumulatedProbabilities);
 			cv$var33$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
@@ -464,10 +469,13 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private final void sample45(int i) {
 		for(int cv$valuePos = 0; cv$valuePos < nCoins; cv$valuePos += 1) {
 			st[i] = cv$valuePos;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[st[(i - 1)]]);
+			double[] cv$temp$0$var41 = m[st[(i - 1)]];
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var41.length)?Math.log(cv$temp$0$var41[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$1_2 = (i + 1);
-			if((index$i$1_2 < nFlips))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[index$i$1_2], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			if((index$i$1_2 < nFlips)) {
+				double[] cv$temp$1$var41 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$1$var41.length))?Math.log(cv$temp$1$var41[st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i], bias[cv$valuePos]) + cv$accumulatedProbabilities);
 			cv$var43$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}

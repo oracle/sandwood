@@ -18,7 +18,6 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -51,8 +50,7 @@ public class Gaussian extends RandomVariableImplementation<DoubleVariable, Gauss
     }
 
     @Override
-    public IRRVFunctionCallReturn<DoubleVariable> getSampleTree(DoubleVariable sample,
-            CompilationContext compilationCtx) {
+    public IRTreeReturn<DoubleVariable> getSampleTree(DoubleVariable sample, CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, getType(),
                 mean.getForwardIR(compilationCtx), variance.getForwardIR(compilationCtx));
     }

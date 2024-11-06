@@ -343,7 +343,7 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					{
 						double[] var31 = m[0];
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var31));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var31.length))?Math.log(var31[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -396,7 +396,7 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						{
 							double[] var48 = m[((states - 1) - st[(i$var39 - 4)])];
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var48));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var48.length))?Math.log(var48[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -588,7 +588,7 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					double[] var31 = m[0];
 					cv$temp$0$var31 = var31;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var31));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var31.length))?Math.log(cv$temp$0$var31[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$var46$1_1 = cv$currentValue;
@@ -606,13 +606,13 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 														double[] var48 = m[((states - 1) - traceTempVariable$var46$1_1)];
 														cv$temp$1$var48 = var48;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(i$var39 - 3)], cv$temp$1$var48)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(i$var39 - 3)], cv$temp$1$var48)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (((0.0 <= st[(i$var39 - 3)]) && (st[(i$var39 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(i$var39 - 3)]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[(i$var39 - 3)]) && (st[(i$var39 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(i$var39 - 3)]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(i$var39 - 3)], cv$temp$1$var48));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[(i$var39 - 3)]) && (st[(i$var39 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(i$var39 - 3)]]):Double.NEGATIVE_INFINITY));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(i$var39 - 3)], cv$temp$1$var48)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(i$var39 - 3)], cv$temp$1$var48)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[(i$var39 - 3)]) && (st[(i$var39 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(i$var39 - 3)]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[(i$var39 - 3)]) && (st[(i$var39 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(i$var39 - 3)]]):Double.NEGATIVE_INFINITY)));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
@@ -733,7 +733,7 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					double[] var48 = m[((states - 1) - st[(i$var39 - 4)])];
 					cv$temp$0$var48 = var48;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var48));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var48.length))?Math.log(cv$temp$0$var48[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$var46$1_1 = cv$currentValue;
@@ -751,13 +751,13 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 														double[] var48 = m[((states - 1) - traceTempVariable$var46$1_1)];
 														cv$temp$1$var48 = var48;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(index$i$1_2 - 3)], cv$temp$1$var48)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(index$i$1_2 - 3)], cv$temp$1$var48)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (((0.0 <= st[(index$i$1_2 - 3)]) && (st[(index$i$1_2 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(index$i$1_2 - 3)]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[(index$i$1_2 - 3)]) && (st[(index$i$1_2 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(index$i$1_2 - 3)]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(index$i$1_2 - 3)], cv$temp$1$var48));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[(index$i$1_2 - 3)]) && (st[(index$i$1_2 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(index$i$1_2 - 3)]]):Double.NEGATIVE_INFINITY));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(index$i$1_2 - 3)], cv$temp$1$var48)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(st[(index$i$1_2 - 3)], cv$temp$1$var48)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[(index$i$1_2 - 3)]) && (st[(index$i$1_2 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(index$i$1_2 - 3)]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[(index$i$1_2 - 3)]) && (st[(index$i$1_2 - 3)] < cv$temp$1$var48.length))?Math.log(cv$temp$1$var48[st[(index$i$1_2 - 3)]]):Double.NEGATIVE_INFINITY)));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}

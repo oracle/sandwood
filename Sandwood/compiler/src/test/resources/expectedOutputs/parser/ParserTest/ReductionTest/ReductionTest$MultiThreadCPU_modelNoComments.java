@@ -336,7 +336,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						{
 							double[] var33 = m[i$var32];
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var33));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var33.length))?Math.log(var33[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -513,7 +513,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					double[] var33 = m[i$var32];
 					cv$temp$0$var33 = var33;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var33));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var33.length))?Math.log(cv$temp$0$var33[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$i$1_1 = cv$currentValue;

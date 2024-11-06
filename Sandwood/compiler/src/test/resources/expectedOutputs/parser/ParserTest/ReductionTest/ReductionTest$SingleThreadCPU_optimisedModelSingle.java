@@ -478,7 +478,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1)
+			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = st[i$var32];
+				double[] var33 = m[i$var32];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -492,9 +496,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(st[i$var32], m[i$var32]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var33.length))?Math.log(var33[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var34 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -743,14 +746,16 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Value of the variable at this index
 			st[i$var32] = cv$valuePos;
 			
+			// Variable declaration of cv$temp$0$var33 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var33 = m[i$var32];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			// 
-			// cv$temp$0$var33's comment
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[i$var32]);
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var33.length)?Math.log(cv$temp$0$var33[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Reduction of array st
 			// 

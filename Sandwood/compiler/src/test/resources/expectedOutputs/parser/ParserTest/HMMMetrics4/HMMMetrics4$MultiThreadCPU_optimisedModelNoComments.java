@@ -515,14 +515,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									if((0 <= st[sample$var120][0])) {
 										int var86 = st[sample$var120][0];
 										if(((0 <= var86) && (var86 < noStates))) {
-											cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(cv$sampleValue, current_metric_mean[server][st[sample$var120][0]], current_metric_var[server][st[sample$var120][0]]);
+											double var154 = current_metric_var[server][st[sample$var120][0]];
+											cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var120][0]]) / Math.sqrt(var154))) - (Math.log(var154) * 0.5));
 											cv$probabilityReached = 1.0;
 										}
 									}
 								} else {
 									for(int index$sample48$4 = 0; index$sample48$4 < noStates; index$sample48$4 += 1) {
 										double cv$probabilitySample48Value5 = distribution$sample48[sample$var120][index$sample48$4];
-										double cv$weightedProbability = (Math.log(cv$probabilitySample48Value5) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, current_metric_mean[server][index$sample48$4], current_metric_var[server][index$sample48$4]));
+										double var154 = current_metric_var[server][index$sample48$4];
+										double cv$weightedProbability = ((Math.log(cv$probabilitySample48Value5) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample48$4]) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 										if((cv$weightedProbability < cv$distributionAccumulator))
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 										else {
@@ -540,7 +542,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									if((0 <= st[sample$var120][timeStep$var140])) {
 										int var86 = st[sample$var120][timeStep$var140];
 										if(((0 <= var86) && (var86 < noStates))) {
-											double cv$weightedProbability = DistributionSampling.logProbabilityGaussian(cv$sampleValue, current_metric_mean[server][st[sample$var120][timeStep$var140]], current_metric_var[server][st[sample$var120][timeStep$var140]]);
+											double var154 = current_metric_var[server][st[sample$var120][timeStep$var140]];
+											double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var120][timeStep$var140]]) / Math.sqrt(var154))) - (Math.log(var154) * 0.5));
 											if((cv$weightedProbability < cv$distributionAccumulator))
 												cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 											else {
@@ -555,7 +558,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								} else {
 									for(int index$sample61$49 = 0; index$sample61$49 < noStates; index$sample61$49 += 1) {
 										double cv$probabilitySample61Value50 = distribution$sample61[sample$var120][(timeStep$var140 - 1)][index$sample61$49];
-										double cv$weightedProbability = (Math.log(cv$probabilitySample61Value50) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, current_metric_mean[server][index$sample61$49], current_metric_var[server][index$sample61$49]));
+										double var154 = current_metric_var[server][index$sample61$49];
+										double cv$weightedProbability = ((Math.log(cv$probabilitySample61Value50) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample61$49]) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 										if((cv$weightedProbability < cv$distributionAccumulator))
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 										else {
@@ -609,7 +613,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			if(fixedFlag$sample48) {
 				double cv$accumulator = 0.0;
 				for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[sample$var32][0], initialStateDistribution);
+					int cv$sampleValue = st[sample$var32][0];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < initialStateDistribution.length))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var43[sample$var32] = cv$distributionAccumulator;
 					logProbability$sample48[sample$var32] = cv$distributionAccumulator;
@@ -647,13 +652,15 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							if(fixedFlag$sample48) {
 								int var26 = st[sample$var32][0];
 								if(((0 <= var26) && (var26 < noStates))) {
-									cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(cv$sampleValue, m[st[sample$var32][0]]);
+									double[] var55 = m[st[sample$var32][0]];
+									cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 									cv$probabilityReached = 1.0;
 								}
 							} else {
 								for(int index$sample48$6 = 0; index$sample48$6 < noStates; index$sample48$6 += 1) {
 									double cv$probabilitySample48Value7 = distribution$sample48[sample$var32][index$sample48$6];
-									double cv$weightedProbability = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, m[index$sample48$6]));
+									double[] var55 = m[index$sample48$6];
+									double cv$weightedProbability = (Math.log(cv$probabilitySample48Value7) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -669,7 +676,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						if((2 <= timeStep$var49)) {
 							int var26 = st[sample$var32][(timeStep$var49 - 1)];
 							if(((0 <= var26) && (var26 < noStates))) {
-								double cv$weightedProbability = DistributionSampling.logProbabilityCategorical(cv$sampleValue, m[st[sample$var32][(timeStep$var49 - 1)]]);
+								double[] var55 = m[st[sample$var32][(timeStep$var49 - 1)]];
+								double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -801,7 +809,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var140 = 0; timeStep$var140 < length$metric[sample$var120][0]; timeStep$var140 += 1) {
 						if(metric_valid_g[sample$var120][server][timeStep$var140]) {
-							double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][server][timeStep$var140], current_metric_mean[server][st[sample$var120][timeStep$var140]], current_metric_var[server][st[sample$var120][timeStep$var140]]);
+							double var154 = current_metric_var[server][st[sample$var120][timeStep$var140]];
+							double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][server][timeStep$var140] - current_metric_mean[server][st[sample$var120][timeStep$var140]]) / Math.sqrt(var154))) - (Math.log(var154) * 0.5));
 							cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 							logProbability$var155[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
 							logProbability$sample164[sample$var120][server][timeStep$var140] = cv$distributionAccumulator;
@@ -876,7 +885,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		if(!fixedProbFlag$sample48) {
 			double cv$accumulator = 0.0;
 			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[sample$var32][0], initialStateDistribution);
+				int cv$sampleValue = st[sample$var32][0];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < initialStateDistribution.length))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var43[sample$var32] = cv$distributionAccumulator;
 				logProbability$sample48[sample$var32] = cv$distributionAccumulator;
@@ -905,7 +915,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$accumulator = 0.0;
 			for(int sample$var32 = 0; sample$var32 < noSamples; sample$var32 += 1) {
 				for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[sample$var32][timeStep$var49], m[st[sample$var32][(timeStep$var49 - 1)]]);
+					int cv$sampleValue = st[sample$var32][timeStep$var49];
+					double[] var55 = m[st[sample$var32][(timeStep$var49 - 1)]];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var55.length))?Math.log(var55[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var56[sample$var32][(timeStep$var49 - 1)] = cv$distributionAccumulator;
 					logProbability$sample61[sample$var32][(timeStep$var49 - 1)] = cv$distributionAccumulator;
@@ -936,8 +948,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		if(!fixedProbFlag$sample92) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var82 = 0; var82 < noServers; var82 += 1) {
-				for(int var86 = 0; var86 < noStates; var86 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityUniform(current_metric_mean[var82][var86], 0.0, max_metric));
+				for(int var86 = 0; var86 < noStates; var86 += 1) {
+					double cv$sampleValue = current_metric_mean[var82][var86];
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY));
+				}
 			}
 			logProbability$var78 = cv$sampleAccumulator;
 			logProbability$var87 = cv$sampleAccumulator;
@@ -961,7 +975,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
 			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
@@ -972,24 +986,24 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var86 = st[sample$var120][0];
 							if(((0 <= var86) && (var86 < noStates))) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], current_metric_mean[var96][st[sample$var120][0]], cv$originalValue);
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][st[sample$var120][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 								double cv$temp$30$var152 = current_metric_mean[var96][st[sample$var120][0]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$originalValue) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$originalValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$originalValue))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$originalValue);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$originalValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$originalValue));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$originalValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								}
 								double cv$temp$58$var152 = current_metric_mean[var96][st[sample$var120][0]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$originalValue) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$originalValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$originalValue))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$originalValue);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$originalValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$originalValue));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$originalValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								}
 								cv$consumerDistributionProbabilityAccumulator = -2.0;
 							}
@@ -1005,26 +1019,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						}
 					} else {
 						double cv$probabilitySample48Value7 = distribution$sample48[sample$var120][var100];
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], current_metric_mean[var96][var100], cv$originalValue));
+						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][var100]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 						{
 							double var152 = current_metric_mean[var96][var100];
-							if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue)) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue));
+									cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 							}
 						}
 						double var152 = current_metric_mean[var96][var100];
-						if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue)) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 							else
-								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$originalValue));
+								cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 						}
 						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample48Value7 + cv$probabilitySample48Value7) + cv$probabilitySample48Value7)), 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1047,24 +1061,24 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								int var86 = st[sample$var120][timeStep$var140];
 								if(((0 <= var86) && (var86 < noStates))) {
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], current_metric_mean[var96][st[sample$var120][timeStep$var140]], cv$originalValue);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][st[sample$var120][timeStep$var140]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 									double cv$temp$48$var152 = current_metric_mean[var96][st[sample$var120][timeStep$var140]];
-									if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$originalValue) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$originalValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$originalValue))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$originalValue);
+											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 										else
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$originalValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$originalValue));
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$originalValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 									}
 									double cv$temp$76$var152 = current_metric_mean[var96][st[sample$var120][timeStep$var140]];
-									if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$originalValue) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$originalValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$originalValue))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$originalValue);
+											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 										else
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$originalValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$originalValue));
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$originalValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 									}
 									cv$consumerDistributionProbabilityAccumulator = -2.0;
 								}
@@ -1080,26 +1094,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							}
 						} else {
 							double cv$probabilitySample61Value19 = distribution$sample61[sample$var120][(timeStep$var140 - 1)][var100];
-							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], current_metric_mean[var96][var100], cv$originalValue));
+							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][var100]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 							{
 								double var152 = current_metric_mean[var96][var100];
-								if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue)) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue));
+										cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue));
+										cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								}
 							}
 							double var152 = current_metric_mean[var96][var100];
-							if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue)) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - ((Math.log(cv$originalValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$originalValue));
+									cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$originalValue) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 							}
 							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample61Value19 + cv$probabilitySample61Value19) + cv$probabilitySample61Value19)), 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1126,24 +1140,24 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						int var86 = st[sample$var120][0];
 						if(((0 <= var86) && (var86 < noStates))) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], current_metric_mean[var96][st[sample$var120][0]], cv$proposedValue);
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][st[sample$var120][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 							double cv$temp$30$var152 = current_metric_mean[var96][st[sample$var120][0]];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$proposedValue) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$proposedValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$proposedValue))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$proposedValue);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$proposedValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$30$var152, cv$proposedValue));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$proposedValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$30$var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							}
 							double cv$temp$58$var152 = current_metric_mean[var96][st[sample$var120][0]];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$proposedValue) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$proposedValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$proposedValue))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$proposedValue);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$proposedValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], cv$temp$58$var152, cv$proposedValue));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$proposedValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - cv$temp$58$var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							}
 							cv$consumerDistributionProbabilityAccumulator = -2.0;
 						}
@@ -1159,26 +1173,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				} else {
 					double cv$probabilitySample48Value7 = distribution$sample48[sample$var120][var100];
-					double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], current_metric_mean[var96][var100], cv$proposedValue));
+					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - current_metric_mean[var96][var100]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 					{
 						double var152 = current_metric_mean[var96][var100];
-						if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue)) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							else
-								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue));
+								cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 						}
 					}
 					double var152 = current_metric_mean[var96][var100];
-					if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue)) < cv$accumulatedConsumerProbabilities))
-						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+					if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 					else {
 						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue));
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 						else
-							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][0], var152, cv$proposedValue));
+							cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][0] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 					}
 					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample48Value7 + cv$probabilitySample48Value7) + cv$probabilitySample48Value7)), 0.0);
 					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1201,24 +1215,24 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var86 = st[sample$var120][timeStep$var140];
 							if(((0 <= var86) && (var86 < noStates))) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], current_metric_mean[var96][st[sample$var120][timeStep$var140]], cv$proposedValue);
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][st[sample$var120][timeStep$var140]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 								double cv$temp$48$var152 = current_metric_mean[var96][st[sample$var120][timeStep$var140]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$proposedValue) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$proposedValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$proposedValue))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$proposedValue);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$proposedValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$48$var152, cv$proposedValue));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$proposedValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$48$var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 								}
 								double cv$temp$76$var152 = current_metric_mean[var96][st[sample$var120][timeStep$var140]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$proposedValue) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$proposedValue) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$proposedValue))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$proposedValue);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$proposedValue))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], cv$temp$76$var152, cv$proposedValue));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$proposedValue))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - cv$temp$76$var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 								}
 								cv$consumerDistributionProbabilityAccumulator = -2.0;
 							}
@@ -1234,26 +1248,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						}
 					} else {
 						double cv$probabilitySample61Value19 = distribution$sample61[sample$var120][(timeStep$var140 - 1)][var100];
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], current_metric_mean[var96][var100], cv$proposedValue));
+						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - current_metric_mean[var96][var100]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 						{
 							double var152 = current_metric_mean[var96][var100];
-							if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue)) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue));
+									cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							}
 						}
 						double var152 = current_metric_mean[var96][var100];
-						if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue)) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5)) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - ((Math.log(cv$proposedValue) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							else
-								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var96][timeStep$var140], var152, cv$proposedValue));
+								cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$proposedValue) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var96][timeStep$var140] - var152) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 						}
 						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample61Value19 + cv$probabilitySample61Value19) + cv$probabilitySample61Value19)), 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1268,7 +1282,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				}
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			current_metric_var[var96][var100] = cv$originalValue;
 	}
 
@@ -1378,9 +1392,11 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		double[] cv$stateProbabilityLocal = cv$var44$stateProbabilityGlobal[threadID$cv$sample$var32];
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			double cv$accumulatedDistributionProbabilities = 0.0;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, initialStateDistribution);
-			if((fixedFlag$sample61 && (1 < length$metric[sample$var32][0])))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[sample$var32][1], m[cv$valuePos]) + cv$accumulatedProbabilities);
+			double cv$accumulatedProbabilities = ((cv$valuePos < initialStateDistribution.length)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			if((fixedFlag$sample61 && (1 < length$metric[sample$var32][0]))) {
+				double[] cv$temp$1$var55 = m[cv$valuePos];
+				cv$accumulatedProbabilities = ((((0.0 <= st[sample$var32][1]) && (st[sample$var32][1] < cv$temp$1$var55.length))?Math.log(cv$temp$1$var55[st[sample$var32][1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			if((0 < length$metric[sample$var32][0])) {
 				for(int server = 0; server < noServers; server += 1)
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][0], current_metric_valid_bias[server][cv$valuePos]) + cv$accumulatedProbabilities);
@@ -1393,26 +1409,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						if(metric_valid_g[sample$var32][server][0]) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+							double cv$temp$4$var154 = current_metric_var[server][cv$valuePos];
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$4$var154))) - (Math.log(cv$temp$4$var154) * 0.5));
 							double cv$temp$19$var152 = current_metric_mean[server][cv$valuePos];
 							double cv$temp$20$var154 = current_metric_var[server][cv$valuePos];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$19$var152, cv$temp$20$var154) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$19$var152, cv$temp$20$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$19$var152) / Math.sqrt(cv$temp$20$var154))) - (Math.log(cv$temp$20$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$19$var152) / Math.sqrt(cv$temp$20$var154))) - ((Math.log(cv$temp$20$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$19$var152, cv$temp$20$var154);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$19$var152) / Math.sqrt(cv$temp$20$var154))) - (Math.log(cv$temp$20$var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$19$var152, cv$temp$20$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$19$var152, cv$temp$20$var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$20$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$19$var152) / Math.sqrt(cv$temp$20$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$19$var152) / Math.sqrt(cv$temp$20$var154)))) - (Math.log(cv$temp$20$var154) * 0.5));
 							}
 							double cv$temp$35$var152 = current_metric_mean[server][cv$valuePos];
 							double cv$temp$36$var154 = current_metric_var[server][cv$valuePos];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$35$var152, cv$temp$36$var154) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$35$var152, cv$temp$36$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$35$var152) / Math.sqrt(cv$temp$36$var154))) - (Math.log(cv$temp$36$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$35$var152) / Math.sqrt(cv$temp$36$var154))) - ((Math.log(cv$temp$36$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$35$var152, cv$temp$36$var154);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$35$var152) / Math.sqrt(cv$temp$36$var154))) - (Math.log(cv$temp$36$var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$35$var152, cv$temp$36$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$35$var152, cv$temp$36$var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$36$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$35$var152) / Math.sqrt(cv$temp$36$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$35$var152) / Math.sqrt(cv$temp$36$var154)))) - (Math.log(cv$temp$36$var154) * 0.5));
 							}
 							cv$consumerDistributionProbabilityAccumulator = -2.0;
 						}
@@ -1433,26 +1450,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						if(metric_valid_g[sample$var32][server][0]) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+							double cv$temp$12$var154 = current_metric_var[server][cv$valuePos];
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$12$var154))) - (Math.log(cv$temp$12$var154) * 0.5));
 							double cv$temp$27$var152 = current_metric_mean[server][cv$valuePos];
 							double cv$temp$28$var154 = current_metric_var[server][cv$valuePos];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$27$var152, cv$temp$28$var154) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$27$var152, cv$temp$28$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$27$var152) / Math.sqrt(cv$temp$28$var154))) - (Math.log(cv$temp$28$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$27$var152) / Math.sqrt(cv$temp$28$var154))) - ((Math.log(cv$temp$28$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$27$var152, cv$temp$28$var154);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$27$var152) / Math.sqrt(cv$temp$28$var154))) - (Math.log(cv$temp$28$var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$27$var152, cv$temp$28$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$27$var152, cv$temp$28$var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$28$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$27$var152) / Math.sqrt(cv$temp$28$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$27$var152) / Math.sqrt(cv$temp$28$var154)))) - (Math.log(cv$temp$28$var154) * 0.5));
 							}
 							double cv$temp$43$var152 = current_metric_mean[server][cv$valuePos];
 							double cv$temp$44$var154 = current_metric_var[server][cv$valuePos];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$43$var152, cv$temp$44$var154) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$43$var152, cv$temp$44$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$43$var152) / Math.sqrt(cv$temp$44$var154))) - (Math.log(cv$temp$44$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$43$var152) / Math.sqrt(cv$temp$44$var154))) - ((Math.log(cv$temp$44$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$43$var152, cv$temp$44$var154);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$43$var152) / Math.sqrt(cv$temp$44$var154))) - (Math.log(cv$temp$44$var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$43$var152, cv$temp$44$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][0], cv$temp$43$var152, cv$temp$44$var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$44$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$43$var152) / Math.sqrt(cv$temp$44$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][0] - cv$temp$43$var152) / Math.sqrt(cv$temp$44$var154)))) - (Math.log(cv$temp$44$var154) * 0.5));
 							}
 							cv$consumerDistributionProbabilityAccumulator = -2.0;
 						}
@@ -1523,7 +1541,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					int var26 = st[sample$var32][0];
 					if(((0 <= var26) && (var26 < noStates))) {
 						cv$reachedDistributionSourceRV = 1.0;
-						double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[st[sample$var32][0]]);
+						double[] cv$temp$0$var55 = m[st[sample$var32][0]];
+						double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var55.length)?Math.log(cv$temp$0$var55[cv$valuePos]):Double.NEGATIVE_INFINITY);
 						if((1 < length$metric[sample$var32][0])) {
 							for(int server = 0; server < noServers; server += 1)
 								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][1], current_metric_valid_bias[server][cv$valuePos]) + cv$accumulatedProbabilities);
@@ -1536,26 +1555,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									if(metric_valid_g[sample$var32][server][1]) {
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+										double cv$temp$11$var154 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$11$var154))) - (Math.log(cv$temp$11$var154) * 0.5));
 										double cv$temp$74$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$75$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$74$var152, cv$temp$75$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$74$var152, cv$temp$75$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$74$var152) / Math.sqrt(cv$temp$75$var154))) - (Math.log(cv$temp$75$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$74$var152) / Math.sqrt(cv$temp$75$var154))) - ((Math.log(cv$temp$75$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$74$var152, cv$temp$75$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$74$var152) / Math.sqrt(cv$temp$75$var154))) - (Math.log(cv$temp$75$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$74$var152, cv$temp$75$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$74$var152, cv$temp$75$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$75$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$74$var152) / Math.sqrt(cv$temp$75$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$74$var152) / Math.sqrt(cv$temp$75$var154)))) - (Math.log(cv$temp$75$var154) * 0.5));
 										}
 										double cv$temp$138$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$139$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$138$var152, cv$temp$139$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$138$var152, cv$temp$139$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$138$var152) / Math.sqrt(cv$temp$139$var154))) - (Math.log(cv$temp$139$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$138$var152) / Math.sqrt(cv$temp$139$var154))) - ((Math.log(cv$temp$139$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$138$var152, cv$temp$139$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$138$var152) / Math.sqrt(cv$temp$139$var154))) - (Math.log(cv$temp$139$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$138$var152, cv$temp$139$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$138$var152, cv$temp$139$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$139$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$138$var152) / Math.sqrt(cv$temp$139$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$138$var152) / Math.sqrt(cv$temp$139$var154)))) - (Math.log(cv$temp$139$var154) * 0.5));
 										}
 										cv$consumerDistributionProbabilityAccumulator = -2.0;
 									}
@@ -1576,26 +1596,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									if(metric_valid_g[sample$var32][server][1]) {
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+										double cv$temp$43$var154 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$43$var154))) - (Math.log(cv$temp$43$var154) * 0.5));
 										double cv$temp$106$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$107$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$106$var152, cv$temp$107$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$106$var152, cv$temp$107$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$106$var152) / Math.sqrt(cv$temp$107$var154))) - (Math.log(cv$temp$107$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$106$var152) / Math.sqrt(cv$temp$107$var154))) - ((Math.log(cv$temp$107$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$106$var152, cv$temp$107$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$106$var152) / Math.sqrt(cv$temp$107$var154))) - (Math.log(cv$temp$107$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$106$var152, cv$temp$107$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$106$var152, cv$temp$107$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$107$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$106$var152) / Math.sqrt(cv$temp$107$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$106$var152) / Math.sqrt(cv$temp$107$var154)))) - (Math.log(cv$temp$107$var154) * 0.5));
 										}
 										double cv$temp$170$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$171$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$170$var152, cv$temp$171$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$170$var152, cv$temp$171$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$170$var152) / Math.sqrt(cv$temp$171$var154))) - (Math.log(cv$temp$171$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$170$var152) / Math.sqrt(cv$temp$171$var154))) - ((Math.log(cv$temp$171$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$170$var152, cv$temp$171$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$170$var152) / Math.sqrt(cv$temp$171$var154))) - (Math.log(cv$temp$171$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$170$var152, cv$temp$171$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$170$var152, cv$temp$171$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$171$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$170$var152) / Math.sqrt(cv$temp$171$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$170$var152) / Math.sqrt(cv$temp$171$var154)))) - (Math.log(cv$temp$171$var154) * 0.5));
 										}
 										cv$consumerDistributionProbabilityAccumulator = -2.0;
 									}
@@ -1617,7 +1638,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					for(int index$sample48$5 = 0; index$sample48$5 < noStates; index$sample48$5 += 1) {
 						double cv$probabilitySample48Value6 = distribution$sample48[sample$var32][index$sample48$5];
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample48Value6);
-						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample48Value6) + DistributionSampling.logProbabilityCategorical(cv$valuePos, m[index$sample48$5]));
+						double[] cv$temp$1$var55 = m[index$sample48$5];
+						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample48Value6) + ((cv$valuePos < cv$temp$1$var55.length)?Math.log(cv$temp$1$var55[cv$valuePos]):Double.NEGATIVE_INFINITY));
 						if((1 < length$metric[sample$var32][0])) {
 							for(int server = 0; server < noServers; server += 1)
 								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][1], current_metric_valid_bias[server][cv$valuePos]) + cv$accumulatedProbabilities);
@@ -1630,26 +1652,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									if(metric_valid_g[sample$var32][server][1]) {
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+										double cv$temp$19$var154 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$19$var154))) - (Math.log(cv$temp$19$var154) * 0.5));
 										double cv$temp$82$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$83$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$82$var152, cv$temp$83$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$82$var152, cv$temp$83$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$82$var152) / Math.sqrt(cv$temp$83$var154))) - (Math.log(cv$temp$83$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$82$var152) / Math.sqrt(cv$temp$83$var154))) - ((Math.log(cv$temp$83$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$82$var152, cv$temp$83$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$82$var152) / Math.sqrt(cv$temp$83$var154))) - (Math.log(cv$temp$83$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$82$var152, cv$temp$83$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$82$var152, cv$temp$83$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$83$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$82$var152) / Math.sqrt(cv$temp$83$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$82$var152) / Math.sqrt(cv$temp$83$var154)))) - (Math.log(cv$temp$83$var154) * 0.5));
 										}
 										double cv$temp$146$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$147$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$146$var152, cv$temp$147$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$146$var152, cv$temp$147$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$146$var152) / Math.sqrt(cv$temp$147$var154))) - (Math.log(cv$temp$147$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$146$var152) / Math.sqrt(cv$temp$147$var154))) - ((Math.log(cv$temp$147$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$146$var152, cv$temp$147$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$146$var152) / Math.sqrt(cv$temp$147$var154))) - (Math.log(cv$temp$147$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$146$var152, cv$temp$147$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$146$var152, cv$temp$147$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$147$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$146$var152) / Math.sqrt(cv$temp$147$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$146$var152) / Math.sqrt(cv$temp$147$var154)))) - (Math.log(cv$temp$147$var154) * 0.5));
 										}
 										cv$consumerDistributionProbabilityAccumulator = -2.0;
 									}
@@ -1670,26 +1693,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									if(metric_valid_g[sample$var32][server][1]) {
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+										double cv$temp$51$var154 = current_metric_var[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$51$var154))) - (Math.log(cv$temp$51$var154) * 0.5));
 										double cv$temp$114$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$115$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$114$var152, cv$temp$115$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$114$var152, cv$temp$115$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$114$var152) / Math.sqrt(cv$temp$115$var154))) - (Math.log(cv$temp$115$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$114$var152) / Math.sqrt(cv$temp$115$var154))) - ((Math.log(cv$temp$115$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$114$var152, cv$temp$115$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$114$var152) / Math.sqrt(cv$temp$115$var154))) - (Math.log(cv$temp$115$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$114$var152, cv$temp$115$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$114$var152, cv$temp$115$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$115$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$114$var152) / Math.sqrt(cv$temp$115$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$114$var152) / Math.sqrt(cv$temp$115$var154)))) - (Math.log(cv$temp$115$var154) * 0.5));
 										}
 										double cv$temp$178$var152 = current_metric_mean[server][cv$valuePos];
 										double cv$temp$179$var154 = current_metric_var[server][cv$valuePos];
-										if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$178$var152, cv$temp$179$var154) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$178$var152, cv$temp$179$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$178$var152) / Math.sqrt(cv$temp$179$var154))) - (Math.log(cv$temp$179$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$178$var152) / Math.sqrt(cv$temp$179$var154))) - ((Math.log(cv$temp$179$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 										else {
 											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$178$var152, cv$temp$179$var154);
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$178$var152) / Math.sqrt(cv$temp$179$var154))) - (Math.log(cv$temp$179$var154) * 0.5));
 											else
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$178$var152, cv$temp$179$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][1], cv$temp$178$var152, cv$temp$179$var154));
+												cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$179$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$178$var152) / Math.sqrt(cv$temp$179$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][1] - cv$temp$178$var152) / Math.sqrt(cv$temp$179$var154)))) - (Math.log(cv$temp$179$var154) * 0.5));
 										}
 										cv$consumerDistributionProbabilityAccumulator = -2.0;
 									}
@@ -1721,7 +1745,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				for(int index$sample61$14 = 0; index$sample61$14 < noStates; index$sample61$14 += 1) {
 					double cv$probabilitySample61Value15 = distribution$sample61[sample$var32][(index$timeStep$13 - 1)][index$sample61$14];
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample61Value15);
-					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample61Value15) + DistributionSampling.logProbabilityCategorical(cv$valuePos, m[index$sample61$14]));
+					double[] cv$temp$3$var55 = m[index$sample61$14];
+					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample61Value15) + ((cv$valuePos < cv$temp$3$var55.length)?Math.log(cv$temp$3$var55[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					for(int server = 0; server < noServers; server += 1)
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var32][server][timeStep$var49], current_metric_valid_bias[server][cv$valuePos]) + cv$accumulatedProbabilities);
 					boolean[][][] guard$sample61gaussian163 = guard$sample61gaussian163$global[threadID$cv$sample$var32];
@@ -1733,26 +1758,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							if(metric_valid_g[sample$var32][server][timeStep$var49]) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+								double cv$temp$35$var154 = current_metric_var[server][cv$valuePos];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$35$var154))) - (Math.log(cv$temp$35$var154) * 0.5));
 								double cv$temp$98$var152 = current_metric_mean[server][cv$valuePos];
 								double cv$temp$99$var154 = current_metric_var[server][cv$valuePos];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$98$var152, cv$temp$99$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$98$var152, cv$temp$99$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$98$var152) / Math.sqrt(cv$temp$99$var154))) - (Math.log(cv$temp$99$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$98$var152) / Math.sqrt(cv$temp$99$var154))) - ((Math.log(cv$temp$99$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$98$var152, cv$temp$99$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$98$var152) / Math.sqrt(cv$temp$99$var154))) - (Math.log(cv$temp$99$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$98$var152, cv$temp$99$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$98$var152, cv$temp$99$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$99$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$98$var152) / Math.sqrt(cv$temp$99$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$98$var152) / Math.sqrt(cv$temp$99$var154)))) - (Math.log(cv$temp$99$var154) * 0.5));
 								}
 								double cv$temp$162$var152 = current_metric_mean[server][cv$valuePos];
 								double cv$temp$163$var154 = current_metric_var[server][cv$valuePos];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$162$var152, cv$temp$163$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$162$var152, cv$temp$163$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$162$var152) / Math.sqrt(cv$temp$163$var154))) - (Math.log(cv$temp$163$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$162$var152) / Math.sqrt(cv$temp$163$var154))) - ((Math.log(cv$temp$163$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$162$var152, cv$temp$163$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$162$var152) / Math.sqrt(cv$temp$163$var154))) - (Math.log(cv$temp$163$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$162$var152, cv$temp$163$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$162$var152, cv$temp$163$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$163$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$162$var152) / Math.sqrt(cv$temp$163$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$162$var152) / Math.sqrt(cv$temp$163$var154)))) - (Math.log(cv$temp$163$var154) * 0.5));
 								}
 								cv$consumerDistributionProbabilityAccumulator = -2.0;
 							}
@@ -1773,26 +1799,27 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							if(metric_valid_g[sample$var32][server][timeStep$var49]) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], current_metric_mean[server][cv$valuePos], current_metric_var[server][cv$valuePos]);
+								double cv$temp$67$var154 = current_metric_var[server][cv$valuePos];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$67$var154))) - (Math.log(cv$temp$67$var154) * 0.5));
 								double cv$temp$130$var152 = current_metric_mean[server][cv$valuePos];
 								double cv$temp$131$var154 = current_metric_var[server][cv$valuePos];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$130$var152, cv$temp$131$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$130$var152, cv$temp$131$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$130$var152) / Math.sqrt(cv$temp$131$var154))) - (Math.log(cv$temp$131$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$130$var152) / Math.sqrt(cv$temp$131$var154))) - ((Math.log(cv$temp$131$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$130$var152, cv$temp$131$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$130$var152) / Math.sqrt(cv$temp$131$var154))) - (Math.log(cv$temp$131$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$130$var152, cv$temp$131$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$130$var152, cv$temp$131$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$131$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$130$var152) / Math.sqrt(cv$temp$131$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$130$var152) / Math.sqrt(cv$temp$131$var154)))) - (Math.log(cv$temp$131$var154) * 0.5));
 								}
 								double cv$temp$194$var152 = current_metric_mean[server][cv$valuePos];
 								double cv$temp$195$var154 = current_metric_var[server][cv$valuePos];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$194$var152, cv$temp$195$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$194$var152, cv$temp$195$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$194$var152) / Math.sqrt(cv$temp$195$var154))) - (Math.log(cv$temp$195$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$194$var152) / Math.sqrt(cv$temp$195$var154))) - ((Math.log(cv$temp$195$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$194$var152, cv$temp$195$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$194$var152) / Math.sqrt(cv$temp$195$var154))) - (Math.log(cv$temp$195$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$194$var152, cv$temp$195$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var32][server][timeStep$var49], cv$temp$194$var152, cv$temp$195$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$195$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$194$var152) / Math.sqrt(cv$temp$195$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var32][server][timeStep$var49] - cv$temp$194$var152) / Math.sqrt(cv$temp$195$var154)))) - (Math.log(cv$temp$195$var154) * 0.5));
 								}
 								cv$consumerDistributionProbabilityAccumulator = -2.0;
 							}
@@ -1884,9 +1911,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityUniform(cv$originalValue, 0.0, max_metric);
+			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 			for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
 				if((metric_valid_g[sample$var120][var82][0] && (0 < length$metric[sample$var120][0]))) {
 					if(fixedFlag$sample48) {
@@ -1895,24 +1922,25 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var100 = st[sample$var120][0];
 							if(((0 <= var100) && (var100 < noStates))) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, current_metric_var[var82][st[sample$var120][0]]);
+								double cv$temp$3$var154 = current_metric_var[var82][st[sample$var120][0]];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$3$var154))) - (Math.log(cv$temp$3$var154) * 0.5));
 								double cv$temp$31$var154 = current_metric_var[var82][st[sample$var120][0]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$31$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$31$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$31$var154))) - (Math.log(cv$temp$31$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$31$var154))) - ((Math.log(cv$temp$31$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$31$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$31$var154))) - (Math.log(cv$temp$31$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$31$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$31$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$31$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$31$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$31$var154)))) - (Math.log(cv$temp$31$var154) * 0.5));
 								}
 								double cv$temp$59$var154 = current_metric_var[var82][st[sample$var120][0]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$59$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$59$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$59$var154))) - (Math.log(cv$temp$59$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$59$var154))) - ((Math.log(cv$temp$59$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$59$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$59$var154))) - (Math.log(cv$temp$59$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$59$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, cv$temp$59$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$59$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$59$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(cv$temp$59$var154)))) - (Math.log(cv$temp$59$var154) * 0.5));
 								}
 								cv$consumerDistributionProbabilityAccumulator = -2.0;
 							}
@@ -1928,26 +1956,30 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						}
 					} else {
 						double cv$probabilitySample48Value7 = distribution$sample48[sample$var120][var86];
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, current_metric_var[var82][var86]));
+						double cv$accumulatedConsumerProbabilities;
 						{
 							double var154 = current_metric_var[var82][var86];
-							if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154)) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
+						}
+						{
+							double var154 = current_metric_var[var82][var86];
+							if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154));
+									cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 							}
 						}
 						double var154 = current_metric_var[var82][var86];
-						if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154)) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 							else
-								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$originalValue, var154));
+								cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 						}
 						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample48Value7 + cv$probabilitySample48Value7) + cv$probabilitySample48Value7)), 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1970,24 +2002,25 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								int var100 = st[sample$var120][timeStep$var140];
 								if(((0 <= var100) && (var100 < noStates))) {
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, current_metric_var[var82][st[sample$var120][timeStep$var140]]);
+									double cv$temp$21$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$21$var154))) - (Math.log(cv$temp$21$var154) * 0.5));
 									double cv$temp$49$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
-									if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$49$var154) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$49$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$49$var154))) - (Math.log(cv$temp$49$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$49$var154))) - ((Math.log(cv$temp$49$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$49$var154);
+											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$49$var154))) - (Math.log(cv$temp$49$var154) * 0.5));
 										else
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$49$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$49$var154));
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$49$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$49$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$49$var154)))) - (Math.log(cv$temp$49$var154) * 0.5));
 									}
 									double cv$temp$77$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
-									if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$77$var154) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$77$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$77$var154))) - (Math.log(cv$temp$77$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$77$var154))) - ((Math.log(cv$temp$77$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$77$var154);
+											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$77$var154))) - (Math.log(cv$temp$77$var154) * 0.5));
 										else
-											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$77$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, cv$temp$77$var154));
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$77$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$77$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(cv$temp$77$var154)))) - (Math.log(cv$temp$77$var154) * 0.5));
 									}
 									cv$consumerDistributionProbabilityAccumulator = -2.0;
 								}
@@ -2003,26 +2036,30 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							}
 						} else {
 							double cv$probabilitySample61Value19 = distribution$sample61[sample$var120][(timeStep$var140 - 1)][var86];
-							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, current_metric_var[var82][var86]));
+							double cv$accumulatedConsumerProbabilities;
 							{
 								double var154 = current_metric_var[var82][var86];
-								if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154)) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
+							}
+							{
+								double var154 = current_metric_var[var82][var86];
+								if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154));
+										cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 								}
 							}
 							double var154 = current_metric_var[var82][var86];
-							if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154)) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$originalValue, var154));
+									cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$originalValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 							}
 							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample61Value19 + cv$probabilitySample61Value19) + cv$probabilitySample61Value19)), 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -2040,7 +2077,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		current_metric_mean[var82][var86] = cv$proposedValue;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityUniform(cv$proposedValue, 0.0, max_metric);
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 		for(int sample$var120 = 0; sample$var120 < noSamples; sample$var120 += 1) {
 			if((metric_valid_g[sample$var120][var82][0] && (0 < length$metric[sample$var120][0]))) {
 				if(fixedFlag$sample48) {
@@ -2049,24 +2086,25 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						int var100 = st[sample$var120][0];
 						if(((0 <= var100) && (var100 < noStates))) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, current_metric_var[var82][st[sample$var120][0]]);
+							double cv$temp$3$var154 = current_metric_var[var82][st[sample$var120][0]];
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$3$var154))) - (Math.log(cv$temp$3$var154) * 0.5));
 							double cv$temp$31$var154 = current_metric_var[var82][st[sample$var120][0]];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$31$var154) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$31$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$31$var154))) - (Math.log(cv$temp$31$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$31$var154))) - ((Math.log(cv$temp$31$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$31$var154);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$31$var154))) - (Math.log(cv$temp$31$var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$31$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$31$var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$31$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$31$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$31$var154)))) - (Math.log(cv$temp$31$var154) * 0.5));
 							}
 							double cv$temp$59$var154 = current_metric_var[var82][st[sample$var120][0]];
-							if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$59$var154) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$59$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$59$var154))) - (Math.log(cv$temp$59$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$59$var154))) - ((Math.log(cv$temp$59$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$59$var154);
+									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$59$var154))) - (Math.log(cv$temp$59$var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$59$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, cv$temp$59$var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$59$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$59$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(cv$temp$59$var154)))) - (Math.log(cv$temp$59$var154) * 0.5));
 							}
 							cv$consumerDistributionProbabilityAccumulator = -2.0;
 						}
@@ -2082,26 +2120,30 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				} else {
 					double cv$probabilitySample48Value7 = distribution$sample48[sample$var120][var86];
-					double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, current_metric_var[var82][var86]));
+					double cv$accumulatedConsumerProbabilities;
 					{
 						double var154 = current_metric_var[var82][var86];
-						if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154)) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
+					}
+					{
+						double var154 = current_metric_var[var82][var86];
+						if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 							else
-								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154));
+								cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 						}
 					}
 					double var154 = current_metric_var[var82][var86];
-					if(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154)) < cv$accumulatedConsumerProbabilities))
-						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+					if((((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 					else {
 						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154));
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 						else
-							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154)))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][0], cv$proposedValue, var154));
+							cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample48Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample48Value7)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][0] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 					}
 					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample48Value7 + cv$probabilitySample48Value7) + cv$probabilitySample48Value7)), 0.0);
 					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -2124,24 +2166,25 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var100 = st[sample$var120][timeStep$var140];
 							if(((0 <= var100) && (var100 < noStates))) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, current_metric_var[var82][st[sample$var120][timeStep$var140]]);
+								double cv$temp$21$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$21$var154))) - (Math.log(cv$temp$21$var154) * 0.5));
 								double cv$temp$49$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$49$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$49$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$49$var154))) - (Math.log(cv$temp$49$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$49$var154))) - ((Math.log(cv$temp$49$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$49$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$49$var154))) - (Math.log(cv$temp$49$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$49$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$49$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$49$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$49$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$49$var154)))) - (Math.log(cv$temp$49$var154) * 0.5));
 								}
 								double cv$temp$77$var154 = current_metric_var[var82][st[sample$var120][timeStep$var140]];
-								if((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$77$var154) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$77$var154) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$77$var154))) - (Math.log(cv$temp$77$var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$77$var154))) - ((Math.log(cv$temp$77$var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$77$var154);
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$77$var154))) - (Math.log(cv$temp$77$var154) * 0.5));
 									else
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$77$var154))) + 1)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, cv$temp$77$var154));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(cv$temp$77$var154) * 0.5)) - DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$77$var154))))) + 1)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(cv$temp$77$var154)))) - (Math.log(cv$temp$77$var154) * 0.5));
 								}
 								cv$consumerDistributionProbabilityAccumulator = -2.0;
 							}
@@ -2157,26 +2200,30 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						}
 					} else {
 						double cv$probabilitySample61Value19 = distribution$sample61[sample$var120][(timeStep$var140 - 1)][var86];
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, current_metric_var[var82][var86]));
+						double cv$accumulatedConsumerProbabilities;
 						{
 							double var154 = current_metric_var[var82][var86];
-							if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154)) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
+						}
+						{
+							double var154 = current_metric_var[var82][var86];
+							if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154));
+									cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 							}
 						}
 						double var154 = current_metric_var[var82][var86];
-						if(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154)) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						if((((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5)) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - ((Math.log(var154) * 0.5) + cv$accumulatedConsumerProbabilities))) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 							else
-								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154)))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(metric_g[sample$var120][var82][timeStep$var140], cv$proposedValue, var154));
+								cv$accumulatedConsumerProbabilities = (((Math.log((Math.exp(((cv$accumulatedConsumerProbabilities + (Math.log(var154) * 0.5)) - (Math.log(cv$probabilitySample61Value19) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))))) + 1)) + Math.log(cv$probabilitySample61Value19)) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var120][var82][timeStep$var140] - cv$proposedValue) / Math.sqrt(var154)))) - (Math.log(var154) * 0.5));
 						}
 						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - ((cv$probabilitySample61Value19 + cv$probabilitySample61Value19) + cv$probabilitySample61Value19)), 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -2191,7 +2238,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				}
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			current_metric_mean[var82][var86] = cv$originalValue;
 	}
 
@@ -2383,7 +2430,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, noStates, 1,
 								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = DistributionSampling.sampleUniform(RNG$2, 0.0, max_metric);
+											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -2435,7 +2482,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 														if(!fixedFlag$sample152)
 															metric_valid_g[sample$var120][server][timeStep$var140] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var120][timeStep$var140]]);
 														if((metric_valid_g[sample$var120][server][timeStep$var140] && !fixedFlag$sample164))
-															metric_inner[timeStep$var140] = DistributionSampling.sampleGaussian(RNG$3, current_metric_mean[server][st[sample$var120][timeStep$var140]], current_metric_var[server][st[sample$var120][timeStep$var140]]);
+															metric_inner[timeStep$var140] = ((Math.sqrt(current_metric_var[server][st[sample$var120][timeStep$var140]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var120][timeStep$var140]]);
 													}
 											}
 										);
@@ -2465,7 +2512,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						if(!fixedFlag$sample48) {
 							double[] cv$distribution$sample48 = distribution$sample48[sample$var32];
 							for(int index$var43 = 0; index$var43 < noStates; index$var43 += 1)
-								cv$distribution$sample48[index$var43] = DistributionSampling.probabilityCategorical(index$var43, initialStateDistribution);
+								cv$distribution$sample48[index$var43] = ((index$var43 < initialStateDistribution.length)?initialStateDistribution[index$var43]:0.0);
 						}
 						if(!fixedFlag$sample61) {
 							for(int timeStep$var49 = 1; timeStep$var49 < length$metric[sample$var32][0]; timeStep$var49 += 1) {
@@ -2478,14 +2525,14 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										if(((0 <= var26) && (var26 < noStates))) {
 											double[] var55 = m[st[sample$var32][0]];
 											for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-												cv$distribution$sample61[index$var56] = (cv$distribution$sample61[index$var56] + DistributionSampling.probabilityCategorical(index$var56, var55));
+												cv$distribution$sample61[index$var56] = (cv$distribution$sample61[index$var56] + ((index$var56 < var55.length)?var55[index$var56]:0.0));
 										}
 									} else {
 										for(int index$sample48$3 = 0; index$sample48$3 < noStates; index$sample48$3 += 1) {
 											double cv$probabilitySample48Value4 = distribution$sample48[sample$var32][index$sample48$3];
 											double[] var55 = m[index$sample48$3];
 											for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-												cv$distribution$sample61[index$var56] = (cv$distribution$sample61[index$var56] + (cv$probabilitySample48Value4 * DistributionSampling.probabilityCategorical(index$var56, var55)));
+												cv$distribution$sample61[index$var56] = (cv$distribution$sample61[index$var56] + (cv$probabilitySample48Value4 * ((index$var56 < var55.length)?var55[index$var56]:0.0)));
 										}
 									}
 								}
@@ -2495,7 +2542,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										double cv$probabilitySample61Value13 = distribution$sample61[sample$var32][(index$timeStep$11 - 1)][index$sample61$12];
 										double[] var55 = m[index$sample61$12];
 										for(int index$var56 = 0; index$var56 < noStates; index$var56 += 1)
-											cv$distribution$sample61[index$var56] = (cv$distribution$sample61[index$var56] + (cv$probabilitySample61Value13 * DistributionSampling.probabilityCategorical(index$var56, var55)));
+											cv$distribution$sample61[index$var56] = (cv$distribution$sample61[index$var56] + (cv$probabilitySample61Value13 * ((index$var56 < var55.length)?var55[index$var56]:0.0)));
 									}
 								}
 								double cv$var56$sum = 0.0;
@@ -2516,7 +2563,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, noStates, 1,
 								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = DistributionSampling.sampleUniform(RNG$2, 0.0, max_metric);
+											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -2588,7 +2635,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, noStates, 1,
 								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = DistributionSampling.sampleUniform(RNG$2, 0.0, max_metric);
+											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -2937,7 +2984,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, noStates, 1,
 								(int forStart$var86, int forEnd$var86, int threadID$var86, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int var86 = forStart$var86; var86 < forEnd$var86; var86 += 1)
-											var83[var86] = DistributionSampling.sampleUniform(RNG$2, 0.0, max_metric);
+											var83[var86] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}

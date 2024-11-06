@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -47,14 +47,11 @@ public class SplittableRng implements Rng {
     /**
      * Returns a double picked from a normal distribution.
      *
-     * @param mean     the mean value of the distribution.
-     * @param variance The variance of the distribution.
-     *
-     * @return Pseudorandom number picked from a normal or Gaussian distribution with the provided mean and variance.
+     * @return Pseudorandom number picked from a normal or Gaussian distribution with mean 0 and variance 1.
      */
     @Override
-    public final double normal(double mean, double variance) {
-        return random.nextGaussian(mean, Math.sqrt(variance));
+    public final double normal() {
+        return random.nextGaussian();
     }
     
     /**

@@ -832,17 +832,17 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// Pick a value in the array to adjust.
-		int cv$sourceIndex = (int)DistributionSampling.sampleUniform(RNG$, 0.0, cv$nonZeroCount);
+		int cv$sourceIndex = (int)(0.0 + ((cv$nonZeroCount - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		for(int cv$loopIndex = 0; cv$loopIndex < (cv$sourceIndex + 1); cv$loopIndex += 1) {
 			if((cv$targetLocal[cv$loopIndex] == 0))
 				cv$sourceIndex = (cv$sourceIndex + 1);
 		}
 		
 		// Select the number of trials to remove from the selected category.
-		int cv$changeValue = (int)DistributionSampling.sampleUniform(RNG$, 1.0, (cv$targetLocal[cv$sourceIndex] + 1.0));
+		int cv$changeValue = (int)(1.0 + (((cv$targetLocal[cv$sourceIndex] + 1.0) - 1.0) * DistributionSampling.sampleUniform(RNG$)));
 		
 		// Select the destination of the moved trials.
-		int cv$destinationIndex = (int)DistributionSampling.sampleUniform(RNG$, 0.0, (cv$arrayLength - 1));
+		int cv$destinationIndex = (int)(0.0 + (((cv$arrayLength - 1) - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		
 		// Ensure the source and target are not equal
 		if((cv$sourceIndex <= cv$destinationIndex))
@@ -1095,7 +1095,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if(((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0)))) {
+		if(((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)))))) {
 			// If it is not revert the sample value and intermediates to their original values.
 			// 
 			// Set the sample value

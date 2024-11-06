@@ -32,7 +32,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
-import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
@@ -140,7 +139,6 @@ public abstract class IRTree extends Tree<IRTree> {
         CONST_DOUBLE,
         CONST_INT,
         CONSTANT_INFERENCE_CONSTRAINT,
-        EXP,
         FOR,
         FUNCTION_CALL,
         FUNCTION_CALL_RETURN,
@@ -149,7 +147,6 @@ public abstract class IRTree extends Tree<IRTree> {
         INITIALIZE,
         INITIALIZE_UNSET,
         LOAD,
-        LOG,
         MAX,
         MIN,
         NEGATE,
@@ -269,52 +266,39 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRFunctionCall(name, args, comment);
     }
 
-    public static <X extends Variable<X>> IRRVFunctionCall functionCall(FunctionType t, RandomVariableType<?, ?> source,
+    public static <X extends Variable<X>> IRTreeVoid functionCall(FunctionType t, RandomVariableType<?, ?> source,
             String comment, List<IRTreeReturn<?>> args) {
         return functionCall(t, source, null, comment, args.toArray(new IRTreeReturn<?>[args.size()]));
     }
 
-    public static <X extends Variable<X>> IRRVFunctionCall functionCall(FunctionType t, RandomVariableType<?, ?> source,
+    public static <X extends Variable<X>> IRTreeVoid functionCall(FunctionType t, RandomVariableType<?, ?> source,
             String comment, IRTreeReturn<?>... args) {
         return functionCall(t, source, null, comment, args);
     }
 
-    public static IRRVFunctionCall functionCall(FunctionType t, RandomVariableType<?, ?> source,
+    public static IRTreeVoid functionCall(FunctionType t, RandomVariableType<?, ?> source,
             RandomVariableType<?, ?> sink, String comment, IRTreeReturn<?>... args) {
-        if(t == FunctionType.CONJUGATE_SAMPLE || t == FunctionType.SAMPLE)
-            args = addRng(args);
-        return new IRRVFunctionCall(t, source, sink, args, comment);
+        return IRRVFunctionCall.construct(t, source, sink, args, comment);
     }
 
-    public static <X extends Variable<X>> IRRVFunctionCallReturn<X> functionCallReturn(FunctionType t,
-            Type<X> outputType, RandomVariableType<?, ?> source, IRTreeReturn<?>... args) {
+    public static <X extends Variable<X>> IRTreeReturn<X> functionCallReturn(FunctionType t, Type<X> outputType,
+            RandomVariableType<?, ?> source, IRTreeReturn<?>... args) {
         return functionCallReturn(t, outputType, source, null, args);
     }
 
-    public static <X extends Variable<X>> IRRVFunctionCallReturn<X> functionCallReturn(FunctionType t,
-            Type<X> outputType, RandomVariableType<?, ?> source, List<IRTreeReturn<?>> args) {
+    public static <X extends Variable<X>> IRTreeReturn<X> functionCallReturn(FunctionType t, Type<X> outputType,
+            RandomVariableType<?, ?> source, List<IRTreeReturn<?>> args) {
         return functionCallReturn(t, outputType, source, null, args.toArray(new IRTreeReturn<?>[args.size()]));
     }
 
-    public static <X extends Variable<X>> IRRVFunctionCallReturn<X> functionCallReturn(FunctionType t,
-            Type<X> outputType, RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink,
-            IRTreeReturn<?>... args) {
-        if(t == FunctionType.CONJUGATE_SAMPLE || t == FunctionType.SAMPLE)
-            args = addRng(args);
-        return new IRRVFunctionCallReturn<>(t, outputType, source, sink, args);
+    public static <X extends Variable<X>> IRTreeReturn<X> functionCallReturn(FunctionType t, Type<X> outputType,
+            RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink, IRTreeReturn<?>... args) {
+        return IRRVFunctionCallReturn.construct(t, outputType, source, sink, args);
     }
 
-    public static <X extends Variable<X>> IRFunctionCallReturn<X> functionCallReturn(ExternalFunction func,
+    public static <X extends Variable<X>> IRExternalFunctionCallReturn<X> functionCallReturn(ExternalFunction func,
             Type<X> outputType, IRTreeReturn<?>... args) {
-        return new IRFunctionCallReturn<>(func, outputType, args);
-    }
-
-    // TODO push this back into the calling classes?
-    private static IRTreeReturn<?>[] addRng(IRTreeReturn<?>[] args) {
-        IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[args.length + 1];
-        newArgs[0] = IRTree.load(VariableNames.rngName(0));
-        System.arraycopy(args, 0, newArgs, 1, args.length);
-        return newArgs;
+        return new IRExternalFunctionCallReturn<>(func, outputType, args);
     }
 
     public static <X extends Variable<X>> IRLocalFunctionCallReturn<X> functionCallReturn(
@@ -590,12 +574,16 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRConditionalAssignment<X>(condition, ifValue, elseValue);
     }
 
-    public static <A extends NumberVariable<A>> IRExp<A> exp(IRTreeReturn<A> input) {
-        return IRExp.getExp(input);
+    public static <A extends NumberVariable<A>> IRTreeReturn<DoubleVariable> exp(IRTreeReturn<A> input) {
+        return functionCallReturn(ExternalFunction.EXP, VariableType.DoubleVariable, input);
     }
 
-    public static <A extends NumberVariable<A>> IRLog<A> log(IRTreeReturn<A> input) {
-        return IRLog.getLog(input);
+    public static <A extends NumberVariable<A>> IRTreeReturn<DoubleVariable> log(IRTreeReturn<A> input) {
+        return functionCallReturn(ExternalFunction.LOG, VariableType.DoubleVariable, input);
+    }
+
+    public static <A extends NumberVariable<A>> IRTreeReturn<DoubleVariable> sqrt(IRTreeReturn<A> input) {
+        return functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable, input);
     }
 
     public static <A extends NumberVariable<A>> IRNegate<A> negate(IRTreeReturn<A> input) {

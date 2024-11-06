@@ -651,6 +651,10 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// just use cached values.
 		if(!fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
+			// The sample value to calculate the probability of generating
+			int cv$sampleValue = st[0][0][0];
+			double[] var49 = m[0];
+			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -658,8 +662,6 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -672,9 +674,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[0][0][0], m[0]);
+			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var49.length))?Math.log(var49[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -773,6 +773,10 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			for(int i1 = 1; i1 < samples; i1 += 1) {
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1) {
+						// The sample value to calculate the probability of generating
+						int cv$sampleValue = st[i1][j1][k1];
+						double[] var67 = m[0];
+						
 						// Variable declaration of cv$distributionAccumulator moved.
 						// Declaration comment was:
 						// Variable declaration of cv$distributionAccumulator moved.
@@ -780,8 +784,6 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						// An accumulator for log probabilities.
 						// 
 						// Store the value of the function call, so the function call is only made once.
-						// 
-						// The sample value to calculate the probability of generating
 						// 
 						// Scale the probability relative to the observed distribution space.
 						// 
@@ -794,9 +796,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						// An accumulator for log probabilities.
 						// 
 						// Store the value of the function call, so the function call is only made once.
-						// 
-						// The sample value to calculate the probability of generating
-						double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(st[i1][j1][k1], m[0]);
+						double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var67.length))?Math.log(var67[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 						
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
@@ -952,12 +952,22 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void sample53() {
 		// Unrolled loop
 		{
+			// Variable declaration of cv$temp$0$var49 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var49 = m[0];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// cv$temp$0$var49's comment
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(0, m[0]);
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = ((0 < cv$temp$0$var49.length)?Math.log(cv$temp$0$var49[0]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "p" with its value "0".
 			if((0 < samples))
@@ -1001,12 +1011,22 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$var51$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
+		// Variable declaration of cv$temp$0$var49 moved.
+		// 
+		// Constructing a random variable input for use later.
+		double[] cv$temp$0$var49 = m[0];
+		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// cv$temp$0$var49's comment
-		// Constructing a random variable input for use later.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(1, m[0]);
+		// Variable declaration of cv$currentValue moved.
+		// Declaration comment was:
+		// The value currently being tested
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = ((1 < cv$temp$0$var49.length)?Math.log(cv$temp$0$var49[1]):Double.NEGATIVE_INFINITY);
 		
 		// Substituted "p" with its value "0".
 		if((0 < samples))
@@ -1122,58 +1142,79 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// marginalization.
 	private final void sample71(int i1, int j1, int k1) {
 		// Unrolled loop
+		{
+			// Variable declaration of cv$temp$0$var67 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var67 = m[0];
+			
+			// Save the calculated index value into the array of index value probabilities
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// Variable declaration of cv$accumulatedProbabilities moved.
+			// Declaration comment was:
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 104 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			// 
+			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+			// Declaration comment was:
+			// Processing sample task 104 of consumer random variable null.
+			// 
+			// Set an accumulator to sum the probabilities for each possible configuration of
+			// inputs.
+			// 
+			// Substituted "l" with its value "j1".
+			// 
+			// Substituted "cv$temp$1$var100" with its value "var100".
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Variable declaration of cv$currentValue moved.
+			// Declaration comment was:
+			// The value currently being tested
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			cv$var69$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[0]) + ((0 < cv$temp$0$var67.length)?Math.log(cv$temp$0$var67[0]):Double.NEGATIVE_INFINITY));
+		}
+		
+		// Variable declaration of cv$temp$0$var67 moved.
 		// 
-		// Save the calculated index value into the array of index value probabilities
-		// 
-		// Get a local reference to the scratch space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// Variable declaration of cv$accumulatedProbabilities moved.
-		// Declaration comment was:
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// cv$temp$0$var67's comment
 		// Constructing a random variable input for use later.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 104 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// cv$temp$0$var67's comment
-		// Constructing a random variable input for use later.
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Processing sample task 104 of consumer random variable null.
-		// 
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Substituted "l" with its value "j1".
-		// 
-		// Substituted "cv$temp$1$var100" with its value "var100".
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "0".
-		cv$var69$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[0]) + DistributionSampling.logProbabilityCategorical(0, m[0]));
+		double[] cv$temp$0$var67 = m[0];
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -1188,8 +1229,13 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// cv$temp$0$var67's comment
-		// Constructing a random variable input for use later.
+		// Variable declaration of cv$currentValue moved.
+		// Declaration comment was:
+		// The value currently being tested
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -1202,8 +1248,13 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// cv$temp$0$var67's comment
-		// Constructing a random variable input for use later.
+		// Variable declaration of cv$currentValue moved.
+		// Declaration comment was:
+		// The value currently being tested
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
@@ -1225,7 +1276,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		cv$var69$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[1]) + DistributionSampling.logProbabilityCategorical(1, m[0]));
+		cv$var69$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[1]) + ((1 < cv$temp$0$var67.length)?Math.log(cv$temp$0$var67[1]):Double.NEGATIVE_INFINITY));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 

@@ -191,6 +191,9 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleAccumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = indirection1[i][j];
+					
 					// Variable declaration of cv$distributionAccumulator moved.
 					// Declaration comment was:
 					// Variable declaration of cv$distributionAccumulator moved.
@@ -198,8 +201,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
 					// 
 					// Scale the probability relative to the observed distribution space.
 					// 
@@ -212,9 +213,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityUniform(indirection1[i][j], 0.0, 1.0);
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -295,7 +294,11 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int m = 0; m < length$observed; m += 1)
+			for(int m = 0; m < length$observed; m += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = generated[m];
+				double[] var54 = indirection2[m];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -309,9 +312,8 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(generated[m], indirection2[m]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var54.length))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var55 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -375,6 +377,11 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// The original value of the sample
 		double cv$originalValue = indirection1[i][j];
 		
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// The probability of the random variable generating the originally sampled value
+		double cv$originalProbability;
+		
 		// Calculate a proposed variance.
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		
@@ -383,38 +390,40 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
-		// Variable declaration of cv$originalProbability moved.
-		// Declaration comment was:
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		// 
 		// Unrolled loop
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 63 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var32" with its value "1.0".
-		// 
-		// Set the current value to the current state of the tree.
-		double cv$originalProbability = (DistributionSampling.logProbabilityCategorical(generated[i], indirection2[i]) + DistributionSampling.logProbabilityUniform(cv$originalValue, 0.0, 1.0));
+		{
+			// Variable declaration of cv$temp$2$var54 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Substituted "m" with its value "i".
+			double[] cv$temp$2$var54 = indirection2[i];
+			
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 63 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Substituted "cv$temp$0$var31" with its value "0.0".
+			// 
+			// Set the current value to the current state of the tree.
+			cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < cv$temp$2$var54.length))?Math.log(cv$temp$2$var54[generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY));
+		}
 		indirection1[i][j] = cv$proposedValue;
 		
 		// Substituted "k" with its value "i".
@@ -422,12 +431,19 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Substituted "k" with its value "i".
 		indirection2[i][j] = indirection1[i][j];
 		
+		// Variable declaration of cv$temp$2$var54 moved.
+		// 
+		// Constructing a random variable input for use later.
+		// 
+		// Substituted "m" with its value "i".
+		double[] cv$temp$2$var54 = indirection2[i];
+		
 		// Variable declaration of cv$accumulatedProbabilities moved.
 		// Declaration comment was:
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var32" with its value "1.0".
+		// Substituted "cv$temp$0$var31" with its value "0.0".
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -440,8 +456,8 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var32" with its value "1.0".
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(generated[i], indirection2[i]) + DistributionSampling.logProbabilityUniform(cv$proposedValue, 0.0, 1.0));
+		// Substituted "cv$temp$0$var31" with its value "0.0".
+		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < cv$temp$2$var54.length))?Math.log(cv$temp$2$var54[generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -455,7 +471,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -514,7 +530,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
-					var30[j] = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+					var30[j] = DistributionSampling.sampleUniform(RNG$);
 			}
 			for(int k = 0; k < length$observed; k += 1) {
 				double[] var45 = indirection2[k];
@@ -539,7 +555,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
-					var30[j] = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+					var30[j] = DistributionSampling.sampleUniform(RNG$);
 			}
 			for(int k = 0; k < length$observed; k += 1) {
 				double[] var45 = indirection2[k];
@@ -558,7 +574,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
-					var30[j] = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+					var30[j] = DistributionSampling.sampleUniform(RNG$);
 			}
 			for(int k = 0; k < length$observed; k += 1) {
 				double[] var45 = indirection2[k];
@@ -692,7 +708,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
-					var30[j] = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+					var30[j] = DistributionSampling.sampleUniform(RNG$);
 			}
 			for(int k = 0; k < length$observed; k += 1) {
 				double[] var45 = indirection2[k];

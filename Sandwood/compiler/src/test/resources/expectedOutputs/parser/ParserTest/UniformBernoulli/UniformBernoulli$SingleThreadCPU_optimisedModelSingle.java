@@ -276,7 +276,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityUniform(prior, 0.0, 1.0);
+			double cv$distributionAccumulator = (((0.0 <= prior) && (prior <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -365,17 +365,17 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, prior, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$b" with its value "1.0".
+			// Substituted "cv$temp$0$a" with its value "0.0".
 			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityUniform(prior, 0.0, 1.0);
+			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 16 of consumer random variable bernoulli.
 			for(int var13 = 0; var13 < length$observed; var13 += 1)
@@ -417,8 +417,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$b" with its value "1.0".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityUniform(cv$proposedValue, 0.0, 1.0);
+		// Substituted "cv$temp$0$a" with its value "0.0".
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
 		
 		// Processing sample task 16 of consumer random variable bernoulli.
 		for(int var13 = 0; var13 < length$observed; var13 += 1)
@@ -455,7 +455,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -483,7 +483,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+			prior = DistributionSampling.sampleUniform(RNG$);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample16) {
@@ -497,7 +497,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+			prior = DistributionSampling.sampleUniform(RNG$);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -505,7 +505,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+			prior = DistributionSampling.sampleUniform(RNG$);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -608,7 +608,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample8)
-			prior = DistributionSampling.sampleUniform(RNG$, 0.0, 1.0);
+			prior = DistributionSampling.sampleUniform(RNG$);
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

@@ -193,7 +193,7 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 					{
 						double var8 = 0.0;
 						double var9 = 2.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var8, var9));
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -244,7 +244,7 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 					{
 						double var12 = 1.0;
 						double var13 = 5.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var12, var13));
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var12) / Math.sqrt(var13))) - (0.5 * Math.log(var13))));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -346,7 +346,7 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 					{
 						{
 							double var26 = (b0 + (b1 * x[i]));
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var26, variance));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var26) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -479,23 +479,23 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		for(int i = 0; i < noSamples; i += 1) {
 			if(!fixedFlag$sample31)
-				y[i] = DistributionSampling.sampleGaussian(RNG$, (b0 + (b1 * x[i])), variance);
+				y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + (b0 + (b1 * x[i])));
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
@@ -503,9 +503,9 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
@@ -594,9 +594,9 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample14)
-			b0 = DistributionSampling.sampleGaussian(RNG$, 0.0, 2.0);
+			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample18)
-			b1 = DistributionSampling.sampleGaussian(RNG$, 1.0, 5.0);
+			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
 		if(!fixedFlag$sample22)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		logModelProbabilitiesVal();

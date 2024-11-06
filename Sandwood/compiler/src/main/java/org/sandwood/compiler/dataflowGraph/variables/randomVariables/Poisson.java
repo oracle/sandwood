@@ -19,7 +19,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -48,7 +47,7 @@ public class Poisson extends RandomVariableImplementation<IntVariable, Poisson>
     }
 
     @Override
-    public IRRVFunctionCallReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
+    public IRTreeReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(FunctionType.SAMPLE, VariableType.IntVariable, getType(),
                 rate.getForwardIR(compilationCtx));
     }

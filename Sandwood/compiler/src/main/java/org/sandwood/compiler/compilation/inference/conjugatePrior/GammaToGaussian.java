@@ -48,7 +48,6 @@ import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -86,7 +85,7 @@ public class GammaToGaussian
      * @return The function call to generate a sample value for this function data.
      */
     @Override
-    protected IRRVFunctionCallReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
             GammaToGaussianData funcData) {
         // TODO adjust this so it traces back to find the constructor, and get the
         // values
@@ -96,7 +95,7 @@ public class GammaToGaussian
         IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
 
         // Construct a tree to construct the sample variable.
-        IRRVFunctionCallReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
+        IRTreeReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
                 VariableType.DoubleVariable, VariableType.Gamma, VariableType.Gaussian, alpha, beta,
                 load(funcData.sumName), load(funcData.countName));
         return mean;

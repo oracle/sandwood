@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -10,6 +10,7 @@ package org.sandwood.compiler.trees.irTree;
 
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
+import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.trees.irTree.transformations.TreeTransformation;
 import org.sandwood.compiler.trees.transformationTree.TransRVFunctionCall;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
@@ -21,7 +22,7 @@ public class IRRVFunctionCall extends IRTreeVoid {
     private final RandomVariableType<?, ?> source, sink;
     private final IRTreeReturn<?>[] args;
 
-    IRRVFunctionCall(FunctionType t, RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink,
+    private IRRVFunctionCall(FunctionType t, RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink,
             IRTreeReturn<?>[] args, String comment) {
         super(IRTreeType.FUNCTION_CALL_RETURN, comment);
         this.funcType = t;
@@ -116,5 +117,22 @@ public class IRRVFunctionCall extends IRTreeVoid {
         int size = args.length;
         for(int i = 0; i < size; i++)
             v.visit(args[i]);
+    }
+
+    public static IRTreeVoid construct(FunctionType t, RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink,
+            IRTreeReturn<?>[] args, String comment) {
+        args = processArgs(t, args);
+        return new IRRVFunctionCall(t, source, sink, args, comment);
+    }
+
+    private static IRTreeReturn<?>[] processArgs(FunctionType t, IRTreeReturn<?>[] args) {
+        // Add the required RNG.
+        if(t == FunctionType.CONJUGATE_SAMPLE || t == FunctionType.SAMPLE) {
+            IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[args.length + 1];
+            newArgs[0] = IRTree.load(VariableNames.rngName(0));
+            System.arraycopy(args, 0, newArgs, 1, args.length);
+            args = newArgs;
+        }
+        return args;
     }
 }

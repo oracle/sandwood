@@ -758,7 +758,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(initialState, weights);
+			double cv$distributionAccumulator = (((0.0 <= initialState) && (initialState < weights.length))?Math.log(weights[initialState]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -833,7 +833,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1)
+			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = st[i$var50][0];
+				double[] var53 = m[initialState];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -847,9 +851,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(st[i$var50][0], m[initialState]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var53.length))?Math.log(var53[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var54 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -923,7 +926,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
-				for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1)
+				for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
+					// The sample value to calculate the probability of generating
+					int cv$sampleValue = st[i$var60][j$var66];
+					double[] var72 = m[st[i$var60][(j$var66 - 1)]];
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -937,9 +944,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(st[i$var60][j$var66], m[st[i$var60][(j$var66 - 1)]]));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var72.length))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				}
 			}
 			logProbability$var73 = cv$sampleAccumulator;
 			
@@ -1014,7 +1020,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
-				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1)
+				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
+					// The sample value to calculate the probability of generating
+					int cv$sampleValue = (events[i$var80][j$var88] - 1);
+					double[] var92 = bias[st[i$var80][j$var88]];
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -1028,9 +1038,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical((events[i$var80][j$var88] - 1), bias[st[i$var80][j$var88]]));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				}
 			}
 			logProbability$var93 = cv$sampleAccumulator;
 			
@@ -1215,10 +1224,17 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// it is added to the index probabilities.
 			// 
 			// Substituted "cv$temp$0$weights" with its value "weights".
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weights);
+			double cv$accumulatedProbabilities = ((cv$valuePos < weights.length)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing random variable 54.
-			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1)
+			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
+				// Variable declaration of cv$temp$1$var53 moved.
+				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Value of the variable at this index
+				double[] cv$temp$1$var53 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1233,14 +1249,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$1$var53's comment
-				// Variable declaration of cv$temp$1$var53 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[i$var50][0], m[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1327,19 +1337,31 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Value of the variable at this index
 			st[i$var50][0] = cv$valuePos;
 			
+			// Variable declaration of cv$temp$0$var53 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var53 = m[initialState];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			// 
-			// cv$temp$0$var53's comment
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[initialState]);
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var53.length)?Math.log(cv$temp$0$var53[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "j$var66" with its value "1".
-			if((1 < length$eventsMeasured[i$var50]))
+			if((1 < length$eventsMeasured[i$var50])) {
 				// Processing sample task 78 of consumer random variable null.
+				// Variable declaration of cv$temp$1$var72 moved.
 				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 73.
+				// 
+				// Looking for a path between Sample 58 and consumer Categorical 73.
+				// 
+				// Value of the variable at this index
+				double[] cv$temp$1$var72 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1354,18 +1376,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				// inputs.
 				// 
 				// Substituted "i$var60" with its value "i$var50".
-				// 
-				// cv$temp$1$var72's comment
-				// Variable declaration of cv$temp$1$var72 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 73.
-				// 
-				// Looking for a path between Sample 58 and consumer Categorical 73.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[i$var50][1], m[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var50][1]) && (st[i$var50][1] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var50][1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1453,18 +1465,30 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Value of the variable at this index
 			st[i$var60][j$var66] = cv$valuePos;
 			
+			// Variable declaration of cv$temp$0$var72 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var72 = m[st[i$var60][(j$var66 - 1)]];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			// 
-			// cv$temp$0$var72's comment
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, m[st[i$var60][(j$var66 - 1)]]);
+			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var72.length)?Math.log(cv$temp$0$var72[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$j$1_3 = (j$var66 + 1);
-			if((index$j$1_3 < length$eventsMeasured[i$var60]))
+			if((index$j$1_3 < length$eventsMeasured[i$var60])) {
 				// Processing sample task 78 of consumer random variable null.
+				// Variable declaration of cv$temp$1$var72 moved.
 				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 73.
+				// 
+				// Looking for a path between Sample 78 and consumer Categorical 73.
+				// 
+				// Value of the variable at this index
+				double[] cv$temp$1$var72 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1479,18 +1503,19 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				// inputs.
 				// 
 				// Substituted "index$i$1_2" with its value "i$var60".
-				// 
-				// cv$temp$1$var72's comment
-				// Variable declaration of cv$temp$1$var72 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 73.
-				// 
-				// Looking for a path between Sample 78 and consumer Categorical 73.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(st[i$var60][index$j$1_3], m[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var60][index$j$1_3]) && (st[i$var60][index$j$1_3] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][index$j$1_3]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Variable declaration of cv$temp$2$var92 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 93.
+			// 
+			// Looking for a path between Sample 78 and consumer Categorical 93.
+			// 
+			// Value of the variable at this index
+			double[] cv$temp$2$var92 = bias[cv$valuePos];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1508,18 +1533,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// inputs.
 			// 
 			// Substituted "i$var80" with its value "i$var60".
-			// 
-			// cv$temp$2$var92's comment
-			// Variable declaration of cv$temp$2$var92 moved.
-			// 
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 93.
-			// 
-			// Looking for a path between Sample 78 and consumer Categorical 93.
-			// 
-			// Value of the variable at this index
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical((events[i$var60][j$var66] - 1), bias[cv$valuePos]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((1.0 <= events[i$var60][j$var66]) && (events[i$var60][j$var66] < (cv$temp$2$var92.length + 1)))?Math.log(cv$temp$2$var92[(events[i$var60][j$var66] - 1)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 

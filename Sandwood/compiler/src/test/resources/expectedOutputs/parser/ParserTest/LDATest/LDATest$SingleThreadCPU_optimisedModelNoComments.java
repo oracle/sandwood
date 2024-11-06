@@ -268,7 +268,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$accumulator = 0.0;
 			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
 				for(int j = 0; j < length$documents[i$var40]; j += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(z[i$var40][j], theta[i$var40]);
+					int cv$sampleValue = z[i$var40][j];
+					double[] var51 = theta[i$var40];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var51.length))?Math.log(var51[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var52[i$var40][j] = cv$distributionAccumulator;
 					logProbability$sample59[i$var40][j] = cv$distributionAccumulator;
@@ -300,7 +302,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$accumulator = 0.0;
 			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
 				for(int j = 0; j < length$documents[i$var40]; j += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(w[i$var40][j], phi[z[i$var40][j]]);
+					int cv$sampleValue = w[i$var40][j];
+					double[] var54 = phi[z[i$var40][j]];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var54.length))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var55[i$var40][j] = cv$distributionAccumulator;
 					logProbability$sample62[i$var40][j] = cv$distributionAccumulator;
@@ -348,7 +352,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private final void sample59(int i$var40, int j) {
 		for(int cv$valuePos = 0; cv$valuePos < noTopics; cv$valuePos += 1) {
 			z[i$var40][j] = cv$valuePos;
-			cv$var53$stateProbabilityGlobal[cv$valuePos] = (DistributionSampling.logProbabilityCategorical(w[i$var40][j], phi[cv$valuePos]) + DistributionSampling.logProbabilityCategorical(cv$valuePos, theta[i$var40]));
+			double[] cv$temp$0$var51 = theta[i$var40];
+			double[] cv$temp$1$var54 = phi[cv$valuePos];
+			cv$var53$stateProbabilityGlobal[cv$valuePos] = ((((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY) + ((cv$valuePos < cv$temp$0$var51.length)?Math.log(cv$temp$0$var51[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var53$stateProbabilityGlobal[0];

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -112,8 +112,8 @@ public class ScalarReadFrequency {
                 case ALLOCATE_ARRAY:
                 case ARRAY_GET:
                 case ARRAY_PUT:
-                // Functions that are void must be altering global state.
-                case NAMED_FUNCTION_CALL:
+                    // Functions that are void must be altering global state.
+                case LOCAL_FUNCTION_CALL:
                 case RV_FUNCTION_CALL: {
                     ScopedVarSet read = varTracking.readVars(t);
                     readIDs = getReadIDs(read);
@@ -180,9 +180,9 @@ public class ScalarReadFrequency {
                 toProcess.addAll(getReadIDs(read));
             }
         }
-        
-        //Filter out any stores that are not in the used set and set them as never used.
-        //The list is use to prevent modifications to the map while it is being iterated on.
+
+        // Filter out any stores that are not in the used set and set them as never used.
+        // The list is use to prevent modifications to the map while it is being iterated on.
         List<TaggedVariableName> toRemove = new ArrayList<>();
         for(TaggedVariableName name:multipleReads.keySet()) {
             if(!usedStores.contains(name.tag))
@@ -191,7 +191,7 @@ public class ScalarReadFrequency {
         for(TaggedVariableName name:toRemove)
             multipleReads.remove(name);
     }
-    
+
     private static Set<TreeID> getReadIDs(ScopedVarSet read) {
         Set<TreeID> readIDs = new HashSet<>();
         for(VarDef v:read.getAllVarDefs()) {

@@ -138,7 +138,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityUniform(indirection1[i][j], 0.0, 1.0);
+					double cv$sampleValue = indirection1[i][j];
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var33[i][j] = cv$distributionAccumulator;
 					logProbability$sample39[i][j] = cv$distributionAccumulator;
@@ -171,7 +172,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		if(!fixedProbFlag$sample63) {
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(generated[m], indirection2[m]);
+				int cv$sampleValue = generated[m];
+				double[] var54 = indirection2[m];
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var54.length))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var55[m] = cv$distributionAccumulator;
 				logProbability$sample63[m] = cv$distributionAccumulator;
@@ -195,15 +198,20 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	private final void sample39(int i, int j, int threadID$cv$i, Rng RNG$) {
 		double cv$originalValue = indirection1[i][j];
+		double cv$originalProbability;
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
-		double cv$originalProbability = (DistributionSampling.logProbabilityCategorical(generated[i], indirection2[i]) + DistributionSampling.logProbabilityUniform(cv$originalValue, 0.0, 1.0));
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			double[] cv$temp$2$var54 = indirection2[i];
+			cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < cv$temp$2$var54.length))?Math.log(cv$temp$2$var54[generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY));
+		}
 		indirection1[i][j] = cv$proposedValue;
 		indirection2[i][j] = indirection1[i][j];
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(generated[i], indirection2[i]) + DistributionSampling.logProbabilityUniform(cv$proposedValue, 0.0, 1.0));
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double[] cv$temp$2$var54 = indirection2[i];
+		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < cv$temp$2$var54.length))?Math.log(cv$temp$2$var54[generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY));
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			indirection1[i][j] = cv$originalValue;
 			indirection2[i][j] = indirection1[i][j];
 		}
@@ -246,7 +254,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, 10, 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											var30[j] = DistributionSampling.sampleUniform(RNG$2, 0.0, 1.0);
+											var30[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -287,7 +295,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, 10, 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											var30[j] = DistributionSampling.sampleUniform(RNG$2, 0.0, 1.0);
+											var30[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -320,7 +328,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, 10, 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											var30[j] = DistributionSampling.sampleUniform(RNG$2, 0.0, 1.0);
+											var30[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -432,7 +440,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							parallelFor(RNG$1, 0, 10, 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											var30[j] = DistributionSampling.sampleUniform(RNG$2, 0.0, 1.0);
+											var30[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}

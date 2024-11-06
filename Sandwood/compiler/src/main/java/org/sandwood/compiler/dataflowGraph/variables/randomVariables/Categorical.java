@@ -19,7 +19,6 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -59,7 +58,7 @@ public class Categorical extends NumericDistributableRandomVariable<IntVariable,
     }
 
     @Override
-    public IRRVFunctionCallReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
+    public IRTreeReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(FunctionType.SAMPLE, VariableType.IntVariable, getType(),
                 elementWeights.getForwardIR(compilationCtx));
     }

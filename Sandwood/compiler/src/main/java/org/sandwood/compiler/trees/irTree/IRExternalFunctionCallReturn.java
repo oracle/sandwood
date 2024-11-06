@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,17 +12,17 @@ import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.trees.irTree.transformations.TreeTransformation;
-import org.sandwood.compiler.trees.transformationTree.TransFunctionCallReturn;
+import org.sandwood.compiler.trees.transformationTree.TransExternalFunctionCallReturn;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
 
-public class IRFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<X> {
+public class IRExternalFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<X> {
 
     private final IRTreeReturn<?>[] args;
     private final Type<X> outputType;
     private final ExternalFunction func;
 
-    IRFunctionCallReturn(ExternalFunction func, Type<X> outputType, IRTreeReturn<?>... args) {
+    IRExternalFunctionCallReturn(ExternalFunction func, Type<X> outputType, IRTreeReturn<?>... args) {
         super(IRTreeType.FUNCTION_CALL_RETURN);
         this.func = func;
         this.outputType = outputType;
@@ -57,7 +57,7 @@ public class IRFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<X>
     }
 
     @Override
-    public TransFunctionCallReturn<X> toTransformationTree() {
+    public TransExternalFunctionCallReturn<X> toTransformationTree() {
         TransTreeReturn<?>[] outputArgs = new TransTreeReturn<?>[args.length];
         for(int i = 0; i < args.length; i++)
             outputArgs[i] = args[i].toTransformationTree();
@@ -80,7 +80,7 @@ public class IRFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<X>
             return true;
         if((tree == null) || (type != tree.type))
             return false;
-        IRFunctionCallReturn<?> other = (IRFunctionCallReturn<?>) tree;
+        IRExternalFunctionCallReturn<?> other = (IRExternalFunctionCallReturn<?>) tree;
         if(args.length != other.args.length)
             return false;
         for(int i = 0; i < args.length; i++)
@@ -90,12 +90,12 @@ public class IRFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<X>
     }
 
     @Override
-    public IRFunctionCallReturn<X> applyTransformation(TreeTransformation t) {
+    public IRExternalFunctionCallReturn<X> applyTransformation(TreeTransformation t) {
         int size = args.length;
         IRTreeReturn<?>[] a = new IRTreeReturn[size];
         for(int i = 0; i < size; i++)
             a[i] = t.transformReturn(args[i]);
-        return new IRFunctionCallReturn<>(func, getOutputType(), a);
+        return new IRExternalFunctionCallReturn<>(func, getOutputType(), a);
     }
 
     @Override

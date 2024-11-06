@@ -303,7 +303,7 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityExponential(cv$sampleValue, rate));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -429,7 +429,7 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 		for(int var13 = 0; var13 < samples; var13 += 1) {
 			if(!fixedFlag$sample16)
-				decay[var13] = DistributionSampling.sampleExponential(RNG$, rate);
+				decay[var13] = (DistributionSampling.sampleExponential(RNG$) / rate);
 		}
 	}
 

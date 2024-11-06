@@ -216,7 +216,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityDistribution$sample7() {
 		if(!fixedProbFlag$sample7) {
 			if(fixedFlag$sample7) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v1, weightings);
+				double cv$distributionAccumulator = (((0.0 <= v1) && (v1 < weightings.length))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 				logProbability$var5 = cv$distributionAccumulator;
 				logProbability$v1 = cv$distributionAccumulator;
 				logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -234,7 +234,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityDistribution$sample9() {
 		if(!fixedProbFlag$sample9) {
 			if(fixedFlag$sample9) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v2, weightings);
+				double cv$distributionAccumulator = (((0.0 <= v2) && (v2 < weightings.length))?Math.log(weightings[v2]):Double.NEGATIVE_INFINITY);
 				logProbability$var7 = cv$distributionAccumulator;
 				logProbability$v2 = cv$distributionAccumulator;
 				logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -266,7 +266,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void logProbabilityValue$sample7() {
 		if(!fixedProbFlag$sample7) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v1, weightings);
+			double cv$distributionAccumulator = (((0.0 <= v1) && (v1 < weightings.length))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 			logProbability$var5 = cv$distributionAccumulator;
 			logProbability$v1 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -283,7 +283,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCategorical(v2, weightings);
+			double cv$distributionAccumulator = (((0.0 <= v2) && (v2 < weightings.length))?Math.log(weightings[v2]):Double.NEGATIVE_INFINITY);
 			logProbability$var7 = cv$distributionAccumulator;
 			logProbability$v2 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -300,7 +300,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample7() {
 		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weightings);
+			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 			double cv$consumerDistributionProbabilityAccumulator = 1.0;
 			if(fixedFlag$sample9) {
@@ -358,7 +358,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample9() {
 		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCategorical(cv$valuePos, weightings);
+			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 			double cv$consumerDistributionProbabilityAccumulator = 1.0;
 			if(fixedFlag$sample7) {
@@ -441,11 +441,11 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample7) {
 			for(int index$var5 = 0; index$var5 < weightings.length; index$var5 += 1)
-				distribution$sample7[index$var5] = DistributionSampling.probabilityCategorical(index$var5, weightings);
+				distribution$sample7[index$var5] = weightings[index$var5];
 		}
 		if(!fixedFlag$sample9) {
 			for(int index$var7 = 0; index$var7 < weightings.length; index$var7 += 1)
-				distribution$sample9[index$var7] = DistributionSampling.probabilityCategorical(index$var7, weightings);
+				distribution$sample9[index$var7] = weightings[index$var7];
 		}
 	}
 

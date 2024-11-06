@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -195,7 +195,7 @@ public class ParFor extends Transformer {
             }
 
             case RV_FUNCTION_CALL:
-            case NAMED_FUNCTION_CALL:
+            case LOCAL_FUNCTION_CALL:
             case ARRAY_PUT:
             case IF:
             case INITIALIZE:
@@ -227,7 +227,7 @@ public class ParFor extends Transformer {
             }
 
             case RV_FUNCTION_CALL_RETURN:
-            case NAMED_FUNCTION_CALL_RETURN:
+            case EXTERNAL_FUNCTION_CALL_RETURN:
             case LOCAL_FUNCTION_CALL_RETURN:
             case ADD:
             case ALLOCATE_ARRAY:
@@ -241,11 +241,9 @@ public class ParFor extends Transformer {
             case CONDITIONAL_ASSIGNMENT:
             case DIVIDE:
             case EQUALITY:
-            case EXP:
             case GET_FIELD:
             case LESS_THAN:
             case LESS_THAN_EQUAL:
-            case LOG:
             case MAX:
             case MIN:
             case REMAINDER:

@@ -271,7 +271,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[i$var12], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[i$var12] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -370,7 +370,10 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var46 = 0; var46 < noObs; var46 += 1)
+			for(int var46 = 0; var46 < noObs; var46 += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = choices[var46];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -384,9 +387,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(choices[var46], prob));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < prob.length))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
 			logProbability$var42 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -458,7 +460,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// Unrolled loop
 		{
@@ -468,7 +470,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Substituted "cv$temp$1$var16" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Processing sample task 49 of consumer random variable null.
 			for(int var46 = 0; var46 < noObs; var46 += 1)
@@ -486,7 +488,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var46], prob) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= choices[var46]) && (choices[var46] < prob.length))?Math.log(prob[choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -583,7 +585,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$1$var16" with its value "10.0".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
 		// Processing sample task 49 of consumer random variable null.
 		for(int var46 = 0; var46 < noObs; var46 += 1)
@@ -601,7 +603,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// inputs.
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityCategorical(choices[var46], prob) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((0.0 <= choices[var46]) && (choices[var46] < prob.length))?Math.log(prob[choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -615,7 +617,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -765,7 +767,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
@@ -840,7 +842,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
@@ -901,7 +903,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			
@@ -1076,7 +1078,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i$var12 = forStart$i$var12; i$var12 < forEnd$i$var12; i$var12 += 1)
-							ut[i$var12] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							ut[i$var12] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 			

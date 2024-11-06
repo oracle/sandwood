@@ -265,7 +265,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		if(!fixedProbFlag$sample25) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var22 = 0; var22 < noProducts; var22 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(ut[var22], 0.0, 10.0);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var22] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				logProbability$sample25[var22] = cv$distributionAccumulator;
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
@@ -384,9 +384,9 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue, 0.0, 10.0);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
 				guard$sample25multinomial96$global[t$var59] = false;
 			for(int t$var59 = 0; t$var59 < T; t$var59 += 1) {
@@ -431,7 +431,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 				weekly_rates[t$var59][var22] = (weekly_ut[t$var59][var22] / reduceVar$denom$1);
 			}
 		}
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue, 0.0, 10.0);
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
 			guard$sample25multinomial96$global[t$var59] = false;
 		for(int t$var59 = 0; t$var59 < T; t$var59 += 1) {
@@ -446,7 +446,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t$var59], weekly_rates[t$var59], arrivals[t$var59]) + cv$accumulatedProbabilities);
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			ut[var22] = cv$originalValue;
 			exped[var22] = Math.exp(ut[var22]);
 			for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
@@ -489,13 +489,13 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 1.0))
 			cv$var = 1.0;
-		double cv$offset = DistributionSampling.sampleGaussian(RNG$, 0.0, cv$var);
+		double cv$offset = (Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$));
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
 		int cv$proposedValue = (cv$originalValue + (int)cv$offset);
 		double cv$originalProbability = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t$var46], weekly_rates[t$var46], cv$originalValue) + DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var46]));
 		arrivals[t$var46] = cv$proposedValue;
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t$var46], weekly_rates[t$var46], cv$proposedValue) + DistributionSampling.logProbabilityPoisson(cv$proposedValue, lambda[t$var46]));
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			arrivals[t$var46] = cv$originalValue;
 	}
 
@@ -548,7 +548,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}
@@ -586,7 +586,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}
@@ -618,7 +618,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}
@@ -753,7 +753,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample25) {
 			for(int var22 = 0; var22 < noProducts; var22 += 1)
-				ut[var22] = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+				ut[var22] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1)
 				exped[j$var28] = Math.exp(ut[j$var28]);
 		}

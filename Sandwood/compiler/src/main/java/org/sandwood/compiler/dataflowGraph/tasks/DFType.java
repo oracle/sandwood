@@ -60,6 +60,7 @@ public enum DFType {
     STEPPING_RANGE("Stepping range"),
     STUDENT_T("StudentT"),
     SUBTRACTION("Subtraction"),
+    TRUNCATED_GAUSSIAN("Truncated Gaussian"),
     UNIFORM("Uniform");
 
     private final String description;

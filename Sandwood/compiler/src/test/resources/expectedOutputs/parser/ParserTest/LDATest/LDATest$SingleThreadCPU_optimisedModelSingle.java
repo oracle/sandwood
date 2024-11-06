@@ -487,7 +487,11 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1)
+				for(int j = 0; j < length$documents[i$var40]; j += 1) {
+					// The sample value to calculate the probability of generating
+					int cv$sampleValue = z[i$var40][j];
+					double[] var51 = theta[i$var40];
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -501,9 +505,8 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(z[i$var40][j], theta[i$var40]));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var51.length))?Math.log(var51[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				}
 			}
 			logProbability$var52 = cv$sampleAccumulator;
 			
@@ -565,7 +568,11 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
-				for(int j = 0; j < length$documents[i$var40]; j += 1)
+				for(int j = 0; j < length$documents[i$var40]; j += 1) {
+					// The sample value to calculate the probability of generating
+					int cv$sampleValue = w[i$var40][j];
+					double[] var54 = phi[z[i$var40][j]];
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -579,9 +586,8 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityCategorical(w[i$var40][j], phi[z[i$var40][j]]));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var54.length))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				}
 			}
 			logProbability$var55 = cv$sampleAccumulator;
 			
@@ -714,6 +720,18 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Value of the variable at this index
 			z[i$var40][j] = cv$valuePos;
 			
+			// Variable declaration of cv$temp$0$var51 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double[] cv$temp$0$var51 = theta[i$var40];
+			
+			// Variable declaration of cv$temp$1$var54 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Value of the variable at this index
+			double[] cv$temp$1$var54 = phi[cv$valuePos];
+			
 			// Save the calculated index value into the array of index value probabilities
 			// 
 			// Get a local reference to the scratch space.
@@ -734,10 +752,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			// 
-			// cv$temp$0$var51's comment
-			// Constructing a random variable input for use later.
-			cv$var53$stateProbabilityGlobal[cv$valuePos] = (DistributionSampling.logProbabilityCategorical(w[i$var40][j], phi[cv$valuePos]) + DistributionSampling.logProbabilityCategorical(cv$valuePos, theta[i$var40]));
+			cv$var53$stateProbabilityGlobal[cv$valuePos] = ((((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY) + ((cv$valuePos < cv$temp$0$var51.length)?Math.log(cv$temp$0$var51[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		
 		// This value is not used before it is set again, so removing the value declaration.

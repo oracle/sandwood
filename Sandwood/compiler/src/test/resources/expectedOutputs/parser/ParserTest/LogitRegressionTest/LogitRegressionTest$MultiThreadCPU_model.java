@@ -244,7 +244,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							double var22 = 10.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var21, var22));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var21) / Math.sqrt(var22))) - (0.5 * Math.log(var22))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -556,7 +556,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						double var33 = 10.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var32, var33));
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var32) / Math.sqrt(var33))) - (0.5 * Math.log(var33))));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -744,7 +744,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$var = (0.1 * 0.1);
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
@@ -922,7 +922,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$currentValue, cv$temp$0$var21, cv$temp$1$var22));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var21) / Math.sqrt(cv$temp$1$var22))) - (0.5 * Math.log(cv$temp$1$var22))));
 				
 				// Processing random variable 67.
 				{
@@ -1326,7 +1326,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio))) {
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -1487,7 +1487,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$var = (0.1 * 0.1);
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
@@ -1530,7 +1530,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$currentValue, cv$temp$0$var32, cv$temp$1$var33));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var32) / Math.sqrt(cv$temp$1$var33))) - (0.5 * Math.log(cv$temp$1$var33))));
 				
 				// Processing random variable 67.
 				{
@@ -1626,7 +1626,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio)))
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -1745,12 +1745,12 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// generator.
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 						if(!fixedFlag$sample31)
-							weights[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, n, 1,
@@ -1806,12 +1806,12 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// generator.
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 						if(!fixedFlag$sample31)
-							weights[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, n, 1,
@@ -1864,12 +1864,12 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// generator.
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 						if(!fixedFlag$sample31)
-							weights[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, n, 1,
@@ -2054,12 +2054,12 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// generator.
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 						if(!fixedFlag$sample31)
-							weights[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 10.0);
+							weights[var27] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		if(!fixedFlag$sample38)
-			bias = DistributionSampling.sampleGaussian(RNG$, 0.0, 10.0);
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, n, 1,

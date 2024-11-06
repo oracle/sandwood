@@ -430,7 +430,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 								double var22 = 1.0;
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$sampleValue, var21, var22));
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var21) / Math.sqrt(var22))) - (0.5 * Math.log(var22))));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1599,7 +1599,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			cv$var = (0.1 * 0.1);
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, cv$originalValue, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
@@ -2494,7 +2494,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityGaussian(cv$currentValue, cv$temp$0$var21, cv$temp$1$var22));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var21) / Math.sqrt(cv$temp$1$var22))) - (0.5 * Math.log(cv$temp$1$var22))));
 				
 				// Processing random variable 111.
 				{
@@ -3388,7 +3388,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio))) {
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -4344,7 +4344,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			cv$var = 1.0;
 		
 		// An offset for the current value
-		double cv$offset = DistributionSampling.sampleGaussian(RNG$, 0.0, cv$var);
+		double cv$offset = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		
 		// Make sure the offset is not 0
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
@@ -4508,7 +4508,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN(cv$ratio))) {
+		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -4713,7 +4713,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 							if(!fixedFlag$sample34)
-								ut[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 1.0);
+								ut[var27] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 						}
 				}
 			);
@@ -4890,7 +4890,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 							if(!fixedFlag$sample34)
-								ut[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 1.0);
+								ut[var27] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 						}
 				}
 			);
@@ -5051,7 +5051,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 							if(!fixedFlag$sample34)
-								ut[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 1.0);
+								ut[var27] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 						}
 				}
 			);
@@ -5383,7 +5383,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
 							if(!fixedFlag$sample34)
-								ut[var27] = DistributionSampling.sampleGaussian(RNG$1, 0.0, 1.0);
+								ut[var27] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 						}
 				}
 			);

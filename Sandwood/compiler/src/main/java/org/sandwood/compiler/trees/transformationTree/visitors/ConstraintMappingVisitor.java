@@ -76,11 +76,10 @@ public class ConstraintMappingVisitor implements TreeVisitor {
             case CONST_DOUBLE:
             case CONST_INT:
             case EQUALITY:
-            case EXP:
-            case NAMED_FUNCTION_CALL:
+            case LOCAL_FUNCTION_CALL:
             case RV_FUNCTION_CALL:
             case LOCAL_FUNCTION_CALL_RETURN:
-            case NAMED_FUNCTION_CALL_RETURN:
+            case EXTERNAL_FUNCTION_CALL_RETURN:
             case RV_FUNCTION_CALL_RETURN:
             case GET_FIELD:
             case INITIALIZE:
@@ -88,7 +87,6 @@ public class ConstraintMappingVisitor implements TreeVisitor {
             case LESS_THAN:
             case LESS_THAN_EQUAL:
             case LOAD:
-            case LOG:
             case MAX:
             case MIN:
             case NEGATE:

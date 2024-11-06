@@ -23,7 +23,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVari
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
-import org.sandwood.compiler.trees.irTree.IRRVFunctionCallReturn;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -63,8 +62,7 @@ public class Bernoulli extends DistributableRandomVariable<BooleanVariable, Bern
     }
 
     @Override
-    public IRRVFunctionCallReturn<BooleanVariable> getSampleTree(BooleanVariable sample,
-            CompilationContext compilationCtx) {
+    public IRTreeReturn<BooleanVariable> getSampleTree(BooleanVariable sample, CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(FunctionType.SAMPLE, VariableType.BooleanVariable, getType(),
                 p.getForwardIR(compilationCtx));
     }

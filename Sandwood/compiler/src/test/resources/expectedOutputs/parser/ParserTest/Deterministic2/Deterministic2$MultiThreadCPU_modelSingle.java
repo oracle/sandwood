@@ -285,7 +285,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double[] var32 = m[b[i$var26]];
 												
 												// Store the value of the function call, so the function call is only made once.
-												double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var32));
+												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 												
 												// Add the probability of this sample task to the distribution accumulator.
 												if((cv$weightedProbability < cv$distributionAccumulator))
@@ -319,7 +319,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double[] var32 = m[traceTempVariable$var31$5_3];
 												
 												// Store the value of the function call, so the function call is only made once.
-												double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var32));
+												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 												
 												// Add the probability of this sample task to the distribution accumulator.
 												if((cv$weightedProbability < cv$distributionAccumulator))
@@ -351,7 +351,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 														double[] var32 = m[b[i$var26]];
 														
 														// Store the value of the function call, so the function call is only made once.
-														double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var32));
+														double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 														
 														// Add the probability of this sample task to the distribution accumulator.
 														if((cv$weightedProbability < cv$distributionAccumulator))
@@ -393,7 +393,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																double[] var32 = m[traceTempVariable$var31$11_3];
 																
 																// Store the value of the function call, so the function call is only made once.
-																double cv$weightedProbability = (Math.log(cv$probabilitySample35Value9) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var32));
+																double cv$weightedProbability = (Math.log(cv$probabilitySample35Value9) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																
 																// Add the probability of this sample task to the distribution accumulator.
 																if((cv$weightedProbability < cv$distributionAccumulator))
@@ -834,7 +834,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 							double[] var32 = m[b[i$var26]];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$sampleValue, var32));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1359,7 +1359,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$0$var32));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var32.length))?Math.log(cv$temp$0$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 33.
 								{
@@ -1476,7 +1476,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$1$var32));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var32.length))?Math.log(cv$temp$1$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 33.
 								{
@@ -1599,7 +1599,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 											
 											// An accumulator to allow the value for each distribution to be constructed before
 											// it is added to the index probabilities.
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample35Value7) + DistributionSampling.logProbabilityCategorical(cv$currentValue, cv$temp$2$var32));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample35Value7) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var32.length))?Math.log(cv$temp$2$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											
 											// Processing random variable 33.
 											{
@@ -2076,7 +2076,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										double[] var32 = m[b[i$var26]];
 										for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 											// Save the probability of each value
-											cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (1.0 * DistributionSampling.probabilityCategorical(index$var33, var32)));
+											cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
 									}
 								}
 							}
@@ -2098,7 +2098,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double[] var32 = m[b[i$var26]];
 												for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 													// Save the probability of each value
-													cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (1.0 * DistributionSampling.probabilityCategorical(index$var33, var32)));
+													cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
 											}
 										}
 									}
@@ -2128,7 +2128,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 														double[] var32 = m[traceTempVariable$var31$8_3];
 														for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 															// Save the probability of each value
-															cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (cv$probabilitySample35Value6 * DistributionSampling.probabilityCategorical(index$var33, var32)));
+															cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (cv$probabilitySample35Value6 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
 													}
 												}
 											}

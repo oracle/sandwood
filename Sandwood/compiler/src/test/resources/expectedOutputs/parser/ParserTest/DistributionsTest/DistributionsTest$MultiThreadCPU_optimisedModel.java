@@ -508,7 +508,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, b0, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b0);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -604,7 +604,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -636,7 +636,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = DistributionSampling.sampleGaussian(RNG$, b1, cv$var);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b1);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -732,7 +732,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$, 0.0, 1.0))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value

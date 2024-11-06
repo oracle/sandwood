@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.exceptions.SandwoodModelStateException;
 
 /**
  * Class of numeric methods. TODO Review proposal and conjugate methods.
@@ -40,7 +41,7 @@ public class DistributionSampling {
      * @param success The probability of the Bernoulli producing a true value.
      * @return A boolean value sampled from the describe Bernoulli distribution.
      */
-    public static boolean sampleBernoulli(Rng Rng, double success) {
+    public static final boolean sampleBernoulli(Rng Rng, double success) {
         return Rng.uniform() <= success;
     }
 
@@ -51,7 +52,7 @@ public class DistributionSampling {
      * @param success The probability of the Bernoulli value generating true.
      * @return The probability of the Bernoulli generating the value x.
      */
-    public static double probabilityBernoulli(boolean x, double success) {
+    public static final double probabilityBernoulli(boolean x, double success) {
         if(x)
             return success;
         else
@@ -65,7 +66,7 @@ public class DistributionSampling {
      * @param success The probability of the Bernoulli value generating true.
      * @return The log probability of the Bernoulli generating the value x.
      */
-    public static double logProbabilityBernoulli(boolean x, double success) {
+    public static final double logProbabilityBernoulli(boolean x, double success) {
         if(x)
             return log(success);
         else
@@ -79,7 +80,7 @@ public class DistributionSampling {
      * @param scale        A positive scale value that the added distribution should be scaled by.
      * @param p            The probability of the Bernoulli distribution generating true.
      */
-    public static void addProbabilityDistributionBernoulli(double[] distribution, double scale, double p) {
+    public static final void addProbabilityDistributionBernoulli(double[] distribution, double scale, double p) {
         distribution[0] += scale * (1 - p);
         distribution[1] += scale * p;
     }
@@ -94,7 +95,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter to the Beta distribution.
      * @return A value randomly sampled from the Beta distribution.
      */
-    public static double sampleBeta(Rng Rng, double alpha, double beta) {
+    public static final double sampleBeta(Rng Rng, double alpha, double beta) {
         double x = sampleGamma(Rng, alpha);
         double y = sampleGamma(Rng, beta);
 
@@ -109,7 +110,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter to the Beta distribution.
      * @return The probability of the specified Beta distribution producing the value x.
      */
-    public static double probabilityBeta(double x, double alpha, double beta) {
+    public static final double probabilityBeta(double x, double alpha, double beta) {
         if(x < 0 || x > 1)
             return 0;
         // Constant to ensure that the value over the range [0..1] integrates to 1.
@@ -125,7 +126,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter to the Beta distribution.
      * @return The probability of the specified Beta distribution producing the value x.
      */
-    public static double logProbabilityBeta(double x, double alpha, double beta) {
+    public static final double logProbabilityBeta(double x, double alpha, double beta) {
         if(x < 0 || x > 1)
             return Double.NEGATIVE_INFINITY;
         // Constant to ensure that the value over the range [0..1] integrates to 1.
@@ -142,7 +143,7 @@ public class DistributionSampling {
      * @param numTests The total number of tests represented by this distribution.
      * @return The number of tests that returned true in this sampling.
      */
-    public static int sampleBinomial(Rng Rng, double probTrue, int numTests) {
+    public static final int sampleBinomial(Rng Rng, double probTrue, int numTests) {
         int sum = 0;
         for(int i = 0; i < numTests; i++)
             sum += Rng.uniform() <= probTrue ? 1 : 0;
@@ -157,7 +158,7 @@ public class DistributionSampling {
      * @param numTests Total number of tests in the distribution.
      * @return The probability of the described distribution returning numTrue positive tests.
      */
-    public static double probabilityBinomial(int numTrue, double probTrue, int numTests) {
+    public static final double probabilityBinomial(int numTrue, double probTrue, int numTests) {
         double result = logProbabilityBinomial(numTrue, probTrue, numTests);
         return Math.exp(result);
     }
@@ -170,7 +171,7 @@ public class DistributionSampling {
      * @param numTests Total number of tests in the distribution.
      * @return The log probability of the described distribution returning numTrue positive tests.
      */
-    public static double logProbabilityBinomial(int numTrue, double probTrue, int numTests) {
+    public static final double logProbabilityBinomial(int numTrue, double probTrue, int numTests) {
         // Catch the edge cases as -Infinity times integer 0 seems to generate NaN. I
         // suspect this is because the value is turned into a floating point first.
         // Floating point 0 also represents numbers that are too small to be anything
@@ -204,7 +205,7 @@ public class DistributionSampling {
      * @param probTrue     The probability of each test returning true.
      * @param numTests     Total number of tests in the distribution.
      */
-    public static void addProbabilityDistributionBinomial(double[] distribution, double scale, double probTrue,
+    public static final void addProbabilityDistributionBinomial(double[] distribution, double scale, double probTrue,
             int numTests) {
         // Catch the edge cases as -Infinity times integer 0 seems to generate NaN. I
         // suspect this is because the value is turned into a floating point first.
@@ -252,7 +253,7 @@ public class DistributionSampling {
      * @param elementProbs The probability of returning each possible value from the categorical distribution.
      * @return The sampled value.
      */
-    public static int sampleCategorical(Rng rng, double[] elementProbs) {
+    public static final int sampleCategorical(Rng rng, double[] elementProbs) {
         // Scale a uniform value to pick a category.
         double val = rng.uniform();
 
@@ -264,41 +265,7 @@ public class DistributionSampling {
             if(sum >= val)
                 return i;
         }
-        throw new SandwoodException("This should be unreachable");
-    }
-
-    /**
-     * Calculate the probability of category x for a list of categories each with a probability
-     * <p>
-     * TODO this currently assumes that the arrays sum to 1. Either add code to protect against this here or remove the
-     * code handling it in the sample code as it is wasted.
-     *
-     * @param x            The value to generate the probability for.
-     * @param elementProbs The probability of each category.
-     * @return The probability of category x being produced by this distribution.
-     */
-    public static double probabilityCategorical(int x, double[] elementProbs) {
-        if(x < 0 || x >= elementProbs.length)
-            return 0;
-        else
-            return elementProbs[x];
-    }
-
-    /**
-     * Calculate the probability of category x for a list of categories each with a probability
-     * <p>
-     * TODO this currently assumes that the arrays sum to 1. Either add code to protect against this here or remove the
-     * code handling it in the sample code as it is wasted.
-     *
-     * @param x            The value to generate the probability for.
-     * @param elementProbs The probability of each category.
-     * @return The probability of category x being produced by this distribution.
-     */
-    public static double logProbabilityCategorical(int x, double[] elementProbs) {
-        if(x < 0 || x >= elementProbs.length)
-            return Double.NEGATIVE_INFINITY;
-        else
-            return log(elementProbs[x]);
+        throw new SandwoodModelStateException("Sum of categorical probabilities is less than " + val);
     }
 
     /**
@@ -308,7 +275,7 @@ public class DistributionSampling {
      * @param scale        A positive scale value that the added distribution should be scaled by.
      * @param elementProbs The probability of each test returning true.
      */
-    public static void addProbabilityDistributionCategorical(double[] distribution, double scale,
+    public static final void addProbabilityDistributionCategorical(double[] distribution, double scale,
             double[] elementProbs) {
         int length = elementProbs.length;
         for(int i = 0; i < length; i++)
@@ -324,7 +291,7 @@ public class DistributionSampling {
      * @param scale    The scale parameter of the Cauchy distribution.
      * @return The sampled value.
      */
-    public static double sampleCauchy(Rng rng, double location, double scale) {
+    public static final double sampleCauchy(Rng rng, double location, double scale) {
         double y = rng.uniform();
         return Math.tan((y - 0.5) * Math.PI) * scale + location;
     }
@@ -337,7 +304,7 @@ public class DistributionSampling {
      * @param scale    The scale parameter of the Cauchy distribution.
      * @return The probability of drawing value from the described distribution.
      */
-    public static double probabilityCauchy(double value, double location, double scale) {
+    public static final double probabilityCauchy(double value, double location, double scale) {
         double t = (value - location) / scale;
         t = t * t;
         return 1 / (scale * Math.PI * (1 + t));
@@ -351,7 +318,7 @@ public class DistributionSampling {
      * @param scale    The scale parameter of the Cauchy distribution.
      * @return The log probability of drawing value from the described distribution.
      */
-    public static double logProbabilityCauchy(double value, double location, double scale) {
+    public static final double logProbabilityCauchy(double value, double location, double scale) {
         return Math.log(probabilityCauchy(value, location, scale));
     }
 
@@ -365,7 +332,7 @@ public class DistributionSampling {
      * @param beta   An array of values describing the Dirichlet distribution.
      * @param output The target output array.
      */
-    public static void sampleDirichlet(Rng rng, double[] beta, double[] output) {
+    public static final void sampleDirichlet(Rng rng, double[] beta, double[] output) {
         assert beta.length == output.length : "Arrays must be the same length";
         double sum = 0;
         for(int i = 0; i < output.length; i++) {
@@ -387,7 +354,7 @@ public class DistributionSampling {
      * @param beta  An array of values describing the Dirichlet distribution.
      * @return The probability of drawing the value from the described distribution.
      */
-    public static double probabilityDirichlet(double[] value, double[] beta) {
+    public static final double probabilityDirichlet(double[] value, double[] beta) {
         double prod = 1.0;
         double prodGamma = 1.0;
         double sumParam = 0.0;
@@ -416,7 +383,7 @@ public class DistributionSampling {
      * @param beta  An array of values describing the Dirichlet distribution.
      * @return The log probability of drawing the value from the described distribution.
      */
-    public static double logProbabilityDirichlet(double[] value, double[] beta) {
+    public static final double logProbabilityDirichlet(double[] value, double[] beta) {
         double sum = 0.0;
         double sumParam = 0.0;
 
@@ -442,40 +409,11 @@ public class DistributionSampling {
     /**
      * Method to sample a value from an Exponential distribution.
      * 
-     * @param rng    A random number generator for the sampling.
-     * @param lambda The lambda parameter of the distribution.
+     * @param rng A random number generator for the sampling.
      * @return The sampled value.
      */
-    public static double sampleExponential(Rng rng, double lambda) {
-        return rng.exponential() / lambda;
-    }
-
-    /**
-     * Method to calculate the probability of a value being drawn from an Exponential distribution.
-     * 
-     * @param value  The value to calculate the probability of being drawn.
-     * @param lambda The lambda parameter of the Exponential distribution.
-     * @return The probability of drawing value from the described distribution.
-     */
-    public static double probabilityExponential(double value, double lambda) {
-        if(value < 0 || value == Double.POSITIVE_INFINITY)
-            return 0;
-        else
-            return lambda * Math.exp(-lambda * value);
-    }
-
-    /**
-     * Method to calculate the log probability of a value being drawn from an Exponential distribution.
-     * 
-     * @param value  The value to calculate the probability of being drawn.
-     * @param lambda The lambda parameter of the Exponential distribution.
-     * @return The log probability of drawing value from the described distribution.
-     */
-    public static double logProbabilityExponential(double value, double lambda) {
-        if(value < 0 || value == Double.POSITIVE_INFINITY)
-            return Double.NEGATIVE_INFINITY;
-        else
-            return Math.log(lambda) - lambda * value;
+    public static final double sampleExponential(Rng rng) {
+        return rng.exponential();
     }
 
     // Gamma
@@ -486,7 +424,7 @@ public class DistributionSampling {
      * @param alpha The parameter alpha for the Gamma distribution.
      * @return The value sampled from the described Gamma distribution.
      */
-    static double sampleGamma(Rng rng, double alpha) { // alpha > 0, beta implicitly 1.
+    static final double sampleGamma(Rng rng, double alpha) { // alpha > 0, beta implicitly 1.
         boolean aflag = false;
         if(alpha < 1) {
             aflag = true;
@@ -511,7 +449,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter of the Gamma distribution.
      * @return The value sampled from the described distribution.
      */
-    public static double sampleGamma(Rng rng, double alpha, double beta) { // scaling for beta
+    public static final double sampleGamma(Rng rng, double alpha, double beta) { // scaling for beta
         return sampleGamma(rng, alpha) / beta;
     }
 
@@ -524,13 +462,13 @@ public class DistributionSampling {
      * @param alpha The alpha parameter of the Gamma distribution.
      * @return The calculated value.
      */
-    private static double sampleGammaAux(Rng rng, double alpha) { // alpha > 0
+    private static final double sampleGammaAux(Rng rng, double alpha) { // alpha > 0
         assert (alpha > 0);
         double d = alpha - (1.0 / 3.0);
         double c = 1.0 / sqrt(9 * d);
 
         while(true) {
-            double x = rng.normal(0, 1);
+            double x = rng.normal();
             double v = (1 + c * x);
             v = v * v * v; // v=v^3
 
@@ -556,7 +494,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter of the Gamma distribution.
      * @return The probability of the described distribution producing the value x.
      */
-    public static double probabilityGamma(double x, double alpha, double beta) {
+    public static final double probabilityGamma(double x, double alpha, double beta) {
         if(x <= 0)
             return 0;
         else
@@ -572,7 +510,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter of the Gamma distribution.
      * @return The log probability of the described distribution producing the value x.
      */
-    public static double logProbabilityGamma(double x, double alpha, double beta) {
+    public static final double logProbabilityGamma(double x, double alpha, double beta) {
         if(x <= 0)
             return Double.NEGATIVE_INFINITY;
         else
@@ -584,41 +522,35 @@ public class DistributionSampling {
     /**
      * Method to sample from a Gaussian distribution.
      * 
-     * @param rng      A random number generator for the sampling.
-     * @param mu       The mean of the Gaussian distribution.
-     * @param variance The variance of the Gaussian distribution.
+     * @param rng A random number generator for the sampling.
      * @return The value sampled from the Gaussian distribution.
      */
-    public static double sampleGaussian(Rng rng, double mu, double variance) {
-        return mu + rng.normal(0, variance);
+    public static final double sampleGaussian(Rng rng) {
+        return rng.normal();
     }
+
+    private static final double normGaussian = 1.0 / sqrt(2.0 * PI);
 
     /**
      * Method to calculate the probability of x appearing in the described Gaussian distribution.
      *
-     * @param x        The value to calculate the probability of generating.
-     * @param mu       The mean of the Gaussian distribution.
-     * @param variance The variance of the Gaussian distribution.
-     * @return The probability of the described distribution generating the value x.
+     * @param x The value to calculate the probability of generating.
+     * @return The probability of the Guassian distribution generating the value x.
      */
-    public static double probabilityGaussian(double x, double mu, double variance) {
-        double xMu = x - mu;
-        double xMu2 = xMu * xMu;
-        return 1.0 / sqrt(2.0 * PI * variance) * exp(-xMu2 / (2.0 * variance));
+    public static final double probabilityGaussian(double x) {
+        return normGaussian * exp(-(x * x) / 2.0);
     }
+
+    private static final double normLogGaussian = -0.5 * log(2.0 * PI);
 
     /**
      * Method to calculate the log probability of x appearing in the described Gaussian distribution.
      *
-     * @param x        The value to calculate the probability of generating.
-     * @param mu       The mean of the Gaussian distribution.
-     * @param variance The variance of the Gaussian distribution.
-     * @return The log probability of the described distribution generating the value x.
+     * @param x The value to calculate the probability of generating.
+     * @return The log probability of the Gaussian distribution generating the value x.
      */
-    public static double logProbabilityGaussian(double x, double mu, double variance) {
-        double xMu = x - mu;
-        double xMu2 = xMu * xMu;
-        return -0.5 * log(2.0 * PI * variance) + (-xMu2 / (2.0 * variance));
+    public static final double logProbabilityGaussian(double x) {
+        return normLogGaussian - (x * x) / 2.0;
     }
 
     // Half Cauchy
@@ -630,7 +562,7 @@ public class DistributionSampling {
      * @param scale    The scale parameter of the distribution.
      * @return The value sampled from the distribution.
      */
-    public static double sampleHalfCauchy(Rng rng, double location, double scale) {
+    public static final double sampleHalfCauchy(Rng rng, double location, double scale) {
         return Math.abs(sampleCauchy(rng, location, scale));
     }
 
@@ -642,7 +574,7 @@ public class DistributionSampling {
      * @param scale    The scale parameter of the distribution.
      * @return The probability of drawing the value from the described distribution.
      */
-    public static double probabilityHalfCauchy(double value, double location, double scale) {
+    public static final double probabilityHalfCauchy(double value, double location, double scale) {
         if(value < location)
             return 0;
         else
@@ -657,7 +589,7 @@ public class DistributionSampling {
      * @param scale    The scale parameter of the distribution.
      * @return The probability of drawing the value from the described distribution.
      */
-    public static double logProbabilityHalfCauchy(double value, double location, double scale) {
+    public static final double logProbabilityHalfCauchy(double value, double location, double scale) {
         return Math.log(probabilityHalfCauchy(value, location, scale));
     }
 
@@ -672,7 +604,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter of the distribution.
      * @return The value sampled from the distribution.
      */
-    public static double sampleInverseGamma(Rng rng, double alpha, double beta) {
+    public static final double sampleInverseGamma(Rng rng, double alpha, double beta) {
         return beta / sampleGamma(rng, alpha);
     }
 
@@ -686,7 +618,7 @@ public class DistributionSampling {
      * @param beta  The beta parameter of the distribution.
      * @return The probability of sampling the value from the described distribution.
      */
-    public static double probabilityInverseGamma(double value, double alpha, double beta) {
+    public static final double probabilityInverseGamma(double value, double alpha, double beta) {
         if(value <= 0)
             return 0;
         else
@@ -703,11 +635,87 @@ public class DistributionSampling {
      * @param beta  The beta parameter of the distribution.
      * @return The log probability of sampling the value from the described distribution.
      */
-    public static double logProbabilityInverseGamma(double value, double alpha, double beta) {
+    public static final double logProbabilityInverseGamma(double value, double alpha, double beta) {
         if(value <= 0)
             return Double.NEGATIVE_INFINITY;
         else
             return alpha * log(beta) - Gamma.logGamma(alpha) - (alpha - 1) * log(value) - beta / value;
+    }
+
+    // Multinomial
+    /**
+     * Method to sample a value from Multinomial distribution.
+     * 
+     * @param rng          A random number generator for the sampling.
+     * @param elementProbs The probability of returning each possible value from the categorical distribution.
+     * @param n            The number of tests to include in the output
+     * @param output       The array to hold the results of the sampling.
+     */
+    public static final void sampleMultinomial(Rng rng, double[] elementProbs, int n, int[] output) {
+        Arrays.fill(output, 0);
+
+        double l = elementProbs.length;
+        for(int i = 0; i < n; i++) {
+            // Scale a uniform value to pick a category.
+            double val = rng.uniform();
+
+            // Loop through to find the category this value matches with.
+            double sum = 0;
+            int j;
+            for(j = 0; j < l; j++) {
+                sum += elementProbs[j];
+                if(sum >= val) {
+                    output[j]++;
+                    break;
+                }
+            }
+            if(j == l)
+                throw new SandwoodException("This should be unreachable");
+        }
+    }
+
+    /**
+     * Calculate the probability of a multinomial producing the sample x.
+     * 
+     * @param xs           The value to generate the probability of sampling.
+     * @param elementProbs The probability of each category.
+     * @param n            The total number of values sampled in the distribution.
+     * @return The probability of x being produced by this distribution.
+     */
+    public static final double probabilityMultinomial(int[] xs, double[] elementProbs, int n) {
+        return Math.exp(logProbabilityMultinomial(xs, elementProbs, n));
+    }
+
+    /**
+     * Calculate the log probability of a multinomial producing the sample x.
+     * 
+     * @param xs           The value to generate the probability of sampling.
+     * @param elementProbs The probability of each category.
+     * @param n            The total number of values sampled in the distribution.
+     * @return The probability of x being produced by this distribution.
+     */
+    public static final double logProbabilityMultinomial(int[] xs, double[] elementProbs, int n) {
+        int l = xs.length;
+        // Test that the arrays are the correct lengths;
+        if(elementProbs.length != l)
+            return Double.NEGATIVE_INFINITY;
+
+        double p = 0;
+        double count = 0;
+        for(int i = 0; i < l; i++) {
+            int x = xs[i];
+            if(x != 0) {
+                count += x;
+                p += x * Math.log(elementProbs[i]);
+                p -= ApproximateFactorial.approxLogFac(x);
+            }
+        }
+        // Check the correct number of events occured.
+        if(count != n)
+            return Double.NEGATIVE_INFINITY;
+
+        p += ApproximateFactorial.approxLogFac(n);
+        return p;
     }
 
     // Poisson
@@ -718,7 +726,7 @@ public class DistributionSampling {
      * @param rate The rate parameter of the Poisson distribution.
      * @return The value sampled from the described distribution.
      */
-    public static int samplePoisson(Rng rng, double rate) {
+    public static final int samplePoisson(Rng rng, double rate) {
         if(rate <= 30) { // For small sizes use Kunths algorithm.
             double p = 1;
             int n = 0;
@@ -753,82 +761,6 @@ public class DistributionSampling {
         }
     }
 
-    // Multinomial
-    /**
-     * Method to sample a value from Multinomial distribution.
-     * 
-     * @param rng          A random number generator for the sampling.
-     * @param elementProbs The probability of returning each possible value from the categorical distribution.
-     * @param n            The number of tests to include in the output
-     * @param output       The array to hold the results of the sampling.
-     */
-    public static void sampleMultinomial(Rng rng, double[] elementProbs, int n, int[] output) {
-        Arrays.fill(output, 0);
-
-        double l = elementProbs.length;
-        for(int i = 0; i < n; i++) {
-            // Scale a uniform value to pick a category.
-            double val = rng.uniform();
-
-            // Loop through to find the category this value matches with.
-            double sum = 0;
-            int j;
-            for(j = 0; j < l; j++) {
-                sum += elementProbs[j];
-                if(sum >= val) {
-                    output[j]++;
-                    break;
-                }
-            }
-            if(j == l)
-                throw new SandwoodException("This should be unreachable");
-        }
-    }
-
-    /**
-     * Calculate the probability of a multinomial producing the sample x.
-     * 
-     * @param xs           The value to generate the probability of sampling.
-     * @param elementProbs The probability of each category.
-     * @param n            The total number of values sampled in the distribution.
-     * @return The probability of x being produced by this distribution.
-     */
-    public static double probabilityMultinomial(int[] xs, double[] elementProbs, int n) {
-        return Math.exp(logProbabilityMultinomial(xs, elementProbs, n));
-    }
-
-    /**
-     * Calculate the log probability of a multinomial producing the sample x.
-     * 
-     * @param xs           The value to generate the probability of sampling.
-     * @param elementProbs The probability of each category.
-     * @param n            The total number of values sampled in the distribution.
-     * @return The probability of x being produced by this distribution.
-     */
-    public static double logProbabilityMultinomial(int[] xs, double[] elementProbs, int n) {
-        int l = xs.length;
-        // Test that the arrays are the correct lengths;
-        if(elementProbs.length != l)
-            return Double.NEGATIVE_INFINITY;
-
-        double p = 0;
-        double count = 0;
-        for(int i = 0; i < l; i++) {
-            int x = xs[i];
-            if(x != 0) {
-                count += x;
-                p += x * Math.log(elementProbs[i]);
-                p -= ApproximateFactorial.approxLogFac(x);
-            }
-        }
-        // Check the correct number of events occured.
-        if(count != n)
-            return Double.NEGATIVE_INFINITY;
-
-        p += ApproximateFactorial.approxLogFac(n);
-        return p;
-    }
-
     /**
      * Method to calculate the probability of value being generated by the described Poisson distribution.
      * 
@@ -836,7 +768,7 @@ public class DistributionSampling {
      * @param rate  The rate parameter of the distribution.
      * @return The probability of sampling value from the described distribution.
      */
-    public static double probabilityPoisson(int value, double rate) {
+    public static final double probabilityPoisson(int value, double rate) {
         return pow(E, logProbabilityPoisson(value, rate));
     }
 
@@ -847,7 +779,7 @@ public class DistributionSampling {
      * @param rate  The rate parameter of the distribution.
      * @return The log probability of sampling value from the described distribution.
      */
-    public static double logProbabilityPoisson(int value, double rate) {
+    public static final double logProbabilityPoisson(int value, double rate) {
         if(value < 0 || rate <= 0)
             return Double.NEGATIVE_INFINITY;
         double logFac = ApproximateFactorial.approxLogFac(value);
@@ -866,7 +798,7 @@ public class DistributionSampling {
      * @param v   The StudentT parameter v.
      * @return The parameter drawn from the described distribution.
      */
-    public static double sampleStudentT(Rng rng, double v) {
+    public static final double sampleStudentT(Rng rng, double v) {
         double a, b, w; // a is U and b is V
         do {
             a = rng.uniform();
@@ -891,7 +823,7 @@ public class DistributionSampling {
      * @param v     The v parameter of the StudentT distribution.
      * @return The probability of sampling the value from the described distribution.
      */
-    public static double probabilityStudentT(double value, double v) {
+    public static final double probabilityStudentT(double value, double v) {
         if(v <= 0)
             return 0;
         else {
@@ -909,7 +841,7 @@ public class DistributionSampling {
      * @param v     The v parameter of the StudentT distribution.
      * @return The probability of sampling the value from the described distribution.
      */
-    public static double logProbabilityStudentT(double value, double v) {
+    public static final double logProbabilityStudentT(double value, double v) {
         if(v <= 0)
             return 0;
         else {
@@ -920,46 +852,47 @@ public class DistributionSampling {
         }
     }
 
+    // Truncated Gaussian
+    public static final double sampleTruncatedGaussian(Rng rng, double lower, double lowerCD, double upper,
+            double upperCD) {
+        assert lower < upper;
+        if(upper <= 0) {
+            if(upperCD - lowerCD > 0.1) {
+                // Find by rejection sampling
+                double value = -Math.abs(rng.normal());
+                while(value > upper || value < lower)
+                    value = -Math.abs(rng.normal());
+                return value;
+            }
+        } else if(lower >= 0) {
+            if(upperCD - lowerCD > 0.1) {
+                // Find by rejection sampling
+                double value = Math.abs(rng.normal());
+                while(value > upper || value < lower)
+                    value = Math.abs(rng.normal());
+                return value;
+            }
+        }
+        if(upperCD - lowerCD > 0.2) {
+            // Find by rejection sampling
+            double value = rng.normal();
+            while(value > upper || value < lower)
+                value = rng.normal();
+            return value;
+        }
+
+        double cdfValue = rng.uniform() * (upper - lower) + lower;
+        return Gaussian.inverseCDF(cdfValue);
+    }
+
     // Uniform
     /**
-     * Method to sample a value from a uniform distribution.
+     * Method to sample a value from a uniform distribution between 0 and 1.
      * 
-     * @param rng   A random number generator for the sampling.
-     * @param start The value the uniform distribution starts at.
-     * @param end   The value the uniform distribution ends at.
+     * @param rng A random number generator for the sampling.
      * @return The value sampled from the distribution.
      */
-    public static double sampleUniform(Rng rng, double start, double end) {
-        return rng.uniform() * (end - start) + start;
-    }
-
-    /**
-     * Method to calculate the probability of a value being sampled from a Uniform distribution.
-     *
-     * @param value The value to calculate the probability of sampling.
-     * @param start The start of the uniform distribution.
-     * @param end   The end of the distribution.
-     * @return The probability of the value being sampled from the described distribution.
-     */
-    public static double probabilityUniform(double value, double start, double end) {
-        if(value >= start && value <= end)
-            return 1 / (end - start);
-        else
-            return 0;
-    }
-
-    /**
-     * Method to calculate the log probability of a value being sampled from a Uniform distribution.
-     *
-     * @param value The value to calculate the probability of sampling.
-     * @param start The start of the uniform distribution.
-     * @param end   The end of the distribution.
-     * @return The log probability of the value being sampled from the described distribution.
-     */
-    public static double logProbabilityUniform(double value, double start, double end) {
-        if(value >= start && value <= end)
-            return -log(end - start);
-        else
-            return Double.NEGATIVE_INFINITY;
+    public static final double sampleUniform(Rng rng) {
+        return rng.uniform();
     }
 }
