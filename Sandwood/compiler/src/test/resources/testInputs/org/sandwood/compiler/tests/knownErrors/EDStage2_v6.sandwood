@@ -1,0 +1,101 @@
+package com.oracle.labs.east.ed;
+
+// estimating model for a very small cohort of data, e.g. between 1 and 2 hour current LOS
+// modeling admit decision
+// adding admit coefficient to the mean of Rem LOS
+
+
+
+public model EDStage2_v6(double[] ObsRemLOS, boolean[] ObsAdmitted, double[] Age, double[][] Vol, double [][]LabsRads, int[] Acuity, double[] ArriveMode, double[] PastVisits, int[] Hour, double[][] Proc) {
+    //features include volumes of cohort 2 (3 in their old version), this should be converted to double before
+    // current LOS, num of labs ordered, num of labs compl, same with rads (all that can be converted to double)
+    // acuity should be int or categorized
+
+    // response is remaining LOS in mins
+
+    int n_ac = 5;
+    int n_proc = 3;
+    int nObs = ObsRemLOS.length;
+
+    // Length-of-stay priors  -------------------------------------------
+    double[] alphaAc = new double[n_ac];
+    alphaAc[0] = gaussian(160,100).sample();
+    alphaAc[1] = gaussian(280,100).sample();
+    alphaAc[2] = gaussian(130,100).sample();
+    alphaAc[3] = gaussian(30,100).sample();
+    alphaAc[4] = gaussian(30,100).sample();
+
+    //double alphaLOS = gaussian(0,100).sample(); // we pre-defined some categories for current time in cohort
+
+    double alphaLabsCompl = gaussian(0,10).sample();
+    double alphaLabsNotCompl = gaussian(0,10).sample();
+    double alphaRadsCompl = gaussian(0,10).sample();
+    double alphaRadsNotCompl = gaussian(0,10).sample();
+
+    double alphaAge = gaussian(0,10).sample();
+    double[] betaVol = gaussian(0,10).sample(n_ac);  // we only consider volumes in one cohorts, 5 acuity levels
+
+    double alphaXR = gaussian(0,10).sample();
+    double alphaCT = gaussian(0,10).sample();
+    double alphaECG = gaussian(0,10).sample();
+
+
+    // Priors for the variance of LOS
+    double[] sigmaAc = gaussian(20,10).sample(n_ac);
+
+
+    double gammaArrive = gaussian(0,20).sample(); //arrive mode
+    double gammaPastCount = gaussian(0,20).sample(); // count of past emergency visits
+
+    double[] deltaHour = gaussian(0,25).sample(24); // for current hour, 24 dummy variables
+
+    // Admit model priors  -------------------------------------------
+    double admitLabsOrd = gaussian(0,10).sample();
+    double admitRadsOrd = gaussian(0,10).sample();
+
+    double[] admitAcuity = gaussian(0,100).sample(n_ac);
+    //double admitLOS = gaussian(0,100).sample();
+
+    double admitArrMode = gaussian(0,100).sample();
+
+    double admitAge = gaussian(0,100).sample();
+
+    // Admit coefficient  -------------------------------------------
+    double admitCoeff = gaussian(0,100).sample();
+
+
+
+    // record observations here  -------------------------------------------
+    double[] RemLOS = new double[nObs];
+    boolean[] Admit = new boolean[nObs];
+
+    // MODEL itself  -------------------------------------------
+
+    double[] procedures = new double[nObs];
+
+    for (int i : [0..nObs)) {
+    // first predict if a person is going to be admitted or not
+    double prob_admit = 1/(1+exp(-admitAge*Age[i] - admitAcuity[Acuity[i]-1]  - admitLabsOrd*LabsRads[i][0] - admitRadsOrd*LabsRads[i][3] - admitArrMode*ArriveMode[i] )); //have to add -1 to acuity because it's coded as 1..5, and we need to access indices 0..4
+    Admit[i] = bernoulli(prob_admit).sample();
+
+        double[] feat = new double[n_ac];
+        for (int j: [0..n_ac)){
+            feat[j] = betaVol[j]*Vol[i][j];
+        }
+       double sum_feat = reduce(feat, 0, (k, l) -> { return k + l; });
+       double mu_all;
+       procedures[i] = alphaXR*Proc[i][0] +  alphaCT*Proc[i][1] + alphaECG*Proc[i][2]; //if you comment this line out and remove procedures[i] from line 89 and 93, everything works
+       if (Admit[i]){
+       mu_all =  procedures[i] + admitCoeff + sum_feat +  gammaArrive*ArriveMode[i] + gammaPastCount*PastVisits[i] + deltaHour[Hour[i]]+ alphaAc[Acuity[i]-1] + alphaAge*Age[i] + LabsRads[i][1]*alphaLabsCompl + (LabsRads[i][0] -LabsRads[i][1])*alphaLabsNotCompl + LabsRads[i][3]*alphaRadsCompl + (LabsRads[i][2] -LabsRads[i][3])*alphaRadsNotCompl;
+       }
+
+      else {
+      mu_all = procedures[i] + sum_feat  + gammaArrive*ArriveMode[i] + gammaPastCount*PastVisits[i] + deltaHour[Hour[i]]+ alphaAc[Acuity[i]-1] + alphaAge*Age[i] + LabsRads[i][1]*alphaLabsCompl + (LabsRads[i][0] -LabsRads[i][1])*alphaLabsNotCompl + LabsRads[i][3]*alphaRadsCompl + (LabsRads[i][2] -LabsRads[i][3])*alphaRadsNotCompl;
+      }
+
+       RemLOS[i] = gaussian(mu_all, sigmaAc[Acuity[i]-1]).sample();
+    }
+
+    RemLOS.observe(ObsRemLOS);
+    Admit.observe(ObsAdmitted);
+}
