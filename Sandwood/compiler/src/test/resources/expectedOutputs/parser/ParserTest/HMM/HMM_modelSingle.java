@@ -167,14 +167,14 @@ public class HMM extends Model {
 
     private final ObservedIntegerInternal $states = new ObservedIntegerInternal(this, "states") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$states();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$states(value); }
+        protected void setValueInternal(int value) { system$c.set$states(value); }
     };
 
     /**
@@ -186,14 +186,14 @@ public class HMM extends Model {
 
     private final ObservedBooleanArrayShapeableInternal $measured = new ObservedBooleanArrayShapeableInternal(this, "measured") {
         @Override
-        public boolean[] get() {
+        public boolean[] getValue() {
             synchronized(model) {
                 return system$c.get$measured();
             }
         }
 
         @Override
-        public void setValue(boolean[] value) {
+        public void setValueInternal(boolean[] value) {
             system$c.set$measured(value);
             system$c.set$length$measured(value.length);
         }
@@ -247,7 +247,7 @@ public class HMM extends Model {
 
     public HMM(int measuredShape, int states) {
         this();
-        this.$states.set(states);
+        this.$states.setValue(states);
         this.$measured.setShape(measuredShape);
     }
     /**
@@ -259,8 +259,8 @@ public class HMM extends Model {
 
     public HMM(boolean[] measured, int states) {
         this();
-        this.measured.set(measured);
-        this.states.set(states);
+        this.measured.setValue(measured);
+        this.states.setValue(states);
     }
     
     @Override
@@ -457,7 +457,7 @@ public class HMM extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.states.set(inputs.states);
+        this.states.setValue(inputs.states);
         this.$measured.setShape(inputs.measuredShape);
         execute();
         return new InferredValueOutputs(this);
@@ -470,8 +470,8 @@ public class HMM extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -483,8 +483,8 @@ public class HMM extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -500,8 +500,8 @@ public class HMM extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -519,8 +519,8 @@ public class HMM extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -532,8 +532,8 @@ public class HMM extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -549,8 +549,8 @@ public class HMM extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -568,8 +568,8 @@ public class HMM extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.states.set(inputs.states);
-        this.$measured.set(inputs.measured);
+        this.states.setValue(inputs.states);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

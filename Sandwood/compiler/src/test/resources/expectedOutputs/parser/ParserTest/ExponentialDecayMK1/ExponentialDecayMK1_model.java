@@ -89,14 +89,14 @@ public class ExponentialDecayMK1 extends Model {
 
     private final ObservedDoubleInternal $a = new ObservedDoubleInternal(this, "a") {
         @Override
-        public double get() {
+        public double getValue() {
             synchronized(model) {
                 return system$c.get$a();
             }
         }
 
         @Override
-        protected void setValue(double value) { system$c.set$a(value); }
+        protected void setValueInternal(double value) { system$c.set$a(value); }
     };
 
     /**
@@ -106,14 +106,14 @@ public class ExponentialDecayMK1 extends Model {
 
     private final ObservedDoubleInternal $b = new ObservedDoubleInternal(this, "b") {
         @Override
-        public double get() {
+        public double getValue() {
             synchronized(model) {
                 return system$c.get$b();
             }
         }
 
         @Override
-        protected void setValue(double value) { system$c.set$b(value); }
+        protected void setValueInternal(double value) { system$c.set$b(value); }
     };
 
     /**
@@ -125,14 +125,14 @@ public class ExponentialDecayMK1 extends Model {
 
     private final ObservedDoubleArrayShapeableInternal $decayDetected = new ObservedDoubleArrayShapeableInternal(this, "decayDetected") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$decayDetected();
             }
         }
 
         @Override
-        public void setValue(double[] value) {
+        public void setValueInternal(double[] value) {
             system$c.set$decayDetected(value);
             system$c.set$length$decayDetected(value.length);
         }
@@ -198,8 +198,8 @@ public class ExponentialDecayMK1 extends Model {
 
     public ExponentialDecayMK1(int decayDetectedShape, double a, double b) {
         this();
-        this.$a.set(a);
-        this.$b.set(b);
+        this.$a.setValue(a);
+        this.$b.setValue(b);
         this.$decayDetected.setShape(decayDetectedShape);
     }
     /**
@@ -212,9 +212,9 @@ public class ExponentialDecayMK1 extends Model {
 
     public ExponentialDecayMK1(double[] decayDetected, double a, double b) {
         this();
-        this.decayDetected.set(decayDetected);
-        this.a.set(a);
-        this.b.set(b);
+        this.decayDetected.setValue(decayDetected);
+        this.a.setValue(a);
+        this.b.setValue(b);
     }
     
     @Override
@@ -393,8 +393,8 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
         this.$decayDetected.setShape(inputs.decayDetectedShape);
         execute();
         return new InferredValueOutputs(this);
@@ -407,9 +407,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -421,9 +421,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -439,9 +439,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -459,9 +459,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -473,9 +473,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -491,9 +491,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -511,9 +511,9 @@ public class ExponentialDecayMK1 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.a.set(inputs.a);
-        this.b.set(inputs.b);
-        this.$decayDetected.set(inputs.decayDetected);
+        this.a.setValue(inputs.a);
+        this.b.setValue(inputs.b);
+        this.$decayDetected.setValue(inputs.decayDetected);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

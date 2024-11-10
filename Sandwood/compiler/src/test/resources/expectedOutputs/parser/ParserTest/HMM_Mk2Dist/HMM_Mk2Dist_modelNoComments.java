@@ -250,14 +250,14 @@ public class HMM_Mk2Dist extends Model {
 
     private final ObservedIntegerInternal $noEvents = new ObservedIntegerInternal(this, "noEvents") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noEvents();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noEvents(value); }
+        protected void setValueInternal(int value) { system$c.set$noEvents(value); }
     };
 
     /**
@@ -267,14 +267,14 @@ public class HMM_Mk2Dist extends Model {
 
     private final ObservedIntegerInternal $noStates = new ObservedIntegerInternal(this, "noStates") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noStates();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noStates(value); }
+        protected void setValueInternal(int value) { system$c.set$noStates(value); }
     };
 
     /**
@@ -286,14 +286,14 @@ public class HMM_Mk2Dist extends Model {
 
     private final ObservedObjectArrayShapeableInternal<int[], int[]> $eventsMeasured = new ObservedObjectArrayShapeableInternal<int[], int[]>(this, "eventsMeasured", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] get() {
+        public int[][] getValue() {
             synchronized(model) {
                 return system$c.get$eventsMeasured();
             }
         }
 
         @Override
-        public void setValue(int[][] value) {
+        public void setValueInternal(int[][] value) {
             system$c.set$eventsMeasured(value);
             system$c.set$length$eventsMeasured(getDims(value));
         }
@@ -359,8 +359,8 @@ public class HMM_Mk2Dist extends Model {
 
     public HMM_Mk2Dist(int[] eventsMeasuredShape, int noStates, int noEvents) {
         this();
-        this.$noEvents.set(noEvents);
-        this.$noStates.set(noStates);
+        this.$noEvents.setValue(noEvents);
+        this.$noStates.setValue(noStates);
         this.$eventsMeasured.setShape(eventsMeasuredShape);
     }
     /**
@@ -373,9 +373,9 @@ public class HMM_Mk2Dist extends Model {
 
     public HMM_Mk2Dist(int[][] eventsMeasured, int noStates, int noEvents) {
         this();
-        this.eventsMeasured.set(eventsMeasured);
-        this.noStates.set(noStates);
-        this.noEvents.set(noEvents);
+        this.eventsMeasured.setValue(eventsMeasured);
+        this.noStates.setValue(noStates);
+        this.noEvents.setValue(noEvents);
     }
     
     @Override
@@ -614,8 +614,8 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
         this.$eventsMeasured.setShape(inputs.eventsMeasuredShape);
         execute();
         return new InferredValueOutputs(this);
@@ -628,9 +628,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -642,9 +642,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -660,9 +660,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -680,9 +680,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -694,9 +694,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -712,9 +712,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -732,9 +732,9 @@ public class HMM_Mk2Dist extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noEvents.set(inputs.noEvents);
-        this.noStates.set(inputs.noStates);
-        this.$eventsMeasured.set(inputs.eventsMeasured);
+        this.noEvents.setValue(inputs.noEvents);
+        this.noStates.setValue(inputs.noStates);
+        this.$eventsMeasured.setValue(inputs.eventsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

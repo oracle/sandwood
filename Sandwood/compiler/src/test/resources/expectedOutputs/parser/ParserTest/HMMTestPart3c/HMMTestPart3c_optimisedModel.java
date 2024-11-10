@@ -169,14 +169,14 @@ public class HMMTestPart3c extends Model {
 
     private final ObservedBooleanArrayShapeableInternal $flipsMeasured = new ObservedBooleanArrayShapeableInternal(this, "flipsMeasured") {
         @Override
-        public boolean[] get() {
+        public boolean[] getValue() {
             synchronized(model) {
                 return system$c.get$flipsMeasured();
             }
         }
 
         @Override
-        public void setValue(boolean[] value) {
+        public void setValueInternal(boolean[] value) {
             system$c.set$flipsMeasured(value);
             system$c.set$length$flipsMeasured(value.length);
         }
@@ -236,7 +236,7 @@ public class HMMTestPart3c extends Model {
 
     public HMMTestPart3c(boolean[] flipsMeasured) {
         this();
-        this.flipsMeasured.set(flipsMeasured);
+        this.flipsMeasured.setValue(flipsMeasured);
     }
     
     @Override
@@ -434,7 +434,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -446,7 +446,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -462,7 +462,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -480,7 +480,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -492,7 +492,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -508,7 +508,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -526,7 +526,7 @@ public class HMMTestPart3c extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

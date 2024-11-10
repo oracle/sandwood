@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -24,28 +24,28 @@ public abstract class ObservedBooleanInternal extends ObservedVariableInternalBa
     }
 
     @Override
-    public final void set(boolean value) {
+    public final void setValue(boolean value) {
         synchronized(model) {
             if(set)
                 throw new SandwoodVariableSetException(
                         "Unable to set the value of " + name + " as it has already been set.");
             set = true;
-            setValue(value);
+            setValueInternal(value);
         }
     }
 
     @Override
     public final void toJson(JsonEncoder e) throws IOException {
-        e.addBoolean(name(), get());
+        e.addBoolean(name(), getValue());
     }
 
     @Override
     public final void fromJSON(JsonDecoder decoder) throws SandwoodJsonException, IOException {
-        set(decoder.getBoolean());
+        setValue(decoder.getBoolean());
     }
 
     @Override
-    public abstract boolean get();
+    public abstract boolean getValue();
 
-    protected abstract void setValue(boolean value);
+    protected abstract void setValueInternal(boolean value);
 }

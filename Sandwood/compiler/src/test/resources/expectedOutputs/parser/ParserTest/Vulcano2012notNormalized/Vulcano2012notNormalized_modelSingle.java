@@ -200,14 +200,14 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ObservedObjectArrayInternal<int[]> $Avail = new ObservedObjectArrayInternal<int[]>(this, "Avail", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] get() {
+        public int[][] getValue() {
             synchronized(model) {
                 return system$c.get$Avail();
             }
         }
 
         @Override
-        protected void setValue(int[][] value) { system$c.set$Avail(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$Avail(value); }
     };
 
     /**
@@ -217,14 +217,14 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ObservedIntegerInternal $T = new ObservedIntegerInternal(this, "T") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$T();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$T(value); }
+        protected void setValueInternal(int value) { system$c.set$T(value); }
     };
 
     /**
@@ -234,14 +234,14 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ObservedIntegerInternal $noProducts = new ObservedIntegerInternal(this, "noProducts") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noProducts();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noProducts(value); }
+        protected void setValueInternal(int value) { system$c.set$noProducts(value); }
     };
 
     /**
@@ -251,14 +251,14 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ObservedIntegerInternal $s = new ObservedIntegerInternal(this, "s") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$s();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$s(value); }
+        protected void setValueInternal(int value) { system$c.set$s(value); }
     };
 
     /**
@@ -270,14 +270,14 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ObservedObjectArrayInternal<int[]> $ObsSales = new ObservedObjectArrayInternal<int[]>(this, "ObsSales", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] get() {
+        public int[][] getValue() {
             synchronized(model) {
                 return system$c.get$ObsSales();
             }
         }
 
         @Override
-        protected void setValue(int[][] value) { system$c.set$ObsSales(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$ObsSales(value); }
     };
 
     /**
@@ -324,10 +324,10 @@ public class Vulcano2012notNormalized extends Model {
 
     public Vulcano2012notNormalized(int noProducts, int T, int s, int[][] Avail) {
         this();
-        this.$Avail.set(Avail);
-        this.$T.set(T);
-        this.$noProducts.set(noProducts);
-        this.$s.set(s);
+        this.$Avail.setValue(Avail);
+        this.$T.setValue(T);
+        this.$noProducts.setValue(noProducts);
+        this.$s.setValue(s);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -341,11 +341,11 @@ public class Vulcano2012notNormalized extends Model {
 
     public Vulcano2012notNormalized(int noProducts, int T, int s, int[][] ObsSales, int[][] Avail) {
         this();
-        this.noProducts.set(noProducts);
-        this.T.set(T);
-        this.s.set(s);
-        this.ObsSales.set(ObsSales);
-        this.Avail.set(Avail);
+        this.noProducts.setValue(noProducts);
+        this.T.setValue(T);
+        this.s.setValue(s);
+        this.ObsSales.setValue(ObsSales);
+        this.Avail.setValue(Avail);
     }
     
     @Override
@@ -573,10 +573,10 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -588,11 +588,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -604,11 +604,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -624,11 +624,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -646,11 +646,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -662,11 +662,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -682,11 +682,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -704,11 +704,11 @@ public class Vulcano2012notNormalized extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.Avail.set(inputs.Avail);
-        this.T.set(inputs.T);
-        this.noProducts.set(inputs.noProducts);
-        this.s.set(inputs.s);
-        this.$ObsSales.set(inputs.ObsSales);
+        this.Avail.setValue(inputs.Avail);
+        this.T.setValue(inputs.T);
+        this.noProducts.setValue(inputs.noProducts);
+        this.s.setValue(inputs.s);
+        this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

@@ -313,20 +313,20 @@ public class ConjugatePriorTest {
         Field f = c.getField(inputName);
         Object inputField = f.get(model);
         if(inputField instanceof ObservedDouble) {
-            ((ObservedDouble) inputField).set((Double) input);
+            ((ObservedDouble) inputField).setValue((Double) input);
         } else if(inputField instanceof ObservedDoubleArray) {
-            ((ObservedDoubleArray) inputField).set((double[]) input);
+            ((ObservedDoubleArray) inputField).setValue((double[]) input);
         } else if(inputField instanceof ObservedInteger) {
-            ((ObservedInteger) inputField).set((Integer) input);
+            ((ObservedInteger) inputField).setValue((Integer) input);
         } else if(inputField instanceof ObservedIntegerArray) {
-            ((ObservedIntegerArray) inputField).set((int[]) input);
+            ((ObservedIntegerArray) inputField).setValue((int[]) input);
         } else if(inputField instanceof ObservedBoolean) {
-            ((ObservedBoolean) inputField).set((Boolean) input);
+            ((ObservedBoolean) inputField).setValue((Boolean) input);
         } else if(inputField instanceof ObservedBooleanArray) {
-            ((ObservedBooleanArray) inputField).set((boolean[]) input);
+            ((ObservedBooleanArray) inputField).setValue((boolean[]) input);
         } else if(inputField instanceof ObservedObjectArray<?>) {
             for(Method m:inputField.getClass().getMethods()) {
-                if(m.getName().equals("set")) {
+                if(m.getName().equals("setValue")) {
                     m.invoke(inputField, input);
                     break;
                 }

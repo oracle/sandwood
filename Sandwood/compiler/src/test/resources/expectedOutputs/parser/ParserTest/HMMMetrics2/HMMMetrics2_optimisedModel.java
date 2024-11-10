@@ -318,14 +318,14 @@ public class HMMMetrics2 extends Model {
 
     private final ObservedIntegerInternal $noStates = new ObservedIntegerInternal(this, "noStates") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noStates();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noStates(value); }
+        protected void setValueInternal(int value) { system$c.set$noStates(value); }
     };
 
     /**
@@ -337,14 +337,14 @@ public class HMMMetrics2 extends Model {
 
     private final ObservedObjectArrayInternal<boolean[]> $metric_valid = new ObservedObjectArrayInternal<boolean[]>(this, "metric_valid", org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        public boolean[][] get() {
+        public boolean[][] getValue() {
             synchronized(model) {
                 return system$c.get$metric_valid();
             }
         }
 
         @Override
-        protected void setValue(boolean[][] value) { system$c.set$metric_valid(value); }
+        protected void setValueInternal(boolean[][] value) { system$c.set$metric_valid(value); }
     };
 
     /**
@@ -354,14 +354,14 @@ public class HMMMetrics2 extends Model {
 
     private final ObservedObjectArrayShapeableInternal<double[], int[]> $metric = new ObservedObjectArrayShapeableInternal<double[], int[]>(this, "metric", org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] get() {
+        public double[][] getValue() {
             synchronized(model) {
                 return system$c.get$metric();
             }
         }
 
         @Override
-        public void setValue(double[][] value) {
+        public void setValueInternal(double[][] value) {
             system$c.set$metric(value);
             system$c.set$length$metric(getDims(value));
         }
@@ -430,7 +430,7 @@ public class HMMMetrics2 extends Model {
 
     public HMMMetrics2(int[] metricShape, int noStates) {
         this();
-        this.$noStates.set(noStates);
+        this.$noStates.setValue(noStates);
         this.$metric.setShape(metricShape);
     }
     /**
@@ -443,9 +443,9 @@ public class HMMMetrics2 extends Model {
 
     public HMMMetrics2(double[][] metric, boolean[][] metric_valid, int noStates) {
         this();
-        this.metric.set(metric);
-        this.metric_valid.set(metric_valid);
-        this.noStates.set(noStates);
+        this.metric.setValue(metric);
+        this.metric_valid.setValue(metric_valid);
+        this.noStates.setValue(noStates);
     }
     
     @Override
@@ -709,7 +709,7 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.noStates.set(inputs.noStates);
+        this.noStates.setValue(inputs.noStates);
         this.$metric.setShape(inputs.metricShape);
         execute();
         return new InferredValueOutputs(this);
@@ -722,9 +722,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -736,9 +736,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -754,9 +754,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -774,9 +774,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -788,9 +788,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -806,9 +806,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -826,9 +826,9 @@ public class HMMMetrics2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$metric.set(inputs.metric);
-        this.$metric_valid.set(inputs.metric_valid);
+        this.noStates.setValue(inputs.noStates);
+        this.$metric.setValue(inputs.metric);
+        this.$metric_valid.setValue(inputs.metric_valid);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

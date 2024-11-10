@@ -91,14 +91,14 @@ public class Flip1CoinMK17 extends Model {
 
     private final ObservedBooleanInternal $flipMeasured = new ObservedBooleanInternal(this, "flipMeasured") {
         @Override
-        public boolean get() {
+        public boolean getValue() {
             synchronized(model) {
                 return system$c.get$flipMeasured();
             }
         }
 
         @Override
-        protected void setValue(boolean value) { system$c.set$flipMeasured(value); }
+        protected void setValueInternal(boolean value) { system$c.set$flipMeasured(value); }
     };
 
     /**
@@ -144,7 +144,7 @@ public class Flip1CoinMK17 extends Model {
 
     public Flip1CoinMK17(boolean flipMeasured) {
         this();
-        this.flipMeasured.set(flipMeasured);
+        this.flipMeasured.setValue(flipMeasured);
     }
     
     @Override
@@ -304,7 +304,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -316,7 +316,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -332,7 +332,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -350,7 +350,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -362,7 +362,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -378,7 +378,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -396,7 +396,7 @@ public class Flip1CoinMK17 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$flipMeasured.set(inputs.flipMeasured);
+        this.$flipMeasured.setValue(inputs.flipMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

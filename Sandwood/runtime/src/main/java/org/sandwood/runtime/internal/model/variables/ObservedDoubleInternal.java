@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -24,28 +24,25 @@ public abstract class ObservedDoubleInternal extends ObservedVariableInternalBas
     }
 
     @Override
-    public final void set(double value) {
+    public final void setValue(double value) {
         synchronized(model) {
             if(set)
                 throw new SandwoodVariableSetException(
                         "Unable to set the value of " + name + " as it has already been set.");
             set = true;
-            setValue(value);
+            setValueInternal(value);
         }
     }
 
     @Override
     public final void toJson(JsonEncoder e) throws IOException {
-        e.addDouble(name(), get());
+        e.addDouble(name(), getValue());
     }
 
     @Override
     public final void fromJSON(JsonDecoder decoder) throws SandwoodJsonException, IOException {
-        set(decoder.getDouble());
+        setValue(decoder.getDouble());
     }
 
-    @Override
-    public abstract double get();
-
-    protected abstract void setValue(double value);
+    protected abstract void setValueInternal(double value);
 }

@@ -201,14 +201,14 @@ public class HMM_Paper extends Model {
 
     private final ObservedIntegerInternal $nCoins = new ObservedIntegerInternal(this, "nCoins") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$nCoins();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$nCoins(value); }
+        protected void setValueInternal(int value) { system$c.set$nCoins(value); }
     };
 
     /**
@@ -220,14 +220,14 @@ public class HMM_Paper extends Model {
 
     private final ObservedBooleanArrayShapeableInternal $measured = new ObservedBooleanArrayShapeableInternal(this, "measured") {
         @Override
-        public boolean[] get() {
+        public boolean[] getValue() {
             synchronized(model) {
                 return system$c.get$measured();
             }
         }
 
         @Override
-        public void setValue(boolean[] value) {
+        public void setValueInternal(boolean[] value) {
             system$c.set$measured(value);
             system$c.set$length$measured(value.length);
         }
@@ -282,7 +282,7 @@ public class HMM_Paper extends Model {
 
     public HMM_Paper(int measuredShape, int nCoins) {
         this();
-        this.$nCoins.set(nCoins);
+        this.$nCoins.setValue(nCoins);
         this.$measured.setShape(measuredShape);
     }
     /**
@@ -294,8 +294,8 @@ public class HMM_Paper extends Model {
 
     public HMM_Paper(boolean[] measured, int nCoins) {
         this();
-        this.measured.set(measured);
-        this.nCoins.set(nCoins);
+        this.measured.setValue(measured);
+        this.nCoins.setValue(nCoins);
     }
     
     @Override
@@ -508,7 +508,7 @@ public class HMM_Paper extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
+        this.nCoins.setValue(inputs.nCoins);
         this.$measured.setShape(inputs.measuredShape);
         execute();
         return new InferredValueOutputs(this);
@@ -521,8 +521,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -534,8 +534,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -551,8 +551,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -570,8 +570,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -583,8 +583,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -600,8 +600,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -619,8 +619,8 @@ public class HMM_Paper extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.nCoins.set(inputs.nCoins);
-        this.$measured.set(inputs.measured);
+        this.nCoins.setValue(inputs.nCoins);
+        this.$measured.setValue(inputs.measured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

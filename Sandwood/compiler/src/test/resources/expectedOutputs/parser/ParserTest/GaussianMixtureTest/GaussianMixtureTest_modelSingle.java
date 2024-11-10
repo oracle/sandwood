@@ -159,14 +159,14 @@ public class GaussianMixtureTest extends Model {
 
     private final ObservedDoubleArrayShapeableInternal $xMeasured = new ObservedDoubleArrayShapeableInternal(this, "xMeasured") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$xMeasured();
             }
         }
 
         @Override
-        public void setValue(double[] value) {
+        public void setValueInternal(double[] value) {
             system$c.set$xMeasured(value);
             system$c.set$length$xMeasured(value.length);
         }
@@ -226,7 +226,7 @@ public class GaussianMixtureTest extends Model {
 
     public GaussianMixtureTest(double[] xMeasured) {
         this();
-        this.xMeasured.set(xMeasured);
+        this.xMeasured.setValue(xMeasured);
     }
     
     @Override
@@ -422,7 +422,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -434,7 +434,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -450,7 +450,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -468,7 +468,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -480,7 +480,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -496,7 +496,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -514,7 +514,7 @@ public class GaussianMixtureTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$xMeasured.set(inputs.xMeasured);
+        this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

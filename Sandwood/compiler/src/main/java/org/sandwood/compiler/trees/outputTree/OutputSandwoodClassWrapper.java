@@ -505,12 +505,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         for(VariableName arg:modelInputs) {
             Variable<?> v = traces.getVariable(arg);
             if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
-                sb.append("        this." + arg + ".set(" + objectName + "." + arg + ");\n");
+                sb.append("        this." + arg + ".setValue(" + objectName + "." + arg + ");\n");
         }
         for(VariableName arg:observedShapeableInputs)
-            sb.append("        this." + VariableNames.internalName(arg) + ".set(" + objectName + "." + arg + ");\n");
+            sb.append("        this." + VariableNames.internalName(arg) + ".setValue(" + objectName + "." + arg + ");\n");
         for(VariableName arg:observedOnlyInputs)
-            sb.append("        this." + VariableNames.internalName(arg) + ".set(" + objectName + "." + arg + ");\n");
+            sb.append("        this." + VariableNames.internalName(arg) + ".setValue(" + objectName + "." + arg + ");\n");
     }
 
     private void constructInfer1Value(StringBuilder sb) {
@@ -528,7 +528,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         for(VariableName arg:modelInputs) {
             Variable<?> v = traces.getVariable(arg);
             if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
-                sb.append("        this." + arg + ".set(" + objectName + "." + arg + ");\n");
+                sb.append("        this." + arg + ".setValue(" + objectName + "." + arg + ");\n");
         }
         for(VariableName arg:observedShapeableInputs) {
             VariableName shapeArg = VariableNames.shapeName(arg);
@@ -882,7 +882,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 for(VariableName arg:modelInputs) {
                     Variable<?> v = traces.getVariable(arg);
                     if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
-                        body.append("        this." + VariableNames.internalName(arg) + ".set(" + arg + ");\n");
+                        body.append("        this." + VariableNames.internalName(arg) + ".setValue(" + arg + ");\n");
                 }
                 for(VariableName arg:observedShapeableInputs) {
                     // Test to avoid name collisions on the argument renaming.
@@ -916,7 +916,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             comment.append("      * @param " + arg + " The value to set " + arg + " to.\n");
             sig.append(type.getJavaType() + " " + arg);
             if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
-                body.append("        this." + arg + ".set(" + arg + ");\n");
+                body.append("        this." + arg + ".setValue(" + arg + ");\n");
 
             for(int i = 1; i < constructorArgs.length; i++) {
                 arg = constructorArgs[i];
@@ -925,7 +925,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 comment.append("      * @param " + arg + " The value to set " + arg + " to.\n");
                 sig.append(", " + type.getJavaType() + " " + arg);
                 if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
-                    body.append("        this." + arg + ".set(" + arg + ");\n");
+                    body.append("        this." + arg + ".setValue(" + arg + ");\n");
             }
 
             comment.append("      */\n");
@@ -1224,12 +1224,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                         + " = new " + varType + "Internal" + genericType + "(" + constructorArgs + ") {\n");
 
         sb.append("        @Override\n");
-        sb.append("        public " + javaType + " get() {\n" + "            synchronized(model) {\n"
+        sb.append("        public " + javaType + " getValue() {\n" + "            synchronized(model) {\n"
                 + "                return " + coreName + getMethod(uniqueName) + "();\n" + "            }\n"
                 + "        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        protected void setValue(" + javaType + " value) { " + coreName + setMethod(uniqueName)
+        sb.append("        protected void setValueInternal(" + javaType + " value) { " + coreName + setMethod(uniqueName)
                 + "(value); }\n");
 
         sb.append("    };\n\n");
@@ -1296,12 +1296,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                         + " = new " + varType + "Internal" + genericType + "(" + constructorArgs + ") {\n");
 
         sb.append("        @Override\n");
-        sb.append("        public " + javaType + " get() {\n" + "            synchronized(model) {\n"
+        sb.append("        public " + javaType + " getValue() {\n" + "            synchronized(model) {\n"
                 + "                return " + coreName + getMethod(uniqueName) + "();\n" + "            }\n"
                 + "        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        public void setValue(" + javaType + " value) {\n" + "            " + coreName
+        sb.append("        public void setValueInternal(" + javaType + " value) {\n" + "            " + coreName
                 + setMethod(uniqueName) + "(value);\n");
 
         VariableName lengthName = VariableNames.lengthName(fieldName);

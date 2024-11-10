@@ -163,14 +163,14 @@ public class Deterministic2 extends Model {
 
     private final ObservedIntegerInternal $n = new ObservedIntegerInternal(this, "n") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$n();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$n(value); }
+        protected void setValueInternal(int value) { system$c.set$n(value); }
     };
 
     /**
@@ -182,14 +182,14 @@ public class Deterministic2 extends Model {
 
     private final ObservedBooleanArrayInternal $flipsMeasured = new ObservedBooleanArrayInternal(this, "flipsMeasured") {
         @Override
-        public boolean[] get() {
+        public boolean[] getValue() {
             synchronized(model) {
                 return system$c.get$flipsMeasured();
             }
         }
 
         @Override
-        protected void setValue(boolean[] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value); }
     };
 
     /**
@@ -229,7 +229,7 @@ public class Deterministic2 extends Model {
 
     public Deterministic2(int n) {
         this();
-        this.$n.set(n);
+        this.$n.setValue(n);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -240,8 +240,8 @@ public class Deterministic2 extends Model {
 
     public Deterministic2(int n, boolean[] flipsMeasured) {
         this();
-        this.n.set(n);
-        this.flipsMeasured.set(flipsMeasured);
+        this.n.setValue(n);
+        this.flipsMeasured.setValue(flipsMeasured);
     }
     
     @Override
@@ -425,7 +425,7 @@ public class Deterministic2 extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.n.set(inputs.n);
+        this.n.setValue(inputs.n);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -437,8 +437,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -450,8 +450,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -467,8 +467,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -486,8 +486,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -499,8 +499,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -516,8 +516,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -535,8 +535,8 @@ public class Deterministic2 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.n.set(inputs.n);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.n.setValue(inputs.n);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

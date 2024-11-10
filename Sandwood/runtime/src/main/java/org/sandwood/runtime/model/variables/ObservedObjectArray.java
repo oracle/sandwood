@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -21,7 +21,7 @@ public interface ObservedObjectArray<A> extends ObservedVariable {
      * 
      * @param value The value to set the variable to.
      */
-    void set(A[] value);
+    void setValue(A[] value);
 
     /**
      * Recover the value that the variable has been set to. This method is only for convenience, and should not be used
@@ -29,6 +29,6 @@ public interface ObservedObjectArray<A> extends ObservedVariable {
      * 
      * @return The value the observed variable is set to.
      */
-    A[] get();
+    A[] getValue();
 
 }

@@ -89,14 +89,14 @@ public class AlternativeModelMK3 extends Model {
 
     private final ObservedIntegerInternal $observedSampleCount = new ObservedIntegerInternal(this, "observedSampleCount") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$observedSampleCount();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$observedSampleCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value); }
     };
 
     /**
@@ -108,14 +108,14 @@ public class AlternativeModelMK3 extends Model {
 
     private final ObservedIntegerInternal $observedPositiveCount = new ObservedIntegerInternal(this, "observedPositiveCount") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$observedPositiveCount();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$observedPositiveCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value); }
     };
 
     /**
@@ -165,7 +165,7 @@ public class AlternativeModelMK3 extends Model {
 
     public AlternativeModelMK3(int observedSampleCount) {
         this();
-        this.$observedSampleCount.set(observedSampleCount);
+        this.$observedSampleCount.setValue(observedSampleCount);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -176,8 +176,8 @@ public class AlternativeModelMK3 extends Model {
 
     public AlternativeModelMK3(int observedSampleCount, int observedPositiveCount) {
         this();
-        this.observedSampleCount.set(observedSampleCount);
-        this.observedPositiveCount.set(observedPositiveCount);
+        this.observedSampleCount.setValue(observedSampleCount);
+        this.observedPositiveCount.setValue(observedPositiveCount);
     }
     
     @Override
@@ -337,7 +337,7 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -349,8 +349,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -362,8 +362,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -379,8 +379,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -398,8 +398,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -411,8 +411,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -428,8 +428,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -447,8 +447,8 @@ public class AlternativeModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

@@ -89,14 +89,14 @@ public class NullModelMK3 extends Model {
 
     private final ObservedDoubleInternal $eta = new ObservedDoubleInternal(this, "eta") {
         @Override
-        public double get() {
+        public double getValue() {
             synchronized(model) {
                 return system$c.get$eta();
             }
         }
 
         @Override
-        protected void setValue(double value) { system$c.set$eta(value); }
+        protected void setValueInternal(double value) { system$c.set$eta(value); }
     };
 
     /**
@@ -106,14 +106,14 @@ public class NullModelMK3 extends Model {
 
     private final ObservedIntegerInternal $observedSampleCount = new ObservedIntegerInternal(this, "observedSampleCount") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$observedSampleCount();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$observedSampleCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value); }
     };
 
     /**
@@ -125,14 +125,14 @@ public class NullModelMK3 extends Model {
 
     private final ObservedIntegerInternal $observedPositiveCount = new ObservedIntegerInternal(this, "observedPositiveCount") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$observedPositiveCount();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$observedPositiveCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value); }
     };
 
     /**
@@ -184,8 +184,8 @@ public class NullModelMK3 extends Model {
 
     public NullModelMK3(double eta, int observedSampleCount) {
         this();
-        this.$eta.set(eta);
-        this.$observedSampleCount.set(observedSampleCount);
+        this.$eta.setValue(eta);
+        this.$observedSampleCount.setValue(observedSampleCount);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -197,9 +197,9 @@ public class NullModelMK3 extends Model {
 
     public NullModelMK3(double eta, int observedSampleCount, int observedPositiveCount) {
         this();
-        this.eta.set(eta);
-        this.observedSampleCount.set(observedSampleCount);
-        this.observedPositiveCount.set(observedPositiveCount);
+        this.eta.setValue(eta);
+        this.observedSampleCount.setValue(observedSampleCount);
+        this.observedPositiveCount.setValue(observedPositiveCount);
     }
     
     @Override
@@ -369,8 +369,8 @@ public class NullModelMK3 extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -382,9 +382,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -396,9 +396,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -414,9 +414,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -434,9 +434,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -448,9 +448,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -466,9 +466,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -486,9 +486,9 @@ public class NullModelMK3 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.eta.set(inputs.eta);
-        this.observedSampleCount.set(inputs.observedSampleCount);
-        this.$observedPositiveCount.set(inputs.observedPositiveCount);
+        this.eta.setValue(inputs.eta);
+        this.observedSampleCount.setValue(inputs.observedSampleCount);
+        this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

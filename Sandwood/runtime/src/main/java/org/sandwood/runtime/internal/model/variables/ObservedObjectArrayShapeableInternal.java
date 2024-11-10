@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -49,7 +49,7 @@ public abstract class ObservedObjectArrayShapeableInternal<A, B> extends Observe
     }
 
     @Override
-    public final void set(A[] value) {
+    public final void setValue(A[] value) {
         synchronized(model) {
             if(set)
                 throw new SandwoodVariableSetException(
@@ -57,7 +57,7 @@ public abstract class ObservedObjectArrayShapeableInternal<A, B> extends Observe
             if(shapeSet)
                 throw new SandwoodVariableSetException(
                         "Unable to set the value of " + name + " as its shape has already been set.");
-            super.set(value);
+            super.setValue(value);
             shapeSet = true;
         }
     }

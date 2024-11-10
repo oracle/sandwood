@@ -138,14 +138,14 @@ public class LDATest extends Model {
 
     private final ObservedIntegerInternal $noTopics = new ObservedIntegerInternal(this, "noTopics") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noTopics();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noTopics(value); }
+        protected void setValueInternal(int value) { system$c.set$noTopics(value); }
     };
 
     /**
@@ -155,14 +155,14 @@ public class LDATest extends Model {
 
     private final ObservedIntegerInternal $vocabSize = new ObservedIntegerInternal(this, "vocabSize") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$vocabSize();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$vocabSize(value); }
+        protected void setValueInternal(int value) { system$c.set$vocabSize(value); }
     };
 
     /**
@@ -174,14 +174,14 @@ public class LDATest extends Model {
 
     private final ObservedObjectArrayShapeableInternal<int[], int[]> $documents = new ObservedObjectArrayShapeableInternal<int[], int[]>(this, "documents", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] get() {
+        public int[][] getValue() {
             synchronized(model) {
                 return system$c.get$documents();
             }
         }
 
         @Override
-        public void setValue(int[][] value) {
+        public void setValueInternal(int[][] value) {
             system$c.set$documents(value);
             system$c.set$length$documents(getDims(value));
         }
@@ -244,8 +244,8 @@ public class LDATest extends Model {
 
     public LDATest(int noTopics, int vocabSize, int[] documentsShape) {
         this();
-        this.$noTopics.set(noTopics);
-        this.$vocabSize.set(vocabSize);
+        this.$noTopics.setValue(noTopics);
+        this.$vocabSize.setValue(vocabSize);
         this.$documents.setShape(documentsShape);
     }
     /**
@@ -258,9 +258,9 @@ public class LDATest extends Model {
 
     public LDATest(int noTopics, int vocabSize, int[][] documents) {
         this();
-        this.noTopics.set(noTopics);
-        this.vocabSize.set(vocabSize);
-        this.documents.set(documents);
+        this.noTopics.setValue(noTopics);
+        this.vocabSize.setValue(vocabSize);
+        this.documents.setValue(documents);
     }
     
     @Override
@@ -449,8 +449,8 @@ public class LDATest extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
         this.$documents.setShape(inputs.documentsShape);
         execute();
         return new InferredValueOutputs(this);
@@ -463,9 +463,9 @@ public class LDATest extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -477,9 +477,9 @@ public class LDATest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -495,9 +495,9 @@ public class LDATest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -515,9 +515,9 @@ public class LDATest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -529,9 +529,9 @@ public class LDATest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -547,9 +547,9 @@ public class LDATest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -567,9 +567,9 @@ public class LDATest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noTopics.set(inputs.noTopics);
-        this.vocabSize.set(inputs.vocabSize);
-        this.$documents.set(inputs.documents);
+        this.noTopics.setValue(inputs.noTopics);
+        this.vocabSize.setValue(inputs.vocabSize);
+        this.$documents.setValue(inputs.documents);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }
