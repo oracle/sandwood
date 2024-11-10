@@ -120,11 +120,11 @@ public class Flip1CoinMK5 extends ModelTestSkeleton {
 
         Field f = cls.getField("flipsMeasured1");
         ObservedBooleanArray i = (ObservedBooleanArray) f.get(o);
-        i.set(list1);
+        i.setValue(list1);
 
         f = cls.getField("flipsMeasured2");
         i = (ObservedBooleanArray) f.get(o);
-        i.set(list2);
+        i.setValue(list2);
     }
 
     @Override

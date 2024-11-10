@@ -123,14 +123,14 @@ public class DistributionsTest extends Model {
 
     private final ObservedDoubleArrayInternal $x = new ObservedDoubleArrayInternal(this, "x") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$x();
             }
         }
 
         @Override
-        protected void setValue(double[] value) { system$c.set$x(value); }
+        protected void setValueInternal(double[] value) { system$c.set$x(value); }
     };
 
     /**
@@ -142,14 +142,14 @@ public class DistributionsTest extends Model {
 
     private final ObservedDoubleArrayInternal $yMeasured = new ObservedDoubleArrayInternal(this, "yMeasured") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$yMeasured();
             }
         }
 
         @Override
-        protected void setValue(double[] value) { system$c.set$yMeasured(value); }
+        protected void setValueInternal(double[] value) { system$c.set$yMeasured(value); }
     };
 
     /**
@@ -188,7 +188,7 @@ public class DistributionsTest extends Model {
 
     public DistributionsTest(double[] x) {
         this();
-        this.$x.set(x);
+        this.$x.setValue(x);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -199,8 +199,8 @@ public class DistributionsTest extends Model {
 
     public DistributionsTest(double[] x, double[] yMeasured) {
         this();
-        this.x.set(x);
-        this.yMeasured.set(yMeasured);
+        this.x.setValue(x);
+        this.yMeasured.setValue(yMeasured);
     }
     
     @Override
@@ -370,7 +370,7 @@ public class DistributionsTest extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.x.set(inputs.x);
+        this.x.setValue(inputs.x);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -382,8 +382,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -395,8 +395,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -412,8 +412,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -431,8 +431,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -444,8 +444,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -461,8 +461,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -480,8 +480,8 @@ public class DistributionsTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.x.set(inputs.x);
-        this.$yMeasured.set(inputs.yMeasured);
+        this.x.setValue(inputs.x);
+        this.$yMeasured.setValue(inputs.yMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

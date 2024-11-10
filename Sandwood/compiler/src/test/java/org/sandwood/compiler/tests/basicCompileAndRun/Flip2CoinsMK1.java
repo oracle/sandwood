@@ -117,7 +117,7 @@ public class Flip2CoinsMK1 extends ModelTestSkeleton {
         Field f = cls.getField("flipsMeasured");
         @SuppressWarnings("unchecked")
         ObservedObjectArray<boolean[]> i = (ObservedObjectArray<boolean[]>) f.get(o);
-        i.set(list3);
+        i.setValue(list3);
     }
 
     @Override

@@ -94,14 +94,14 @@ public class Flip2CoinsMK9 extends Model {
 
     private final ObservedIntegerArrayInternal $shape = new ObservedIntegerArrayInternal(this, "shape") {
         @Override
-        public int[] get() {
+        public int[] getValue() {
             synchronized(model) {
                 return system$c.get$shape();
             }
         }
 
         @Override
-        protected void setValue(int[] value) { system$c.set$shape(value); }
+        protected void setValueInternal(int[] value) { system$c.set$shape(value); }
     };
 
     /**
@@ -113,14 +113,14 @@ public class Flip2CoinsMK9 extends Model {
 
     private final ObservedObjectArrayInternal<boolean[]> $flipsMeasured = new ObservedObjectArrayInternal<boolean[]>(this, "flipsMeasured", org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        public boolean[][] get() {
+        public boolean[][] getValue() {
             synchronized(model) {
                 return system$c.get$flipsMeasured();
             }
         }
 
         @Override
-        protected void setValue(boolean[][] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[][] value) { system$c.set$flipsMeasured(value); }
     };
 
     /**
@@ -184,7 +184,7 @@ public class Flip2CoinsMK9 extends Model {
 
     public Flip2CoinsMK9(int[] shape) {
         this();
-        this.$shape.set(shape);
+        this.$shape.setValue(shape);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -195,8 +195,8 @@ public class Flip2CoinsMK9 extends Model {
 
     public Flip2CoinsMK9(boolean[][] flipsMeasured, int[] shape) {
         this();
-        this.flipsMeasured.set(flipsMeasured);
-        this.shape.set(shape);
+        this.flipsMeasured.setValue(flipsMeasured);
+        this.shape.setValue(shape);
     }
     
     @Override
@@ -362,7 +362,7 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.shape.set(inputs.shape);
+        this.shape.setValue(inputs.shape);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -374,8 +374,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -387,8 +387,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -404,8 +404,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -423,8 +423,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -436,8 +436,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -453,8 +453,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -472,8 +472,8 @@ public class Flip2CoinsMK9 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.shape.set(inputs.shape);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.shape.setValue(inputs.shape);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

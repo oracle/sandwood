@@ -80,7 +80,7 @@ public class Flip1CoinMK0 extends ModelTestSkeleton {
             throws IllegalAccessException, IllegalArgumentException, SecurityException, NoSuchFieldException {
         Field f = cls.getField("flipMeasured");
         ObservedBoolean i = (ObservedBoolean) f.get(o);
-        i.set(true);
+        i.setValue(true);
     }
 
     @Override

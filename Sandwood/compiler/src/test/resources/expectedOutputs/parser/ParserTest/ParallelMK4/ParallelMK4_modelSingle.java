@@ -137,14 +137,14 @@ public class ParallelMK4 extends Model {
 
     private final ObservedIntegerArrayShapeableInternal $observed = new ObservedIntegerArrayShapeableInternal(this, "observed") {
         @Override
-        public int[] get() {
+        public int[] getValue() {
             synchronized(model) {
                 return system$c.get$observed();
             }
         }
 
         @Override
-        public void setValue(int[] value) {
+        public void setValueInternal(int[] value) {
             system$c.set$observed(value);
             system$c.set$length$observed(value.length);
         }
@@ -203,7 +203,7 @@ public class ParallelMK4 extends Model {
 
     public ParallelMK4(int[] observed) {
         this();
-        this.observed.set(observed);
+        this.observed.setValue(observed);
     }
     
     @Override
@@ -381,7 +381,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -393,7 +393,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -409,7 +409,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -427,7 +427,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -439,7 +439,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -455,7 +455,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -473,7 +473,7 @@ public class ParallelMK4 extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.$observed.set(inputs.observed);
+        this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

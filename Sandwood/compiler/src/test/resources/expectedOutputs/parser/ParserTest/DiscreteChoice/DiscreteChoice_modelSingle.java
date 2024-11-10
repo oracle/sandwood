@@ -197,14 +197,14 @@ public class DiscreteChoice extends Model {
 
     private final ObservedIntegerInternal $noObs = new ObservedIntegerInternal(this, "noObs") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noObs();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noObs(value); }
+        protected void setValueInternal(int value) { system$c.set$noObs(value); }
     };
 
     /**
@@ -214,14 +214,14 @@ public class DiscreteChoice extends Model {
 
     private final ObservedIntegerInternal $noProducts = new ObservedIntegerInternal(this, "noProducts") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noProducts();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noProducts(value); }
+        protected void setValueInternal(int value) { system$c.set$noProducts(value); }
     };
 
     /**
@@ -233,14 +233,14 @@ public class DiscreteChoice extends Model {
 
     private final ObservedIntegerArrayInternal $ObsChoices = new ObservedIntegerArrayInternal(this, "ObsChoices") {
         @Override
-        public int[] get() {
+        public int[] getValue() {
             synchronized(model) {
                 return system$c.get$ObsChoices();
             }
         }
 
         @Override
-        protected void setValue(int[] value) { system$c.set$ObsChoices(value); }
+        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value); }
     };
 
     /**
@@ -283,8 +283,8 @@ public class DiscreteChoice extends Model {
 
     public DiscreteChoice(int noProducts, int noObs) {
         this();
-        this.$noObs.set(noObs);
-        this.$noProducts.set(noProducts);
+        this.$noObs.setValue(noObs);
+        this.$noProducts.setValue(noProducts);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -296,9 +296,9 @@ public class DiscreteChoice extends Model {
 
     public DiscreteChoice(int noProducts, int noObs, int[] ObsChoices) {
         this();
-        this.noProducts.set(noProducts);
-        this.noObs.set(noObs);
-        this.ObsChoices.set(ObsChoices);
+        this.noProducts.setValue(noProducts);
+        this.noObs.setValue(noObs);
+        this.ObsChoices.setValue(ObsChoices);
     }
     
     @Override
@@ -504,8 +504,8 @@ public class DiscreteChoice extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -517,9 +517,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -531,9 +531,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -549,9 +549,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -569,9 +569,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -583,9 +583,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -601,9 +601,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -621,9 +621,9 @@ public class DiscreteChoice extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

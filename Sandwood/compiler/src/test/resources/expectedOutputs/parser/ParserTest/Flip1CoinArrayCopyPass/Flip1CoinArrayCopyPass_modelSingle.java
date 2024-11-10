@@ -89,14 +89,14 @@ public class Flip1CoinArrayCopyPass extends Model {
 
     private final ObservedIntegerInternal $samples = new ObservedIntegerInternal(this, "samples") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$samples();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$samples(value); }
+        protected void setValueInternal(int value) { system$c.set$samples(value); }
     };
 
     /**
@@ -108,14 +108,14 @@ public class Flip1CoinArrayCopyPass extends Model {
 
     private final ObservedBooleanArrayInternal $flipsMeasured = new ObservedBooleanArrayInternal(this, "flipsMeasured") {
         @Override
-        public boolean[] get() {
+        public boolean[] getValue() {
             synchronized(model) {
                 return system$c.get$flipsMeasured();
             }
         }
 
         @Override
-        protected void setValue(boolean[] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value); }
     };
 
     /**
@@ -165,7 +165,7 @@ public class Flip1CoinArrayCopyPass extends Model {
 
     public Flip1CoinArrayCopyPass(int samples) {
         this();
-        this.$samples.set(samples);
+        this.$samples.setValue(samples);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -176,8 +176,8 @@ public class Flip1CoinArrayCopyPass extends Model {
 
     public Flip1CoinArrayCopyPass(int samples, boolean[] flipsMeasured) {
         this();
-        this.samples.set(samples);
-        this.flipsMeasured.set(flipsMeasured);
+        this.samples.setValue(samples);
+        this.flipsMeasured.setValue(flipsMeasured);
     }
     
     @Override
@@ -337,7 +337,7 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.samples.set(inputs.samples);
+        this.samples.setValue(inputs.samples);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -349,8 +349,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -362,8 +362,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -379,8 +379,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -398,8 +398,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -411,8 +411,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -428,8 +428,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -447,8 +447,8 @@ public class Flip1CoinArrayCopyPass extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.samples.set(inputs.samples);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.samples.setValue(inputs.samples);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

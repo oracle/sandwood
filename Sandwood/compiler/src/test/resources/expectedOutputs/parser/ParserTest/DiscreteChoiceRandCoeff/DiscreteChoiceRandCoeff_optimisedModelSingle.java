@@ -237,14 +237,14 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ObservedObjectArrayInternal<int[]> $Prices = new ObservedObjectArrayInternal<int[]>(this, "Prices", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] get() {
+        public int[][] getValue() {
             synchronized(model) {
                 return system$c.get$Prices();
             }
         }
 
         @Override
-        protected void setValue(int[][] value) { system$c.set$Prices(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$Prices(value); }
     };
 
     /**
@@ -254,14 +254,14 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ObservedIntegerInternal $noObs = new ObservedIntegerInternal(this, "noObs") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noObs();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noObs(value); }
+        protected void setValueInternal(int value) { system$c.set$noObs(value); }
     };
 
     /**
@@ -271,14 +271,14 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ObservedIntegerInternal $noProducts = new ObservedIntegerInternal(this, "noProducts") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noProducts();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noProducts(value); }
+        protected void setValueInternal(int value) { system$c.set$noProducts(value); }
     };
 
     /**
@@ -290,14 +290,14 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ObservedIntegerArrayInternal $ObsChoices = new ObservedIntegerArrayInternal(this, "ObsChoices") {
         @Override
-        public int[] get() {
+        public int[] getValue() {
             synchronized(model) {
                 return system$c.get$ObsChoices();
             }
         }
 
         @Override
-        protected void setValue(int[] value) { system$c.set$ObsChoices(value); }
+        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value); }
     };
 
     /**
@@ -343,9 +343,9 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     public DiscreteChoiceRandCoeff(int noProducts, int noObs, int[][] Prices) {
         this();
-        this.$Prices.set(Prices);
-        this.$noObs.set(noObs);
-        this.$noProducts.set(noProducts);
+        this.$Prices.setValue(Prices);
+        this.$noObs.setValue(noObs);
+        this.$noProducts.setValue(noProducts);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
@@ -358,10 +358,10 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     public DiscreteChoiceRandCoeff(int noProducts, int noObs, int[] ObsChoices, int[][] Prices) {
         this();
-        this.noProducts.set(noProducts);
-        this.noObs.set(noObs);
-        this.ObsChoices.set(ObsChoices);
-        this.Prices.set(Prices);
+        this.noProducts.setValue(noProducts);
+        this.noObs.setValue(noObs);
+        this.ObsChoices.setValue(ObsChoices);
+        this.Prices.setValue(Prices);
     }
     
     @Override
@@ -597,9 +597,9 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -611,10 +611,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -626,10 +626,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -645,10 +645,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -666,10 +666,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -681,10 +681,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -700,10 +700,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -721,10 +721,10 @@ public class DiscreteChoiceRandCoeff extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.Prices.set(inputs.Prices);
-        this.noObs.set(inputs.noObs);
-        this.noProducts.set(inputs.noProducts);
-        this.$ObsChoices.set(inputs.ObsChoices);
+        this.Prices.setValue(inputs.Prices);
+        this.noObs.setValue(inputs.noObs);
+        this.noProducts.setValue(inputs.noProducts);
+        this.$ObsChoices.setValue(inputs.ObsChoices);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

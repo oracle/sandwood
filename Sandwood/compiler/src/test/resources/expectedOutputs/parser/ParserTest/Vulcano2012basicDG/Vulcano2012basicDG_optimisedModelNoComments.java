@@ -89,14 +89,14 @@ public class Vulcano2012basicDG extends Model {
 
     private final ObservedObjectArrayInternal<int[]> $ObsSales = new ObservedObjectArrayInternal<int[]>(this, "ObsSales", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] get() {
+        public int[][] getValue() {
             synchronized(model) {
                 return system$c.get$ObsSales();
             }
         }
 
         @Override
-        protected void setValue(int[][] value) { system$c.set$ObsSales(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$ObsSales(value); }
     };
 
     /**
@@ -106,14 +106,14 @@ public class Vulcano2012basicDG extends Model {
 
     private final ObservedObjectArrayInternal<boolean[]> $avail = new ObservedObjectArrayInternal<boolean[]>(this, "avail", org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        public boolean[][] get() {
+        public boolean[][] getValue() {
             synchronized(model) {
                 return system$c.get$avail();
             }
         }
 
         @Override
-        protected void setValue(boolean[][] value) { system$c.set$avail(value); }
+        protected void setValueInternal(boolean[][] value) { system$c.set$avail(value); }
     };
 
     /**
@@ -151,8 +151,8 @@ public class Vulcano2012basicDG extends Model {
 
     public Vulcano2012basicDG(int[][] ObsSales, boolean[][] avail) {
         this();
-        this.ObsSales.set(ObsSales);
-        this.avail.set(avail);
+        this.ObsSales.setValue(ObsSales);
+        this.avail.setValue(avail);
     }
     
     @Override
@@ -312,8 +312,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -325,8 +325,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -338,8 +338,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -355,8 +355,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -374,8 +374,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -387,8 +387,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -404,8 +404,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -423,8 +423,8 @@ public class Vulcano2012basicDG extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.ObsSales.set(inputs.ObsSales);
-        this.avail.set(inputs.avail);
+        this.ObsSales.setValue(inputs.ObsSales);
+        this.avail.setValue(inputs.avail);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

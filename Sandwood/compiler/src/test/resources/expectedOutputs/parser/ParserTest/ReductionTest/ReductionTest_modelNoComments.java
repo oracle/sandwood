@@ -162,14 +162,14 @@ public class ReductionTest extends Model {
 
     private final ObservedIntegerInternal $noCats = new ObservedIntegerInternal(this, "noCats") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noCats();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noCats(value); }
+        protected void setValueInternal(int value) { system$c.set$noCats(value); }
     };
 
     /**
@@ -181,14 +181,14 @@ public class ReductionTest extends Model {
 
     private final ObservedBooleanArrayShapeableInternal $flipsMeasured = new ObservedBooleanArrayShapeableInternal(this, "flipsMeasured") {
         @Override
-        public boolean[] get() {
+        public boolean[] getValue() {
             synchronized(model) {
                 return system$c.get$flipsMeasured();
             }
         }
 
         @Override
-        public void setValue(boolean[] value) {
+        public void setValueInternal(boolean[] value) {
             system$c.set$flipsMeasured(value);
             system$c.set$length$flipsMeasured(value.length);
         }
@@ -242,7 +242,7 @@ public class ReductionTest extends Model {
 
     public ReductionTest(int flipsMeasuredShape, int noCats) {
         this();
-        this.$noCats.set(noCats);
+        this.$noCats.setValue(noCats);
         this.$flipsMeasured.setShape(flipsMeasuredShape);
     }
     /**
@@ -254,8 +254,8 @@ public class ReductionTest extends Model {
 
     public ReductionTest(boolean[] flipsMeasured, int noCats) {
         this();
-        this.flipsMeasured.set(flipsMeasured);
-        this.noCats.set(noCats);
+        this.flipsMeasured.setValue(flipsMeasured);
+        this.noCats.setValue(noCats);
     }
     
     @Override
@@ -450,7 +450,7 @@ public class ReductionTest extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.noCats.set(inputs.noCats);
+        this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setShape(inputs.flipsMeasuredShape);
         execute();
         return new InferredValueOutputs(this);
@@ -463,8 +463,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -476,8 +476,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -493,8 +493,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -512,8 +512,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -525,8 +525,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -542,8 +542,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -561,8 +561,8 @@ public class ReductionTest extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noCats.set(inputs.noCats);
-        this.$flipsMeasured.set(inputs.flipsMeasured);
+        this.noCats.setValue(inputs.noCats);
+        this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }

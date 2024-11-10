@@ -439,14 +439,14 @@ public class HMMMetrics extends Model {
 
     private final ObservedIntegerInternal $noStates = new ObservedIntegerInternal(this, "noStates") {
         @Override
-        public int get() {
+        public int getValue() {
             synchronized(model) {
                 return system$c.get$noStates();
             }
         }
 
         @Override
-        protected void setValue(int value) { system$c.set$noStates(value); }
+        protected void setValueInternal(int value) { system$c.set$noStates(value); }
     };
 
     /**
@@ -458,14 +458,14 @@ public class HMMMetrics extends Model {
 
     private final ObservedDoubleArrayInternal $mem_measured = new ObservedDoubleArrayInternal(this, "mem_measured") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$mem_measured();
             }
         }
 
         @Override
-        protected void setValue(double[] value) { system$c.set$mem_measured(value); }
+        protected void setValueInternal(double[] value) { system$c.set$mem_measured(value); }
     };
 
     /**
@@ -475,14 +475,14 @@ public class HMMMetrics extends Model {
 
     private final ObservedDoubleArrayInternal $pageFaults_measured = new ObservedDoubleArrayInternal(this, "pageFaults_measured") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$pageFaults_measured();
             }
         }
 
         @Override
-        protected void setValue(double[] value) { system$c.set$pageFaults_measured(value); }
+        protected void setValueInternal(double[] value) { system$c.set$pageFaults_measured(value); }
     };
 
     /**
@@ -492,14 +492,14 @@ public class HMMMetrics extends Model {
 
     private final ObservedDoubleArrayShapeableInternal $cpu_measured = new ObservedDoubleArrayShapeableInternal(this, "cpu_measured") {
         @Override
-        public double[] get() {
+        public double[] getValue() {
             synchronized(model) {
                 return system$c.get$cpu_measured();
             }
         }
 
         @Override
-        public void setValue(double[] value) {
+        public void setValueInternal(double[] value) {
             system$c.set$cpu_measured(value);
             system$c.set$length$cpu_measured(value.length);
         }
@@ -565,7 +565,7 @@ public class HMMMetrics extends Model {
 
     public HMMMetrics(int cpu_measuredShape, int noStates) {
         this();
-        this.$noStates.set(noStates);
+        this.$noStates.setValue(noStates);
         this.$cpu_measured.setShape(cpu_measuredShape);
     }
     /**
@@ -579,10 +579,10 @@ public class HMMMetrics extends Model {
 
     public HMMMetrics(double[] cpu_measured, double[] mem_measured, double[] pageFaults_measured, int noStates) {
         this();
-        this.cpu_measured.set(cpu_measured);
-        this.mem_measured.set(mem_measured);
-        this.pageFaults_measured.set(pageFaults_measured);
-        this.noStates.set(noStates);
+        this.cpu_measured.setValue(cpu_measured);
+        this.mem_measured.setValue(mem_measured);
+        this.pageFaults_measured.setValue(pageFaults_measured);
+        this.noStates.setValue(noStates);
     }
     
     @Override
@@ -914,7 +914,7 @@ public class HMMMetrics extends Model {
      * @return An object containing the values computed by the inference step.
      */
     public InferredValueOutputs execute(InferValueInputs inputs) {
-        this.noStates.set(inputs.noStates);
+        this.noStates.setValue(inputs.noStates);
         this.$cpu_measured.setShape(inputs.cpu_measuredShape);
         execute();
         return new InferredValueOutputs(this);
@@ -927,10 +927,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed values for the model.
      */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
@@ -942,10 +942,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
@@ -961,10 +961,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
@@ -982,10 +982,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
@@ -997,10 +997,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
@@ -1016,10 +1016,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
@@ -1037,10 +1037,10 @@ public class HMMMetrics extends Model {
      * @return An object containing the computed probabilities for the model.
      */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
-        this.noStates.set(inputs.noStates);
-        this.$cpu_measured.set(inputs.cpu_measured);
-        this.$mem_measured.set(inputs.mem_measured);
-        this.$pageFaults_measured.set(inputs.pageFaults_measured);
+        this.noStates.setValue(inputs.noStates);
+        this.$cpu_measured.setValue(inputs.cpu_measured);
+        this.$mem_measured.setValue(inputs.mem_measured);
+        this.$pageFaults_measured.setValue(inputs.pageFaults_measured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }
