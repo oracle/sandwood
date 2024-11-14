@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-//import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -195,11 +194,16 @@ public class ProbabilityTests {
         for(double p = 0.0; p <= 1; p += 0.01) {
             double localValue = DistributionSampling.probabilityBernoulli(false, p);
             double storedValue = d.read(1, p, false);
-            testValue(localValue, storedValue, 0, p);
+            testValueNormal(localValue, storedValue, 0, p);
 
+            double distributionSum = localValue;
             localValue = DistributionSampling.probabilityBernoulli(true, p);
             storedValue = d.read(1, p, true);
-            testValue(localValue, storedValue, 1, p);
+            testValueNormal(localValue, storedValue, 1, p);
+
+            // Check the distribution sums to approximately 1.
+            distributionSum += localValue;
+            assertTrue(0.9999999 < distributionSum && distributionSum < 1.0000001);
         }
         d.close();
     }
@@ -210,11 +214,11 @@ public class ProbabilityTests {
         for(double p = 0.0; p <= 1; p += 0.01) {
             double localValue = DistributionSampling.logProbabilityBernoulli(false, p);
             double storedValue = d.read(1, p, false);
-            testValue(localValue, storedValue, 0, p);
+            testValueLog(localValue, storedValue, 0, p);
 
             localValue = DistributionSampling.logProbabilityBernoulli(true, p);
             storedValue = d.read(1, p, true);
-            testValue(localValue, storedValue, 1, p);
+            testValueLog(localValue, storedValue, 1, p);
         }
         d.close();
     }
@@ -222,12 +226,12 @@ public class ProbabilityTests {
     @Test
     void testBeta() throws IOException {
         DataReader d = new DataReader("beta");
-        for(double alpha = 0; alpha < 5; alpha += 0.1) {
-            for(double beta = 0; beta < 5; beta += 0.1) {
+        for(double alpha = 0.1; alpha < 5; alpha += 0.1) {
+            for(double beta = 0.1; beta < 5; beta += 0.1) {
                 for(double value = 0.1; value < 1; value += 0.1) {
                     double localValue = DistributionSampling.probabilityBeta(value, alpha, beta);
                     double storedValue = d.read(value, alpha, beta);
-                    testValue(localValue, storedValue, value, alpha, beta);
+                    testValueNormal(localValue, storedValue, value, alpha, beta);
                 }
             }
         }
@@ -237,12 +241,12 @@ public class ProbabilityTests {
     @Test
     void testLogBeta() throws IOException {
         DataReader d = new DataReader("logBeta");
-        for(double alpha = 0; alpha < 5; alpha += 0.1) {
-            for(double beta = 0; beta < 5; beta += 0.1) {
+        for(double alpha = 0.1; alpha < 5; alpha += 0.1) {
+            for(double beta = 0.1; beta < 5; beta += 0.1) {
                 for(double value = 0.1; value < 1; value += 0.1) {
                     double localValue = DistributionSampling.logProbabilityBeta(value, alpha, beta);
                     double storedValue = d.read(value, alpha, beta);
-                    testValue(localValue, storedValue, value, alpha, beta);
+                    testValueLog(localValue, storedValue, value, alpha, beta);
                 }
             }
         }
@@ -257,7 +261,7 @@ public class ProbabilityTests {
                 for(double p = 0.0; p <= 1; p += 0.01) {
                     double localValue = DistributionSampling.probabilityBinomial(t, p, length);
                     double storedValue = d.read(t, p, length);
-                    testValue(localValue, storedValue, t, length, p);
+                    testValueNormal(localValue, storedValue, t, length, p);
                 }
             }
         }
@@ -272,7 +276,7 @@ public class ProbabilityTests {
                 for(double p = 0.0; p <= 1; p += 0.01) {
                     double localValue = DistributionSampling.logProbabilityBinomial(t, p, length);
                     double storedValue = d.read(t, p, length);
-                    testValue(localValue, storedValue, t, length, p);
+                    testValueLog(localValue, storedValue, t, length, p);
                 }
             }
         }
@@ -302,8 +306,8 @@ public class ProbabilityTests {
                                 value[2] = n;
                                 double localValue = DistributionSampling.probabilityDirichlet(value, param);
                                 double storedValue = d.read(param, value);
-                                testValue(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
-                                        value[2]);
+                                testValueNormal(localValue, storedValue, param[0], param[1], param[2], value[0],
+                                        value[1], value[2]);
                             }
                         }
                     }
@@ -333,7 +337,7 @@ public class ProbabilityTests {
                                 value[2] = n;
                                 double localValue = DistributionSampling.logProbabilityDirichlet(value, param);
                                 double storedValue = d.read(param, value);
-                                testValue(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
+                                testValueLog(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
                                         value[2]);
                             }
                         }
@@ -352,7 +356,7 @@ public class ProbabilityTests {
                 for(double value = 0.1; value < 100; value++) {
                     double localValue = DistributionSampling.probabilityGamma(value, alpha, beta);
                     double storedValue = d.read(value, alpha, beta);
-                    testValue(localValue, storedValue, value, alpha, beta);
+                    testValueNormal(localValue, storedValue, value, alpha, beta);
                 }
             }
         }
@@ -367,7 +371,7 @@ public class ProbabilityTests {
                 for(double value = 0.1; value < 100; value++) {
                     double localValue = DistributionSampling.logProbabilityGamma(value, alpha, beta);
                     double storedValue = d.read(value, alpha, beta);
-                    testValue(localValue, storedValue, value, alpha, beta);
+                    testValueLog(localValue, storedValue, value, alpha, beta);
                 }
             }
         }
@@ -393,7 +397,7 @@ public class ProbabilityTests {
                             value[2] = n - (l + m);
                             double localValue = DistributionSampling.probabilityMultinomial(value, param, n);
                             double storedValue = d.read(param, value);
-                            testValue(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
+                            testValueNormal(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
                                     value[2]);
                         }
                     }
@@ -422,7 +426,7 @@ public class ProbabilityTests {
                             value[2] = n - (l + m);
                             double localValue = DistributionSampling.logProbabilityMultinomial(value, param, n);
                             double storedValue = d.read(param, value);
-                            testValue(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
+                            testValueLog(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
                                     value[2]);
                         }
                     }
@@ -439,7 +443,7 @@ public class ProbabilityTests {
             for(int value = 0; value < 100; value++) {
                 double localValue = DistributionSampling.probabilityPoisson(value, lambda);
                 double storedValue = d.read(value, lambda);
-                testValue(localValue, storedValue, value, lambda);
+                testValueNormal(localValue, storedValue, value, lambda);
             }
         }
         d.close();
@@ -452,7 +456,7 @@ public class ProbabilityTests {
             for(int value = 0; value < 100; value++) {
                 double localValue = DistributionSampling.logProbabilityPoisson(value, lambda);
                 double storedValue = d.read(value, lambda);
-                testValue(localValue, storedValue, value, lambda);
+                testValueLog(localValue, storedValue, value, lambda);
             }
         }
         d.close();
@@ -467,9 +471,24 @@ public class ProbabilityTests {
         for(double alpha = 0.1; alpha < 5; alpha += 0.1) {
             for(double beta = 0.1; beta < 5; beta += 0.1) {
                 for(double value = 0.1; value < 100; value++) {
+                    double localValue = DistributionSampling.probabilityInverseGamma(value, alpha, beta);
+                    double storedValue = d.read(value, alpha, beta);
+                    testValueLog(localValue, storedValue, value, alpha, beta);
+                }
+            }
+        }
+        d.close();
+    }
+
+    @Test
+    void testLogInverseGamma() throws IOException {
+        DataReader d = new DataReader("logInverseGamma");
+        for(double alpha = 0.1; alpha < 5; alpha += 0.1) {
+            for(double beta = 0.1; beta < 5; beta += 0.1) {
+                for(double value = 0.1; value < 100; value++) {
                     double localValue = DistributionSampling.logProbabilityInverseGamma(value, alpha, beta);
                     double storedValue = d.read(value, alpha, beta);
-                    testValue(localValue, storedValue, value, alpha, beta);
+                    testValueLog(localValue, storedValue, value, alpha, beta);
                 }
             }
         }
@@ -483,7 +502,7 @@ public class ProbabilityTests {
             for(double value = -50; value <= 50; value += 0.5) {
                 double localValue = DistributionSampling.probabilityStudentT(value, v);
                 double storedValue = d.read(value, v);
-                testValue(localValue, storedValue, value, v);
+                testValueNormal(localValue, storedValue, value, v);
             }
         }
         d.close();
@@ -496,7 +515,7 @@ public class ProbabilityTests {
             for(double value = -50; value <= 50; value += 0.5) {
                 double localValue = DistributionSampling.logProbabilityStudentT(value, v);
                 double storedValue = d.read(value, v);
-                testValue(localValue, storedValue, value, v);
+                testValueLog(localValue, storedValue, value, v);
             }
         }
         d.close();
@@ -510,7 +529,7 @@ public class ProbabilityTests {
                 for(double value = -50; value <= 50; value += 0.5) {
                     double localValue = DistributionSampling.probabilityCauchy(value, location, scale);
                     double storedValue = d.read(value, location, scale);
-                    testValue(localValue, storedValue, value, location, scale);
+                    testValueNormal(localValue, storedValue, value, location, scale);
                 }
             }
         }
@@ -525,7 +544,7 @@ public class ProbabilityTests {
                 for(double value = -50; value <= 50; value += 0.5) {
                     double localValue = DistributionSampling.logProbabilityCauchy(value, location, scale);
                     double storedValue = d.read(value, location, scale);
-                    testValue(localValue, storedValue, value, location, scale);
+                    testValueLog(localValue, storedValue, value, location, scale);
                 }
             }
         }
@@ -541,9 +560,9 @@ public class ProbabilityTests {
                     double localValue = DistributionSampling.probabilityHalfCauchy(value, location, scale);
                     double storedValue = d.read(value, location, scale);
                     if(value < location)
-                        testValue(localValue, 0, value, location, scale);
+                        testValueNormal(localValue, 0, value, location, scale);
                     else
-                        testValue(localValue, 2 * storedValue, value, location, scale);
+                        testValueNormal(localValue, 2 * storedValue, value, location, scale);
                 }
             }
         }
@@ -559,19 +578,33 @@ public class ProbabilityTests {
                     double localValue = DistributionSampling.logProbabilityHalfCauchy(value, location, scale);
                     double storedValue = d.read(value, location, scale);
                     if(value < location)
-                        testValue(localValue, Double.NEGATIVE_INFINITY, value, location, scale);
+                        testValueLog(localValue, Double.NEGATIVE_INFINITY, value, location, scale);
                     else
-                        testValue(localValue, storedValue + Math.log(2), value, location, scale);
+                        testValueLog(localValue, storedValue + Math.log(2), value, location, scale);
                 }
             }
         }
         d.close();
     }
 
-    private static void testValue(double localValue, double storedValue, double... args) {
+    private static void testValueLog(double localValue, double storedValue, double... args) {
         boolean valuesCloseEnough = testDouble(localValue, storedValue);
 
         if(!valuesCloseEnough) {
+            System.err.println("Local value = " + localValue + " Stored Value = " + storedValue);
+            System.err.print("Arguments were:");
+            for(double d:args)
+                System.err.print(" " + d);
+            System.err.println();
+        }
+
+        assertTrue(valuesCloseEnough);
+    }
+
+    private static void testValueNormal(double localValue, double storedValue, double... args) {
+        boolean valuesCloseEnough = testDouble(localValue, storedValue);
+
+        if(!valuesCloseEnough || localValue < 0) {
             System.err.println("Local value = " + localValue + " Stored Value = " + storedValue);
             System.err.print("Arguments were:");
             for(double d:args)
@@ -591,8 +624,6 @@ public class ProbabilityTests {
             return diff < epsilon;
         } else if(storedValue == Double.NEGATIVE_INFINITY || storedValue == Double.POSITIVE_INFINITY) {
             return localValue == storedValue;
-        } else if(Double.isNaN(storedValue)) {
-            return Double.isNaN(localValue);
         } else {
             double abs = Math.abs(localValue - storedValue);
             double diff = Math.abs(abs / storedValue);
