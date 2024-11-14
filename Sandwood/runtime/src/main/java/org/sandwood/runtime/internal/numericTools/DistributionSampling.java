@@ -622,7 +622,7 @@ public class DistributionSampling {
         if(value <= 0)
             return 0;
         else
-            return (pow(beta, alpha) / Gamma.gamma(alpha)) * pow(value, -(alpha - 1)) * exp(-beta / value);
+            return (pow(beta, alpha) / Gamma.gamma(alpha)) * pow(value, -(alpha + 1)) * exp(-beta / value);
     }
 
     /**
@@ -639,7 +639,7 @@ public class DistributionSampling {
         if(value <= 0)
             return Double.NEGATIVE_INFINITY;
         else
-            return alpha * log(beta) - Gamma.logGamma(alpha) - (alpha - 1) * log(value) - beta / value;
+            return alpha * log(beta) - Gamma.logGamma(alpha) - (alpha + 1) * log(value) - beta / value;
     }
 
     // Multinomial
