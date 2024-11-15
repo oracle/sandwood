@@ -19,11 +19,12 @@ public class AlternativeModelMK3 extends Model {
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
         @Override
-        protected double getValue() { return system$c.get$bias(); }
+        public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class AlternativeModelMK3 extends Model {
 
     private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", true) {
         @Override
-        protected int getValue() { return system$c.get$positiveCount(); }
+        public int getValue() { return system$c.get$positiveCount(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$positiveCount(value);
+            valueSet = true;
             setFixed(true);
         }
 

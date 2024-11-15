@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -97,8 +97,9 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
             for(int j = 0; j < v.length; j++) {
                 copy((Object[]) t[j], (Object[]) v[j]);
             }
-        } else
-            throw new SandwoodException("Unknown type");
+        } else {
+            throw new SandwoodException("Unknown type: " + v[0].getClass().getCanonicalName() + " in variable " + name);
+        }
     }
 
     private Object[] copy(Object[] v, int depth) {
@@ -136,8 +137,12 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
                 System.arraycopy(vj, 0, tj, 0, vj.length);
             }
             return bb;
-        } else
-            throw new SandwoodException("Unknown type");
+        } else {
+            String type = baseType.name();
+            for(int i = 0; i < arrayDimension; i++)
+                type = type + "[]";
+            throw new SandwoodException("Unknown type: " + type + " in variable " + name);
+        }
     }
 
     @Override
@@ -165,13 +170,22 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
     public final void setValue(A[] value) {
         synchronized(model) {
             testSettable();
-            p = RetentionPolicy.MAP;
+            p = RetentionPolicy.NONE;
             map = value;
             setValueInternal(map);
         }
     }
 
-    protected abstract A[] getValue();
+    @Override
+    public final boolean setToMAPValue() {
+        synchronized(model) {
+            if(p == RetentionPolicy.MAP && valueComputed()) {
+                setValue(getMAP());
+                return true;
+            } else
+                return false;
+        }
+    }
 
     protected abstract void setValueInternal(A[] value);
 

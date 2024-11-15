@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -83,13 +83,22 @@ public abstract class ComputedDoubleArrayInternal extends ComputedVariableIntern
     public final void setValue(double[] value) {
         synchronized(model) {
             testSettable();
-            p = RetentionPolicy.MAP;
+            p = RetentionPolicy.NONE;
             map = value;
             setValueInternal(map);
         }
     }
 
-    protected abstract double[] getValue();
+    @Override
+    public final boolean setToMAPValue() {
+        synchronized(model) {
+            if(p == RetentionPolicy.MAP && valueComputed()) {
+                setValue(getMAP());
+                return true;
+            } else
+                return false;
+        }
+    }
 
     protected abstract void setValueInternal(double[] value);
 }

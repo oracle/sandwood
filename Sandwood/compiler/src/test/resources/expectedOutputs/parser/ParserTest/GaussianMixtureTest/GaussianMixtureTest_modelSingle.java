@@ -19,11 +19,12 @@ public class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true) {
         @Override
-        protected double[] getValue() { return system$c.get$mu(); }
+        public double[] getValue() { return system$c.get$mu(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$mu(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true) {
         @Override
-        protected double[] getValue() { return system$c.get$phi(); }
+        public double[] getValue() { return system$c.get$phi(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$phi(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true) {
         @Override
-        protected double[] getValue() { return system$c.get$sigma(); }
+        public double[] getValue() { return system$c.get$sigma(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$sigma(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -121,11 +124,12 @@ public class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", true) {
         @Override
-        protected double[] getValue() { return system$c.get$x(); }
+        public double[] getValue() { return system$c.get$x(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$x(value);
+            valueSet = true;
             setFixed(true);
         }
 

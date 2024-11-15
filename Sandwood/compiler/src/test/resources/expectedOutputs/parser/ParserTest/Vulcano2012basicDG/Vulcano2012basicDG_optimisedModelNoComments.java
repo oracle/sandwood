@@ -19,11 +19,12 @@ public class Vulcano2012basicDG extends Model {
 
     private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true) {
         @Override
-        protected int[] getValue() { return system$c.get$arrivals(); }
+        public int[] getValue() { return system$c.get$arrivals(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$arrivals(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class Vulcano2012basicDG extends Model {
 
     private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true) {
         @Override
-        protected double[] getValue() { return system$c.get$lambda(); }
+        public double[] getValue() { return system$c.get$lambda(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$lambda(value);
+            valueSet = true;
             setFixed(true);
         }
 

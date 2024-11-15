@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -31,7 +31,8 @@ public class JsonModelEncoder extends JsonModel {
     }
 
     public void addVariable(ComputedVariableInternal v) throws IOException {
-        v.toJson(e);
+        if(v.isSet())
+            v.toJson(e);
     }
 
     public void addVariable(ObservedVariableInternal v) throws IOException {

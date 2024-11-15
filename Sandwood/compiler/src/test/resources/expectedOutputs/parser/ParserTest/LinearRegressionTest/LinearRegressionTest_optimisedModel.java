@@ -19,11 +19,12 @@ public class LinearRegressionTest extends Model {
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
         @Override
-        protected double getValue() { return system$c.get$bias(); }
+        public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class LinearRegressionTest extends Model {
 
     private final ComputedDoubleInternal $tau = new ComputedDoubleInternal(this, "tau", true) {
         @Override
-        protected double getValue() { return system$c.get$tau(); }
+        public double getValue() { return system$c.get$tau(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$tau(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class LinearRegressionTest extends Model {
 
     private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true) {
         @Override
-        protected double[] getValue() { return system$c.get$weights(); }
+        public double[] getValue() { return system$c.get$weights(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$weights(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -121,11 +124,12 @@ public class LinearRegressionTest extends Model {
 
     private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", true) {
         @Override
-        protected double[] getValue() { return system$c.get$y(); }
+        public double[] getValue() { return system$c.get$y(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$y(value);
+            valueSet = true;
             setFixed(true);
         }
 

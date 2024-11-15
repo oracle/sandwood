@@ -19,11 +19,12 @@ public class LogitRegressionTest extends Model {
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
         @Override
-        protected double getValue() { return system$c.get$bias(); }
+        public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class LogitRegressionTest extends Model {
 
     private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true) {
         @Override
-        protected double[] getValue() { return system$c.get$weights(); }
+        public double[] getValue() { return system$c.get$weights(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$weights(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class LogitRegressionTest extends Model {
 
     private final ComputedObjectArrayInternal<boolean[]> $y = new ComputedObjectArrayInternal<boolean[]>(this, "y", true, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        protected boolean[][] getValue() { return system$c.get$y(); }
+        public boolean[][] getValue() { return system$c.get$y(); }
 
         @Override
         protected void setValueInternal(boolean[][] value) {
             system$c.set$y(value);
+            valueSet = true;
             setFixed(true);
         }
 

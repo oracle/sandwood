@@ -19,11 +19,12 @@ public class LinearRegressionWrongNameFail extends Model {
 
     private final ComputedDoubleInternal $b0 = new ComputedDoubleInternal(this, "b0", true) {
         @Override
-        protected double getValue() { return system$c.get$b0(); }
+        public double getValue() { return system$c.get$b0(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b0(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class LinearRegressionWrongNameFail extends Model {
 
     private final ComputedDoubleInternal $b1 = new ComputedDoubleInternal(this, "b1", true) {
         @Override
-        protected double getValue() { return system$c.get$b1(); }
+        public double getValue() { return system$c.get$b1(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b1(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class LinearRegressionWrongNameFail extends Model {
 
     private final ComputedDoubleInternal $variance = new ComputedDoubleInternal(this, "variance", true) {
         @Override
-        protected double getValue() { return system$c.get$variance(); }
+        public double getValue() { return system$c.get$variance(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$variance(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -121,11 +124,12 @@ public class LinearRegressionWrongNameFail extends Model {
 
     private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", true) {
         @Override
-        protected double[] getValue() { return system$c.get$y(); }
+        public double[] getValue() { return system$c.get$y(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$y(value);
+            valueSet = true;
             setFixed(true);
         }
 

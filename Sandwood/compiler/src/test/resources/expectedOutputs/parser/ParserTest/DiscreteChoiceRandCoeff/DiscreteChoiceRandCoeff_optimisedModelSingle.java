@@ -19,11 +19,12 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true) {
         @Override
-        protected double getValue() { return system$c.get$b(); }
+        public double getValue() { return system$c.get$b(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleArrayInternal $beta = new ComputedDoubleArrayInternal(this, "beta", true) {
         @Override
-        protected double[] getValue() { return system$c.get$beta(); }
+        public double[] getValue() { return system$c.get$beta(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$beta(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", true) {
         @Override
-        protected int[] getValue() { return system$c.get$choices(); }
+        public int[] getValue() { return system$c.get$choices(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$choices(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -121,7 +124,7 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $prob = new ComputedObjectArrayInternal<double[]>(this, "prob", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$prob(); }
+        public double[][] getValue() { return system$c.get$prob(); }
 
         @Override
         protected void setValueInternal(double[][] value) {}
@@ -167,11 +170,12 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleInternal $sigma = new ComputedDoubleInternal(this, "sigma", true) {
         @Override
-        protected double getValue() { return system$c.get$sigma(); }
+        public double getValue() { return system$c.get$sigma(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$sigma(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -201,11 +205,12 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
         @Override
-        protected double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
+            valueSet = true;
             setFixed(true);
         }
 

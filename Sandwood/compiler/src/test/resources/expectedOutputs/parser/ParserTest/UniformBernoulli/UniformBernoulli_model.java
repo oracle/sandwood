@@ -19,11 +19,12 @@ public class UniformBernoulli extends Model {
 
     private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$output(); }
+        public boolean[] getValue() { return system$c.get$output(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$output(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class UniformBernoulli extends Model {
 
     private final ComputedDoubleInternal $prior = new ComputedDoubleInternal(this, "prior", true) {
         @Override
-        protected double getValue() { return system$c.get$prior(); }
+        public double getValue() { return system$c.get$prior(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$prior(value);
+            valueSet = true;
             setFixed(true);
         }
 

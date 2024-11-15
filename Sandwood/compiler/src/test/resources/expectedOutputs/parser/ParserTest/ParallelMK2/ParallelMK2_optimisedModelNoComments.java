@@ -19,11 +19,12 @@ public class ParallelMK2 extends Model {
 
     private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", true) {
         @Override
-        protected double[] getValue() { return system$c.get$generated(); }
+        public double[] getValue() { return system$c.get$generated(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$generated(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class ParallelMK2 extends Model {
 
     private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", false) {
         @Override
-        protected double[] getValue() { return system$c.get$indirection(); }
+        public double[] getValue() { return system$c.get$indirection(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$indirection(value);
+            valueSet = true;
             setFixed(true);
         }
 

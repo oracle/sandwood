@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -80,13 +80,22 @@ public abstract class ComputedBooleanInternal extends ComputedVariableInternal i
     public final void setValue(boolean value) {
         synchronized(model) {
             testSettable();
-            p = RetentionPolicy.MAP;
+            p = RetentionPolicy.NONE;
             map = value;
             setValueInternal(map);
         }
     }
 
-    protected abstract boolean getValue();
+    @Override
+    public final boolean setToMAPValue() {
+        synchronized(model) {
+            if(p == RetentionPolicy.MAP && valueComputed()) {
+                setValue(getMAP());
+                return true;
+            } else
+                return false;
+        }
+    }
 
     protected abstract void setValueInternal(boolean value);
 }

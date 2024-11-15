@@ -19,11 +19,12 @@ public class DistributionTest2 extends Model {
 
     private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$v(); }
+        public boolean[] getValue() { return system$c.get$v(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$v(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class DistributionTest2 extends Model {
 
     private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true) {
         @Override
-        protected int getValue() { return system$c.get$v1(); }
+        public int getValue() { return system$c.get$v1(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$v1(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class DistributionTest2 extends Model {
 
     private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true) {
         @Override
-        protected int[] getValue() { return system$c.get$v2(); }
+        public int[] getValue() { return system$c.get$v2(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$v2(value);
+            valueSet = true;
             setFixed(true);
         }
 

@@ -10,7 +10,9 @@ package org.sandwood.runtime.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -52,7 +54,7 @@ public abstract class Model implements HasProbability, AutoCloseable {
     private boolean lastForward = true;
     // Are the observed values propagated into the model. TODO can we merge this into existing flags.
     private boolean observationsPropagated = false;
-    
+
     private CoreModel core;
     // Inputs that parameterize the model, for example the bias we wish to use.
     private Map<String, ObservedVariableInternal> modelInputs;
@@ -704,6 +706,29 @@ public abstract class Model implements HasProbability, AutoCloseable {
         }
         // Unreachable code.
         return null;
+    }
+
+    /**
+     * A method to set all the settable computed values that have a MAP value computed to use that value in future
+     * calculations. A MAP value will only be present to set to the variables value if the {@link RetentionPolicy
+     * retention policy} for the variable was set to MAP and {@link #inferValues(int, ComputedVariable...) variable
+     * inference} was the last inference operation performed on the model. The retention policy can be set to MAP by
+     * either setting the MAP policy for the whole model and not overriding the policy for this variable, or setting the
+     * policy to MAP specifically for this variable. Retention policies are set via the methods
+     * {@link #setDefaultRetentionPolicy(RetentionPolicy) setDefaultRetentionPolicy} for the model and
+     * {@link ComputedVariable#setRetentionPolicy(RetentionPolicy) setRetentionPolicy} for the variable.
+     * 
+     * @return Returns a list of variables that have had their value set to their current MAP value.
+     */
+    public List<ComputedVariable> setToMAPValues() {
+        List<ComputedVariable> toReturn = new ArrayList<>();
+        for(ComputedVariable c:computedVariables.values()) {
+            if(c.isSettable()) {
+                if(c.setToMAPValue())
+                    toReturn.add(c);
+            }
+        }
+        return toReturn;
     }
 
     /**

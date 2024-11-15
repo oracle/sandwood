@@ -999,7 +999,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 + constructorArgs + ") {\n");
 
         sb.append("        @Override\n");
-        sb.append("        protected " + javaType + " getValue() { return " + coreName + getMethod(uniqueName)
+        sb.append("        public " + javaType + " getValue() { return " + coreName + getMethod(uniqueName)
                 + "(); }\n\n");
 
         Set<Variable<?>> requirements = getSourceVariables(fieldDesc);
@@ -1007,6 +1007,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             sb.append("        @Override\n");
             sb.append("        protected void setValueInternal(" + javaType + " value) {\n");
             sb.append("            " + coreName + setMethod(uniqueName) + "(value);\n");
+            sb.append("            valueSet = true;\n");
             sb.append("            setFixed(true);\n");
             sb.append("        }\n\n");
         } else {
@@ -1015,9 +1016,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
             if(requirements.isEmpty()) {
                 sb.append("        @Override\n");
-                sb.append("        protected void testSettable() {"
-                        + "\n            throw new SandwoodException(\"Set is not available for variable " + fieldName
-                        + ".\");\n" + "        }\n\n");
+                sb.append("        protected void testSettable() {\n");
+                sb.append("            throw new SandwoodException(\"Set is not available for variable " + fieldName
+                        + ".\");\n");
+                sb.append("        }\n\n");
             } else {
                 sb.append("        @Override\n");
                 sb.append("        protected void testSettable() {\n"

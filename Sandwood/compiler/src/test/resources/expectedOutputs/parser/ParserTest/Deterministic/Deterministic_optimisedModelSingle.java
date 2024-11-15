@@ -18,11 +18,12 @@ public class Deterministic extends Model {
 
     private final ComputedIntegerArrayInternal $a = new ComputedIntegerArrayInternal(this, "a", true) {
         @Override
-        protected int[] getValue() { return system$c.get$a(); }
+        public int[] getValue() { return system$c.get$a(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$a(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -52,7 +53,7 @@ public class Deterministic extends Model {
 
     private final ComputedIntegerArrayInternal $b = new ComputedIntegerArrayInternal(this, "b", false) {
         @Override
-        protected int[] getValue() { return system$c.get$b(); }
+        public int[] getValue() { return system$c.get$b(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -88,11 +89,12 @@ public class Deterministic extends Model {
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return system$c.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$flips(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -122,11 +124,12 @@ public class Deterministic extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
+            valueSet = true;
             setFixed(true);
         }
 

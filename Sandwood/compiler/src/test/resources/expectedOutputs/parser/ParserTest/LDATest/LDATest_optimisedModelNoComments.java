@@ -19,11 +19,12 @@ public class LDATest extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$phi(); }
+        public double[][] getValue() { return system$c.get$phi(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$phi(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -58,11 +59,12 @@ public class LDATest extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$theta(); }
+        public double[][] getValue() { return system$c.get$theta(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$theta(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -97,11 +99,12 @@ public class LDATest extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        protected int[][] getValue() { return system$c.get$w(); }
+        public int[][] getValue() { return system$c.get$w(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
             system$c.set$w(value);
+            valueSet = true;
             setFixed(true);
         }
 

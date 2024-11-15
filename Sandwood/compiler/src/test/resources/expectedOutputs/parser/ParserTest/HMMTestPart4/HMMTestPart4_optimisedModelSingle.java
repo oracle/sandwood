@@ -19,11 +19,12 @@ public class HMMTestPart4 extends Model {
 
     private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
         @Override
-        protected double[] getValue() { return system$c.get$bias(); }
+        public double[] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class HMMTestPart4 extends Model {
 
     private final ComputedObjectArrayInternal<boolean[][]> $flips = new ComputedObjectArrayInternal<boolean[][]>(this, "flips", true, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 3) {
         @Override
-        protected boolean[][][] getValue() { return system$c.get$flips(); }
+        public boolean[][][] getValue() { return system$c.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[][][] value) {
             system$c.set$flips(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -92,11 +94,12 @@ public class HMMTestPart4 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -131,11 +134,12 @@ public class HMMTestPart4 extends Model {
 
     private final ComputedObjectArrayInternal<int[][]> $st = new ComputedObjectArrayInternal<int[][]>(this, "st", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 3) {
         @Override
-        protected int[][][] getValue() { return system$c.get$st(); }
+        public int[][][] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[][][] value) {
             system$c.set$st(value);
+            valueSet = true;
             setFixed(true);
         }
 
