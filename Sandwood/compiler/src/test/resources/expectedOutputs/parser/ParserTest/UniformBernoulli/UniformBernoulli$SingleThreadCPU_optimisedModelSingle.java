@@ -276,7 +276,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= prior) && (prior <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= prior) && (prior <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -375,7 +375,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
-			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 16 of consumer random variable bernoulli.
 			for(int var13 = 0; var13 < length$observed; var13 += 1)
@@ -418,7 +418,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$a" with its value "0.0".
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 		
 		// Processing sample task 16 of consumer random variable bernoulli.
 		for(int var13 = 0; var13 < length$observed; var13 += 1)
