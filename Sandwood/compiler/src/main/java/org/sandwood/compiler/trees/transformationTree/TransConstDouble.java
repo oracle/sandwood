@@ -26,7 +26,10 @@ public class TransConstDouble extends TransTreeReturn<DoubleVariable> {
 
     TransConstDouble(double value) {
         super(TransTreeType.CONST_DOUBLE, 1);
-        this.value = value;
+        if(value == -0.0)
+            this.value = 0.0;
+        else
+            this.value = value;
     }
 
     @Override

@@ -596,7 +596,7 @@ public class CollapseConstantsTransformer extends Transformer {
                     return TransTree.functionCallReturn(f, tree.outputType, value);
             }
             case LOG: {
-                TransTreeReturn<X> value = (TransTreeReturn<X>)transform(tree.args[0]);
+                TransTreeReturn<X> value = (TransTreeReturn<X>) transform(tree.args[0]);
                 switch(value.type) {
                     case CONST_DOUBLE:
                         return (TransTreeReturn<X>) constant(Math.log(((TransConstDouble) value).value));
@@ -618,7 +618,7 @@ public class CollapseConstantsTransformer extends Transformer {
                 return TransTree.functionCallReturn(f, tree.outputType, value);
             }
             case SQRT: {
-                TransTreeReturn<X> value = (TransTreeReturn<X>)transform(tree.args[0]);
+                TransTreeReturn<X> value = (TransTreeReturn<X>) transform(tree.args[0]);
                 switch(value.type) {
                     case CONST_DOUBLE:
                         return (TransTreeReturn<X>) constant(Math.sqrt(((TransConstDouble) value).value));
@@ -1177,11 +1177,13 @@ public class CollapseConstantsTransformer extends Transformer {
     @SuppressWarnings("unchecked")
     private <V extends NumberVariable<V>> TransTreeReturn<V> collapseConstants(TransNegate<V> tree) {
         TransTreeReturn<V> newInput = transform(tree.input);
-        if(newInput.type == TransTreeType.CONST_DOUBLE)
-            return (TransTreeReturn<V>) constant(-((TransConstDouble) newInput).value);
-        else if(newInput.type == TransTreeType.CONST_INT)
-            return (TransTreeReturn<V>) constant(-((TransConstInt) newInput).value);
-        else
+        if(newInput.type == TransTreeType.CONST_DOUBLE) {
+            double value = ((TransConstDouble) newInput).value;
+            return (TransTreeReturn<V>) constant(-value);
+        } else if(newInput.type == TransTreeType.CONST_INT) {
+            int value = ((TransConstInt) newInput).value;
+            return (TransTreeReturn<V>) constant(-value);
+        } else
             return negate(newInput);
     }
 

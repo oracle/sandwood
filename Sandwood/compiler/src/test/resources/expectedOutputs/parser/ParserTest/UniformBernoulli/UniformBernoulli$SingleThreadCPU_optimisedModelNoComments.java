@@ -146,7 +146,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 
 	private final void logProbabilityValue$sample8() {
 		if(!fixedProbFlag$sample8) {
-			double cv$distributionAccumulator = (((0.0 <= prior) && (prior <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= prior) && (prior <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			logProbability$var6 = cv$distributionAccumulator;
 			logProbability$prior = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -169,13 +169,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
 		{
-			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			for(int var13 = 0; var13 < length$observed; var13 += 1)
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var13], prior) + cv$accumulatedProbabilities);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		prior = cv$proposedValue;
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?-0.0:Double.NEGATIVE_INFINITY);
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 		for(int var13 = 0; var13 < length$observed; var13 += 1)
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var13], cv$proposedValue) + cv$accumulatedProbabilities);
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
