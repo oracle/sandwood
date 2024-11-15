@@ -19,11 +19,12 @@ public class MultinomialBernoulli extends Model {
 
     private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$output(); }
+        public boolean[] getValue() { return system$c.get$output(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$output(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -60,11 +61,12 @@ public class MultinomialBernoulli extends Model {
 
     private final ComputedDoubleArrayInternal $p = new ComputedDoubleArrayInternal(this, "p", true) {
         @Override
-        protected double[] getValue() { return system$c.get$p(); }
+        public double[] getValue() { return system$c.get$p(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$p(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -94,11 +96,12 @@ public class MultinomialBernoulli extends Model {
 
     private final ComputedIntegerArrayInternal $prior = new ComputedIntegerArrayInternal(this, "prior", true) {
         @Override
-        protected int[] getValue() { return system$c.get$prior(); }
+        public int[] getValue() { return system$c.get$prior(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$prior(value);
+            valueSet = true;
             setFixed(true);
         }
 

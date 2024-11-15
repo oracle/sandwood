@@ -19,11 +19,12 @@ public class Flip2CoinsMK11 extends Model {
 
     private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
         @Override
-        protected double[] getValue() { return system$c.get$bias(); }
+        public double[] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -58,11 +59,12 @@ public class Flip2CoinsMK11 extends Model {
 
     private final ComputedObjectArrayInternal<boolean[]> $flips = new ComputedObjectArrayInternal<boolean[]>(this, "flips", true, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        protected boolean[][] getValue() { return system$c.get$flips(); }
+        public boolean[][] getValue() { return system$c.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[][] value) {
             system$c.set$flips(value);
+            valueSet = true;
             setFixed(true);
         }
 

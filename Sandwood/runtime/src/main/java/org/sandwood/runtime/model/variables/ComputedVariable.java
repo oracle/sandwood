@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -39,11 +39,41 @@ public interface ComputedVariable extends HasProbability, Variable {
     }
 
     /**
-     * Has the model been run so that calling get on this variable is a valid action.
+     * Method to test if the model been run so that calling getMap or getSamples on this variable is a valid action.
+     * 
+     * @return A boolean showing if the model has been set.
+     */
+    boolean valueComputed();
+
+    /**
+     * Method to test if the value been set either by the user, or by running the model.
      * 
      * @return A boolean showing if the model has been set.
      */
     boolean isSet();
+
+    /**
+     * Method to test if this value can have its value set by the user. Currently the only computed variables that can
+     * have their value set by users are sample variables.
+     * 
+     * @return Returns true if this value can be set.
+     */
+    boolean isSettable();
+
+    /**
+     * Method to set and fix the value to the value stored as the MAP value for this variable. A boolean is returned to
+     * record if it succeeded. The method will not succeed if a MAP value has not been computed for this variable. A MAP
+     * value will only be present to set to the variables value if the {@link RetentionPolicy retention policy} for the
+     * variable was set to MAP and {@link Model#inferValues(int, ComputedVariable...) variable inference} was the last
+     * inference operation performed on the model. The retention policy can be set to MAP by either setting the MAP
+     * policy for the whole model and not overriding the policy for this variable, or setting the policy to MAP
+     * specifically for this variable. Retention policies are set via the methods
+     * {@link Model#setDefaultRetentionPolicy(RetentionPolicy) setDefaultRetentionPolicy} for the model and
+     * {@link ComputedVariable#setRetentionPolicy(RetentionPolicy) setRetentionPolicy} for the variable.
+     * 
+     * @return Was the variable set and fixed to the MAP value.
+     */
+    boolean setToMAPValue();
 
     /**
      * A method to set the retention policy of this variable.

@@ -19,11 +19,12 @@ public class DiscreteChoiceAlt extends Model {
 
     private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", true) {
         @Override
-        protected int[] getValue() { return system$c.get$choices(); }
+        public int[] getValue() { return system$c.get$choices(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$choices(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,7 +54,7 @@ public class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false) {
         @Override
-        protected double[] getValue() { return system$c.get$exped(); }
+        public double[] getValue() { return system$c.get$exped(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -89,7 +90,7 @@ public class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleArrayInternal $prob = new ComputedDoubleArrayInternal(this, "prob", false) {
         @Override
-        protected double[] getValue() { return system$c.get$prob(); }
+        public double[] getValue() { return system$c.get$prob(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -125,7 +126,7 @@ public class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false) {
         @Override
-        protected double getValue() { return system$c.get$sum(); }
+        public double getValue() { return system$c.get$sum(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -161,11 +162,12 @@ public class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
         @Override
-        protected double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
+            valueSet = true;
             setFixed(true);
         }
 

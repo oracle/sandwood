@@ -19,11 +19,12 @@ public class HMM_Mk2Dist extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $bias = new ComputedObjectArrayInternal<double[]>(this, "bias", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$bias(); }
+        public double[][] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -58,11 +59,12 @@ public class HMM_Mk2Dist extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $events = new ComputedObjectArrayInternal<int[]>(this, "events", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        protected int[][] getValue() { return system$c.get$events(); }
+        public int[][] getValue() { return system$c.get$events(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
             system$c.set$events(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -97,11 +99,12 @@ public class HMM_Mk2Dist extends Model {
 
     private final ComputedIntegerInternal $initialState = new ComputedIntegerInternal(this, "initialState", true) {
         @Override
-        protected int getValue() { return system$c.get$initialState(); }
+        public int getValue() { return system$c.get$initialState(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$initialState(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -131,11 +134,12 @@ public class HMM_Mk2Dist extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -170,11 +174,12 @@ public class HMM_Mk2Dist extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $st = new ComputedObjectArrayInternal<int[]>(this, "st", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        protected int[][] getValue() { return system$c.get$st(); }
+        public int[][] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
             system$c.set$st(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -214,11 +219,12 @@ public class HMM_Mk2Dist extends Model {
 
     private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true) {
         @Override
-        protected double[] getValue() { return system$c.get$weights(); }
+        public double[] getValue() { return system$c.get$weights(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$weights(value);
+            valueSet = true;
             setFixed(true);
         }
 

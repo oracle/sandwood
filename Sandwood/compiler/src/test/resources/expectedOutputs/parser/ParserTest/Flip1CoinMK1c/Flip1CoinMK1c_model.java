@@ -19,11 +19,12 @@ public class Flip1CoinMK1c extends Model {
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return system$c.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$flips(value);
+            valueSet = true;
             setFixed(true);
         }
 

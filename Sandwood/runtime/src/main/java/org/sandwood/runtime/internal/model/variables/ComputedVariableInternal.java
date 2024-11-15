@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -18,6 +18,7 @@ public abstract class ComputedVariableInternal
     protected RetentionPolicy p = RetentionPolicy.SAMPLE;
 
     private boolean valueComputed = false;
+    protected boolean valueSet = false;
 
     private double logProbability;
     private final LogSumExponential logProbabilitySum = new LogSumExponential();
@@ -46,10 +47,32 @@ public abstract class ComputedVariableInternal
      * @see forGenerator.ComputedVariableInterface#isSet()
      */
     @Override
-    public final boolean isSet() {
+    public final boolean valueComputed() {
         synchronized(model) {
             return valueComputed;
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see forGenerator.ComputedVariableInterface#isSet()
+     */
+    @Override
+    public final boolean isSet() {
+        synchronized(model) {
+            return valueComputed || valueSet;
+        }
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see forGenerator.ComputedVariableInterface#isSettable()
+     */
+    @Override
+    public boolean isSettable() {
+        return isSample;
     }
 
     @Override

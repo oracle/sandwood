@@ -19,11 +19,12 @@ public class PoissonDecayMK1 extends Model {
 
     private final ComputedIntegerArrayInternal $decay = new ComputedIntegerArrayInternal(this, "decay", true) {
         @Override
-        protected int[] getValue() { return system$c.get$decay(); }
+        public int[] getValue() { return system$c.get$decay(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$decay(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class PoissonDecayMK1 extends Model {
 
     private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true) {
         @Override
-        protected double getValue() { return system$c.get$rate(); }
+        public double getValue() { return system$c.get$rate(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$rate(value);
+            valueSet = true;
             setFixed(true);
         }
 

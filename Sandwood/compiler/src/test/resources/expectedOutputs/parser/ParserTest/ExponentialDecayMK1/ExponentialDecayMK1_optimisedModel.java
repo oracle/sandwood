@@ -19,11 +19,12 @@ public class ExponentialDecayMK1 extends Model {
 
     private final ComputedDoubleArrayInternal $decay = new ComputedDoubleArrayInternal(this, "decay", true) {
         @Override
-        protected double[] getValue() { return system$c.get$decay(); }
+        public double[] getValue() { return system$c.get$decay(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$decay(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class ExponentialDecayMK1 extends Model {
 
     private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true) {
         @Override
-        protected double getValue() { return system$c.get$rate(); }
+        public double getValue() { return system$c.get$rate(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$rate(value);
+            valueSet = true;
             setFixed(true);
         }
 

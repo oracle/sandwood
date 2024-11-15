@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2024, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -27,6 +27,13 @@ public interface ComputedBooleanArray extends ComputedVariable {
      * @return The most probable value.
      */
     boolean[] getMAP();
+
+    /**
+     * Get the current value of this variable in the model.
+     * 
+     * @return The current value of this variable.
+     */
+    boolean[] getValue();
 
     /**
      * Method to set a value of an element in the model. This would be used to fix the value of the element in the

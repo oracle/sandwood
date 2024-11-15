@@ -19,7 +19,7 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        protected int[][] getValue() { return system$c.get$Sales(); }
+        public int[][] getValue() { return system$c.get$Sales(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -60,11 +60,12 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true) {
         @Override
-        protected int[] getValue() { return system$c.get$arrivals(); }
+        public int[] getValue() { return system$c.get$arrivals(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$arrivals(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -94,7 +95,7 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false) {
         @Override
-        protected double[] getValue() { return system$c.get$exped(); }
+        public double[] getValue() { return system$c.get$exped(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -130,11 +131,12 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true) {
         @Override
-        protected double[] getValue() { return system$c.get$lambda(); }
+        public double[] getValue() { return system$c.get$lambda(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$lambda(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -164,11 +166,12 @@ public class Vulcano2012notNormalized extends Model {
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
         @Override
-        protected double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
+            valueSet = true;
             setFixed(true);
         }
 

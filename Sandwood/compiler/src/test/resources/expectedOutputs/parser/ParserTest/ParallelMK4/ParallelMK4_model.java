@@ -19,11 +19,12 @@ public class ParallelMK4 extends Model {
 
     private final ComputedIntegerArrayInternal $generated = new ComputedIntegerArrayInternal(this, "generated", true) {
         @Override
-        protected int[] getValue() { return system$c.get$generated(); }
+        public int[] getValue() { return system$c.get$generated(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$generated(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class ParallelMK4 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $indirection1 = new ComputedObjectArrayInternal<double[]>(this, "indirection1", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$indirection1(); }
+        public double[][] getValue() { return system$c.get$indirection1(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$indirection1(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -92,7 +94,7 @@ public class ParallelMK4 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $indirection2 = new ComputedObjectArrayInternal<double[]>(this, "indirection2", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$indirection2(); }
+        public double[][] getValue() { return system$c.get$indirection2(); }
 
         @Override
         protected void setValueInternal(double[][] value) {}

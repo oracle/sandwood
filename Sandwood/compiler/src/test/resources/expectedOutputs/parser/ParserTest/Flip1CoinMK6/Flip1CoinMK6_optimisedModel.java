@@ -19,11 +19,12 @@ public class Flip1CoinMK6 extends Model {
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
         @Override
-        protected double getValue() { return system$c.get$bias(); }
+        public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class Flip1CoinMK6 extends Model {
 
     private final ComputedBooleanArrayInternal $flips1 = new ComputedBooleanArrayInternal(this, "flips1", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$flips1(); }
+        public boolean[] getValue() { return system$c.get$flips1(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$flips1(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -87,11 +89,12 @@ public class Flip1CoinMK6 extends Model {
 
     private final ComputedBooleanArrayInternal $flips2 = new ComputedBooleanArrayInternal(this, "flips2", true) {
         @Override
-        protected boolean[] getValue() { return system$c.get$flips2(); }
+        public boolean[] getValue() { return system$c.get$flips2(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
             system$c.set$flips2(value);
+            valueSet = true;
             setFixed(true);
         }
 

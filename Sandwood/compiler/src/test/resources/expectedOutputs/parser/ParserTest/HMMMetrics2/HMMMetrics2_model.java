@@ -19,11 +19,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true) {
         @Override
-        protected double[] getValue() { return system$c.get$initialStateDistribution(); }
+        public double[] getValue() { return system$c.get$initialStateDistribution(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$initialStateDistribution(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -53,11 +54,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -92,11 +94,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $metric_g = new ComputedObjectArrayInternal<double[]>(this, "metric_g", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        protected double[][] getValue() { return system$c.get$metric_g(); }
+        public double[][] getValue() { return system$c.get$metric_g(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$metric_g(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -131,11 +134,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedDoubleArrayInternal $metric_mean = new ComputedDoubleArrayInternal(this, "metric_mean", true) {
         @Override
-        protected double[] getValue() { return system$c.get$metric_mean(); }
+        public double[] getValue() { return system$c.get$metric_mean(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$metric_mean(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -165,11 +169,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedDoubleArrayInternal $metric_valid_bias = new ComputedDoubleArrayInternal(this, "metric_valid_bias", true) {
         @Override
-        protected double[] getValue() { return system$c.get$metric_valid_bias(); }
+        public double[] getValue() { return system$c.get$metric_valid_bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$metric_valid_bias(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -199,11 +204,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedObjectArrayInternal<boolean[]> $metric_valid_g = new ComputedObjectArrayInternal<boolean[]>(this, "metric_valid_g", false, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        protected boolean[][] getValue() { return system$c.get$metric_valid_g(); }
+        public boolean[][] getValue() { return system$c.get$metric_valid_g(); }
 
         @Override
         protected void setValueInternal(boolean[][] value) {
             system$c.set$metric_valid_g(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -238,11 +244,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedDoubleArrayInternal $metric_var = new ComputedDoubleArrayInternal(this, "metric_var", true) {
         @Override
-        protected double[] getValue() { return system$c.get$metric_var(); }
+        public double[] getValue() { return system$c.get$metric_var(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$metric_var(value);
+            valueSet = true;
             setFixed(true);
         }
 
@@ -272,11 +279,12 @@ public class HMMMetrics2 extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $st = new ComputedObjectArrayInternal<int[]>(this, "st", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        protected int[][] getValue() { return system$c.get$st(); }
+        public int[][] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
             system$c.set$st(value);
+            valueSet = true;
             setFixed(true);
         }
 
