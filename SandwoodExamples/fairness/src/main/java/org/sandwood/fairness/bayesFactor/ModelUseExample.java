@@ -20,8 +20,8 @@ public class ModelUseExample {
      */
     public static void main(String[] args) {
         AlternativeModel altModel = new AlternativeModel();
-        altModel.observedPositiveCount.set(38);
-        altModel.observedSampleCount.set(200);
+        altModel.observedPositiveCount.setValue(38);
+        altModel.observedSampleCount.setValue(200);
         System.out.println("Starting alt model probability inference");
         altModel.inferProbabilities(0.00001, 1000, 1000000);
         System.out.println("Alt model probability: " + altModel.getProbability());

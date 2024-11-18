@@ -16,9 +16,9 @@ public class NullModelWrapper extends Model {
 
     @Override
     public void setObservations(int samples, int positives, double eta) {
-        model.observedSampleCount.set(samples);
-        model.observedPositiveCount.set(positives);
-        model.eta.set(eta);
+        model.observedSampleCount.setValue(samples);
+        model.observedPositiveCount.setValue(positives);
+        model.eta.setValue(eta);
     }
 
     @Override
