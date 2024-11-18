@@ -21,7 +21,7 @@ class CoinBiasEstimatorMK2 {
                 true };
         CoinModel coinModel = new CoinModel();
 
-        coinModel.observedFlips.set(observedFlips);
+        coinModel.observedFlips.setValue(observedFlips);
         coinModel.bias.setRetentionPolicy(RetentionPolicy.MAP);
 
         coinModel.inferValues(1000);
