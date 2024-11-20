@@ -3,7 +3,7 @@
 <!-- 
  Sandwood
 
- Copyright (c) 2019-2023, Oracle and/or its affiliates
+ Copyright (c) 2019-2024, Oracle and/or its affiliates
 
  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
@@ -15,14 +15,12 @@
 
 	<groupId>org.sandwood</groupId>
 	<artifactId>SandwoodExamples</artifactId>
-	<version>0.5.0</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Sandwood Examples</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<modules>
@@ -39,26 +37,26 @@
 		</license>
 	</licenses>
 
-    <developers>
-        <developer>
-            <name>Daniel Goodman</name>
-            <email>daniel.goodman@oracle.com</email>
-            <organization>Oracle Labs</organization>
-            <organizationUrl>https://labs.oracle.com</organizationUrl>
-        </developer>
-        <developer>
-            <name>Adam Pocock</name>
-            <email>adam.pocock@oracle.com</email>
-            <organization>Oracle Labs</organization>
-            <organizationUrl>https://labs.oracle.com</organizationUrl>
-        </developer>
-        <developer>
-            <name>Guy Steele</name>
-            <email>guy.steele@oracle.com</email>
-            <organization>Oracle Labs</organization>
-            <organizationUrl>https://labs.oracle.com</organizationUrl>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<name>Daniel Goodman</name>
+			<email>daniel.goodman@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Adam Pocock</name>
+			<email>adam.pocock@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Guy Steele</name>
+			<email>guy.steele@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+	</developers>
 
 	<dependencies>
 		<dependency>
@@ -73,7 +71,7 @@
 			<plugin>
 				<groupId>org.sandwood</groupId>
 				<artifactId>sandwoodc-maven-plugin</artifactId>
-				<version>0.5.0</version>
+				<version>0.6.0-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<configuration>
@@ -86,6 +84,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<release>17</release>
+					<testRelease>17</testRelease>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

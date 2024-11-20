@@ -8,12 +8,14 @@
  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.sandwood</groupId>
 	<artifactId>sandwoodc-maven-plugin</artifactId>
-	<version>0.5.0</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>sandwoodc-maven-plugin Maven Plugin</name>
@@ -21,11 +23,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.version>3.9.8</maven.version>
 	</properties>
-	
+
 	<prerequisites>
 		<maven>3.8.1</maven>
 	</prerequisites>
@@ -103,8 +103,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -164,7 +164,8 @@
 						<artifactId>maven-javadoc-plugin</artifactId>
 						<version>3.5.0</version>
 						<configuration>
-							<bottom>Copyright &#169; 2018&#x2013;2022 Oracle and/or its affiliates. All rights reserved.</bottom>
+							<bottom>Copyright &#169; 2018&#x2013;2022 Oracle
+								and/or its affiliates. All rights reserved.</bottom>
 						</configuration>
 						<executions>
 							<execution>
