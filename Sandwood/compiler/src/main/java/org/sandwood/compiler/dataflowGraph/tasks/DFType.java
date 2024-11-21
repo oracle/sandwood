@@ -45,6 +45,7 @@ public enum DFType {
     MULTIPLICATION("Multiplication"),
     NAMED_VARIABLE("Named variable constructor for use in auto generation of code phase only."),
     NEGATE("Negate"),
+    NEGATIVE_BINOMIAL("Negative Binomial"),
     NEGATE_BOOLEAN("Negate boolean"),
     OBSERVE_VARIABLE("Observation variable"),
     OR("Or"),

@@ -72,6 +72,7 @@ Sandwood supports the following random variables:
 * Half Cauchy (HalfCauchy)
 * Inverse Gamma (InverseGamma)
 * Multinomial
+* Negative Binomial (NegativeBinomial)
 * Poisson
 * Student-T (StudentT)
 * Uniform

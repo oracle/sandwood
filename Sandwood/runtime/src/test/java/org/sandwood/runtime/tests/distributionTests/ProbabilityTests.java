@@ -29,11 +29,12 @@ public class ProbabilityTests {
             + File.separator + "expectedOutputs" + File.separator + "ProbabilityTests";
 
     /*
-     * private class DataWriter { private final FileWriter fileWriter; public DataWriter(String name) throws IOException
-     * { File dir = new File(outputDir); dir.mkdirs(); File file = new File(dir, name + ".csv"); fileWriter = new
-     * FileWriter(file); }
+     * private class DataWriter { private final FileWriter fileWriter;
      * 
-     * public void write(String ... values) throws IOException { for(String v:values) fileWriter.append(v + ",");
+     * public DataWriter(String name) throws IOException { File dir = new File(outputDir); dir.mkdirs(); File file = new
+     * File(dir, name + ".csv"); fileWriter = new FileWriter(file); }
+     * 
+     * public void write(String... values) throws IOException { for(String v:values) fileWriter.append(v + ",");
      * fileWriter.append("\n"); }
      * 
      * public void write(int v1, double v2, double v3) throws IOException { write(Integer.toString(v1),
@@ -430,6 +431,36 @@ public class ProbabilityTests {
                                     value[2]);
                         }
                     }
+                }
+            }
+        }
+        d.close();
+    }
+
+    @Test
+    void testNegativeBinomial() throws IOException {
+        DataReader d = new DataReader("negativeBinomial");
+        for(int t = 0; t <= 10; t++) {
+            for(double p = 0.0; p <= 1; p += 0.1) {
+                for(int r = 1; r <= 5; r++) {
+                    double localValue = DistributionSampling.probabilityNegativeBinomial(t, p, r);
+                    double storedValue = d.read(t, p, r);
+                    testValueNormal(localValue, storedValue, t, p, r);
+                }
+            }
+        }
+        d.close();
+    }
+
+    @Test
+    void testLogNegativeBinomial() throws IOException {
+        DataReader d = new DataReader("logNegativeBinomial");
+        for(int t = 0; t <= 10; t++) {
+            for(double p = 0.0; p <= 1; p += 0.01) {
+                for(int r = 1; r <= 5; r++) {
+                    double localValue = DistributionSampling.logProbabilityNegativeBinomial(t, p, r);
+                    double storedValue = d.read(t, p, r);
+                    testValueLog(localValue, storedValue, t, p, r);
                 }
             }
         }

@@ -28,6 +28,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.HalfCauchy;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.InverseGamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.NegativeBinomial;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Poisson;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.StudentT;
@@ -528,6 +529,8 @@ public class VariableType {
             true, "InverseGamma");
     public static final RandomVariableType<ArrayVariable<IntVariable>, Multinomial> Multinomial = new RandomVariableType<>(
             true, true, "Multinomial");
+    public static final RandomVariableType<IntVariable, NegativeBinomial> NegativeBinomial = new RandomVariableType<>(
+            true, false, "NegativeBinomial");
     public static final RandomVariableType<IntVariable, Poisson> Poisson = new RandomVariableType<>(true, false,
             "Poisson");
     public static final RandomVariableType<DoubleVariable, StudentT> StudentT = new RandomVariableType<>(true, true,
