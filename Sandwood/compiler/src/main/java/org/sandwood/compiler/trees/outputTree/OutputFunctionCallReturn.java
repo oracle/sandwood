@@ -216,6 +216,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addProbabilityFunc(VariableType.HalfCauchy);
             addProbabilityFunc(VariableType.InverseGamma);
             addProbabilityFunc(VariableType.Multinomial);
+            addProbabilityFunc(VariableType.NegativeBinomial);
             addProbabilityFunc(VariableType.Poisson);
             addProbabilityFunc(VariableType.StudentT);
             addProbabilityFunc(VariableType.Uniform);
@@ -233,6 +234,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addLogProbabilityFunc(VariableType.HalfCauchy);
             addLogProbabilityFunc(VariableType.InverseGamma);
             addLogProbabilityFunc(VariableType.Multinomial);
+            addLogProbabilityFunc(VariableType.NegativeBinomial);
             addLogProbabilityFunc(VariableType.Poisson);
             addLogProbabilityFunc(VariableType.StudentT);
             addLogProbabilityFunc(VariableType.Uniform);

@@ -44,6 +44,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.HalfCauchy;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.InverseGamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.NegativeBinomial;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Poisson;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.StudentT;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.TruncatedGaussian;
@@ -915,6 +916,34 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
 
     static Multinomial multinomial(ArrayVariable<DoubleVariable> p, IntVariable n, Location location) {
         return Multinomial.multinomial(p, n, location);
+    }
+
+    static NegativeBinomial negativeBinomial(double p, int positiveTests) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests);
+    }
+
+    static NegativeBinomial negativeBinomial(DoubleVariable p, int positiveTests) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests);
+    }
+
+    static NegativeBinomial negativeBinomial(double p, IntVariable positiveTests) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests);
+    }
+
+    static NegativeBinomial negativeBinomial(DoubleVariable p, IntVariable positiveTests) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests);
+    }
+
+    static NegativeBinomial negativeBinomial(DoubleVariable p, IntVariable positiveTests, Location location) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests, location);
+    }
+
+    static NegativeBinomial negativeBinomial(IntVariable p, IntVariable positiveTests) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests);
+    }
+
+    static NegativeBinomial negativeBinomial(IntVariable p, IntVariable positiveTests, Location location) {
+        return NegativeBinomial.negativeBinomial(p, positiveTests, location);
     }
 
     static Poisson poisson(double rate) {

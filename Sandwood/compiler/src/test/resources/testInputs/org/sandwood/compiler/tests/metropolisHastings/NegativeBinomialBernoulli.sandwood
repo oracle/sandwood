@@ -8,8 +8,8 @@
 
 package org.sandwood.compiler.tests.metropolisHastings;
 
-public model PoissonBernoulli(boolean[] observed) {
-	int prior = poisson(1.5).sample();
+public model NegativeBinomialBernoulli(boolean[] observed) {
+	int prior = negativeBinomial(0.5, 2).sample();
 	Bernoulli bernoulli = bernoulli(prior/10.0);
 	boolean[] output = bernoulli.sample(observed.length);
 	output.observe(observed);

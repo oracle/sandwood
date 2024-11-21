@@ -141,7 +141,11 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
     public static <X extends Variable<X>> IRTreeReturn<X> construct(FunctionType t, Type<X> outputType,
             RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink, IRTreeReturn<?>[] args) {
         args = processArgs(t, source, args);
+        return constructInternal(t, outputType, source, sink, args);
+    }
 
+    private static <X extends Variable<X>> IRTreeReturn<X> constructInternal(FunctionType t, Type<X> outputType,
+            RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink, IRTreeReturn<?>[] args) {
         // TODO go through Distribution Sampling and decide if there are any other methods to promote into the model
         // code. For example Beta, Gamma and Inverse Gamma probabilities and samples.
 
@@ -341,6 +345,44 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
                     IRTreeReturn<DoubleVariable> sample = new IRRVFunctionCallReturn<DoubleVariable>(t,
                             VariableType.DoubleVariable, source, sink, newArgs);
                     return (IRTreeReturn<X>) divideDD(sample, lambda);
+                }
+            }
+        } else if(source == VariableType.NegativeBinomial) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(Double.NEGATIVE_INFINITY));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(0.0));
+                }
+                case SAMPLE: {
+                    // Samples are drawn from a Poisson distribution with lambda drawn from the Gamma distribution with
+                    // parameters r and p/(1-p)
+                    IRTreeReturn<DoubleVariable> p = (IRTreeReturn<DoubleVariable>) args[1];
+                    IRTreeReturn<IntVariable> r = (IRTreeReturn<IntVariable>) args[2];
+
+                    IRTreeReturn<?>[] gammaArgs = new IRTreeReturn<?>[3];
+                    gammaArgs[0] = args[0]; // RNG
+                    gammaArgs[1] = r;
+                    gammaArgs[2] = divideDD(p, subtractDD(constant(1.0), p));
+
+                    IRTreeReturn<?>[] poissonArgs = new IRTreeReturn<?>[2];
+                    poissonArgs[0] = args[0]; // RNG
+                    poissonArgs[1] = constructInternal(t, VariableType.DoubleVariable, VariableType.Gamma, sink, gammaArgs);
+
+                    return (IRTreeReturn<X>) constructInternal(t, VariableType.IntVariable, VariableType.Poisson, sink,
+                            poissonArgs);
                 }
             }
         } else if(source == VariableType.Uniform) {

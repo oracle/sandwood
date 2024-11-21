@@ -718,6 +718,35 @@ public class DistributionSampling {
         return p;
     }
 
+    // Negative Binmomial
+    /**
+     * Method to calculate the probability of a value being produced by a Negative Binomial distribution.
+     * 
+     * @param value The number of negative tests.
+     * @param p     The probability of a test being positive.
+     * @param r     The number of positive tests required.
+     * @return The probability of value negative tests before the final positive test is generated.
+     */
+    public static final double probabilityNegativeBinomial(int value, double p, int r) {
+        return Math.exp(logProbabilityNegativeBinomial(value, p, r));
+    }
+
+    /**
+     * Method to calculate the log probability of a value being produced by a Negative Binomial distribution.
+     * 
+     * @param value The number of negative tests.
+     * @param p     The probability of a test being positive.
+     * @param r     The number of positive tests required.
+     * @return The log probability of value negative tests before the final positive test is generated.
+     */
+    public static final double logProbabilityNegativeBinomial(int value, double p, int r) {        
+        double pNegative = value * Math.log(1 - p);
+        double pPositive = r * Math.log(p);
+        double coef = ApproximateFactorial.approxLogFac(value + r - 1)
+                - (ApproximateFactorial.approxLogFac(r - 1) + ApproximateFactorial.approxLogFac(value));
+        return coef + pNegative + pPositive;
+    }
+
     // Poisson
     /**
      * A method to sample a value from a Poisson distribution.
