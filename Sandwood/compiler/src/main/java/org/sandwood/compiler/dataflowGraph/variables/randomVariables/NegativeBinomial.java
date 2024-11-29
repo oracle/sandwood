@@ -17,7 +17,6 @@ import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
-import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -85,7 +84,7 @@ public class NegativeBinomial extends RandomVariableImplementation<IntVariable, 
 
     @Override
     public IRTreeReturn<IntVariable> getMax(CompilationContext compilationCtx) {
-        throw new CompilerException("The maximum value of a Negative Binomial distribution cannot currently be calculated");
+        return IRTree.constant(Integer.MAX_VALUE);
     }
 
     @Override
