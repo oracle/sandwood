@@ -17,7 +17,6 @@ import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
-import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -54,7 +53,7 @@ public class Poisson extends RandomVariableImplementation<IntVariable, Poisson>
 
     @Override
     public IRTreeReturn<IntVariable> getMax(CompilationContext compilationCtx) {
-        throw new CompilerException("The maximum value of a Poisson distribution cannot currently be calculated");
+        return IRTree.constant(Integer.MAX_VALUE);
     }
 
     @Override

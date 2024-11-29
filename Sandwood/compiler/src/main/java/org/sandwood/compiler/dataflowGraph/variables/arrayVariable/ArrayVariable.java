@@ -20,7 +20,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
-import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.ArrayConstructTask;
@@ -362,10 +361,8 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         } else if(getElementType() == VariableType.DoubleVariable && value.getType() == VariableType.IntVariable) {
             typeCheckedPut(i, (A) ((IntVariable) value).castToDouble(location), implicit, location);
         } else {
-            throw new SandwoodModelException(
-                    "Incompatible types, type " + value.getType().getJavaType()
-                            + " cannot be assigned to an array of type " + getType().getJavaType() + ".",
-                    location);
+            throw new SandwoodModelException("Incompatible types, type " + value.getType().getJavaType()
+                    + " cannot be assigned to an array of type " + getType().getJavaType() + ".", location);
         }
     }
 
@@ -488,10 +485,10 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         }
     }
 
-    public DataflowTask getSource() {
-        DataflowTask<ArrayVariable<A>> d = instanceHandle().getParent();
+    public ArrayProducingDataflowTask<?> getSource() {
+        ArrayProducingDataflowTask<A> d = instanceHandle().getParent();
         if(d.getType() == DFType.GET)
-            return ((GetTask<ArrayVariable<A>>) d).array.getSource();
+            return ((GetArrayTask<A>) d).array.getSource();
         else
             return d;
     }
