@@ -1,0 +1,79 @@
+package org.sandwood.compiler.tests.knownErrors;
+
+public model Incidents(int[] n_c, int[] N_inc, double[][] XCoord, double[][] YCoord, int[][] IncType) {
+    int K_inc = 3; //categories of incidents
+    int N_t = XCoord.length; //number of periods in the sample
+
+    // each incident category will have location distributed as a mix of Ncenter_i groups
+    // int[] n_c = new int[] {2,3,4}; //let's just fix number of centers in the data
+
+    //for every type of the incident, we also need to draw probabilities for the different centers
+    double[][] distr_mix = new double[K_inc][];
+
+    for(int i : [0..K_inc)) {
+        distr_mix[i] = new double[n_c[i]];
+        double[] lam = new double[n_c[i]] <~ 1.5;
+        distr_mix[i] = dirichlet(lam).sample();
+    }
+
+    double[][] c_x = new double[K_inc][];
+    double[][] c_y = new double[K_inc][];
+
+    for(int i : [0..K_inc)) {
+        c_x[i] = new double[n_c[i]];
+        c_y[i] = new double[n_c[i]];
+
+        c_x[i] = gaussian(0,10).sample(n_c[i]); // for category i, x coordinates of incidents centers
+        c_y[i] = gaussian(0,10).sample(n_c[i]);  //  for category i, y coordinates of incidents centers
+     }
+
+     double sigma = beta(2,2).sample(); //our prior for variance, will draw something better later
+
+
+    // we can say that every hour a certain number of incidents happens
+    double rate = gamma(2,2).sample(); // our prior on how many incidents happen every period of time
+    int[] n_inc = poisson(rate).sample(N_t); //sample how many incidents happen every period of time (e.g., hour)
+
+    // categorical probability for the type of incidents
+    double[] alpha = new double[K_inc] <~ 1.5;
+    double[] theta = dirichlet(alpha).sample();   // use theta to draw a category of incident
+
+
+    // record simulated data here
+    int[][] inctype = new int[N_t][];
+    double[][] xcoord = new double[N_t][];
+    double[][] ycoord = new double[N_t][];
+
+    int[][] P_center_cat = new int[N_t][];
+
+    // Now for each incident sample location
+    for(int t : [0..N_t)) {
+    inctype[t] = new int[N_inc[t]];
+    xcoord[t] = new double[N_inc[t]];
+    ycoord[t] = new double[N_inc[t]];
+
+    P_center_cat[t] = new int[N_inc[t]];
+
+        for(int i : [0..N_inc[t])) {
+        // first sample what kind of incident it is
+        inctype[t][i] = categorical(theta).sample();
+
+        // based on the type of accident we need to draw a location. Each type has its own mixture of locations
+        // draw an index for the center based on the type of the incident
+        // int p = categorical(distr_mix[inctype[t][i]]).sample() ;
+        // xcoord[t][i] = gaussian(c_x[inctype[t][i]][p], sigma).sample();
+        // ycoord[t][i] = gaussian(c_y[inctype[t][i]][p], sigma).sample();
+
+        // version where each p is recorded in a massive array
+        P_center_cat[t][i] =  categorical(distr_mix[inctype[t][i]]).sample() ;
+        xcoord[t][i] = gaussian(c_x[inctype[t][i]][P_center_cat[t][i]], sigma).sample();
+        ycoord[t][i] = gaussian(c_y[inctype[t][i]][P_center_cat[t][i]], sigma).sample();
+        }
+    }
+
+    // assert generated choices match observed choices
+    n_inc.observe(N_inc);
+    xcoord.observe(XCoord);
+    ycoord.observe(YCoord);
+    inctype.observe(IncType);
+}
