@@ -1,4 +1,4 @@
-package com.oracle.labs.east.ed;
+package org.sandwood.compiler.tests.knownErrors;
 
 // estimating model for a very small cohort of data, e.g. between 1 and 2 hour current LOS
 // modeling admit decision
