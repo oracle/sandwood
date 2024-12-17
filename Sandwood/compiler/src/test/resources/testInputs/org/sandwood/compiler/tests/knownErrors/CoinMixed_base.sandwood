@@ -1,0 +1,38 @@
+package com.oracle.labs.east.knownErrors;
+
+// ---------------------------------------------------------------------------------------------------
+// No compilation errros, but I think there is something really wrong with if statements in Sandwood,
+// this super simple model completely mis-estimates q parameter
+// ---------------------------------------------------------------------------------------------------
+
+
+public model CoinMixed_base(boolean[] obsE, boolean[] obsX) {
+    int N = obsX.length; //number of obs in the sample
+
+    double p = beta(10,100).sample();
+
+    boolean[] x = new boolean[N];
+    boolean[] e = new boolean[N];
+
+    //true positive
+    double q = beta(9,1).sample();
+
+    //true negative (alarm sounds with probability (1-t), ideally we want q > 1-t for the signal to be informative)
+    double t = beta(9,1).sample();
+
+
+    for(int i : [0..N)) {
+        // draw an x
+        x[i] = bernoulli(p).sample();
+        //depending on the result of x, draw a value of e
+        if (x[i]){
+            e[i] =  bernoulli(q).sample();
+                }
+        else {
+            e[i] =  bernoulli(1-t).sample();
+            }
+   }
+
+    x.observe(obsX);
+    e.observe(obsE);
+}

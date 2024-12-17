@@ -1,0 +1,39 @@
+package com.oracle.labs.east.knownErrors;
+
+// ---------------------------------------------------------------------------------------------------
+// no compilation errors, but when executing the model, samples of model parameters and Xs produced seem to be not consistent with each other
+// ---------------------------------------------------------------------------------------------------
+
+public model CoinMixed_base2(boolean[] obsE, boolean[] obsX) {
+    int N = obsX.length; //number of obs in the sample
+
+    double p = beta(10,100).sample();
+
+    boolean[] x = new boolean[N];
+    boolean[] xDisc = new boolean[N];
+    boolean[] e = new boolean[N];
+
+    //true positive
+    double q = beta(9,1).sample();
+
+    //true negative (alarm sounds with probability (1-t), ideally we want q > 1-t for the signal to be informative)
+    double t = beta(9,1).sample();
+
+
+    for(int i : [0..N)) {
+        // draw an x
+        x[i] = bernoulli(p).sample();
+        //depending on the result of x, draw a value of e
+        if (x[i]){
+            e[i] =  bernoulli(q).sample();
+            xDisc[i] = bernoulli(1.0).sample();
+                }
+        else {
+            e[i] =  bernoulli(1-t).sample();
+            xDisc[i] = bernoulli(0.0).sample();
+            }
+   }
+
+    xDisc.observe(obsX);
+    e.observe(obsE);
+}
