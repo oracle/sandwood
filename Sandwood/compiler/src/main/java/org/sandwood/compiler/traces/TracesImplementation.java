@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -111,7 +112,7 @@ public class TracesImplementation extends Traces {
         constructTraces(vs);
     }
 
-    public static Traces getTraces(Variable<?>[] vs) {
+    public static Traces getTraces(Variable<?>... vs) {
         return new TracesImplementation(vs);
     }
 
