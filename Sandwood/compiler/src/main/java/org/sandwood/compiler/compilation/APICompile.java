@@ -40,6 +40,7 @@ import java.util.Stack;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
+import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.CompilationOptions;
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
@@ -137,6 +138,9 @@ public class APICompile {
         // Collect the classes constructing the other simpler classes in the main
         // thread.
         CompilationDesc compDesc = new CompilationDesc();
+        
+        if(vs.length==0)
+            throw new SandwoodException("This model contains no variables.");
 
         try {
             PackageName targetPackageName = new PackageName(packageName);
