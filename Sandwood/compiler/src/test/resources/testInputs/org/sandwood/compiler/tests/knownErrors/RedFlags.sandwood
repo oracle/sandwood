@@ -6,16 +6,16 @@ public model RedFlags(boolean[][] obsA, boolean[] obsX, boolean[][] obsFlags) {
     int nFlags = 2;    //obsFlags[0].length -- will it work if some of the flags are not observed?
 
     // e.g. the structure is the following:
-    // rf1 -> a1; rf2 -> a2, a3; //extend later
+    // rf1 -> a1; rf2 -> a2, a3; //extend later to make alarms depend on multiple red flags
 
-    double p = beta(1,100).sample(); // percentage of criminals
+    double p = beta(1,100).sample(); // percentage of criminals in the population
 
     boolean[] x = new boolean[N];
     boolean[] xDisc = new boolean[N];  // observe those and not true type
     boolean[][] a = new boolean[N][nAlarms];
 
     boolean[][] flags = new boolean[N][nFlags];
-    boolean[][] flagsDisc = new boolean[N][nFlags];  // observe those, and not flags
+    boolean[][] flagsDisc = new boolean[N][nFlags];  // observe those, and not actual flags
 
     // draw red flags conditional on the type
     // is there an elegant way to do CPT in Sandwood??
@@ -35,43 +35,26 @@ public model RedFlags(boolean[][] obsA, boolean[] obsX, boolean[][] obsFlags) {
     double a3_rf2_FalsePositive = beta(1,10).sample(); //if red flag is not present, alarm can go off with small probability
 
 
-
     for(int t : [0..N)) {
         // draw an x
         x[t] = bernoulli(p).sample();
         //depending on the result of x, draw values of red flags
-        double e1 = x[t]? rf1_type_TruePositive : rf1_type_FalsePositive;
-        double e2 = x[t]? rf2_type_TruePositive : rf2_type_FalsePositive;
-        flags[t][0] = bernoulli(e1).sample();
-        flags[t][1] = bernoulli(e2).sample();
-
+        flags[t][0] = bernoulli(x[t]? rf1_type_TruePositive : rf1_type_FalsePositive).sample();
+        flags[t][1] = bernoulli(x[t]? rf2_type_TruePositive : rf2_type_FalsePositive).sample();
 
         //depending on the values of flags draw alarms
-        double b1 = flags[t][0]? a1_rf1_TruePositive : a1_rf1_FalsePositive;
-        double b2 = flags[t][0]? a2_rf1_TruePositive : a2_rf1_FalsePositive;
-        double b3 = flags[t][1]? a3_rf2_TruePositive : a3_rf2_FalsePositive;
-        a[t][0] = bernoulli(b1).sample();
-        a[t][1] = bernoulli(b2).sample();
-        a[t][2] = bernoulli(b3).sample();
-
+        a[t][0] = bernoulli(flags[t][0]? a1_rf1_TruePositive : a1_rf1_FalsePositive).sample();
+        a[t][1] = bernoulli(flags[t][0]? a2_rf1_TruePositive : a2_rf1_FalsePositive).sample();
+        a[t][2] = bernoulli(flags[t][1]? a3_rf2_TruePositive : a3_rf2_FalsePositive).sample();
 
         //depending on the value of alarms, learn flag values and account type
 
-
-        if (a[t][0]||a[t][1]||a[t][2]){  //that is, one of the alarms goes off
-            double aux = x[t]? 1.0:0.0;
-            xDisc[t] = bernoulli(aux).sample();
-
-            double aux_rf1 = flags[t][0]?1.0 : 0.0;
-            double aux_rf2 = flags[t][1]?1.0 : 0.0;
-
-            flagsDisc[t][0] = bernoulli(aux_rf1).sample();
-            flagsDisc[t][1] = bernoulli(aux_rf2).sample();
-
-
+        if (a[t][0]||a[t][1]||a[t][2]){  //if at least one of the alarms goes off
+            xDisc[t] = bernoulli(x[t]? 1.0:0.0).sample();
+            flagsDisc[t][0] = bernoulli(flags[t][0]?1.0 : 0.0).sample();
+            flagsDisc[t][1] = bernoulli(flags[t][1]?1.0 : 0.0).sample();
             }
         }
-
 
     xDisc.observe(obsX);
     flagsDisc.observe(obsFlags);
