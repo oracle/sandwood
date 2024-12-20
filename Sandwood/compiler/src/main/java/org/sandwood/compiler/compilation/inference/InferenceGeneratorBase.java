@@ -8,6 +8,8 @@
 
 package org.sandwood.compiler.compilation.inference;
 
+import static org.sandwood.compiler.traces.guards.ScopeConstructor.Values.IGNORE_VALUES;
+import static org.sandwood.compiler.traces.guards.ScopeConstructor.Values.PASS_VALUES;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.negateBoolean;
 import static org.sandwood.compiler.trees.irTree.IRTree.voidFunction;
@@ -198,7 +200,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 // sample task.
                 Set<TraceHandle> consumerTraces = funcData.getToConsumingRV(consumingRV);
 
-                b = b.addConstraints(consumerTraces, rvDistTraces, funcData.sampleUpdated);
+                b = b.addConstraints(consumerTraces, rvDistTraces,
+                        funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
 
                 // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
                 // task mapping, and now explore the distributed properties.
@@ -258,7 +261,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                     compilationCtx);
                             // Set the constraint linking the branch point and the consuming random variable.
                             ScopeConstructor consumerSC = c.addConstraints(sinkToConditional.get(branchPointDesc),
-                                    rvDistTraces, funcData.sampleUpdated);
+                                    rvDistTraces, funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
 
                             // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
                             // task mapping, and now explore the distributed properties.
@@ -278,38 +281,44 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                             }
 
                             // Handle the RV producers passing through this branch.
-                            Map<SampleTask<?,?>, Set<TraceHandle>> conditionalToSource = splitTraces.conditionalToSource
+                            Map<SampleTask<?, ?>, Set<TraceHandle>> conditionalToSource = splitTraces.conditionalToSource
                                     .get(branchPointDesc);
-                            for(SampleTask<?,?> source:conditionalToSource.keySet()) {
-                                RandomVariable<?,?> sourceRV = source.randomVariable;
+                            for(SampleTask<?, ?> source:conditionalToSource.keySet()) {
+                                RandomVariable<?, ?> sourceRV = source.randomVariable;
                                 Set<Set<TraceHandle>> sourceRVDistTraces = Traces.findDistributionTraces(sourceRV,
                                         compilationCtx);
                                 Set<TraceHandle> tracesToBranch = conditionalToSource.get(source);
-                                ScopeConstructor sourceSC = c.addBackConstraints(tracesToBranch, sourceRVDistTraces, false);
-                                
-                                TraceHandle sampleTrace = compilationCtx.traces.getSampleTrace(source).traceToSampleVariable;
-                                sourceSC = sourceSC.addComment(
-                                        "Processing sample task " + source.id() + " of consumer random variable " + sourceRV.getAlias() + ".")
+                                ScopeConstructor sourceSC = c.addBackConstraints(tracesToBranch, sourceRVDistTraces,
+                                        IGNORE_VALUES);
+
+                                TraceHandle sampleTrace = compilationCtx.traces
+                                        .getSampleTrace(source).traceToSampleVariable;
+                                sourceSC = sourceSC
+                                        .addComment("Processing sample task " + source.id()
+                                                + " of consumer random variable " + sourceRV.getAlias() + ".")
                                         .addConstraint(sampleTrace);
 
-                                sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
-                                
+                                sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info,
+                                        compilationCtx));
+
                                 ScopeConstructor dConsumerAllArgs = sourceSC.applyAllDistributedArguments();
                                 /*
-                                 * This will not depend on distributions as it goes either to a sample value, so can only have put
-                                 * operations, or to an observed value so is not allowed to be a distribution. It does need to have a
-                                 * constraint on the trace though to make sure the trace is valid.
+                                 * This will not depend on distributions as it goes either to a sample value, so can
+                                 * only have put operations, or to an observed value so is not allowed to be a
+                                 * distribution. It does need to have a constraint on the trace though to make sure the
+                                 * trace is valid.
                                  */
                                 dConsumerAllArgs.addTree((TreeBuilderInfo info) -> {
 
                                     /*
-                                     * Construct the arguments for the consumer random variable. If we could apply the distributions before the
-                                     * sample task is fixed this could be moved further out and run only once. However, as in the future the may
-                                     * be distributions in the sample trace that is not possible, so, it is placed here with the expectation
-                                     * that the optimisation phase can move shared values out where appropriate.
+                                     * Construct the arguments for the consumer random variable. If we could apply the
+                                     * distributions before the sample task is fixed this could be moved further out and
+                                     * run only once. However, as in the future the may be distributions in the sample
+                                     * trace that is not possible, so, it is placed here with the expectation that the
+                                     * optimisation phase can move shared values out where appropriate.
                                      */
                                     getConsumerRVInputIR(info, sourceRV, funcData, compilationCtx);
-                                    
+
                                     Trace trace = sampleTrace.getTrace();
 
                                     DataflowTaskArgDesc d = trace.pop();
@@ -327,14 +336,16 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                     if(info.backTraceInfo.noGetValues() != 0) {
                                         Location start = sampleTrace.get(0).task.getLocation();
                                         Location end = sampleTrace.peek().task.getLocation();
-                                        throw new CompilerException("Unaccounted for get in trace " + sampleTrace + "\nStarting at line "
-                                                + start.startLine + " through to line " + end.endLine);
+                                        throw new CompilerException(
+                                                "Unaccounted for get in trace " + sampleTrace + "\nStarting at line "
+                                                        + start.startLine + " through to line " + end.endLine);
                                     }
 
                                     getObservationToSampleIR(source, current, funcData, info, compilationCtx);
                                 });
-                                
-                                sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
+
+                                sourceSC.addTree(2,
+                                        (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
                             }
                         }
                     }
@@ -366,7 +377,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                     // sample task.
                     Set<TraceHandle> consumerTraces = funcData.getToConsumingRV(consumingRV);
 
-                    b = b.addConstraints(consumerTraces, rvDistTraces, funcData.sampleUpdated);
+                    b = b.addConstraints(consumerTraces, rvDistTraces,
+                            funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
 
                     // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
                     // task mapping, and now explore the distributed properties.

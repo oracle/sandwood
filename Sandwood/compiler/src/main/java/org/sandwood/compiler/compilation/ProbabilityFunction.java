@@ -12,6 +12,7 @@ import static org.sandwood.compiler.compilation.util.TreeUtils.getIndirectValue;
 import static org.sandwood.compiler.compilation.util.TreeUtils.getScopeArgs;
 import static org.sandwood.compiler.compilation.util.TreeUtils.putIndirectValue;
 import static org.sandwood.compiler.compilation.util.TreeUtils.toArgTrees;
+import static org.sandwood.compiler.traces.guards.ScopeConstructor.Guards.NO_GUARDS;
 import static org.sandwood.compiler.trees.irTree.IRTree.addDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.and;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
@@ -351,7 +352,7 @@ public class ProbabilityFunction {
         // Add side effect to clear the flag if a dependency given the ability to changed
         IRTreeVoid restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
                 "Should the probability of sample " + sampleTask.id()
-                + " be set to fixed. This will only every change the flag to false.");
+                        + " be set to fixed. This will only every change the flag to false.");
         compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
         
         // Add side effect to clear the flag if a dependency is changed.
@@ -376,7 +377,7 @@ public class ProbabilityFunction {
                 // Add side effect to clear the flag if a dependency given the ability to changed
                 restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
                         "Should the probability of sample " + sampleTask.id()
-                        + " be set to fixed. This will only every change the flag to false.");
+                                + " be set to fixed. This will only every change the flag to false.");
                 compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
                 // Add side effect to clear the flag if a dependency is changed.
@@ -446,7 +447,7 @@ public class ProbabilityFunction {
         IRTreeVoid mergeResult = ifElse(
                 mergeGuard, generateValues, "Determine if we need to calculate the values for sample task "
                         + sampleTask.id() + " or if we should just use cached values.",
-                        repopulateValues, "Using cached values.");
+                repopulateValues, "Using cached values.");
 
         // And place the subtree in a void function.
         VariableDescription<?> taskName = sampleTask.getUniqueVarDesc();
@@ -454,7 +455,7 @@ public class ProbabilityFunction {
                 .createFunctionName(useDistributions ? VariableNames.logProbabilityDistributionName(taskName)
                         : VariableNames.logProbabilityValueName(taskName));
         String comment = "Calculate the probability of the samples represented by " + sampleTask.getUniqueVarDesc()
-        + (useDistributions ? " using probability distributions." : " using sampled values.");
+                + (useDistributions ? " using probability distributions." : " using sampled values.");
         SampleFunctionClass functionClass = useDistributions ? SampleFunctionClass.LOG_PROBABILITY_DISTRIBUTIONS
                 : SampleFunctionClass.LOG_PROBABILITY_VALUE;
         compilationCtx.addFunction(functionClass, sampleTask,
@@ -583,7 +584,7 @@ public class ProbabilityFunction {
                 .construct(
                         sampleTask, distributionTraces, "Look for paths between the variable and the sample task "
                                 + sampleTask.id() + " including any distribution values.",
-                                Tree.NoComment, compilationCtx);
+                        Tree.NoComment, compilationCtx);
         a = a.addConstraint(traceHandle);
 
         VariableDescription<A> sampleVariableName = VariableNames.calcVarName("sampleValue", sampleTask.getOutputType(),
@@ -629,9 +630,10 @@ public class ProbabilityFunction {
 
         // Check if any of the traces from here lead to a conditional that might not be true. If it does the current
         // value could not be set in the model so the probability needs to be set to log(0) aka -infinity.
-        Map<ProducingDataflowTask<?>, Set<TraceHandle>> conditionalTraces = compilationCtx.traces.getTracesToConditionals(sampleTask);
+        Map<ProducingDataflowTask<?>, Set<TraceHandle>> conditionalTraces = compilationCtx.traces
+                .getTracesToConditionals(sampleTask);
         for(ProducingDataflowTask<?> p:conditionalTraces.keySet()) {
-            //Construct a scope constructor at the conditional
+            // Construct a scope constructor at the conditional
             Set<TraceHandle> ts = conditionalTraces.get(p);
             Set<TraceHandle> subTraces = new HashSet<>();
             for(TraceHandle t:ts)
@@ -648,7 +650,7 @@ public class ProbabilityFunction {
                                 // If this point is reached the trace is between an observed value and a constant.
                                 // Add a constraint to ensure that the observed value can be reached.
 
-                                // At this point the trace to the source will always be empty so there is no concern 
+                                // At this point the trace to the source will always be empty so there is no concern
                                 // about duplicate split traces.
                                 ScopeConstructor c = b.addConstraint(sinkToConditional);
 
@@ -658,10 +660,10 @@ public class ProbabilityFunction {
                                     BackTraceInfo backTraceInfo = new BackTraceInfo();
                                     while(index >= 0) {
                                         DataflowTaskArgDesc currentDesc = sinkToConditional.get(index--);
-                                        current = currentDesc.task.getInverseIR(currentDesc.argPos, current, backTraceInfo,
-                                                compilationCtx);
+                                        current = currentDesc.task.getInverseIR(currentDesc.argPos, current,
+                                                backTraceInfo, compilationCtx);
                                     }
-                                    
+
                                     constructObservationTest(weightedProbability, taskDesc, current, compilationCtx);
                                 });
                             }
@@ -694,11 +696,13 @@ public class ProbabilityFunction {
         return load(disAccumulator);
     }
 
-    private static <A extends ScalarVariable<A>, B extends ScalarVariable<B>> void constructObservationTest(VariableDescription<DoubleVariable> varDesc,
-            DataflowTaskArgDesc taskDesc, IRTreeReturn<?> observedValue, CompilationContext compilationCtx) {
-        A inputVar = (A)taskDesc.task.getInput(taskDesc.argPos);
+    private static <A extends ScalarVariable<A>, B extends ScalarVariable<B>> void constructObservationTest(
+            VariableDescription<DoubleVariable> varDesc, DataflowTaskArgDesc taskDesc, IRTreeReturn<?> observedValue,
+            CompilationContext compilationCtx) {
+        A inputVar = (A) taskDesc.task.getInput(taskDesc.argPos);
         IRTreeReturn<A> expected = inputVar.getForwardIR(compilationCtx);
-        IRTreeReturn<BooleanVariable> guard = IRTree.negateBoolean(IRTree.eq((IRTreeReturn<B>)observedValue, expected));
+        IRTreeReturn<BooleanVariable> guard = IRTree
+                .negateBoolean(IRTree.eq((IRTreeReturn<B>) observedValue, expected));
         IRTreeVoid condition = IRTree.ifElse(guard,
                 IRTree.store(varDesc, IRTree.constant(Double.NEGATIVE_INFINITY), Tree.NoComment),
                 "If the observed value does not match the provided value the probability of generating this random variable is zero");
@@ -790,7 +794,7 @@ public class ProbabilityFunction {
                     VariableDescription<BooleanVariable> guardName = guards.get(v.instanceHandle());
 
                     // Add variables that require per variable values
-                    ScopeConstructor perVarScopes = sPerSample.addConstraints(traces, true);
+                    ScopeConstructor perVarScopes = sPerSample.addConstraints(traces, NO_GUARDS);
                     perVarScopes.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
                             setValueProbability(sampleProbability, v, guardName, useDistributions, compilationCtx)));
                 }
@@ -807,7 +811,7 @@ public class ProbabilityFunction {
                     VariableDescription<BooleanVariable> guardName = guards.get(v.instanceHandle());
 
                     // Add variables that require per variable values
-                    ScopeConstructor perVarScopes = sAccumulator.addConstraints(traces, true);
+                    ScopeConstructor perVarScopes = sAccumulator.addConstraints(traces, NO_GUARDS);
                     perVarScopes.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
                             setValueProbability(accumulatedProbability, v, guardName, useDistributions,
                                     compilationCtx)));

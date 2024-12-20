@@ -8,6 +8,8 @@
 
 package org.sandwood.compiler.traces.guards;
 
+import static org.sandwood.compiler.traces.guards.ScopeConstructor.Direction.FORWARDS;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.Traces;
+import org.sandwood.compiler.traces.guards.ScopeConstructor.Direction;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -108,8 +111,8 @@ class ScopeDescription {
          */
         public final Set<Set<TraceHandle>> postTraceSets;
 
-        ConstraintData(TraceHandle trace, boolean forward) {
-            this.task = (forward?trace.peek():trace.get(0)).task;
+        ConstraintData(TraceHandle trace, Direction direction) {
+            this.task = (direction == FORWARDS?trace.peek():trace.get(0)).task;
             this.trace = trace;
             this.postTraceSets = null;
             Map<DataflowTask<?>, Substitutions> subs = new HashMap<>();
@@ -383,11 +386,11 @@ class ScopeDescription {
                     "Trying to add distribution traces to a class that already has its distribution traces set.");
     }
 
-    public ScopeDescription constructConstraintSpace(TraceHandle trace, boolean forward) {
-        return new ScopeDescription(trace, this, forward);
+    public ScopeDescription constructConstraintSpace(TraceHandle trace, Direction direction) {
+        return new ScopeDescription(trace, this, direction);
     }
 
-    private ScopeDescription(TraceHandle trace, ScopeDescription d, boolean forward) {
+    private ScopeDescription(TraceHandle trace, ScopeDescription d, Direction direction) {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
@@ -395,7 +398,7 @@ class ScopeDescription {
         knownFlags = d.knownFlags;
 
         List<ConstraintData> cd = new ArrayList<>(d.constraintData);
-        cd.add(new ConstraintData(trace, forward));
+        cd.add(new ConstraintData(trace, direction));
         constraintData = Collections.unmodifiableList(cd);
     }
 
