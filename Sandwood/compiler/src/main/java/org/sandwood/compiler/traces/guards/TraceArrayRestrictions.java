@@ -46,6 +46,7 @@ import org.sandwood.compiler.exceptions.MissingFeatureException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Trace;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor.Values;
 import org.sandwood.compiler.traces.guards.ScopeDescription.Substitutions;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
@@ -53,7 +54,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
 public class TraceArrayRestrictions {
-    
+
     /**
      * A comparator for comparing scopes.
      */
@@ -62,7 +63,7 @@ public class TraceArrayRestrictions {
         public int compare(Scope s1, Scope s2) {
             return s1.id() - s2.id();
         }
-     };
+    };
 
     /**
      * Class to record the scopes that we should add and remove when we reach this dataflow task;
@@ -184,13 +185,13 @@ public class TraceArrayRestrictions {
 
         public RestrictionsData(TraceHandle trace, Map<ForTask, IntVariable> existingStartScopes,
                 Map<ForTask, IntVariable> existingEndScopes, Set<ForTask> existingScopes, int globalID,
-                boolean passValues) {
+                Values arrayValues) {
             this.trace = trace;
             this.existingStartScopes = Collections.unmodifiableMap(existingStartScopes);
             this.existingEndScopes = Collections.unmodifiableMap(existingEndScopes);
             this.existingScopes = new HashSet<>(existingScopes);
             this.globalID = globalID;
-            this.passValues = passValues;
+            passValues = arrayValues == Values.PASS_VALUES;
         }
     }
 
@@ -221,20 +222,20 @@ public class TraceArrayRestrictions {
      */
     public static ScopeDescription constructRestriction(TraceHandle trace,
             Map<ForTask, IntVariable> existingStartScopes, Map<ForTask, IntVariable> existingEndScopes,
-            ScopeDescription target, int globalID, boolean passValues, int position,
+            ScopeDescription target, int globalID, Values arrayValues, int position,
             CompilationContext compilationCtx) {
         Set<TraceHandle> rawTraces = new HashSet<>();
         rawTraces.add(trace);
         return constructRestriction(trace, rawTraces, existingStartScopes, existingEndScopes, target, globalID,
-                passValues, position, compilationCtx);
+                arrayValues, position, compilationCtx);
     }
 
     public static ScopeDescription constructRestriction(TraceHandle trace, Set<TraceHandle> rawTraces,
             Map<ForTask, IntVariable> existingStartScopes, Map<ForTask, IntVariable> existingEndScopes,
-            ScopeDescription target, int globalID, boolean passValues, int position,
+            ScopeDescription target, int globalID, Values arrayValues, int position,
             CompilationContext compilationCtx) {
         RestrictionsData data = new RestrictionsData(trace, existingStartScopes, existingEndScopes,
-                target.existingScopes, globalID, passValues);
+                target.existingScopes, globalID, arrayValues);
 
         constructOpPairs(data);
 
@@ -818,8 +819,7 @@ public class TraceArrayRestrictions {
 
                         // Construct the environment
                         ScopeChanges s = data.scopeData.get(gt);
-                        innerScope = constructEnvironment(gt, data, scopeSubstitutions,
-                                innerScope, compilationCtx);
+                        innerScope = constructEnvironment(gt, data, scopeSubstitutions, innerScope, compilationCtx);
 
                         // If there is a put to go with this get a guard will be needed
                         IRTreeReturn<IntVariable> putIndex = putIndexes.get(gt);
@@ -844,12 +844,11 @@ public class TraceArrayRestrictions {
                     if(task != null) {
                         // Construct the value of the put index
                         ScopeChanges s = data.scopeData.get(pt);
-                        innerScope = constructEnvironment(pt, data, scopeSubstitutions,
-                                innerScope, compilationCtx);
+                        innerScope = constructEnvironment(pt, data, scopeSubstitutions, innerScope, compilationCtx);
 
                         if(data.storeSubstitutions.contains(pt))
-                            target = target.addSubstitutions(position, pt, constructSubstituions(originalSubstitutions,
-                                    varSubstitutions, scopeSubstitutions));
+                            target = target.addSubstitutions(position, pt,
+                                    constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions));
 
                         // Construct all the values that the put value will depend on. This is required
                         // in the case that the intermediate also depends on the values being updated,
@@ -885,8 +884,8 @@ public class TraceArrayRestrictions {
                         // No restrictions are required, but the status of the scopes at the point this
                         // is reached should be recorded.
                         if(data.storeSubstitutions.contains(pt))
-                            target = target.addSubstitutions(position, pt, constructSubstituions(originalSubstitutions,
-                                    varSubstitutions, scopeSubstitutions));
+                            target = target.addSubstitutions(position, pt,
+                                    constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions));
                     }
                     break;
                 }
@@ -895,8 +894,7 @@ public class TraceArrayRestrictions {
                     ReductionInput<?> ri = (ReductionInput<?>) d.task;
 
                     // Construct the environment
-                    innerScope = constructEnvironment(ri, data, scopeSubstitutions, innerScope,
-                            compilationCtx);
+                    innerScope = constructEnvironment(ri, data, scopeSubstitutions, innerScope, compilationCtx);
                     IRTreeReturn<IntVariable> index = putIndexes.get(ri);
                     if(index != null) {
                         // Check that the put was in the range of the range of the reduction
@@ -929,8 +927,8 @@ public class TraceArrayRestrictions {
 
                     // Construct the environment
                     ScopeChanges s = data.scopeData.get(ifElseAssignmentTask);
-                    innerScope = constructEnvironment(ifElseAssignmentTask, data, scopeSubstitutions,
-                            innerScope, compilationCtx);
+                    innerScope = constructEnvironment(ifElseAssignmentTask, data, scopeSubstitutions, innerScope,
+                            compilationCtx);
 
                     // Construct the guard.
                     switch(d.argPos) {
@@ -1192,7 +1190,7 @@ public class TraceArrayRestrictions {
             switch(scope.getScopeType()) {
                 case IF: {
                     IfScope ifScope = (IfScope) scope;
-                    IRTreeReturn<BooleanVariable>  guardTree = ifScope.guard.getForwardIR(compilationCtx);
+                    IRTreeReturn<BooleanVariable> guardTree = ifScope.guard.getForwardIR(compilationCtx);
                     outerScope = new IfScope(outerScope, guardTree);
 
                     // If we have replaced the old scope remove its substitution
@@ -1209,7 +1207,7 @@ public class TraceArrayRestrictions {
                 }
                 case ELSE: {
                     ElseScope elseScope = (ElseScope) scope;
-                    IRTreeReturn<BooleanVariable>  guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
+                    IRTreeReturn<BooleanVariable> guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
                     guardTree = IRTree.negateBoolean(guardTree);
                     outerScope = new IfScope(outerScope, guardTree);
 
@@ -1293,7 +1291,7 @@ public class TraceArrayRestrictions {
         // created.
         for(Scope scope:substitutions.keySet()) {
             if(scope.getScopeType() == ScopeType.FOR)
-                compilationCtx.addSubstitute(((ForTask)scope).getIndex(), substitutions.get(scope));
+                compilationCtx.addSubstitute(((ForTask) scope).getIndex(), substitutions.get(scope));
             compilationCtx.addScopeSubstitute(scope, outerScope);
         }
 
@@ -1301,7 +1299,7 @@ public class TraceArrayRestrictions {
             switch(scope.getScopeType()) {
                 case IF: {
                     IfScope ifScope = (IfScope) scope;
-                    IRTreeReturn<BooleanVariable>  guardTree = ifScope.guard.getForwardIR(compilationCtx);
+                    IRTreeReturn<BooleanVariable> guardTree = ifScope.guard.getForwardIR(compilationCtx);
                     outerScope = new IfScope(outerScope, guardTree);
 
                     // If we have replaced the old scope remove its substitution
@@ -1318,7 +1316,7 @@ public class TraceArrayRestrictions {
                 }
                 case ELSE: {
                     ElseScope elseScope = (ElseScope) scope;
-                    IRTreeReturn<BooleanVariable>  guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
+                    IRTreeReturn<BooleanVariable> guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
                     guardTree = IRTree.negateBoolean(guardTree);
                     outerScope = new IfScope(outerScope, guardTree);
 
@@ -1363,7 +1361,7 @@ public class TraceArrayRestrictions {
         // Now the scopes are created remove the substitutions.
         for(Scope scope:substitutions.keySet()) {
             if(scope.getScopeType() == ScopeType.FOR)
-                compilationCtx.removeSubstitute(((ForTask)scope).getIndex());
+                compilationCtx.removeSubstitute(((ForTask) scope).getIndex());
             compilationCtx.removeScopeSubstitute(scope);
         }
 
