@@ -1,0 +1,27 @@
+package com.oracle.labs.east.knownErrors;
+
+// simple coin model, but using categorical distribution instead of if statements
+
+public model CoinCategorical(int[] obsE, int[] obsX) {
+    int N = obsX.length; //number of obs in the sample
+    double p = beta(10,100).sample();
+    double[] bias = {1-p, p};
+
+    int[] x = new int[N];
+    int[] e = new int[N];
+    //true positive
+    double q = beta(9,1).sample();
+    //true negative (alarm sounds with probability (1-t), ideally we want q > 1-t for the signal to be informative)
+    double t = beta(9,1).sample();
+    double[][] Prob = {{t, 1-t},{1-q, q}};
+
+    for(int i : [0..N)) {
+        // draw an x
+        x[i] = categorical(bias).sample();
+        //depending on the result of x, draw a value of e
+        e[i] =  categorical(Prob[x[i]]).sample();
+   }
+
+    x.observe(obsX);
+    e.observe(obsE);
+}
