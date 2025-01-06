@@ -64,12 +64,12 @@ public interface ComputedVariable extends HasProbability, Variable {
      * Method to set and fix the value to the value stored as the MAP value for this variable. A boolean is returned to
      * record if it succeeded. The method will not succeed if a MAP value has not been computed for this variable. A MAP
      * value will only be present to set to the variables value if the {@link RetentionPolicy retention policy} for the
-     * variable was set to MAP and {@link Model#inferValues(int, ComputedVariable...) variable inference} was the last
-     * inference operation performed on the model. The retention policy can be set to MAP by either setting the MAP
-     * policy for the whole model and not overriding the policy for this variable, or setting the policy to MAP
-     * specifically for this variable. Retention policies are set via the methods
-     * {@link Model#setDefaultRetentionPolicy(RetentionPolicy) setDefaultRetentionPolicy} for the model and
-     * {@link ComputedVariable#setRetentionPolicy(RetentionPolicy) setRetentionPolicy} for the variable.
+     * variable was set to MAP and {@link org.sandwood.runtime.model.Model#inferValues(int, ComputedVariable...)
+     * variable inference} was the last inference operation performed on the model. The retention policy can be set to
+     * MAP by either setting the MAP policy for the whole model and not overriding the policy for this variable, or
+     * setting the policy to MAP specifically for this variable. Retention policies are set via the methods
+     * {@link org.sandwood.runtime.model.Model#setDefaultRetentionPolicy(RetentionPolicy) setDefaultRetentionPolicy} for
+     * the model and {@link ComputedVariable#setRetentionPolicy(RetentionPolicy) setRetentionPolicy} for the variable.
      * 
      * @return Was the variable set and fixed to the MAP value.
      */
