@@ -89,9 +89,6 @@ interface HMMTestPart3d$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Getter for st2.
 	public int[] get$st2();
 
-	// Setter for st2.
-	public void set$st2(int[] cv$value);
-
 	// Getter for states.
 	public int get$states();
 

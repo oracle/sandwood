@@ -23,9 +23,6 @@ interface ParallelMK3$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Getter for indirection.
 	public double[] get$indirection();
 
-	// Setter for indirection.
-	public void set$indirection(double[] cv$value);
-
 	// Getter for length$observed.
 	public int get$length$observed();
 

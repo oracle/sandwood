@@ -275,8 +275,6 @@ public class Deterministic2 extends Model {
         //ComputedVariables
         if(a.isSet())
             newCore.set$a(oldCore.get$a());
-        if(b.isSet())
-            newCore.set$b(oldCore.get$b());
         if(flips.isSet())
             newCore.set$flips(oldCore.get$flips());
         if(m.isSet())

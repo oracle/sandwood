@@ -35,14 +35,8 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	// Getter for denom.
 	public double get$denom();
 
-	// Setter for denom.
-	public void set$denom(double cv$value);
-
 	// Getter for exped.
 	public double[] get$exped();
-
-	// Setter for exped.
-	public void set$exped(double[] cv$value);
 
 	// Getter for fixedFlag$sample25.
 	public boolean get$fixedFlag$sample25();
@@ -109,9 +103,6 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 
 	// Getter for sum.
 	public double get$sum();
-
-	// Setter for sum.
-	public void set$sum(double cv$value);
 
 	// Getter for ut.
 	public double[] get$ut();

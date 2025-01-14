@@ -49,7 +49,6 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean setFlag$flips = false;
 	private boolean setFlag$m = false;
 	private boolean setFlag$st = false;
-	private boolean setFlag$st2 = false;
 	private int[] st;
 	private int[] st2;
 	private int states;
@@ -312,15 +311,6 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final int[] get$st2() {
 		return st2;
-	}
-
-	// Setter for st2.
-	@Override
-	public final void set$st2(int[] cv$value) {
-		// Set st2 with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		st2 = cv$value;
-		setFlag$st2 = true;
 	}
 
 	// Getter for states.
@@ -1855,12 +1845,9 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		
-		// If st2 has not been set already allocate space.
-		if(!setFlag$st2) {
-			// Constructor for st2
-			{
-				st2 = new int[length$flipsMeasured];
-			}
+		// Constructor for st2
+		{
+			st2 = new int[length$flipsMeasured];
 		}
 		
 		// Constructor for indirection

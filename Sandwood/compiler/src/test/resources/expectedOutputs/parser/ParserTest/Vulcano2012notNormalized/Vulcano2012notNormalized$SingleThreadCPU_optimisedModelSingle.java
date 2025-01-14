@@ -44,9 +44,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$weekly_ut;
 	private int noProducts;
 	private int s;
-	private boolean setFlag$Sales = false;
 	private boolean setFlag$arrivals = false;
-	private boolean setFlag$exped = false;
 	private boolean setFlag$lambda = false;
 	private boolean setFlag$ut = false;
 	private boolean setFlag$weekly_sales = false;
@@ -94,15 +92,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		return Sales;
 	}
 
-	// Setter for Sales.
-	@Override
-	public final void set$Sales(int[][] cv$value) {
-		// Set Sales with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		Sales = cv$value;
-		setFlag$Sales = true;
-	}
-
 	// Getter for T.
 	@Override
 	public final int get$T() {
@@ -134,15 +123,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	// Setter for exped.
-	@Override
-	public final void set$exped(double[] cv$value) {
-		// Set exped with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		exped = cv$value;
-		setFlag$exped = true;
 	}
 
 	// Getter for fixedFlag$sample25.
@@ -1302,10 +1282,8 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 			// Constructor for ut
 			ut = new double[noProducts];
 		
-		// If exped has not been set already allocate space.
-		if(!setFlag$exped)
-			// Constructor for exped
-			exped = new double[noProducts];
+		// Constructor for exped
+		exped = new double[noProducts];
 		
 		// If lambda has not been set already allocate space.
 		if(!setFlag$lambda)
@@ -1317,15 +1295,12 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 			// Constructor for arrivals
 			arrivals = new int[T];
 		
-		// If Sales has not been set already allocate space.
-		if(!setFlag$Sales) {
-			// Constructor for Sales
-			Sales = new int[T][];
-			for(int var54 = 0; var54 < T; var54 += 1)
-				Sales[var54] = new int[noProducts];
-			for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
-				Sales[t$var59] = new int[noProducts];
-		}
+		// Constructor for Sales
+		Sales = new int[T][];
+		for(int var54 = 0; var54 < T; var54 += 1)
+			Sales[var54] = new int[noProducts];
+		for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
+			Sales[t$var59] = new int[noProducts];
 		
 		// Constructor for weekly_rates
 		weekly_rates = new double[T][];

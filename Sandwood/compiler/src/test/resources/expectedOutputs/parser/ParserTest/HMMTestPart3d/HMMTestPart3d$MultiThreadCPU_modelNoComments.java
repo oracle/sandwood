@@ -47,7 +47,6 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean setFlag$flips = false;
 	private boolean setFlag$m = false;
 	private boolean setFlag$st = false;
-	private boolean setFlag$st2 = false;
 	private int[] st;
 	private int[] st2;
 	private int states;
@@ -226,12 +225,6 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final int[] get$st2() {
 		return st2;
-	}
-
-	@Override
-	public final void set$st2(int[] cv$value) {
-		st2 = cv$value;
-		setFlag$st2 = true;
 	}
 
 	@Override
@@ -1142,10 +1135,8 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				st = new int[length$flipsMeasured];
 			}
 		}
-		if(!setFlag$st2) {
-			{
-				st2 = new int[length$flipsMeasured];
-			}
+		{
+			st2 = new int[length$flipsMeasured];
 		}
 		{
 			indirection = new int[((((length$flipsMeasured - 1) - 1) / 1) + 1)][];

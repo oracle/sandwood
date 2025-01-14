@@ -36,7 +36,6 @@ class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$var8;
 	private boolean setFlag$v = false;
 	private boolean setFlag$v2 = false;
-	private boolean setFlag$v3 = false;
 	private int size;
 	private boolean system$gibbsForward = true;
 	private boolean[] v;
@@ -177,12 +176,6 @@ class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final int[] get$v3() {
 		return v3;
-	}
-
-	@Override
-	public final void set$v3(int[] cv$value) {
-		v3 = cv$value;
-		setFlag$v3 = true;
 	}
 
 	@Override
@@ -11610,10 +11603,8 @@ class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				v2 = new int[(length$value + 1)];
 			}
 		}
-		if(!setFlag$v3) {
-			{
-				v3 = new int[(length$value + 1)];
-			}
+		{
+			v3 = new int[(length$value + 1)];
 		}
 		if(!setFlag$v) {
 			{

@@ -29,8 +29,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private int noProducts;
 	private double[] prob;
 	private boolean setFlag$choices = false;
-	private boolean setFlag$exped = false;
-	private boolean setFlag$prob = false;
 	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
@@ -73,15 +71,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	// Setter for exped.
-	@Override
-	public final void set$exped(double[] cv$value) {
-		// Set exped with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		exped = cv$value;
-		setFlag$exped = true;
 	}
 
 	// Getter for fixedFlag$sample19.
@@ -202,25 +191,10 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		return prob;
 	}
 
-	// Setter for prob.
-	@Override
-	public final void set$prob(double[] cv$value) {
-		// Set prob with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		prob = cv$value;
-		setFlag$prob = true;
-	}
-
 	// Getter for sum.
 	@Override
 	public final double get$sum() {
 		return sum;
-	}
-
-	// Setter for sum.
-	@Override
-	public final void set$sum(double cv$value) {
-		sum = cv$value;
 	}
 
 	// Getter for ut.
@@ -730,15 +704,11 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Constructor for ut
 			ut = new double[noProducts];
 		
-		// If exped has not been set already allocate space.
-		if(!setFlag$exped)
-			// Constructor for exped
-			exped = new double[noProducts];
+		// Constructor for exped
+		exped = new double[noProducts];
 		
-		// If prob has not been set already allocate space.
-		if(!setFlag$prob)
-			// Constructor for prob
-			prob = new double[noProducts];
+		// Constructor for prob
+		prob = new double[noProducts];
 		
 		// If choices has not been set already allocate space.
 		if(!setFlag$choices)

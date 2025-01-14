@@ -11,9 +11,6 @@ interface Deterministic2$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Getter for b.
 	public int[] get$b();
 
-	// Setter for b.
-	public void set$b(int[] cv$value);
-
 	// Getter for fixedFlag$sample18.
 	public boolean get$fixedFlag$sample18();
 

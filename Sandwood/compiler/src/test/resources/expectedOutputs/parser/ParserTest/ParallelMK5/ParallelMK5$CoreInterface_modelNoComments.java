@@ -10,7 +10,6 @@ interface ParallelMK5$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[][] get$indirection1();
 	public void set$indirection1(double[][] cv$value);
 	public double[][] get$indirection2();
-	public void set$indirection2(double[][] cv$value);
 	public int get$length$observed();
 	public void set$length$observed(int cv$value);
 	public double get$logProbability$generated();

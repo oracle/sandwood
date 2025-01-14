@@ -23,7 +23,6 @@ interface DistributionTest5$CoreInterface extends org.sandwood.runtime.internal.
 	public int[] get$v2();
 	public void set$v2(int[] cv$value);
 	public int[] get$v3();
-	public void set$v3(int[] cv$value);
 	public boolean[] get$value();
 	public void set$value(boolean[] cv$value);
 	public double[] get$weightings();

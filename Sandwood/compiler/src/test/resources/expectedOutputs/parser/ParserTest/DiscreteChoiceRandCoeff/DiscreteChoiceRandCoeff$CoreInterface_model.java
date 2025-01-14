@@ -95,9 +95,6 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	// Getter for prob.
 	public double[][] get$prob();
 
-	// Setter for prob.
-	public void set$prob(double[][] cv$value);
-
 	// Getter for sigma.
 	public double get$sigma();
 

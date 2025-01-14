@@ -43,7 +43,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private int s;
 	private boolean setFlag$Sales = false;
 	private boolean setFlag$arrivals = false;
-	private boolean setFlag$exped = false;
 	private boolean setFlag$lambda = false;
 	private boolean setFlag$ut = false;
 	private double sum;
@@ -112,19 +111,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$denom(double cv$value) {
-		denom = cv$value;
-	}
-
-	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	@Override
-	public final void set$exped(double[] cv$value) {
-		exped = cv$value;
-		setFlag$exped = true;
 	}
 
 	@Override
@@ -253,11 +241,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double get$sum() {
 		return sum;
-	}
-
-	@Override
-	public final void set$sum(double cv$value) {
-		sum = cv$value;
 	}
 
 	@Override
@@ -505,8 +488,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void allocator() {
 		if(!setFlag$ut)
 			ut = new double[noProducts];
-		if(!setFlag$exped)
-			exped = new double[noProducts];
+		exped = new double[noProducts];
 		if(!setFlag$lambda)
 			lambda = new double[T];
 		if(!setFlag$arrivals)

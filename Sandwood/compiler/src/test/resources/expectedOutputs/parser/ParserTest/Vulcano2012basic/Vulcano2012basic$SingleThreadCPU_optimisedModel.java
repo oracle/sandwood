@@ -45,7 +45,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private int s;
 	private boolean setFlag$Sales = false;
 	private boolean setFlag$arrivals = false;
-	private boolean setFlag$exped = false;
 	private boolean setFlag$lambda = false;
 	private boolean setFlag$ut = false;
 	private double sum;
@@ -132,25 +131,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		return denom;
 	}
 
-	// Setter for denom.
-	@Override
-	public final void set$denom(double cv$value) {
-		denom = cv$value;
-	}
-
 	// Getter for exped.
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	// Setter for exped.
-	@Override
-	public final void set$exped(double[] cv$value) {
-		// Set exped with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		exped = cv$value;
-		setFlag$exped = true;
 	}
 
 	// Getter for fixedFlag$sample25.
@@ -348,12 +332,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double get$sum() {
 		return sum;
-	}
-
-	// Setter for sum.
-	@Override
-	public final void set$sum(double cv$value) {
-		sum = cv$value;
 	}
 
 	// Getter for ut.
@@ -1342,10 +1320,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Constructor for ut
 			ut = new double[noProducts];
 		
-		// If exped has not been set already allocate space.
-		if(!setFlag$exped)
-			// Constructor for exped
-			exped = new double[noProducts];
+		// Constructor for exped
+		exped = new double[noProducts];
 		
 		// If lambda has not been set already allocate space.
 		if(!setFlag$lambda)

@@ -25,7 +25,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] observed;
 	private double[] sample;
 	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
 	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -93,15 +92,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final double[] get$indirection() {
 		return indirection;
-	}
-
-	// Setter for indirection.
-	@Override
-	public final void set$indirection(double[] cv$value) {
-		// Set indirection with flag to mark that it has been set so another array doesn't
-		// need to be constructed
-		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	// Getter for length$observed.
@@ -762,12 +752,9 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 		}
 		
-		// If indirection has not been set already allocate space.
-		if(!setFlag$indirection) {
-			// Constructor for indirection
-			{
-				indirection = new double[length$observed];
-			}
+		// Constructor for indirection
+		{
+			indirection = new double[length$observed];
 		}
 		
 		// Constructor for v

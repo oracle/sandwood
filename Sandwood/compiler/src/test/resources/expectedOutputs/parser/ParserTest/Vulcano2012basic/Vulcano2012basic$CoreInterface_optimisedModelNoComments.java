@@ -12,9 +12,7 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	public int[] get$arrivals();
 	public void set$arrivals(int[] cv$value);
 	public double get$denom();
-	public void set$denom(double cv$value);
 	public double[] get$exped();
-	public void set$exped(double[] cv$value);
 	public boolean get$fixedFlag$sample25();
 	public void set$fixedFlag$sample25(boolean cv$value);
 	public boolean get$fixedFlag$sample53();
@@ -37,7 +35,6 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	public int get$s();
 	public void set$s(int cv$value);
 	public double get$sum();
-	public void set$sum(double cv$value);
 	public double[] get$ut();
 	public void set$ut(double[] cv$value);
 	public void logEvidenceGeneration();

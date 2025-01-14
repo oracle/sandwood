@@ -8,7 +8,6 @@ interface ParallelMK3$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[] get$generated();
 	public void set$generated(double[] cv$value);
 	public double[] get$indirection();
-	public void set$indirection(double[] cv$value);
 	public int get$length$observed();
 	public void set$length$observed(int cv$value);
 	public double get$logProbability$generated();

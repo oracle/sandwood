@@ -24,7 +24,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private int[] observed;
 	private boolean setFlag$generated = false;
 	private boolean setFlag$indirection1 = false;
-	private boolean setFlag$indirection2 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK4$SingleThreadCPU(ExecutionTarget target) {
@@ -79,12 +78,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final double[][] get$indirection2() {
 		return indirection2;
-	}
-
-	@Override
-	public final void set$indirection2(double[][] cv$value) {
-		indirection2 = cv$value;
-		setFlag$indirection2 = true;
 	}
 
 	@Override
@@ -430,12 +423,10 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					indirection1[var11] = new double[10];
 			}
 		}
-		if(!setFlag$indirection2) {
-			{
-				indirection2 = new double[length$observed][];
-				for(int var19 = 0; var19 < length$observed; var19 += 1)
-					indirection2[var19] = new double[10];
-			}
+		{
+			indirection2 = new double[length$observed][];
+			for(int var19 = 0; var19 < length$observed; var19 += 1)
+				indirection2[var19] = new double[10];
 		}
 		{
 			logProbability$var33 = new double[((((length$observed - 1) - 0) / 1) + 1)][];

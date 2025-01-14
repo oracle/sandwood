@@ -22,10 +22,11 @@ public class Flip1CoinMK12 extends Model {
         public double getValue() { return system$c.get$bias(); }
 
         @Override
-        protected void setValueInternal(double value) {
-            system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable bias.");
         }
 
         @Override
@@ -259,8 +260,6 @@ public class Flip1CoinMK12 extends Model {
             newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
         if(flips.isSet())
             newCore.set$flips(oldCore.get$flips());
 

@@ -30,7 +30,6 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var78;
 	private double q;
 	private int samples;
-	private boolean setFlag$bias = false;
 	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double t;
@@ -67,15 +66,6 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final double[][][] get$bias() {
 		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double[][][] cv$value) {
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		bias = cv$value;
-		setFlag$bias = true;
 	}
 
 	// Getter for c.
@@ -1222,19 +1212,16 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
-			// Constructor for bias
-			bias = new double[2][][];
-			double[][] subarray$0 = new double[2][];
-			bias[0] = subarray$0;
-			subarray$0[0] = new double[2];
-			subarray$0[1] = new double[2];
-			double[][] subarray$1 = new double[2][];
-			bias[1] = subarray$1;
-			subarray$1[0] = new double[2];
-			subarray$1[1] = new double[2];
-		}
+		// Constructor for bias
+		bias = new double[2][][];
+		double[][] subarray$0 = new double[2][];
+		bias[0] = subarray$0;
+		subarray$0[0] = new double[2];
+		subarray$0[1] = new double[2];
+		double[][] subarray$1 = new double[2][];
+		bias[1] = subarray$1;
+		subarray$1[0] = new double[2];
+		subarray$1[1] = new double[2];
 		
 		// If flips has not been set already allocate space.
 		if(!setFlag$flips)

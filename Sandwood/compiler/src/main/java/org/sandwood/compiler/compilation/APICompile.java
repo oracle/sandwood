@@ -657,7 +657,7 @@ public class APICompile {
             boolean isSubArray = v.getType().isArray() && ((ArrayVariable<?>) v).isSubArray();
             boolean isModelInput = v.getParent().getType() == DFType.CONSTRUCT_INPUT;
             if((v.isIntermediate() || (v.isSample() && !isSubArray)) && !isModelInput) {
-                boolean setter = !v.isPrivate() && !v.isDeterministic();
+                boolean setter = !v.isPrivate() && !v.isDeterministic() && setBySampleValue(v);
                 compilationCtx.addConstructedClassField(v, !v.isPrivate(), setter, compilationCtx);
                 // TODO decide if the setflag and the fixed flag should be merged into a single flag.
                 if(setter && (v.getType().isArray() || v.scope() != GlobalScope.scope)) {

@@ -2,7 +2,6 @@ package org.sandwood.compiler.tests.parser;
 
 interface Flip1CoinMK12$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double get$bias();
-	public void set$bias(double cv$value);
 	public boolean get$fixedFlag$sample15();
 	public void set$fixedFlag$sample15(boolean cv$value);
 	public boolean get$fixedFlag$sample24();

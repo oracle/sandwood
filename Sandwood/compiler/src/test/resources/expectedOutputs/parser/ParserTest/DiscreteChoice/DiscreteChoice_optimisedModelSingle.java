@@ -333,12 +333,6 @@ public class DiscreteChoice extends Model {
         //ComputedVariables
         if(choices.isSet())
             newCore.set$choices(oldCore.get$choices());
-        if(exped.isSet())
-            newCore.set$exped(oldCore.get$exped());
-        if(prob.isSet())
-            newCore.set$prob(oldCore.get$prob());
-        if(sum.isSet())
-            newCore.set$sum(oldCore.get$sum());
         if(ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 

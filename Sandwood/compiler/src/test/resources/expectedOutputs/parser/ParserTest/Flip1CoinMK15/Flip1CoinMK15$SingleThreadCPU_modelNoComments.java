@@ -48,11 +48,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
-		bias = cv$value;
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample12() {
 		return fixedFlag$sample12;
 	}

@@ -49,7 +49,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double[][] prob;
 	private boolean setFlag$beta = false;
 	private boolean setFlag$choices = false;
-	private boolean setFlag$prob = false;
 	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
@@ -329,15 +328,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final double[][] get$prob() {
 		return prob;
-	}
-
-	// Setter for prob.
-	@Override
-	public final void set$prob(double[][] cv$value) {
-		// Set prob with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		prob = cv$value;
-		setFlag$prob = true;
 	}
 
 	// Getter for sigma.
@@ -1812,13 +1802,10 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		for(int i = 0; i < noObs; i += 1)
 			exped[i] = new double[noProducts];
 		
-		// If prob has not been set already allocate space.
-		if(!setFlag$prob) {
-			// Constructor for prob
-			prob = new double[noObs][];
-			for(int i = 0; i < noObs; i += 1)
-				prob[i] = new double[noProducts];
-		}
+		// Constructor for prob
+		prob = new double[noObs][];
+		for(int i = 0; i < noObs; i += 1)
+			prob[i] = new double[noProducts];
 		
 		// Constructor for logProbability$sample22
 		logProbability$sample22 = new double[noProducts];

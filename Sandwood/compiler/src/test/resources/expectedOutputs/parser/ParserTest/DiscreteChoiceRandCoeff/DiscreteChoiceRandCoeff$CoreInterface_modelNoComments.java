@@ -32,7 +32,6 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	public int get$noProducts();
 	public void set$noProducts(int cv$value);
 	public double[][] get$prob();
-	public void set$prob(double[][] cv$value);
 	public double get$sigma();
 	public void set$sigma(double cv$value);
 	public double[] get$ut();
