@@ -43,9 +43,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$weekly_ut;
 	private int noProducts;
 	private int s;
-	private boolean setFlag$Sales = false;
 	private boolean setFlag$arrivals = false;
-	private boolean setFlag$exped = false;
 	private boolean setFlag$lambda = false;
 	private boolean setFlag$ut = false;
 	private boolean setFlag$weekly_sales = false;
@@ -85,12 +83,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void set$Sales(int[][] cv$value) {
-		Sales = cv$value;
-		setFlag$Sales = true;
-	}
-
-	@Override
 	public final int get$T() {
 		return T;
 	}
@@ -114,12 +106,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	@Override
-	public final void set$exped(double[] cv$value) {
-		exped = cv$value;
-		setFlag$exped = true;
 	}
 
 	@Override
@@ -1232,10 +1218,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 				ut = new double[noProducts];
 			}
 		}
-		if(!setFlag$exped) {
-			{
-				exped = new double[noProducts];
-			}
+		{
+			exped = new double[noProducts];
 		}
 		if(!setFlag$lambda) {
 			{
@@ -1247,14 +1231,12 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 				arrivals = new int[T];
 			}
 		}
-		if(!setFlag$Sales) {
-			{
-				Sales = new int[T][];
-				for(int var54 = 0; var54 < T; var54 += 1)
-					Sales[var54] = new int[noProducts];
-				for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
-					Sales[t$var59] = new int[noProducts];
-			}
+		{
+			Sales = new int[T][];
+			for(int var54 = 0; var54 < T; var54 += 1)
+				Sales[var54] = new int[noProducts];
+			for(int t$var59 = 0; t$var59 < T; t$var59 += 1)
+				Sales[t$var59] = new int[noProducts];
 		}
 		{
 			weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];

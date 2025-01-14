@@ -17,9 +17,6 @@ interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Getter for exped.
 	public double[] get$exped();
 
-	// Setter for exped.
-	public void set$exped(double[] cv$value);
-
 	// Getter for fixedFlag$sample19.
 	public boolean get$fixedFlag$sample19();
 
@@ -62,14 +59,8 @@ interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Getter for prob.
 	public double[] get$prob();
 
-	// Setter for prob.
-	public void set$prob(double[] cv$value);
-
 	// Getter for sum.
 	public double get$sum();
-
-	// Setter for sum.
-	public void set$sum(double cv$value);
 
 	// Getter for ut.
 	public double[] get$ut();

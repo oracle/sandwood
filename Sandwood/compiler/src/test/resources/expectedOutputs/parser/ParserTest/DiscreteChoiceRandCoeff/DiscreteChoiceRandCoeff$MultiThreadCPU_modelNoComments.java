@@ -48,7 +48,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	private double[][] prob;
 	private boolean setFlag$beta = false;
 	private boolean setFlag$choices = false;
-	private boolean setFlag$prob = false;
 	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
@@ -232,12 +231,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final double[][] get$prob() {
 		return prob;
-	}
-
-	@Override
-	public final void set$prob(double[][] cv$value) {
-		prob = cv$value;
-		setFlag$prob = true;
 	}
 
 	@Override
@@ -1524,12 +1517,10 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int i = 0; i < noObs; i += 1)
 				exped[((i - 0) / 1)] = new double[noProducts];
 		}
-		if(!setFlag$prob) {
-			{
-				prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
-				for(int i = 0; i < noObs; i += 1)
-					prob[((i - 0) / 1)] = new double[noProducts];
-			}
+		{
+			prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
+			for(int i = 0; i < noObs; i += 1)
+				prob[((i - 0) / 1)] = new double[noProducts];
 		}
 		{
 			logProbability$sample22 = new double[((((noProducts - 1) - 0) / 1) + 1)];

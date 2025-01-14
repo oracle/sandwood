@@ -28,7 +28,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var38;
 	private double q;
 	private int samples;
-	private boolean setFlag$bias = false;
 	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double t;
@@ -60,12 +59,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final double[][] get$bias() {
 		return bias;
-	}
-
-	@Override
-	public final void set$bias(double[][] cv$value) {
-		bias = cv$value;
-		setFlag$bias = true;
 	}
 
 	@Override
@@ -282,10 +275,8 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$bias) {
-			bias = new double[1][];
-			bias[0] = new double[2];
-		}
+		bias = new double[1][];
+		bias[0] = new double[2];
 		if(!setFlag$flips)
 			flips = new boolean[samples];
 	}

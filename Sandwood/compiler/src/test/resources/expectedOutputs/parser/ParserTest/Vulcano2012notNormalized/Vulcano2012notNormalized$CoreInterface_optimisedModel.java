@@ -17,9 +17,6 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 	// Getter for Sales.
 	public int[][] get$Sales();
 
-	// Setter for Sales.
-	public void set$Sales(int[][] cv$value);
-
 	// Getter for T.
 	public int get$T();
 
@@ -34,9 +31,6 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 
 	// Getter for exped.
 	public double[] get$exped();
-
-	// Setter for exped.
-	public void set$exped(double[] cv$value);
 
 	// Getter for fixedFlag$sample25.
 	public boolean get$fixedFlag$sample25();

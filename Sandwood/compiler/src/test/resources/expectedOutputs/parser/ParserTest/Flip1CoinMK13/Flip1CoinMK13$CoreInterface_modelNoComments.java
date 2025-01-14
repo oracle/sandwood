@@ -4,7 +4,6 @@ interface Flip1CoinMK13$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$b();
 	public void set$b(double cv$value);
 	public double get$bias();
-	public void set$bias(double cv$value);
 	public boolean get$fixedFlag$sample13();
 	public void set$fixedFlag$sample13(boolean cv$value);
 	public boolean get$fixedFlag$sample29();

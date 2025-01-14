@@ -27,8 +27,6 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private int noProducts;
 	private double[] prob;
 	private boolean setFlag$choices = false;
-	private boolean setFlag$exped = false;
-	private boolean setFlag$prob = false;
 	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
@@ -62,12 +60,6 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	@Override
-	public final void set$exped(double[] cv$value) {
-		exped = cv$value;
-		setFlag$exped = true;
 	}
 
 	@Override
@@ -154,19 +146,8 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void set$prob(double[] cv$value) {
-		prob = cv$value;
-		setFlag$prob = true;
-	}
-
-	@Override
 	public final double get$sum() {
 		return sum;
-	}
-
-	@Override
-	public final void set$sum(double cv$value) {
-		sum = cv$value;
 	}
 
 	@Override
@@ -302,10 +283,8 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	public final void allocator() {
 		if(!setFlag$ut)
 			ut = new double[noProducts];
-		if(!setFlag$exped)
-			exped = new double[noProducts];
-		if(!setFlag$prob)
-			prob = new double[noProducts];
+		exped = new double[noProducts];
+		prob = new double[noProducts];
 		if(!setFlag$choices)
 			choices = new int[noObs];
 		logProbability$var17 = new double[(noProducts - 1)];

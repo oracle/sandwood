@@ -36,7 +36,6 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double[][] m;
 	private int n;
 	private boolean setFlag$a = false;
-	private boolean setFlag$b = false;
 	private boolean setFlag$flips = false;
 	private boolean setFlag$m = false;
 	private int states;
@@ -66,15 +65,6 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final int[] get$b() {
 		return b;
-	}
-
-	// Setter for b.
-	@Override
-	public final void set$b(int[] cv$value) {
-		// Set b with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		b = cv$value;
-		setFlag$b = true;
 	}
 
 	// Getter for fixedFlag$sample18.
@@ -1957,12 +1947,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			}
 		}
 		
-		// If b has not been set already allocate space.
-		if(!setFlag$b) {
-			// Constructor for b
-			{
-				b = new int[n];
-			}
+		// Constructor for b
+		{
+			b = new int[n];
 		}
 		
 		// If flips has not been set already allocate space.

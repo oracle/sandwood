@@ -460,14 +460,8 @@ public class Vulcano2012basic extends Model {
             newCore.set$Sales(oldCore.get$Sales());
         if(arrivals.isSet())
             newCore.set$arrivals(oldCore.get$arrivals());
-        if(denom.isSet())
-            newCore.set$denom(oldCore.get$denom());
-        if(exped.isSet())
-            newCore.set$exped(oldCore.get$exped());
         if(lambda.isSet())
             newCore.set$lambda(oldCore.get$lambda());
-        if(sum.isSet())
-            newCore.set$sum(oldCore.get$sum());
         if(ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 

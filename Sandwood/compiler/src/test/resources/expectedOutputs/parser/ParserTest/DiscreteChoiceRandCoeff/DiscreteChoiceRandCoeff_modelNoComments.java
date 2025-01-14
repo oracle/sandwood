@@ -405,8 +405,6 @@ public class DiscreteChoiceRandCoeff extends Model {
             newCore.set$beta(oldCore.get$beta());
         if(choices.isSet())
             newCore.set$choices(oldCore.get$choices());
-        if(prob.isSet())
-            newCore.set$prob(oldCore.get$prob());
         if(sigma.isSet())
             newCore.set$sigma(oldCore.get$sigma());
         if(ut.isSet())

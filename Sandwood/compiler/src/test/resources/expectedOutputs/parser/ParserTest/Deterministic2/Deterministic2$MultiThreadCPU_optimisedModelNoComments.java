@@ -35,7 +35,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[][] m;
 	private int n;
 	private boolean setFlag$a = false;
-	private boolean setFlag$b = false;
 	private boolean setFlag$flips = false;
 	private boolean setFlag$m = false;
 	private boolean system$gibbsForward = true;
@@ -59,12 +58,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int[] get$b() {
 		return b;
-	}
-
-	@Override
-	public final void set$b(int[] cv$value) {
-		b = cv$value;
-		setFlag$b = true;
 	}
 
 	@Override
@@ -519,8 +512,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		if(!setFlag$a)
 			a = new int[n];
-		if(!setFlag$b)
-			b = new int[n];
+		b = new int[n];
 		if(!setFlag$flips)
 			flips = new boolean[n];
 		distribution$sample36 = new double[(n - 1)][];

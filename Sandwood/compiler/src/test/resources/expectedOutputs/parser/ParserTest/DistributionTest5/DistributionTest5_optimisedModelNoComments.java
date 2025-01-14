@@ -305,8 +305,6 @@ public class DistributionTest5 extends Model {
             newCore.set$v1(oldCore.get$v1());
         if(v2.isSet())
             newCore.set$v2(oldCore.get$v2());
-        if(v3.isSet())
-            newCore.set$v3(oldCore.get$v3());
 
         //Set fixed flags
         if(v.isSet())

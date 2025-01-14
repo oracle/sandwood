@@ -240,8 +240,6 @@ public class ParallelMK4 extends Model {
             newCore.set$generated(oldCore.get$generated());
         if(indirection1.isSet())
             newCore.set$indirection1(oldCore.get$indirection1());
-        if(indirection2.isSet())
-            newCore.set$indirection2(oldCore.get$indirection2());
 
         //Set fixed flags
         if(generated.isSet())

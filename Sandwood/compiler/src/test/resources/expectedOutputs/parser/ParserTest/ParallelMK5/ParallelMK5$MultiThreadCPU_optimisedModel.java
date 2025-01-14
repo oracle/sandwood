@@ -27,7 +27,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private int[] observed;
 	private boolean setFlag$generated = false;
 	private boolean setFlag$indirection1 = false;
-	private boolean setFlag$indirection2 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK5$MultiThreadCPU(ExecutionTarget target) {
@@ -114,15 +113,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final double[][] get$indirection2() {
 		return indirection2;
-	}
-
-	// Setter for indirection2.
-	@Override
-	public final void set$indirection2(double[][] cv$value) {
-		// Set indirection2 with flag to mark that it has been set so another array doesn't
-		// need to be constructed
-		indirection2 = cv$value;
-		setFlag$indirection2 = true;
 	}
 
 	// Getter for length$observed.
@@ -502,13 +492,10 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				indirection1[var11] = new double[length$observed];
 		}
 		
-		// If indirection2 has not been set already allocate space.
-		if(!setFlag$indirection2) {
-			// Constructor for indirection2
-			indirection2 = new double[length$observed][];
-			for(int var19 = 0; var19 < length$observed; var19 += 1)
-				indirection2[var19] = new double[10];
-		}
+		// Constructor for indirection2
+		indirection2 = new double[length$observed][];
+		for(int var19 = 0; var19 < length$observed; var19 += 1)
+			indirection2[var19] = new double[10];
 		
 		// Constructor for logProbability$var33
 		logProbability$var33 = new double[10][];

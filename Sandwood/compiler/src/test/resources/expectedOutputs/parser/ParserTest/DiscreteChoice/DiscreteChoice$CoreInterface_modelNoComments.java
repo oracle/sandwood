@@ -6,7 +6,6 @@ interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.mod
 	public int[] get$choices();
 	public void set$choices(int[] cv$value);
 	public double[] get$exped();
-	public void set$exped(double[] cv$value);
 	public boolean get$fixedFlag$sample19();
 	public void set$fixedFlag$sample19(boolean cv$value);
 	public boolean get$fixedFlag$sample49();
@@ -21,9 +20,7 @@ interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.mod
 	public int get$noProducts();
 	public void set$noProducts(int cv$value);
 	public double[] get$prob();
-	public void set$prob(double[] cv$value);
 	public double get$sum();
-	public void set$sum(double cv$value);
 	public double[] get$ut();
 	public void set$ut(double[] cv$value);
 	public void logEvidenceGeneration();

@@ -291,8 +291,6 @@ public class Flip1CoinMK13 extends Model {
         //ComputedVariables
         if(b.isSet())
             newCore.set$b(oldCore.get$b());
-        if(bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
         if(flips.isSet())
             newCore.set$flips(oldCore.get$flips());
 

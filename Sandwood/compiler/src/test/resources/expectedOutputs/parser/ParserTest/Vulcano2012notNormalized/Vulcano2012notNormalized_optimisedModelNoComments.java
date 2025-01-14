@@ -383,12 +383,8 @@ public class Vulcano2012notNormalized extends Model {
             newCore.set$ObsSales(oldCore.get$ObsSales());
 
         //ComputedVariables
-        if(Sales.isSet())
-            newCore.set$Sales(oldCore.get$Sales());
         if(arrivals.isSet())
             newCore.set$arrivals(oldCore.get$arrivals());
-        if(exped.isSet())
-            newCore.set$exped(oldCore.get$exped());
         if(lambda.isSet())
             newCore.set$lambda(oldCore.get$lambda());
         if(ut.isSet())

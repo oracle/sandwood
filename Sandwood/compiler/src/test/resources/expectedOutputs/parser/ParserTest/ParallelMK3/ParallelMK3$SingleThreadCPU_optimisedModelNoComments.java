@@ -23,7 +23,6 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] observed;
 	private double[] sample;
 	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
 	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -69,12 +68,6 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final double[] get$indirection() {
 		return indirection;
-	}
-
-	@Override
-	public final void set$indirection(double[] cv$value) {
-		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	@Override
@@ -272,8 +265,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void allocator() {
 		if(!setFlag$generated)
 			generated = new double[length$observed];
-		if(!setFlag$indirection)
-			indirection = new double[length$observed];
+		indirection = new double[length$observed];
 		v = new double[10];
 		if(!setFlag$sample)
 			sample = new double[10];

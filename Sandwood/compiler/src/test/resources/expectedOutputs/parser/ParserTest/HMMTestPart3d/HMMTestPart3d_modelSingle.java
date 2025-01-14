@@ -321,8 +321,6 @@ public class HMMTestPart3d extends Model {
             newCore.set$m(oldCore.get$m());
         if(st.isSet())
             newCore.set$st(oldCore.get$st());
-        if(st2.isSet())
-            newCore.set$st2(oldCore.get$st2());
 
         //Set fixed flags
         if(bias.isSet())

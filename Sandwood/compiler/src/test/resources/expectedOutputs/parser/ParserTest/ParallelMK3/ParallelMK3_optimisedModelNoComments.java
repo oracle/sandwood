@@ -228,8 +228,6 @@ public class ParallelMK3 extends Model {
         //ComputedVariables
         if(generated.isSet())
             newCore.set$generated(oldCore.get$generated());
-        if(indirection.isSet())
-            newCore.set$indirection(oldCore.get$indirection());
         if(sample.isSet())
             newCore.set$sample(oldCore.get$sample());
 

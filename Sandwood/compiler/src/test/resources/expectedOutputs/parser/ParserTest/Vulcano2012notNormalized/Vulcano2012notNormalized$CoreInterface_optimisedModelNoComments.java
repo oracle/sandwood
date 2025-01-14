@@ -6,13 +6,11 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 	public int[][] get$ObsSales();
 	public void set$ObsSales(int[][] cv$value);
 	public int[][] get$Sales();
-	public void set$Sales(int[][] cv$value);
 	public int get$T();
 	public void set$T(int cv$value);
 	public int[] get$arrivals();
 	public void set$arrivals(int[] cv$value);
 	public double[] get$exped();
-	public void set$exped(double[] cv$value);
 	public boolean get$fixedFlag$sample25();
 	public void set$fixedFlag$sample25(boolean cv$value);
 	public boolean get$fixedFlag$sample43();

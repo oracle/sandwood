@@ -29,9 +29,6 @@ interface ParallelMK4$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Getter for indirection2.
 	public double[][] get$indirection2();
 
-	// Setter for indirection2.
-	public void set$indirection2(double[][] cv$value);
-
 	// Getter for length$observed.
 	public int get$length$observed();
 
