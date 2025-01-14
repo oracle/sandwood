@@ -2,17 +2,17 @@ package org.sandwood.compiler.tests.parser;
 
 interface HMMMetrics2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 
-	// Getter for fixedFlag$sample100.
-	public boolean get$fixedFlag$sample100();
+	// Getter for fixedFlag$sample104.
+	public boolean get$fixedFlag$sample104();
 
-	// Setter for fixedFlag$sample100.
-	public void set$fixedFlag$sample100(boolean cv$value);
+	// Setter for fixedFlag$sample104.
+	public void set$fixedFlag$sample104(boolean cv$value);
 
-	// Getter for fixedFlag$sample109.
-	public boolean get$fixedFlag$sample109();
+	// Getter for fixedFlag$sample113.
+	public boolean get$fixedFlag$sample113();
 
-	// Setter for fixedFlag$sample109.
-	public void set$fixedFlag$sample109(boolean cv$value);
+	// Setter for fixedFlag$sample113.
+	public void set$fixedFlag$sample113(boolean cv$value);
 
 	// Getter for fixedFlag$sample23.
 	public boolean get$fixedFlag$sample23();
@@ -26,35 +26,35 @@ interface HMMMetrics2$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Setter for fixedFlag$sample29.
 	public void set$fixedFlag$sample29(boolean cv$value);
 
-	// Getter for fixedFlag$sample41.
-	public boolean get$fixedFlag$sample41();
+	// Getter for fixedFlag$sample42.
+	public boolean get$fixedFlag$sample42();
 
-	// Setter for fixedFlag$sample41.
-	public void set$fixedFlag$sample41(boolean cv$value);
+	// Setter for fixedFlag$sample42.
+	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample50.
-	public boolean get$fixedFlag$sample50();
+	// Getter for fixedFlag$sample51.
+	public boolean get$fixedFlag$sample51();
 
-	// Setter for fixedFlag$sample50.
-	public void set$fixedFlag$sample50(boolean cv$value);
+	// Setter for fixedFlag$sample51.
+	public void set$fixedFlag$sample51(boolean cv$value);
 
-	// Getter for fixedFlag$sample59.
-	public boolean get$fixedFlag$sample59();
+	// Getter for fixedFlag$sample60.
+	public boolean get$fixedFlag$sample60();
 
-	// Setter for fixedFlag$sample59.
-	public void set$fixedFlag$sample59(boolean cv$value);
+	// Setter for fixedFlag$sample60.
+	public void set$fixedFlag$sample60(boolean cv$value);
 
-	// Getter for fixedFlag$sample73.
-	public boolean get$fixedFlag$sample73();
+	// Getter for fixedFlag$sample75.
+	public boolean get$fixedFlag$sample75();
 
-	// Setter for fixedFlag$sample73.
-	public void set$fixedFlag$sample73(boolean cv$value);
+	// Setter for fixedFlag$sample75.
+	public void set$fixedFlag$sample75(boolean cv$value);
 
-	// Getter for fixedFlag$sample86.
-	public boolean get$fixedFlag$sample86();
+	// Getter for fixedFlag$sample88.
+	public boolean get$fixedFlag$sample88();
 
-	// Setter for fixedFlag$sample86.
-	public void set$fixedFlag$sample86(boolean cv$value);
+	// Setter for fixedFlag$sample88.
+	public void set$fixedFlag$sample88(boolean cv$value);
 
 	// Getter for initialStateDistribution.
 	public double[] get$initialStateDistribution();

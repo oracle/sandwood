@@ -72,18 +72,18 @@ public class ClassName extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample46(fixed);
-                system$c.set$fixedFlag$sample56(fixed);
+                system$c.set$fixedFlag$sample47(fixed);
+                system$c.set$fixedFlag$sample58(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample46 = system$c.get$fixedFlag$sample46();
-            boolean fixedFlag$sample56 = system$c.get$fixedFlag$sample56();
-            if(fixedFlag$sample46 && fixedFlag$sample56)
+            boolean fixedFlag$sample47 = system$c.get$fixedFlag$sample47();
+            boolean fixedFlag$sample58 = system$c.get$fixedFlag$sample58();
+            if(fixedFlag$sample47 && fixedFlag$sample58)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample46 || fixedFlag$sample56)
+            else if(fixedFlag$sample47 || fixedFlag$sample58)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -233,8 +233,8 @@ public class ClassName extends Model {
         if(bias.isSet())
             newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
         if(flips.isSet()){
-            newCore.set$fixedFlag$sample46(oldCore.get$fixedFlag$sample46());
-            newCore.set$fixedFlag$sample56(oldCore.get$fixedFlag$sample56());
+            newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
+            newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
         }
     }
 

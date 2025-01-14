@@ -7,10 +7,10 @@ interface Deterministic2$CoreInterface extends org.sandwood.runtime.internal.mod
 	public void set$b(int[] cv$value);
 	public boolean get$fixedFlag$sample18();
 	public void set$fixedFlag$sample18(boolean cv$value);
-	public boolean get$fixedFlag$sample35();
-	public void set$fixedFlag$sample35(boolean cv$value);
-	public boolean get$fixedFlag$sample48();
-	public void set$fixedFlag$sample48(boolean cv$value);
+	public boolean get$fixedFlag$sample36();
+	public void set$fixedFlag$sample36(boolean cv$value);
+	public boolean get$fixedFlag$sample49();
+	public void set$fixedFlag$sample49(boolean cv$value);
 	public boolean[] get$flips();
 	public void set$flips(boolean[] cv$value);
 	public boolean[] get$flipsMeasured();

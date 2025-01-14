@@ -34,13 +34,13 @@ public class Vulcano2012basicDG extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample89(fixed);
+                system$c.set$fixedFlag$sample90(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample89())
+            if(system$c.get$fixedFlag$sample90())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class Vulcano2012basicDG extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample87(fixed);
+                system$c.set$fixedFlag$sample88(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample87())
+            if(system$c.get$fixedFlag$sample88())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -189,9 +189,9 @@ public class Vulcano2012basicDG extends Model {
 
         //Set fixed flags
         if(arrivals.isSet())
-            newCore.set$fixedFlag$sample89(oldCore.get$fixedFlag$sample89());
+            newCore.set$fixedFlag$sample90(oldCore.get$fixedFlag$sample90());
         if(lambda.isSet())
-            newCore.set$fixedFlag$sample87(oldCore.get$fixedFlag$sample87());
+            newCore.set$fixedFlag$sample88(oldCore.get$fixedFlag$sample88());
     }
 
     /**

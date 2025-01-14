@@ -11,13 +11,13 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] cv$distributionAccumulator$var33;
 	private double[][] cv$var17$countGlobal;
 	private double[] cv$var34$stateProbabilityGlobal;
-	private double[][] distribution$sample35;
+	private double[][] distribution$sample36;
 	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample48 = false;
+	private boolean fixedFlag$sample36 = false;
+	private boolean fixedFlag$sample49 = false;
 	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample48 = false;
+	private boolean fixedProbFlag$sample36 = false;
+	private boolean fixedProbFlag$sample49 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private double logProbability$$evidence;
@@ -26,8 +26,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$b;
 	private double logProbability$flips;
 	private double logProbability$m;
-	private double[] logProbability$sample35;
-	private double[] logProbability$sample48;
+	private double[] logProbability$sample36;
+	private double[] logProbability$sample49;
 	private double logProbability$var12;
 	private double logProbability$var17;
 	private double[] logProbability$var33;
@@ -76,30 +76,30 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$fixedFlag$sample18(boolean cv$value) {
 		fixedFlag$sample18 = cv$value;
 		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
+		fixedProbFlag$sample36 = (cv$value && fixedProbFlag$sample36);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
+	public final boolean get$fixedFlag$sample36() {
+		return fixedFlag$sample36;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
-		fixedFlag$sample35 = cv$value;
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
-		fixedProbFlag$sample48 = (cv$value && fixedProbFlag$sample48);
+	public final void set$fixedFlag$sample36(boolean cv$value) {
+		fixedFlag$sample36 = cv$value;
+		fixedProbFlag$sample36 = (cv$value && fixedProbFlag$sample36);
+		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
+	public final boolean get$fixedFlag$sample49() {
+		return fixedFlag$sample49;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		fixedFlag$sample48 = cv$value;
-		fixedProbFlag$sample48 = (cv$value && fixedProbFlag$sample48);
+	public final void set$fixedFlag$sample49(boolean cv$value) {
+		fixedFlag$sample49 = cv$value;
+		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
 	}
 
 	@Override
@@ -184,9 +184,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		return v;
 	}
 
-	private final void logProbabilityDistribution$sample35() {
-		if(!fixedProbFlag$sample35) {
-			if(fixedFlag$sample35) {
+	private final void logProbabilityDistribution$sample36() {
+		if(!fixedProbFlag$sample36) {
+			if(fixedFlag$sample36) {
 				double cv$accumulator = 0.0;
 				for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -222,40 +222,40 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var33[(i$var26 - 1)] = cv$distributionAccumulator;
-					logProbability$sample35[(i$var26 - 1)] = cv$distributionAccumulator;
+					logProbability$sample36[(i$var26 - 1)] = cv$distributionAccumulator;
 					if((i$var26 < (n - 1)))
 						logProbability$b = (logProbability$b + cv$distributionAccumulator);
 				}
 				logProbability$a = (logProbability$a + cv$accumulator);
 				logProbability$$model = (logProbability$$model + cv$accumulator);
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				fixedProbFlag$sample35 = fixedFlag$sample18;
+				fixedProbFlag$sample36 = fixedFlag$sample18;
 			}
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-				double cv$sampleValue = logProbability$sample35[(i$var26 - 1)];
+				double cv$sampleValue = logProbability$sample36[(i$var26 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
 				logProbability$var33[(i$var26 - 1)] = cv$sampleValue;
-				if((fixedFlag$sample35 && (i$var26 < (n - 1))))
+				if((fixedFlag$sample36 && (i$var26 < (n - 1))))
 					logProbability$b = (logProbability$b + cv$sampleValue);
 			}
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$a = (logProbability$a + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityDistribution$sample48() {
-		if(!fixedProbFlag$sample48) {
+	private final void logProbabilityDistribution$sample49() {
+		if(!fixedProbFlag$sample49) {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				boolean cv$sampleValue = flips[j];
-				if(fixedFlag$sample35) {
+				if(fixedFlag$sample36) {
 					if((j < (n - 1))) {
 						cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, (1 / a[(j + 1)]));
 						cv$probabilityReached = 1.0;
@@ -263,9 +263,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				} else {
 					int i$var26 = (j + 1);
 					if((i$var26 < n)) {
-						for(int index$sample35$5 = 0; index$sample35$5 < 5; index$sample35$5 += 1) {
-							double cv$probabilitySample35Value6 = distribution$sample35[(i$var26 - 1)][index$sample35$5];
-							double cv$weightedProbability = (Math.log(cv$probabilitySample35Value6) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, (1 / index$sample35$5)));
+						for(int index$sample36$5 = 0; index$sample36$5 < 5; index$sample36$5 += 1) {
+							double cv$probabilitySample36Value6 = distribution$sample36[(i$var26 - 1)][index$sample36$5];
+							double cv$weightedProbability = (Math.log(cv$probabilitySample36Value6) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, (1 / index$sample36$5)));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -274,7 +274,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								else
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 							}
-							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample35Value6);
+							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample36Value6);
 						}
 					}
 				}
@@ -284,16 +284,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var46[j] = cv$distributionAccumulator;
-				logProbability$sample48[j] = cv$distributionAccumulator;
+				logProbability$sample49[j] = cv$distributionAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedFlag$sample35);
+			fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedFlag$sample36);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
-				double cv$rvAccumulator = logProbability$sample48[j];
+				double cv$rvAccumulator = logProbability$sample49[j];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var46[j] = cv$rvAccumulator;
 			}
@@ -324,8 +324,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 	}
 
-	private final void logProbabilityValue$sample35() {
-		if(!fixedProbFlag$sample35) {
+	private final void logProbabilityValue$sample36() {
+		if(!fixedProbFlag$sample36) {
 			double cv$accumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 				int cv$sampleValue = a[i$var26];
@@ -333,19 +333,19 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var33[(i$var26 - 1)] = cv$distributionAccumulator;
-				logProbability$sample35[(i$var26 - 1)] = cv$distributionAccumulator;
+				logProbability$sample36[(i$var26 - 1)] = cv$distributionAccumulator;
 				if((i$var26 < (n - 1)))
 					logProbability$b = (logProbability$b + cv$distributionAccumulator);
 			}
 			logProbability$a = (logProbability$a + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedFlag$sample18);
+			fixedProbFlag$sample36 = (fixedFlag$sample36 && fixedFlag$sample18);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-				double cv$sampleValue = logProbability$sample35[(i$var26 - 1)];
+				double cv$sampleValue = logProbability$sample36[(i$var26 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
 				logProbability$var33[(i$var26 - 1)] = cv$sampleValue;
 				if((i$var26 < (n - 1)))
@@ -353,28 +353,28 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 			logProbability$a = (logProbability$a + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample48() {
-		if(!fixedProbFlag$sample48) {
+	private final void logProbabilityValue$sample49() {
+		if(!fixedProbFlag$sample49) {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], (1 / a[(j + 1)]));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var46[j] = cv$distributionAccumulator;
-				logProbability$sample48[j] = cv$distributionAccumulator;
+				logProbability$sample49[j] = cv$distributionAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedFlag$sample35);
+			fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedFlag$sample36);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
-				double cv$rvAccumulator = logProbability$sample48[j];
+				double cv$rvAccumulator = logProbability$sample49[j];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var46[j] = cv$rvAccumulator;
 			}
@@ -388,7 +388,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		double[] cv$countLocal = cv$var17$countGlobal[threadID$cv$var16];
 		for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
-		if(fixedFlag$sample35) {
+		if(fixedFlag$sample36) {
 			if(((1 < n) && (var16 == b[1])))
 				cv$countLocal[a[1]] = (cv$countLocal[a[1]] + 1.0);
 			for(int i$var26 = 2; i$var26 < n; i$var26 += 1) {
@@ -398,15 +398,15 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		} else {
 			if(((1 < n) && (var16 == b[1]))) {
 				for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
-					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample35[0][cv$loopIndex]);
+					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample36[0][cv$loopIndex]);
 			}
 			if((var16 < 5)) {
 				for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 					int index$i$27 = (i$var26 - 1);
 					if((1 <= index$i$27)) {
-						double cv$distributionProbability = distribution$sample35[(index$i$27 - 1)][var16];
+						double cv$distributionProbability = distribution$sample36[(index$i$27 - 1)][var16];
 						for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
-							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample35[(i$var26 - 1)][cv$loopIndex] * cv$distributionProbability));
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample36[(i$var26 - 1)][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
 			}
@@ -414,7 +414,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var16]);
 	}
 
-	private final void sample35(int i$var26) {
+	private final void sample36(int i$var26) {
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
@@ -429,11 +429,11 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 			int index$i$5 = (i$var26 - 1);
 			if(((1 <= index$i$5) && !(index$i$5 == i$var26))) {
-				for(int index$sample35$6 = 0; index$sample35$6 < 5; index$sample35$6 += 1) {
-					double cv$probabilitySample35Value7 = distribution$sample35[(index$i$5 - 1)][index$sample35$6];
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample35Value7);
-					double[] var32 = m[index$sample35$6];
-					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[(i$var26 - 1)], (1 / cv$valuePos)) + Math.log(cv$probabilitySample35Value7)) + ((cv$valuePos < var32.length)?Math.log(var32[cv$valuePos]):Double.NEGATIVE_INFINITY));
+				for(int index$sample36$6 = 0; index$sample36$6 < 5; index$sample36$6 += 1) {
+					double cv$probabilitySample36Value7 = distribution$sample36[(index$i$5 - 1)][index$sample36$6];
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample36Value7);
+					double[] var32 = m[index$sample36$6];
+					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[(i$var26 - 1)], (1 / cv$valuePos)) + Math.log(cv$probabilitySample36Value7)) + ((cv$valuePos < var32.length)?Math.log(var32[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
 						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
 					else {
@@ -456,11 +456,11 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 				int index$i$31 = (i$var26 - 1);
 				if((((1 <= index$i$31) && !(index$i$31 == i$var26)) && !(index$i$31 == index$i$24_2))) {
-					for(int index$sample35$32 = 0; index$sample35$32 < 5; index$sample35$32 += 1)
-						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample35[(index$i$31 - 1)][index$sample35$32]);
+					for(int index$sample36$32 = 0; index$sample36$32 < 5; index$sample36$32 += 1)
+						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample36[(index$i$31 - 1)][index$sample36$32]);
 				}
 				DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var33, scopeVariable$reachedSourceProbability, m[cv$valuePos]);
-				double[] cv$sampleDistribution = distribution$sample35[(index$i$24_2 - 1)];
+				double[] cv$sampleDistribution = distribution$sample36[(index$i$24_2 - 1)];
 				double cv$overlap = 0.0;
 				for(int cv$i = 0; cv$i < 5; cv$i += 1) {
 					double cv$normalisedDistValue = (cv$distributionAccumulator$var33[cv$i] / scopeVariable$reachedSourceProbability);
@@ -474,7 +474,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 			cv$var34$stateProbabilityGlobal[cv$valuePos] = ((cv$stateProbabilityValue + cv$accumulatedDistributionProbabilities) - Math.log(cv$reachedDistributionSourceRV));
 		}
-		double[] cv$localProbability = distribution$sample35[(i$var26 - 1)];
+		double[] cv$localProbability = distribution$sample36[(i$var26 - 1)];
 		double cv$logSum;
 		double cv$lseMax = cv$var34$stateProbabilityGlobal[0];
 		for(int cv$lseIndex = 1; cv$lseIndex < cv$var34$stateProbabilityGlobal.length; cv$lseIndex += 1) {
@@ -523,13 +523,13 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			b = new int[n];
 		if(!setFlag$flips)
 			flips = new boolean[n];
-		distribution$sample35 = new double[(n - 1)][];
+		distribution$sample36 = new double[(n - 1)][];
 		for(int i$var26 = 1; i$var26 < n; i$var26 += 1)
-			distribution$sample35[(i$var26 - 1)] = new double[5];
+			distribution$sample36[(i$var26 - 1)] = new double[5];
 		logProbability$var33 = new double[(n - 1)];
-		logProbability$sample35 = new double[(n - 1)];
+		logProbability$sample36 = new double[(n - 1)];
 		logProbability$var46 = new double[n];
-		logProbability$sample48 = new double[n];
+		logProbability$sample49 = new double[n];
 		allocateScratch();
 	}
 
@@ -543,13 +543,13 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			);
 
-		if(!fixedFlag$sample35) {
+		if(!fixedFlag$sample36) {
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 				b[i$var26] = a[(i$var26 - 1)];
 				a[i$var26] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var26]]);
 			}
 		}
-		if(!fixedFlag$sample48)
+		if(!fixedFlag$sample49)
 			parallelFor(RNG$, 0, n, 1,
 				(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int j = forStart$j; j < forEnd$j; j += 1)
@@ -569,33 +569,33 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			);
 
-		if(!fixedFlag$sample35) {
+		if(!fixedFlag$sample36) {
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-				double[] cv$distribution$sample35 = distribution$sample35[(i$var26 - 1)];
+				double[] cv$distribution$sample36 = distribution$sample36[(i$var26 - 1)];
 				for(int index$var33 = 0; index$var33 < 5; index$var33 += 1)
-					cv$distribution$sample35[index$var33] = 0.0;
+					cv$distribution$sample36[index$var33] = 0.0;
 				if((1 == i$var26)) {
 					int var16 = b[1];
 					if(((0 <= var16) && (var16 < 5))) {
 						double[] var32 = m[b[1]];
 						for(int index$var33 = 0; index$var33 < 5; index$var33 += 1)
-							cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + ((index$var33 < var32.length)?var32[index$var33]:0.0));
+							cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + ((index$var33 < var32.length)?var32[index$var33]:0.0));
 					}
 				}
 				int index$i$4 = (i$var26 - 1);
 				if((1 <= index$i$4)) {
-					for(int index$sample35$5 = 0; index$sample35$5 < 5; index$sample35$5 += 1) {
-						double cv$probabilitySample35Value6 = distribution$sample35[(index$i$4 - 1)][index$sample35$5];
-						double[] var32 = m[index$sample35$5];
+					for(int index$sample36$5 = 0; index$sample36$5 < 5; index$sample36$5 += 1) {
+						double cv$probabilitySample36Value6 = distribution$sample36[(index$i$4 - 1)][index$sample36$5];
+						double[] var32 = m[index$sample36$5];
 						for(int index$var33 = 0; index$var33 < 5; index$var33 += 1)
-							cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (cv$probabilitySample35Value6 * ((index$var33 < var32.length)?var32[index$var33]:0.0)));
+							cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + (cv$probabilitySample36Value6 * ((index$var33 < var32.length)?var32[index$var33]:0.0)));
 					}
 				}
 				double cv$var33$sum = 0.0;
 				for(int index$var33 = 0; index$var33 < 5; index$var33 += 1)
-					cv$var33$sum = (cv$var33$sum + cv$distribution$sample35[index$var33]);
+					cv$var33$sum = (cv$var33$sum + cv$distribution$sample36[index$var33]);
 				for(int index$var33 = 0; index$var33 < 5; index$var33 += 1)
-					cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] / cv$var33$sum);
+					cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] / cv$var33$sum);
 			}
 		}
 	}
@@ -610,7 +610,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			);
 
-		if(!fixedFlag$sample35) {
+		if(!fixedFlag$sample36) {
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 				b[i$var26] = a[(i$var26 - 1)];
 				a[i$var26] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var26]]);
@@ -629,14 +629,14 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					}
 				);
 
-			if(!fixedFlag$sample35) {
+			if(!fixedFlag$sample36) {
 				for(int i$var26 = 1; i$var26 < n; i$var26 += 1)
-					sample35(i$var26);
+					sample36(i$var26);
 			}
 		} else {
-			if(!fixedFlag$sample35) {
+			if(!fixedFlag$sample36) {
 				for(int i$var26 = (n - 1); i$var26 >= 1; i$var26 -= 1)
-					sample35(i$var26);
+					sample36(i$var26);
 			}
 			if(!fixedFlag$sample18)
 				parallelFor(RNG$, 0, 5, 1,
@@ -672,16 +672,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var33[(i$var26 - 1)] = 0.0;
 		logProbability$a = 0.0;
 		logProbability$b = 0.0;
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample36) {
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1)
-				logProbability$sample35[(i$var26 - 1)] = 0.0;
+				logProbability$sample36[(i$var26 - 1)] = 0.0;
 		}
 		for(int j = 0; j < n; j += 1)
 			logProbability$var46[j] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample48) {
+		if(!fixedProbFlag$sample49) {
 			for(int j = 0; j < n; j += 1)
-				logProbability$sample48[j] = 0.0;
+				logProbability$sample49[j] = 0.0;
 		}
 	}
 
@@ -695,23 +695,23 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample18)
 			logProbabilityValue$sample18();
-		logProbabilityValue$sample48();
+		logProbabilityValue$sample49();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample18();
-		logProbabilityDistribution$sample35();
-		logProbabilityDistribution$sample48();
+		logProbabilityDistribution$sample36();
+		logProbabilityDistribution$sample49();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample18();
-		logProbabilityValue$sample35();
-		logProbabilityValue$sample48();
+		logProbabilityValue$sample36();
+		logProbabilityValue$sample49();
 	}
 
 	@Override
@@ -724,7 +724,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			);
 
-		if(!fixedFlag$sample35) {
+		if(!fixedFlag$sample36) {
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 				b[i$var26] = a[(i$var26 - 1)];
 				a[i$var26] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var26]]);

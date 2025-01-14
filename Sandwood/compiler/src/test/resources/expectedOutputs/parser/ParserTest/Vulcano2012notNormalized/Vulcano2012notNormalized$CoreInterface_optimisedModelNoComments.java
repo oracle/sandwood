@@ -19,8 +19,8 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 	public void set$fixedFlag$sample43(boolean cv$value);
 	public boolean get$fixedFlag$sample51();
 	public void set$fixedFlag$sample51(boolean cv$value);
-	public boolean get$fixedFlag$sample97();
-	public void set$fixedFlag$sample97(boolean cv$value);
+	public boolean get$fixedFlag$sample98();
+	public void set$fixedFlag$sample98(boolean cv$value);
 	public double[] get$lambda();
 	public void set$lambda(double[] cv$value);
 	public double get$logProbability$Sales();

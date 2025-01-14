@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -21,11 +21,12 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
@@ -166,9 +167,8 @@ public class TracesImplementation extends Traces {
         DAGInfo dagInfo = new DAGInfo();
         // Iterate through the variables starting trace generation. For anything other
         // than random variables, observed variables, and terminal variables this will
-        // do nothing,
-        // but by constructing it like this was can add in other things we want to save
-        // just by overriding the method in the class.
+        // do nothing, but by constructing it like this was can add in other things we
+        // want to save just by overriding the method in the class.
         for(Variable<?> v:allVariables)
             v.constructTrace(dagInfo);
 
@@ -563,13 +563,20 @@ public class TracesImplementation extends Traces {
 
         // Get the sample task
         DataflowTaskArgDesc d = consumerTrace.get(0);
-        // Record its scope
-        s.toSample.add(d);
         // Add it to the to sample trace
+        s.toSample.add(d);
+
+        // Record its scopes
         Scope sampleScope = d.task.scope();
+        Set<Scope> sampleScopes = new HashSet<>();
+        while(sampleScope != null) {
+            sampleScopes.add(sampleScope);
+            sampleScope = sampleScope.getEnclosingScope();
+        }
+
         // And determine if it is only consumed by a single task.
         Variable<?> output = d.task.getOutput();
-        boolean singleStream = output.getConsumers().size() == 1;
+        boolean singleStream = singleStream(output);
         boolean intermediateFound = output.isIntermediate();
 
         // Set the trace position ready to traverse the rest of the trace.
@@ -579,7 +586,8 @@ public class TracesImplementation extends Traces {
         while(tracePos < noElements && singleStream && !intermediateFound) {
             // Get the element
             d = consumerTrace.get(tracePos); // We know the first element is there as there is always a sample.
-            if(d.task.checkInversionError(d.argPos) != null || d.task.scope() != sampleScope || usesSampledValue(d))
+            if(d.task.checkInversionError(d.argPos) != null || !sampleScopes.contains(d.task.scope())
+                    || usesSampledValue(d) || !output.isPrivate())
                 // Final test is used to ensure that we have
                 // not gone into some other part of the
                 // program. TODO This is a stop gap till we
@@ -594,7 +602,7 @@ public class TracesImplementation extends Traces {
             // Test to see if the trace diverges at this point.
             output = d.task.getOutput();
             // Calculate if this is still a single stream.
-            singleStream = output.getConsumers().size() == 1;
+            singleStream = singleStream(output);
             // Make sure we stop at the first intermediate in the trace.
             intermediateFound = output.isIntermediate();
         }
@@ -616,11 +624,9 @@ public class TracesImplementation extends Traces {
 
             // Test to see if the trace diverges at this point.
             output = d.task.getOutput();
-            if(output.getConsumers().size() != 1)
-                singleStream = false;
+            singleStream = singleStream(output);
             // Make sure we stop at the first intermediate in the trace.
-            if(output.isIntermediate())
-                intermediateFound = true;
+            intermediateFound = output.isIntermediate();
         }
 
         // Get the last task in the to sample trace as this will generate the output
@@ -641,10 +647,22 @@ public class TracesImplementation extends Traces {
         return s;
     }
 
+    private boolean singleStream(Variable<?> output) {
+        int consumers = 0;
+        for(DataflowTask<?> d:output.getConsumers()) {
+            boolean implicitGet = d.getType() == DFType.GET && ((GetTask<?>) d).isImplicit();
+            boolean putArray = d.getType() == DFType.PUT && ((PutTask<?>) d).array == output;
+            if(!implicitGet && !putArray)
+                consumers++;
+        }
+        return consumers == 1;
+    }
+
     private boolean usesSampledValue(DataflowTaskArgDesc d) {
         int size = d.task.getInputsCount();
+        boolean isPut = d.task.getType() == DFType.PUT;
         for(int i = 0; i < size; i++) {
-            if(i != d.argPos && !d.task.getInput(i).isDeterministic())
+            if((i != d.argPos || (isPut && d.argPos == 0)) && !d.task.getInput(i).isDeterministic())
                 return true;
         }
         return false;
@@ -842,12 +860,8 @@ public class TracesImplementation extends Traces {
         SampleTask<?, ?> sample = (SampleTask<?, ?>) h.get(0).task;
         Set<Variable<?>> intermediateVars = h.getIntermediates();
 
-        IntermediateDesc intermediates = sampleToIntermediates.get(sample);
-        if(intermediates == null) {
-            intermediates = new IntermediateDesc(sample);
-            sampleToIntermediates.put(sample, intermediates);
-        }
-
+        IntermediateDesc intermediates = sampleToIntermediates.computeIfAbsent(sample,
+                k -> new IntermediateDesc(sample));
         intermediates.addVariables(intermediateVars, h);
 
         for(Variable<?> v:intermediateVars) {

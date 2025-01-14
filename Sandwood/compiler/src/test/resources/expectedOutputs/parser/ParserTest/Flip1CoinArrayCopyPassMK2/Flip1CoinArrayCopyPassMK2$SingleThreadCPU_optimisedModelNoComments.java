@@ -135,8 +135,6 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 			logProbability$var11 = cv$distributionAccumulator;
 			logProbability$var12 = cv$distributionAccumulator;
 			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
-			if((0 < samples))
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample13)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
@@ -144,8 +142,6 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		} else {
 			logProbability$var11 = logProbability$var12;
 			logProbability$bias = (logProbability$bias + logProbability$var12);
-			if((0 < samples))
-				logProbability$bias = (logProbability$bias + logProbability$var12);
 			logProbability$$model = (logProbability$$model + logProbability$var12);
 			if(fixedFlag$sample13)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$var12);

@@ -40,13 +40,13 @@ public class Vulcano2012notNormalized extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample97(fixed);
+                system$c.set$fixedFlag$sample98(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample97())
+            if(system$c.get$fixedFlag$sample98())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;

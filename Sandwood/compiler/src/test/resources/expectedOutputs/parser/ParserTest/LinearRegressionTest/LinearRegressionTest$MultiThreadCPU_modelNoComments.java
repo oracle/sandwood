@@ -461,14 +461,14 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 															cv$denominator = (cv$denominator * x[i$var38][j$var42]);
 															if((0 < k)) {
 																double reduceVar$var55$5 = 0.0;
-																for(int cv$reduction259Index = 0; cv$reduction259Index < j$var42; cv$reduction259Index += 1) {
+																for(int cv$reduction273Index = 0; cv$reduction273Index < j$var42; cv$reduction273Index += 1) {
 																	double i$var52 = reduceVar$var55$5;
-																	double j$var53 = phi[((i$var38 - 0) / 1)][cv$reduction259Index];
+																	double j$var53 = phi[((i$var38 - 0) / 1)][cv$reduction273Index];
 																	reduceVar$var55$5 = (i$var52 + j$var53);
 																}
-																for(int cv$reduction259Index = (j$var42 + 1); cv$reduction259Index < k; cv$reduction259Index += 1) {
+																for(int cv$reduction273Index = (j$var42 + 1); cv$reduction273Index < k; cv$reduction273Index += 1) {
 																	double i$var52 = reduceVar$var55$5;
-																	double j$var53 = phi[((i$var38 - 0) / 1)][cv$reduction259Index];
+																	double j$var53 = phi[((i$var38 - 0) / 1)][cv$reduction273Index];
 																	reduceVar$var55$5 = (i$var52 + j$var53);
 																}
 																double cv$reduced56 = reduceVar$var55$5;

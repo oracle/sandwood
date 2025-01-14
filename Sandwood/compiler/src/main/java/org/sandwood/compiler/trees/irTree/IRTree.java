@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -233,8 +233,13 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRArrayGet<>(array, index);
     }
 
-    public static <X extends Variable<X>> IRArrayPut<X> arrayPut(IRTreeReturn<ArrayVariable<X>> array,
+    public static <X extends Variable<X>> IRTreeVoid arrayPut(IRTreeReturn<ArrayVariable<X>> array,
             IRTreeReturn<IntVariable> index, IRTreeReturn<X> value, String comment) {
+        if(value.type == IRTreeType.ARRAY_GET) {
+            IRArrayGet<X> gt = (IRArrayGet<X>) value;
+            if(gt.array.equivalent(array) && gt.index.equivalent(index))
+                return nop();
+        }
         return new IRArrayPut<>(array, index, value, comment);
     }
 
@@ -310,17 +315,20 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRGetIntField(tree, name);
     }
 
-    public static <X extends Variable<X>> IRInitialize<X> initializeVariable(Visibility visibility,
+    public static <X extends Variable<X>> IRTreeVoid initializeVariable(Visibility visibility,
             VariableDescription<X> varDesc, IRTreeReturn<X> value, String comment) {
-        return new IRInitialize<>(visibility, varDesc, value, comment);
+        if(value.type == IRTreeType.LOAD && ((IRLoad<X>) value).varDesc.equals(varDesc))
+            return nop();
+        else
+            return new IRInitialize<>(visibility, varDesc, value, comment);
     }
 
-    public static <X extends Variable<X>> IRInitialize<X> initializeVariable(Variable<X> var, IRTreeReturn<X> value,
+    public static <X extends Variable<X>> IRTreeVoid initializeVariable(Variable<X> var, IRTreeReturn<X> value,
             String comment) {
         return initializeVariable(var.getUniqueVarDesc(), value, comment);
     }
 
-    public static <X extends Variable<X>> IRInitialize<X> initializeVariable(VariableDescription<X> varDesc,
+    public static <X extends Variable<X>> IRTreeVoid initializeVariable(VariableDescription<X> varDesc,
             IRTreeReturn<X> value, String comment) {
         return initializeVariable(Visibility.DEFAULT, varDesc, value, comment);
     }
@@ -376,9 +384,12 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRSequential(trees, comment);
     }
 
-    public static <X extends Variable<X>> IRStore<X> store(VariableDescription<X> varDesc, IRTreeReturn<X> value,
+    public static <X extends Variable<X>> IRTreeVoid store(VariableDescription<X> varDesc, IRTreeReturn<X> value,
             String comment) {
-        return new IRStore<>(varDesc, value, comment);
+        if(value.type == IRTreeType.LOAD && ((IRLoad<X>) value).varDesc.equals(varDesc))
+            return nop();
+        else
+            return new IRStore<>(varDesc, value, comment);
     }
 
     public static IRTreeScope treeScope(IRTreeVoid tree, String comment) {

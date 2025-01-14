@@ -12,13 +12,13 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[][] cv$var18$countGlobal;
 	private double[] cv$var35$stateProbabilityGlobal;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample37 = false;
-	private boolean fixedFlag$sample53 = false;
+	private boolean fixedFlag$sample30 = false;
+	private boolean fixedFlag$sample38 = false;
+	private boolean fixedFlag$sample54 = false;
 	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample37 = false;
-	private boolean fixedProbFlag$sample53 = false;
+	private boolean fixedProbFlag$sample30 = false;
+	private boolean fixedProbFlag$sample38 = false;
+	private boolean fixedProbFlag$sample54 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private int length$flipsMeasured;
@@ -86,83 +86,83 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Substituted "fixedFlag$sample20" with its value "cv$value".
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 		
-		// Should the probability of sample 37 be set to fixed. This will only every change
+		// Should the probability of sample 38 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample37 = (cv$value && fixedProbFlag$sample37);
+		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
 	}
 
-	// Getter for fixedFlag$sample29.
+	// Getter for fixedFlag$sample30.
 	@Override
-	public final boolean get$fixedFlag$sample29() {
-		return fixedFlag$sample29;
+	public final boolean get$fixedFlag$sample30() {
+		return fixedFlag$sample30;
 	}
 
-	// Setter for fixedFlag$sample29.
+	// Setter for fixedFlag$sample30.
 	@Override
-	public final void set$fixedFlag$sample29(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample29 including if probabilities
+	public final void set$fixedFlag$sample30(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample30 including if probabilities
 		// need to be updated.
-		fixedFlag$sample29 = cv$value;
+		fixedFlag$sample30 = cv$value;
 		
-		// Should the probability of sample 29 be set to fixed. This will only every change
+		// Should the probability of sample 30 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample29" with its value "cv$value".
-		fixedProbFlag$sample29 = (cv$value && fixedProbFlag$sample29);
+		// Substituted "fixedFlag$sample30" with its value "cv$value".
+		fixedProbFlag$sample30 = (cv$value && fixedProbFlag$sample30);
 		
-		// Should the probability of sample 53 be set to fixed. This will only every change
+		// Should the probability of sample 54 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample29" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
+		// Substituted "fixedFlag$sample30" with its value "cv$value".
+		fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
 	}
 
-	// Getter for fixedFlag$sample37.
+	// Getter for fixedFlag$sample38.
 	@Override
-	public final boolean get$fixedFlag$sample37() {
-		return fixedFlag$sample37;
+	public final boolean get$fixedFlag$sample38() {
+		return fixedFlag$sample38;
 	}
 
-	// Setter for fixedFlag$sample37.
+	// Setter for fixedFlag$sample38.
 	@Override
-	public final void set$fixedFlag$sample37(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample37 including if probabilities
+	public final void set$fixedFlag$sample38(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample38 including if probabilities
 		// need to be updated.
-		fixedFlag$sample37 = cv$value;
+		fixedFlag$sample38 = cv$value;
 		
-		// Should the probability of sample 37 be set to fixed. This will only every change
+		// Should the probability of sample 38 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample37" with its value "cv$value".
-		fixedProbFlag$sample37 = (cv$value && fixedProbFlag$sample37);
+		// Substituted "fixedFlag$sample38" with its value "cv$value".
+		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
 		
-		// Should the probability of sample 53 be set to fixed. This will only every change
+		// Should the probability of sample 54 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample37" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
+		// Substituted "fixedFlag$sample38" with its value "cv$value".
+		fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
 	}
 
-	// Getter for fixedFlag$sample53.
+	// Getter for fixedFlag$sample54.
 	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
+	public final boolean get$fixedFlag$sample54() {
+		return fixedFlag$sample54;
 	}
 
-	// Setter for fixedFlag$sample53.
+	// Setter for fixedFlag$sample54.
 	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
+	public final void set$fixedFlag$sample54(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample54 including if probabilities
 		// need to be updated.
-		fixedFlag$sample53 = cv$value;
+		fixedFlag$sample54 = cv$value;
 		
-		// Should the probability of sample 53 be set to fixed. This will only every change
+		// Should the probability of sample 54 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
+		// Substituted "fixedFlag$sample54" with its value "cv$value".
+		fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
 	}
 
 	// Getter for flips.
@@ -386,12 +386,12 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample29 using sampled
+	// Calculate the probability of the samples represented by sample30 using sampled
 	// values.
-	private final void logProbabilityValue$sample29() {
-		// Determine if we need to calculate the values for sample task 29 or if we should
+	private final void logProbabilityValue$sample30() {
+		// Determine if we need to calculate the values for sample task 30 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample29) {
+		if(!fixedProbFlag$sample30) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
@@ -435,7 +435,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample29)
+			if(fixedFlag$sample30)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -444,7 +444,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample29 = fixedFlag$sample29;
+			fixedProbFlag$sample30 = fixedFlag$sample30;
 		}
 		// Using cached values.
 		else {
@@ -464,18 +464,18 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample29)
+			if(fixedFlag$sample30)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$var27);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample37 using sampled
+	// Calculate the probability of the samples represented by sample38 using sampled
 	// values.
-	private final void logProbabilityValue$sample37() {
-		// Determine if we need to calculate the values for sample task 37 or if we should
+	private final void logProbabilityValue$sample38() {
+		// Determine if we need to calculate the values for sample task 38 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample37) {
+		if(!fixedProbFlag$sample38) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
@@ -527,7 +527,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample37)
+			if(fixedFlag$sample38)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -536,7 +536,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample37 = (fixedFlag$sample37 && fixedFlag$sample20);
+			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample20);
 		}
 		// Using cached values.
 		else {
@@ -556,18 +556,18 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample37)
+			if(fixedFlag$sample38)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$var35);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample53 using sampled
+	// Calculate the probability of the samples represented by sample54 using sampled
 	// values.
-	private final void logProbabilityValue$sample53() {
-		// Determine if we need to calculate the values for sample task 53 or if we should
+	private final void logProbabilityValue$sample54() {
+		// Determine if we need to calculate the values for sample task 54 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample53) {
+		if(!fixedProbFlag$sample54) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
@@ -580,14 +580,14 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				int reduceVar$var47$6 = 0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction46Index = 0; cv$reduction46Index < noCats; cv$reduction46Index += 1)
+				for(int cv$reduction47Index = 0; cv$reduction47Index < noCats; cv$reduction47Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 					// j$var45's comment
 					// Set the right hand term to a value from the array st
-					reduceVar$var47$6 = (reduceVar$var47$6 + st[cv$reduction46Index]);
+					reduceVar$var47$6 = (reduceVar$var47$6 + st[cv$reduction47Index]);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -640,7 +640,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = ((fixedFlag$sample53 && fixedFlag$sample29) && fixedFlag$sample37);
+			fixedProbFlag$sample54 = ((fixedFlag$sample54 && fixedFlag$sample30) && fixedFlag$sample38);
 		}
 		// Using cached values.
 		else {
@@ -676,9 +676,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
 		
-		// Processing sample task 37 of consumer random variable null.
+		// Processing sample task 38 of consumer random variable null.
 		// 
-		// Increment the sample counter with the value sampled by sample task 37 of random
+		// Increment the sample counter with the value sampled by sample task 38 of random
 		// variable var34
 		// 
 		// Substituted "i$var32" with its value "var17".
@@ -693,9 +693,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 29 drawn from Beta 22. Inference was performed using a Beta to Bernoulli/Binomial
+	// by sample task 30 drawn from Beta 22. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
-	private final void sample29(int var26, int threadID$cv$var26, Rng RNG$) {
+	private final void sample30(int var26, int threadID$cv$var26, Rng RNG$) {
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -704,7 +704,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Processing random variable 49.
 		// 
-		// Looking for a path between Sample 29 and consumer Bernoulli 49.
+		// Looking for a path between Sample 30 and consumer Bernoulli 49.
 		// 
 		// Reduction of array st
 		// 
@@ -714,19 +714,19 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		int reduceVar$var47$4 = 0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noCats; cv$reduction46Index += 1)
+		for(int cv$reduction47Index = 0; cv$reduction47Index < noCats; cv$reduction47Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// j$var45's comment
 			// Set the right hand term to a value from the array st
-			reduceVar$var47$4 = (reduceVar$var47$4 + st[cv$reduction46Index]);
+			reduceVar$var47$4 = (reduceVar$var47$4 + st[cv$reduction47Index]);
 		if((var26 == reduceVar$var47$4)) {
 			for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1) {
-				// Processing sample task 53 of consumer random variable null.
+				// Processing sample task 54 of consumer random variable null.
 				// 
-				// Include the value sampled by task 53 from random variable var49.
+				// Include the value sampled by task 54 from random variable var49.
 				// Increment the number of samples.
 				cv$count = (cv$count + 1);
 				
@@ -742,9 +742,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 37 drawn from Categorical 34. Inference was performed using variable
+	// by sample task 38 drawn from Categorical 34. Inference was performed using variable
 	// marginalization.
-	private final void sample37(int i$var32) {
+	private final void sample38(int i$var32) {
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			// Value of the variable at this index
 			st[i$var32] = cv$valuePos;
@@ -768,15 +768,15 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			int reduceVar$var47$5 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction218Index = 0; cv$reduction218Index < i$var32; cv$reduction218Index += 1)
+			for(int cv$reduction219Index = 0; cv$reduction219Index < i$var32; cv$reduction219Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j$var45's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction218Index]);
-			for(int cv$reduction218Index = (i$var32 + 1); cv$reduction218Index < noCats; cv$reduction218Index += 1)
+				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction219Index]);
+			for(int cv$reduction219Index = (i$var32 + 1); cv$reduction219Index < noCats; cv$reduction219Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
@@ -785,7 +785,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// j$var45's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction218Index]);
+				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction219Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -794,12 +794,12 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Value of the variable at this index
 			reduceVar$var47$5 = (cv$valuePos + reduceVar$var47$5);
 			for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1)
-				// Processing sample task 53 of consumer random variable null.
+				// Processing sample task 54 of consumer random variable null.
 				// 
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 53 with the current configuration.
+				// Recorded the probability of reaching sample task 54 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
@@ -921,7 +921,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Allocation of cv$var35$stateProbabilityGlobal for single threaded execution
 		// 
-		// Variable to record the maximum value of Task Get 35. Initially set to the value
+		// Variable to record the maximum value of Task Get 36. Initially set to the value
 		// of putTask 21.
 		cv$var35$stateProbabilityGlobal = new double[((0.0 <= noCats)?(length$flipsMeasured / noCats):((noCats < 0.0)?(length$flipsMeasured / noCats):length$flipsMeasured))];
 	}
@@ -977,7 +977,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample30)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noFlips, 1,
 				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -991,7 +991,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample37)
+		if(!fixedFlag$sample38)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noCats, 1,
 				(int forStart$i$var32, int forEnd$i$var32, int threadID$i$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1005,7 +1005,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample54)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noFlips, 1,
 				(int forStart$j$var40, int forEnd$j$var40, int threadID$j$var40, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1021,12 +1021,12 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							int reduceVar$var47$7 = 0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction46Index = 0; cv$reduction46Index < noCats; cv$reduction46Index += 1)
+							for(int cv$reduction47Index = 0; cv$reduction47Index < noCats; cv$reduction47Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 								// j$var45's comment
 								// Set the right hand term to a value from the array st
-								reduceVar$var47$7 = (reduceVar$var47$7 + st[cv$reduction46Index]);
+								reduceVar$var47$7 = (reduceVar$var47$7 + st[cv$reduction47Index]);
 							flips[j$var40] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var47$7]);
 						}
 				}
@@ -1053,7 +1053,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample30)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noFlips, 1,
 				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1067,7 +1067,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample37)
+		if(!fixedFlag$sample38)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noCats, 1,
 				(int forStart$i$var32, int forEnd$i$var32, int threadID$i$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1100,7 +1100,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample30)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noFlips, 1,
 				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1114,7 +1114,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample37)
+		if(!fixedFlag$sample38)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noCats, 1,
 				(int forStart$i$var32, int forEnd$i$var32, int threadID$i$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1148,7 +1148,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample29)
+			if(!fixedFlag$sample30)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 				parallelFor(RNG$, 0, noFlips, 1,
 					(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1156,27 +1156,27 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-								sample29(var26, threadID$var26, RNG$1);
+								sample30(var26, threadID$var26, RNG$1);
 					}
 				);
 
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample37) {
+			if(!fixedFlag$sample38) {
 				for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1)
-					sample37(i$var32);
+					sample38(i$var32);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample37) {
+			if(!fixedFlag$sample38) {
 				for(int i$var32 = (noCats - 1); i$var32 >= 0; i$var32 -= 1)
-					sample37(i$var32);
+					sample38(i$var32);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample29)
+			if(!fixedFlag$sample30)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 				parallelFor(RNG$, 0, noFlips, 1,
 					(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1184,7 +1184,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int var26 = forStart$var26; var26 < forEnd$var26; var26 += 1)
-								sample29(var26, threadID$var26, RNG$1);
+								sample30(var26, threadID$var26, RNG$1);
 					}
 				);
 
@@ -1243,15 +1243,15 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var18 = 0.0;
 		logProbability$var22 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample29)
+		if(!fixedProbFlag$sample30)
 			logProbability$var27 = 0.0;
 		logProbability$var34 = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample37)
+		if(!fixedProbFlag$sample38)
 			logProbability$var35 = 0.0;
 		logProbability$var49 = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample53)
+		if(!fixedProbFlag$sample54)
 			logProbability$var50 = 0.0;
 	}
 
@@ -1274,11 +1274,11 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
-		if(fixedFlag$sample29)
-			logProbabilityValue$sample29();
-		if(fixedFlag$sample37)
-			logProbabilityValue$sample37();
-		logProbabilityValue$sample53();
+		if(fixedFlag$sample30)
+			logProbabilityValue$sample30();
+		if(fixedFlag$sample38)
+			logProbabilityValue$sample38();
+		logProbabilityValue$sample54();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1297,9 +1297,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample29();
-		logProbabilityValue$sample37();
-		logProbabilityValue$sample53();
+		logProbabilityValue$sample30();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample54();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1317,9 +1317,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample29();
-		logProbabilityValue$sample37();
-		logProbabilityValue$sample53();
+		logProbabilityValue$sample30();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample54();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1342,7 +1342,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample29)
+		if(!fixedFlag$sample30)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noFlips, 1,
 				(int forStart$var26, int forEnd$var26, int threadID$var26, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1356,7 +1356,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample37)
+		if(!fixedFlag$sample38)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noCats, 1,
 				(int forStart$i$var32, int forEnd$i$var32, int threadID$i$var32, org.sandwood.random.internal.Rng RNG$1) -> { 

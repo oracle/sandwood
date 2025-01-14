@@ -10,17 +10,17 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private boolean[][] avail;
 	private double[] exped;
 	private double[] expedNorm;
-	private boolean fixedFlag$sample124 = false;
+	private boolean fixedFlag$sample125 = false;
 	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample87 = false;
-	private boolean fixedFlag$sample89 = false;
-	private boolean fixedProbFlag$sample124 = false;
+	private boolean fixedFlag$sample88 = false;
+	private boolean fixedFlag$sample90 = false;
+	private boolean fixedProbFlag$sample125 = false;
 	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample87 = false;
-	private boolean fixedProbFlag$sample89 = false;
-	private boolean[] guard$sample34multinomial123$global;
-	private boolean[][] guard$sample34put101$global;
-	private boolean[][] guard$sample34put122$global;
+	private boolean fixedProbFlag$sample88 = false;
+	private boolean fixedProbFlag$sample90 = false;
+	private boolean[] guard$sample34multinomial124$global;
+	private boolean[][] guard$sample34put102$global;
+	private boolean[][] guard$sample34put123$global;
 	private boolean[] guard$sample34put61$global;
 	private double[] lambda;
 	private double logProbability$$evidence;
@@ -30,10 +30,10 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$expedNorm;
 	private double logProbability$lambda;
 	private double logProbability$sales;
-	private double[] logProbability$sample124;
+	private double[] logProbability$sample125;
 	private double[] logProbability$sample34;
-	private double[] logProbability$sample87;
-	private double[] logProbability$sample89;
+	private double[] logProbability$sample88;
+	private double[] logProbability$sample90;
 	private double logProbability$ut;
 	private double[] logProbability$var111;
 	private double logProbability$var23;
@@ -89,14 +89,14 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample124() {
-		return fixedFlag$sample124;
+	public final boolean get$fixedFlag$sample125() {
+		return fixedFlag$sample125;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample124(boolean cv$value) {
-		fixedFlag$sample124 = cv$value;
-		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
+	public final void set$fixedFlag$sample125(boolean cv$value) {
+		fixedFlag$sample125 = cv$value;
+		fixedProbFlag$sample125 = (cv$value && fixedProbFlag$sample125);
 	}
 
 	@Override
@@ -108,31 +108,31 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void set$fixedFlag$sample34(boolean cv$value) {
 		fixedFlag$sample34 = cv$value;
 		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
-		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
+		fixedProbFlag$sample125 = (cv$value && fixedProbFlag$sample125);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample87() {
-		return fixedFlag$sample87;
+	public final boolean get$fixedFlag$sample88() {
+		return fixedFlag$sample88;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample87(boolean cv$value) {
-		fixedFlag$sample87 = cv$value;
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
-		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
+	public final void set$fixedFlag$sample88(boolean cv$value) {
+		fixedFlag$sample88 = cv$value;
+		fixedProbFlag$sample88 = (cv$value && fixedProbFlag$sample88);
+		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample89() {
-		return fixedFlag$sample89;
+	public final boolean get$fixedFlag$sample90() {
+		return fixedFlag$sample90;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample89(boolean cv$value) {
-		fixedFlag$sample89 = cv$value;
-		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
-		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
+	public final void set$fixedFlag$sample90(boolean cv$value) {
+		fixedFlag$sample90 = cv$value;
+		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
+		fixedProbFlag$sample125 = (cv$value && fixedProbFlag$sample125);
 	}
 
 	@Override
@@ -192,15 +192,15 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		setFlag$weekly_sales = true;
 	}
 
-	private final void logProbabilityValue$sample124() {
-		if(!fixedProbFlag$sample124) {
+	private final void logProbabilityValue$sample125() {
+		if(!fixedProbFlag$sample125) {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var111[t] = cv$distributionAccumulator;
-					logProbability$sample124[t] = cv$distributionAccumulator;
+					logProbability$sample125[t] = cv$distributionAccumulator;
 					if((0 < avail[0].length))
 						logProbability$sales = (logProbability$sales + cv$distributionAccumulator);
 				}
@@ -208,12 +208,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$weekly_sales = (logProbability$weekly_sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample124 = ((fixedFlag$sample124 && fixedFlag$sample34) && fixedFlag$sample89);
+			fixedProbFlag$sample125 = ((fixedFlag$sample125 && fixedFlag$sample34) && fixedFlag$sample90);
 		} else {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					double cv$sampleValue = logProbability$sample124[t];
+					double cv$sampleValue = logProbability$sample125[t];
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
 					logProbability$var111[t] = cv$sampleValue;
 					if((0 < avail[0].length))
@@ -366,69 +366,69 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	private final void logProbabilityValue$sample87() {
-		if(!fixedProbFlag$sample87) {
+	private final void logProbabilityValue$sample88() {
+		if(!fixedProbFlag$sample88) {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					double cv$distributionAccumulator = DistributionSampling.logProbabilityGamma(lambda[t], 10.0, 10.0);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var77[t] = cv$distributionAccumulator;
-					logProbability$sample87[t] = cv$distributionAccumulator;
+					logProbability$sample88[t] = cv$distributionAccumulator;
 				}
 			}
 			logProbability$lambda = (logProbability$lambda + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample87)
+			if(fixedFlag$sample88)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample87 = fixedFlag$sample87;
+			fixedProbFlag$sample88 = fixedFlag$sample88;
 		} else {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					double cv$rvAccumulator = logProbability$sample87[t];
+					double cv$rvAccumulator = logProbability$sample88[t];
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var77[t] = cv$rvAccumulator;
 				}
 			}
 			logProbability$lambda = (logProbability$lambda + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample87)
+			if(fixedFlag$sample88)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample89() {
-		if(!fixedProbFlag$sample89) {
+	private final void logProbabilityValue$sample90() {
+		if(!fixedProbFlag$sample90) {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					int reduceVar$numSales$4 = 0;
-					for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-						reduceVar$numSales$4 = (reduceVar$numSales$4 + ObsSales[t][cv$reduction77Index]);
+					for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+						reduceVar$numSales$4 = (reduceVar$numSales$4 + ObsSales[t][cv$reduction78Index]);
 					double cv$distributionAccumulator = DistributionSampling.logProbabilityPoisson((arrivals[t] - reduceVar$numSales$4), lambda[t]);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var79[t] = cv$distributionAccumulator;
-					logProbability$sample89[t] = cv$distributionAccumulator;
+					logProbability$sample90[t] = cv$distributionAccumulator;
 				}
 			}
 			logProbability$arrivals = (logProbability$arrivals + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample89)
+			if(fixedFlag$sample90)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample89 = (fixedFlag$sample89 && fixedFlag$sample87);
+			fixedProbFlag$sample90 = (fixedFlag$sample90 && fixedFlag$sample88);
 		} else {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					double cv$rvAccumulator = logProbability$sample89[t];
+					double cv$rvAccumulator = logProbability$sample90[t];
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var79[t] = cv$rvAccumulator;
 				}
 			}
 			logProbability$arrivals = (logProbability$arrivals + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample89)
+			if(fixedFlag$sample90)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
@@ -445,50 +445,50 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					if(avail[t][j$var50])
-						guard$sample34multinomial123$global[t] = false;
+						guard$sample34multinomial124$global[t] = false;
 				}
 			}
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					if(avail[t][j$var50])
-						guard$sample34multinomial123$global[t] = false;
+						guard$sample34multinomial124$global[t] = false;
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][var27])
-					guard$sample34multinomial123$global[t] = false;
+					guard$sample34multinomial124$global[t] = false;
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][var27])
-					guard$sample34multinomial123$global[t] = false;
+					guard$sample34multinomial124$global[t] = false;
 			}
 			if(((0 < exped.length) && (0 < avail[0].length))) {
 				for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 					for(int t = 0; t < numTimeSteps; t += 1) {
-						if((((0 < weekly_ut[t].length) && avail[t][j$var50]) && !guard$sample34multinomial123$global[t])) {
-							guard$sample34multinomial123$global[t] = true;
+						if((((0 < weekly_ut[t].length) && avail[t][j$var50]) && !guard$sample34multinomial124$global[t])) {
+							guard$sample34multinomial124$global[t] = true;
 							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 						}
 					}
 				}
 				for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 					for(int t = 0; t < numTimeSteps; t += 1) {
-						if((avail[t][j$var50] && !guard$sample34multinomial123$global[t])) {
-							guard$sample34multinomial123$global[t] = true;
+						if((avail[t][j$var50] && !guard$sample34multinomial124$global[t])) {
+							guard$sample34multinomial124$global[t] = true;
 							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 						}
 					}
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if((((0 < weekly_ut[t].length) && !guard$sample34multinomial123$global[t]) && avail[t][var27])) {
-					guard$sample34multinomial123$global[t] = true;
+				if((((0 < weekly_ut[t].length) && !guard$sample34multinomial124$global[t]) && avail[t][var27])) {
+					guard$sample34multinomial124$global[t] = true;
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if((!guard$sample34multinomial123$global[t] && avail[t][var27])) {
-					guard$sample34multinomial123$global[t] = true;
+				if((!guard$sample34multinomial124$global[t] && avail[t][var27])) {
+					guard$sample34multinomial124$global[t] = true;
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 				}
 			}
@@ -503,8 +503,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			if(!guard$sample34put61$global[j$var50]) {
 				guard$sample34put61$global[j$var50] = true;
 				double reduceVar$sum$0 = 0.0;
-				for(int cv$reduction276Index = 0; cv$reduction276Index < avail[0].length; cv$reduction276Index += 1)
-					reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction276Index]);
+				for(int cv$reduction277Index = 0; cv$reduction277Index < avail[0].length; cv$reduction277Index += 1)
+					reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction277Index]);
 				expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$0 * 0.3));
 			}
 		}
@@ -518,24 +518,24 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][j$var50])
-					guard$sample34put101$global[t][j$var50] = false;
+					guard$sample34put102$global[t][j$var50] = false;
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
 			if(avail[t][var27])
-				guard$sample34put101$global[t][var27] = false;
+				guard$sample34put102$global[t][var27] = false;
 		}
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if((avail[t][j$var50] && !guard$sample34put101$global[t][j$var50])) {
-					guard$sample34put101$global[t][j$var50] = true;
+				if((avail[t][j$var50] && !guard$sample34put102$global[t][j$var50])) {
+					guard$sample34put102$global[t][j$var50] = true;
 					weekly_ut[t][j$var50] = expedNorm[j$var50];
 				}
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
-			if((!guard$sample34put101$global[t][var27] && avail[t][var27])) {
-				guard$sample34put101$global[t][var27] = true;
+			if((!guard$sample34put102$global[t][var27] && avail[t][var27])) {
+				guard$sample34put102$global[t][var27] = true;
 				weekly_ut[t][var27] = expedNorm[var27];
 			}
 		}
@@ -543,35 +543,35 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][j$var50]) {
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
-						guard$sample34put122$global[t][j$var107] = false;
+						guard$sample34put123$global[t][j$var107] = false;
 				}
 			}
 		}
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][j$var50])
-					guard$sample34put122$global[t][j$var50] = false;
+					guard$sample34put123$global[t][j$var50] = false;
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
 			if(avail[t][var27]) {
 				for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
-					guard$sample34put122$global[t][j$var107] = false;
+					guard$sample34put123$global[t][j$var107] = false;
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
 			if(avail[t][var27])
-				guard$sample34put122$global[t][var27] = false;
+				guard$sample34put123$global[t][var27] = false;
 		}
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][j$var50]) {
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1) {
-						if(!guard$sample34put122$global[t][j$var107]) {
-							guard$sample34put122$global[t][j$var107] = true;
+						if(!guard$sample34put123$global[t][j$var107]) {
+							guard$sample34put123$global[t][j$var107] = true;
 							double reduceVar$denom$0 = 0.0;
-							for(int cv$reduction711Index = 0; cv$reduction711Index <= avail[0].length; cv$reduction711Index += 1)
-								reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t][cv$reduction711Index]);
+							for(int cv$reduction716Index = 0; cv$reduction716Index <= avail[0].length; cv$reduction716Index += 1)
+								reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t][cv$reduction716Index]);
 							weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$0);
 						}
 					}
@@ -580,11 +580,11 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if((avail[t][j$var50] && !guard$sample34put122$global[t][j$var50])) {
-					guard$sample34put122$global[t][j$var50] = true;
+				if((avail[t][j$var50] && !guard$sample34put123$global[t][j$var50])) {
+					guard$sample34put123$global[t][j$var50] = true;
 					double reduceVar$denom$1 = 0.0;
-					for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-						reduceVar$denom$1 = (reduceVar$denom$1 + weekly_ut[t][cv$reduction110Index]);
+					for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+						reduceVar$denom$1 = (reduceVar$denom$1 + weekly_ut[t][cv$reduction111Index]);
 					weekly_rates[t][j$var50] = (weekly_ut[t][j$var50] / reduceVar$denom$1);
 				}
 			}
@@ -592,22 +592,22 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		for(int t = 0; t < numTimeSteps; t += 1) {
 			if(avail[t][var27]) {
 				for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1) {
-					if(!guard$sample34put122$global[t][j$var107]) {
-						guard$sample34put122$global[t][j$var107] = true;
+					if(!guard$sample34put123$global[t][j$var107]) {
+						guard$sample34put123$global[t][j$var107] = true;
 						double reduceVar$denom$2 = 0.0;
-						for(int cv$reduction811Index = 0; cv$reduction811Index <= avail[0].length; cv$reduction811Index += 1)
-							reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t][cv$reduction811Index]);
+						for(int cv$reduction816Index = 0; cv$reduction816Index <= avail[0].length; cv$reduction816Index += 1)
+							reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t][cv$reduction816Index]);
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$2);
 					}
 				}
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
-			if((avail[t][var27] && !guard$sample34put122$global[t][var27])) {
-				guard$sample34put122$global[t][var27] = true;
+			if((avail[t][var27] && !guard$sample34put123$global[t][var27])) {
+				guard$sample34put123$global[t][var27] = true;
 				double reduceVar$denom$3 = 0.0;
-				for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-					reduceVar$denom$3 = (reduceVar$denom$3 + weekly_ut[t][cv$reduction110Index]);
+				for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+					reduceVar$denom$3 = (reduceVar$denom$3 + weekly_ut[t][cv$reduction111Index]);
 				weekly_rates[t][var27] = (weekly_ut[t][var27] / reduceVar$denom$3);
 			}
 		}
@@ -615,50 +615,50 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][j$var50])
-					guard$sample34multinomial123$global[t] = false;
+					guard$sample34multinomial124$global[t] = false;
 			}
 		}
 		for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][j$var50])
-					guard$sample34multinomial123$global[t] = false;
+					guard$sample34multinomial124$global[t] = false;
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
 			if(avail[t][var27])
-				guard$sample34multinomial123$global[t] = false;
+				guard$sample34multinomial124$global[t] = false;
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
 			if(avail[t][var27])
-				guard$sample34multinomial123$global[t] = false;
+				guard$sample34multinomial124$global[t] = false;
 		}
 		if(((0 < exped.length) && (0 < avail[0].length))) {
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					if((((0 < weekly_ut[t].length) && avail[t][j$var50]) && !guard$sample34multinomial123$global[t])) {
-						guard$sample34multinomial123$global[t] = true;
+					if((((0 < weekly_ut[t].length) && avail[t][j$var50]) && !guard$sample34multinomial124$global[t])) {
+						guard$sample34multinomial124$global[t] = true;
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					if((avail[t][j$var50] && !guard$sample34multinomial123$global[t])) {
-						guard$sample34multinomial123$global[t] = true;
+					if((avail[t][j$var50] && !guard$sample34multinomial124$global[t])) {
+						guard$sample34multinomial124$global[t] = true;
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
-			if((((0 < weekly_ut[t].length) && !guard$sample34multinomial123$global[t]) && avail[t][var27])) {
-				guard$sample34multinomial123$global[t] = true;
+			if((((0 < weekly_ut[t].length) && !guard$sample34multinomial124$global[t]) && avail[t][var27])) {
+				guard$sample34multinomial124$global[t] = true;
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 			}
 		}
 		for(int t = 0; t < numTimeSteps; t += 1) {
-			if((!guard$sample34multinomial123$global[t] && avail[t][var27])) {
-				guard$sample34multinomial123$global[t] = true;
+			if((!guard$sample34multinomial124$global[t] && avail[t][var27])) {
+				guard$sample34multinomial124$global[t] = true;
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + cv$accumulatedProbabilities);
 			}
 		}
@@ -672,8 +672,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				if(!guard$sample34put61$global[j$var50]) {
 					guard$sample34put61$global[j$var50] = true;
 					double reduceVar$sum$6 = 0.0;
-					for(int cv$reduction1449Index = 0; cv$reduction1449Index < avail[0].length; cv$reduction1449Index += 1)
-						reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction1449Index]);
+					for(int cv$reduction1462Index = 0; cv$reduction1462Index < avail[0].length; cv$reduction1462Index += 1)
+						reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction1462Index]);
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$6 * 0.3));
 				}
 			}
@@ -687,24 +687,24 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					if(avail[t][j$var50])
-						guard$sample34put101$global[t][j$var50] = false;
+						guard$sample34put102$global[t][j$var50] = false;
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][var27])
-					guard$sample34put101$global[t][var27] = false;
+					guard$sample34put102$global[t][var27] = false;
 			}
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					if((avail[t][j$var50] && !guard$sample34put101$global[t][j$var50])) {
-						guard$sample34put101$global[t][j$var50] = true;
+					if((avail[t][j$var50] && !guard$sample34put102$global[t][j$var50])) {
+						guard$sample34put102$global[t][j$var50] = true;
 						weekly_ut[t][j$var50] = expedNorm[j$var50];
 					}
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if((!guard$sample34put101$global[t][var27] && avail[t][var27])) {
-					guard$sample34put101$global[t][var27] = true;
+				if((!guard$sample34put102$global[t][var27] && avail[t][var27])) {
+					guard$sample34put102$global[t][var27] = true;
 					weekly_ut[t][var27] = expedNorm[var27];
 				}
 			}
@@ -712,35 +712,35 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					if(avail[t][j$var50]) {
 						for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
-							guard$sample34put122$global[t][j$var107] = false;
+							guard$sample34put123$global[t][j$var107] = false;
 					}
 				}
 			}
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					if(avail[t][j$var50])
-						guard$sample34put122$global[t][j$var50] = false;
+						guard$sample34put123$global[t][j$var50] = false;
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][var27]) {
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
-						guard$sample34put122$global[t][j$var107] = false;
+						guard$sample34put123$global[t][j$var107] = false;
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][var27])
-					guard$sample34put122$global[t][var27] = false;
+					guard$sample34put123$global[t][var27] = false;
 			}
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
 					if(avail[t][j$var50]) {
 						for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1) {
-							if(!guard$sample34put122$global[t][j$var107]) {
-								guard$sample34put122$global[t][j$var107] = true;
+							if(!guard$sample34put123$global[t][j$var107]) {
+								guard$sample34put123$global[t][j$var107] = true;
 								double reduceVar$denom$6 = 0.0;
-								for(int cv$reduction1884Index = 0; cv$reduction1884Index <= avail[0].length; cv$reduction1884Index += 1)
-									reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t][cv$reduction1884Index]);
+								for(int cv$reduction1901Index = 0; cv$reduction1901Index <= avail[0].length; cv$reduction1901Index += 1)
+									reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t][cv$reduction1901Index]);
 								weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$6);
 							}
 						}
@@ -749,11 +749,11 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			}
 			for(int j$var50 = 0; j$var50 < avail[0].length; j$var50 += 1) {
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					if((avail[t][j$var50] && !guard$sample34put122$global[t][j$var50])) {
-						guard$sample34put122$global[t][j$var50] = true;
+					if((avail[t][j$var50] && !guard$sample34put123$global[t][j$var50])) {
+						guard$sample34put123$global[t][j$var50] = true;
 						double reduceVar$denom$7 = 0.0;
-						for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-							reduceVar$denom$7 = (reduceVar$denom$7 + weekly_ut[t][cv$reduction110Index]);
+						for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+							reduceVar$denom$7 = (reduceVar$denom$7 + weekly_ut[t][cv$reduction111Index]);
 						weekly_rates[t][j$var50] = (weekly_ut[t][j$var50] / reduceVar$denom$7);
 					}
 				}
@@ -761,39 +761,39 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				if(avail[t][var27]) {
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1) {
-						if(!guard$sample34put122$global[t][j$var107]) {
-							guard$sample34put122$global[t][j$var107] = true;
+						if(!guard$sample34put123$global[t][j$var107]) {
+							guard$sample34put123$global[t][j$var107] = true;
 							double reduceVar$denom$8 = 0.0;
-							for(int cv$reduction1984Index = 0; cv$reduction1984Index <= avail[0].length; cv$reduction1984Index += 1)
-								reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t][cv$reduction1984Index]);
+							for(int cv$reduction2001Index = 0; cv$reduction2001Index <= avail[0].length; cv$reduction2001Index += 1)
+								reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t][cv$reduction2001Index]);
 							weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$8);
 						}
 					}
 				}
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if((avail[t][var27] && !guard$sample34put122$global[t][var27])) {
-					guard$sample34put122$global[t][var27] = true;
+				if((avail[t][var27] && !guard$sample34put123$global[t][var27])) {
+					guard$sample34put123$global[t][var27] = true;
 					double reduceVar$denom$9 = 0.0;
-					for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-						reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t][cv$reduction110Index]);
+					for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+						reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t][cv$reduction111Index]);
 					weekly_rates[t][var27] = (weekly_ut[t][var27] / reduceVar$denom$9);
 				}
 			}
 		}
 	}
 
-	private final void sample87(int t) {
+	private final void sample88(int t) {
 		int reduceVar$numSales$0 = 0;
-		for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-			reduceVar$numSales$0 = (reduceVar$numSales$0 + ObsSales[t][cv$reduction77Index]);
+		for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+			reduceVar$numSales$0 = (reduceVar$numSales$0 + ObsSales[t][cv$reduction78Index]);
 		lambda[t] = Conjugates.sampleConjugateGammaPoisson(RNG$, 10.0, 10.0, (arrivals[t] - reduceVar$numSales$0), 1);
 	}
 
-	private final void sample89(int t) {
+	private final void sample90(int t) {
 		int reduceVar$numSales$1 = 0;
-		for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-			reduceVar$numSales$1 = (reduceVar$numSales$1 + ObsSales[t][cv$reduction77Index]);
+		for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+			reduceVar$numSales$1 = (reduceVar$numSales$1 + ObsSales[t][cv$reduction78Index]);
 		int cv$originalValue = (arrivals[t] - reduceVar$numSales$1);
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
 		if((cv$var < 1.0))
@@ -803,14 +803,14 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		int cv$proposedValue = (cv$originalValue + (int)cv$offset);
 		double cv$originalProbability = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t]));
 		int reduceVar$numSales$2 = 0;
-		for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-			reduceVar$numSales$2 = (reduceVar$numSales$2 + ObsSales[t][cv$reduction77Index]);
+		for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+			reduceVar$numSales$2 = (reduceVar$numSales$2 + ObsSales[t][cv$reduction78Index]);
 		arrivals[t] = (reduceVar$numSales$2 + cv$proposedValue);
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t], weekly_rates[t], arrivals[t]) + DistributionSampling.logProbabilityPoisson(cv$proposedValue, lambda[t]));
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			int reduceVar$numSales$3 = 0;
-			for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-				reduceVar$numSales$3 = (reduceVar$numSales$3 + ObsSales[t][cv$reduction77Index]);
+			for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+				reduceVar$numSales$3 = (reduceVar$numSales$3 + ObsSales[t][cv$reduction78Index]);
 			arrivals[t] = (reduceVar$numSales$3 + cv$originalValue);
 		}
 	}
@@ -828,7 +828,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				cv$max_j$var86 = avail[0].length;
 				cv$max_t = avail.length;
 			}
-			guard$sample34put101$global = new boolean[cv$max_t][cv$max_j$var86];
+			guard$sample34put102$global = new boolean[cv$max_t][cv$max_j$var86];
 		}
 		{
 			int cv$max_t = 0;
@@ -837,12 +837,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				cv$max_j$var107 = (avail[0].length + 1);
 				cv$max_t = avail.length;
 			}
-			guard$sample34put122$global = new boolean[cv$max_t][cv$max_j$var107];
+			guard$sample34put123$global = new boolean[cv$max_t][cv$max_j$var107];
 		}
 		int cv$max_t = 0;
 		if((0 < avail.length))
 			cv$max_t = avail.length;
-		guard$sample34multinomial123$global = new boolean[cv$max_t];
+		guard$sample34multinomial124$global = new boolean[cv$max_t];
 	}
 
 	@Override
@@ -878,11 +878,11 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		logProbability$sample34 = new double[avail[0].length];
 		logProbability$var77 = new double[avail.length];
-		logProbability$sample87 = new double[avail.length];
+		logProbability$sample88 = new double[avail.length];
 		logProbability$var79 = new double[avail.length];
-		logProbability$sample89 = new double[avail.length];
+		logProbability$sample90 = new double[avail.length];
 		logProbability$var111 = new double[avail.length];
-		logProbability$sample124 = new double[avail.length];
+		logProbability$sample125 = new double[avail.length];
 		allocateScratch();
 	}
 
@@ -901,12 +901,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$8 * 0.3));
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if(!fixedFlag$sample87)
+				if(!fixedFlag$sample88)
 					lambda[t] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
-				if(!fixedFlag$sample89) {
+				if(!fixedFlag$sample90) {
 					int reduceVar$numSales$5 = 0;
-					for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-						reduceVar$numSales$5 = (reduceVar$numSales$5 + ObsSales[t][cv$reduction77Index]);
+					for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+						reduceVar$numSales$5 = (reduceVar$numSales$5 + ObsSales[t][cv$reduction78Index]);
 					arrivals[t] = (reduceVar$numSales$5 + DistributionSampling.samplePoisson(RNG$, lambda[t]));
 				}
 				for(int j$var86 = 0; j$var86 < avail[0].length; j$var86 += 1) {
@@ -919,12 +919,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				weekly_ut[t][avail[0].length] = 1.0;
 				if(!fixedFlag$sample34) {
 					double reduceVar$denom$10 = 0.0;
-					for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t][cv$reduction110Index]);
+					for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t][cv$reduction111Index]);
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$10);
 				}
-				if(!fixedFlag$sample124) {
+				if(!fixedFlag$sample125) {
 					DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t], arrivals[t], weekly_sales[t]);
 					int[] observed_weekly_sales = sales[t];
 					for(int j$var116 = 0; j$var116 < avail[0].length; j$var116 += 1)
@@ -949,12 +949,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$10 * 0.3));
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if(!fixedFlag$sample87)
+				if(!fixedFlag$sample88)
 					lambda[t] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
-				if(!fixedFlag$sample89) {
+				if(!fixedFlag$sample90) {
 					int reduceVar$numSales$7 = 0;
-					for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-						reduceVar$numSales$7 = (reduceVar$numSales$7 + ObsSales[t][cv$reduction77Index]);
+					for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+						reduceVar$numSales$7 = (reduceVar$numSales$7 + ObsSales[t][cv$reduction78Index]);
 					arrivals[t] = (reduceVar$numSales$7 + DistributionSampling.samplePoisson(RNG$, lambda[t]));
 				}
 				for(int j$var86 = 0; j$var86 < avail[0].length; j$var86 += 1) {
@@ -967,8 +967,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				weekly_ut[t][avail[0].length] = 1.0;
 				if(!fixedFlag$sample34) {
 					double reduceVar$denom$12 = 0.0;
-					for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-						reduceVar$denom$12 = (reduceVar$denom$12 + weekly_ut[t][cv$reduction110Index]);
+					for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+						reduceVar$denom$12 = (reduceVar$denom$12 + weekly_ut[t][cv$reduction111Index]);
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$12);
 				}
@@ -991,12 +991,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$9 * 0.3));
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if(!fixedFlag$sample87)
+				if(!fixedFlag$sample88)
 					lambda[t] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
-				if(!fixedFlag$sample89) {
+				if(!fixedFlag$sample90) {
 					int reduceVar$numSales$6 = 0;
-					for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-						reduceVar$numSales$6 = (reduceVar$numSales$6 + ObsSales[t][cv$reduction77Index]);
+					for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+						reduceVar$numSales$6 = (reduceVar$numSales$6 + ObsSales[t][cv$reduction78Index]);
 					arrivals[t] = (reduceVar$numSales$6 + DistributionSampling.samplePoisson(RNG$, lambda[t]));
 				}
 				for(int j$var86 = 0; j$var86 < avail[0].length; j$var86 += 1) {
@@ -1009,8 +1009,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				weekly_ut[t][avail[0].length] = 1.0;
 				if(!fixedFlag$sample34) {
 					double reduceVar$denom$11 = 0.0;
-					for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-						reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t][cv$reduction110Index]);
+					for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+						reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t][cv$reduction111Index]);
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$11);
 				}
@@ -1027,17 +1027,17 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 						sample34(var27);
 				}
 				for(int t = 0; t < numTimeSteps; t += 1) {
-					if(!fixedFlag$sample87)
-						sample87(t);
-					if(!fixedFlag$sample89)
-						sample89(t);
+					if(!fixedFlag$sample88)
+						sample88(t);
+					if(!fixedFlag$sample90)
+						sample90(t);
 				}
 			} else {
 				for(int t = (numTimeSteps - 1); t >= 0; t -= 1) {
-					if(!fixedFlag$sample89)
-						sample89(t);
-					if(!fixedFlag$sample87)
-						sample87(t);
+					if(!fixedFlag$sample90)
+						sample90(t);
+					if(!fixedFlag$sample88)
+						sample88(t);
 				}
 				if(!fixedFlag$sample34) {
 					for(int var27 = (avail[0].length - 1); var27 >= 0; var27 -= 1)
@@ -1072,27 +1072,27 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		logProbability$lambda = 0.0;
 		if((0 < numTimeSteps)) {
-			if(!fixedProbFlag$sample87) {
+			if(!fixedProbFlag$sample88) {
 				for(int t = 0; t < numTimeSteps; t += 1)
-					logProbability$sample87[t] = 0.0;
+					logProbability$sample88[t] = 0.0;
 			}
 			for(int t = 0; t < numTimeSteps; t += 1)
 				logProbability$var79[t] = 0.0;
 		}
 		logProbability$arrivals = 0.0;
 		if((0 < numTimeSteps)) {
-			if(!fixedProbFlag$sample89) {
+			if(!fixedProbFlag$sample90) {
 				for(int t = 0; t < numTimeSteps; t += 1)
-					logProbability$sample89[t] = 0.0;
+					logProbability$sample90[t] = 0.0;
 			}
 			for(int t = 0; t < numTimeSteps; t += 1)
 				logProbability$var111[t] = 0.0;
 		}
 		logProbability$sales = 0.0;
 		logProbability$weekly_sales = 0.0;
-		if((!fixedProbFlag$sample124 && (0 < numTimeSteps))) {
+		if((!fixedProbFlag$sample125 && (0 < numTimeSteps))) {
 			for(int t = 0; t < numTimeSteps; t += 1)
-				logProbability$sample124[t] = 0.0;
+				logProbability$sample125[t] = 0.0;
 		}
 	}
 
@@ -1106,29 +1106,29 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample34)
 			logProbabilityValue$sample34();
-		if(fixedFlag$sample87)
-			logProbabilityValue$sample87();
-		if(fixedFlag$sample89)
-			logProbabilityValue$sample89();
-		logProbabilityValue$sample124();
+		if(fixedFlag$sample88)
+			logProbabilityValue$sample88();
+		if(fixedFlag$sample90)
+			logProbabilityValue$sample90();
+		logProbabilityValue$sample125();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample34();
-		logProbabilityValue$sample87();
-		logProbabilityValue$sample89();
-		logProbabilityValue$sample124();
+		logProbabilityValue$sample88();
+		logProbabilityValue$sample90();
+		logProbabilityValue$sample125();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample34();
-		logProbabilityValue$sample87();
-		logProbabilityValue$sample89();
-		logProbabilityValue$sample124();
+		logProbabilityValue$sample88();
+		logProbabilityValue$sample90();
+		logProbabilityValue$sample125();
 	}
 
 	@Override
@@ -1146,12 +1146,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$11 * 0.3));
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
-				if(!fixedFlag$sample87)
+				if(!fixedFlag$sample88)
 					lambda[t] = DistributionSampling.sampleGamma(RNG$, 10.0, 10.0);
-				if(!fixedFlag$sample89) {
+				if(!fixedFlag$sample90) {
 					int reduceVar$numSales$8 = 0;
-					for(int cv$reduction77Index = 0; cv$reduction77Index < ObsSales[t].length; cv$reduction77Index += 1)
-						reduceVar$numSales$8 = (reduceVar$numSales$8 + ObsSales[t][cv$reduction77Index]);
+					for(int cv$reduction78Index = 0; cv$reduction78Index < ObsSales[t].length; cv$reduction78Index += 1)
+						reduceVar$numSales$8 = (reduceVar$numSales$8 + ObsSales[t][cv$reduction78Index]);
 					arrivals[t] = (reduceVar$numSales$8 + DistributionSampling.samplePoisson(RNG$, lambda[t]));
 				}
 				for(int j$var86 = 0; j$var86 < avail[0].length; j$var86 += 1) {
@@ -1164,8 +1164,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				weekly_ut[t][avail[0].length] = 1.0;
 				if(!fixedFlag$sample34) {
 					double reduceVar$denom$13 = 0.0;
-					for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-						reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t][cv$reduction110Index]);
+					for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+						reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t][cv$reduction111Index]);
 					for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$13);
 				}
@@ -1209,8 +1209,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 						weekly_ut[t][j$var86] = expedNorm[j$var86];
 				}
 				double reduceVar$denom$14 = 0.0;
-				for(int cv$reduction110Index = 0; cv$reduction110Index <= avail[0].length; cv$reduction110Index += 1)
-					reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t][cv$reduction110Index]);
+				for(int cv$reduction111Index = 0; cv$reduction111Index <= avail[0].length; cv$reduction111Index += 1)
+					reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t][cv$reduction111Index]);
 				for(int j$var107 = 0; j$var107 <= avail[0].length; j$var107 += 1)
 					weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$14);
 				if(setFlag$weekly_sales) {

@@ -34,13 +34,13 @@ public class HMMTestPart2b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample27(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(system$c.get$fixedFlag$sample27())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class HMMTestPart2b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample53(fixed);
+                system$c.set$fixedFlag$sample54(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample53())
+            if(system$c.get$fixedFlag$sample54())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -144,13 +144,13 @@ public class HMMTestPart2b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample45(fixed);
+                system$c.set$fixedFlag$sample46(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample45())
+            if(system$c.get$fixedFlag$sample46())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -277,13 +277,13 @@ public class HMMTestPart2b extends Model {
 
         //Set fixed flags
         if(bias.isSet())
-            newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
+            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
+            newCore.set$fixedFlag$sample54(oldCore.get$fixedFlag$sample54());
         if(m.isSet())
             newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
         if(st.isSet())
-            newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
+            newCore.set$fixedFlag$sample46(oldCore.get$fixedFlag$sample46());
     }
 
     /**

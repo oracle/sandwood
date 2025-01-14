@@ -232,29 +232,8 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Store the sample task probability
 			logProbability$var12 = cv$sampleProbability;
 			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			// 
-			// Looking for a path between Sample 13 and consumer double[] 26.
-			{
-				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$bias) {
-							// Set the guard so the update is only applied once.
-							cv$guard$bias = true;
-							
-							// Update the variable probability
-							logProbability$bias = (logProbability$bias + cv$accumulator);
-						}
-					}
-				}
-			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -279,29 +258,8 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var11 = cv$rvAccumulator;
 			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			// 
-			// Looking for a path between Sample 13 and consumer double[] 26.
-			{
-				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$bias) {
-							// Set the guard so the update is only applied once.
-							cv$guard$bias = true;
-							
-							// Update the variable probability
-							logProbability$bias = (logProbability$bias + cv$accumulator);
-						}
-					}
-				}
-			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

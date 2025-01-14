@@ -8,11 +8,11 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private double[] bias;
 	private int coins;
 	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample46 = false;
-	private boolean fixedFlag$sample56 = false;
+	private boolean fixedFlag$sample47 = false;
+	private boolean fixedFlag$sample58 = false;
 	private boolean fixedProbFlag$sample16 = false;
-	private boolean fixedProbFlag$sample46 = false;
-	private boolean fixedProbFlag$sample56 = false;
+	private boolean fixedProbFlag$sample47 = false;
+	private boolean fixedProbFlag$sample58 = false;
 	private boolean[][][] flips;
 	private boolean[][][] flipsMeasured;
 	private int[][] length$flipsMeasured;
@@ -22,8 +22,8 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double[] logProbability$sample16;
-	private double[] logProbability$sample46;
-	private double[] logProbability$sample56;
+	private double[] logProbability$sample47;
+	private double[] logProbability$sample58;
 	private double[] logProbability$var13;
 	private boolean setFlag$bias = false;
 	private boolean setFlag$flips = false;
@@ -85,57 +85,57 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// Substituted "fixedFlag$sample16" with its value "cv$value".
 		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 		
-		// Should the probability of sample 46 be set to fixed. This will only every change
+		// Should the probability of sample 47 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		fixedProbFlag$sample46 = (cv$value && fixedProbFlag$sample46);
+		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 		
-		// Should the probability of sample 56 be set to fixed. This will only every change
+		// Should the probability of sample 58 be set to fixed. This will only every change
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		fixedProbFlag$sample56 = (cv$value && fixedProbFlag$sample56);
+		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
 	}
 
-	// Getter for fixedFlag$sample46.
+	// Getter for fixedFlag$sample47.
 	@Override
-	public final boolean get$fixedFlag$sample46() {
-		return fixedFlag$sample46;
+	public final boolean get$fixedFlag$sample47() {
+		return fixedFlag$sample47;
 	}
 
-	// Setter for fixedFlag$sample46.
+	// Setter for fixedFlag$sample47.
 	@Override
-	public final void set$fixedFlag$sample46(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample46 including if probabilities
+	public final void set$fixedFlag$sample47(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
 		// need to be updated.
-		fixedFlag$sample46 = cv$value;
+		fixedFlag$sample47 = cv$value;
 		
-		// Should the probability of sample 46 be set to fixed. This will only every change
+		// Should the probability of sample 47 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample46" with its value "cv$value".
-		fixedProbFlag$sample46 = (cv$value && fixedProbFlag$sample46);
+		// Substituted "fixedFlag$sample47" with its value "cv$value".
+		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 	}
 
-	// Getter for fixedFlag$sample56.
+	// Getter for fixedFlag$sample58.
 	@Override
-	public final boolean get$fixedFlag$sample56() {
-		return fixedFlag$sample56;
+	public final boolean get$fixedFlag$sample58() {
+		return fixedFlag$sample58;
 	}
 
-	// Setter for fixedFlag$sample56.
+	// Setter for fixedFlag$sample58.
 	@Override
-	public final void set$fixedFlag$sample56(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample56 including if probabilities
+	public final void set$fixedFlag$sample58(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
 		// need to be updated.
-		fixedFlag$sample56 = cv$value;
+		fixedFlag$sample58 = cv$value;
 		
-		// Should the probability of sample 56 be set to fixed. This will only every change
+		// Should the probability of sample 58 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample56" with its value "cv$value".
-		fixedProbFlag$sample56 = (cv$value && fixedProbFlag$sample56);
+		// Substituted "fixedFlag$sample58" with its value "cv$value".
+		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
 	}
 
 	// Getter for flips.
@@ -303,12 +303,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample46 using sampled
+	// Calculate the probability of the samples represented by sample47 using sampled
 	// values.
-	private final void logProbabilityValue$sample46() {
-		// Determine if we need to calculate the values for sample task 46 or if we should
+	private final void logProbabilityValue$sample47() {
+		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample46) {
+		if(!fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -339,7 +339,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$sampleAccumulator);
 				
 				// Store the random variable instance probability
-				logProbability$sample46[j] = cv$sampleAccumulator;
+				logProbability$sample47[j] = cv$sampleAccumulator;
 			}
 			
 			// Update the variable probability
@@ -351,7 +351,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample46 = (fixedFlag$sample46 && fixedFlag$sample16);
+			fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedFlag$sample16);
 		}
 		// Using cached values.
 		else {
@@ -360,7 +360,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample46[j];
+				double cv$rvAccumulator = logProbability$sample47[j];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$rvAccumulator);
 			}
@@ -374,12 +374,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample56 using sampled
+	// Calculate the probability of the samples represented by sample58 using sampled
 	// values.
-	private final void logProbabilityValue$sample56() {
-		// Determine if we need to calculate the values for sample task 56 or if we should
+	private final void logProbabilityValue$sample58() {
+		// Determine if we need to calculate the values for sample task 58 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample56) {
+		if(!fixedProbFlag$sample58) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -410,7 +410,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$sampleAccumulator);
 				
 				// Store the random variable instance probability
-				logProbability$sample56[j] = cv$sampleAccumulator;
+				logProbability$sample58[j] = cv$sampleAccumulator;
 			}
 			
 			// Update the variable probability
@@ -422,7 +422,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample56 = (fixedFlag$sample56 && fixedFlag$sample16);
+			fixedProbFlag$sample58 = (fixedFlag$sample58 && fixedFlag$sample16);
 		}
 		// Using cached values.
 		else {
@@ -431,7 +431,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample56[j];
+				double cv$rvAccumulator = logProbability$sample58[j];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$rvAccumulator);
 			}
@@ -455,11 +455,11 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// Local variable to record the number of samples.
 		int cv$count = 0;
 		
-		// Processing sample task 46 of consumer random variable bernoulli.
+		// Processing sample task 47 of consumer random variable bernoulli.
 		// 
 		// Substituted "j" with its value "var12".
 		for(int var41 = 0; var41 < length$flipsMeasured[var12][0]; var41 += 1) {
-			// Include the value sampled by task 46 from random variable bernoulli.
+			// Include the value sampled by task 47 from random variable bernoulli.
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -470,11 +470,11 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				cv$sum = (cv$sum + 1);
 		}
 		
-		// Processing sample task 56 of consumer random variable bernoulli.
+		// Processing sample task 58 of consumer random variable bernoulli.
 		// 
 		// Substituted "j" with its value "var12".
 		for(int var51 = 0; var51 < length$flipsMeasured[var12][1]; var51 += 1) {
-			// Include the value sampled by task 56 from random variable bernoulli.
+			// Include the value sampled by task 58 from random variable bernoulli.
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -525,11 +525,11 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// Constructor for logProbability$bernoulli
 		logProbability$bernoulli = new double[length$flipsMeasured.length];
 		
-		// Constructor for logProbability$sample46
-		logProbability$sample46 = new double[length$flipsMeasured.length];
+		// Constructor for logProbability$sample47
+		logProbability$sample47 = new double[length$flipsMeasured.length];
 		
-		// Constructor for logProbability$sample56
-		logProbability$sample56 = new double[length$flipsMeasured.length];
+		// Constructor for logProbability$sample58
+		logProbability$sample58 = new double[length$flipsMeasured.length];
 	}
 
 	// Method to execute the model code conventionally.
@@ -542,14 +542,14 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		}
 		for(int j = 0; j < coins; j += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample46) {
+			if(!fixedFlag$sample47) {
 				boolean[] var38 = flips[j][0];
 				for(int var41 = 0; var41 < length$flipsMeasured[j][0]; var41 += 1)
 					var38[var41] = DistributionSampling.sampleBernoulli(RNG$, bias[j]);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample56) {
+			if(!fixedFlag$sample58) {
 				boolean[] var48 = flips[j][1];
 				for(int var51 = 0; var51 < length$flipsMeasured[j][1]; var51 += 1)
 					var48[var51] = DistributionSampling.sampleBernoulli(RNG$, bias[j]);
@@ -627,13 +627,13 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		for(int j = 0; j < coins; j += 1)
 			logProbability$bernoulli[j] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample46) {
+		if(!fixedProbFlag$sample47) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample46[j] = 0.0;
+				logProbability$sample47[j] = 0.0;
 		}
-		if(!fixedProbFlag$sample56) {
+		if(!fixedProbFlag$sample58) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample56[j] = 0.0;
+				logProbability$sample58[j] = 0.0;
 		}
 	}
 
@@ -656,8 +656,8 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample16)
 			logProbabilityValue$sample16();
-		logProbabilityValue$sample46();
-		logProbabilityValue$sample56();
+		logProbabilityValue$sample47();
+		logProbabilityValue$sample58();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -676,8 +676,8 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample16();
-		logProbabilityValue$sample46();
-		logProbabilityValue$sample56();
+		logProbabilityValue$sample47();
+		logProbabilityValue$sample58();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -695,8 +695,8 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample16();
-		logProbabilityValue$sample46();
-		logProbabilityValue$sample56();
+		logProbabilityValue$sample47();
+		logProbabilityValue$sample58();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then

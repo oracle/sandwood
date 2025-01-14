@@ -15,13 +15,13 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private double[][] cv$var53$stateProbabilityGlobal;
 	private int[][] documents;
 	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample59 = false;
-	private boolean fixedFlag$sample62 = false;
+	private boolean fixedFlag$sample36 = false;
+	private boolean fixedFlag$sample61 = false;
+	private boolean fixedFlag$sample64 = false;
 	private boolean fixedProbFlag$sample26 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample59 = false;
-	private boolean fixedProbFlag$sample62 = false;
+	private boolean fixedProbFlag$sample36 = false;
+	private boolean fixedProbFlag$sample61 = false;
+	private boolean fixedProbFlag$sample64 = false;
 	private int[] length$documents;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -95,71 +95,71 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		// the flag to false.
 		fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
 		
-		// Should the probability of sample 62 be set to fixed. This will only every change
+		// Should the probability of sample 64 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample62 = (fixedFlag$sample26 && fixedProbFlag$sample62);
+		fixedProbFlag$sample64 = (fixedFlag$sample26 && fixedProbFlag$sample64);
 	}
 
-	// Getter for fixedFlag$sample35.
+	// Getter for fixedFlag$sample36.
 	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
+	public final boolean get$fixedFlag$sample36() {
+		return fixedFlag$sample36;
 	}
 
-	// Setter for fixedFlag$sample35.
+	// Setter for fixedFlag$sample36.
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
+	public final void set$fixedFlag$sample36(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample36 including if probabilities
 		// need to be updated.
-		fixedFlag$sample35 = cv$value;
+		fixedFlag$sample36 = cv$value;
 		
-		// Should the probability of sample 35 be set to fixed. This will only every change
+		// Should the probability of sample 36 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedProbFlag$sample35);
+		fixedProbFlag$sample36 = (fixedFlag$sample36 && fixedProbFlag$sample36);
 		
-		// Should the probability of sample 59 be set to fixed. This will only every change
+		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample59 = (fixedFlag$sample35 && fixedProbFlag$sample59);
+		fixedProbFlag$sample61 = (fixedFlag$sample36 && fixedProbFlag$sample61);
 	}
 
-	// Getter for fixedFlag$sample59.
+	// Getter for fixedFlag$sample61.
 	@Override
-	public final boolean get$fixedFlag$sample59() {
-		return fixedFlag$sample59;
+	public final boolean get$fixedFlag$sample61() {
+		return fixedFlag$sample61;
 	}
 
-	// Setter for fixedFlag$sample59.
+	// Setter for fixedFlag$sample61.
 	@Override
-	public final void set$fixedFlag$sample59(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample59 including if probabilities
+	public final void set$fixedFlag$sample61(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample61 including if probabilities
 		// need to be updated.
-		fixedFlag$sample59 = cv$value;
+		fixedFlag$sample61 = cv$value;
 		
-		// Should the probability of sample 59 be set to fixed. This will only every change
+		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample59 = (fixedFlag$sample59 && fixedProbFlag$sample59);
+		fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedProbFlag$sample61);
 		
-		// Should the probability of sample 62 be set to fixed. This will only every change
+		// Should the probability of sample 64 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample62 = (fixedFlag$sample59 && fixedProbFlag$sample62);
+		fixedProbFlag$sample64 = (fixedFlag$sample61 && fixedProbFlag$sample64);
 	}
 
-	// Getter for fixedFlag$sample62.
+	// Getter for fixedFlag$sample64.
 	@Override
-	public final boolean get$fixedFlag$sample62() {
-		return fixedFlag$sample62;
+	public final boolean get$fixedFlag$sample64() {
+		return fixedFlag$sample64;
 	}
 
-	// Setter for fixedFlag$sample62.
+	// Setter for fixedFlag$sample64.
 	@Override
-	public final void set$fixedFlag$sample62(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample62 including if probabilities
+	public final void set$fixedFlag$sample64(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample64 including if probabilities
 		// need to be updated.
-		fixedFlag$sample62 = cv$value;
+		fixedFlag$sample64 = cv$value;
 		
-		// Should the probability of sample 62 be set to fixed. This will only every change
+		// Should the probability of sample 64 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedProbFlag$sample62);
+		fixedProbFlag$sample64 = (fixedFlag$sample64 && fixedProbFlag$sample64);
 	}
 
 	// Getter for length$documents.
@@ -397,12 +397,12 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample35 using sampled
+	// Calculate the probability of the samples represented by sample36 using sampled
 	// values.
-	private final void logProbabilityValue$sample35() {
-		// Determine if we need to calculate the values for sample task 35 or if we should
+	private final void logProbabilityValue$sample36() {
+		// Determine if we need to calculate the values for sample task 36 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample36) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -467,12 +467,12 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
+			fixedProbFlag$sample36 = fixedFlag$sample36;
 		}
 		// Using cached values.
 		else {
@@ -493,17 +493,17 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample59 using sampled
+	// Calculate the probability of the samples represented by sample61 using sampled
 	// values.
-	private final void logProbabilityValue$sample59() {
-		// Determine if we need to calculate the values for sample task 59 or if we should
+	private final void logProbabilityValue$sample61() {
+		// Determine if we need to calculate the values for sample task 61 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample59) {
+		if(!fixedProbFlag$sample61) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -569,12 +569,12 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample59)
+			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample59 = (fixedFlag$sample59 && fixedFlag$sample35);
+			fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedFlag$sample36);
 		}
 		// Using cached values.
 		else {
@@ -592,17 +592,17 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample59)
+			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample62 using sampled
+	// Calculate the probability of the samples represented by sample64 using sampled
 	// values.
-	private final void logProbabilityValue$sample62() {
-		// Determine if we need to calculate the values for sample task 62 or if we should
+	private final void logProbabilityValue$sample64() {
+		// Determine if we need to calculate the values for sample task 64 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample62) {
+		if(!fixedProbFlag$sample64) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -672,7 +672,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample62 = ((fixedFlag$sample62 && fixedFlag$sample26) && fixedFlag$sample59);
+			fixedProbFlag$sample64 = ((fixedFlag$sample64 && fixedFlag$sample26) && fixedFlag$sample61);
 		}
 		// Using cached values.
 		else {
@@ -718,13 +718,13 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 					for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
 						for(int j = 0; j < length$documents[i$var40]; j += 1) {
 							if((var24 == z[((i$var40 - 0) / 1)][((j - 0) / 1)])) {
-								// Processing sample task 62 of consumer random variable null.
+								// Processing sample task 64 of consumer random variable null.
 								{
 									{
 										{
 											{
 												{
-													// Increment the sample counter with the value sampled by sample task 62 of random
+													// Increment the sample counter with the value sampled by sample task 64 of random
 													// variable var55
 													cv$countLocal[w[i$var40][j]] = (cv$countLocal[w[i$var40][j]] + 1.0);
 												}
@@ -746,9 +746,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 35 drawn from Dirichlet 27. Inference was performed using a Dirichlet
+	// by sample task 36 drawn from Dirichlet 27. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample35(int var32, int threadID$cv$var32, Rng RNG$) {
+	private final void sample36(int var32, int threadID$cv$var32, Rng RNG$) {
 		// A reference local to the function for the sample variable.
 		double[] cv$targetLocal = theta[var32];
 		
@@ -764,12 +764,12 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		{
 			// Processing random variable 52.
 			{
-				// Looking for a path between Sample 35 and consumer Categorical 52.
+				// Looking for a path between Sample 36 and consumer Categorical 52.
 				{
 					for(int i$var40 = 0; i$var40 < length$documents.length; i$var40 += 1) {
 						if((var32 == i$var40)) {
 							for(int j = 0; j < length$documents[i$var40]; j += 1)
-								// Increment the sample counter with the value sampled by sample task 59 of random
+								// Increment the sample counter with the value sampled by sample task 61 of random
 								// variable var52
 								cv$countLocal[z[((i$var40 - 0) / 1)][((j - 0) / 1)]] = (cv$countLocal[z[((i$var40 - 0) / 1)][((j - 0) / 1)]] + 1.0);
 						}
@@ -785,9 +785,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 59 drawn from Categorical 52. Inference was performed using variable
+	// by sample task 61 drawn from Categorical 52. Inference was performed using variable
 	// marginalization.
-	private final void sample59(int i$var40, int j, int threadID$cv$j, Rng RNG$) {
+	private final void sample61(int i$var40, int j, int threadID$cv$j, Rng RNG$) {
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var53$stateProbabilityGlobal[threadID$cv$j];
 		for(int cv$valuePos = 0; cv$valuePos < noTopics; cv$valuePos += 1) {
@@ -826,7 +826,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// Processing random variable 55.
 				{
 					{
-						// Processing sample task 62 of consumer random variable null.
+						// Processing sample task 64 of consumer random variable null.
 						{
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
@@ -846,7 +846,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 												cv$temp$1$var54 = var54;
 											}
 											
-											// Record the probability of sample task 62 generating output with current configuration.
+											// Record the probability of sample task 64 generating output with current configuration.
 											if(((Math.log(1.0) + (((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
 												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 											else {
@@ -857,7 +857,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var40][j]) && (w[i$var40][j] < cv$temp$1$var54.length))?Math.log(cv$temp$1$var54[w[i$var40][j]]):Double.NEGATIVE_INFINITY)));
 											}
 											
-											// Recorded the probability of reaching sample task 62 with the current configuration.
+											// Recorded the probability of reaching sample task 64 with the current configuration.
 											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 										}
 									}
@@ -1000,8 +1000,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		
 		// Constructor for cv$var53$stateProbabilityGlobal
 		{
-			// Variable to record the maximum value of Task Get 57. Initially set to the value
-			// of putTask 36.
+			// Variable to record the maximum value of Task Get 59. Initially set to the value
+			// of putTask 37.
 			int cv$var34$max = noTopics;
 			
 			// Allocation of cv$var53$stateProbabilityGlobal for multithreaded execution
@@ -1101,7 +1101,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
 						double[] var33 = theta[var32];
-						if(!fixedFlag$sample35)
+						if(!fixedFlag$sample36)
 							DistributionSampling.sampleDirichlet(RNG$1, alpha, var33);
 					}
 			}
@@ -1124,9 +1124,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample59)
+										if(!fixedFlag$sample61)
 											z[((i$var40 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
-										if(!fixedFlag$sample62)
+										if(!fixedFlag$sample64)
 											t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[((i$var40 - 0) / 1)][((j - 0) / 1)]]);
 									}
 							}
@@ -1162,7 +1162,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
 						double[] var33 = theta[var32];
-						if(!fixedFlag$sample35)
+						if(!fixedFlag$sample36)
 							DistributionSampling.sampleDirichlet(RNG$1, alpha, var33);
 					}
 			}
@@ -1184,7 +1184,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample59)
+										if(!fixedFlag$sample61)
 											z[((i$var40 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
 									}
 							}
@@ -1220,7 +1220,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
 						double[] var33 = theta[var32];
-						if(!fixedFlag$sample35)
+						if(!fixedFlag$sample36)
 							DistributionSampling.sampleDirichlet(RNG$1, alpha, var33);
 					}
 			}
@@ -1242,7 +1242,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample59)
+										if(!fixedFlag$sample61)
 											z[((i$var40 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
 									}
 							}
@@ -1277,8 +1277,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-							if(!fixedFlag$sample35)
-								sample35(var32, threadID$var32, RNG$1);
+							if(!fixedFlag$sample36)
+								sample36(var32, threadID$var32, RNG$1);
 						}
 				}
 			);
@@ -1299,8 +1299,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1) {
-											if(!fixedFlag$sample59)
-												sample59(i$var40, j, threadID$j, RNG$2);
+											if(!fixedFlag$sample61)
+												sample61(i$var40, j, threadID$j, RNG$2);
 										}
 								}
 							);
@@ -1326,8 +1326,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1) {
-											if(!fixedFlag$sample59)
-												sample59(i$var40, j, threadID$j, RNG$2);
+											if(!fixedFlag$sample61)
+												sample61(i$var40, j, threadID$j, RNG$2);
 										}
 								}
 							);
@@ -1342,8 +1342,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-							if(!fixedFlag$sample35)
-								sample35(var32, threadID$var32, RNG$1);
+							if(!fixedFlag$sample36)
+								sample36(var32, threadID$var32, RNG$1);
 						}
 				}
 			);
@@ -1409,14 +1409,14 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			logProbability$var25 = 0.0;
 		logProbability$var27 = 0.0;
 		logProbability$theta = 0.0;
-		if(!fixedProbFlag$sample35)
+		if(!fixedProbFlag$sample36)
 			logProbability$var33 = 0.0;
 		logProbability$var52 = 0.0;
-		if(!fixedProbFlag$sample59)
+		if(!fixedProbFlag$sample61)
 			logProbability$z = 0.0;
 		logProbability$var55 = 0.0;
 		logProbability$w = 0.0;
-		if(!fixedProbFlag$sample62)
+		if(!fixedProbFlag$sample64)
 			logProbability$var56 = 0.0;
 	}
 
@@ -1439,11 +1439,11 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample26)
 			logProbabilityValue$sample26();
-		if(fixedFlag$sample35)
-			logProbabilityValue$sample35();
-		if(fixedFlag$sample59)
-			logProbabilityValue$sample59();
-		logProbabilityValue$sample62();
+		if(fixedFlag$sample36)
+			logProbabilityValue$sample36();
+		if(fixedFlag$sample61)
+			logProbabilityValue$sample61();
+		logProbabilityValue$sample64();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1462,9 +1462,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample26();
-		logProbabilityValue$sample35();
-		logProbabilityValue$sample59();
-		logProbabilityValue$sample62();
+		logProbabilityValue$sample36();
+		logProbabilityValue$sample61();
+		logProbabilityValue$sample64();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1482,9 +1482,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample26();
-		logProbabilityValue$sample35();
-		logProbabilityValue$sample59();
-		logProbabilityValue$sample62();
+		logProbabilityValue$sample36();
+		logProbabilityValue$sample61();
+		logProbabilityValue$sample64();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1514,7 +1514,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
 						double[] var33 = theta[var32];
-						if(!fixedFlag$sample35)
+						if(!fixedFlag$sample36)
 							DistributionSampling.sampleDirichlet(RNG$1, alpha, var33);
 					}
 			}
@@ -1536,7 +1536,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample59)
+										if(!fixedFlag$sample61)
 											z[((i$var40 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var40]);
 									}
 							}

@@ -6,10 +6,10 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK4$CoreInterface {
 	
 	// Declare the variables for the model.
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample63 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample63 = false;
+	private boolean fixedFlag$sample41 = false;
+	private boolean fixedFlag$sample65 = false;
+	private boolean fixedProbFlag$sample41 = false;
+	private boolean fixedProbFlag$sample65 = false;
 	private int[] generated;
 	private double[][] indirection1;
 	private double[][] indirection2;
@@ -19,8 +19,8 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$generated;
 	private double logProbability$indirection1;
 	private double logProbability$indirection2;
-	private double[][] logProbability$sample39;
-	private double[] logProbability$sample63;
+	private double[][] logProbability$sample41;
+	private double[] logProbability$sample65;
 	private double[][] logProbability$var33;
 	private double[] logProbability$var55;
 	private int[] observed;
@@ -33,50 +33,50 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample39.
+	// Getter for fixedFlag$sample41.
 	@Override
-	public final boolean get$fixedFlag$sample39() {
-		return fixedFlag$sample39;
+	public final boolean get$fixedFlag$sample41() {
+		return fixedFlag$sample41;
 	}
 
-	// Setter for fixedFlag$sample39.
+	// Setter for fixedFlag$sample41.
 	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
+	public final void set$fixedFlag$sample41(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample41 including if probabilities
 		// need to be updated.
-		fixedFlag$sample39 = cv$value;
+		fixedFlag$sample41 = cv$value;
 		
-		// Should the probability of sample 39 be set to fixed. This will only every change
+		// Should the probability of sample 41 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample39" with its value "cv$value".
-		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
+		// Substituted "fixedFlag$sample41" with its value "cv$value".
+		fixedProbFlag$sample41 = (cv$value && fixedProbFlag$sample41);
 		
-		// Should the probability of sample 63 be set to fixed. This will only every change
+		// Should the probability of sample 65 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample39" with its value "cv$value".
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+		// Substituted "fixedFlag$sample41" with its value "cv$value".
+		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
 	}
 
-	// Getter for fixedFlag$sample63.
+	// Getter for fixedFlag$sample65.
 	@Override
-	public final boolean get$fixedFlag$sample63() {
-		return fixedFlag$sample63;
+	public final boolean get$fixedFlag$sample65() {
+		return fixedFlag$sample65;
 	}
 
-	// Setter for fixedFlag$sample63.
+	// Setter for fixedFlag$sample65.
 	@Override
-	public final void set$fixedFlag$sample63(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample63 including if probabilities
+	public final void set$fixedFlag$sample65(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample65 including if probabilities
 		// need to be updated.
-		fixedFlag$sample63 = cv$value;
+		fixedFlag$sample65 = cv$value;
 		
-		// Should the probability of sample 63 be set to fixed. This will only every change
+		// Should the probability of sample 65 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample63" with its value "cv$value".
-		fixedProbFlag$sample63 = (cv$value && fixedProbFlag$sample63);
+		// Substituted "fixedFlag$sample65" with its value "cv$value".
+		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
 	}
 
 	// Getter for generated.
@@ -180,12 +180,12 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		observed = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample39 using sampled
+	// Calculate the probability of the samples represented by sample41 using sampled
 	// values.
-	private final void logProbabilityValue$sample39() {
-		// Determine if we need to calculate the values for sample task 39 or if we should
+	private final void logProbabilityValue$sample41() {
+		// Determine if we need to calculate the values for sample task 41 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample39) {
+		if(!fixedProbFlag$sample41) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -229,7 +229,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					logProbability$var33[i][j] = cv$distributionAccumulator;
 					
 					// Store the sample task probability
-					logProbability$sample39[i][j] = cv$distributionAccumulator;
+					logProbability$sample41[i][j] = cv$distributionAccumulator;
 					
 					// Update the variable probability
 					logProbability$indirection2 = (logProbability$indirection2 + cv$distributionAccumulator);
@@ -244,12 +244,12 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample39)
+			if(fixedFlag$sample41)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample39 = fixedFlag$sample39;
+			fixedProbFlag$sample41 = fixedFlag$sample41;
 		}
 		// Using cached values.
 		else {
@@ -258,7 +258,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
-					double cv$sampleValue = logProbability$sample39[i][j];
+					double cv$sampleValue = logProbability$sample41[i][j];
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
 					logProbability$var33[i][j] = cv$sampleValue;
 					
@@ -275,17 +275,17 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample39)
+			if(fixedFlag$sample41)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample63 using sampled
+	// Calculate the probability of the samples represented by sample65 using sampled
 	// values.
-	private final void logProbabilityValue$sample63() {
-		// Determine if we need to calculate the values for sample task 63 or if we should
+	private final void logProbabilityValue$sample65() {
+		// Determine if we need to calculate the values for sample task 65 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample63) {
+		if(!fixedProbFlag$sample65) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -329,7 +329,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				logProbability$var55[m] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample63[m] = cv$distributionAccumulator;
+				logProbability$sample65[m] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -341,7 +341,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample63 = (fixedFlag$sample63 && fixedFlag$sample39);
+			fixedProbFlag$sample65 = (fixedFlag$sample65 && fixedFlag$sample41);
 		}
 		// Using cached values.
 		else {
@@ -350,7 +350,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample63[m];
+				double cv$rvAccumulator = logProbability$sample65[m];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var55[m] = cv$rvAccumulator;
 			}
@@ -365,8 +365,8 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 39 drawn from Uniform 33. Inference was performed using Metropolis-Hastings.
-	private final void sample39(int i, int j) {
+	// by sample task 41 drawn from Uniform 33. Inference was performed using Metropolis-Hastings.
+	private final void sample41(int i, int j) {
 		// The original value of the sample
 		double cv$originalValue = indirection1[i][j];
 		
@@ -404,7 +404,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 63 with the current configuration.
+			// Recorded the probability of reaching sample task 65 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
@@ -441,7 +441,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
-		// Recorded the probability of reaching sample task 63 with the current configuration.
+		// Recorded the probability of reaching sample task 65 with the current configuration.
 		// 
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
@@ -514,23 +514,23 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		for(int i = 0; i < length$observed; i += 1)
 			logProbability$var33[i] = new double[10];
 		
-		// Constructor for logProbability$sample39
-		logProbability$sample39 = new double[length$observed][];
+		// Constructor for logProbability$sample41
+		logProbability$sample41 = new double[length$observed][];
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$sample39[i] = new double[10];
+			logProbability$sample41[i] = new double[10];
 		
 		// Constructor for logProbability$var55
 		logProbability$var55 = new double[length$observed];
 		
-		// Constructor for logProbability$sample63
-		logProbability$sample63 = new double[length$observed];
+		// Constructor for logProbability$sample65
+		logProbability$sample65 = new double[length$observed];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
+		if(!fixedFlag$sample41) {
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
@@ -544,7 +544,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample63) {
+		if(!fixedFlag$sample65) {
 			for(int m = 0; m < length$observed; m += 1)
 				generated[m] = DistributionSampling.sampleCategorical(RNG$, indirection2[m]);
 		}
@@ -555,7 +555,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
+		if(!fixedFlag$sample41) {
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
@@ -574,7 +574,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
+		if(!fixedFlag$sample41) {
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)
@@ -592,19 +592,19 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(!fixedFlag$sample39) {
+		if(!fixedFlag$sample41) {
 			// Infer the samples in chronological order.
 			if(system$gibbsForward) {
 				for(int i = 0; i < length$observed; i += 1) {
 					for(int j = 0; j < 10; j += 1)
-						sample39(i, j);
+						sample41(i, j);
 				}
 			}
 			// Infer the samples in reverse chronological order.
 			else {
 				for(int i = (length$observed - 1); i >= 0; i -= 1) {
 					for(int j = 9; j >= 0; j -= 1)
-						sample39(i, j);
+						sample41(i, j);
 				}
 			}
 		}
@@ -634,18 +634,18 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		logProbability$indirection2 = 0.0;
 		logProbability$indirection1 = 0.0;
-		if(!fixedProbFlag$sample39) {
+		if(!fixedProbFlag$sample41) {
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1)
-					logProbability$sample39[i][j] = 0.0;
+					logProbability$sample41[i][j] = 0.0;
 			}
 		}
 		for(int m = 0; m < length$observed; m += 1)
 			logProbability$var55[m] = 0.0;
 		logProbability$generated = 0.0;
-		if(!fixedProbFlag$sample63) {
+		if(!fixedProbFlag$sample65) {
 			for(int m = 0; m < length$observed; m += 1)
-				logProbability$sample63[m] = 0.0;
+				logProbability$sample65[m] = 0.0;
 		}
 	}
 
@@ -666,9 +666,9 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample39)
-			logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		if(fixedFlag$sample41)
+			logProbabilityValue$sample41();
+		logProbabilityValue$sample65();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -686,8 +686,8 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		logProbabilityValue$sample41();
+		logProbabilityValue$sample65();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -704,8 +704,8 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		logProbabilityValue$sample41();
+		logProbabilityValue$sample65();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -714,7 +714,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
+		if(!fixedFlag$sample41) {
 			for(int i = 0; i < length$observed; i += 1) {
 				double[] var30 = indirection1[i];
 				for(int j = 0; j < 10; j += 1)

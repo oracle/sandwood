@@ -9,13 +9,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] cv$var18$countGlobal;
 	private double[] cv$var35$stateProbabilityGlobal;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample37 = false;
-	private boolean fixedFlag$sample53 = false;
+	private boolean fixedFlag$sample30 = false;
+	private boolean fixedFlag$sample38 = false;
+	private boolean fixedFlag$sample54 = false;
 	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample37 = false;
-	private boolean fixedProbFlag$sample53 = false;
+	private boolean fixedProbFlag$sample30 = false;
+	private boolean fixedProbFlag$sample38 = false;
+	private boolean fixedProbFlag$sample54 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private int length$flipsMeasured;
@@ -24,8 +24,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double logProbability$m;
-	private double[] logProbability$sample37;
-	private double[] logProbability$sample53;
+	private double[] logProbability$sample38;
+	private double[] logProbability$sample54;
 	private double logProbability$st;
 	private double logProbability$var13;
 	private double logProbability$var18;
@@ -69,42 +69,42 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$fixedFlag$sample20(boolean cv$value) {
 		fixedFlag$sample20 = cv$value;
 		fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
-		fixedProbFlag$sample37 = (fixedFlag$sample20 && fixedProbFlag$sample37);
+		fixedProbFlag$sample38 = (fixedFlag$sample20 && fixedProbFlag$sample38);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample29() {
-		return fixedFlag$sample29;
+	public final boolean get$fixedFlag$sample30() {
+		return fixedFlag$sample30;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample29(boolean cv$value) {
-		fixedFlag$sample29 = cv$value;
-		fixedProbFlag$sample29 = (fixedFlag$sample29 && fixedProbFlag$sample29);
-		fixedProbFlag$sample53 = (fixedFlag$sample29 && fixedProbFlag$sample53);
+	public final void set$fixedFlag$sample30(boolean cv$value) {
+		fixedFlag$sample30 = cv$value;
+		fixedProbFlag$sample30 = (fixedFlag$sample30 && fixedProbFlag$sample30);
+		fixedProbFlag$sample54 = (fixedFlag$sample30 && fixedProbFlag$sample54);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample37() {
-		return fixedFlag$sample37;
+	public final boolean get$fixedFlag$sample38() {
+		return fixedFlag$sample38;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample37(boolean cv$value) {
-		fixedFlag$sample37 = cv$value;
-		fixedProbFlag$sample37 = (fixedFlag$sample37 && fixedProbFlag$sample37);
-		fixedProbFlag$sample53 = (fixedFlag$sample37 && fixedProbFlag$sample53);
+	public final void set$fixedFlag$sample38(boolean cv$value) {
+		fixedFlag$sample38 = cv$value;
+		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
+		fixedProbFlag$sample54 = (fixedFlag$sample38 && fixedProbFlag$sample54);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
+	public final boolean get$fixedFlag$sample54() {
+		return fixedFlag$sample54;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		fixedFlag$sample53 = cv$value;
-		fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedProbFlag$sample53);
+	public final void set$fixedFlag$sample54(boolean cv$value) {
+		fixedFlag$sample54 = cv$value;
+		fixedProbFlag$sample54 = (fixedFlag$sample54 && fixedProbFlag$sample54);
 	}
 
 	@Override
@@ -268,8 +268,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 	}
 
-	private final void logProbabilityValue$sample29() {
-		if(!fixedProbFlag$sample29) {
+	private final void logProbabilityValue$sample30() {
+		if(!fixedProbFlag$sample30) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			for(int var26 = 0; var26 < noFlips; var26 += 1) {
@@ -306,9 +306,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var27 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample29)
+			if(fixedFlag$sample30)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample29 = fixedFlag$sample29;
+			fixedProbFlag$sample30 = fixedFlag$sample30;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -318,13 +318,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var22 = cv$rvAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample29)
+			if(fixedFlag$sample30)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample37() {
-		if(!fixedProbFlag$sample37) {
+	private final void logProbabilityValue$sample38() {
+		if(!fixedProbFlag$sample38) {
 			double cv$accumulator = 0.0;
 			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -356,31 +356,31 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var34[((i$var32 - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample37[((i$var32 - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample38[((i$var32 - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample37)
+			if(fixedFlag$sample38)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample37 = (fixedFlag$sample37 && fixedFlag$sample20);
+			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample20);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample37[((i$var32 - 0) / 1)];
+				double cv$sampleValue = logProbability$sample38[((i$var32 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var34[((i$var32 - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample37)
+			if(fixedFlag$sample38)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample53() {
-		if(!fixedProbFlag$sample53) {
+	private final void logProbabilityValue$sample54() {
+		if(!fixedProbFlag$sample54) {
 			double cv$accumulator = 0.0;
 			for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -391,9 +391,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					{
 						{
 							int reduceVar$var47$2 = 0;
-							for(int cv$reduction46Index = 0; cv$reduction46Index < noCats; cv$reduction46Index += 1) {
+							for(int cv$reduction47Index = 0; cv$reduction47Index < noCats; cv$reduction47Index += 1) {
 								int i$var44 = reduceVar$var47$2;
-								int j$var45 = st[cv$reduction46Index];
+								int j$var45 = st[cv$reduction47Index];
 								reduceVar$var47$2 = (i$var44 + j$var45);
 							}
 							double var48 = bias[reduceVar$var47$2];
@@ -418,17 +418,17 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var49[((j$var40 - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample53[((j$var40 - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample54[((j$var40 - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample53 = ((fixedFlag$sample53 && fixedFlag$sample29) && fixedFlag$sample37);
+			fixedProbFlag$sample54 = ((fixedFlag$sample54 && fixedFlag$sample30) && fixedFlag$sample38);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample53[((j$var40 - 0) / 1)];
+				double cv$sampleValue = logProbability$sample54[((j$var40 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var49[((j$var40 - 0) / 1)] = cv$rvAccumulator;
@@ -469,16 +469,16 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal);
 	}
 
-	private final void sample29(int var26) {
+	private final void sample30(int var26) {
 		int cv$sum = 0;
 		int cv$count = 0;
 		{
 			{
 				{
 					int reduceVar$var47$0 = 0;
-					for(int cv$reduction46Index = 0; cv$reduction46Index < noCats; cv$reduction46Index += 1) {
+					for(int cv$reduction47Index = 0; cv$reduction47Index < noCats; cv$reduction47Index += 1) {
 						int i$var44 = reduceVar$var47$0;
-						int j$var45 = st[cv$reduction46Index];
+						int j$var45 = st[cv$reduction47Index];
 						reduceVar$var47$0 = (i$var44 + j$var45);
 					}
 					if((var26 == reduceVar$var47$0)) {
@@ -495,7 +495,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		bias[var26] = var27;
 	}
 
-	private final void sample37(int i$var32) {
+	private final void sample38(int i$var32) {
 		double[] cv$stateProbabilityLocal = cv$var35$stateProbabilityGlobal;
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -520,18 +520,18 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							{
 								if((0 < noCats)) {
 									int reduceVar$var47$1 = 0;
-									for(int cv$reduction124Index = 0; cv$reduction124Index < i$var32; cv$reduction124Index += 1) {
+									for(int cv$reduction125Index = 0; cv$reduction125Index < i$var32; cv$reduction125Index += 1) {
 										int i$var44 = reduceVar$var47$1;
-										int j$var45 = st[cv$reduction124Index];
+										int j$var45 = st[cv$reduction125Index];
 										reduceVar$var47$1 = (i$var44 + j$var45);
 									}
-									for(int cv$reduction124Index = (i$var32 + 1); cv$reduction124Index < noCats; cv$reduction124Index += 1) {
+									for(int cv$reduction125Index = (i$var32 + 1); cv$reduction125Index < noCats; cv$reduction125Index += 1) {
 										int i$var44 = reduceVar$var47$1;
-										int j$var45 = st[cv$reduction124Index];
+										int j$var45 = st[cv$reduction125Index];
 										reduceVar$var47$1 = (i$var44 + j$var45);
 									}
-									int cv$reduced46 = reduceVar$var47$1;
-									reduceVar$var47$1 = (traceTempVariable$i$1_1 + cv$reduced46);
+									int cv$reduced47 = reduceVar$var47$1;
+									reduceVar$var47$1 = (traceTempVariable$i$1_1 + cv$reduced47);
 									int traceTempVariable$var47$1_2 = reduceVar$var47$1;
 									for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1) {
 										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -657,13 +657,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var34 = new double[((((noCats - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample37 = new double[((((noCats - 1) - 0) / 1) + 1)];
+			logProbability$sample38 = new double[((((noCats - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$var49 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample53 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
+			logProbability$sample54 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
 	}
@@ -676,22 +676,22 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				DistributionSampling.sampleDirichlet(RNG$, v, var18);
 		}
 		for(int var26 = 0; var26 < noFlips; var26 += 1) {
-			if(!fixedFlag$sample29)
+			if(!fixedFlag$sample30)
 				bias[var26] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
-			if(!fixedFlag$sample37)
+			if(!fixedFlag$sample38)
 				st[i$var32] = DistributionSampling.sampleCategorical(RNG$, m[i$var32]);
 		}
 		for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1) {
 			int reduceVar$var47$3 = 0;
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noCats; cv$reduction46Index += 1) {
+			for(int cv$reduction47Index = 0; cv$reduction47Index < noCats; cv$reduction47Index += 1) {
 				int i$var44 = reduceVar$var47$3;
-				int j$var45 = st[cv$reduction46Index];
-				if(!fixedFlag$sample53)
+				int j$var45 = st[cv$reduction47Index];
+				if(!fixedFlag$sample54)
 					reduceVar$var47$3 = (i$var44 + j$var45);
 			}
-			if(!fixedFlag$sample53)
+			if(!fixedFlag$sample54)
 				flips[j$var40] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var47$3]);
 		}
 	}
@@ -704,11 +704,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				DistributionSampling.sampleDirichlet(RNG$, v, var18);
 		}
 		for(int var26 = 0; var26 < noFlips; var26 += 1) {
-			if(!fixedFlag$sample29)
+			if(!fixedFlag$sample30)
 				bias[var26] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
-			if(!fixedFlag$sample37)
+			if(!fixedFlag$sample38)
 				st[i$var32] = DistributionSampling.sampleCategorical(RNG$, m[i$var32]);
 		}
 	}
@@ -721,11 +721,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				DistributionSampling.sampleDirichlet(RNG$, v, var18);
 		}
 		for(int var26 = 0; var26 < noFlips; var26 += 1) {
-			if(!fixedFlag$sample29)
+			if(!fixedFlag$sample30)
 				bias[var26] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
-			if(!fixedFlag$sample37)
+			if(!fixedFlag$sample38)
 				st[i$var32] = DistributionSampling.sampleCategorical(RNG$, m[i$var32]);
 		}
 	}
@@ -738,21 +738,21 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					sample20(var17);
 			}
 			for(int var26 = 0; var26 < noFlips; var26 += 1) {
-				if(!fixedFlag$sample29)
-					sample29(var26);
+				if(!fixedFlag$sample30)
+					sample30(var26);
 			}
 			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
-				if(!fixedFlag$sample37)
-					sample37(i$var32);
+				if(!fixedFlag$sample38)
+					sample38(i$var32);
 			}
 		} else {
 			for(int i$var32 = (noCats - ((((noCats - 1) - 0) % 1) + 1)); i$var32 >= ((0 - 1) + 1); i$var32 -= 1) {
-				if(!fixedFlag$sample37)
-					sample37(i$var32);
+				if(!fixedFlag$sample38)
+					sample38(i$var32);
 			}
 			for(int var26 = (noFlips - ((((noFlips - 1) - 0) % 1) + 1)); var26 >= ((0 - 1) + 1); var26 -= 1) {
-				if(!fixedFlag$sample29)
-					sample29(var26);
+				if(!fixedFlag$sample30)
+					sample30(var26);
 			}
 			for(int var17 = (noCats - ((((noCats - 1) - 0) % 1) + 1)); var17 >= ((0 - 1) + 1); var17 -= 1) {
 				if(!fixedFlag$sample20)
@@ -779,21 +779,21 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var18 = 0.0;
 		logProbability$var22 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample29)
+		if(!fixedProbFlag$sample30)
 			logProbability$var27 = 0.0;
 		for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1)
 			logProbability$var34[((i$var32 - 0) / 1)] = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample37) {
+		if(!fixedProbFlag$sample38) {
 			for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1)
-				logProbability$sample37[((i$var32 - 0) / 1)] = 0.0;
+				logProbability$sample38[((i$var32 - 0) / 1)] = 0.0;
 		}
 		for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1)
 			logProbability$var49[((j$var40 - 0) / 1)] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample53) {
+		if(!fixedProbFlag$sample54) {
 			for(int j$var40 = 0; j$var40 < noFlips; j$var40 += 1)
-				logProbability$sample53[((j$var40 - 0) / 1)] = 0.0;
+				logProbability$sample54[((j$var40 - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -807,29 +807,29 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
-		if(fixedFlag$sample29)
-			logProbabilityValue$sample29();
-		if(fixedFlag$sample37)
-			logProbabilityValue$sample37();
-		logProbabilityValue$sample53();
+		if(fixedFlag$sample30)
+			logProbabilityValue$sample30();
+		if(fixedFlag$sample38)
+			logProbabilityValue$sample38();
+		logProbabilityValue$sample54();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample29();
-		logProbabilityValue$sample37();
-		logProbabilityValue$sample53();
+		logProbabilityValue$sample30();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample54();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample20();
-		logProbabilityValue$sample29();
-		logProbabilityValue$sample37();
-		logProbabilityValue$sample53();
+		logProbabilityValue$sample30();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample54();
 	}
 
 	@Override
@@ -840,11 +840,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				DistributionSampling.sampleDirichlet(RNG$, v, var18);
 		}
 		for(int var26 = 0; var26 < noFlips; var26 += 1) {
-			if(!fixedFlag$sample29)
+			if(!fixedFlag$sample30)
 				bias[var26] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		for(int i$var32 = 0; i$var32 < noCats; i$var32 += 1) {
-			if(!fixedFlag$sample37)
+			if(!fixedFlag$sample38)
 				st[i$var32] = DistributionSampling.sampleCategorical(RNG$, m[i$var32]);
 		}
 		logModelProbabilitiesVal();

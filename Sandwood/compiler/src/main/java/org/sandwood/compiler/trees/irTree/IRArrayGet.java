@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -19,7 +19,7 @@ import org.sandwood.compiler.trees.transformationTree.TransTree;
 
 public class IRArrayGet<X extends Variable<X>> extends IRTreeReturn<X> {
     public final IRTreeReturn<ArrayVariable<X>> array;
-    private final IRTreeReturn<IntVariable> index;
+    public final IRTreeReturn<IntVariable> index;
 
     IRArrayGet(IRTreeReturn<ArrayVariable<X>> array, IRTreeReturn<IntVariable> index) {
         super(IRTreeType.ARRAY_GET);

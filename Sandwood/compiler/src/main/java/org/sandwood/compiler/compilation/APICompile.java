@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -138,8 +138,8 @@ public class APICompile {
         // Collect the classes constructing the other simpler classes in the main
         // thread.
         CompilationDesc compDesc = new CompilationDesc();
-        
-        if(vs.length==0)
+
+        if(vs.length == 0)
             throw new SandwoodException("This model contains no variables.");
 
         try {
@@ -737,7 +737,7 @@ public class APICompile {
 
         while(v.getParent().getType() == DFType.PUT) {
             PutTask<?> pt = (PutTask<?>) v.getParent();
-            if(pt.value.isSample())
+            if(pt.value.isSample() && !pt.value.isIntermediate())
                 return true;
             v = pt.value;
         }
@@ -756,7 +756,7 @@ public class APICompile {
         compilationCtx.addScopeSubstitute(targetScope, newScope);
 
         IRTreeReturn<A> t = v.getParent().getForwardIR(compilationCtx);
-        if(!t.returning(v.getUniqueVarDesc()) && !compilationCtx.initialized(v)) {
+        if(!compilationCtx.initialized(v)) {
             compilationCtx.addTreeToScope(newScope, TreeUtils.putIndirectValue(v, t, Tree.NoComment, compilationCtx));
             compilationCtx.addInitialized(v);
         }
@@ -1232,20 +1232,6 @@ public class APICompile {
             // In this case the result will have already been written out to the outer array.
             if(v.getType().isArray() && ((ArrayVariable<?>) v).isSubArray())
                 return;
-
-            // Check that saving this value is not a writing the value back into its original value.
-            IRTreeReturn<?> t = returnBody;
-            // Remove any get and recover the source array.
-            while(t.type == IRTreeType.ARRAY_GET)
-                t = ((IRArrayGet<?>) t).array;
-            // If storing the result would be writing the intermediate into itself skip the store. i.e. no a = a; trees.
-            if(t.type == IRTreeType.LOAD) {
-                IRLoad<?> l = (IRLoad<?>) t;
-                VariableName treeName = l.varDesc.name;
-                VariableName intermediateName = v.getUniqueVarDesc().name;
-                if(treeName.equals(intermediateName))
-                    return;
-            }
 
             /*
              * This indirection is done to allow for the case where the intermediate variable is allocated inside a for

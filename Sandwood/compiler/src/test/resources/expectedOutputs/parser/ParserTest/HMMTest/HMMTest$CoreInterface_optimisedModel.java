@@ -14,23 +14,23 @@ interface HMMTest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	// Setter for fixedFlag$sample17.
 	public void set$fixedFlag$sample17(boolean cv$value);
 
-	// Getter for fixedFlag$sample26.
-	public boolean get$fixedFlag$sample26();
+	// Getter for fixedFlag$sample27.
+	public boolean get$fixedFlag$sample27();
 
-	// Setter for fixedFlag$sample26.
-	public void set$fixedFlag$sample26(boolean cv$value);
+	// Setter for fixedFlag$sample27.
+	public void set$fixedFlag$sample27(boolean cv$value);
 
-	// Getter for fixedFlag$sample43.
-	public boolean get$fixedFlag$sample43();
+	// Getter for fixedFlag$sample44.
+	public boolean get$fixedFlag$sample44();
 
-	// Setter for fixedFlag$sample43.
-	public void set$fixedFlag$sample43(boolean cv$value);
+	// Setter for fixedFlag$sample44.
+	public void set$fixedFlag$sample44(boolean cv$value);
 
-	// Getter for fixedFlag$sample51.
-	public boolean get$fixedFlag$sample51();
+	// Getter for fixedFlag$sample52.
+	public boolean get$fixedFlag$sample52();
 
-	// Setter for fixedFlag$sample51.
-	public void set$fixedFlag$sample51(boolean cv$value);
+	// Setter for fixedFlag$sample52.
+	public void set$fixedFlag$sample52(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

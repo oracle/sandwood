@@ -34,13 +34,13 @@ public class LogitRegressionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample38(fixed);
+                system$c.set$fixedFlag$sample39(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample38())
+            if(system$c.get$fixedFlag$sample39())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class LogitRegressionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample31(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample31())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -109,13 +109,13 @@ public class LogitRegressionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample71(fixed);
+                system$c.set$fixedFlag$sample72(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample71())
+            if(system$c.get$fixedFlag$sample72())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -246,11 +246,11 @@ public class LogitRegressionTest extends Model {
 
         //Set fixed flags
         if(bias.isSet())
-            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
+            newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
         if(weights.isSet())
-            newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31());
+            newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
         if(y.isSet())
-            newCore.set$fixedFlag$sample71(oldCore.get$fixedFlag$sample71());
+            newCore.set$fixedFlag$sample72(oldCore.get$fixedFlag$sample72());
     }
 
     /**

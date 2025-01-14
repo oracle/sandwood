@@ -5,12 +5,12 @@ interface HMMTestPart1b$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$bias(double[] cv$value);
 	public boolean get$fixedFlag$sample14();
 	public void set$fixedFlag$sample14(boolean cv$value);
-	public boolean get$fixedFlag$sample23();
-	public void set$fixedFlag$sample23(boolean cv$value);
-	public boolean get$fixedFlag$sample28();
-	public void set$fixedFlag$sample28(boolean cv$value);
-	public boolean get$fixedFlag$sample31();
-	public void set$fixedFlag$sample31(boolean cv$value);
+	public boolean get$fixedFlag$sample24();
+	public void set$fixedFlag$sample24(boolean cv$value);
+	public boolean get$fixedFlag$sample29();
+	public void set$fixedFlag$sample29(boolean cv$value);
+	public boolean get$fixedFlag$sample32();
+	public void set$fixedFlag$sample32(boolean cv$value);
 	public boolean get$flip();
 	public void set$flip(boolean cv$value);
 	public boolean get$flipMeasured();

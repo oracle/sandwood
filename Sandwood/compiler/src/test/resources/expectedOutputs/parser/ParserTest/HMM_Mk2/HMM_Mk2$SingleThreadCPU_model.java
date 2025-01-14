@@ -16,20 +16,20 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private double[] cv$var74$stateProbabilityGlobal;
 	private int[][] events;
 	private int[][] eventsMeasured;
+	private boolean fixedFlag$sample103 = false;
 	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample33 = false;
-	private boolean fixedFlag$sample48 = false;
-	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample58 = false;
-	private boolean fixedFlag$sample78 = false;
-	private boolean fixedFlag$sample99 = false;
+	private boolean fixedFlag$sample34 = false;
+	private boolean fixedFlag$sample51 = false;
+	private boolean fixedFlag$sample53 = false;
+	private boolean fixedFlag$sample61 = false;
+	private boolean fixedFlag$sample81 = false;
+	private boolean fixedProbFlag$sample103 = false;
 	private boolean fixedProbFlag$sample26 = false;
-	private boolean fixedProbFlag$sample33 = false;
-	private boolean fixedProbFlag$sample48 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample58 = false;
-	private boolean fixedProbFlag$sample78 = false;
-	private boolean fixedProbFlag$sample99 = false;
+	private boolean fixedProbFlag$sample34 = false;
+	private boolean fixedProbFlag$sample51 = false;
+	private boolean fixedProbFlag$sample53 = false;
+	private boolean fixedProbFlag$sample61 = false;
+	private boolean fixedProbFlag$sample81 = false;
 	private int initialState;
 	private int[] length$eventsMeasured;
 	private double logProbability$$evidence;
@@ -38,9 +38,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private double logProbability$events;
 	private double logProbability$initialState;
 	private double logProbability$m;
-	private double[] logProbability$sample58;
-	private double[][] logProbability$sample78;
-	private double[][] logProbability$sample99;
+	private double[][] logProbability$sample103;
+	private double[] logProbability$sample61;
+	private double[][] logProbability$sample81;
 	private double logProbability$st;
 	private double logProbability$var20;
 	private double logProbability$var25;
@@ -115,6 +115,24 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		eventsMeasured = cv$value;
 	}
 
+	// Getter for fixedFlag$sample103.
+	@Override
+	public final boolean get$fixedFlag$sample103() {
+		return fixedFlag$sample103;
+	}
+
+	// Setter for fixedFlag$sample103.
+	@Override
+	public final void set$fixedFlag$sample103(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample103 including if probabilities
+		// need to be updated.
+		fixedFlag$sample103 = cv$value;
+		
+		// Should the probability of sample 103 be set to fixed. This will only every change
+		// the flag to false.
+		fixedProbFlag$sample103 = (fixedFlag$sample103 && fixedProbFlag$sample103);
+	}
+
 	// Getter for fixedFlag$sample26.
 	@Override
 	public final boolean get$fixedFlag$sample26() {
@@ -132,145 +150,127 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// the flag to false.
 		fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
 		
-		// Should the probability of sample 58 be set to fixed. This will only every change
+		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample58 = (fixedFlag$sample26 && fixedProbFlag$sample58);
+		fixedProbFlag$sample61 = (fixedFlag$sample26 && fixedProbFlag$sample61);
 		
-		// Should the probability of sample 78 be set to fixed. This will only every change
+		// Should the probability of sample 81 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample78 = (fixedFlag$sample26 && fixedProbFlag$sample78);
+		fixedProbFlag$sample81 = (fixedFlag$sample26 && fixedProbFlag$sample81);
 	}
 
-	// Getter for fixedFlag$sample33.
+	// Getter for fixedFlag$sample34.
 	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
+	public final boolean get$fixedFlag$sample34() {
+		return fixedFlag$sample34;
 	}
 
-	// Setter for fixedFlag$sample33.
+	// Setter for fixedFlag$sample34.
 	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample33 including if probabilities
+	public final void set$fixedFlag$sample34(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
 		// need to be updated.
-		fixedFlag$sample33 = cv$value;
+		fixedFlag$sample34 = cv$value;
 		
-		// Should the probability of sample 33 be set to fixed. This will only every change
+		// Should the probability of sample 34 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample33 = (fixedFlag$sample33 && fixedProbFlag$sample33);
+		fixedProbFlag$sample34 = (fixedFlag$sample34 && fixedProbFlag$sample34);
 		
-		// Should the probability of sample 99 be set to fixed. This will only every change
+		// Should the probability of sample 103 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample99 = (fixedFlag$sample33 && fixedProbFlag$sample99);
+		fixedProbFlag$sample103 = (fixedFlag$sample34 && fixedProbFlag$sample103);
 	}
 
-	// Getter for fixedFlag$sample48.
+	// Getter for fixedFlag$sample51.
 	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
+	public final boolean get$fixedFlag$sample51() {
+		return fixedFlag$sample51;
 	}
 
-	// Setter for fixedFlag$sample48.
+	// Setter for fixedFlag$sample51.
 	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample48 including if probabilities
+	public final void set$fixedFlag$sample51(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample51 including if probabilities
 		// need to be updated.
-		fixedFlag$sample48 = cv$value;
+		fixedFlag$sample51 = cv$value;
 		
-		// Should the probability of sample 48 be set to fixed. This will only every change
+		// Should the probability of sample 51 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
+		fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedProbFlag$sample51);
 		
-		// Should the probability of sample 50 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample50 = (fixedFlag$sample48 && fixedProbFlag$sample50);
+		fixedProbFlag$sample53 = (fixedFlag$sample51 && fixedProbFlag$sample53);
 	}
 
-	// Getter for fixedFlag$sample50.
+	// Getter for fixedFlag$sample53.
 	@Override
-	public final boolean get$fixedFlag$sample50() {
-		return fixedFlag$sample50;
+	public final boolean get$fixedFlag$sample53() {
+		return fixedFlag$sample53;
 	}
 
-	// Setter for fixedFlag$sample50.
+	// Setter for fixedFlag$sample53.
 	@Override
-	public final void set$fixedFlag$sample50(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample50 including if probabilities
+	public final void set$fixedFlag$sample53(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
 		// need to be updated.
-		fixedFlag$sample50 = cv$value;
+		fixedFlag$sample53 = cv$value;
 		
-		// Should the probability of sample 50 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedProbFlag$sample50);
+		fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedProbFlag$sample53);
 		
-		// Should the probability of sample 58 be set to fixed. This will only every change
+		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample58 = (fixedFlag$sample50 && fixedProbFlag$sample58);
+		fixedProbFlag$sample61 = (fixedFlag$sample53 && fixedProbFlag$sample61);
 	}
 
-	// Getter for fixedFlag$sample58.
+	// Getter for fixedFlag$sample61.
 	@Override
-	public final boolean get$fixedFlag$sample58() {
-		return fixedFlag$sample58;
+	public final boolean get$fixedFlag$sample61() {
+		return fixedFlag$sample61;
 	}
 
-	// Setter for fixedFlag$sample58.
+	// Setter for fixedFlag$sample61.
 	@Override
-	public final void set$fixedFlag$sample58(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
+	public final void set$fixedFlag$sample61(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample61 including if probabilities
 		// need to be updated.
-		fixedFlag$sample58 = cv$value;
+		fixedFlag$sample61 = cv$value;
 		
-		// Should the probability of sample 58 be set to fixed. This will only every change
+		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample58 = (fixedFlag$sample58 && fixedProbFlag$sample58);
+		fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedProbFlag$sample61);
 		
-		// Should the probability of sample 78 be set to fixed. This will only every change
+		// Should the probability of sample 81 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample78 = (fixedFlag$sample58 && fixedProbFlag$sample78);
+		fixedProbFlag$sample81 = (fixedFlag$sample61 && fixedProbFlag$sample81);
 		
-		// Should the probability of sample 99 be set to fixed. This will only every change
+		// Should the probability of sample 103 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample99 = (fixedFlag$sample58 && fixedProbFlag$sample99);
+		fixedProbFlag$sample103 = (fixedFlag$sample61 && fixedProbFlag$sample103);
 	}
 
-	// Getter for fixedFlag$sample78.
+	// Getter for fixedFlag$sample81.
 	@Override
-	public final boolean get$fixedFlag$sample78() {
-		return fixedFlag$sample78;
+	public final boolean get$fixedFlag$sample81() {
+		return fixedFlag$sample81;
 	}
 
-	// Setter for fixedFlag$sample78.
+	// Setter for fixedFlag$sample81.
 	@Override
-	public final void set$fixedFlag$sample78(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample78 including if probabilities
+	public final void set$fixedFlag$sample81(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample81 including if probabilities
 		// need to be updated.
-		fixedFlag$sample78 = cv$value;
+		fixedFlag$sample81 = cv$value;
 		
-		// Should the probability of sample 78 be set to fixed. This will only every change
+		// Should the probability of sample 81 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample78 = (fixedFlag$sample78 && fixedProbFlag$sample78);
+		fixedProbFlag$sample81 = (fixedFlag$sample81 && fixedProbFlag$sample81);
 		
-		// Should the probability of sample 99 be set to fixed. This will only every change
+		// Should the probability of sample 103 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample99 = (fixedFlag$sample78 && fixedProbFlag$sample99);
-	}
-
-	// Getter for fixedFlag$sample99.
-	@Override
-	public final boolean get$fixedFlag$sample99() {
-		return fixedFlag$sample99;
-	}
-
-	// Setter for fixedFlag$sample99.
-	@Override
-	public final void set$fixedFlag$sample99(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample99 including if probabilities
-		// need to be updated.
-		fixedFlag$sample99 = cv$value;
-		
-		// Should the probability of sample 99 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample99 = (fixedFlag$sample99 && fixedProbFlag$sample99);
+		fixedProbFlag$sample103 = (fixedFlag$sample81 && fixedProbFlag$sample103);
 	}
 
 	// Getter for initialState.
@@ -434,6 +434,107 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		setFlag$weights = true;
 	}
 
+	// Calculate the probability of the samples represented by sample103 using sampled
+	// values.
+	private final void logProbabilityValue$sample103() {
+		// Determine if we need to calculate the values for sample task 103 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample103) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
+				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
+					// Accumulator for sample probabilities for a specific instance of the random variable.
+					double cv$sampleAccumulator = 0.0;
+					
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					{
+						// The sample value to calculate the probability of generating
+						int cv$sampleValue = (events[i$var80][j$var88] - 1);
+						{
+							{
+								double[] var92 = bias[st[i$var80][j$var88]];
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					logProbability$var93[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = cv$sampleAccumulator;
+					
+					// Store the sample task probability
+					logProbability$sample103[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = cv$sampleProbability;
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$events = (logProbability$events + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample103 = (((fixedFlag$sample103 && fixedFlag$sample34) && fixedFlag$sample61) && fixedFlag$sample81);
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
+				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample103[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var93[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = cv$rvAccumulator;
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$events = (logProbability$events + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	// Calculate the probability of the samples represented by sample26 using sampled
 	// values.
 	private final void logProbabilityValue$sample26() {
@@ -535,12 +636,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample33 using sampled
+	// Calculate the probability of the samples represented by sample34 using sampled
 	// values.
-	private final void logProbabilityValue$sample33() {
-		// Determine if we need to calculate the values for sample task 33 or if we should
+	private final void logProbabilityValue$sample34() {
+		// Determine if we need to calculate the values for sample task 34 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample33) {
+		if(!fixedProbFlag$sample34) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -605,12 +706,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample33)
+			if(fixedFlag$sample34)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample33 = fixedFlag$sample33;
+			fixedProbFlag$sample34 = fixedFlag$sample34;
 		}
 		// Using cached values.
 		else {
@@ -631,17 +732,17 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample33)
+			if(fixedFlag$sample34)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample48 using sampled
+	// Calculate the probability of the samples represented by sample51 using sampled
 	// values.
-	private final void logProbabilityValue$sample48() {
-		// Determine if we need to calculate the values for sample task 48 or if we should
+	private final void logProbabilityValue$sample51() {
+		// Determine if we need to calculate the values for sample task 51 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample48) {
+		if(!fixedProbFlag$sample51) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -702,12 +803,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample48)
+			if(fixedFlag$sample51)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample48 = fixedFlag$sample48;
+			fixedProbFlag$sample51 = fixedFlag$sample51;
 		}
 		// Using cached values.
 		else {
@@ -725,17 +826,17 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample48)
+			if(fixedFlag$sample51)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample50 using sampled
+	// Calculate the probability of the samples represented by sample53 using sampled
 	// values.
-	private final void logProbabilityValue$sample50() {
-		// Determine if we need to calculate the values for sample task 50 or if we should
+	private final void logProbabilityValue$sample53() {
+		// Determine if we need to calculate the values for sample task 53 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample50) {
+		if(!fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -796,12 +897,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample53)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample48);
+			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample51);
 		}
 		// Using cached values.
 		else {
@@ -819,17 +920,17 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample53)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample58 using sampled
+	// Calculate the probability of the samples represented by sample61 using sampled
 	// values.
-	private final void logProbabilityValue$sample58() {
-		// Determine if we need to calculate the values for sample task 58 or if we should
+	private final void logProbabilityValue$sample61() {
+		// Determine if we need to calculate the values for sample task 61 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample58) {
+		if(!fixedProbFlag$sample61) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -885,7 +986,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				logProbability$var54[((i$var50 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample58[((i$var50 - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample61[((i$var50 - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -896,12 +997,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample58)
+			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample58 = ((fixedFlag$sample58 && fixedFlag$sample26) && fixedFlag$sample50);
+			fixedProbFlag$sample61 = ((fixedFlag$sample61 && fixedFlag$sample26) && fixedFlag$sample53);
 		}
 		// Using cached values.
 		else {
@@ -910,7 +1011,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$accumulator = 0.0;
 			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample58[((i$var50 - 0) / 1)];
+				double cv$sampleValue = logProbability$sample61[((i$var50 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var54[((i$var50 - 0) / 1)] = cv$rvAccumulator;
@@ -924,17 +1025,17 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample58)
+			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample78 using sampled
+	// Calculate the probability of the samples represented by sample81 using sampled
 	// values.
-	private final void logProbabilityValue$sample78() {
-		// Determine if we need to calculate the values for sample task 78 or if we should
+	private final void logProbabilityValue$sample81() {
+		// Determine if we need to calculate the values for sample task 81 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample78) {
+		if(!fixedProbFlag$sample81) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -991,7 +1092,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					logProbability$var73[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
-					logProbability$sample78[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = cv$sampleProbability;
+					logProbability$sample81[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = cv$sampleProbability;
 				}
 			}
 			
@@ -1003,12 +1104,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample78)
+			if(fixedFlag$sample81)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample78 = ((fixedFlag$sample78 && fixedFlag$sample26) && fixedFlag$sample58);
+			fixedProbFlag$sample81 = ((fixedFlag$sample81 && fixedFlag$sample26) && fixedFlag$sample61);
 		}
 		// Using cached values.
 		else {
@@ -1018,7 +1119,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 				for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
 					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample78[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)];
+					double cv$sampleValue = logProbability$sample81[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var73[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = cv$rvAccumulator;
@@ -1033,109 +1134,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample78)
+			if(fixedFlag$sample81)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample99 using sampled
-	// values.
-	private final void logProbabilityValue$sample99() {
-		// Determine if we need to calculate the values for sample task 99 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample99) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
-				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					double cv$sampleAccumulator = 0.0;
-					
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					{
-						// The sample value to calculate the probability of generating
-						int cv$sampleValue = (events[i$var80][j$var88] - 1);
-						{
-							{
-								double[] var92 = bias[st[i$var80][j$var88]];
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var92.length))?Math.log(var92[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var93[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = cv$sampleAccumulator;
-					
-					// Store the sample task probability
-					logProbability$sample99[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = cv$sampleProbability;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$events = (logProbability$events + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample99 = (((fixedFlag$sample99 && fixedFlag$sample33) && fixedFlag$sample58) && fixedFlag$sample78);
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
-				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample99[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var93[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = cv$rvAccumulator;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$events = (logProbability$events + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1162,7 +1162,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				{
 					if((var24 == initialState)) {
 						for(int i$var50 = 0; i$var50 < samples; i$var50 += 1)
-							// Increment the sample counter with the value sampled by sample task 58 of random
+							// Increment the sample counter with the value sampled by sample task 61 of random
 							// variable var54
 							cv$countLocal[st[i$var50][0]] = (cv$countLocal[st[i$var50][0]] + 1.0);
 					}
@@ -1176,13 +1176,13 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 						for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
 							if((var24 == st[i$var60][(j$var66 - 1)])) {
-								// Processing sample task 78 of consumer random variable null.
+								// Processing sample task 81 of consumer random variable null.
 								{
 									{
 										{
 											{
 												{
-													// Increment the sample counter with the value sampled by sample task 78 of random
+													// Increment the sample counter with the value sampled by sample task 81 of random
 													// variable var73
 													cv$countLocal[st[i$var60][j$var66]] = (cv$countLocal[st[i$var60][j$var66]] + 1.0);
 												}
@@ -1204,9 +1204,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 33 drawn from Dirichlet 27. Inference was performed using a Dirichlet
+	// by sample task 34 drawn from Dirichlet 27. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample33(int var31) {
+	private final void sample34(int var31) {
 		// A reference local to the function for the sample variable.
 		double[] cv$targetLocal = bias[var31];
 		
@@ -1222,18 +1222,18 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		{
 			// Processing random variable 93.
 			{
-				// Looking for a path between Sample 33 and consumer Categorical 93.
+				// Looking for a path between Sample 34 and consumer Categorical 93.
 				{
 					for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
 						for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
 							if((var31 == st[i$var80][j$var88])) {
-								// Processing sample task 99 of consumer random variable null.
+								// Processing sample task 103 of consumer random variable null.
 								{
 									{
 										{
 											{
 												{
-													// Increment the sample counter with the value sampled by sample task 99 of random
+													// Increment the sample counter with the value sampled by sample task 103 of random
 													// variable var93
 													cv$countLocal[(events[i$var80][j$var88] - 1)] = (cv$countLocal[(events[i$var80][j$var88] - 1)] + 1.0);
 												}
@@ -1255,9 +1255,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 48 drawn from Dirichlet 44. Inference was performed using a Dirichlet
+	// by sample task 51 drawn from Dirichlet 44. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample48() {
+	private final void sample51() {
 		// A reference local to the function for the sample variable.
 		double[] cv$targetLocal = weights;
 		
@@ -1274,13 +1274,13 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Processing random variable 46.
 			{
 				{
-					// Processing sample task 50 of consumer random variable null.
+					// Processing sample task 53 of consumer random variable null.
 					{
 						{
 							{
 								{
 									{
-										// Increment the sample counter with the value sampled by sample task 50 of random
+										// Increment the sample counter with the value sampled by sample task 53 of random
 										// variable var46
 										cv$countLocal[initialState] = (cv$countLocal[initialState] + 1.0);
 									}
@@ -1299,9 +1299,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 50 drawn from Categorical 46. Inference was performed using variable
+	// by sample task 53 drawn from Categorical 46. Inference was performed using variable
 	// marginalization.
-	private final void sample50() {
+	private final void sample53() {
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var47$stateProbabilityGlobal;
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
@@ -1341,7 +1341,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 						for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
 							int traceTempVariable$initialState$1_2 = cv$currentValue;
 							
-							// Processing sample task 58 of consumer random variable null.
+							// Processing sample task 61 of consumer random variable null.
 							{
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
@@ -1361,7 +1361,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 													cv$temp$1$var53 = var53;
 												}
 												
-												// Record the probability of sample task 58 generating output with current configuration.
+												// Record the probability of sample task 61 generating output with current configuration.
 												if(((Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
 													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
@@ -1372,7 +1372,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var50][0]) && (st[i$var50][0] < cv$temp$1$var53.length))?Math.log(cv$temp$1$var53[st[i$var50][0]]):Double.NEGATIVE_INFINITY)));
 												}
 												
-												// Recorded the probability of reaching sample task 58 with the current configuration.
+												// Recorded the probability of reaching sample task 61 with the current configuration.
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
 										}
@@ -1465,9 +1465,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 58 drawn from Categorical 54. Inference was performed using variable
+	// by sample task 61 drawn from Categorical 54. Inference was performed using variable
 	// marginalization.
-	private final void sample58(int i$var50) {
+	private final void sample61(int i$var50) {
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var55$stateProbabilityGlobal;
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
@@ -1508,14 +1508,14 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				
 				// Processing random variable 73.
 				{
-					// Looking for a path between Sample 58 and consumer Categorical 73.
+					// Looking for a path between Sample 61 and consumer Categorical 73.
 					{
 						int traceTempVariable$var71$1_1 = cv$currentValue;
 						for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 							if((i$var50 == i$var60)) {
 								for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
 									if((0 == (j$var66 - 1))) {
-										// Processing sample task 78 of consumer random variable null.
+										// Processing sample task 81 of consumer random variable null.
 										{
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1535,7 +1535,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																cv$temp$1$var72 = var72;
 															}
 															
-															// Record the probability of sample task 78 generating output with current configuration.
+															// Record the probability of sample task 81 generating output with current configuration.
 															if(((Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
 																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
@@ -1546,7 +1546,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var60][j$var66]) && (st[i$var60][j$var66] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[i$var60][j$var66]]):Double.NEGATIVE_INFINITY)));
 															}
 															
-															// Recorded the probability of reaching sample task 78 with the current configuration.
+															// Recorded the probability of reaching sample task 81 with the current configuration.
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
@@ -1578,14 +1578,14 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				
 				// Processing random variable 93.
 				{
-					// Looking for a path between Sample 58 and consumer Categorical 93.
+					// Looking for a path between Sample 61 and consumer Categorical 93.
 					{
 						int traceTempVariable$var91$4_1 = cv$currentValue;
 						for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
 							if((i$var50 == i$var80)) {
 								for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
 									if((0 == j$var88)) {
-										// Processing sample task 99 of consumer random variable null.
+										// Processing sample task 103 of consumer random variable null.
 										{
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1605,7 +1605,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																cv$temp$2$var92 = var92;
 															}
 															
-															// Record the probability of sample task 99 generating output with current configuration.
+															// Record the probability of sample task 103 generating output with current configuration.
 															if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
 																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
@@ -1616,7 +1616,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 															}
 															
-															// Recorded the probability of reaching sample task 99 with the current configuration.
+															// Recorded the probability of reaching sample task 103 with the current configuration.
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
@@ -1715,9 +1715,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 78 drawn from Categorical 73. Inference was performed using variable
+	// by sample task 81 drawn from Categorical 73. Inference was performed using variable
 	// marginalization.
-	private final void sample78(int i$var60, int j$var66) {
+	private final void sample81(int i$var60, int j$var66) {
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var74$stateProbabilityGlobal;
 		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
@@ -1758,14 +1758,14 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				
 				// Processing random variable 73.
 				{
-					// Looking for a path between Sample 78 and consumer Categorical 73.
+					// Looking for a path between Sample 81 and consumer Categorical 73.
 					{
 						int traceTempVariable$var71$1_1 = cv$currentValue;
 						for(int index$i$1_2 = 0; index$i$1_2 < samples; index$i$1_2 += 1) {
 							if((i$var60 == index$i$1_2)) {
 								for(int index$j$1_3 = 1; index$j$1_3 < length$eventsMeasured[index$i$1_2]; index$j$1_3 += 1) {
 									if((j$var66 == (index$j$1_3 - 1))) {
-										// Processing sample task 78 of consumer random variable null.
+										// Processing sample task 81 of consumer random variable null.
 										{
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1785,7 +1785,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																cv$temp$1$var72 = var72;
 															}
 															
-															// Record the probability of sample task 78 generating output with current configuration.
+															// Record the probability of sample task 81 generating output with current configuration.
 															if(((Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
 																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
@@ -1796,7 +1796,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$1$var72.length))?Math.log(cv$temp$1$var72[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)));
 															}
 															
-															// Recorded the probability of reaching sample task 78 with the current configuration.
+															// Recorded the probability of reaching sample task 81 with the current configuration.
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
@@ -1828,14 +1828,14 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				
 				// Processing random variable 93.
 				{
-					// Looking for a path between Sample 78 and consumer Categorical 93.
+					// Looking for a path between Sample 81 and consumer Categorical 93.
 					{
 						int traceTempVariable$var91$4_1 = cv$currentValue;
 						for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
 							if((i$var60 == i$var80)) {
 								for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
 									if((j$var66 == j$var88)) {
-										// Processing sample task 99 of consumer random variable null.
+										// Processing sample task 103 of consumer random variable null.
 										{
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1855,7 +1855,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																cv$temp$2$var92 = var92;
 															}
 															
-															// Record the probability of sample task 99 generating output with current configuration.
+															// Record the probability of sample task 103 generating output with current configuration.
 															if(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
 																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
@@ -1866,7 +1866,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (events[i$var80][j$var88] - 1)) && ((events[i$var80][j$var88] - 1) < cv$temp$2$var92.length))?Math.log(cv$temp$2$var92[(events[i$var80][j$var88] - 1)]):Double.NEGATIVE_INFINITY)));
 															}
 															
-															// Recorded the probability of reaching sample task 99 with the current configuration.
+															// Recorded the probability of reaching sample task 103 with the current configuration.
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
@@ -2013,7 +2013,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		
 		// Constructor for cv$var55$stateProbabilityGlobal
 		{
-			// Variable to record the maximum value of Task Get 56. Initially set to the value
+			// Variable to record the maximum value of Task Get 59. Initially set to the value
 			// of putTask 27.
 			int cv$var26$max = noStates;
 			
@@ -2023,7 +2023,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		
 		// Constructor for cv$var74$stateProbabilityGlobal
 		{
-			// Variable to record the maximum value of Task Get 76. Initially set to the value
+			// Variable to record the maximum value of Task Get 79. Initially set to the value
 			// of putTask 27.
 			int cv$var26$max = noStates;
 			
@@ -2098,9 +2098,9 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			logProbability$var54 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample58
+		// Constructor for logProbability$sample61
 		{
-			logProbability$sample58 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)];
+			logProbability$sample61 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$var73
@@ -2110,11 +2110,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				logProbability$var73[((i$var60 - 0) / 1)] = new double[((((length$eventsMeasured[i$var60] - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample78
+		// Constructor for logProbability$sample81
 		{
-			logProbability$sample78 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)][];
+			logProbability$sample81 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)][];
 			for(int i$var60 = 0; i$var60 < length$eventsMeasured.length; i$var60 += 1)
-				logProbability$sample78[((i$var60 - 0) / 1)] = new double[((((length$eventsMeasured[i$var60] - 1) - 1) / 1) + 1)];
+				logProbability$sample81[((i$var60 - 0) / 1)] = new double[((((length$eventsMeasured[i$var60] - 1) - 1) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$var93
@@ -2124,11 +2124,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				logProbability$var93[((i$var80 - 0) / 1)] = new double[((((length$eventsMeasured[i$var80] - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample99
+		// Constructor for logProbability$sample103
 		{
-			logProbability$sample99 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)][];
+			logProbability$sample103 = new double[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)][];
 			for(int i$var80 = 0; i$var80 < length$eventsMeasured.length; i$var80 += 1)
-				logProbability$sample99[((i$var80 - 0) / 1)] = new double[((((length$eventsMeasured[i$var80] - 1) - 1) / 1) + 1)];
+				logProbability$sample103[((i$var80 - 0) / 1)] = new double[((((length$eventsMeasured[i$var80] - 1) - 1) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -2145,29 +2145,29 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		for(int var31 = 0; var31 < noStates; var31 += 1) {
 			double[] var32 = bias[var31];
-			if(!fixedFlag$sample33)
+			if(!fixedFlag$sample34)
 				DistributionSampling.sampleDirichlet(RNG$, v2, var32);
 		}
-		if(!fixedFlag$sample48)
+		if(!fixedFlag$sample51)
 			DistributionSampling.sampleDirichlet(RNG$, v, weights);
-		if(!fixedFlag$sample50)
+		if(!fixedFlag$sample53)
 			initialState = DistributionSampling.sampleCategorical(RNG$, weights);
 		for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
 			int[] var51 = st[i$var50];
-			if(!fixedFlag$sample58)
+			if(!fixedFlag$sample61)
 				var51[0] = DistributionSampling.sampleCategorical(RNG$, m[initialState]);
 		}
 		for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 			int[] var67 = st[i$var60];
 			for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
-				if(!fixedFlag$sample78)
+				if(!fixedFlag$sample81)
 					var67[j$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var60][(j$var66 - 1)]]);
 			}
 		}
 		for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
 			int[] var89 = events[i$var80];
 			for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1) {
-				if(!fixedFlag$sample99)
+				if(!fixedFlag$sample103)
 					var89[j$var88] = (DistributionSampling.sampleCategorical(RNG$, bias[st[i$var80][j$var88]]) + 1);
 			}
 		}
@@ -2184,22 +2184,22 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		for(int var31 = 0; var31 < noStates; var31 += 1) {
 			double[] var32 = bias[var31];
-			if(!fixedFlag$sample33)
+			if(!fixedFlag$sample34)
 				DistributionSampling.sampleDirichlet(RNG$, v2, var32);
 		}
-		if(!fixedFlag$sample48)
+		if(!fixedFlag$sample51)
 			DistributionSampling.sampleDirichlet(RNG$, v, weights);
-		if(!fixedFlag$sample50)
+		if(!fixedFlag$sample53)
 			initialState = DistributionSampling.sampleCategorical(RNG$, weights);
 		for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
 			int[] var51 = st[i$var50];
-			if(!fixedFlag$sample58)
+			if(!fixedFlag$sample61)
 				var51[0] = DistributionSampling.sampleCategorical(RNG$, m[initialState]);
 		}
 		for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 			int[] var67 = st[i$var60];
 			for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
-				if(!fixedFlag$sample78)
+				if(!fixedFlag$sample81)
 					var67[j$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var60][(j$var66 - 1)]]);
 			}
 		}
@@ -2216,22 +2216,22 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		for(int var31 = 0; var31 < noStates; var31 += 1) {
 			double[] var32 = bias[var31];
-			if(!fixedFlag$sample33)
+			if(!fixedFlag$sample34)
 				DistributionSampling.sampleDirichlet(RNG$, v2, var32);
 		}
-		if(!fixedFlag$sample48)
+		if(!fixedFlag$sample51)
 			DistributionSampling.sampleDirichlet(RNG$, v, weights);
-		if(!fixedFlag$sample50)
+		if(!fixedFlag$sample53)
 			initialState = DistributionSampling.sampleCategorical(RNG$, weights);
 		for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
 			int[] var51 = st[i$var50];
-			if(!fixedFlag$sample58)
+			if(!fixedFlag$sample61)
 				var51[0] = DistributionSampling.sampleCategorical(RNG$, m[initialState]);
 		}
 		for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 			int[] var67 = st[i$var60];
 			for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
-				if(!fixedFlag$sample78)
+				if(!fixedFlag$sample81)
 					var67[j$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var60][(j$var66 - 1)]]);
 			}
 		}
@@ -2247,21 +2247,21 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					sample26(var24);
 			}
 			for(int var31 = 0; var31 < noStates; var31 += 1) {
-				if(!fixedFlag$sample33)
-					sample33(var31);
+				if(!fixedFlag$sample34)
+					sample34(var31);
 			}
-			if(!fixedFlag$sample48)
-				sample48();
-			if(!fixedFlag$sample50)
-				sample50();
+			if(!fixedFlag$sample51)
+				sample51();
+			if(!fixedFlag$sample53)
+				sample53();
 			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
-				if(!fixedFlag$sample58)
-					sample58(i$var50);
+				if(!fixedFlag$sample61)
+					sample61(i$var50);
 			}
 			for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 				for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
-					if(!fixedFlag$sample78)
-						sample78(i$var60, j$var66);
+					if(!fixedFlag$sample81)
+						sample81(i$var60, j$var66);
 				}
 			}
 		}
@@ -2269,21 +2269,21 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		else {
 			for(int i$var60 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var60 >= ((0 - 1) + 1); i$var60 -= 1) {
 				for(int j$var66 = (length$eventsMeasured[i$var60] - ((((length$eventsMeasured[i$var60] - 1) - 1) % 1) + 1)); j$var66 >= ((1 - 1) + 1); j$var66 -= 1) {
-					if(!fixedFlag$sample78)
-						sample78(i$var60, j$var66);
+					if(!fixedFlag$sample81)
+						sample81(i$var60, j$var66);
 				}
 			}
 			for(int i$var50 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var50 >= ((0 - 1) + 1); i$var50 -= 1) {
-				if(!fixedFlag$sample58)
-					sample58(i$var50);
+				if(!fixedFlag$sample61)
+					sample61(i$var50);
 			}
-			if(!fixedFlag$sample50)
-				sample50();
-			if(!fixedFlag$sample48)
-				sample48();
+			if(!fixedFlag$sample53)
+				sample53();
+			if(!fixedFlag$sample51)
+				sample51();
 			for(int var31 = (noStates - ((((noStates - 1) - 0) % 1) + 1)); var31 >= ((0 - 1) + 1); var31 -= 1) {
-				if(!fixedFlag$sample33)
-					sample33(var31);
+				if(!fixedFlag$sample34)
+					sample34(var31);
 			}
 			for(int var24 = (noStates - ((((noStates - 1) - 0) % 1) + 1)); var24 >= ((0 - 1) + 1); var24 -= 1) {
 				if(!fixedFlag$sample26)
@@ -2322,29 +2322,29 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			logProbability$var25 = 0.0;
 		logProbability$var27 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample33)
+		if(!fixedProbFlag$sample34)
 			logProbability$var32 = 0.0;
 		logProbability$var44 = 0.0;
-		if(!fixedProbFlag$sample48)
+		if(!fixedProbFlag$sample51)
 			logProbability$weights = 0.0;
 		logProbability$var46 = 0.0;
-		if(!fixedProbFlag$sample50)
+		if(!fixedProbFlag$sample53)
 			logProbability$initialState = 0.0;
 		for(int i$var50 = 0; i$var50 < samples; i$var50 += 1)
 			logProbability$var54[((i$var50 - 0) / 1)] = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample58) {
+		if(!fixedProbFlag$sample61) {
 			for(int i$var50 = 0; i$var50 < samples; i$var50 += 1)
-				logProbability$sample58[((i$var50 - 0) / 1)] = 0.0;
+				logProbability$sample61[((i$var50 - 0) / 1)] = 0.0;
 		}
 		for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 			for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1)
 				logProbability$var73[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = 0.0;
 		}
-		if(!fixedProbFlag$sample78) {
+		if(!fixedProbFlag$sample81) {
 			for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 				for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1)
-					logProbability$sample78[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = 0.0;
+					logProbability$sample81[((i$var60 - 0) / 1)][((j$var66 - 1) / 1)] = 0.0;
 			}
 		}
 		for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
@@ -2352,10 +2352,10 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				logProbability$var93[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = 0.0;
 		}
 		logProbability$events = 0.0;
-		if(!fixedProbFlag$sample99) {
+		if(!fixedProbFlag$sample103) {
 			for(int i$var80 = 0; i$var80 < samples; i$var80 += 1) {
 				for(int j$var88 = 1; j$var88 < length$eventsMeasured[i$var80]; j$var88 += 1)
-					logProbability$sample99[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = 0.0;
+					logProbability$sample103[((i$var80 - 0) / 1)][((j$var88 - 1) / 1)] = 0.0;
 			}
 		}
 	}
@@ -2379,17 +2379,17 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample26)
 			logProbabilityValue$sample26();
-		if(fixedFlag$sample33)
-			logProbabilityValue$sample33();
-		if(fixedFlag$sample48)
-			logProbabilityValue$sample48();
-		if(fixedFlag$sample50)
-			logProbabilityValue$sample50();
-		if(fixedFlag$sample58)
-			logProbabilityValue$sample58();
-		if(fixedFlag$sample78)
-			logProbabilityValue$sample78();
-		logProbabilityValue$sample99();
+		if(fixedFlag$sample34)
+			logProbabilityValue$sample34();
+		if(fixedFlag$sample51)
+			logProbabilityValue$sample51();
+		if(fixedFlag$sample53)
+			logProbabilityValue$sample53();
+		if(fixedFlag$sample61)
+			logProbabilityValue$sample61();
+		if(fixedFlag$sample81)
+			logProbabilityValue$sample81();
+		logProbabilityValue$sample103();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2408,12 +2408,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample26();
-		logProbabilityValue$sample33();
-		logProbabilityValue$sample48();
-		logProbabilityValue$sample50();
-		logProbabilityValue$sample58();
-		logProbabilityValue$sample78();
-		logProbabilityValue$sample99();
+		logProbabilityValue$sample34();
+		logProbabilityValue$sample51();
+		logProbabilityValue$sample53();
+		logProbabilityValue$sample61();
+		logProbabilityValue$sample81();
+		logProbabilityValue$sample103();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2431,12 +2431,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample26();
-		logProbabilityValue$sample33();
-		logProbabilityValue$sample48();
-		logProbabilityValue$sample50();
-		logProbabilityValue$sample58();
-		logProbabilityValue$sample78();
-		logProbabilityValue$sample99();
+		logProbabilityValue$sample34();
+		logProbabilityValue$sample51();
+		logProbabilityValue$sample53();
+		logProbabilityValue$sample61();
+		logProbabilityValue$sample81();
+		logProbabilityValue$sample103();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -2451,22 +2451,22 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		for(int var31 = 0; var31 < noStates; var31 += 1) {
 			double[] var32 = bias[var31];
-			if(!fixedFlag$sample33)
+			if(!fixedFlag$sample34)
 				DistributionSampling.sampleDirichlet(RNG$, v2, var32);
 		}
-		if(!fixedFlag$sample48)
+		if(!fixedFlag$sample51)
 			DistributionSampling.sampleDirichlet(RNG$, v, weights);
-		if(!fixedFlag$sample50)
+		if(!fixedFlag$sample53)
 			initialState = DistributionSampling.sampleCategorical(RNG$, weights);
 		for(int i$var50 = 0; i$var50 < samples; i$var50 += 1) {
 			int[] var51 = st[i$var50];
-			if(!fixedFlag$sample58)
+			if(!fixedFlag$sample61)
 				var51[0] = DistributionSampling.sampleCategorical(RNG$, m[initialState]);
 		}
 		for(int i$var60 = 0; i$var60 < samples; i$var60 += 1) {
 			int[] var67 = st[i$var60];
 			for(int j$var66 = 1; j$var66 < length$eventsMeasured[i$var60]; j$var66 += 1) {
-				if(!fixedFlag$sample78)
+				if(!fixedFlag$sample81)
 					var67[j$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var60][(j$var66 - 1)]]);
 			}
 		}

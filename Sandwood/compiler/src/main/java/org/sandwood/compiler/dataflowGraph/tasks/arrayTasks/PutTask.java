@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,7 +12,6 @@ import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayPut;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
-import static org.sandwood.compiler.trees.irTree.IRTree.store;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,6 +61,7 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
         this.index = index;
         inlineableTask = false;
         this.implicit = implicit;
+
         // If the array only becomes a distribution now.
         if(value.isDistribution() && !array.isDistribution()) {
             setDistributions();
@@ -133,9 +133,30 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
         testValue(errors);
     }
 
-    public void assignmentDuplication(ArrayVariable<A> duplicateArray, ArrayVariable<A> originalArray) {
-        VariableName arrayName1 = getArraySourceName(duplicateArray);
-        VariableName arrayName2 = getArraySourceName(originalArray);
+    public void assignmentToSameArrayElement() {
+        VariableName arrayName = getArraySourceName(array);
+        VariableName valueName = getArraySourceName((ArrayVariable<?>) value);
+
+        loggedErrors.add(
+                new SandwoodModelException("Array " + valueName + " is being assigned to the same location in array "
+                        + arrayName + ". This is not permitted due to the single assignment semantics.", this));
+    }
+
+    public void assignmentToSameArrayDifferntElements() {
+        VariableName arrayName = getArraySourceName(array);
+        VariableName valueName = getArraySourceName((ArrayVariable<?>) value);
+
+        loggedErrors
+                .add(new SandwoodModelException(
+                        "Array " + valueName + " is being assigned to the multiple location in array " + arrayName
+                                + ". This is not permitted, each array may only exist in once in an another array.",
+                        this));
+
+    }
+
+    public void assignmentToMultipleArrays() {
+        VariableName arrayName1 = getArraySourceName(array);
+        VariableName arrayName2 = getArraySourceName(((ArrayVariable<?>) value).getOuterArrayDesc().getArray());
 
         loggedErrors.add(new SandwoodModelException("References to arrays may not be held in multiple "
                 + "different arrays. Attempt to assign the same array to " + arrayName1 + " and " + arrayName2 + ".",
@@ -269,7 +290,8 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
         if(!value.isPrivate() && value.getType().isArray()) {
             errors.add(new SandwoodModelException(
                     "Public arrays cannot be placed into arrays as this would provide multiple access points to the "
-                    + "array's internal state.", this));
+                            + "array's internal state.",
+                    this));
         }
     }
 
@@ -290,81 +312,105 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
 
     @Override
     public IRTreeReturn<ArrayVariable<A>> getForwardIRinternal(CompilationContext compilationCtx) {
-        if(isAllocation())
-            return array.getForwardIR(compilationCtx);
 
-        // Get the tree for the array
+        // Setup the array ready for access
         IRTreeReturn<ArrayVariable<A>> arrayTree;
         if(compilationCtx.initialized(array)) {
-            array.markStopPoint();
+            ArrayVariable<A> stopPoint = getStopPoint();
+            stopPoint.markStopPoint();
             arrayTree = array.getForwardIR(compilationCtx);
-            array.unmarkStopPoint();
-        } else
-            arrayTree = array.getForwardIR(compilationCtx);
-
-        // If this is an implicit put that only exists to keep the dependence order in
-        // the dag correct, then ignore it, and pass the call
-        // to the parent that provided the array.
-        if(implicit) {
-            ArrayVariable<?> arrayValue = (ArrayVariable<?>) value;
-            if(!compilationCtx.initialized(arrayValue)) {
-                compilationCtx.addInitialized(arrayValue);
-                IRTreeVoid t = initializeVariable(Visibility.DEFAULT, value.getUniqueVarDesc(),
-                        arrayGet(arrayTree, index.getForwardIR(compilationCtx)), Tree.NoComment);
-                Scope targetScope = Scope.innerScope(array.scope(), index.scope());
-                compilationCtx.enterScope(value.scope());
-                //TODO once this and the call below is removed, remove this function from compilation context
-                compilationCtx.addTreeToScope(targetScope, t, value.instanceHandle().getParent());
-                compilationCtx.leaveScope(value.scope());
-            }
-            value.getForwardIR(compilationCtx);
-            return arrayTree;
-        }
-
-        /*
-         * This is not array an array that is being assigned other arrays. We treat this one normally.
-         */
-        if(!value.getType().isArray()) {
-            IRTreeVoid t = arrayPut(arrayTree, index.getForwardIR(compilationCtx), value.getForwardIR(compilationCtx),
-                    Tree.NoComment);
-            compilationCtx.addTreeToScope(scope(), t);
-            return load(array);
-        }
-        /*
-         * We are assigning arrays to this array. This is only going to happen by a function that produces arrays or a
-         * call to put.
-         *
-         * For functions as we want to allocate all memory before we start, these functions take the array they are
-         * going to generate as an argument. As such we do not need to capture the output of the called function in
-         * value, but we do need to make sure the array it will output has been loaded into scope before it is used in
-         * the function call.
-         *
-         * For a put, we will load each value into scope until we reach the function generating the value, or a put that
-         * is taking base type. This final put will place the value into the array, so again all that is required is to
-         * ensure that the correct data is in scope.
-         *
-         * The exception to this is if the parent is a get. In this case a subarray of one array is being loaded and
-         * placed in another array. This will overwrite any state that is already in the array.
-         */
-        ArrayVariable<?> arrayValue = (ArrayVariable<?>) value;
-        if(!compilationCtx.initialized(arrayValue)) {
-            compilationCtx.addInitialized(arrayValue);
-            IRTreeVoid t = initializeVariable(Visibility.DEFAULT, value.getUniqueVarDesc(),
-                    arrayGet(arrayTree, index.getForwardIR(compilationCtx)), Tree.NoComment);
-            Scope targetScope = Scope.innerScope(array.scope(), index.scope());
-            compilationCtx.enterScope(value.scope());
-            //TODO once this and the call above is removed, remove this function from compilation context
-            compilationCtx.addTreeToScope(targetScope, t, value.instanceHandle().getParent());
-            compilationCtx.leaveScope(value.scope());
-            value.getForwardIR(compilationCtx);
+            stopPoint.unmarkStopPoint();
         } else {
-            IRTreeVoid t = store(value.getUniqueVarDesc(), arrayGet(arrayTree, index.getForwardIR(compilationCtx)),
-                    Tree.NoComment);
-            compilationCtx.addTreeToScope(scope(), t);
+            arrayTree = array.getForwardIR(compilationCtx);
+            // If the call did not initialise the array initialise it now.
+            if(!array.isIntermediate() && !compilationCtx.initialized(array)) {
+                IRTreeVoid t = initializeVariable(Visibility.DEFAULT, array.getUniqueVarDesc(), arrayTree,
+                        Tree.NoComment);
+                // Find the outermost safe scope to place the value in.
+                Scope targetScope;
+                if(array.aliasSet())
+                    targetScope = array.scope();
+                else {
+                    List<Variable<?>> inputs = array.getParent().getInputs();
+                    int size = inputs.size();
+                    if(size == 0)
+                        targetScope = array.scope();
+                    else {
+                        targetScope = inputs.get(0).scope();
+                        for(int i = 1; i < size; i++)
+                            targetScope = Scope.innerScope(targetScope, inputs.get(i).scope());
+                    }
+                }
 
-            value.getForwardIR(compilationCtx);
+                compilationCtx.addTreeToScope(targetScope, t);
+                compilationCtx.addInitialized(array);
+                arrayTree = load(array);
+            }
         }
-        return load(array);
+
+        // Apply the put
+        if(compilationCtx.requiredArray(array) && !isAllocation()) {
+            if(value.getType().isArray()) {
+                /*
+                 * We are assigning arrays to this array. This is only going to happen by a function that produces
+                 * arrays or a call to put.
+                 *
+                 * For functions as we want to allocate all memory before we start, these functions take the array they
+                 * are going to generate as an argument. As such we do not need to capture the output of the called
+                 * function in value, but we do need to make sure the array it will output has been loaded into scope
+                 * before it is used in the function call.
+                 *
+                 * For a put, we will load each value into scope until we reach the function generating the value, or a
+                 * put that is taking base type. This final put will place the value into the array, so again all that
+                 * is required is to ensure that the correct data is in scope.
+                 *
+                 * The exception to this is if the parent is a get. In this case a subarray of one array is being loaded
+                 * and placed in another array. This will overwrite any state that is already in the array.
+                 */
+                ArrayVariable<?> arrayValue = (ArrayVariable<?>) value;
+                if(!compilationCtx.initialized(arrayValue)) {
+                    compilationCtx.addInitialized(arrayValue);
+                    IRTreeVoid t = initializeVariable(Visibility.DEFAULT, value.getUniqueVarDesc(),
+                            arrayGet(arrayTree, index.getForwardIR(compilationCtx)), Tree.NoComment);
+                    Scope targetScope = value.aliasSet() ? value.scope()
+                            : Scope.innerScope(array.scope(), index.scope());
+                    compilationCtx.enterScope(value.scope());
+                    // TODO once this and the call below is removed, remove this function from compilation context
+                    compilationCtx.addTreeToScope(targetScope, t, value.instanceHandle().getParent());
+                    compilationCtx.leaveScope(value.scope());
+                }
+                value.getForwardIR(compilationCtx);
+            } else {
+                /*
+                 * This is not array an array that is being assigned other arrays. We treat this one normally.
+                 */
+                IRTreeVoid t = arrayPut(arrayTree, index.getForwardIR(compilationCtx),
+                        value.getForwardIR(compilationCtx), Tree.NoComment);
+                compilationCtx.addTreeToScope(scope(), t);
+            }
+        }
+
+        // Return the array for any later tasks to use.
+        return arrayTree;
+    }
+
+    private ArrayVariable<A> getStopPoint() {
+        if(!array.isSubArray())
+            return array;
+        ArrayVariable<A> a = array;
+        while(true) {
+            Set<DataflowTask<?>> consumers = a.getConsumers();
+            for(DataflowTask<?> c:consumers) {
+                if(c.getType() == DFType.PUT && ((PutTask<?>) c).value == a)
+                    return a;
+            }
+
+            DataflowTask<ArrayVariable<A>> p = a.getParent();
+            if(p.getType() == DFType.PUT) {
+                a = ((PutTask<A>) p).array;
+            } else
+                return a;
+        }
     }
 
     private VariableName getArraySourceName(ArrayVariable<?> a) {
@@ -440,30 +486,65 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
 
     @Override
     public void constructTrace(TraceConstructionDesc desc) {
+        // Test if this is just putting back a value read by an implicit get. If it is do not explore the
+        // value.
+        boolean skipImplicit = false;
+
+        // Ensure this get is not providing the value to an implicit put on the same
+        // array cell.
+        if(!desc.trace.isEmpty()) {
+            DataflowTaskArgDesc d = desc.trace.peek();
+            if(d.task.getType() == DFType.GET) {
+                @SuppressWarnings("unchecked")
+                GetTask<A> gt = (GetTask<A>) d.task;
+
+                /*
+                 * If this put is writing the value to the array that get is reading do not explore the put.
+                 */
+                if(gt.getOutput().instanceHandle() == value.instanceHandle() && gt.array.instanceHandle() == array.instanceHandle()) {
+                    skipImplicit = true;
+                }
+            }
+        }
+
         int i = 0;
-        GetTask<?> initialGet = desc.initialGet;
+        DataflowTask<?> arrayEntryPoint = desc.arrayEntryPoint;
         for(Variable<?> in:getInputs()) {
             if(in == array) {
                 // When handling traces only the put task that modifies the array element we are
-                // interested in
-                // should be added to the trace. As such when the trace follows up the array,
-                // the task should
-                // not be added to the trace.
+                // interested in should be added to the trace. As such when the trace follows up
+                // the array, the task should not be added to the trace.
 
-                // The first put we find will trigger all the searches for this array so
-                // additional searches will not be required.
-                if(desc.firstPut) {
+                // Test if the last operation was an implicit put which this task generated the value for.
+                boolean implicitValue;
+                if(desc.trace.isEmpty())
+                    implicitValue = false;
+                else {
+                    DataflowTaskArgDesc d = desc.trace.peek();
+                    if(d.task.getType() == DFType.PUT) {
+                        PutTask<?> pt = (PutTask<?>) d.task;
+                        implicitValue = d.argPos == 2 && pt.isImplicit();
+                    } else
+                        implicitValue = false;
+                }
+
+                // The first put we find will trigger all the searches for this array so additional
+                // searches will not be required. If this tasks is reached as the value of an implicit put, the other
+                // arrays will be reached via other put operations.
+                if(desc.firstPut && !implicitValue) {
                     // This is the first put for this array, so going forward it is false.
                     desc.firstPut = false;
                     desc.seenVar.remove(output);
 
                     // For most cases there will be a get task, if the put doesn't have a
-                    // corresponding get
-                    // we use the scope of the sink location.
-                    Set<ArrayVariable<A>> altArrays = (initialGet == null)
-                            ? array.getPossibleInstances(desc.sink.scope(), desc.sink.getParent().id())
-                            : array.getPossibleInstances(initialGet.scope(), initialGet.id());
-                    // Remove this array as we are already exploring it.
+                    // corresponding get we use the scope of the sink location.
+                    if(desc.arrayEntryPoint == null) {
+                        arrayEntryPoint = desc.sink.getParent();
+                        desc.arrayEntryPoint = arrayEntryPoint;
+                    }
+                    Set<ArrayVariable<A>> altArrays = array.getPossibleInstances(desc.arrayEntryPoint.scope(),
+                            desc.arrayEntryPoint.id());
+                    // Remove this array as we are already exploring it and explore the remaining arrays.
                     altArrays.remove(output);
                     for(ArrayVariable<A> v:altArrays) {
                         v.constructTrace(desc);
@@ -474,58 +555,47 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                     desc.firstPut = true;
                 }
             } else {
-                if(!isImplicit())
-                    desc.addRestrictedIndexes(this);
+                // Explore the other inputs if skip implicit is not true.
+                if(!skipImplicit) {
+                    if(!isImplicit())
+                        desc.addRestrictedIndexes(this);
 
-                // Add this task to the trace, this is only done for values and indexes, as if
-                // the input is the array this task does not change the data covered by this
-                // trace
-                desc.trace.push(new DataflowTaskArgDesc(this, i));
-                // If this is an array variable then the value being placed into the array is
-                // another array. As such all possible puts to this array that could affect the
-                // original get are required.
-                if(in.getType().isArray()) {
+                    // Add this task to the trace, this is only done for values and indexes, as if
+                    // the input is the array this task does not change the data covered by this
+                    // trace
+                    desc.trace.push(new DataflowTaskArgDesc(this, i));
+
                     // Set the first put flag to false, as an array is being added to
                     // this array, so this is still the first put.
                     boolean firstPut = desc.firstPut;
-                    desc.firstPut = false;
-
-                    // Explore the trace through the possible values, the search is done here
-                    // because it is possible to meet an array constructor or a get as the first
-                    // value met if the array is placed before it is populated. This only applies to
-                    // arrays being placed into puts, so we keep the search here. If we wanted to
-                    // move it into the classes we would need to test that first put is false before
-                    // doing the search for possible other instances.
-                    for(ArrayVariable<?> v:(initialGet == null)
-                            ? ((ArrayVariable<?>) in).getPossibleInstances(desc.sink.scope(),
-                                    desc.sink.getParent().id())
-                            : ((ArrayVariable<?>) in).getPossibleInstances(initialGet.scope(), initialGet.id())) {
-                        v.constructTrace(desc);
-                    }
-
-                    // restore the flags;
-                    desc.firstPut = firstPut;
-                } else {
-                    // We are starting a new trace through arrays as we are following
-                    // the index or a scalar value variable, so clear the initial get field.
-                    desc.initialGet = null;
-                    // Set the first put flag to true as this is the first put in any
-                    // array we meet while following the index or value variables
-                    boolean firstPut = desc.firstPut;
                     desc.firstPut = true;
 
-                    // Explore the trace
-                    in.constructTrace(desc);
+                    // If this is an array variable then the value being placed into the array is
+                    // another array. As such all possible puts to this array that could affect the
+                    // original get are required.
+                    if(in.getType().isArray()) {
+
+                        in.constructTrace(desc);
+                    } else {
+                        // We are starting a new trace through arrays as we are following
+                        // the index or a scalar value variable, so clear the initial get field.
+                        desc.arrayEntryPoint = null;
+
+                        // Explore the trace
+                        in.constructTrace(desc);
+
+                        // Restore the get task for this trace.
+                        desc.arrayEntryPoint = arrayEntryPoint;
+                    }
 
                     // restore the first put flag;
                     desc.firstPut = firstPut;
-                    // Restore the get task for this trace.
-                    desc.initialGet = initialGet;
-                }
-                desc.trace.pop();
 
-                if(!isImplicit())
-                    desc.removeRestrictedIndexes(this);
+                    desc.trace.pop();
+
+                    if(!isImplicit())
+                        desc.removeRestrictedIndexes(this);
+                }
             }
             i++;
         }
@@ -551,24 +621,30 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
     public ArrayVariable<?> findOuterArray() {
         ArrayVariable<?> v = output;
         while(true) {
+            // If this is an outer array, return.
+            if(!v.isSubArray())
+                return v;
+
             Set<DataflowTask<?>> consumers = v.getConsumers();
-            boolean putFound = false;
+            boolean outerArrayFound = false;
+            // Search for this array being put into an outer array.
             for(DataflowTask<?> consumer:consumers) {
                 if(consumer.getType() == DFType.PUT) {
                     PutTask<?> p = (PutTask<?>) consumer;
-                    if((p.isImplicit() || consumers.size() == 1) && p.value == v) {
+                    if(p.value == v) {
+                        outerArrayFound = true;
                         v = p.getOutput();
-                        putFound = true;
-                        break; // There will only ever be one implicit consumer, so no need to continue.
+                        break;
                     }
                 }
             }
 
-            if(!putFound)
-                break;
+            // If this array is not put into an outer array look to see if it is after the next assignment to this
+            // array.
+            if(!outerArrayFound) {
+                v = v.getChildInstance();
+                assert v != null;
+            }
         }
-
-        return v;
-
     }
 }

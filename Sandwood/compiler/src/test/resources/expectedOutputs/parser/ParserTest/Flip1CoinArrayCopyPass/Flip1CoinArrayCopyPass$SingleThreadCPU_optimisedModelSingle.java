@@ -231,26 +231,6 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			
-			// Add probability to constructed variables from the combined probability
-			// 
-			// Looking for a path between Sample 13 and consumer double[] 26.
-			if((0 < samples))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -298,15 +278,6 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Variable declaration of cv$accumulator moved.
 			logProbability$bias = (logProbability$bias + logProbability$var12);
-			
-			// Add probability to constructed variables from the combined probability
-			// 
-			// Looking for a path between Sample 13 and consumer double[] 26.
-			if((0 < samples))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$bias = (logProbability$bias + logProbability$var12);
 			
 			// Add probability to model
 			// 
