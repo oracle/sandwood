@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,6 +25,7 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
+import org.sandwood.compiler.traces.TraceConstructionDesc;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -36,11 +37,9 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
     public ArrayConstructTask(VariableType.Type<A> baseType, IntVariable length, Location location) {
         super(DFType.ARRAY_CONSTRUCTOR, VariableType.arrayType(baseType), location, length);
         this.length = length;
-        // TODO add in a test here for non deterministic lengths. This will need to
-        // follow the
-        // length all the way back to it's source like max does. A flag to hold this
-        // information
-        // can be added to array, something like "deterministicLength".
+        // TODO add in a test here for non deterministic lengths. This will need to follow the length all the way back
+        // to it's source like max does. A flag to hold this information can be added to array, something like
+        // "deterministicLength".
     }
 
     @Override
@@ -73,13 +72,16 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
     }
 
     @Override
-    protected IRTreeReturn<ArrayVariable<A>> getForwardIRinternal(
-            CompilationContext compilationCtx) {
+    protected IRTreeReturn<ArrayVariable<A>> getForwardIRinternal(CompilationContext compilationCtx) {
         if(output.isSubArray()) {
-            OuterArrayDesc<A> outerDesc = output.getOuterArrayDesc();
-            return IRTree.arrayGet(outerDesc.getArray().getForwardIR(compilationCtx), 
-                    outerDesc.getIndex().getForwardIR(compilationCtx));
-        } else 
+            if(compilationCtx.initialized(output))
+                return IRTree.load(output);
+            else {
+                OuterArrayDesc<A> outerDesc = output.getOuterArrayDesc();
+                return IRTree.arrayGet(outerDesc.getArray().getForwardIR(compilationCtx),
+                        outerDesc.getIndex().getForwardIR(compilationCtx));
+            }
+        } else
             return TreeUtils.getIndirectValue(output, compilationCtx);
     }
 
@@ -118,5 +120,13 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
     @Override
     public String checkInversionError(int argPos) {
         return null;
+    }
+
+    @Override
+    public void constructTrace(TraceConstructionDesc desc) {
+        super.constructTrace(desc);
+        if(output.isSubArray()) {
+            output.getOuterArrayDesc().getGetTask().constructTrace(desc);
+        }
     }
 }

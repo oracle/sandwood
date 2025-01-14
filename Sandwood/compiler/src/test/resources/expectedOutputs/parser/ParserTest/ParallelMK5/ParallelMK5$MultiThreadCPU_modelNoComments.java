@@ -5,10 +5,10 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK5$CoreInterface {
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample63 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample63 = false;
+	private boolean fixedFlag$sample41 = false;
+	private boolean fixedFlag$sample65 = false;
+	private boolean fixedProbFlag$sample41 = false;
+	private boolean fixedProbFlag$sample65 = false;
 	private int[] generated;
 	private double[][] indirection1;
 	private double[][] indirection2;
@@ -18,8 +18,8 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$generated;
 	private double logProbability$indirection1;
 	private double logProbability$indirection2;
-	private double[][] logProbability$sample39;
-	private double[] logProbability$sample63;
+	private double[][] logProbability$sample41;
+	private double[] logProbability$sample65;
 	private double[][] logProbability$var33;
 	private double[] logProbability$var55;
 	private int[] observed;
@@ -33,26 +33,26 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample39() {
-		return fixedFlag$sample39;
+	public final boolean get$fixedFlag$sample41() {
+		return fixedFlag$sample41;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value) {
-		fixedFlag$sample39 = cv$value;
-		fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedProbFlag$sample39);
-		fixedProbFlag$sample63 = (fixedFlag$sample39 && fixedProbFlag$sample63);
+	public final void set$fixedFlag$sample41(boolean cv$value) {
+		fixedFlag$sample41 = cv$value;
+		fixedProbFlag$sample41 = (fixedFlag$sample41 && fixedProbFlag$sample41);
+		fixedProbFlag$sample65 = (fixedFlag$sample41 && fixedProbFlag$sample65);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample63() {
-		return fixedFlag$sample63;
+	public final boolean get$fixedFlag$sample65() {
+		return fixedFlag$sample65;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample63(boolean cv$value) {
-		fixedFlag$sample63 = cv$value;
-		fixedProbFlag$sample63 = (fixedFlag$sample63 && fixedProbFlag$sample63);
+	public final void set$fixedFlag$sample65(boolean cv$value) {
+		fixedFlag$sample65 = cv$value;
+		fixedProbFlag$sample65 = (fixedFlag$sample65 && fixedProbFlag$sample65);
 	}
 
 	@Override
@@ -133,8 +133,8 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		observed = cv$value;
 	}
 
-	private final void logProbabilityValue$sample39() {
-		if(!fixedProbFlag$sample39) {
+	private final void logProbabilityValue$sample41() {
+		if(!fixedProbFlag$sample41) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < 10; i += 1) {
 				for(int j = 0; j < length$observed; j += 1) {
@@ -168,7 +168,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var33[((i - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
-					logProbability$sample39[((i - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
+					logProbability$sample41[((i - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
 					boolean cv$guard$indirection2 = false;
 					{
 						for(int l = 0; l < 10; l += 1) {
@@ -188,15 +188,15 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 			logProbability$indirection1 = (logProbability$indirection1 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample39)
+			if(fixedFlag$sample41)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample39 = fixedFlag$sample39;
+			fixedProbFlag$sample41 = fixedFlag$sample41;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < 10; i += 1) {
 				for(int j = 0; j < length$observed; j += 1) {
 					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample39[((i - 0) / 1)][((j - 0) / 1)];
+					double cv$sampleValue = logProbability$sample41[((i - 0) / 1)][((j - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var33[((i - 0) / 1)][((j - 0) / 1)] = cv$rvAccumulator;
@@ -219,13 +219,13 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 			logProbability$indirection1 = (logProbability$indirection1 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample39)
+			if(fixedFlag$sample41)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample63() {
-		if(!fixedProbFlag$sample63) {
+	private final void logProbabilityValue$sample65() {
+		if(!fixedProbFlag$sample65) {
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -257,17 +257,17 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var55[((m - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample63[((m - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample65[((m - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample63 = (fixedFlag$sample63 && fixedFlag$sample39);
+			fixedProbFlag$sample65 = (fixedFlag$sample65 && fixedFlag$sample41);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample63[((m - 0) / 1)];
+				double cv$sampleValue = logProbability$sample65[((m - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var55[((m - 0) / 1)] = cv$rvAccumulator;
@@ -278,7 +278,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	private final void sample39(int i, int j, int threadID$cv$j, Rng RNG$) {
+	private final void sample41(int i, int j, int threadID$cv$j, Rng RNG$) {
 		double cv$originalValue = indirection1[i][j];
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -444,15 +444,15 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				logProbability$var33[((i - 0) / 1)] = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample39 = new double[((((10 - 1) - 0) / 1) + 1)][];
+			logProbability$sample41 = new double[((((10 - 1) - 0) / 1) + 1)][];
 			for(int i = 0; i < 10; i += 1)
-				logProbability$sample39[((i - 0) / 1)] = new double[((((length$observed - 1) - 0) / 1) + 1)];
+				logProbability$sample41[((i - 0) / 1)] = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$var55 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample63 = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			logProbability$sample65 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 	}
 
@@ -465,7 +465,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, length$observed, 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var30[j] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
@@ -481,7 +481,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, 10, 1,
 							(int forStart$l, int forEnd$l, int threadID$l, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int l = forStart$l; l < forEnd$l; l += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var45[l] = indirection1[l][k];
 									}
 							}
@@ -492,7 +492,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$m, int forEnd$m, int threadID$m, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int m = forStart$m; m < forEnd$m; m += 1) {
-						if(!fixedFlag$sample63)
+						if(!fixedFlag$sample65)
 							generated[m] = DistributionSampling.sampleCategorical(RNG$1, indirection2[m]);
 					}
 			}
@@ -508,7 +508,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, length$observed, 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var30[j] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
@@ -524,7 +524,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, 10, 1,
 							(int forStart$l, int forEnd$l, int threadID$l, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int l = forStart$l; l < forEnd$l; l += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var45[l] = indirection1[l][k];
 									}
 							}
@@ -543,7 +543,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, length$observed, 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var30[j] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
@@ -559,7 +559,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, 10, 1,
 							(int forStart$l, int forEnd$l, int threadID$l, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int l = forStart$l; l < forEnd$l; l += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var45[l] = indirection1[l][k];
 									}
 							}
@@ -577,8 +577,8 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				parallelFor(RNG$, 0, length$observed, 1,
 					(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int j = forStart$j; j < forEnd$j; j += 1) {
-								if(!fixedFlag$sample39)
-									sample39(i, j, threadID$j, RNG$1);
+								if(!fixedFlag$sample41)
+									sample41(i, j, threadID$j, RNG$1);
 							}
 					}
 				);
@@ -589,8 +589,8 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				parallelFor(RNG$, 0, length$observed, 1,
 					(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int j = forStart$j; j < forEnd$j; j += 1) {
-								if(!fixedFlag$sample39)
-									sample39(i, j, threadID$j, RNG$1);
+								if(!fixedFlag$sample41)
+									sample41(i, j, threadID$j, RNG$1);
 							}
 					}
 				);
@@ -611,18 +611,18 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		logProbability$indirection2 = 0.0;
 		logProbability$indirection1 = 0.0;
-		if(!fixedProbFlag$sample39) {
+		if(!fixedProbFlag$sample41) {
 			for(int i = 0; i < 10; i += 1) {
 				for(int j = 0; j < length$observed; j += 1)
-					logProbability$sample39[((i - 0) / 1)][((j - 0) / 1)] = 0.0;
+					logProbability$sample41[((i - 0) / 1)][((j - 0) / 1)] = 0.0;
 			}
 		}
 		for(int m = 0; m < length$observed; m += 1)
 			logProbability$var55[((m - 0) / 1)] = 0.0;
 		logProbability$generated = 0.0;
-		if(!fixedProbFlag$sample63) {
+		if(!fixedProbFlag$sample65) {
 			for(int m = 0; m < length$observed; m += 1)
-				logProbability$sample63[((m - 0) / 1)] = 0.0;
+				logProbability$sample65[((m - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -634,23 +634,23 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample39)
-			logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		if(fixedFlag$sample41)
+			logProbabilityValue$sample41();
+		logProbabilityValue$sample65();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		logProbabilityValue$sample41();
+		logProbabilityValue$sample65();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample39();
-		logProbabilityValue$sample63();
+		logProbabilityValue$sample41();
+		logProbabilityValue$sample65();
 	}
 
 	@Override
@@ -662,7 +662,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, length$observed, 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var30[j] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
@@ -678,7 +678,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						parallelFor(RNG$1, 0, 10, 1,
 							(int forStart$l, int forEnd$l, int threadID$l, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int l = forStart$l; l < forEnd$l; l += 1) {
-										if(!fixedFlag$sample39)
+										if(!fixedFlag$sample41)
 											var45[l] = indirection1[l][k];
 									}
 							}

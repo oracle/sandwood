@@ -1,0 +1,26 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Flip1CoinMK19(int samples, int a, int b, boolean[] flipsMeasured) {
+	
+	double q = beta(1,1).sample();
+	double t = beta(1,1).sample();
+	
+	double[][] bias = new double[1][];
+	private double[] inner = new double[2];
+	inner[0] = q;
+	bias[0] = inner;
+	bias[0][1] = t;
+	
+	Bernoulli bernoulli = bernoulli(inner[b]);
+	boolean[] flips = bernoulli.sample(samples);
+	
+	flips.observe(flipsMeasured);
+}

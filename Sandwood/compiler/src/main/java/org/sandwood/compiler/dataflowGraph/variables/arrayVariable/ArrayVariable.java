@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -77,6 +77,12 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         Scope scope = null;
 
         /**
+         * The get task that the inner array was, or in the case of an array placed in the outer array by a put
+         * operation, could, be recovered by.
+         */
+        GetArrayTask<B> getTask;
+
+        /**
          * Method to get the array that contains a reference to this array.
          * 
          * @return The array that contains a reference to this array, or null if this is not a subarray.
@@ -103,6 +109,14 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
          */
         public Scope getScope() {
             return scope;
+        }
+        
+        /**
+         * 
+         * @return
+         */
+        public GetArrayTask<B> getGetTask() {
+            return getTask;
         }
     }
 
@@ -273,11 +287,13 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
     public <B extends NumberVariable<B>, C extends Variable<C>> A get(IntVariable i, Location location) {
         Type<A> t = getElementType();
         if(t.getTypeSingleton() == VariableType.Array) {
-            ArrayVariable<C> a = ((ArrayType) t)
-                    .getInstance(new GetArrayTask<>((ArrayVariable<ArrayVariable<C>>) this, i, location));
-            a.outerArrayDesc.array = (ArrayVariable<ArrayVariable<C>>) this;
+            ArrayVariable<ArrayVariable<C>> array = (ArrayVariable<ArrayVariable<C>>) this;
+            GetArrayTask<C> getTask = new GetArrayTask<>(array, i, location);
+            ArrayVariable<C> a = ((ArrayType<C>) t).getInstance(getTask);
+            a.outerArrayDesc.array = array;
             a.outerArrayDesc.index = i;
             a.outerArrayDesc.scope = ScopeStack.getCurrentScope();
+            a.outerArrayDesc.getTask = getTask;
             return (A) a;
         } else if(t == VariableType.BooleanVariable)
             return (A) ((BooleanType) t)
@@ -382,8 +398,21 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                 arrayValue.outerArrayDesc.array = (ArrayVariable<ArrayVariable<C>>) instanceHandle();
                 arrayValue.outerArrayDesc.index = i;
                 arrayValue.outerArrayDesc.scope = ScopeStack.getCurrentScope();
-            } else
-                putTask.assignmentDuplication(instanceHandle(), (ArrayVariable<A>) arrayValue.outerArrayDesc.array);
+                arrayValue.outerArrayDesc.getTask = new GetArrayTask<>((PutTask<ArrayVariable<C>>)putTask);
+            } else {
+                // Generate an error message as multiple assignments are not allowed.
+                ArrayVariable<A> thisArray = instanceHandle();
+                ArrayVariable<A> exisitingOuterArray = (ArrayVariable<A>) arrayValue.outerArrayDesc.array;
+                if(thisArray == exisitingOuterArray) {
+                    IntVariable exisitingIndex = arrayValue.outerArrayDesc.index;
+                    if(i.equivalent(exisitingIndex)) {
+                        putTask.assignmentToSameArrayElement();
+                    } else {
+                        putTask.assignmentToSameArrayDifferntElements();
+                    }
+                } else
+                    putTask.assignmentToMultipleArrays();
+            }
         }
 
         if(outerArrayDesc.array != null)
@@ -721,7 +750,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
     }
 
     public Set<PutTask<A>> getPuts(Scope scope, int destinationID) {
-        Set<ArrayVariable<A>> possibleInstances = this.getPossibleInstances(scope, destinationID);
+        Set<ArrayVariable<A>> possibleInstances = getPossibleInstances(scope, destinationID);
 
         Set<PutTask<A>> putTasks = new HashSet<>();
 
@@ -730,15 +759,25 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
             switch(parent.getType()) {
                 case CONSTRUCT_INPUT:
                 case SAMPLE:
-                case ARRAY_CONSTRUCTOR:
                     break;
+                case ARRAY_CONSTRUCTOR: {
+                    if(isSubArray()) {
+                        GetArrayTask<A> getTask = getOuterArrayDesc().getGetTask();
+                        // For each put task (p1) that can set a value for this get, add the puts (p2)
+                        // that could build up the value set by p1.
+                        for(PutTask<ArrayVariable<A>> pt:getTask.array.getPuts(scope, destinationID))
+                            if(pt.value.instanceHandle().getParent() != getTask)
+                                putTasks.addAll(((ArrayVariable<A>) pt.value).getPuts(scope, destinationID));
+                    }
+                    break;
+                }
                 case GET: {
-                    GetTask<ArrayVariable<A>> getTask = (GetTask<ArrayVariable<A>>) parent;
+                    GetArrayTask<A> getTask = (GetArrayTask<A>) parent;
                     // For each put task (p1) that can set a value for this get, add the puts (p2)
-                    // that
-                    // could build up the value wet by p1.
+                    // that could build up the value set by p1.
                     for(PutTask<ArrayVariable<A>> pt:getTask.array.getPuts(scope, destinationID))
-                        putTasks.addAll(((ArrayVariable<A>) pt.value).getPuts(scope, destinationID));
+                        if(pt.value.instanceHandle().getParent() != getTask)
+                            putTasks.addAll(((ArrayVariable<A>) pt.value).getPuts(scope, destinationID));
                     break;
                 }
                 case PUT: {

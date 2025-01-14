@@ -79,13 +79,13 @@ public class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample35(fixed);
+                system$c.set$fixedFlag$sample36(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample35())
+            if(system$c.get$fixedFlag$sample36())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -119,13 +119,13 @@ public class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample62(fixed);
+                system$c.set$fixedFlag$sample64(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample62())
+            if(system$c.get$fixedFlag$sample64())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -310,9 +310,9 @@ public class LDATest extends Model {
         if(phi.isSet())
             newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
         if(theta.isSet())
-            newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
+            newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
         if(w.isSet())
-            newCore.set$fixedFlag$sample62(oldCore.get$fixedFlag$sample62());
+            newCore.set$fixedFlag$sample64(oldCore.get$fixedFlag$sample64());
     }
 
     /**

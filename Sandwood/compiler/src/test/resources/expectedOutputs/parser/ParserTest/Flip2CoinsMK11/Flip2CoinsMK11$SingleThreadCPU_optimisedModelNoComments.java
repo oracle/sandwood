@@ -10,11 +10,11 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private boolean fixedFlag$sample15 = false;
 	private boolean fixedFlag$sample20 = false;
 	private boolean fixedFlag$sample36 = false;
-	private boolean fixedFlag$sample52 = false;
+	private boolean fixedFlag$sample53 = false;
 	private boolean fixedProbFlag$sample15 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample36 = false;
-	private boolean fixedProbFlag$sample52 = false;
+	private boolean fixedProbFlag$sample53 = false;
 	private boolean[][] flips;
 	private boolean[][] flipsMeasured;
 	private int[] length$flipsMeasured;
@@ -26,7 +26,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double[] logProbability$sample36;
-	private double[] logProbability$sample52;
+	private double[] logProbability$sample53;
 	private double logProbability$var13;
 	private double logProbability$var18;
 	private boolean setFlag$bias = false;
@@ -63,7 +63,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		fixedFlag$sample15 = cv$value;
 		fixedProbFlag$sample15 = (cv$value && fixedProbFlag$sample15);
 		fixedProbFlag$sample36 = (cv$value && fixedProbFlag$sample36);
-		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
+		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		fixedFlag$sample20 = cv$value;
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 		fixedProbFlag$sample36 = (cv$value && fixedProbFlag$sample36);
-		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
+		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
 	@Override
@@ -91,14 +91,14 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample52() {
-		return fixedFlag$sample52;
+	public final boolean get$fixedFlag$sample53() {
+		return fixedFlag$sample53;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value) {
-		fixedFlag$sample52 = cv$value;
-		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
+	public final void set$fixedFlag$sample53(boolean cv$value) {
+		fixedFlag$sample53 = cv$value;
+		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
 	@Override
@@ -227,8 +227,8 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	private final void logProbabilityValue$sample52() {
-		if(!fixedProbFlag$sample52) {
+	private final void logProbabilityValue$sample53() {
+		if(!fixedProbFlag$sample53) {
 			double cv$accumulator = 0.0;
 			for(int k = 1; k < coins; k += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -236,16 +236,16 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[k][var47], bias[k]));
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli2[(k - 1)] = cv$sampleAccumulator;
-				logProbability$sample52[(k - 1)] = cv$sampleAccumulator;
+				logProbability$sample53[(k - 1)] = cv$sampleAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample52 = ((fixedFlag$sample52 && fixedFlag$sample15) && fixedFlag$sample20);
+			fixedProbFlag$sample53 = ((fixedFlag$sample53 && fixedFlag$sample15) && fixedFlag$sample20);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int k = 1; k < coins; k += 1) {
-				double cv$rvAccumulator = logProbability$sample52[(k - 1)];
+				double cv$rvAccumulator = logProbability$sample53[(k - 1)];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$bernoulli2[(k - 1)] = cv$rvAccumulator;
 			}
@@ -293,7 +293,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$bernoulli1 = new double[1];
 		logProbability$sample36 = new double[1];
 		logProbability$bernoulli2 = new double[(length$flipsMeasured.length - 1)];
-		logProbability$sample52 = new double[(length$flipsMeasured.length - 1)];
+		logProbability$sample53 = new double[(length$flipsMeasured.length - 1)];
 	}
 
 	@Override
@@ -309,7 +309,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			for(int var32 = 0; var32 < length$flipsMeasured[0]; var32 += 1)
 				var29[var32] = DistributionSampling.sampleBernoulli(RNG$, bias[0]);
 		}
-		if(!fixedFlag$sample52) {
+		if(!fixedFlag$sample53) {
 			for(int k = 1; k < coins; k += 1) {
 				boolean[] var44 = flips[k];
 				for(int var47 = 0; var47 < length$flipsMeasured[k]; var47 += 1)
@@ -378,9 +378,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$sample36[0] = 0.0;
 		for(int k = 1; k < coins; k += 1)
 			logProbability$bernoulli2[(k - 1)] = 0.0;
-		if(!fixedProbFlag$sample52) {
+		if(!fixedProbFlag$sample53) {
 			for(int k = 1; k < coins; k += 1)
-				logProbability$sample52[(k - 1)] = 0.0;
+				logProbability$sample53[(k - 1)] = 0.0;
 		}
 	}
 
@@ -397,7 +397,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
 		logProbabilityValue$sample36();
-		logProbabilityValue$sample52();
+		logProbabilityValue$sample53();
 	}
 
 	@Override
@@ -406,7 +406,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbabilityValue$sample15();
 		logProbabilityValue$sample20();
 		logProbabilityValue$sample36();
-		logProbabilityValue$sample52();
+		logProbabilityValue$sample53();
 	}
 
 	@Override
@@ -415,7 +415,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbabilityValue$sample15();
 		logProbabilityValue$sample20();
 		logProbabilityValue$sample36();
-		logProbabilityValue$sample52();
+		logProbabilityValue$sample53();
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -72,7 +72,7 @@ public class CompilationContext {
         LOG_EVIDENCE_PROBABILITIES("logEvidenceProbabilities"),
         ALL_LOG_PROBABILITIES("logProbabilityGeneration"),
         ALL_LOG_PROBABILITIES_CALCULATION_VAL("logModelProbabilitiesVal"),
-        ALL_LOG_PROBABILITIES_CALCULATION_DIST("logModelProbabilitiesDist"), 
+        ALL_LOG_PROBABILITIES_CALCULATION_DIST("logModelProbabilitiesDist"),
         OBSERVATION_PROPAGATION("propogateObservedValues");
 
         public final FunctionName functionName;
@@ -93,7 +93,7 @@ public class CompilationContext {
         MAIN_METHODS,
         INITIALIZATION_OF_CONSTANTS,
         INITIALIZATION_OF_INTERMEDIATES,
-        ALLOCATION 
+        ALLOCATION
     }
 
     /**
@@ -446,6 +446,9 @@ public class CompilationContext {
 
     public final Traces traces;
 
+    // A set to record which sub arrays are required in locations where only some sub arrays are required.
+    private Set<ArrayVariable<?>> requiredArrays = null;
+
     public CompilationContext(CompilationOptions options, Traces traces, ExecutionType target) {
         this.traces = traces;
         this.target = target;
@@ -746,7 +749,7 @@ public class CompilationContext {
     public void leaveScope(Scope s) {
         scopes.leaveScope(substituteScope(s));
     }
-    
+
     public void setreverseScopes(boolean reverseScopes) {
         scopes.setreverseScopes(reverseScopes);
     }
@@ -909,5 +912,34 @@ public class CompilationContext {
      */
     public void popIsSerial() {
         isSerial.pop();
+    }
+
+    /**
+     * Method to set the required arrays when updating intermediates
+     * 
+     * @param requiredArrays The set of required arrays.
+     */
+    public void setRequiredArrays(Set<ArrayVariable<?>> requiredArrays) {
+        this.requiredArrays = requiredArrays;
+    }
+
+    /**
+     * Method to clear the set of required arrays. Once this set is cleared all arrays will be required.
+     */
+    public void clearRequiredArrays() {
+        requiredArrays = null;
+    }
+
+    /**
+     * Method to check if this array is currently required to be constructed.
+     * 
+     * @param array The array to check.
+     * @return Is the array required to be constructed.
+     */
+    public boolean requiredArray(ArrayVariable<?> array) {
+        if(requiredArrays == null)
+            return true;
+        else
+            return requiredArrays.contains(array);
     }
 }

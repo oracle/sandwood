@@ -16,12 +16,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private boolean fixedFlag$sample25 = false;
 	private boolean fixedFlag$sample53 = false;
 	private boolean fixedFlag$sample61 = false;
-	private boolean fixedFlag$sample85 = false;
+	private boolean fixedFlag$sample86 = false;
 	private boolean fixedProbFlag$sample25 = false;
 	private boolean fixedProbFlag$sample53 = false;
 	private boolean fixedProbFlag$sample61 = false;
-	private boolean fixedProbFlag$sample85 = false;
-	private boolean[][] guard$sample25gaussian84$global;
+	private boolean fixedProbFlag$sample86 = false;
+	private boolean[][] guard$sample25gaussian85$global;
 	private double[] lambda;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -32,7 +32,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private double logProbability$lambda;
 	private double[] logProbability$sample25;
 	private double[] logProbability$sample61;
-	private double[][] logProbability$sample85;
+	private double[][] logProbability$sample86;
 	private double logProbability$sum;
 	private double logProbability$ut;
 	private double logProbability$var18;
@@ -137,7 +137,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$fixedFlag$sample25(boolean cv$value) {
 		fixedFlag$sample25 = cv$value;
 		fixedProbFlag$sample25 = (fixedFlag$sample25 && fixedProbFlag$sample25);
-		fixedProbFlag$sample85 = (fixedFlag$sample25 && fixedProbFlag$sample85);
+		fixedProbFlag$sample86 = (fixedFlag$sample25 && fixedProbFlag$sample86);
 	}
 
 	@Override
@@ -161,18 +161,18 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$fixedFlag$sample61(boolean cv$value) {
 		fixedFlag$sample61 = cv$value;
 		fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedProbFlag$sample61);
-		fixedProbFlag$sample85 = (fixedFlag$sample61 && fixedProbFlag$sample85);
+		fixedProbFlag$sample86 = (fixedFlag$sample61 && fixedProbFlag$sample86);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample85() {
-		return fixedFlag$sample85;
+	public final boolean get$fixedFlag$sample86() {
+		return fixedFlag$sample86;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample85(boolean cv$value) {
-		fixedFlag$sample85 = cv$value;
-		fixedProbFlag$sample85 = (fixedFlag$sample85 && fixedProbFlag$sample85);
+	public final void set$fixedFlag$sample86(boolean cv$value) {
+		fixedFlag$sample86 = cv$value;
+		fixedProbFlag$sample86 = (fixedFlag$sample86 && fixedProbFlag$sample86);
 	}
 
 	@Override
@@ -522,8 +522,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void logProbabilityValue$sample85() {
-		if(!fixedProbFlag$sample85) {
+	private final void logProbabilityValue$sample86() {
+		if(!fixedProbFlag$sample86) {
 			double cv$accumulator = 0.0;
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
@@ -557,19 +557,19 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var81[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$sampleAccumulator;
-					logProbability$sample85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$sampleProbability;
+					logProbability$sample86[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$sampleProbability;
 				}
 			}
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample85 = ((fixedFlag$sample85 && fixedFlag$sample25) && fixedFlag$sample61);
+			fixedProbFlag$sample86 = ((fixedFlag$sample86 && fixedFlag$sample25) && fixedFlag$sample61);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
 					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)];
+					double cv$sampleValue = logProbability$sample86[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var81[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = cv$rvAccumulator;
@@ -617,9 +617,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 									{
 										{
 											double reduceVar$sum$8 = 0.0;
-											for(int cv$reduction450Index = 0; cv$reduction450Index < noProducts; cv$reduction450Index += 1) {
+											for(int cv$reduction452Index = 0; cv$reduction452Index < noProducts; cv$reduction452Index += 1) {
 												double k = reduceVar$sum$8;
-												double l = exped[cv$reduction450Index];
+												double l = exped[cv$reduction452Index];
 												reduceVar$sum$8 = (k + l);
 											}
 											sum = reduceVar$sum$8;
@@ -657,14 +657,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var16) / Math.sqrt(cv$temp$1$var17))) - (0.5 * Math.log(cv$temp$1$var17))));
 				{
 					{
-						boolean[][] guard$sample25gaussian84 = guard$sample25gaussian84$global;
+						boolean[][] guard$sample25gaussian85 = guard$sample25gaussian85$global;
 						for(int j$var28 = 0; j$var28 < noProducts; j$var28 += 1) {
 							if((var22 == j$var28)) {
 								if(((0 <= j$var28) && (j$var28 < noProducts))) {
 									{
 										for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 											for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-												guard$sample25gaussian84[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = false;
+												guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = false;
 										}
 									}
 								}
@@ -675,7 +675,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 								for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
 									if((j$var28 == j$var72)) {
 										for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-											guard$sample25gaussian84[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = false;
+											guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = false;
 									}
 								}
 							}
@@ -688,14 +688,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 									{
 										if((0 < noProducts)) {
 											double reduceVar$sum$9 = 0.0;
-											for(int cv$reduction507Index = 0; cv$reduction507Index < j$var28; cv$reduction507Index += 1) {
+											for(int cv$reduction509Index = 0; cv$reduction509Index < j$var28; cv$reduction509Index += 1) {
 												double k = reduceVar$sum$9;
-												double l = exped[cv$reduction507Index];
+												double l = exped[cv$reduction509Index];
 												reduceVar$sum$9 = (k + l);
 											}
-											for(int cv$reduction507Index = (j$var28 + 1); cv$reduction507Index < noProducts; cv$reduction507Index += 1) {
+											for(int cv$reduction509Index = (j$var28 + 1); cv$reduction509Index < noProducts; cv$reduction509Index += 1) {
 												double k = reduceVar$sum$9;
-												double l = exped[cv$reduction507Index];
+												double l = exped[cv$reduction509Index];
 												reduceVar$sum$9 = (k + l);
 											}
 											double cv$reduced38 = reduceVar$sum$9;
@@ -704,8 +704,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 											for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 												for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
 													double traceTempVariable$denom$6_7 = (traceTempVariable$sum$6_4 / s);
-													if(!guard$sample25gaussian84[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)]) {
-														guard$sample25gaussian84[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = true;
+													if(!guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)]) {
+														guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = true;
 														{
 															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 															double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -760,8 +760,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 								for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
 									if((j$var28 == j$var72)) {
 										for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
-											if(!guard$sample25gaussian84[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)]) {
-												guard$sample25gaussian84[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = true;
+											if(!guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)]) {
+												guard$sample25gaussian85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = true;
 												{
 													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 													double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -843,9 +843,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 							{
 								{
 									double reduceVar$sum$10 = 0.0;
-									for(int cv$reduction560Index = 0; cv$reduction560Index < noProducts; cv$reduction560Index += 1) {
+									for(int cv$reduction562Index = 0; cv$reduction562Index < noProducts; cv$reduction562Index += 1) {
 										double k = reduceVar$sum$10;
-										double l = exped[cv$reduction560Index];
+										double l = exped[cv$reduction562Index];
 										reduceVar$sum$10 = (k + l);
 									}
 									sum = reduceVar$sum$10;
@@ -1008,7 +1008,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
 			cv$max_j$var72 = Math.max(cv$max_j$var72, ((noProducts - 0) / 1));
 		cv$max_t$var68 = Math.max(cv$max_t$var68, ((T - 0) / 1));
-		guard$sample25gaussian84$global = new boolean[cv$max_t$var68][cv$max_j$var72];
+		guard$sample25gaussian85$global = new boolean[cv$max_t$var68][cv$max_j$var72];
 	}
 
 	@Override
@@ -1057,9 +1057,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				logProbability$var81[((t$var68 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample85 = new double[((((T - 1) - 0) / 1) + 1)][];
+			logProbability$sample86 = new double[((((T - 1) - 0) / 1) + 1)][];
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
-				logProbability$sample85[((t$var68 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
+				logProbability$sample86[((t$var68 - 0) / 1)] = new double[((((noProducts - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
 	}
@@ -1117,7 +1117,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 						parallelFor(RNG$1, 0, noProducts, 1,
 							(int forStart$j$var72, int forEnd$j$var72, int threadID$j$var72, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var72 = forStart$j$var72; j$var72 < forEnd$j$var72; j$var72 += 1) {
-										if(!fixedFlag$sample85)
+										if(!fixedFlag$sample86)
 											weekly_sales[j$var72] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$2)) + (((exped[j$var72] * Avail[t$var68][j$var72]) / denom) * arrivals[t$var68]));
 									}
 							}
@@ -1300,10 +1300,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				logProbability$var81[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = 0.0;
 		}
 		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample85) {
+		if(!fixedProbFlag$sample86) {
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
-					logProbability$sample85[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = 0.0;
+					logProbability$sample86[((t$var68 - 0) / 1)][((j$var72 - 0) / 1)] = 0.0;
 			}
 		}
 	}
@@ -1322,7 +1322,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			logProbabilityValue$sample53();
 		if(fixedFlag$sample61)
 			logProbabilityValue$sample61();
-		logProbabilityValue$sample85();
+		logProbabilityValue$sample86();
 	}
 
 	@Override
@@ -1331,7 +1331,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbabilityValue$sample25();
 		logProbabilityValue$sample53();
 		logProbabilityValue$sample61();
-		logProbabilityValue$sample85();
+		logProbabilityValue$sample86();
 	}
 
 	@Override
@@ -1340,7 +1340,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbabilityValue$sample25();
 		logProbabilityValue$sample53();
 		logProbabilityValue$sample61();
-		logProbabilityValue$sample85();
+		logProbabilityValue$sample86();
 	}
 
 	@Override

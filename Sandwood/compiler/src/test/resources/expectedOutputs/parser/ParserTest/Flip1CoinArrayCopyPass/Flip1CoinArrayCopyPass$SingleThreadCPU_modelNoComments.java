@@ -163,18 +163,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var11 = cv$sampleAccumulator;
 			logProbability$var12 = cv$sampleProbability;
-			boolean cv$guard$bias = false;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
-			{
-				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1) {
-						if(!cv$guard$bias) {
-							cv$guard$bias = true;
-							logProbability$bias = (logProbability$bias + cv$accumulator);
-						}
-					}
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample13)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -186,18 +175,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var11 = cv$rvAccumulator;
-			boolean cv$guard$bias = false;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
-			{
-				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1) {
-						if(!cv$guard$bias) {
-							cv$guard$bias = true;
-							logProbability$bias = (logProbability$bias + cv$accumulator);
-						}
-					}
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample13)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);

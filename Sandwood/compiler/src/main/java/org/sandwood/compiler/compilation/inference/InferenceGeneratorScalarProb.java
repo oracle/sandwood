@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -419,7 +419,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // the else branch will also generate correct code.
         VariableDescription<C> pName = v.getUniqueVarDesc();
         if(!v.isIntermediate() && !v.isSample() && !v.isDeterministic()
-                && !(value.returning(pName) || compilationCtx.initialized(v))) {
+                && !compilationCtx.initialized(v)) {
             compilationCtx.addTreeToScope(v.getParent().scope(),
                     initializeVariable(pName, value, "Constructing a random variable input for use later."));
             compilationCtx.addInitialized(v);

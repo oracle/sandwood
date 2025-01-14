@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -9,6 +9,7 @@
 package org.sandwood.compiler.dataflowGraph.tasks.arrayTasks;
 
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
+import static org.sandwood.compiler.trees.irTree.IRTree.load;
 
 import java.util.Set;
 
@@ -31,11 +32,17 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
 
     public final ArrayVariable<A> array;
     public final IntVariable index;
+    private final boolean implicit;
 
     public GetTask(ArrayVariable<A> array, IntVariable index, Location location) {
+        this(array, index, false, location);
+    }
+    
+    protected GetTask(ArrayVariable<A> array, IntVariable index, boolean implicit, Location location) {
         super(DFType.GET, array.getElementType(), location, array.getCurrentInstance(), index);
         this.array = array.getCurrentInstance();
         this.index = index;
+        this.implicit = implicit;
     }
 
     @Override
@@ -46,7 +53,10 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
 
     @Override
     public IRTreeReturn<A> getForwardIRinternal(CompilationContext compilationCtx) {
-        return arrayGet(array.getForwardIR(compilationCtx), index.getForwardIR(compilationCtx));
+        if(compilationCtx.initialized(output))
+            return load(output);
+        else
+            return arrayGet(array.getForwardIR(compilationCtx), index.getForwardIR(compilationCtx));
     }
 
     @Override
@@ -100,8 +110,9 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
 
     @Override
     public void constructTrace(TraceConstructionDesc desc) {
+        // Check that this read is not being written back into the same array using a function of the same index.
         Set<IntVariable> restrictedIndexes = desc.checkRestrictedIndexes(this);
-        if(!restrictedIndexes.isEmpty()) {
+        if(!restrictedIndexes.isEmpty() && !isImplicit()) {
             String arrayName = array.getSource().getOutput().getAlias();
             String end, indexString;
             if(restrictedIndexes.size() == 1) {
@@ -130,22 +141,32 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
             if(d.task.getType() == DFType.PUT && d.argPos == 2) {
                 @SuppressWarnings("unchecked")
                 PutTask<A> pt = (PutTask<A>) d.task;
-                if(pt.isImplicit() && pt.array == array && pt.index == index)
+
+                /*
+                 * If the put is writing this array to the array that this get is reading from and the put is writing
+                 * back the value that was read. Checks preventing writing the same value into multiple locations mean
+                 * that the indexes do not need checking.
+                 */
+                if(pt.array.instanceHandle() == array.instanceHandle() && pt.value.getType().isArray()
+                        && this == pt.value.instanceHandle().getParent()) {
+                    assert pt.isImplicit() || isImplicit();
                     return;
+                }
             }
         }
 
-        // Check that we have not already visited this get.
-
         // Explore the array
         desc.trace.push(new DataflowTaskArgDesc(this, 0));
-        // Is this the first get in this part of the trace?
-        if(desc.initialGet == null) {
-            desc.initialGet = this;
+        // Is this the first interaction with this array in this part of the trace?
+        if(desc.arrayEntryPoint == null) {
+            desc.arrayEntryPoint = this;
             array.constructTrace(desc);
-            desc.initialGet = null;
+            desc.arrayEntryPoint = null;
         } else {
+            boolean firstPut = desc.firstPut;
+            desc.firstPut = true;
             array.constructTrace(desc);
+            desc.firstPut = firstPut;
         }
         desc.trace.pop();
 
@@ -153,5 +174,9 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
         desc.trace.push(new DataflowTaskArgDesc(this, 1));
         index.constructTrace(desc);
         desc.trace.pop();
+    }
+    
+    public boolean isImplicit() {
+        return implicit;
     }
 }

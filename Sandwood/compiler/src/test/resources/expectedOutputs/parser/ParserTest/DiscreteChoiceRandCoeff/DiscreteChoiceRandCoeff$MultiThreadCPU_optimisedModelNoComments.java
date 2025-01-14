@@ -434,8 +434,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				if(!guard$sample22put74$global[i][j$var68]) {
 					guard$sample22put74$global[i][j$var68] = true;
 					double reduceVar$sum$15 = 0.0;
-					for(int cv$reduction911Index = 0; cv$reduction911Index < noProducts; cv$reduction911Index += 1)
-						reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction911Index]);
+					for(int cv$reduction961Index = 0; cv$reduction961Index < noProducts; cv$reduction961Index += 1)
+						reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction961Index]);
 					prob[i][j$var68] = (exped[i][j$var68] / reduceVar$sum$15);
 				}
 			}
@@ -481,8 +481,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(!guard$sample22put74$global[i][j$var68]) {
 						guard$sample22put74$global[i][j$var68] = true;
 						double reduceVar$sum$18 = 0.0;
-						for(int cv$reduction1069Index = 0; cv$reduction1069Index < noProducts; cv$reduction1069Index += 1)
-							reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction1069Index]);
+						for(int cv$reduction1125Index = 0; cv$reduction1125Index < noProducts; cv$reduction1125Index += 1)
+							reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction1125Index]);
 						prob[i][j$var68] = (exped[i][j$var68] / reduceVar$sum$18);
 					}
 				}
@@ -568,8 +568,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(!guard$sample41put74[var38][j$var68]) {
 						guard$sample41put74[var38][j$var68] = true;
 						double reduceVar$sum$20 = 0.0;
-						for(int cv$reduction1178Index = 0; cv$reduction1178Index < noProducts; cv$reduction1178Index += 1)
-							reduceVar$sum$20 = (reduceVar$sum$20 + exped[var38][cv$reduction1178Index]);
+						for(int cv$reduction1240Index = 0; cv$reduction1240Index < noProducts; cv$reduction1240Index += 1)
+							reduceVar$sum$20 = (reduceVar$sum$20 + exped[var38][cv$reduction1240Index]);
 						prob[var38][j$var68] = (exped[var38][j$var68] / reduceVar$sum$20);
 					}
 				}
@@ -616,8 +616,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(!guard$sample41put74[var38][j$var68]) {
 						guard$sample41put74[var38][j$var68] = true;
 						double reduceVar$sum$23 = 0.0;
-						for(int cv$reduction1336Index = 0; cv$reduction1336Index < noProducts; cv$reduction1336Index += 1)
-							reduceVar$sum$23 = (reduceVar$sum$23 + exped[var38][cv$reduction1336Index]);
+						for(int cv$reduction1404Index = 0; cv$reduction1404Index < noProducts; cv$reduction1404Index += 1)
+							reduceVar$sum$23 = (reduceVar$sum$23 + exped[var38][cv$reduction1404Index]);
 						prob[var38][j$var68] = (exped[var38][j$var68] / reduceVar$sum$23);
 					}
 				}

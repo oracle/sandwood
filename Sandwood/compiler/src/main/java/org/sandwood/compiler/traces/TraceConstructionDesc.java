@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -29,12 +29,11 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 public class TraceConstructionDesc {
     // The sink is required to be carried in the constructor as the skipping over of
     // some tasks such as puts, means that the sink is not always the output of the
-    // first
-    // task in the trace.
+    // first task in the trace.
     public final Variable<?> sink;
     public final Trace trace;
     public final TraceCallback c;
-    public GetTask<?> initialGet = null;
+    public DataflowTask<?> arrayEntryPoint = null;
     public boolean firstPut = true;
     public final Set<Variable<?>> seenVar;
     private final Map<ArrayVariable<?>, Map<Integer, Set<IntVariable>>> restrictedIndexes;

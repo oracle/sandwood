@@ -1025,14 +1025,14 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					double reduceVar$sum$15 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction899Index = 0; cv$reduction899Index < noProducts; cv$reduction899Index += 1)
+					for(int cv$reduction949Index = 0; cv$reduction949Index < noProducts; cv$reduction949Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 						// l's comment
 						// Set the right hand term to a value from the array exped
-						reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction899Index]);
+						reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction949Index]);
 					prob[i][j$var68] = (exped[i][j$var68] / reduceVar$sum$15);
 				}
 			}
@@ -1204,14 +1204,14 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 						double reduceVar$sum$18 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1057Index = 0; cv$reduction1057Index < noProducts; cv$reduction1057Index += 1)
+						for(int cv$reduction1113Index = 0; cv$reduction1113Index < noProducts; cv$reduction1113Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 							// l's comment
 							// Set the right hand term to a value from the array exped
-							reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction1057Index]);
+							reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction1113Index]);
 						prob[i][j$var68] = (exped[i][j$var68] / reduceVar$sum$18);
 					}
 				}
@@ -1504,7 +1504,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 						double reduceVar$sum$20 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1166Index = 0; cv$reduction1166Index < noProducts; cv$reduction1166Index += 1)
+						for(int cv$reduction1228Index = 0; cv$reduction1228Index < noProducts; cv$reduction1228Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
@@ -1516,7 +1516,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var38".
-							reduceVar$sum$20 = (reduceVar$sum$20 + exped[var38][cv$reduction1166Index]);
+							reduceVar$sum$20 = (reduceVar$sum$20 + exped[var38][cv$reduction1228Index]);
 						
 						// Substituted "i" with its value "var38".
 						prob[var38][j$var68] = (exped[var38][j$var68] / reduceVar$sum$20);
@@ -1706,7 +1706,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 						double reduceVar$sum$23 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1324Index = 0; cv$reduction1324Index < noProducts; cv$reduction1324Index += 1)
+						for(int cv$reduction1392Index = 0; cv$reduction1392Index < noProducts; cv$reduction1392Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
@@ -1718,7 +1718,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var38".
-							reduceVar$sum$23 = (reduceVar$sum$23 + exped[var38][cv$reduction1324Index]);
+							reduceVar$sum$23 = (reduceVar$sum$23 + exped[var38][cv$reduction1392Index]);
 						
 						// Substituted "i" with its value "var38".
 						prob[var38][j$var68] = (exped[var38][j$var68] / reduceVar$sum$23);

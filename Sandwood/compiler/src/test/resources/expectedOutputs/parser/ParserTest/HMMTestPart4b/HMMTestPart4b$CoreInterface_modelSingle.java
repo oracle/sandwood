@@ -8,11 +8,11 @@ interface HMMTestPart4b$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Setter for bias.
 	public void set$bias(double[] cv$value);
 
-	// Getter for fixedFlag$sample102.
-	public boolean get$fixedFlag$sample102();
+	// Getter for fixedFlag$sample107.
+	public boolean get$fixedFlag$sample107();
 
-	// Setter for fixedFlag$sample102.
-	public void set$fixedFlag$sample102(boolean cv$value);
+	// Setter for fixedFlag$sample107.
+	public void set$fixedFlag$sample107(boolean cv$value);
 
 	// Getter for fixedFlag$sample19.
 	public boolean get$fixedFlag$sample19();
@@ -20,23 +20,23 @@ interface HMMTestPart4b$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Setter for fixedFlag$sample19.
 	public void set$fixedFlag$sample19(boolean cv$value);
 
-	// Getter for fixedFlag$sample28.
-	public boolean get$fixedFlag$sample28();
+	// Getter for fixedFlag$sample29.
+	public boolean get$fixedFlag$sample29();
 
-	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
+	// Setter for fixedFlag$sample29.
+	public void set$fixedFlag$sample29(boolean cv$value);
 
-	// Getter for fixedFlag$sample51.
-	public boolean get$fixedFlag$sample51();
+	// Getter for fixedFlag$sample54.
+	public boolean get$fixedFlag$sample54();
 
-	// Setter for fixedFlag$sample51.
-	public void set$fixedFlag$sample51(boolean cv$value);
+	// Setter for fixedFlag$sample54.
+	public void set$fixedFlag$sample54(boolean cv$value);
 
-	// Getter for fixedFlag$sample69.
-	public boolean get$fixedFlag$sample69();
+	// Getter for fixedFlag$sample72.
+	public boolean get$fixedFlag$sample72();
 
-	// Setter for fixedFlag$sample69.
-	public void set$fixedFlag$sample69(boolean cv$value);
+	// Setter for fixedFlag$sample72.
+	public void set$fixedFlag$sample72(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[][][] get$flips();

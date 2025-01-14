@@ -20,11 +20,11 @@ interface Vulcano2012basicDG$CoreInterface extends org.sandwood.runtime.internal
 	// Setter for avail.
 	public void set$avail(boolean[][] cv$value);
 
-	// Getter for fixedFlag$sample124.
-	public boolean get$fixedFlag$sample124();
+	// Getter for fixedFlag$sample125.
+	public boolean get$fixedFlag$sample125();
 
-	// Setter for fixedFlag$sample124.
-	public void set$fixedFlag$sample124(boolean cv$value);
+	// Setter for fixedFlag$sample125.
+	public void set$fixedFlag$sample125(boolean cv$value);
 
 	// Getter for fixedFlag$sample34.
 	public boolean get$fixedFlag$sample34();
@@ -32,17 +32,17 @@ interface Vulcano2012basicDG$CoreInterface extends org.sandwood.runtime.internal
 	// Setter for fixedFlag$sample34.
 	public void set$fixedFlag$sample34(boolean cv$value);
 
-	// Getter for fixedFlag$sample87.
-	public boolean get$fixedFlag$sample87();
+	// Getter for fixedFlag$sample88.
+	public boolean get$fixedFlag$sample88();
 
-	// Setter for fixedFlag$sample87.
-	public void set$fixedFlag$sample87(boolean cv$value);
+	// Setter for fixedFlag$sample88.
+	public void set$fixedFlag$sample88(boolean cv$value);
 
-	// Getter for fixedFlag$sample89.
-	public boolean get$fixedFlag$sample89();
+	// Getter for fixedFlag$sample90.
+	public boolean get$fixedFlag$sample90();
 
-	// Setter for fixedFlag$sample89.
-	public void set$fixedFlag$sample89(boolean cv$value);
+	// Setter for fixedFlag$sample90.
+	public void set$fixedFlag$sample90(boolean cv$value);
 
 	// Getter for lambda.
 	public double[] get$lambda();

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -46,7 +46,12 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
         implements ArrayProducingDataflowTask<A> {
 
     public GetArrayTask(ArrayVariable<ArrayVariable<A>> array, IntVariable index, Location location) {
-        super(array, index, location);
+        super(array, index, false, location);
+    }
+
+    public GetArrayTask(PutTask<ArrayVariable<A>> putTask) {
+        super(putTask.array, putTask.index, true, putTask.getLocation());
+        output = (ArrayVariable<A>) putTask.value;
     }
 
     @Override

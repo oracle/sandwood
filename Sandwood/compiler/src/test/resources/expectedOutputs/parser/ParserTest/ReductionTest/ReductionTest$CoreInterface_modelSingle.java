@@ -14,23 +14,23 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Setter for fixedFlag$sample20.
 	public void set$fixedFlag$sample20(boolean cv$value);
 
-	// Getter for fixedFlag$sample29.
-	public boolean get$fixedFlag$sample29();
+	// Getter for fixedFlag$sample30.
+	public boolean get$fixedFlag$sample30();
 
-	// Setter for fixedFlag$sample29.
-	public void set$fixedFlag$sample29(boolean cv$value);
+	// Setter for fixedFlag$sample30.
+	public void set$fixedFlag$sample30(boolean cv$value);
 
-	// Getter for fixedFlag$sample37.
-	public boolean get$fixedFlag$sample37();
+	// Getter for fixedFlag$sample38.
+	public boolean get$fixedFlag$sample38();
 
-	// Setter for fixedFlag$sample37.
-	public void set$fixedFlag$sample37(boolean cv$value);
+	// Setter for fixedFlag$sample38.
+	public void set$fixedFlag$sample38(boolean cv$value);
 
-	// Getter for fixedFlag$sample53.
-	public boolean get$fixedFlag$sample53();
+	// Getter for fixedFlag$sample54.
+	public boolean get$fixedFlag$sample54();
 
-	// Setter for fixedFlag$sample53.
-	public void set$fixedFlag$sample53(boolean cv$value);
+	// Setter for fixedFlag$sample54.
+	public void set$fixedFlag$sample54(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

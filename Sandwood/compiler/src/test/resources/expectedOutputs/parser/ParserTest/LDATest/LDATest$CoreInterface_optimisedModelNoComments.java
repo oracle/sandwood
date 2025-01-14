@@ -7,12 +7,12 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public void set$documents(int[][] cv$value);
 	public boolean get$fixedFlag$sample26();
 	public void set$fixedFlag$sample26(boolean cv$value);
-	public boolean get$fixedFlag$sample35();
-	public void set$fixedFlag$sample35(boolean cv$value);
-	public boolean get$fixedFlag$sample59();
-	public void set$fixedFlag$sample59(boolean cv$value);
-	public boolean get$fixedFlag$sample62();
-	public void set$fixedFlag$sample62(boolean cv$value);
+	public boolean get$fixedFlag$sample36();
+	public void set$fixedFlag$sample36(boolean cv$value);
+	public boolean get$fixedFlag$sample61();
+	public void set$fixedFlag$sample61(boolean cv$value);
+	public boolean get$fixedFlag$sample64();
+	public void set$fixedFlag$sample64(boolean cv$value);
 	public int[] get$length$documents();
 	public void set$length$documents(int[] cv$value);
 	public double get$logProbability$phi();

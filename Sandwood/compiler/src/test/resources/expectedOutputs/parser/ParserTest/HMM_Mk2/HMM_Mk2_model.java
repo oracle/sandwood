@@ -39,13 +39,13 @@ public class HMM_Mk2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample33(fixed);
+                system$c.set$fixedFlag$sample34(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample33())
+            if(system$c.get$fixedFlag$sample34())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -79,13 +79,13 @@ public class HMM_Mk2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample99(fixed);
+                system$c.set$fixedFlag$sample103(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample99())
+            if(system$c.get$fixedFlag$sample103())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -114,13 +114,13 @@ public class HMM_Mk2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample50(fixed);
+                system$c.set$fixedFlag$sample53(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample50())
+            if(system$c.get$fixedFlag$sample53())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -194,18 +194,18 @@ public class HMM_Mk2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample58(fixed);
-                system$c.set$fixedFlag$sample78(fixed);
+                system$c.set$fixedFlag$sample61(fixed);
+                system$c.set$fixedFlag$sample81(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample58 = system$c.get$fixedFlag$sample58();
-            boolean fixedFlag$sample78 = system$c.get$fixedFlag$sample78();
-            if(fixedFlag$sample58 && fixedFlag$sample78)
+            boolean fixedFlag$sample61 = system$c.get$fixedFlag$sample61();
+            boolean fixedFlag$sample81 = system$c.get$fixedFlag$sample81();
+            if(fixedFlag$sample61 && fixedFlag$sample81)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample58 || fixedFlag$sample78)
+            else if(fixedFlag$sample61 || fixedFlag$sample81)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -234,13 +234,13 @@ public class HMM_Mk2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample48(fixed);
+                system$c.set$fixedFlag$sample51(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample48())
+            if(system$c.get$fixedFlag$sample51())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -432,19 +432,19 @@ public class HMM_Mk2 extends Model {
 
         //Set fixed flags
         if(bias.isSet())
-            newCore.set$fixedFlag$sample33(oldCore.get$fixedFlag$sample33());
+            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
         if(events.isSet())
-            newCore.set$fixedFlag$sample99(oldCore.get$fixedFlag$sample99());
+            newCore.set$fixedFlag$sample103(oldCore.get$fixedFlag$sample103());
         if(initialState.isSet())
-            newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
+            newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
         if(m.isSet())
             newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
         if(st.isSet()){
-            newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
-            newCore.set$fixedFlag$sample78(oldCore.get$fixedFlag$sample78());
+            newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61());
+            newCore.set$fixedFlag$sample81(oldCore.get$fixedFlag$sample81());
         }
         if(weights.isSet())
-            newCore.set$fixedFlag$sample48(oldCore.get$fixedFlag$sample48());
+            newCore.set$fixedFlag$sample51(oldCore.get$fixedFlag$sample51());
     }
 
     /**

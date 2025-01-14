@@ -1232,12 +1232,12 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 														double reduceVar$sum$15 = 0.0;
 														
 														// For each index in the array to be reduced
-														for(int cv$reduction911Index = 0; cv$reduction911Index < noProducts; cv$reduction911Index += 1) {
+														for(int cv$reduction961Index = 0; cv$reduction961Index < noProducts; cv$reduction961Index += 1) {
 															// Set the left hand term of the reduction function to the return variable value.
 															double k = reduceVar$sum$15;
 															
 															// Set the right hand term to a value from the array exped
-															double l = exped[((i - 0) / 1)][cv$reduction911Index];
+															double l = exped[((i - 0) / 1)][cv$reduction961Index];
 															
 															// Execute the reduction function, saving the result into the return value.
 															// 
@@ -1355,24 +1355,24 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double reduceVar$sum$17 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction985Index = 0; cv$reduction985Index < j$var48; cv$reduction985Index += 1) {
+												for(int cv$reduction1039Index = 0; cv$reduction1039Index < j$var48; cv$reduction1039Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$17;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction985Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1039Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$17 = (k + l);
 												}
-												for(int cv$reduction985Index = (j$var48 + 1); cv$reduction985Index < noProducts; cv$reduction985Index += 1) {
+												for(int cv$reduction1039Index = (j$var48 + 1); cv$reduction1039Index < noProducts; cv$reduction1039Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$17;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction985Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1039Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1619,12 +1619,12 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double reduceVar$sum$18 = 0.0;
 												
 												// For each index in the array to be reduced
-												for(int cv$reduction1069Index = 0; cv$reduction1069Index < noProducts; cv$reduction1069Index += 1) {
+												for(int cv$reduction1125Index = 0; cv$reduction1125Index < noProducts; cv$reduction1125Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$18;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1069Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1125Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1882,12 +1882,12 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 														double reduceVar$sum$20 = 0.0;
 														
 														// For each index in the array to be reduced
-														for(int cv$reduction1178Index = 0; cv$reduction1178Index < noProducts; cv$reduction1178Index += 1) {
+														for(int cv$reduction1240Index = 0; cv$reduction1240Index < noProducts; cv$reduction1240Index += 1) {
 															// Set the left hand term of the reduction function to the return variable value.
 															double k = reduceVar$sum$20;
 															
 															// Set the right hand term to a value from the array exped
-															double l = exped[((i - 0) / 1)][cv$reduction1178Index];
+															double l = exped[((i - 0) / 1)][cv$reduction1240Index];
 															
 															// Execute the reduction function, saving the result into the return value.
 															// 
@@ -2005,24 +2005,24 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double reduceVar$sum$22 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction1252Index = 0; cv$reduction1252Index < j$var48; cv$reduction1252Index += 1) {
+												for(int cv$reduction1318Index = 0; cv$reduction1318Index < j$var48; cv$reduction1318Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$22;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1252Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1318Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$22 = (k + l);
 												}
-												for(int cv$reduction1252Index = (j$var48 + 1); cv$reduction1252Index < noProducts; cv$reduction1252Index += 1) {
+												for(int cv$reduction1318Index = (j$var48 + 1); cv$reduction1318Index < noProducts; cv$reduction1318Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$22;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1252Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1318Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -2269,12 +2269,12 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double reduceVar$sum$23 = 0.0;
 												
 												// For each index in the array to be reduced
-												for(int cv$reduction1336Index = 0; cv$reduction1336Index < noProducts; cv$reduction1336Index += 1) {
+												for(int cv$reduction1404Index = 0; cv$reduction1404Index < noProducts; cv$reduction1404Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$23;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1336Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1404Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 

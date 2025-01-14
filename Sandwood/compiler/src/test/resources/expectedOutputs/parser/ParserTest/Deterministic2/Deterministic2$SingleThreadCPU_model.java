@@ -12,13 +12,13 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double[] cv$distributionAccumulator$var33;
 	private double[] cv$var17$countGlobal;
 	private double[] cv$var34$stateProbabilityGlobal;
-	private double[][] distribution$sample35;
+	private double[][] distribution$sample36;
 	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample48 = false;
+	private boolean fixedFlag$sample36 = false;
+	private boolean fixedFlag$sample49 = false;
 	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample48 = false;
+	private boolean fixedProbFlag$sample36 = false;
+	private boolean fixedProbFlag$sample49 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private double logProbability$$evidence;
@@ -27,8 +27,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$b;
 	private double logProbability$flips;
 	private double logProbability$m;
-	private double[] logProbability$sample35;
-	private double[] logProbability$sample48;
+	private double[] logProbability$sample36;
+	private double[] logProbability$sample49;
 	private double logProbability$var12;
 	private double logProbability$var17;
 	private double[] logProbability$var33;
@@ -94,49 +94,49 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// the flag to false.
 		fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedProbFlag$sample18);
 		
-		// Should the probability of sample 35 be set to fixed. This will only every change
+		// Should the probability of sample 36 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample18 && fixedProbFlag$sample35);
+		fixedProbFlag$sample36 = (fixedFlag$sample18 && fixedProbFlag$sample36);
 	}
 
-	// Getter for fixedFlag$sample35.
+	// Getter for fixedFlag$sample36.
 	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
+	public final boolean get$fixedFlag$sample36() {
+		return fixedFlag$sample36;
 	}
 
-	// Setter for fixedFlag$sample35.
+	// Setter for fixedFlag$sample36.
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
+	public final void set$fixedFlag$sample36(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample36 including if probabilities
 		// need to be updated.
-		fixedFlag$sample35 = cv$value;
+		fixedFlag$sample36 = cv$value;
 		
-		// Should the probability of sample 35 be set to fixed. This will only every change
+		// Should the probability of sample 36 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedProbFlag$sample35);
+		fixedProbFlag$sample36 = (fixedFlag$sample36 && fixedProbFlag$sample36);
 		
-		// Should the probability of sample 48 be set to fixed. This will only every change
+		// Should the probability of sample 49 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample48 = (fixedFlag$sample35 && fixedProbFlag$sample48);
+		fixedProbFlag$sample49 = (fixedFlag$sample36 && fixedProbFlag$sample49);
 	}
 
-	// Getter for fixedFlag$sample48.
+	// Getter for fixedFlag$sample49.
 	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
+	public final boolean get$fixedFlag$sample49() {
+		return fixedFlag$sample49;
 	}
 
-	// Setter for fixedFlag$sample48.
+	// Setter for fixedFlag$sample49.
 	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample48 including if probabilities
+	public final void set$fixedFlag$sample49(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample49 including if probabilities
 		// need to be updated.
-		fixedFlag$sample48 = cv$value;
+		fixedFlag$sample49 = cv$value;
 		
-		// Should the probability of sample 48 be set to fixed. This will only every change
+		// Should the probability of sample 49 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
+		fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedProbFlag$sample49);
 	}
 
 	// Getter for flips.
@@ -243,15 +243,15 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		return v;
 	}
 
-	// Calculate the probability of the samples represented by sample35 using probability
+	// Calculate the probability of the samples represented by sample36 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample35() {
-		// Determine if we need to calculate the values for sample task 35 or if we should
+	private final void logProbabilityDistribution$sample36() {
+		// Determine if we need to calculate the values for sample task 36 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample36) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample35) {
+			if(fixedFlag$sample36) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -265,7 +265,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					// An accumulator for the distributed probability space covered.
 					double cv$probabilityReached = 0.0;
 					
-					// Look for paths between the variable and the sample task 35 including any distribution
+					// Look for paths between the variable and the sample task 36 including any distribution
 					// values.
 					// 
 					// Copy of index so that its values can be safely substituted
@@ -339,7 +339,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 								}
 							}
 						}
-						if(fixedFlag$sample35) {
+						if(fixedFlag$sample36) {
 							for(int index$i$6_1 = 1; index$i$6_1 < n; index$i$6_1 += 1) {
 								for(int index$i$6_2 = 1; index$i$6_2 < n; index$i$6_2 += 1) {
 									if((index$i$6_1 == (index$i$6_2 - 1))) {
@@ -376,11 +376,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 							for(int index$i$7 = 1; index$i$7 < n; index$i$7 += 1) {
 								if(!(index$i$7 == index$i$1)) {
 									// Enumerating the possible outputs of Categorical 33.
-									for(int index$sample35$8 = 0; index$sample35$8 < states; index$sample35$8 += 1) {
-										int distributionTempVariable$var34$10 = index$sample35$8;
+									for(int index$sample36$8 = 0; index$sample36$8 < states; index$sample36$8 += 1) {
+										int distributionTempVariable$var34$10 = index$sample36$8;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample35Value9 = (1.0 * distribution$sample35[((index$i$7 - 1) / 1)][index$sample35$8]);
+										double cv$probabilitySample36Value9 = (1.0 * distribution$sample36[((index$i$7 - 1) / 1)][index$sample36$8]);
 										int traceTempVariable$var29$11_1 = distributionTempVariable$var34$10;
 										for(int index$i$11_2 = 1; index$i$11_2 < n; index$i$11_2 += 1) {
 											if((index$i$7 == (index$i$11_2 - 1))) {
@@ -392,7 +392,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																double[] var32 = m[traceTempVariable$var31$11_3];
 																
 																// Store the value of the function call, so the function call is only made once.
-																double cv$weightedProbability = (Math.log(cv$probabilitySample35Value9) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																double cv$weightedProbability = (Math.log(cv$probabilitySample36Value9) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																
 																// Add the probability of this sample task to the distribution accumulator.
 																if((cv$weightedProbability < cv$distributionAccumulator))
@@ -406,7 +406,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																}
 																
 																// Add the probability of this distribution configuration to the accumulator.
-																cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample35Value9);
+																cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample36Value9);
 															}
 														}
 													}
@@ -435,7 +435,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					logProbability$var33[((i$var26 - 1) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
-					logProbability$sample35[((i$var26 - 1) / 1)] = cv$sampleProbability;
+					logProbability$sample36[((i$var26 - 1) / 1)] = cv$sampleProbability;
 					
 					// Guard to ensure that b is only updated once for this probability.
 					boolean cv$guard$b = false;
@@ -446,12 +446,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					// Copy of index so that its values can be safely substituted
 					int index$i$15 = i$var26;
 					
-					// Looking for a path between Sample 35 and consumer int[] 30.
+					// Looking for a path between Sample 36 and consumer int[] 30.
 					{
 						for(int index$i$16_1 = 1; index$i$16_1 < n; index$i$16_1 += 1) {
 							if((i$var26 == (index$i$16_1 - 1))) {
 								// Make sure all the inputs have been fixed so the variable is not a distribution.
-								if(fixedFlag$sample35) {
+								if(fixedFlag$sample36) {
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$b) {
 										// Set the guard so the update is only applied once.
@@ -467,7 +467,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				}
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample35)
+				if(fixedFlag$sample36)
 					// Update the variable probability
 					logProbability$a = (logProbability$a + cv$accumulator);
 				
@@ -476,12 +476,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample35)
+				if(fixedFlag$sample36)
 					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedFlag$sample18);
+				fixedProbFlag$sample36 = (fixedFlag$sample36 && fixedFlag$sample18);
 			}
 		}
 		// Using cached values.
@@ -491,7 +491,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			double cv$accumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample35[((i$var26 - 1) / 1)];
+				double cv$sampleValue = logProbability$sample36[((i$var26 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var33[((i$var26 - 1) / 1)] = cv$rvAccumulator;
@@ -505,12 +505,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// Copy of index so that its values can be safely substituted
 				int index$i$17 = i$var26;
 				
-				// Looking for a path between Sample 35 and consumer int[] 30.
+				// Looking for a path between Sample 36 and consumer int[] 30.
 				{
 					for(int index$i$18_1 = 1; index$i$18_1 < n; index$i$18_1 += 1) {
 						if((i$var26 == (index$i$18_1 - 1))) {
 							// Make sure all the inputs have been fixed so the variable is not a distribution.
-							if(fixedFlag$sample35) {
+							if(fixedFlag$sample36) {
 								// If the probability of the variable has not already been updated
 								if(!cv$guard$b) {
 									// Set the guard so the update is only applied once.
@@ -526,7 +526,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			}
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				// Update the variable probability
 				logProbability$a = (logProbability$a + cv$accumulator);
 			
@@ -535,17 +535,17 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample48 using probability
+	// Calculate the probability of the samples represented by sample49 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample48() {
-		// Determine if we need to calculate the values for sample task 48 or if we should
+	private final void logProbabilityDistribution$sample49() {
+		// Determine if we need to calculate the values for sample task 49 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample48) {
+		if(!fixedProbFlag$sample49) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -559,7 +559,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				
-				// Look for paths between the variable and the sample task 48 including any distribution
+				// Look for paths between the variable and the sample task 49 including any distribution
 				// values.
 				{
 					// The sample value to calculate the probability of generating
@@ -590,7 +590,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					}
 					
 					// Enumerating the possible arguments for Bernoulli 46.
-					if(fixedFlag$sample35) {
+					if(fixedFlag$sample36) {
 						for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 							if((i$var26 == (j + 1))) {
 								{
@@ -619,18 +619,18 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 							if(true) {
 								// Enumerating the possible outputs of Categorical 33.
-								for(int index$sample35$5 = 0; index$sample35$5 < states; index$sample35$5 += 1) {
-									int distributionTempVariable$var34$7 = index$sample35$5;
+								for(int index$sample36$5 = 0; index$sample36$5 < states; index$sample36$5 += 1) {
+									int distributionTempVariable$var34$7 = index$sample36$5;
 									
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample35Value6 = (1.0 * distribution$sample35[((i$var26 - 1) / 1)][index$sample35$5]);
+									double cv$probabilitySample36Value6 = (1.0 * distribution$sample36[((i$var26 - 1) / 1)][index$sample36$5]);
 									int traceTempVariable$var43$8_1 = distributionTempVariable$var34$7;
 									if((i$var26 == (j + 1))) {
 										{
 											double var45 = (double)(1 / traceTempVariable$var43$8_1);
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = (Math.log(cv$probabilitySample35Value6) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var45));
+											double cv$weightedProbability = (Math.log(cv$probabilitySample36Value6) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var45));
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -644,7 +644,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 											}
 											
 											// Add the probability of this distribution configuration to the accumulator.
-											cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample35Value6);
+											cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample36Value6);
 										}
 									}
 								}
@@ -669,7 +669,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				logProbability$var46[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample48[((j - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample49[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -681,7 +681,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedFlag$sample35);
+			fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedFlag$sample36);
 		}
 		// Using cached values.
 		else {
@@ -690,7 +690,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample48[((j - 0) / 1)];
+				double cv$sampleValue = logProbability$sample49[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var46[((j - 0) / 1)] = cv$rvAccumulator;
@@ -806,12 +806,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample35 using sampled
+	// Calculate the probability of the samples represented by sample36 using sampled
 	// values.
-	private final void logProbabilityValue$sample35() {
-		// Determine if we need to calculate the values for sample task 35 or if we should
+	private final void logProbabilityValue$sample36() {
+		// Determine if we need to calculate the values for sample task 36 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample36) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -870,7 +870,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				logProbability$var33[((i$var26 - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample35[((i$var26 - 1) / 1)] = cv$sampleProbability;
+				logProbability$sample36[((i$var26 - 1) / 1)] = cv$sampleProbability;
 				
 				// Guard to ensure that b is only updated once for this probability.
 				boolean cv$guard$b = false;
@@ -881,7 +881,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// Copy of index so that its values can be safely substituted
 				int index$i$3 = i$var26;
 				
-				// Looking for a path between Sample 35 and consumer int[] 30.
+				// Looking for a path between Sample 36 and consumer int[] 30.
 				{
 					for(int index$i$4_1 = 1; index$i$4_1 < n; index$i$4_1 += 1) {
 						if((i$var26 == (index$i$4_1 - 1))) {
@@ -906,12 +906,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedFlag$sample18);
+			fixedProbFlag$sample36 = (fixedFlag$sample36 && fixedFlag$sample18);
 		}
 		// Using cached values.
 		else {
@@ -920,7 +920,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			double cv$accumulator = 0.0;
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample35[((i$var26 - 1) / 1)];
+				double cv$sampleValue = logProbability$sample36[((i$var26 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var33[((i$var26 - 1) / 1)] = cv$rvAccumulator;
@@ -934,7 +934,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// Copy of index so that its values can be safely substituted
 				int index$i$5 = i$var26;
 				
-				// Looking for a path between Sample 35 and consumer int[] 30.
+				// Looking for a path between Sample 36 and consumer int[] 30.
 				{
 					for(int index$i$6_1 = 1; index$i$6_1 < n; index$i$6_1 += 1) {
 						if((i$var26 == (index$i$6_1 - 1))) {
@@ -959,17 +959,17 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(fixedFlag$sample36)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample48 using sampled
+	// Calculate the probability of the samples represented by sample49 using sampled
 	// values.
-	private final void logProbabilityValue$sample48() {
-		// Determine if we need to calculate the values for sample task 48 or if we should
+	private final void logProbabilityValue$sample49() {
+		// Determine if we need to calculate the values for sample task 49 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample48) {
+		if(!fixedProbFlag$sample49) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1025,7 +1025,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				logProbability$var46[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample48[((j - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample49[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -1037,7 +1037,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedFlag$sample35);
+			fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedFlag$sample36);
 		}
 		// Using cached values.
 		else {
@@ -1046,7 +1046,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample48[((j - 0) / 1)];
+				double cv$sampleValue = logProbability$sample49[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var46[((j - 0) / 1)] = cv$rvAccumulator;
@@ -1087,8 +1087,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 							if((0 == (index$i$2_1 - 1))) {
 								if((index$i$2_1 == i$var26)) {
 									if((var16 == b[i$var26])) {
-										if(fixedFlag$sample35) {
-											// Processing sample task 35 of consumer random variable null.
+										if(fixedFlag$sample36) {
+											// Processing sample task 36 of consumer random variable null.
 											{
 												// Copy of index so that its values can be safely substituted
 												int index$i$14 = i$var26;
@@ -1096,7 +1096,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 													{
 														{
 															{
-																// Increment the sample counter with the value sampled by sample task 35 of random
+																// Increment the sample counter with the value sampled by sample task 36 of random
 																// variable var33
 																cv$countLocal[a[i$var26]] = (cv$countLocal[a[i$var26]] + 1.0);
 															}
@@ -1111,14 +1111,14 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						}
 					}
 					for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-						if(fixedFlag$sample35) {
+						if(fixedFlag$sample36) {
 							for(int index$i$5_1 = 1; index$i$5_1 < n; index$i$5_1 += 1) {
 								for(int index$i$5_2 = 1; index$i$5_2 < n; index$i$5_2 += 1) {
 									if((index$i$5_1 == (index$i$5_2 - 1))) {
 										if((index$i$5_2 == i$var26)) {
 											if((var16 == b[i$var26])) {
-												if(fixedFlag$sample35) {
-													// Processing sample task 35 of consumer random variable null.
+												if(fixedFlag$sample36) {
+													// Processing sample task 36 of consumer random variable null.
 													{
 														// Copy of index so that its values can be safely substituted
 														int index$i$16 = i$var26;
@@ -1126,7 +1126,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 															{
 																{
 																	{
-																		// Increment the sample counter with the value sampled by sample task 35 of random
+																		// Increment the sample counter with the value sampled by sample task 36 of random
 																		// variable var33
 																		cv$countLocal[a[i$var26]] = (cv$countLocal[a[i$var26]] + 1.0);
 																	}
@@ -1144,19 +1144,19 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 							for(int index$i$6 = 1; index$i$6 < n; index$i$6 += 1) {
 								if(true) {
 									// Enumerating the possible outputs of Categorical 33.
-									for(int index$sample35$7 = 0; index$sample35$7 < states; index$sample35$7 += 1) {
-										int distributionTempVariable$var34$9 = index$sample35$7;
+									for(int index$sample36$7 = 0; index$sample36$7 < states; index$sample36$7 += 1) {
+										int distributionTempVariable$var34$9 = index$sample36$7;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample35Value8 = (1.0 * distribution$sample35[((index$i$6 - 1) / 1)][index$sample35$7]);
+										double cv$probabilitySample36Value8 = (1.0 * distribution$sample36[((index$i$6 - 1) / 1)][index$sample36$7]);
 										int traceTempVariable$var29$10_1 = distributionTempVariable$var34$9;
 										for(int index$i$10_2 = 1; index$i$10_2 < n; index$i$10_2 += 1) {
 											if((index$i$6 == (index$i$10_2 - 1))) {
 												int traceTempVariable$var31$10_3 = traceTempVariable$var29$10_1;
 												if((index$i$10_2 == i$var26)) {
 													if((var16 == traceTempVariable$var31$10_3)) {
-														if(fixedFlag$sample35) {
-															// Processing sample task 35 of consumer random variable null.
+														if(fixedFlag$sample36) {
+															// Processing sample task 36 of consumer random variable null.
 															{
 																// Copy of index so that its values can be safely substituted
 																int index$i$18 = i$var26;
@@ -1164,9 +1164,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																	{
 																		{
 																			{
-																				// Increment the sample counter with the value sampled by sample task 35 of random
+																				// Increment the sample counter with the value sampled by sample task 36 of random
 																				// variable var33
-																				cv$countLocal[a[i$var26]] = (cv$countLocal[a[i$var26]] + cv$probabilitySample35Value8);
+																				cv$countLocal[a[i$var26]] = (cv$countLocal[a[i$var26]] + cv$probabilitySample36Value8);
 																			}
 																		}
 																	}
@@ -1195,8 +1195,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						if((0 == (index$i$23_1 - 1))) {
 							if((index$i$23_1 == i$var26)) {
 								if((var16 == b[i$var26])) {
-									if(!fixedFlag$sample35) {
-										// Processing sample task 35 of consumer random variable null.
+									if(!fixedFlag$sample36) {
+										// Processing sample task 36 of consumer random variable null.
 										{
 											// Copy of index so that its values can be safely substituted
 											int index$i$35 = i$var26;
@@ -1214,7 +1214,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 													
 													// Merge the distribution probabilities into the count
 													for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-														cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample35[((i$var26 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+														cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample36[((i$var26 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 												}
 											}
 										}
@@ -1225,14 +1225,14 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					}
 				}
 				for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-					if(fixedFlag$sample35) {
+					if(fixedFlag$sample36) {
 						for(int index$i$26_1 = 1; index$i$26_1 < n; index$i$26_1 += 1) {
 							for(int index$i$26_2 = 1; index$i$26_2 < n; index$i$26_2 += 1) {
 								if((index$i$26_1 == (index$i$26_2 - 1))) {
 									if((index$i$26_2 == i$var26)) {
 										if((var16 == b[i$var26])) {
-											if(!fixedFlag$sample35) {
-												// Processing sample task 35 of consumer random variable null.
+											if(!fixedFlag$sample36) {
+												// Processing sample task 36 of consumer random variable null.
 												{
 													// Copy of index so that its values can be safely substituted
 													int index$i$37 = i$var26;
@@ -1250,7 +1250,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 															
 															// Merge the distribution probabilities into the count
 															for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample35[((i$var26 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample36[((i$var26 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 														}
 													}
 												}
@@ -1264,19 +1264,19 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						for(int index$i$27 = 1; index$i$27 < n; index$i$27 += 1) {
 							if(true) {
 								// Enumerating the possible outputs of Categorical 33.
-								for(int index$sample35$28 = 0; index$sample35$28 < states; index$sample35$28 += 1) {
-									int distributionTempVariable$var34$30 = index$sample35$28;
+								for(int index$sample36$28 = 0; index$sample36$28 < states; index$sample36$28 += 1) {
+									int distributionTempVariable$var34$30 = index$sample36$28;
 									
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample35Value29 = (1.0 * distribution$sample35[((index$i$27 - 1) / 1)][index$sample35$28]);
+									double cv$probabilitySample36Value29 = (1.0 * distribution$sample36[((index$i$27 - 1) / 1)][index$sample36$28]);
 									int traceTempVariable$var29$31_1 = distributionTempVariable$var34$30;
 									for(int index$i$31_2 = 1; index$i$31_2 < n; index$i$31_2 += 1) {
 										if((index$i$27 == (index$i$31_2 - 1))) {
 											int traceTempVariable$var31$31_3 = traceTempVariable$var29$31_1;
 											if((index$i$31_2 == i$var26)) {
 												if((var16 == traceTempVariable$var31$31_3)) {
-													if(!fixedFlag$sample35) {
-														// Processing sample task 35 of consumer random variable null.
+													if(!fixedFlag$sample36) {
+														// Processing sample task 36 of consumer random variable null.
 														{
 															// Copy of index so that its values can be safely substituted
 															int index$i$39 = i$var26;
@@ -1290,11 +1290,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																	}
 																	
 																	// The probability of reaching the consumer with this set of consumer arguments
-																	double cv$distributionProbability = (scopeVariable$reachedSourceProbability * cv$probabilitySample35Value29);
+																	double cv$distributionProbability = (scopeVariable$reachedSourceProbability * cv$probabilitySample36Value29);
 																	
 																	// Merge the distribution probabilities into the count
 																	for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																		cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample35[((i$var26 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																		cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample36[((i$var26 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 																}
 															}
 														}
@@ -1318,14 +1318,14 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 35 drawn from Categorical 33. Inference was performed using variable
+	// by sample task 36 drawn from Categorical 33. Inference was performed using variable
 	// marginalization.
-	private final void sample35(int i$var26) {
+	private final void sample36(int i$var26) {
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var34$stateProbabilityGlobal;
 		for(int cv$valuePos = 0; cv$valuePos < states; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 33 creating
-			// sample task 35.
+			// sample task 36.
 			// Copy of index so that its values can be safely substituted
 			int index$i$1 = i$var26;
 			
@@ -1366,7 +1366,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 								
 								// Processing random variable 33.
 								{
-									// Looking for a path between Sample 35 and consumer Categorical 33.
+									// Looking for a path between Sample 36 and consumer Categorical 33.
 									{
 										int traceTempVariable$var29$12_1 = cv$currentValue;
 										for(int index$i$12_2 = 1; index$i$12_2 < n; index$i$12_2 += 1) {
@@ -1379,12 +1379,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 								
 								// Processing random variable 46.
 								{
-									// Looking for a path between Sample 35 and consumer Bernoulli 46.
+									// Looking for a path between Sample 36 and consumer Bernoulli 46.
 									{
 										int traceTempVariable$var43$15_1 = cv$currentValue;
 										for(int j = 0; j < n; j += 1) {
 											if((i$var26 == (j + 1))) {
-												// Processing sample task 48 of consumer random variable null.
+												// Processing sample task 49 of consumer random variable null.
 												{
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -1404,7 +1404,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																		cv$temp$3$var45 = var45;
 																	}
 																	
-																	// Record the probability of sample task 48 generating output with current configuration.
+																	// Record the probability of sample task 49 generating output with current configuration.
 																	if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var45)) < cv$accumulatedConsumerProbabilities))
 																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var45)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
@@ -1415,7 +1415,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var45)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var45)));
 																	}
 																	
-																	// Recorded the probability of reaching sample task 48 with the current configuration.
+																	// Recorded the probability of reaching sample task 49 with the current configuration.
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
 															}
@@ -1483,7 +1483,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 								
 								// Processing random variable 33.
 								{
-									// Looking for a path between Sample 35 and consumer Categorical 33.
+									// Looking for a path between Sample 36 and consumer Categorical 33.
 									{
 										int traceTempVariable$var29$13_1 = cv$currentValue;
 										for(int index$i$13_2 = 1; index$i$13_2 < n; index$i$13_2 += 1) {
@@ -1496,12 +1496,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 								
 								// Processing random variable 46.
 								{
-									// Looking for a path between Sample 35 and consumer Bernoulli 46.
+									// Looking for a path between Sample 36 and consumer Bernoulli 46.
 									{
 										int traceTempVariable$var43$16_1 = cv$currentValue;
 										for(int j = 0; j < n; j += 1) {
 											if((i$var26 == (j + 1))) {
-												// Processing sample task 48 of consumer random variable null.
+												// Processing sample task 49 of consumer random variable null.
 												{
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -1521,7 +1521,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																		cv$temp$4$var45 = var45;
 																	}
 																	
-																	// Record the probability of sample task 48 generating output with current configuration.
+																	// Record the probability of sample task 49 generating output with current configuration.
 																	if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var45)) < cv$accumulatedConsumerProbabilities))
 																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var45)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
@@ -1532,7 +1532,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var45)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var45)));
 																	}
 																	
-																	// Recorded the probability of reaching sample task 48 with the current configuration.
+																	// Recorded the probability of reaching sample task 49 with the current configuration.
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
 															}
@@ -1579,11 +1579,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			for(int index$i$5 = 1; index$i$5 < n; index$i$5 += 1) {
 				if(!(index$i$5 == index$i$1)) {
 					// Enumerating the possible outputs of Categorical 33.
-					for(int index$sample35$6 = 0; index$sample35$6 < states; index$sample35$6 += 1) {
-						int distributionTempVariable$var34$8 = index$sample35$6;
+					for(int index$sample36$6 = 0; index$sample36$6 < states; index$sample36$6 += 1) {
+						int distributionTempVariable$var34$8 = index$sample36$6;
 						
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample35Value7 = (1.0 * distribution$sample35[((index$i$5 - 1) / 1)][index$sample35$6]);
+						double cv$probabilitySample36Value7 = (1.0 * distribution$sample36[((index$i$5 - 1) / 1)][index$sample36$6]);
 						int traceTempVariable$var29$9_1 = distributionTempVariable$var34$8;
 						for(int index$i$9_2 = 1; index$i$9_2 < n; index$i$9_2 += 1) {
 							if((index$i$5 == (index$i$9_2 - 1))) {
@@ -1592,7 +1592,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 									for(int var16 = 0; var16 < states; var16 += 1) {
 										if((var16 == traceTempVariable$var31$9_3)) {
 											// Record the reached probability density.
-											cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample35Value7);
+											cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample36Value7);
 											double[] cv$temp$2$var32;
 											{
 												// Constructing a random variable input for use later.
@@ -1602,11 +1602,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 											
 											// An accumulator to allow the value for each distribution to be constructed before
 											// it is added to the index probabilities.
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample35Value7) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var32.length))?Math.log(cv$temp$2$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample36Value7) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var32.length))?Math.log(cv$temp$2$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											
 											// Processing random variable 33.
 											{
-												// Looking for a path between Sample 35 and consumer Categorical 33.
+												// Looking for a path between Sample 36 and consumer Categorical 33.
 												{
 													int traceTempVariable$var29$14_1 = cv$currentValue;
 													for(int index$i$14_2 = 1; index$i$14_2 < n; index$i$14_2 += 1) {
@@ -1619,12 +1619,12 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 											
 											// Processing random variable 46.
 											{
-												// Looking for a path between Sample 35 and consumer Bernoulli 46.
+												// Looking for a path between Sample 36 and consumer Bernoulli 46.
 												{
 													int traceTempVariable$var43$17_1 = cv$currentValue;
 													for(int j = 0; j < n; j += 1) {
 														if((i$var26 == (j + 1))) {
-															// Processing sample task 48 of consumer random variable null.
+															// Processing sample task 49 of consumer random variable null.
 															{
 																// Set an accumulator to sum the probabilities for each possible configuration of
 																// inputs.
@@ -1644,7 +1644,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																					cv$temp$5$var45 = var45;
 																				}
 																				
-																				// Record the probability of sample task 48 generating output with current configuration.
+																				// Record the probability of sample task 49 generating output with current configuration.
 																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var45)) < cv$accumulatedConsumerProbabilities))
 																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var45)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
@@ -1655,7 +1655,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var45)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var45)));
 																				}
 																				
-																				// Recorded the probability of reaching sample task 48 with the current configuration.
+																				// Recorded the probability of reaching sample task 49 with the current configuration.
 																				cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																			}
 																		}
@@ -1705,7 +1705,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Processing random variable 33.
 			{
-				// Looking for a path between Sample 35 and consumer Categorical 33.
+				// Looking for a path between Sample 36 and consumer Categorical 33.
 				{
 					int traceTempVariable$var29$24_1 = cv$currentValue;
 					for(int index$i$24_2 = 1; index$i$24_2 < n; index$i$24_2 += 1) {
@@ -1713,7 +1713,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 							int traceTempVariable$var31$24_3 = traceTempVariable$var29$24_1;
 							for(int index$i$24_4 = 1; index$i$24_4 < n; index$i$24_4 += 1) {
 								if((index$i$24_2 == index$i$24_4)) {
-									// Processing sample task 35 of consumer random variable null.
+									// Processing sample task 36 of consumer random variable null.
 									{
 										// Copy of index so that its values can be safely substituted
 										int index$i$26 = index$i$24_4;
@@ -1730,7 +1730,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 										double cv$reachedDistributionProbability = 0.0;
 										
 										// Enumerating the possible arguments for the variable Categorical 33 which is consuming
-										// the output of Sample task 35.
+										// the output of Sample task 36.
 										for(int var16 = 0; var16 < states; var16 += 1) {
 											if((var16 == traceTempVariable$var31$24_3)) {
 												{
@@ -1767,11 +1767,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 													for(int index$i$31 = 1; index$i$31 < n; index$i$31 += 1) {
 														if((!(index$i$31 == index$i$1) && !(index$i$31 == index$i$26))) {
 															// Enumerating the possible outputs of Categorical 33.
-															for(int index$sample35$32 = 0; index$sample35$32 < states; index$sample35$32 += 1) {
-																int distributionTempVariable$var34$34 = index$sample35$32;
+															for(int index$sample36$32 = 0; index$sample36$32 < states; index$sample36$32 += 1) {
+																int distributionTempVariable$var34$34 = index$sample36$32;
 																
 																// Update the probability of sampling this value from the distribution value.
-																double cv$probabilitySample35Value33 = (1.0 * distribution$sample35[((index$i$31 - 1) / 1)][index$sample35$32]);
+																double cv$probabilitySample36Value33 = (1.0 * distribution$sample36[((index$i$31 - 1) / 1)][index$sample36$32]);
 																int traceTempVariable$var29$35_1 = distributionTempVariable$var34$34;
 																for(int index$i$35_2 = 1; index$i$35_2 < n; index$i$35_2 += 1) {
 																	if((index$i$31 == (index$i$35_2 - 1))) {
@@ -1780,7 +1780,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																			for(int index$var16$37_1 = 0; index$var16$37_1 < states; index$var16$37_1 += 1) {
 																				if((index$var16$37_1 == traceTempVariable$var31$35_3))
 																					// Add the probability of this argument configuration.
-																					scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample35Value33);
+																					scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample36Value33);
 																			}
 																		}
 																	}
@@ -1808,7 +1808,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 										}
 										
 										// A local copy of the samples' distribution.
-										double[] cv$sampleDistribution = distribution$sample35[((index$i$24_4 - 1) / 1)];
+										double[] cv$sampleDistribution = distribution$sample36[((index$i$24_4 - 1) / 1)];
 										
 										// The overlap of the distributions so far.
 										double cv$overlap = 0.0;
@@ -1849,7 +1849,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// Set the calculated probabilities to be the distribution values, and normalize
 		// 
 		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample35[((i$var26 - 1) / 1)];
+		double[] cv$localProbability = distribution$sample36[((i$var26 - 1) / 1)];
 		
 		// The sum of all the probabilities in log space
 		double cv$logSum = 0.0;
@@ -1916,7 +1916,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		
 		// Constructor for cv$distributionAccumulator$var33
 		{
-			// Variable to record the maximum value of Task Get 33. Initially set to the value
+			// Variable to record the maximum value of Task Get 34. Initially set to the value
 			// of putTask 19.
 			int cv$var18$max = 5;
 			
@@ -1926,7 +1926,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		
 		// Constructor for cv$var34$stateProbabilityGlobal
 		{
-			// Variable to record the maximum value of Task Get 33. Initially set to the value
+			// Variable to record the maximum value of Task Get 34. Initially set to the value
 			// of putTask 19.
 			int cv$var18$max = 5;
 			
@@ -1977,11 +1977,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			}
 		}
 		
-		// Constructor for distribution$sample35
+		// Constructor for distribution$sample36
 		{
-			distribution$sample35 = new double[((((n - 1) - 1) / 1) + 1)][];
+			distribution$sample36 = new double[((((n - 1) - 1) / 1) + 1)][];
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1)
-				distribution$sample35[((i$var26 - 1) / 1)] = new double[5];
+				distribution$sample36[((i$var26 - 1) / 1)] = new double[5];
 		}
 		
 		// Constructor for logProbability$var33
@@ -1989,9 +1989,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$var33 = new double[((((n - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample35
+		// Constructor for logProbability$sample36
 		{
-			logProbability$sample35 = new double[((((n - 1) - 1) / 1) + 1)];
+			logProbability$sample36 = new double[((((n - 1) - 1) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$var46
@@ -1999,9 +1999,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$var46 = new double[((((n - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample48
+		// Constructor for logProbability$sample49
 		{
-			logProbability$sample48 = new double[((((n - 1) - 0) / 1) + 1)];
+			logProbability$sample49 = new double[((((n - 1) - 0) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -2017,13 +2017,13 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				DistributionSampling.sampleDirichlet(RNG$, v, var17);
 		}
 		for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-			if(!fixedFlag$sample35)
+			if(!fixedFlag$sample36)
 				b[i$var26] = a[(i$var26 - 1)];
-			if(!fixedFlag$sample35)
+			if(!fixedFlag$sample36)
 				a[i$var26] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var26]]);
 		}
 		for(int j = 0; j < n; j += 1) {
-			if(!fixedFlag$sample48)
+			if(!fixedFlag$sample49)
 				flips[j] = DistributionSampling.sampleBernoulli(RNG$, (1 / a[(j + 1)]));
 		}
 	}
@@ -2039,11 +2039,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		}
 		for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
 			// Create local copy of variable probabilities.
-			double[] cv$distribution$sample35 = distribution$sample35[((i$var26 - 1) / 1)];
+			double[] cv$distribution$sample36 = distribution$sample36[((i$var26 - 1) / 1)];
 			for(int index$var33 = 0; index$var33 < states; index$var33 += 1) {
-				if(!fixedFlag$sample35)
+				if(!fixedFlag$sample36)
 					// Zero the probability of each value
-					cv$distribution$sample35[index$var33] = 0.0;
+					cv$distribution$sample36[index$var33] = 0.0;
 			}
 			
 			// Iterate through possible values for var33's arguments.
@@ -2055,11 +2055,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						for(int var16 = 0; var16 < states; var16 += 1) {
 							if((var16 == b[i$var26])) {
 								{
-									if(!fixedFlag$sample35) {
+									if(!fixedFlag$sample36) {
 										double[] var32 = m[b[i$var26]];
 										for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 											// Save the probability of each value
-											cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
+											cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
 									}
 								}
 							}
@@ -2069,7 +2069,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			}
 			
 			// Enumerating the possible arguments for Categorical 33.
-			if(fixedFlag$sample35) {
+			if(fixedFlag$sample36) {
 				for(int index$i$3_1 = 1; index$i$3_1 < n; index$i$3_1 += 1) {
 					for(int index$i$3_2 = 1; index$i$3_2 < n; index$i$3_2 += 1) {
 						if((index$i$3_1 == (index$i$3_2 - 1))) {
@@ -2077,11 +2077,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 								for(int var16 = 0; var16 < states; var16 += 1) {
 									if((var16 == b[i$var26])) {
 										{
-											if(!fixedFlag$sample35) {
+											if(!fixedFlag$sample36) {
 												double[] var32 = m[b[i$var26]];
 												for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 													// Save the probability of each value
-													cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
+													cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
 											}
 										}
 									}
@@ -2094,11 +2094,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				for(int index$i$4 = 1; index$i$4 < n; index$i$4 += 1) {
 					if(true) {
 						// Enumerating the possible outputs of Categorical 33.
-						for(int index$sample35$5 = 0; index$sample35$5 < states; index$sample35$5 += 1) {
-							int distributionTempVariable$var34$7 = index$sample35$5;
+						for(int index$sample36$5 = 0; index$sample36$5 < states; index$sample36$5 += 1) {
+							int distributionTempVariable$var34$7 = index$sample36$5;
 							
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample35Value6 = (1.0 * distribution$sample35[((index$i$4 - 1) / 1)][index$sample35$5]);
+							double cv$probabilitySample36Value6 = (1.0 * distribution$sample36[((index$i$4 - 1) / 1)][index$sample36$5]);
 							int traceTempVariable$var29$8_1 = distributionTempVariable$var34$7;
 							for(int index$i$8_2 = 1; index$i$8_2 < n; index$i$8_2 += 1) {
 								if((index$i$4 == (index$i$8_2 - 1))) {
@@ -2107,11 +2107,11 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 										for(int var16 = 0; var16 < states; var16 += 1) {
 											if((var16 == traceTempVariable$var31$8_3)) {
 												{
-													if(!fixedFlag$sample35) {
+													if(!fixedFlag$sample36) {
 														double[] var32 = m[traceTempVariable$var31$8_3];
 														for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 															// Save the probability of each value
-															cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] + (cv$probabilitySample35Value6 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
+															cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + (cv$probabilitySample36Value6 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
 													}
 												}
 											}
@@ -2127,14 +2127,14 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Sum the values in the array
 			double cv$var33$sum = 0.0;
 			for(int index$var33 = 0; index$var33 < states; index$var33 += 1) {
-				if(!fixedFlag$sample35)
+				if(!fixedFlag$sample36)
 					// sum the probability of each value
-					cv$var33$sum = (cv$var33$sum + cv$distribution$sample35[index$var33]);
+					cv$var33$sum = (cv$var33$sum + cv$distribution$sample36[index$var33]);
 			}
 			for(int index$var33 = 0; index$var33 < states; index$var33 += 1) {
-				if(!fixedFlag$sample35)
+				if(!fixedFlag$sample36)
 					// Normalise the probability of each value
-					cv$distribution$sample35[index$var33] = (cv$distribution$sample35[index$var33] / cv$var33$sum);
+					cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] / cv$var33$sum);
 			}
 		}
 	}
@@ -2149,9 +2149,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				DistributionSampling.sampleDirichlet(RNG$, v, var17);
 		}
 		for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-			if(!fixedFlag$sample35)
+			if(!fixedFlag$sample36)
 				b[i$var26] = a[(i$var26 - 1)];
-			if(!fixedFlag$sample35)
+			if(!fixedFlag$sample36)
 				a[i$var26] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var26]]);
 		}
 	}
@@ -2166,15 +2166,15 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					sample18(var16);
 			}
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-				if(!fixedFlag$sample35)
-					sample35(i$var26);
+				if(!fixedFlag$sample36)
+					sample36(i$var26);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			for(int i$var26 = (n - ((((n - 1) - 1) % 1) + 1)); i$var26 >= ((1 - 1) + 1); i$var26 -= 1) {
-				if(!fixedFlag$sample35)
-					sample35(i$var26);
+				if(!fixedFlag$sample36)
+					sample36(i$var26);
 			}
 			for(int var16 = (states - ((((states - 1) - 0) % 1) + 1)); var16 >= ((0 - 1) + 1); var16 -= 1) {
 				if(!fixedFlag$sample18)
@@ -2214,16 +2214,16 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$var33[((i$var26 - 1) / 1)] = 0.0;
 		logProbability$a = 0.0;
 		logProbability$b = 0.0;
-		if(!fixedProbFlag$sample35) {
+		if(!fixedProbFlag$sample36) {
 			for(int i$var26 = 1; i$var26 < n; i$var26 += 1)
-				logProbability$sample35[((i$var26 - 1) / 1)] = 0.0;
+				logProbability$sample36[((i$var26 - 1) / 1)] = 0.0;
 		}
 		for(int j = 0; j < n; j += 1)
 			logProbability$var46[((j - 0) / 1)] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample48) {
+		if(!fixedProbFlag$sample49) {
 			for(int j = 0; j < n; j += 1)
-				logProbability$sample48[((j - 0) / 1)] = 0.0;
+				logProbability$sample49[((j - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -2246,7 +2246,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// Call each method in turn to generate the new probability values.
 		if(fixedFlag$sample18)
 			logProbabilityValue$sample18();
-		logProbabilityValue$sample48();
+		logProbabilityValue$sample49();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2265,8 +2265,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample18();
-		logProbabilityDistribution$sample35();
-		logProbabilityDistribution$sample48();
+		logProbabilityDistribution$sample36();
+		logProbabilityDistribution$sample49();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2284,8 +2284,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample18();
-		logProbabilityValue$sample35();
-		logProbabilityValue$sample48();
+		logProbabilityValue$sample36();
+		logProbabilityValue$sample49();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -2299,9 +2299,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				DistributionSampling.sampleDirichlet(RNG$, v, var17);
 		}
 		for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-			if(!fixedFlag$sample35)
+			if(!fixedFlag$sample36)
 				b[i$var26] = a[(i$var26 - 1)];
-			if(!fixedFlag$sample35)
+			if(!fixedFlag$sample36)
 				a[i$var26] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var26]]);
 		}
 		

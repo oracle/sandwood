@@ -7,22 +7,22 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample31 = false;
-	private boolean fixedFlag$sample38 = false;
-	private boolean fixedFlag$sample71 = false;
-	private boolean fixedProbFlag$sample31 = false;
-	private boolean fixedProbFlag$sample38 = false;
-	private boolean fixedProbFlag$sample71 = false;
-	private boolean[][] guard$sample31bernoulli70$global;
-	private boolean[][] guard$sample31put66$global;
+	private boolean fixedFlag$sample32 = false;
+	private boolean fixedFlag$sample39 = false;
+	private boolean fixedFlag$sample72 = false;
+	private boolean fixedProbFlag$sample32 = false;
+	private boolean fixedProbFlag$sample39 = false;
+	private boolean fixedProbFlag$sample72 = false;
+	private boolean[][] guard$sample32bernoulli71$global;
+	private boolean[][] guard$sample32put67$global;
 	private double[][] indicator;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
 	private double logProbability$indicator;
 	private double logProbability$p;
-	private double[] logProbability$sample31;
-	private double[][] logProbability$sample71;
+	private double[] logProbability$sample32;
+	private double[][] logProbability$sample72;
 	private double logProbability$var23;
 	private double logProbability$var34;
 	private double[][] logProbability$var67;
@@ -54,76 +54,76 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		bias = cv$value;
 	}
 
-	// Getter for fixedFlag$sample31.
+	// Getter for fixedFlag$sample32.
 	@Override
-	public final boolean get$fixedFlag$sample31() {
-		return fixedFlag$sample31;
+	public final boolean get$fixedFlag$sample32() {
+		return fixedFlag$sample32;
 	}
 
-	// Setter for fixedFlag$sample31.
+	// Setter for fixedFlag$sample32.
 	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
+	public final void set$fixedFlag$sample32(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample32 including if probabilities
 		// need to be updated.
-		fixedFlag$sample31 = cv$value;
+		fixedFlag$sample32 = cv$value;
 		
-		// Should the probability of sample 31 be set to fixed. This will only every change
+		// Should the probability of sample 32 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample31" with its value "cv$value".
-		fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
+		// Substituted "fixedFlag$sample32" with its value "cv$value".
+		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
 		
-		// Should the probability of sample 71 be set to fixed. This will only every change
+		// Should the probability of sample 72 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample31" with its value "cv$value".
-		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+		// Substituted "fixedFlag$sample32" with its value "cv$value".
+		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
 	}
 
-	// Getter for fixedFlag$sample38.
+	// Getter for fixedFlag$sample39.
 	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
+	public final boolean get$fixedFlag$sample39() {
+		return fixedFlag$sample39;
 	}
 
-	// Setter for fixedFlag$sample38.
+	// Setter for fixedFlag$sample39.
 	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample38 including if probabilities
+	public final void set$fixedFlag$sample39(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
 		// need to be updated.
-		fixedFlag$sample38 = cv$value;
+		fixedFlag$sample39 = cv$value;
 		
-		// Should the probability of sample 38 be set to fixed. This will only every change
+		// Should the probability of sample 39 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample38" with its value "cv$value".
-		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
+		// Substituted "fixedFlag$sample39" with its value "cv$value".
+		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
 		
-		// Should the probability of sample 71 be set to fixed. This will only every change
+		// Should the probability of sample 72 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample38" with its value "cv$value".
-		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+		// Substituted "fixedFlag$sample39" with its value "cv$value".
+		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
 	}
 
-	// Getter for fixedFlag$sample71.
+	// Getter for fixedFlag$sample72.
 	@Override
-	public final boolean get$fixedFlag$sample71() {
-		return fixedFlag$sample71;
+	public final boolean get$fixedFlag$sample72() {
+		return fixedFlag$sample72;
 	}
 
-	// Setter for fixedFlag$sample71.
+	// Setter for fixedFlag$sample72.
 	@Override
-	public final void set$fixedFlag$sample71(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample71 including if probabilities
+	public final void set$fixedFlag$sample72(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
 		// need to be updated.
-		fixedFlag$sample71 = cv$value;
+		fixedFlag$sample72 = cv$value;
 		
-		// Should the probability of sample 71 be set to fixed. This will only every change
+		// Should the probability of sample 72 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample71" with its value "cv$value".
-		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+		// Substituted "fixedFlag$sample72" with its value "cv$value".
+		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
 	}
 
 	// Getter for k.
@@ -226,12 +226,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample31 using sampled
+	// Calculate the probability of the samples represented by sample32 using sampled
 	// values.
-	private final void logProbabilityValue$sample31() {
-		// Determine if we need to calculate the values for sample task 31 or if we should
+	private final void logProbabilityValue$sample32() {
+		// Determine if we need to calculate the values for sample task 32 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample31) {
+		if(!fixedProbFlag$sample32) {
 			// Generating probabilities for sample task
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
@@ -261,7 +261,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample31[0] = cv$weightedProbability;
+				logProbability$sample32[0] = cv$weightedProbability;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 < n)) {
@@ -308,7 +308,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample31[1] = cv$weightedProbability;
+				logProbability$sample32[1] = cv$weightedProbability;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 < n)) {
@@ -355,7 +355,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this distribution configuration to the accumulator.
 			// 
 			// An accumulator for the distributed probability space covered.
-			logProbability$sample31[2] = cv$weightedProbability;
+			logProbability$sample32[2] = cv$weightedProbability;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 < n)) {
@@ -399,7 +399,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample31)
+			if(fixedFlag$sample32)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -408,7 +408,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample31 = fixedFlag$sample31;
+			fixedProbFlag$sample32 = fixedFlag$sample32;
 		}
 		// Using cached values.
 		else {
@@ -417,7 +417,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// This value is not used before it is set again, so removing the value declaration.
 			double cv$rvAccumulator;
 			{
-				double cv$sampleValue = logProbability$sample31[0];
+				double cv$sampleValue = logProbability$sample32[0];
 				cv$rvAccumulator = cv$sampleValue;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -432,7 +432,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 			{
-				double cv$sampleValue = logProbability$sample31[1];
+				double cv$sampleValue = logProbability$sample32[1];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -446,7 +446,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					logProbability$p = (logProbability$p + cv$sampleValue);
 				}
 			}
-			double cv$sampleValue = logProbability$sample31[2];
+			double cv$sampleValue = logProbability$sample32[2];
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -469,17 +469,17 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample31)
+			if(fixedFlag$sample32)
 				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample38 using sampled
+	// Calculate the probability of the samples represented by sample39 using sampled
 	// values.
-	private final void logProbabilityValue$sample38() {
-		// Determine if we need to calculate the values for sample task 38 or if we should
+	private final void logProbabilityValue$sample39() {
+		// Determine if we need to calculate the values for sample task 39 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample38) {
+		if(!fixedProbFlag$sample39) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -532,7 +532,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample38)
+			if(fixedFlag$sample39)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -549,7 +549,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample38 = fixedFlag$sample38;
+			fixedProbFlag$sample39 = fixedFlag$sample39;
 		}
 		// Using cached values.
 		else {
@@ -564,18 +564,18 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample38)
+			if(fixedFlag$sample39)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample71 using sampled
+	// Calculate the probability of the samples represented by sample72 using sampled
 	// values.
-	private final void logProbabilityValue$sample71() {
-		// Determine if we need to calculate the values for sample task 71 or if we should
+	private final void logProbabilityValue$sample72() {
+		// Determine if we need to calculate the values for sample task 72 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample71) {
+		if(!fixedProbFlag$sample72) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -623,7 +623,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Add the probability of this distribution configuration to the accumulator.
 					// 
 					// An accumulator for the distributed probability space covered.
-					logProbability$sample71[i][0] = cv$weightedProbability;
+					logProbability$sample72[i][0] = cv$weightedProbability;
 				}
 				{
 					// Store the value of the function call, so the function call is only made once.
@@ -667,7 +667,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Add the probability of this distribution configuration to the accumulator.
 					// 
 					// An accumulator for the distributed probability space covered.
-					logProbability$sample71[i][1] = cv$weightedProbability;
+					logProbability$sample72[i][1] = cv$weightedProbability;
 				}
 				
 				// Store the value of the function call, so the function call is only made once.
@@ -711,7 +711,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample71[i][2] = cv$weightedProbability;
+				logProbability$sample72[i][2] = cv$weightedProbability;
 			}
 			
 			// Update the variable probability
@@ -723,7 +723,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample71 = ((fixedFlag$sample71 && fixedFlag$sample31) && fixedFlag$sample38);
+			fixedProbFlag$sample72 = ((fixedFlag$sample72 && fixedFlag$sample32) && fixedFlag$sample39);
 		}
 		// Using cached values.
 		else {
@@ -736,7 +736,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Variable declaration of cv$rvAccumulator moved.
 					// 
 					// Substituted "j$var60" with its value "0".
-					double cv$rvAccumulator = logProbability$sample71[i][0];
+					double cv$rvAccumulator = logProbability$sample72[i][0];
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					
 					// Substituted "j$var60" with its value "0".
@@ -746,7 +746,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Variable declaration of cv$rvAccumulator moved.
 					// 
 					// Substituted "j$var60" with its value "1".
-					double cv$rvAccumulator = logProbability$sample71[i][1];
+					double cv$rvAccumulator = logProbability$sample72[i][1];
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					
 					// Substituted "j$var60" with its value "1".
@@ -756,7 +756,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Variable declaration of cv$rvAccumulator moved.
 				// 
 				// Substituted "j$var60" with its value "2".
-				double cv$rvAccumulator = logProbability$sample71[i][2];
+				double cv$rvAccumulator = logProbability$sample72[i][2];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				
 				// Substituted "j$var60" with its value "2".
@@ -773,8 +773,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 31 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
-	private final void sample31(int var27) {
+	// by sample task 32 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
+	private final void sample32(int var27) {
 		// The original value of the sample
 		double cv$originalValue = weights[var27];
 		
@@ -812,19 +812,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = false;
+					guard$sample32bernoulli71$global[i][0] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = false;
+					guard$sample32bernoulli71$global[i][1] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = false;
+					guard$sample32bernoulli71$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -836,19 +836,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = false;
+					guard$sample32bernoulli71$global[i][0] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = false;
+					guard$sample32bernoulli71$global[i][1] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = false;
+					guard$sample32bernoulli71$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -860,19 +860,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = false;
+					guard$sample32bernoulli71$global[i][0] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = false;
+					guard$sample32bernoulli71$global[i][1] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = false;
+					guard$sample32bernoulli71$global[i][2] = false;
 			}
 			
 			// Unrolled loop
@@ -885,7 +885,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = false;
+					guard$sample32bernoulli71$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -896,7 +896,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = false;
+					guard$sample32bernoulli71$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -907,7 +907,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = false;
+					guard$sample32bernoulli71$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -920,24 +920,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					double traceTempVariable$var50$14_4 = Math.exp((cv$originalValue * x[i][0]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][0]) {
+					if(!guard$sample32bernoulli71$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][0] = true;
+						guard$sample32bernoulli71$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -952,24 +952,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][1]) {
+					if(!guard$sample32bernoulli71$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][1] = true;
+						guard$sample32bernoulli71$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -984,24 +984,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][2]) {
+					if(!guard$sample32bernoulli71$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][2] = true;
+						guard$sample32bernoulli71$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1027,24 +1027,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					double traceTempVariable$var52$15_4 = Math.exp((cv$originalValue * x[i][1]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][0]) {
+					if(!guard$sample32bernoulli71$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][0] = true;
+						guard$sample32bernoulli71$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1059,24 +1059,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][1]) {
+					if(!guard$sample32bernoulli71$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][1] = true;
+						guard$sample32bernoulli71$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1091,24 +1091,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][2]) {
+					if(!guard$sample32bernoulli71$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][2] = true;
+						guard$sample32bernoulli71$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1134,24 +1134,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					double traceTempVariable$var55$16_4 = Math.exp((cv$originalValue * x[i][2]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][0]) {
+					if(!guard$sample32bernoulli71$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][0] = true;
+						guard$sample32bernoulli71$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1166,24 +1166,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][1]) {
+					if(!guard$sample32bernoulli71$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][1] = true;
+						guard$sample32bernoulli71$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1198,24 +1198,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][2]) {
+					if(!guard$sample32bernoulli71$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][2] = true;
+						guard$sample32bernoulli71$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1235,24 +1235,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if((var27 == 0)) {
 				for(int i = 0; i < n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][0]) {
+					if(!guard$sample32bernoulli71$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][0] = true;
+						guard$sample32bernoulli71$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1274,24 +1274,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if((var27 == 1)) {
 				for(int i = 0; i < n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][1]) {
+					if(!guard$sample32bernoulli71$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][1] = true;
+						guard$sample32bernoulli71$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1313,24 +1313,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if((var27 == 2)) {
 				for(int i = 0; i < n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31bernoulli70$global[i][2]) {
+					if(!guard$sample32bernoulli71$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31bernoulli70$global[i][2] = true;
+						guard$sample32bernoulli71$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 71 with the current configuration.
+						// Recorded the probability of reaching sample task 72 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 71 of consumer random variable null.
+						// Processing sample task 72 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -1362,7 +1362,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Guards to ensure that indicator is only updated when there is a valid path.
 		// 
-		// Looking for a path between Sample 31 and consumer double[] 48.
+		// Looking for a path between Sample 32 and consumer double[] 48.
 		// 
 		// Unrolled loop
 		// 
@@ -1396,19 +1396,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][0] = false;
+				guard$sample32put67$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][1] = false;
+				guard$sample32put67$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][2] = false;
+				guard$sample32put67$global[i][2] = false;
 			}
 		}
 		
@@ -1421,19 +1421,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][0] = false;
+				guard$sample32put67$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][1] = false;
+				guard$sample32put67$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][2] = false;
+				guard$sample32put67$global[i][2] = false;
 			}
 		}
 		
@@ -1446,19 +1446,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][0] = false;
+				guard$sample32put67$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][1] = false;
+				guard$sample32put67$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][2] = false;
+				guard$sample32put67$global[i][2] = false;
 			}
 		}
 		
@@ -1472,7 +1472,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][0] = false;
+				guard$sample32put67$global[i][0] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1483,7 +1483,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][1] = false;
+				guard$sample32put67$global[i][1] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1494,7 +1494,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31put66$global[i][2] = false;
+				guard$sample32put67$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1503,36 +1503,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][0]) {
+				if(!guard$sample32put67$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = true;
+					guard$sample32put67$global[i][0] = true;
 					
 					// Substituted "j$var60" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][1]) {
+				if(!guard$sample32put67$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = true;
+					guard$sample32put67$global[i][1] = true;
 					
 					// Substituted "j$var60" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][2]) {
+				if(!guard$sample32put67$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = true;
+					guard$sample32put67$global[i][2] = true;
 					
 					// Substituted "j$var60" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -1546,36 +1546,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][0]) {
+				if(!guard$sample32put67$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = true;
+					guard$sample32put67$global[i][0] = true;
 					
 					// Substituted "j$var60" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][1]) {
+				if(!guard$sample32put67$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = true;
+					guard$sample32put67$global[i][1] = true;
 					
 					// Substituted "j$var60" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][2]) {
+				if(!guard$sample32put67$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = true;
+					guard$sample32put67$global[i][2] = true;
 					
 					// Substituted "j$var60" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -1589,36 +1589,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][0]) {
+				if(!guard$sample32put67$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = true;
+					guard$sample32put67$global[i][0] = true;
 					
 					// Substituted "j$var60" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][1]) {
+				if(!guard$sample32put67$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = true;
+					guard$sample32put67$global[i][1] = true;
 					
 					// Substituted "j$var60" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31put66$global[i][2]) {
+				if(!guard$sample32put67$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = true;
+					guard$sample32put67$global[i][2] = true;
 					
 					// Substituted "j$var60" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -1632,12 +1632,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int i = 0; i < n; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample31put66$global[i][0]) {
+				if(!guard$sample32put67$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = true;
+					guard$sample32put67$global[i][0] = true;
 					
 					// Substituted "j$var60" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -1651,12 +1651,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int i = 0; i < n; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample31put66$global[i][1]) {
+				if(!guard$sample32put67$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = true;
+					guard$sample32put67$global[i][1] = true;
 					
 					// Substituted "j$var60" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -1670,12 +1670,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int i = 0; i < n; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample31put66$global[i][2]) {
+				if(!guard$sample32put67$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = true;
+					guard$sample32put67$global[i][2] = true;
 					
 					// Substituted "j$var60" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -1698,19 +1698,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][0] = false;
+				guard$sample32bernoulli71$global[i][0] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][1] = false;
+				guard$sample32bernoulli71$global[i][1] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][2] = false;
+				guard$sample32bernoulli71$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1722,19 +1722,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][0] = false;
+				guard$sample32bernoulli71$global[i][0] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][1] = false;
+				guard$sample32bernoulli71$global[i][1] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][2] = false;
+				guard$sample32bernoulli71$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1746,19 +1746,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][0] = false;
+				guard$sample32bernoulli71$global[i][0] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][1] = false;
+				guard$sample32bernoulli71$global[i][1] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][2] = false;
+				guard$sample32bernoulli71$global[i][2] = false;
 		}
 		
 		// Unrolled loop
@@ -1771,7 +1771,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][0] = false;
+				guard$sample32bernoulli71$global[i][0] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1782,7 +1782,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][1] = false;
+				guard$sample32bernoulli71$global[i][1] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1793,7 +1793,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample31bernoulli70$global[i][2] = false;
+				guard$sample32bernoulli71$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1804,24 +1804,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				double traceTempVariable$var50$14_4 = Math.exp((cv$proposedValue * x[i][0]));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][0]) {
+				if(!guard$sample32bernoulli71$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = true;
+					guard$sample32bernoulli71$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -1836,24 +1836,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][1]) {
+				if(!guard$sample32bernoulli71$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = true;
+					guard$sample32bernoulli71$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -1868,24 +1868,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][2]) {
+				if(!guard$sample32bernoulli71$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = true;
+					guard$sample32bernoulli71$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -1909,24 +1909,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				double traceTempVariable$var52$15_4 = Math.exp((cv$proposedValue * x[i][1]));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][0]) {
+				if(!guard$sample32bernoulli71$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = true;
+					guard$sample32bernoulli71$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -1941,24 +1941,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][1]) {
+				if(!guard$sample32bernoulli71$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = true;
+					guard$sample32bernoulli71$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -1973,24 +1973,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][2]) {
+				if(!guard$sample32bernoulli71$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = true;
+					guard$sample32bernoulli71$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2014,24 +2014,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				double traceTempVariable$var55$16_4 = Math.exp((cv$proposedValue * x[i][2]));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][0]) {
+				if(!guard$sample32bernoulli71$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = true;
+					guard$sample32bernoulli71$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2046,24 +2046,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][1]) {
+				if(!guard$sample32bernoulli71$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = true;
+					guard$sample32bernoulli71$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2078,24 +2078,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][2]) {
+				if(!guard$sample32bernoulli71$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = true;
+					guard$sample32bernoulli71$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2115,24 +2115,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if((var27 == 0)) {
 			for(int i = 0; i < n; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][0]) {
+				if(!guard$sample32bernoulli71$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][0] = true;
+					guard$sample32bernoulli71$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2152,24 +2152,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if((var27 == 1)) {
 			for(int i = 0; i < n; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][1]) {
+				if(!guard$sample32bernoulli71$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][1] = true;
+					guard$sample32bernoulli71$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2189,24 +2189,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if((var27 == 2)) {
 			for(int i = 0; i < n; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample31bernoulli70$global[i][2]) {
+				if(!guard$sample32bernoulli71$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31bernoulli70$global[i][2] = true;
+					guard$sample32bernoulli71$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 71 with the current configuration.
+					// Recorded the probability of reaching sample task 72 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 71 of consumer random variable null.
+					// Processing sample task 72 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2244,7 +2244,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Guards to ensure that indicator is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 31 and consumer double[] 48.
+			// Looking for a path between Sample 32 and consumer double[] 48.
 			// 
 			// Unrolled loop
 			// 
@@ -2278,19 +2278,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = false;
+					guard$sample32put67$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = false;
+					guard$sample32put67$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = false;
+					guard$sample32put67$global[i][2] = false;
 				}
 			}
 			
@@ -2303,19 +2303,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = false;
+					guard$sample32put67$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = false;
+					guard$sample32put67$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = false;
+					guard$sample32put67$global[i][2] = false;
 				}
 			}
 			
@@ -2328,19 +2328,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = false;
+					guard$sample32put67$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = false;
+					guard$sample32put67$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = false;
+					guard$sample32put67$global[i][2] = false;
 				}
 			}
 			
@@ -2354,7 +2354,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][0] = false;
+					guard$sample32put67$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2365,7 +2365,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][1] = false;
+					guard$sample32put67$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2376,7 +2376,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample31put66$global[i][2] = false;
+					guard$sample32put67$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2385,36 +2385,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][0]) {
+					if(!guard$sample32put67$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][0] = true;
+						guard$sample32put67$global[i][0] = true;
 						
 						// Substituted "j$var60" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][1]) {
+					if(!guard$sample32put67$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][1] = true;
+						guard$sample32put67$global[i][1] = true;
 						
 						// Substituted "j$var60" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][2]) {
+					if(!guard$sample32put67$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][2] = true;
+						guard$sample32put67$global[i][2] = true;
 						
 						// Substituted "j$var60" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -2428,36 +2428,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][0]) {
+					if(!guard$sample32put67$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][0] = true;
+						guard$sample32put67$global[i][0] = true;
 						
 						// Substituted "j$var60" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][1]) {
+					if(!guard$sample32put67$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][1] = true;
+						guard$sample32put67$global[i][1] = true;
 						
 						// Substituted "j$var60" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][2]) {
+					if(!guard$sample32put67$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][2] = true;
+						guard$sample32put67$global[i][2] = true;
 						
 						// Substituted "j$var60" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -2471,36 +2471,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][0]) {
+					if(!guard$sample32put67$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][0] = true;
+						guard$sample32put67$global[i][0] = true;
 						
 						// Substituted "j$var60" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][1]) {
+					if(!guard$sample32put67$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][1] = true;
+						guard$sample32put67$global[i][1] = true;
 						
 						// Substituted "j$var60" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample31put66$global[i][2]) {
+					if(!guard$sample32put67$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][2] = true;
+						guard$sample32put67$global[i][2] = true;
 						
 						// Substituted "j$var60" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -2514,12 +2514,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int i = 0; i < n; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample31put66$global[i][0]) {
+					if(!guard$sample32put67$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][0] = true;
+						guard$sample32put67$global[i][0] = true;
 						
 						// Substituted "j$var60" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -2533,12 +2533,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int i = 0; i < n; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample31put66$global[i][1]) {
+					if(!guard$sample32put67$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][1] = true;
+						guard$sample32put67$global[i][1] = true;
 						
 						// Substituted "j$var60" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -2552,12 +2552,12 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int i = 0; i < n; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample31put66$global[i][2]) {
+					if(!guard$sample32put67$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample31put66$global[i][2] = true;
+						guard$sample32put67$global[i][2] = true;
 						
 						// Substituted "j$var60" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
@@ -2568,8 +2568,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 38 drawn from Gaussian 34. Inference was performed using Metropolis-Hastings.
-	private final void sample38() {
+	// by sample task 39 drawn from Gaussian 34. Inference was performed using Metropolis-Hastings.
+	private final void sample39() {
 		// The original value of the sample
 		double cv$originalValue = bias;
 		
@@ -2608,14 +2608,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 71 with the current configuration.
+				// Recorded the probability of reaching sample task 72 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 71 of consumer random variable null.
+				// Processing sample task 72 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
@@ -2636,14 +2636,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 71 with the current configuration.
+				// Recorded the probability of reaching sample task 72 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 71 of consumer random variable null.
+				// Processing sample task 72 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
@@ -2664,14 +2664,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 71 with the current configuration.
+				// Recorded the probability of reaching sample task 72 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 71 of consumer random variable null.
+				// Processing sample task 72 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
@@ -2716,14 +2716,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 71 with the current configuration.
+			// Recorded the probability of reaching sample task 72 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 71 of consumer random variable null.
+			// Processing sample task 72 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
@@ -2740,14 +2740,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 71 with the current configuration.
+			// Recorded the probability of reaching sample task 72 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 71 of consumer random variable null.
+			// Processing sample task 72 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
@@ -2764,14 +2764,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 71 with the current configuration.
+			// Recorded the probability of reaching sample task 72 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 71 of consumer random variable null.
+			// Processing sample task 72 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
@@ -2817,7 +2817,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
-		// Constructor for guard$sample31put66$global
+		// Constructor for guard$sample32put67$global
 		{
 			// Calculate the largest index of j that is possible and allocate an array to hold
 			// the guard for each of these.
@@ -2825,11 +2825,11 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if((0 < x.length))
 				cv$max_j$var60 = 3;
 			
-			// Allocation of guard$sample31put66$global for single threaded execution
-			guard$sample31put66$global = new boolean[x.length][cv$max_j$var60];
+			// Allocation of guard$sample32put67$global for single threaded execution
+			guard$sample32put67$global = new boolean[x.length][cv$max_j$var60];
 		}
 		
-		// Constructor for guard$sample31bernoulli70$global
+		// Constructor for guard$sample32bernoulli71$global
 		// 
 		// Calculate the largest index of j that is possible and allocate an array to hold
 		// the guard for each of these.
@@ -2837,8 +2837,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if((0 < x.length))
 			cv$max_j$var60 = 3;
 		
-		// Allocation of guard$sample31bernoulli70$global for single threaded execution
-		guard$sample31bernoulli70$global = new boolean[x.length][cv$max_j$var60];
+		// Allocation of guard$sample32bernoulli71$global for single threaded execution
+		guard$sample32bernoulli71$global = new boolean[x.length][cv$max_j$var60];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -2867,18 +2867,18 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		for(int i = 0; i < x.length; i += 1)
 			p[i] = new double[3];
 		
-		// Constructor for logProbability$sample31
-		logProbability$sample31 = new double[3];
+		// Constructor for logProbability$sample32
+		logProbability$sample32 = new double[3];
 		
 		// Constructor for logProbability$var67
 		logProbability$var67 = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
 			logProbability$var67[i] = new double[3];
 		
-		// Constructor for logProbability$sample71
-		logProbability$sample71 = new double[x.length][];
+		// Constructor for logProbability$sample72
+		logProbability$sample72 = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
-			logProbability$sample71[i] = new double[3];
+			logProbability$sample72[i] = new double[3];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -2888,18 +2888,18 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample38)
+		if(!fixedFlag$sample39)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		for(int i = 0; i < n; i += 1) {
 			boolean[] var64 = y[i];
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample31) {
+			if(!fixedFlag$sample32) {
 				// Substituted "j$var42" with its value "0".
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
 				
@@ -2912,19 +2912,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "j$var60" with its value "0".
 				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 			}
-			if(!fixedFlag$sample71)
+			if(!fixedFlag$sample72)
 				// Substituted "j$var60" with its value "0".
 				var64[0] = DistributionSampling.sampleBernoulli(RNG$, (p[i][0] + bias));
-			if(!fixedFlag$sample31)
+			if(!fixedFlag$sample32)
 				// Substituted "j$var60" with its value "1".
 				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			if(!fixedFlag$sample71)
+			if(!fixedFlag$sample72)
 				// Substituted "j$var60" with its value "1".
 				var64[1] = DistributionSampling.sampleBernoulli(RNG$, (p[i][1] + bias));
-			if(!fixedFlag$sample31)
+			if(!fixedFlag$sample32)
 				// Substituted "j$var60" with its value "2".
 				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			if(!fixedFlag$sample71)
+			if(!fixedFlag$sample72)
 				// Substituted "j$var60" with its value "2".
 				var64[2] = DistributionSampling.sampleBernoulli(RNG$, (p[i][2] + bias));
 		}
@@ -2935,16 +2935,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample38)
+		if(!fixedFlag$sample39)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			for(int i = 0; i < n; i += 1) {
 				// Substituted "j$var42" with its value "0".
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
@@ -2972,16 +2972,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample38)
+		if(!fixedFlag$sample39)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			for(int i = 0; i < n; i += 1) {
 				// Substituted "j$var42" with its value "0".
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
@@ -3010,24 +3010,24 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample31) {
-				sample31(0);
-				sample31(1);
-				sample31(2);
+			if(!fixedFlag$sample32) {
+				sample32(0);
+				sample32(1);
+				sample32(2);
 			}
-			if(!fixedFlag$sample38)
-				sample38();
+			if(!fixedFlag$sample39)
+				sample39();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample38)
-				sample38();
+			if(!fixedFlag$sample39)
+				sample39();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample31) {
-				sample31(2);
-				sample31(1);
-				sample31(0);
+			if(!fixedFlag$sample32) {
+				sample32(2);
+				sample32(1);
+				sample32(0);
 			}
 		}
 		
@@ -3056,14 +3056,14 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$weights = 0.0;
 		logProbability$p = 0.0;
 		logProbability$indicator = 0.0;
-		if(!fixedProbFlag$sample31) {
+		if(!fixedProbFlag$sample32) {
 			// Unrolled loop
-			logProbability$sample31[0] = 0.0;
-			logProbability$sample31[1] = 0.0;
-			logProbability$sample31[2] = 0.0;
+			logProbability$sample32[0] = 0.0;
+			logProbability$sample32[1] = 0.0;
+			logProbability$sample32[2] = 0.0;
 		}
 		logProbability$var34 = 0.0;
-		if(!fixedProbFlag$sample38)
+		if(!fixedProbFlag$sample39)
 			logProbability$bias = 0.0;
 		for(int i = 0; i < n; i += 1) {
 			// Unrolled loop
@@ -3077,17 +3077,17 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$var67[i][2] = 0.0;
 		}
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample71) {
+		if(!fixedProbFlag$sample72) {
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Substituted "j$var60" with its value "0".
-				logProbability$sample71[i][0] = 0.0;
+				logProbability$sample72[i][0] = 0.0;
 				
 				// Substituted "j$var60" with its value "1".
-				logProbability$sample71[i][1] = 0.0;
+				logProbability$sample72[i][1] = 0.0;
 				
 				// Substituted "j$var60" with its value "2".
-				logProbability$sample71[i][2] = 0.0;
+				logProbability$sample72[i][2] = 0.0;
 			}
 		}
 	}
@@ -3109,11 +3109,11 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample31)
-			logProbabilityValue$sample31();
-		if(fixedFlag$sample38)
-			logProbabilityValue$sample38();
-		logProbabilityValue$sample71();
+		if(fixedFlag$sample32)
+			logProbabilityValue$sample32();
+		if(fixedFlag$sample39)
+			logProbabilityValue$sample39();
+		logProbabilityValue$sample72();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -3131,9 +3131,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample31();
-		logProbabilityValue$sample38();
-		logProbabilityValue$sample71();
+		logProbabilityValue$sample32();
+		logProbabilityValue$sample39();
+		logProbabilityValue$sample72();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -3150,9 +3150,9 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample31();
-		logProbabilityValue$sample38();
-		logProbabilityValue$sample71();
+		logProbabilityValue$sample32();
+		logProbabilityValue$sample39();
+		logProbabilityValue$sample72();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -3161,16 +3161,16 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample38)
+		if(!fixedFlag$sample39)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample31) {
+		if(!fixedFlag$sample32) {
 			for(int i = 0; i < n; i += 1) {
 				// Substituted "j$var42" with its value "0".
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));

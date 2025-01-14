@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -85,7 +85,7 @@ public class ProbabilityFunction {
             sampleVariable = compilationCtx.traces.getSampleTrace(sTask).sampleVariable;
             IntermediateDesc intermediateDesc = compilationCtx.traces.getIntermediates(sTask);
             for(Variable<?> v:intermediateDesc.getVariables()) {
-                if(v != sampleVariable) {
+                if(v.instanceHandle() != sampleVariable.instanceHandle()) {
                     Set<TraceHandle> traces = intermediateDesc.getTraces(v);
 
                     boolean perSampleValuesRequired = false;
@@ -831,7 +831,7 @@ public class ProbabilityFunction {
             DataflowTask<A> parent = p.getParent();
             VariableDescription<A> pName = p.getUniqueVarDesc();
             IRTreeReturn<A> pTree = p.getForwardIR(compilationCtx);
-            if(!pTree.returning(pName) && !compilationCtx.initialized(p)) {
+            if(!compilationCtx.initialized(p)) {
                 compilationCtx.addTreeToScope(parent.scope(), initializeVariable(pName, pTree, Tree.NoComment));
                 compilationCtx.addInitialized(p);
             }

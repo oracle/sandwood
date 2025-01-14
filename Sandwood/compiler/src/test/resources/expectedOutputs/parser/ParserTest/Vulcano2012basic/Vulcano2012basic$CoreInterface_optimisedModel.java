@@ -62,11 +62,11 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	// Setter for fixedFlag$sample61.
 	public void set$fixedFlag$sample61(boolean cv$value);
 
-	// Getter for fixedFlag$sample85.
-	public boolean get$fixedFlag$sample85();
+	// Getter for fixedFlag$sample86.
+	public boolean get$fixedFlag$sample86();
 
-	// Setter for fixedFlag$sample85.
-	public void set$fixedFlag$sample85(boolean cv$value);
+	// Setter for fixedFlag$sample86.
+	public void set$fixedFlag$sample86(boolean cv$value);
 
 	// Getter for lambda.
 	public double[] get$lambda();

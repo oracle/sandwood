@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -146,7 +146,11 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
                 // separate out the code. If the isolation is not required the optimisation
                 // phase will remove it.
                 a = a.addIsolation();
-                a.addTree((TreeBuilderInfo info) -> populateValue(v, compilationCtx));
+                a.addTree((TreeBuilderInfo info) -> {
+                    compilationCtx.setRequiredArrays(intermediates.getRequiredArrays(v));
+                    populateValue(v, compilationCtx);
+                    compilationCtx.clearRequiredArrays();
+                });
             }
         }
         output.unmarkStopPoint();
@@ -165,7 +169,7 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
             Variable<X> vSub = compilationCtx.getSubstitute(v);
             ProducingDataflowTask<X> task = vSub.getParent();
             IRTreeReturn<X> t = task.getForwardIR(compilationCtx);
-            if(!(t.returning(v.getUniqueVarDesc()) || compilationCtx.initialized(v))) {
+            if(!compilationCtx.initialized(v)) {
                 compilationCtx.addTreeToScope(v.scope(),
                         TreeUtils.putIndirectValue(v, t, "Write out the new sample value.", compilationCtx));
                 compilationCtx.addInitialized(v);

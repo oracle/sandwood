@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -29,6 +29,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
+import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
@@ -52,6 +53,7 @@ public abstract class Traces {
     public static class IntermediateDesc {
         private final SampleTask<?, ?> task;
         private final Map<Variable<?>, Set<TraceHandle>> traces = new HashMap<>();
+        private final Map<Variable<?>, Set<ArrayVariable<?>>> requiredArrays = new HashMap<>();
 
         public IntermediateDesc(SampleTask<?, ?> task) {
             this.task = task;
@@ -69,6 +71,9 @@ public abstract class Traces {
                 index.put(d.task, i);
             }
 
+            // A set used to record all arrays met.
+            Set<ArrayVariable<?>> arrays = new HashSet<>();
+
             for(Variable<?> v:vs) {
                 // Initialize the trace construction
                 Trace trace = new Trace();
@@ -79,24 +84,32 @@ public abstract class Traces {
                 while(pos == null) {
                     assert (t.getType() == DFType.PUT);
                     trace.push(new DataflowTaskArgDesc(t, 2));
-                    t = ((PutTask<?>) t).value.getParent();
+                    PutTask<?> pt = (PutTask<?>) t;
+                    arrays.add(pt.array);
+                    t = pt.value.getParent();
                     pos = index.get(t);
                 }
 
                 // copy the rest of the trace
-                for(int i = pos; i >= 0; i--)
-                    trace.push(h.get(i));
+                for(int i = pos; i >= 0; i--) {
+                    DataflowTaskArgDesc d = h.get(i);
+                    if(d.task.getType() == DFType.PUT)
+                        arrays.add(((PutTask<?>) d.task).array);
+                    trace.push(d);
+                }
 
                 // And add the trace
-                addTrace(v, trace);
+                addTrace(v, trace, arrays);
+                arrays.clear();
             }
         }
 
-        private void addTrace(Variable<?> variable, Trace trace) {
+        private void addTrace(Variable<?> variable, Trace trace, Set<ArrayVariable<?>> arrays) {
             // Add the trace to traces, creating the set if it doesn't already exist.
             Set<TraceHandle> traceSet = traces.computeIfAbsent(variable, k -> new HashSet<>());
-
             traceSet.add(TraceHandle.getReversedTraceHandle(trace));
+
+            requiredArrays.computeIfAbsent(variable, k -> new HashSet<>()).addAll(arrays);
         }
 
         public Set<Variable<?>> getVariables() {
@@ -109,6 +122,10 @@ public abstract class Traces {
 
         public boolean containsVariable(Variable<?> v) {
             return traces.containsKey(v);
+        }
+
+        public Set<ArrayVariable<?>> getRequiredArrays(Variable<?> v) {
+            return requiredArrays.get(v);
         }
     }
 
@@ -389,9 +406,7 @@ public abstract class Traces {
         int aPos = a.size() - 1;
         int bPos = b.size() - 1;
         Stack<DataflowTask<?>> accesses = new Stack<>();
-        // Loop through elements while we have not reached the 0th element which
-        // is always the sample task.
-        while(aPos != 0 && bPos != 0) {
+        while(aPos >= 0 && bPos >= 0) {
             DataflowTaskArgDesc aElement = a.get(aPos--);
             DataflowTaskArgDesc bElement = b.get(bPos--);
             if(!aElement.equals(bElement)) {
