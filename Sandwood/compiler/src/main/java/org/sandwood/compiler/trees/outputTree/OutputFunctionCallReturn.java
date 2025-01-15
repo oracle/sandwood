@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -188,6 +188,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addSampleFunc(VariableType.Exponential);
             addSampleFunc(VariableType.Gamma);
             addSampleFunc(VariableType.Gaussian);
+            addSampleFunc(VariableType.Geometric);
             addSampleFunc(VariableType.HalfCauchy);
             addSampleFunc(VariableType.InverseGamma);
             addSampleFunc(VariableType.Poisson);
@@ -213,6 +214,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addProbabilityFunc(VariableType.Dirichlet);
             addProbabilityFunc(VariableType.Gamma);
             addProbabilityFunc(VariableType.Gaussian);
+            addProbabilityFunc(VariableType.Geometric);
             addProbabilityFunc(VariableType.HalfCauchy);
             addProbabilityFunc(VariableType.InverseGamma);
             addProbabilityFunc(VariableType.Multinomial);
@@ -231,6 +233,7 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             addLogProbabilityFunc(VariableType.Dirichlet);
             addLogProbabilityFunc(VariableType.Gamma);
             addLogProbabilityFunc(VariableType.Gaussian);
+            addLogProbabilityFunc(VariableType.Geometric);
             addLogProbabilityFunc(VariableType.HalfCauchy);
             addLogProbabilityFunc(VariableType.InverseGamma);
             addLogProbabilityFunc(VariableType.Multinomial);
@@ -243,8 +246,10 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
             for(ExternalFunction e:ExternalFunction.values()) {
                 switch(e) {
                     case EXP:
-                        externalDescriptions.put(e, new FunctionDesc("Exponential",
-                                "Math", "exp"));
+                        externalDescriptions.put(e, new FunctionDesc("Exponential", "Math", "exp"));
+                        break;
+                    case FLOOR:
+                        externalDescriptions.put(e, new FunctionDesc("Floor function", "Math", "floor"));
                         break;
                     case GAUSSIAN_CDF:
                         externalDescriptions.put(e, new FunctionDesc("Gaussian CDF",
@@ -254,12 +259,10 @@ public class OutputFunctionCallReturn<X extends Variable<X>> extends OutputTreeR
                         externalDescriptions.put(e, new FunctionDesc("IsNaN", "Double", "isNaN"));
                         break;
                     case LOG:
-                        externalDescriptions.put(e, new FunctionDesc("Log",
-                                "Math", "log"));
+                        externalDescriptions.put(e, new FunctionDesc("Log", "Math", "log"));
                         break;
                     case SQRT:
-                        externalDescriptions.put(e, new FunctionDesc("Square Root",
-                                "Math", "sqrt"));
+                        externalDescriptions.put(e, new FunctionDesc("Square Root", "Math", "sqrt"));
                         break;
 
                 }
