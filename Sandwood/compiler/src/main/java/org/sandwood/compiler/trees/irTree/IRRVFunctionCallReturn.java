@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -347,6 +347,28 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
                     return (IRTreeReturn<X>) divideDD(sample, lambda);
                 }
             }
+        } else if(source == VariableType.Geometric) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(Double.NEGATIVE_INFINITY));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(0.0));
+                }
+                case SAMPLE:
+                    break;
+            }
         } else if(source == VariableType.NegativeBinomial) {
             switch(t) {
                 case ADD_DISTRIBUTION:
@@ -379,7 +401,8 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
 
                     IRTreeReturn<?>[] poissonArgs = new IRTreeReturn<?>[2];
                     poissonArgs[0] = args[0]; // RNG
-                    poissonArgs[1] = constructInternal(t, VariableType.DoubleVariable, VariableType.Gamma, sink, gammaArgs);
+                    poissonArgs[1] = constructInternal(t, VariableType.DoubleVariable, VariableType.Gamma, sink,
+                            gammaArgs);
 
                     return (IRTreeReturn<X>) constructInternal(t, VariableType.IntVariable, VariableType.Poisson, sink,
                             poissonArgs);

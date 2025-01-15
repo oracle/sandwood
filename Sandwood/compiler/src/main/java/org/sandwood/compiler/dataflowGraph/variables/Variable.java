@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -41,6 +41,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Dirichlet;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Exponential;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Geometric;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.HalfCauchy;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.InverseGamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial;
@@ -260,10 +261,11 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      * @return
      */
     boolean isIntermediate();
-    
+
     /**
-     * A method to control if the value of the intermediates should be calculated from the current 
-     * state of the compilationCtx, not read from the global variables. This is set on a per variable basis.
+     * A method to control if the value of the intermediates should be calculated from the current state of the
+     * compilationCtx, not read from the global variables. This is set on a per variable basis.
+     * 
      * @param calculateIntermediate should intermediates be calculated.
      */
     void calculateIntermediate(boolean calculateIntermediate);
@@ -810,6 +812,26 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
         return Gaussian.gaussian(mean, variance, location);
     }
 
+    public static Geometric geometric(double p) {
+        return Geometric.geometric(p);
+    }
+
+    public static Geometric geometric(DoubleVariable p) {
+        return Geometric.geometric(p);
+    }
+
+    public static Geometric geometric(DoubleVariable p, Location location) {
+        return Geometric.geometric(p, location);
+    }
+
+    public static Geometric geometric(IntVariable p) {
+        return Geometric.geometric(p);
+    }
+
+    public static Geometric geometric(IntVariable p, Location location) {
+        return Geometric.geometric(p, location);
+    }
+
     static HalfCauchy halfCauchy(double location, double scale) {
         return HalfCauchy.halfCauchy(location, scale);
     }
@@ -1144,7 +1166,7 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
             DoubleVariable lower, DoubleVariable upper, Location location) {
         return TruncatedGaussian.truncatedGaussian(mean, variance, lower, upper, location);
     }
-    
+
     static Uniform uniform(double start, double end) {
         return Uniform.uniform(doubleVariable(start), doubleVariable(end));
     }

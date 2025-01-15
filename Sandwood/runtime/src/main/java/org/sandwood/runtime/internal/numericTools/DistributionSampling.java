@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -553,6 +553,41 @@ public class DistributionSampling {
         return normLogGaussian - (x * x) / 2.0;
     }
 
+    // Geometric
+    /**
+     * Method to sampling from a Geometric distribution.
+     *
+     * @param p The probability of a test being positive.
+     * @return A sample from the distribution giving the number of negative tests taken. The total number of tests taken
+     *         is this number plus 1.
+     */
+    public static final int sampleGeometric(Rng rng, double p) {
+        double val = rng.uniform();
+        return (int) Math.floor(Math.log(1 - val) / Math.log(1 - p));
+    }
+
+    /**
+     * Method to calculate the probability of a value being produced by a Geometric distribution.
+     *
+     * @param value The number of negative tests.
+     * @param p     The probability of a test being positive.
+     * @return The probability of value negative tests before the positive test is generated.
+     */
+    public static final double probabilityGeometric(int value, double p) {
+        return Math.exp(logProbabilityGeometric(value, p));
+    }
+
+    /**
+     * Method to calculate the log probability of a value being produced by a Geometric distribution.
+     *
+     * @param value The number of negative tests.
+     * @param p     The probability of a test being positive.
+     * @return The log probability of value negative tests before the positive test is generated.
+     */
+    public static final double logProbabilityGeometric(int value, double p) {
+        return value * Math.log(1 - p) + Math.log(p);
+    }
+
     // Half Cauchy
     /**
      * Method to sample a value form a Half Cauchy distribution.
@@ -739,7 +774,7 @@ public class DistributionSampling {
      * @param r     The number of positive tests required.
      * @return The log probability of value negative tests before the final positive test is generated.
      */
-    public static final double logProbabilityNegativeBinomial(int value, double p, int r) {        
+    public static final double logProbabilityNegativeBinomial(int value, double p, int r) {
         double pNegative = value * Math.log(1 - p);
         double pPositive = r * Math.log(p);
         double coef = ApproximateFactorial.approxLogFac(value + r - 1)

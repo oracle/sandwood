@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -28,8 +28,10 @@ public enum DFType {
     EQ("Equals"),
     EXP("Exp"),
     EXPONENTIAL("Exponential"),
+    FLOOR("Floor function"),
     GAMMA("Gamma"),
     GAUSSIAN("Gaussian"),
+    GEOMETRIC("Geometric"),
     GET("Get"),
     GET_LENGTH("Length"),
     HALF_CAUCHY("Half Cauchy"),

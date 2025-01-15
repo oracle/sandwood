@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,6 +25,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Dirichlet;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Exponential;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Geometric;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.HalfCauchy;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.InverseGamma;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial;
@@ -523,6 +524,8 @@ public class VariableType {
     public static final RandomVariableType<DoubleVariable, Gamma> Gamma = new RandomVariableType<>(true, true, "Gamma");
     public static final RandomVariableType<DoubleVariable, Gaussian> Gaussian = new RandomVariableType<>(true, true,
             "Gaussian");
+    public static final RandomVariableType<IntVariable, Geometric> Geometric = new RandomVariableType<>(true, false,
+            "Geometric");
     public static final RandomVariableType<DoubleVariable, HalfCauchy> HalfCauchy = new RandomVariableType<>(true, true,
             "HalfCauchy");
     public static final RandomVariableType<DoubleVariable, InverseGamma> InverseGamma = new RandomVariableType<>(true,
