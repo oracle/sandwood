@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -374,6 +374,32 @@ public class ProbabilityTests {
                     double storedValue = d.read(value, alpha, beta);
                     testValueLog(localValue, storedValue, value, alpha, beta);
                 }
+            }
+        }
+        d.close();
+    }
+
+    @Test
+    void testGeometric() throws IOException {
+        DataReader d = new DataReader("geometric");
+        for(int t = 0; t <= 10; t++) {
+            for(double p = 0.0; p <= 1; p += 0.1) {
+                double localValue = DistributionSampling.probabilityGeometric(t, p);
+                double storedValue = d.read(t, p);
+                testValueNormal(localValue, storedValue, t, p);
+            }
+        }
+        d.close();
+    }
+
+    @Test
+    void testLogGeometric() throws IOException {
+        DataReader d = new DataReader("logGeometric");
+        for(int t = 0; t <= 10; t++) {
+            for(double p = 0.0; p <= 1; p += 0.01) {
+                double localValue = DistributionSampling.logProbabilityGeometric(t, p);
+                double storedValue = d.read(t, p);
+                testValueLog(localValue, storedValue, t, p);
             }
         }
         d.close();
