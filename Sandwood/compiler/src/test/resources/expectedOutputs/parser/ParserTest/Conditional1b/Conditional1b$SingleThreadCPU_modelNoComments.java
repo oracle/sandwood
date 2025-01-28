@@ -366,10 +366,12 @@ class Conditional1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!fixedFlag$sample8)
 			u = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-		if(!fixedFlag$sample8)
-			value = u;
 		if(guard)
 			value = 1.0;
+		else {
+			if(!fixedFlag$sample8)
+				value = u;
+		}
 	}
 
 	@Override

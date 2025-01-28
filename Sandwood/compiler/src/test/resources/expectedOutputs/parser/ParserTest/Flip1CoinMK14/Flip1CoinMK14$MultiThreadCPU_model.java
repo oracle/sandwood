@@ -820,14 +820,15 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, samples, 1,
@@ -849,14 +850,15 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -865,14 +867,15 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -987,14 +990,15 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

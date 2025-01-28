@@ -1131,11 +1131,7 @@ public class TracesImplementation extends Traces {
      */
     @Override
     public Map<RandomVariable<?, ?>, Set<TraceHandle>> getTracesRVToSampleTask(SampleTask<?, ?> sampleTask) {
-        Map<RandomVariable<?, ?>, Set<TraceHandle>> toReturn = tracesRVToSampleTask.get(sampleTask);
-        if(toReturn == null)
-            return Collections.emptyMap();
-        else
-            return toReturn;
+        return tracesRVToSampleTask.getOrDefault(sampleTask, Collections.emptyMap());
     }
 
     @Override
@@ -1318,11 +1314,7 @@ public class TracesImplementation extends Traces {
 
     @Override
     public Map<ProducingDataflowTask<?>, Set<TraceHandle>> getTracesToConditionals(SampleTask<?, ?> sampleTask) {
-        Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks.get(sampleTask);
-        if(m == null)
-            return Collections.emptyMap();
-        else
-            return m;
+        return conditionalTraceTasks.getOrDefault(sampleTask, Collections.emptyMap());
     }
 
     @Override

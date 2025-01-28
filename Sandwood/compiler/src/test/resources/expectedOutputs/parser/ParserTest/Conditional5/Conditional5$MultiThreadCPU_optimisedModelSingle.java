@@ -549,14 +549,15 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!fixedFlag$sample9)
 			a = DistributionSampling.sampleUniform(RNG$);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample13) {
+		if(!fixedFlag$sample13)
 			b = DistributionSampling.sampleUniform(RNG$);
-			value = b;
+		if(guard) {
+			if(!fixedFlag$sample9)
+				value = a;
+		} else {
+			if(!fixedFlag$sample13)
+				value = b;
 		}
-		if(!fixedFlag$sample9)
-			value = a;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

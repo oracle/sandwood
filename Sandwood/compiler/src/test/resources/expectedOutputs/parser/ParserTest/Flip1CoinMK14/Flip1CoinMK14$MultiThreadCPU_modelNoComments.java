@@ -530,14 +530,15 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$var36, int forEnd$var36, int threadID$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var36 = forStart$var36; var36 < forEnd$var36; var36 += 1) {
@@ -552,28 +553,30 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 	}
 
 	@Override
@@ -638,14 +641,15 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample12)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!guard1) {
+		if(guard1) {
+			if(!fixedFlag$sample12)
+				bias = b;
+		} else {
 			if(!fixedFlag$sample12)
 				c[0] = (b / 2);
 			if(!fixedFlag$sample12)
 				bias = c[0];
 		}
-		if(!fixedFlag$sample12)
-			bias = b;
 		logModelProbabilitiesVal();
 	}
 

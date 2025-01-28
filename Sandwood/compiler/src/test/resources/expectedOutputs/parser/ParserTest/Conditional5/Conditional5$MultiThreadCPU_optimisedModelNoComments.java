@@ -222,12 +222,15 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!fixedFlag$sample9)
 			a = DistributionSampling.sampleUniform(RNG$);
-		if(!fixedFlag$sample13) {
+		if(!fixedFlag$sample13)
 			b = DistributionSampling.sampleUniform(RNG$);
-			value = b;
+		if(guard) {
+			if(!fixedFlag$sample9)
+				value = a;
+		} else {
+			if(!fixedFlag$sample13)
+				value = b;
 		}
-		if(!fixedFlag$sample9)
-			value = a;
 	}
 
 	@Override

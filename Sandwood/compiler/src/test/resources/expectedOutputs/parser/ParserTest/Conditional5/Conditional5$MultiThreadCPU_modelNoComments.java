@@ -353,10 +353,13 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			a = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		if(!fixedFlag$sample13)
 			b = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-		if(!fixedFlag$sample13)
-			value = b;
-		if(!fixedFlag$sample9)
-			value = a;
+		if(guard) {
+			if(!fixedFlag$sample9)
+				value = a;
+		} else {
+			if(!fixedFlag$sample13)
+				value = b;
+		}
 	}
 
 	@Override

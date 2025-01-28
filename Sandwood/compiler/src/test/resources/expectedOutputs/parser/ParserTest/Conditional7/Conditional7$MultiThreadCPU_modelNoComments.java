@@ -163,8 +163,10 @@ class Conditional7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample5)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		value = b;
-		value = a;
+		if(guard)
+			value = a;
+		else
+			value = b;
 		if(!fixedFlag$sample5)
 			value2 = (value + 1);
 	}

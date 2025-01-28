@@ -506,11 +506,6 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             DistributableRandomVariable<?, ?> rv, VariableDescription<ArrayVariable<C>> variableDescription) {
         // Allocate space for storing the results.
         compilationCtx.pushScope();
-        /*
-         * Because of the reuse of max this needs to be serial. We could overcome this by taking a copy of the value of
-         * max in a new in, but as I am not sure that parallel allocation is a beneficial, for now we will make this
-         * serial and skip any overhead.
-         */
         compilationCtx.pushIsSerial(true);
 
         IRTreeReturn<IntVariable> noStates = rv.getMaxNoStates(compilationCtx);
