@@ -750,13 +750,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -773,13 +774,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 	}
 
@@ -790,13 +792,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 	}
 
@@ -905,13 +908,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are

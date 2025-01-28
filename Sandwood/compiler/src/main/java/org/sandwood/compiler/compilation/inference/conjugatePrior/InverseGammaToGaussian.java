@@ -214,7 +214,7 @@ public class InverseGammaToGaussian extends
                         case COPY:
                             break;
                         case IF_ASSIGNMENT:
-                            if(d.argPos == 1)
+                            if(d.argPos == 0)
                                 return false;
                             break;
                         case DIVISION: {

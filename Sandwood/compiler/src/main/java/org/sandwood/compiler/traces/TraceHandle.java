@@ -172,6 +172,9 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
         return TraceHandle.getTraceHandle(nt);
     }
 
+    /**
+     * As traces inside a trace handle are immutable a singleton instance is created for the empty trace.
+     */
     private static final TraceHandle emptyTrace = new TraceHandle(new Trace(), false);
     
     public static TraceHandle emptyTrace() {

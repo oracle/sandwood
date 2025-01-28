@@ -236,11 +236,12 @@ class Conditional6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample5)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		value = 1.0;
-		value = 0.0;
+		if(guard)
+			value = 0.0;
+		else
+			value = 1.0;
 		if(!fixedFlag$sample5)
-			// Substituted "value" with its value "0.0".
-			value2 = 0.0;
+			value2 = value;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

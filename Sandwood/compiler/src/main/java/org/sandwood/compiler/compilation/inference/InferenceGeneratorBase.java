@@ -47,6 +47,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
+import org.sandwood.compiler.exceptions.MissingFeatureException;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -246,8 +247,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                 processObservedDeterministicConditional(sink, sinkToConditional.get(d), input, funcData,
                                         c, compilationCtx);
                             } else {
-                                // input will need to be inverted for a calculation with the source random variable
+                                // Input will need to be inverted for a calculation with the source random variable
                                 // There currently can only be one random variable in this scenario.
+                                throw new MissingFeatureException("This code is part of the feature to observe outputs from conditionals. It is not yet fully implemented.");
                             }
                         }
                         c.addTree(1, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
@@ -473,7 +475,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         compilationCtx.addTreeToScope(targetScope, IRTree.initializeVariable(observationGuard, IRTree.constant(false),
                 "A guard to record if the variable is observed"));
 
-        // Attempt to reach each of the observed variabls
+        // Attempt to reach each of the observed variables
         ScopeConstructor a = ScopeConstructor.construct(s, targetScope, "Look for a valid path to an observed variable",
                 compilationCtx);
         for(Set<TraceHandle> ts:observationTraces.values()) {

@@ -1306,7 +1306,7 @@ public class TraceArrayRestrictions {
                     if(substitutions.containsKey(scope))
                         compilationCtx.removeScopeSubstitute(scope);
 
-                    // Add in substitutes for the newly
+                    // Add in substitutes for the newly created scope
                     compilationCtx.addScopeSubstitute(scope, outerScope);
 
                     // Store the substitute for later

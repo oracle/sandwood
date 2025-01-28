@@ -113,6 +113,7 @@ import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassWrapper;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
 import org.sandwood.compiler.trees.transformationTree.TransSandwoodClassGenerated;
+import org.sandwood.compiler.util.Pair;
 
 public class APICompile {
     // A flag used to make the compiler run in serial mode. THis is used to make it easier to debug errors in the
@@ -271,7 +272,7 @@ public class APICompile {
     }
 
     /**
-     * Private class for sorting variables based on their dependencies. The class is creates so that dependencies can be
+     * Private class for sorting variables based on their dependencies. The class is created so that dependencies can be
      * cached.
      */
     private static class VariableDependencyDesc implements Comparable<VariableDependencyDesc> {
@@ -351,6 +352,10 @@ public class APICompile {
 
         @Override
         public int compareTo(VariableDependencyDesc o) {
+            if(o == this)
+                return 0;
+            if(variable == o.variable)
+                throw new SandwoodException("Multiple dependency descriptions have been created for variable: " + variable);
             boolean contains = o.dependencies.contains(variable);
             if(dependencies.contains(o.variable)) {
                 if(contains)
@@ -407,8 +412,8 @@ public class APICompile {
     }
 
     /**
-     * A record class for recording the trace to the value that will be the source followed by the set of traces
-     * to the value that will be constructed from the source.
+     * A record class for recording the trace to the value that will be the source followed by the set of traces to the
+     * value that will be constructed from the source.
      */
     private static record VarTraces(TraceHandle traceToSource, Set<TraceHandle> tracesToVar) {}
 
@@ -476,7 +481,7 @@ public class APICompile {
                         throw new SandwoodModelException(
                                 "Multiple variables linked to sample task. This could result in inconsistencies. "
                                         + "Relevant variables are " + s + ".",
-                                        sTask);
+                                sTask);
                     }
 
                     ingestTrace(t.values(), segmentedTraces);
@@ -595,7 +600,7 @@ public class APICompile {
                 TraceHandle t = traces.iterator().next();
                 Variable<?> output = t.peek().task.getOutput();
                 throw new SandwoodModelException("Multiple traces to observed variable " + output.getAlias()
-                + ". This could result in inconsistencies.", output.getObservation());
+                        + ". This could result in inconsistencies.", output.getObservation());
             }
 
             for(TraceHandle t:traces) {
@@ -618,7 +623,8 @@ public class APICompile {
                 }
 
                 if(output.isObserved())
-                    segmentedTraces.computeIfAbsent(output, k -> new VarTraces(TraceHandle.emptyTrace(), Collections.emptySet()));
+                    segmentedTraces.computeIfAbsent(output,
+                            k -> new VarTraces(TraceHandle.emptyTrace(), Collections.emptySet()));
                 else {
                     Variable<?> result;
                     // If the result is a get
@@ -626,20 +632,20 @@ public class APICompile {
                         if(d.argPos == 0)
                             result = ((GetTask<?>) d.task).array;
                         else
-                            throw new CompilerException(
-                                    "Array indexes cannot be observed, this should have been "
-                                            + "detected and prevented from happening by reporting an "
-                                            + "error to the user before this point.");
+                            throw new CompilerException("Array indexes cannot be observed, this should have been "
+                                    + "detected and prevented from happening by reporting an "
+                                    + "error to the user before this point.");
                     } else
                         result = output;
                     while(true) {
-                        
+
                         // Add the value as this is where the trace segment ends
                         segment.add(d);
                         // If the output is observed, this is also the end of the trace so store the segment and stop.
                         if(output.isObserved()) {
-                            int start = i-1;
-                            VarTraces segments = segmentedTraces.computeIfAbsent(result, k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                            int start = i - 1;
+                            VarTraces segments = segmentedTraces.computeIfAbsent(result,
+                                    k -> new VarTraces(t.subTrace(start), new HashSet<>()));
                             segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
                             break;
                         }
@@ -649,8 +655,9 @@ public class APICompile {
                         output = d.task.getOutput();
                         // If the next intermediate has been found store the segment and start the next segment.
                         if(output.isIntermediate()) {
-                            int start = i-1;
-                            VarTraces segments = segmentedTraces.computeIfAbsent(result, k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                            int start = i - 1;
+                            VarTraces segments = segmentedTraces.computeIfAbsent(result,
+                                    k -> new VarTraces(t.subTrace(start), new HashSet<>()));
                             segment.add(d);
                             segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
                             segment.clear();
@@ -661,7 +668,7 @@ public class APICompile {
                                 d = t.get(i++);
                                 output = d.task.getOutput();
                             }
-                            
+
                             // If the result is a get
                             if(d.task.getType() == DFType.GET) {
                                 if(d.argPos == 0)
@@ -835,15 +842,15 @@ public class APICompile {
                         compilationCtx.leaveScope(task.scope());
                         break;
 
-                        // Values are not propagated through scope conditions, instead we will have to infer these values
-                        // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
-                        // model probability of 0/-Infinity in normal/log space respectively.
+                    // Values are not propagated through scope conditions, instead we will have to infer these values
+                    // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
+                    // model probability of 0/-Infinity in normal/log space respectively.
                     case 3:
                         throw new CompilerException(
                                 "Values are not propagated through scope conditions, instead we will have to infer these values.");
 
                     default:
-                        throw new CompilerException("Unknown operation put only accepts arguments in positions 0-2");
+                        throw new CompilerException("Unknown operation put only accepts arguments in positions 0-3");
                 }
                 break;
             }
@@ -1145,7 +1152,7 @@ public class APICompile {
                 sb.append("Unable");
 
             sb.append(" to generate inference function based on a conjugate prior for\n" + s.randomVariable.getType()
-            + " because the result is used by a conditional guard.\n");
+                    + " because the result is used by a conditional guard.\n");
         }
         sb.append("Falling back on Metropolis–Hastings. This may make convergence slow.");
         for(String suggestion:suggestions)
@@ -1441,15 +1448,17 @@ public class APICompile {
          * saved, and this array needs dereferencing. As this is constructed by the compiler there is no problem with
          * complex indices, or different orders to the indices.
          */
-        List<Variable<A>> sources = new ArrayList<>();
-        sources.add(intermediate);
+        List<Pair<Variable<A>, Scope>> sources = new ArrayList<>();
+        sources.add(new Pair<>(intermediate, intermediate.scope()));
         while(!sources.isEmpty()) {
-            Variable<A> v = sources.remove(sources.size() - 1);
+            Pair<Variable<A>, Scope> p = sources.remove(sources.size() - 1);
+            Variable<A> v = p.a;
+            Scope s = p.b;
             DataflowTask<A> parent = v.getParent();
             if(parent.getType() == DFType.IF_ASSIGNMENT) {
                 IfElseAssignmentTask<A> ifElseParent = (IfElseAssignmentTask<A>) parent;
-                sources.add(ifElseParent.ifValue);
-                sources.add(ifElseParent.elseValue);
+                sources.add(new Pair<>(ifElseParent.ifValue, ifElseParent.ifScope));
+                sources.add(new Pair<>(ifElseParent.elseValue, ifElseParent.ifScope.elseScope));
             } else {
                 // If we are using restrictions in this code construct a guard for the code
                 // generating this intermediate.
@@ -1465,8 +1474,8 @@ public class APICompile {
                     tree = IRTree.load(v);
                 else
                     tree = v.getForwardIR(compilationCtx);
-                compilationCtx.addTreeToScope(v.scope(),
-                        IRTree.store(intermediate.getUniqueVarDesc(), tree, Tree.NoComment));
+
+                compilationCtx.addTreeToScope(s, IRTree.store(intermediate.getUniqueVarDesc(), tree, Tree.NoComment));
 
                 // If a guard was generated clear it.
                 if(guard != null)

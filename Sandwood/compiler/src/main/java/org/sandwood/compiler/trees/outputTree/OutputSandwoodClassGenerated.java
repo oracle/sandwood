@@ -130,10 +130,8 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodClass {
 
     private String processInputString(String input) {
         StringBuilder sb = new StringBuilder();
-        String[] parts = input.split("\\\\n", -1);
-        sb.append("\"" + parts[0]);
-        for(int i = 1; i < parts.length; i++)
-            sb.append("\\n\"\n\t\t     + \"" + parts[i]);
+        sb.append("\"");
+        sb.append(String.join("\\n\"\n\t\t     + \"", input.split("\\\\n", -1)));
         sb.append("\"");
         return sb.toString();
     }

@@ -20,7 +20,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
  * @author djgoodma
  *
  */
-public abstract class RandomNumberGenerator extends VariableImplementation<RandomNumberGenerator> {
+public final class RandomNumberGenerator extends VariableImplementation<RandomNumberGenerator> {
 
     private RandomNumberGenerator() {
         super(null);

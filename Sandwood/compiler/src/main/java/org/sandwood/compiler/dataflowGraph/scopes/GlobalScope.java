@@ -67,7 +67,7 @@ public class GlobalScope implements Scope {
     @Override
     public BooleanVariable getScopeCondition() {
         //This is created every time it is accessed to prevent links between runs via a static object.
-        //TODO create it every time a the construction of a DAG starts.
+        //TODO create it every time the construction of a DAG starts.
         ScopeStack.pushScope(this);
         BooleanVariable scopeCondition = Variable.booleanVariable(true);
         ScopeStack.popScope(this);

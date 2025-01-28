@@ -291,13 +291,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 		if(!fixedFlag$sample44) {
 			for(int var37 = 0; var37 < samples; var37 += 1)
@@ -309,13 +310,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 	}
 
@@ -323,13 +325,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 	}
 
@@ -389,13 +392,14 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample13) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				if(guard2)
 					bias = (b / 2);
 				else
 					bias = (b / 3);
 			}
-			bias = b;
 		}
 		logModelProbabilitiesVal();
 	}

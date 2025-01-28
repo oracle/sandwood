@@ -97,20 +97,17 @@ import org.sandwood.compiler.trees.irTree.IRTreeVoid;
  */
 public class ScopeConstructor {
 
-    public static enum Direction {
+    public enum Direction {
         FORWARDS,
-        BACKWARDS;
-    }
+        BACKWARDS; }
 
-    public static enum Guards {
+    public enum Guards {
         GUARDS,
-        NO_GUARDS;
-    }
+        NO_GUARDS; }
 
-    public static enum Values {
+    public enum Values {
         PASS_VALUES,
-        IGNORE_VALUES;
-    }
+        IGNORE_VALUES; }
 
     private static class GuardDesc {
         // Name for the guard that will ensure the body of this code is only executed once. If there is only 1 trace
@@ -615,8 +612,8 @@ public class ScopeConstructor {
             } else {
                 // Non distributed values are just treated as fixed values.
                 toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                        constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), PASS_VALUES,
-                        position, compilationCtx));
+                        constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), PASS_VALUES, position,
+                        compilationCtx));
             }
         } else {
             // Fixed values are just treated as fixed values.
@@ -947,8 +944,8 @@ public class ScopeConstructor {
             }
             case BACKWARDS: {
                 source = tasks.get(position);
-                sink = tasks.get(position - 1);
                 startScopes = getTaskScopes(source);
+                sink = tasks.get(position - 1);
                 endScopes = getTaskScopes(sink);
                 break;
             }
@@ -997,7 +994,7 @@ public class ScopeConstructor {
                         d = TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
                                 startSubstitutions, endSubstitutions, d, id.get().next(), arrayValues, position,
                                 compilationCtx);
-                        // If the consumer is a distribution sample add a description for it to the scope description.
+                        // If the sink is a distribution sample add a description for it to the scope description.
                         if(sink.isDistribution() && sink.getType() == DFType.SAMPLE)
                             d = addSampleDesc((SampleTask<?, ?>) sink, null, d);
                         withTraceConstraint.add(d);
@@ -1153,8 +1150,8 @@ public class ScopeConstructor {
         if(trace.size() <= 2)
             return trace;
 
-        // Construct a new trace copying over just the first and last elements plus any puts and gets as these are the
-        // only elements used to construct the restrictions
+        // Construct a new trace copying over just the first and last elements plus any elements that will be used in
+        // the construction of guards.
         Trace t = new Trace();
         // First element
         t.add(trace.get(0));

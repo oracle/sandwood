@@ -655,14 +655,14 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample7)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample11) {
+		if(!fixedFlag$sample11)
 			u = DistributionSampling.sampleUniform(RNG$);
-			value = u;
-		}
 		if(guard)
 			value = 1.0;
+		else {
+			if(!fixedFlag$sample11)
+				value = u;
+		}
 		if((!fixedFlag$sample7 || !fixedFlag$sample11))
 			value2[0] = value;
 	}

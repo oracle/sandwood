@@ -953,7 +953,9 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample12) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				c[0] = (b / 2);
 				c[1] = (b / 2);
 				
@@ -975,7 +977,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Substituted "cv$reduction34Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
-			bias = b;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -992,7 +993,9 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample12) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				c[0] = (b / 2);
 				c[1] = (b / 2);
 				
@@ -1014,7 +1017,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Substituted "cv$reduction34Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
-			bias = b;
 		}
 	}
 
@@ -1025,7 +1027,9 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample12) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				c[0] = (b / 2);
 				c[1] = (b / 2);
 				
@@ -1047,7 +1051,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Substituted "cv$reduction34Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
-			bias = b;
 		}
 	}
 
@@ -1157,7 +1160,9 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample12) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!guard1) {
+			if(guard1)
+				bias = b;
+			else {
 				c[0] = (b / 2);
 				c[1] = (b / 2);
 				
@@ -1179,7 +1184,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Substituted "cv$reduction34Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
-			bias = b;
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are
