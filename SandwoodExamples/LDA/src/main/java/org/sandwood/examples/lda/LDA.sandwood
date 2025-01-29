@@ -23,7 +23,7 @@ model LDA(int noTopics, int vocabSize, int[][] documents) {
 			int z = categorical(theta[i]).sample();
 			t[j] = categorical(phi[z]).sample();
 		}
-		w.put(i, t);
+		w[i] = t;
 	}
 
 	w.observe(documents);
