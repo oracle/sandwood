@@ -141,6 +141,7 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$v(boolean[] cv$value) {
 		v = cv$value;
 		setFlag$v = true;
+		fixedProbFlag$sample33 = false;
 	}
 
 	@Override
@@ -151,6 +152,8 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$v1(int cv$value) {
 		v1 = cv$value;
+		fixedProbFlag$sample12 = false;
+		fixedProbFlag$sample33 = false;
 	}
 
 	@Override
@@ -162,6 +165,9 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$v2(int[] cv$value) {
 		v2 = cv$value;
 		setFlag$v2 = true;
+		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample22 = false;
+		fixedProbFlag$sample33 = false;
 	}
 
 	@Override

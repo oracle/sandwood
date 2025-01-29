@@ -36,7 +36,15 @@ class AlternativeModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		bias = cv$value;
+		
+		// Unset the fixed probability flag for sample 6 as it depends on bias.
+		fixedProbFlag$sample6 = false;
+		
+		// Unset the fixed probability flag for sample 8 as it depends on bias.
+		fixedProbFlag$sample8 = false;
 	}
 
 	// Getter for fixedFlag$sample6.
@@ -148,7 +156,12 @@ class AlternativeModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for positiveCount.
 	@Override
 	public final void set$positiveCount(int cv$value) {
+		// Set flags for all the side effects of positiveCount including if probabilities
+		// need to be updated.
 		positiveCount = cv$value;
+		
+		// Unset the fixed probability flag for sample 8 as it depends on positiveCount.
+		fixedProbFlag$sample8 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample6 using sampled values.

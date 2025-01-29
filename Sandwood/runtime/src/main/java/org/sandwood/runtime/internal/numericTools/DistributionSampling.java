@@ -18,7 +18,6 @@ import static java.lang.Math.sqrt;
 
 import java.util.Arrays;
 
-import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.exceptions.SandwoodModelStateException;
 
@@ -96,10 +95,15 @@ public class DistributionSampling {
      * @return A value randomly sampled from the Beta distribution.
      */
     public static final double sampleBeta(Rng Rng, double alpha, double beta) {
-        double x = sampleGamma(Rng, alpha);
-        double y = sampleGamma(Rng, beta);
-
-        return x / (x + y);
+        // Rejection sampling added because while with real numbers these values are not reachable, with floating point
+        // arithmetic they are.
+        double value = 0;
+        while(value == 0 || value == 1) {
+            double x = sampleGamma(Rng, alpha);
+            double y = sampleGamma(Rng, beta);
+            value = x / (x + y);
+        }
+        return value;
     }
 
     /**
@@ -418,25 +422,46 @@ public class DistributionSampling {
 
     // Gamma
     /**
-     * Method to sample a Gamma distribution assuming that beta is 1
+     * Method to sample a Gamma distribution assuming that beta is 1. This method implements a version of Ahrens-Dieter
+     * acceptance–rejection method
+     * <a href= "https://en.wikipedia.org/wiki/Gamma_distribution#Generating_gamma-distributed_Rng_variables">
+     * https://en.wikipedia.org/wiki/Gamma_distribution#Generating_gamma-distributed_Rng_variables</a>
      *
      * @param rng   A random number generator for the sampling.
      * @param alpha The parameter alpha for the Gamma distribution.
      * @return The value sampled from the described Gamma distribution.
      */
     static final double sampleGamma(Rng rng, double alpha) { // alpha > 0, beta implicitly 1.
+        // alpha > 0
+        assert (alpha > 0);
+
         boolean aflag = false;
         if(alpha < 1) {
             aflag = true;
             alpha += 1;
         }
 
-        double gamma = sampleGammaAux(rng, alpha);
+        double d = alpha - (1.0 / 3.0);
+        double c = 1.0 / sqrt(9 * d);
 
-        if(aflag)
-            gamma *= pow(rng.uniform(), 1.0 / (alpha - 1));
+        while(true) {
+            double x = rng.normal();
+            double v = (1 + c * x);
 
-        return gamma;
+            if(v > 0) {
+                v = v * v * v; // v=v^3
+                double u = rng.uniform();
+                double xsq = x * x;
+                // The first guard doesn't appear in the wikipedia article, but is in the paper to avoid the 2 log
+                // calls.
+                if(u < 1 - 0.0331 * xsq * xsq || log(u) < 0.5 * xsq + d * (1 - v + log(v))) {
+                    double gamma = d * v;
+                    if(aflag)
+                        gamma *= pow(rng.uniform(), 1.0 / (alpha - 1));
+                    return gamma;
+                }
+            }
+        }
     }
 
     /**
@@ -451,38 +476,6 @@ public class DistributionSampling {
      */
     public static final double sampleGamma(Rng rng, double alpha, double beta) { // scaling for beta
         return sampleGamma(rng, alpha) / beta;
-    }
-
-    /**
-     * Auxiliary method used when sampling Gamma distributions. A version of Ahrens-Dieter acceptance–rejection method
-     * <a href= "https://en.wikipedia.org/wiki/Gamma_distribution#Generating_gamma-distributed_Rng_variables">
-     * https://en.wikipedia.org/wiki/Gamma_distribution#Generating_gamma-distributed_Rng_variables</a>
-     *
-     * @param rng   A random number generator for the sampling.
-     * @param alpha The alpha parameter of the Gamma distribution.
-     * @return The calculated value.
-     */
-    private static final double sampleGammaAux(Rng rng, double alpha) { // alpha > 0
-        assert (alpha > 0);
-        double d = alpha - (1.0 / 3.0);
-        double c = 1.0 / sqrt(9 * d);
-
-        while(true) {
-            double x = rng.normal();
-            double v = (1 + c * x);
-            v = v * v * v; // v=v^3
-
-            if(v > 0) {
-                double u = rng.uniform();
-                double xsq = x * x;
-                // This guard doesn't appear in the wikipedia article, but is in the paper to avoid the 2 log calls.
-                if(u < 1 - 0.0331 * xsq * xsq) {
-                    return d * v;
-                } else if(log(u) < 0.5 * xsq + d * (1 - v + log(v))) {
-                    return d * v;
-                }
-            }
-        }
     }
 
     /**
@@ -598,7 +591,7 @@ public class DistributionSampling {
      * @return The value sampled from the distribution.
      */
     public static final double sampleHalfCauchy(Rng rng, double location, double scale) {
-        return Math.abs(sampleCauchy(rng, location, scale));
+        return Math.abs(sampleCauchy(rng, location, scale) - location) + location;
     }
 
     /**
@@ -705,7 +698,9 @@ public class DistributionSampling {
                 }
             }
             if(j == l)
-                throw new SandwoodException("This should be unreachable");
+                // Of this point has been reached rounding errors in the summing mean that the sum did not quite reach
+                // 1. It is very unlikely this code will ever execute.
+                output[j - 1]++;
         }
     }
 
@@ -864,18 +859,24 @@ public class DistributionSampling {
      */
     public static final double sampleStudentT(Rng rng, double v) {
         double a, b, w; // a is U and b is V
+        boolean positive;
         do {
             a = rng.uniform();
             a = 2 * a - 1;
             b = rng.uniform();
             b = 2 * b - 1;
+            positive = a >= 0;
             a = a * a;
             w = a + b * b;
-        } while(w > 1);
+        } while(w == 0 || w > 1);
 
-        double c = a / w;
-        double r = v * (Math.pow(w, -2 / v) - 1);
-        return Math.sqrt(c * r);
+        double c2 = a / w;
+        double r2 = v * (Math.pow(w, -2 / v) - 1);
+        double s = Math.sqrt(c2 * r2);
+        if(positive)
+            return s;
+        else
+            return -s;
     }
 
     // function from

@@ -59,6 +59,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$decay(int[] cv$value) {
 		decay = cv$value;
 		setFlag$decay = true;
+		fixedProbFlag$sample16 = false;
 	}
 
 	@Override
@@ -137,6 +138,8 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void set$rate(double cv$value) {
 		rate = cv$value;
+		fixedProbFlag$sample10 = false;
+		fixedProbFlag$sample16 = false;
 	}
 
 	@Override

@@ -33,6 +33,8 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
+		fixedProbFlag$sample6 = false;
+		fixedProbFlag$sample8 = false;
 	}
 
 	@Override
@@ -111,6 +113,7 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$positiveCount(int cv$value) {
 		positiveCount = cv$value;
+		fixedProbFlag$sample8 = false;
 	}
 
 	private final void logProbabilityValue$sample6() {

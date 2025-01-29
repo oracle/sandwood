@@ -83,10 +83,15 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for generated.
 	@Override
 	public final void set$generated(double[] cv$value) {
+		// Set flags for all the side effects of generated including if probabilities need
+		// to be updated.
 		// Set generated with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		generated = cv$value;
 		setFlag$generated = true;
+		
+		// Unset the fixed probability flag for sample 23 as it depends on generated.
+		fixedProbFlag$sample23 = false;
 	}
 
 	// Getter for indirection.

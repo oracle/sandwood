@@ -189,7 +189,11 @@ class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for v.
 	@Override
 	public final void set$v(boolean cv$value) {
+		// Set flags for all the side effects of v including if probabilities need to be updated.
 		v = cv$value;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on v.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for v1.
@@ -201,7 +205,15 @@ class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for v1.
 	@Override
 	public final void set$v1(int cv$value) {
+		// Set flags for all the side effects of v1 including if probabilities need to be
+		// updated.
 		v1 = cv$value;
+		
+		// Unset the fixed probability flag for sample 7 as it depends on v1.
+		fixedProbFlag$sample7 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on v1.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for v2.
@@ -213,7 +225,15 @@ class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for v2.
 	@Override
 	public final void set$v2(int cv$value) {
+		// Set flags for all the side effects of v2 including if probabilities need to be
+		// updated.
 		v2 = cv$value;
+		
+		// Unset the fixed probability flag for sample 9 as it depends on v2.
+		fixedProbFlag$sample9 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on v2.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for v3.
@@ -225,7 +245,15 @@ class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for v3.
 	@Override
 	public final void set$v3(int cv$value) {
+		// Set flags for all the side effects of v3 including if probabilities need to be
+		// updated.
 		v3 = cv$value;
+		
+		// Unset the fixed probability flag for sample 10 as it depends on v3.
+		fixedProbFlag$sample10 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on v3.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for value.

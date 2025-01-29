@@ -46,6 +46,8 @@ class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$b0(double cv$value) {
 		b0 = cv$value;
+		fixedProbFlag$sample14 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -56,6 +58,8 @@ class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$b1(double cv$value) {
 		b1 = cv$value;
+		fixedProbFlag$sample18 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -148,6 +152,8 @@ class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$variance(double cv$value) {
 		variance = cv$value;
+		fixedProbFlag$sample22 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -169,6 +175,7 @@ class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.internal
 	public final void set$y(double[] cv$value) {
 		y = cv$value;
 		setFlag$y = true;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override

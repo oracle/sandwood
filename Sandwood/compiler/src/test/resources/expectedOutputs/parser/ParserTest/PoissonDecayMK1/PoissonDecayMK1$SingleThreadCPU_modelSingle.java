@@ -65,10 +65,15 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	// Setter for decay.
 	@Override
 	public final void set$decay(int[] cv$value) {
+		// Set flags for all the side effects of decay including if probabilities need to
+		// be updated.
 		// Set decay with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		decay = cv$value;
 		setFlag$decay = true;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on decay.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for decayDetected.
@@ -176,7 +181,15 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	// Setter for rate.
 	@Override
 	public final void set$rate(double cv$value) {
+		// Set flags for all the side effects of rate including if probabilities need to be
+		// updated.
 		rate = cv$value;
+		
+		// Unset the fixed probability flag for sample 10 as it depends on rate.
+		fixedProbFlag$sample10 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on rate.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for samples.

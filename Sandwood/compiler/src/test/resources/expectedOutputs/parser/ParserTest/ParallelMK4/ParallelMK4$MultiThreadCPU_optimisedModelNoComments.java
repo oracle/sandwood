@@ -63,6 +63,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$generated(int[] cv$value) {
 		generated = cv$value;
 		setFlag$generated = true;
+		fixedProbFlag$sample65 = false;
 	}
 
 	@Override
@@ -74,6 +75,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$indirection1(double[][] cv$value) {
 		indirection1 = cv$value;
 		setFlag$indirection1 = true;
+		fixedProbFlag$sample41 = false;
+		fixedProbFlag$sample65 = false;
 	}
 
 	@Override

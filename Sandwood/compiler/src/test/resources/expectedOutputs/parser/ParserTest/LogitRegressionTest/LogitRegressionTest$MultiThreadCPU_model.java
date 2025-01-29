@@ -52,7 +52,15 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		bias = cv$value;
+		
+		// Unset the fixed probability flag for sample 39 as it depends on bias.
+		fixedProbFlag$sample39 = false;
+		
+		// Unset the fixed probability flag for sample 72 as it depends on bias.
+		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for fixedFlag$sample32.
@@ -168,10 +176,18 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for weights.
 	@Override
 	public final void set$weights(double[] cv$value) {
+		// Set flags for all the side effects of weights including if probabilities need to
+		// be updated.
 		// Set weights with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		weights = cv$value;
 		setFlag$weights = true;
+		
+		// Unset the fixed probability flag for sample 32 as it depends on weights.
+		fixedProbFlag$sample32 = false;
+		
+		// Unset the fixed probability flag for sample 72 as it depends on weights.
+		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for x.
@@ -197,10 +213,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for y.
 	@Override
 	public final void set$y(boolean[][] cv$value) {
+		// Set flags for all the side effects of y including if probabilities need to be updated.
 		// Set y with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		y = cv$value;
 		setFlag$y = true;
+		
+		// Unset the fixed probability flag for sample 72 as it depends on y.
+		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for yMeasured.

@@ -61,10 +61,15 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for choices.
 	@Override
 	public final void set$choices(int[] cv$value) {
+		// Set flags for all the side effects of choices including if probabilities need to
+		// be updated.
 		// Set choices with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		choices = cv$value;
 		setFlag$choices = true;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on choices.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for exped.
@@ -206,10 +211,18 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for ut.
 	@Override
 	public final void set$ut(double[] cv$value) {
+		// Set flags for all the side effects of ut including if probabilities need to be
+		// updated.
 		// Set ut with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		ut = cv$value;
 		setFlag$ut = true;
+		
+		// Unset the fixed probability flag for sample 19 as it depends on ut.
+		fixedProbFlag$sample19 = false;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on ut.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample19 using sampled

@@ -38,7 +38,15 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		bias = cv$value;
+		
+		// Unset the fixed probability flag for sample 9 as it depends on bias.
+		fixedProbFlag$sample9 = false;
+		
+		// Unset the fixed probability flag for sample 11 as it depends on bias.
+		fixedProbFlag$sample11 = false;
 	}
 
 	// Getter for fixedFlag$sample11.
@@ -96,7 +104,12 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flip.
 	@Override
 	public final void set$flip(boolean cv$value) {
+		// Set flags for all the side effects of flip including if probabilities need to be
+		// updated.
 		flip = cv$value;
+		
+		// Unset the fixed probability flag for sample 11 as it depends on flip.
+		fixedProbFlag$sample11 = false;
 	}
 
 	// Getter for flipMeasured.

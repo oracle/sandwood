@@ -80,10 +80,18 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[][] cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		// Set bias with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		bias = cv$value;
 		setFlag$bias = true;
+		
+		// Unset the fixed probability flag for sample 34 as it depends on bias.
+		fixedProbFlag$sample34 = false;
+		
+		// Unset the fixed probability flag for sample 103 as it depends on bias.
+		fixedProbFlag$sample103 = false;
 	}
 
 	// Getter for events.
@@ -95,10 +103,15 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for events.
 	@Override
 	public final void set$events(int[][] cv$value) {
+		// Set flags for all the side effects of events including if probabilities need to
+		// be updated.
 		// Set events with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		events = cv$value;
 		setFlag$events = true;
+		
+		// Unset the fixed probability flag for sample 103 as it depends on events.
+		fixedProbFlag$sample103 = false;
 	}
 
 	// Getter for eventsMeasured.
@@ -312,7 +325,15 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for initialState.
 	@Override
 	public final void set$initialState(int cv$value) {
+		// Set flags for all the side effects of initialState including if probabilities need
+		// to be updated.
 		initialState = cv$value;
+		
+		// Unset the fixed probability flag for sample 53 as it depends on initialState.
+		fixedProbFlag$sample53 = false;
+		
+		// Unset the fixed probability flag for sample 61 as it depends on initialState.
+		fixedProbFlag$sample61 = false;
 	}
 
 	// Getter for length$eventsMeasured.
@@ -386,10 +407,20 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for m.
 	@Override
 	public final void set$m(double[][] cv$value) {
+		// Set flags for all the side effects of m including if probabilities need to be updated.
 		// Set m with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		m = cv$value;
 		setFlag$m = true;
+		
+		// Unset the fixed probability flag for sample 26 as it depends on m.
+		fixedProbFlag$sample26 = false;
+		
+		// Unset the fixed probability flag for sample 61 as it depends on m.
+		fixedProbFlag$sample61 = false;
+		
+		// Unset the fixed probability flag for sample 81 as it depends on m.
+		fixedProbFlag$sample81 = false;
 	}
 
 	// Getter for noEvents.
@@ -431,10 +462,21 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for st.
 	@Override
 	public final void set$st(int[][] cv$value) {
+		// Set flags for all the side effects of st including if probabilities need to be
+		// updated.
 		// Set st with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		st = cv$value;
 		setFlag$st = true;
+		
+		// Unset the fixed probability flag for sample 61 as it depends on st.
+		fixedProbFlag$sample61 = false;
+		
+		// Unset the fixed probability flag for sample 81 as it depends on st.
+		fixedProbFlag$sample81 = false;
+		
+		// Unset the fixed probability flag for sample 103 as it depends on st.
+		fixedProbFlag$sample103 = false;
 	}
 
 	// Getter for v.
@@ -458,10 +500,18 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for weights.
 	@Override
 	public final void set$weights(double[] cv$value) {
+		// Set flags for all the side effects of weights including if probabilities need to
+		// be updated.
 		// Set weights with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		weights = cv$value;
 		setFlag$weights = true;
+		
+		// Unset the fixed probability flag for sample 51 as it depends on weights.
+		fixedProbFlag$sample51 = false;
+		
+		// Unset the fixed probability flag for sample 53 as it depends on weights.
+		fixedProbFlag$sample53 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample103 using sampled

@@ -184,10 +184,18 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for output.
 	@Override
 	public final void set$output(boolean[] cv$value) {
+		// Set flags for all the side effects of output including if probabilities need to
+		// be updated.
 		// Set output with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		output = cv$value;
 		setFlag$output = true;
+		
+		// Unset the fixed probability flag for sample 28 as it depends on output.
+		fixedProbFlag$sample28 = false;
+		
+		// Unset the fixed probability flag for sample 34 as it depends on output.
+		fixedProbFlag$sample34 = false;
 	}
 
 	// Getter for prior.
@@ -199,10 +207,21 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for prior.
 	@Override
 	public final void set$prior(double[] cv$value) {
+		// Set flags for all the side effects of prior including if probabilities need to
+		// be updated.
 		// Set prior with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		prior = cv$value;
 		setFlag$prior = true;
+		
+		// Unset the fixed probability flag for sample 13 as it depends on prior.
+		fixedProbFlag$sample13 = false;
+		
+		// Unset the fixed probability flag for sample 28 as it depends on prior.
+		fixedProbFlag$sample28 = false;
+		
+		// Unset the fixed probability flag for sample 34 as it depends on prior.
+		fixedProbFlag$sample34 = false;
 	}
 
 	// Getter for v.

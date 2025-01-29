@@ -36,6 +36,8 @@ class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
+		fixedProbFlag$sample10 = false;
+		fixedProbFlag$sample20 = false;
 	}
 
 	@Override
@@ -70,6 +72,7 @@ class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample20 = false;
 	}
 
 	@Override

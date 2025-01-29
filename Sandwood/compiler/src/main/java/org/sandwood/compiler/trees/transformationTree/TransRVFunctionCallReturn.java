@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -176,10 +176,16 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
                 } else if(source == VariableType.Gaussian) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
+                } else if(source == VariableType.Geometric) {
+                    throw new CompilerException("Method not implemented for type " + source);
                 } else if(source == VariableType.HalfCauchy) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
                 } else if(source == VariableType.InverseGamma) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
+                } else if(source == VariableType.Multinomial) {
+                    throw new CompilerException("Method not implemented for type " + source);
+                } else if(source == VariableType.NegativeBinomial) {
+                    throw new CompilerException("Method not implemented for type " + source);
                 } else if(source == VariableType.Poisson) {
                     tree = (TransTreeReturn<X>) constant(Integer.MAX_VALUE);
                 } else if(source == VariableType.StudentT) {
@@ -211,10 +217,16 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
                 } else if(source == VariableType.Gaussian) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
+                } else if(source == VariableType.Geometric) {
+                    tree = (TransTreeReturn<X>) constant(Integer.MAX_VALUE);
                 } else if(source == VariableType.HalfCauchy) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
                 } else if(source == VariableType.InverseGamma) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
+                } else if(source == VariableType.Multinomial) {
+                    throw new CompilerException("Method not implemented for type " + source);
+                } else if(source == VariableType.NegativeBinomial) {
+                    tree = (TransTreeReturn<X>) constant(Integer.MAX_VALUE);
                 } else if(source == VariableType.Poisson) {
                     tree = (TransTreeReturn<X>) constant(Integer.MAX_VALUE);
                 } else if(source == VariableType.StudentT) {
@@ -271,10 +283,16 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(0.0);
                 } else if(source == VariableType.Gaussian) {
                     tree = (TransTreeReturn<X>) constant(Double.NEGATIVE_INFINITY);
+                } else if(source == VariableType.Geometric) {
+                    throw new CompilerException("Method not implemented for type " + source);
                 } else if(source == VariableType.HalfCauchy) {
                     tree = (TransTreeReturn<X>) constant(0.0);
                 } else if(source == VariableType.InverseGamma) {
                     tree = (TransTreeReturn<X>) constant(0.0);
+                } else if(source == VariableType.Multinomial) {
+                    throw new CompilerException("Method not implemented for type " + source);
+                } else if(source == VariableType.NegativeBinomial) {
+                    throw new CompilerException("Method not implemented for type " + source);
                 } else if(source == VariableType.Poisson) {
                     tree = (TransTreeReturn<X>) constant(0);
                 } else if(source == VariableType.StudentT) {
@@ -306,10 +324,16 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                     tree = (TransTreeReturn<X>) constant(0.0);
                 } else if(source == VariableType.Gaussian) {
                     tree = (TransTreeReturn<X>) constant(Double.NEGATIVE_INFINITY);
+                } else if(source == VariableType.Geometric) {
+                    return (TransTreeReturn<X>) constant(0);
                 } else if(source == VariableType.HalfCauchy) {
                     tree = (TransTreeReturn<X>) constant(0.0);
                 } else if(source == VariableType.InverseGamma) {
                     tree = (TransTreeReturn<X>) constant(0.0);
+                } else if(source == VariableType.Multinomial) {
+                    throw new CompilerException("Method not implemented for type " + source);
+                } else if(source == VariableType.NegativeBinomial) {
+                    return (TransTreeReturn<X>) constant(0);
                 } else if(source == VariableType.Poisson) {
                     tree = (TransTreeReturn<X>) constant(0);
                 } else if(source == VariableType.StudentT) {

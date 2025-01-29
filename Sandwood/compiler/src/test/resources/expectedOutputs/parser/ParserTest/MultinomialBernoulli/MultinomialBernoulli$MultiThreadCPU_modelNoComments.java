@@ -189,6 +189,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$output(boolean[] cv$value) {
 		output = cv$value;
 		setFlag$output = true;
+		fixedProbFlag$sample42 = false;
+		fixedProbFlag$sample47 = false;
+		fixedProbFlag$sample52 = false;
 	}
 
 	@Override
@@ -200,6 +203,8 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$p(double[] cv$value) {
 		p = cv$value;
 		setFlag$p = true;
+		fixedProbFlag$sample17 = false;
+		fixedProbFlag$sample20 = false;
 	}
 
 	@Override
@@ -211,6 +216,10 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$prior(int[] cv$value) {
 		prior = cv$value;
 		setFlag$prior = true;
+		fixedProbFlag$sample20 = false;
+		fixedProbFlag$sample42 = false;
+		fixedProbFlag$sample47 = false;
+		fixedProbFlag$sample52 = false;
 	}
 
 	private final void logProbabilityValue$sample17() {

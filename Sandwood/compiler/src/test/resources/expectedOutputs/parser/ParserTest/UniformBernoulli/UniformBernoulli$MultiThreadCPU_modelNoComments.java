@@ -115,6 +115,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$output(boolean[] cv$value) {
 		output = cv$value;
 		setFlag$output = true;
+		fixedProbFlag$sample16 = false;
 	}
 
 	@Override
@@ -125,6 +126,8 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void set$prior(double cv$value) {
 		prior = cv$value;
+		fixedProbFlag$sample8 = false;
+		fixedProbFlag$sample16 = false;
 	}
 
 	private final void logProbabilityValue$sample16() {

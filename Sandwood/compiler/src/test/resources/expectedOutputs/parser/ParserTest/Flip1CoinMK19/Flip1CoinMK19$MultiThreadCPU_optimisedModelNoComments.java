@@ -105,6 +105,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample40 = false;
 	}
 
 	@Override
@@ -160,6 +161,8 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$q(double cv$value) {
 		q = cv$value;
+		fixedProbFlag$sample13 = false;
+		fixedProbFlag$sample40 = false;
 	}
 
 	@Override
@@ -180,6 +183,8 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$t(double cv$value) {
 		t = cv$value;
+		fixedProbFlag$sample19 = false;
+		fixedProbFlag$sample40 = false;
 	}
 
 	private final void logProbabilityValue$sample13() {

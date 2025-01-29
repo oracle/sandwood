@@ -65,10 +65,18 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[] cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		// Set bias with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		bias = cv$value;
 		setFlag$bias = true;
+		
+		// Unset the fixed probability flag for sample 29 as it depends on bias.
+		fixedProbFlag$sample29 = false;
+		
+		// Unset the fixed probability flag for sample 109 as it depends on bias.
+		fixedProbFlag$sample109 = false;
 	}
 
 	// Getter for fixedFlag$sample109.
@@ -190,10 +198,15 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for flips.
 	@Override
 	public final void set$flips(boolean[][][] cv$value) {
+		// Set flags for all the side effects of flips including if probabilities need to
+		// be updated.
 		// Set flips with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		flips = cv$value;
 		setFlag$flips = true;
+		
+		// Unset the fixed probability flag for sample 109 as it depends on flips.
+		fixedProbFlag$sample109 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -269,10 +282,20 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for m.
 	@Override
 	public final void set$m(double[][] cv$value) {
+		// Set flags for all the side effects of m including if probabilities need to be updated.
 		// Set m with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		m = cv$value;
 		setFlag$m = true;
+		
+		// Unset the fixed probability flag for sample 19 as it depends on m.
+		fixedProbFlag$sample19 = false;
+		
+		// Unset the fixed probability flag for sample 56 as it depends on m.
+		fixedProbFlag$sample56 = false;
+		
+		// Unset the fixed probability flag for sample 74 as it depends on m.
+		fixedProbFlag$sample74 = false;
 	}
 
 	// Getter for samples.
@@ -290,10 +313,21 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for st.
 	@Override
 	public final void set$st(int[][][] cv$value) {
+		// Set flags for all the side effects of st including if probabilities need to be
+		// updated.
 		// Set st with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		st = cv$value;
 		setFlag$st = true;
+		
+		// Unset the fixed probability flag for sample 56 as it depends on st.
+		fixedProbFlag$sample56 = false;
+		
+		// Unset the fixed probability flag for sample 74 as it depends on st.
+		fixedProbFlag$sample74 = false;
+		
+		// Unset the fixed probability flag for sample 109 as it depends on st.
+		fixedProbFlag$sample109 = false;
 	}
 
 	// Getter for states.

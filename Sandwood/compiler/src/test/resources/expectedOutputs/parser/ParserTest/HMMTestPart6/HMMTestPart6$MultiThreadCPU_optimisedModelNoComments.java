@@ -62,6 +62,8 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
+		fixedProbFlag$sample27 = false;
+		fixedProbFlag$sample71 = false;
 	}
 
 	@Override
@@ -134,6 +136,7 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample71 = false;
 	}
 
 	@Override
@@ -195,6 +198,9 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample17 = false;
+		fixedProbFlag$sample36 = false;
+		fixedProbFlag$sample53 = false;
 	}
 
 	@Override
@@ -211,6 +217,9 @@ class HMMTestPart6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
+		fixedProbFlag$sample36 = false;
+		fixedProbFlag$sample53 = false;
+		fixedProbFlag$sample71 = false;
 	}
 
 	@Override

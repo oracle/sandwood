@@ -34,6 +34,8 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
+		fixedProbFlag$sample10 = false;
+		fixedProbFlag$sample12 = false;
 	}
 
 	@Override
@@ -127,6 +129,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$positiveCount(int cv$value) {
 		positiveCount = cv$value;
+		fixedProbFlag$sample12 = false;
 	}
 
 	private final void logProbabilityValue$sample10() {

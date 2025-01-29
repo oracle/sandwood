@@ -207,6 +207,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$initialStateDistribution(double[] cv$value) {
 		initialStateDistribution = cv$value;
 		setFlag$initialStateDistribution = true;
+		fixedProbFlag$sample23 = false;
+		fixedProbFlag$sample75 = false;
 	}
 
 	@Override
@@ -278,6 +280,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample29 = false;
+		fixedProbFlag$sample88 = false;
 	}
 
 	@Override
@@ -310,6 +314,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_mean(double[] cv$value) {
 		metric_mean = cv$value;
 		setFlag$metric_mean = true;
+		fixedProbFlag$sample42 = false;
+		fixedProbFlag$sample113 = false;
 	}
 
 	@Override
@@ -331,6 +337,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_valid_bias(double[] cv$value) {
 		metric_valid_bias = cv$value;
 		setFlag$metric_valid_bias = true;
+		fixedProbFlag$sample60 = false;
+		fixedProbFlag$sample104 = false;
 	}
 
 	@Override
@@ -353,6 +361,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_var(double[] cv$value) {
 		metric_var = cv$value;
 		setFlag$metric_var = true;
+		fixedProbFlag$sample51 = false;
+		fixedProbFlag$sample113 = false;
 	}
 
 	@Override
@@ -379,6 +389,10 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
+		fixedProbFlag$sample75 = false;
+		fixedProbFlag$sample88 = false;
+		fixedProbFlag$sample104 = false;
+		fixedProbFlag$sample113 = false;
 	}
 
 	@Override

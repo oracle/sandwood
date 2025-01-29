@@ -37,7 +37,15 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		bias = cv$value;
+		
+		// Unset the fixed probability flag for sample 10 as it depends on bias.
+		fixedProbFlag$sample10 = false;
+		
+		// Unset the fixed probability flag for sample 12 as it depends on bias.
+		fixedProbFlag$sample12 = false;
 	}
 
 	// Getter for eta.
@@ -167,7 +175,12 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for positiveCount.
 	@Override
 	public final void set$positiveCount(int cv$value) {
+		// Set flags for all the side effects of positiveCount including if probabilities
+		// need to be updated.
 		positiveCount = cv$value;
+		
+		// Unset the fixed probability flag for sample 12 as it depends on positiveCount.
+		fixedProbFlag$sample12 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample10 using sampled

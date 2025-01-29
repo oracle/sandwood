@@ -82,6 +82,7 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample16 = false;
 	}
 
 	@Override

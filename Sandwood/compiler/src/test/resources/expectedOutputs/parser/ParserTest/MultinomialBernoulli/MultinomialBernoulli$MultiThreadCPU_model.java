@@ -255,10 +255,21 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for output.
 	@Override
 	public final void set$output(boolean[] cv$value) {
+		// Set flags for all the side effects of output including if probabilities need to
+		// be updated.
 		// Set output with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		output = cv$value;
 		setFlag$output = true;
+		
+		// Unset the fixed probability flag for sample 42 as it depends on output.
+		fixedProbFlag$sample42 = false;
+		
+		// Unset the fixed probability flag for sample 47 as it depends on output.
+		fixedProbFlag$sample47 = false;
+		
+		// Unset the fixed probability flag for sample 52 as it depends on output.
+		fixedProbFlag$sample52 = false;
 	}
 
 	// Getter for p.
@@ -270,10 +281,17 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for p.
 	@Override
 	public final void set$p(double[] cv$value) {
+		// Set flags for all the side effects of p including if probabilities need to be updated.
 		// Set p with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		p = cv$value;
 		setFlag$p = true;
+		
+		// Unset the fixed probability flag for sample 17 as it depends on p.
+		fixedProbFlag$sample17 = false;
+		
+		// Unset the fixed probability flag for sample 20 as it depends on p.
+		fixedProbFlag$sample20 = false;
 	}
 
 	// Getter for prior.
@@ -285,10 +303,24 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for prior.
 	@Override
 	public final void set$prior(int[] cv$value) {
+		// Set flags for all the side effects of prior including if probabilities need to
+		// be updated.
 		// Set prior with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		prior = cv$value;
 		setFlag$prior = true;
+		
+		// Unset the fixed probability flag for sample 20 as it depends on prior.
+		fixedProbFlag$sample20 = false;
+		
+		// Unset the fixed probability flag for sample 42 as it depends on prior.
+		fixedProbFlag$sample42 = false;
+		
+		// Unset the fixed probability flag for sample 47 as it depends on prior.
+		fixedProbFlag$sample47 = false;
+		
+		// Unset the fixed probability flag for sample 52 as it depends on prior.
+		fixedProbFlag$sample52 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample17 using sampled

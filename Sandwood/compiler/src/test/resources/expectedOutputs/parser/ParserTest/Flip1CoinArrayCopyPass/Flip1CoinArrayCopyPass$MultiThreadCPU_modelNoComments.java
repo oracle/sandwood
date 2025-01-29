@@ -50,6 +50,8 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
+		fixedProbFlag$sample13 = false;
+		fixedProbFlag$sample21 = false;
 	}
 
 	@Override
@@ -84,6 +86,7 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample21 = false;
 	}
 
 	@Override

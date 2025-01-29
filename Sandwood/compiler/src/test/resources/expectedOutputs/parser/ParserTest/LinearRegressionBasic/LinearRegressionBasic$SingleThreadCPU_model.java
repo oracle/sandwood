@@ -49,7 +49,15 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Setter for b0.
 	@Override
 	public final void set$b0(double cv$value) {
+		// Set flags for all the side effects of b0 including if probabilities need to be
+		// updated.
 		b0 = cv$value;
+		
+		// Unset the fixed probability flag for sample 14 as it depends on b0.
+		fixedProbFlag$sample14 = false;
+		
+		// Unset the fixed probability flag for sample 31 as it depends on b0.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for b1.
@@ -61,7 +69,15 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Setter for b1.
 	@Override
 	public final void set$b1(double cv$value) {
+		// Set flags for all the side effects of b1 including if probabilities need to be
+		// updated.
 		b1 = cv$value;
+		
+		// Unset the fixed probability flag for sample 18 as it depends on b1.
+		fixedProbFlag$sample18 = false;
+		
+		// Unset the fixed probability flag for sample 31 as it depends on b1.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for fixedFlag$sample14.
@@ -199,7 +215,15 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Setter for variance.
 	@Override
 	public final void set$variance(double cv$value) {
+		// Set flags for all the side effects of variance including if probabilities need
+		// to be updated.
 		variance = cv$value;
+		
+		// Unset the fixed probability flag for sample 22 as it depends on variance.
+		fixedProbFlag$sample22 = false;
+		
+		// Unset the fixed probability flag for sample 31 as it depends on variance.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for x.
@@ -225,10 +249,14 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Setter for y.
 	@Override
 	public final void set$y(double[] cv$value) {
+		// Set flags for all the side effects of y including if probabilities need to be updated.
 		// Set y with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		y = cv$value;
 		setFlag$y = true;
+		
+		// Unset the fixed probability flag for sample 31 as it depends on y.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for yMeasured.

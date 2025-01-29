@@ -59,10 +59,18 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[] cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		// Set bias with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		bias = cv$value;
 		setFlag$bias = true;
+		
+		// Unset the fixed probability flag for sample 27 as it depends on bias.
+		fixedProbFlag$sample27 = false;
+		
+		// Unset the fixed probability flag for sample 52 as it depends on bias.
+		fixedProbFlag$sample52 = false;
 	}
 
 	// Getter for fixedFlag$sample17.
@@ -172,10 +180,15 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for flips.
 	@Override
 	public final void set$flips(boolean[] cv$value) {
+		// Set flags for all the side effects of flips including if probabilities need to
+		// be updated.
 		// Set flips with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		flips = cv$value;
 		setFlag$flips = true;
+		
+		// Unset the fixed probability flag for sample 52 as it depends on flips.
+		fixedProbFlag$sample52 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -249,10 +262,17 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for m.
 	@Override
 	public final void set$m(double[][] cv$value) {
+		// Set flags for all the side effects of m including if probabilities need to be updated.
 		// Set m with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		m = cv$value;
 		setFlag$m = true;
+		
+		// Unset the fixed probability flag for sample 17 as it depends on m.
+		fixedProbFlag$sample17 = false;
+		
+		// Unset the fixed probability flag for sample 44 as it depends on m.
+		fixedProbFlag$sample44 = false;
 	}
 
 	// Getter for samples.
@@ -270,10 +290,18 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for st.
 	@Override
 	public final void set$st(int[] cv$value) {
+		// Set flags for all the side effects of st including if probabilities need to be
+		// updated.
 		// Set st with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		st = cv$value;
 		setFlag$st = true;
+		
+		// Unset the fixed probability flag for sample 44 as it depends on st.
+		fixedProbFlag$sample44 = false;
+		
+		// Unset the fixed probability flag for sample 52 as it depends on st.
+		fixedProbFlag$sample52 = false;
 	}
 
 	// Getter for states.
