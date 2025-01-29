@@ -253,10 +253,18 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for mu.
 	@Override
 	public final void set$mu(double[] cv$value) {
+		// Set flags for all the side effects of mu including if probabilities need to be
+		// updated.
 		// Set mu with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		mu = cv$value;
 		setFlag$mu = true;
+		
+		// Unset the fixed probability flag for sample 23 as it depends on mu.
+		fixedProbFlag$sample23 = false;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on mu.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for phi.
@@ -268,10 +276,18 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for phi.
 	@Override
 	public final void set$phi(double[] cv$value) {
+		// Set flags for all the side effects of phi including if probabilities need to be
+		// updated.
 		// Set phi with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		phi = cv$value;
 		setFlag$phi = true;
+		
+		// Unset the fixed probability flag for sample 13 as it depends on phi.
+		fixedProbFlag$sample13 = false;
+		
+		// Unset the fixed probability flag for sample 45 as it depends on phi.
+		fixedProbFlag$sample45 = false;
 	}
 
 	// Getter for sigma.
@@ -283,10 +299,18 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for sigma.
 	@Override
 	public final void set$sigma(double[] cv$value) {
+		// Set flags for all the side effects of sigma including if probabilities need to
+		// be updated.
 		// Set sigma with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		sigma = cv$value;
 		setFlag$sigma = true;
+		
+		// Unset the fixed probability flag for sample 34 as it depends on sigma.
+		fixedProbFlag$sample34 = false;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on sigma.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for x.
@@ -298,10 +322,14 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for x.
 	@Override
 	public final void set$x(double[] cv$value) {
+		// Set flags for all the side effects of x including if probabilities need to be updated.
 		// Set x with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		x = cv$value;
 		setFlag$x = true;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on x.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for xMeasured.

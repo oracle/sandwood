@@ -143,6 +143,7 @@ class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$v(boolean[] cv$value) {
 		v = cv$value;
 		setFlag$v = true;
+		fixedProbFlag$sample45 = false;
 	}
 
 	@Override
@@ -153,6 +154,8 @@ class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void set$v1(int cv$value) {
 		v1 = cv$value;
+		fixedProbFlag$sample12 = false;
+		fixedProbFlag$sample45 = false;
 	}
 
 	@Override
@@ -164,6 +167,9 @@ class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$v2(int[] cv$value) {
 		v2 = cv$value;
 		setFlag$v2 = true;
+		fixedProbFlag$sample18 = false;
+		fixedProbFlag$sample26 = false;
+		fixedProbFlag$sample45 = false;
 	}
 
 	@Override

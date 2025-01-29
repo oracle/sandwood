@@ -101,6 +101,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
 		setFlag$arrivals = true;
+		fixedProbFlag$sample51 = false;
+		fixedProbFlag$sample98 = false;
 	}
 
 	@Override
@@ -164,6 +166,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
 		setFlag$lambda = true;
+		fixedProbFlag$sample43 = false;
+		fixedProbFlag$sample51 = false;
 	}
 
 	@Override
@@ -235,6 +239,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
 		setFlag$ut = true;
+		fixedProbFlag$sample25 = false;
+		fixedProbFlag$sample98 = false;
 	}
 
 	@Override

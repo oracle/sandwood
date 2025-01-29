@@ -49,10 +49,24 @@ class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[] cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		// Set bias with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		bias = cv$value;
 		setFlag$bias = true;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on bias.
+		fixedProbFlag$sample16 = false;
+		
+		// Unset the fixed probability flag for sample 21 as it depends on bias.
+		fixedProbFlag$sample21 = false;
+		
+		// Unset the fixed probability flag for sample 37 as it depends on bias.
+		fixedProbFlag$sample37 = false;
+		
+		// Unset the fixed probability flag for sample 54 as it depends on bias.
+		fixedProbFlag$sample54 = false;
 	}
 
 	// Getter for coins.
@@ -174,10 +188,18 @@ class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// Setter for flips.
 	@Override
 	public final void set$flips(boolean[][] cv$value) {
+		// Set flags for all the side effects of flips including if probabilities need to
+		// be updated.
 		// Set flips with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		flips = cv$value;
 		setFlag$flips = true;
+		
+		// Unset the fixed probability flag for sample 37 as it depends on flips.
+		fixedProbFlag$sample37 = false;
+		
+		// Unset the fixed probability flag for sample 54 as it depends on flips.
+		fixedProbFlag$sample54 = false;
 	}
 
 	// Getter for flipsMeasured.

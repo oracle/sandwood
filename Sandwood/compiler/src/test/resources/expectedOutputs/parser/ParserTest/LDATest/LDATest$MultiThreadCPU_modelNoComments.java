@@ -177,6 +177,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$phi(double[][] cv$value) {
 		phi = cv$value;
 		setFlag$phi = true;
+		fixedProbFlag$sample26 = false;
+		fixedProbFlag$sample64 = false;
 	}
 
 	@Override
@@ -188,6 +190,8 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$theta(double[][] cv$value) {
 		theta = cv$value;
 		setFlag$theta = true;
+		fixedProbFlag$sample36 = false;
+		fixedProbFlag$sample61 = false;
 	}
 
 	@Override
@@ -209,6 +213,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void set$w(int[][] cv$value) {
 		w = cv$value;
 		setFlag$w = true;
+		fixedProbFlag$sample64 = false;
 	}
 
 	@Override

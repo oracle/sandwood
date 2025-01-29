@@ -102,10 +102,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for current_metric_mean.
 	@Override
 	public final void set$current_metric_mean(double[][] cv$value) {
+		// Set flags for all the side effects of current_metric_mean including if probabilities
+		// need to be updated.
 		// Set current_metric_mean with flag to mark that it has been set so another array
 		// doesn't need to be constructed
 		current_metric_mean = cv$value;
 		setFlag$current_metric_mean = true;
+		
+		// Unset the fixed probability flag for sample 96 as it depends on current_metric_mean.
+		fixedProbFlag$sample96 = false;
+		
+		// Unset the fixed probability flag for sample 173 as it depends on current_metric_mean.
+		fixedProbFlag$sample173 = false;
 	}
 
 	// Getter for current_metric_valid_bias.
@@ -117,10 +125,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for current_metric_valid_bias.
 	@Override
 	public final void set$current_metric_valid_bias(double[][] cv$value) {
+		// Set flags for all the side effects of current_metric_valid_bias including if probabilities
+		// need to be updated.
 		// Set current_metric_valid_bias with flag to mark that it has been set so another
 		// array doesn't need to be constructed
 		current_metric_valid_bias = cv$value;
 		setFlag$current_metric_valid_bias = true;
+		
+		// Unset the fixed probability flag for sample 126 as it depends on current_metric_valid_bias.
+		fixedProbFlag$sample126 = false;
+		
+		// Unset the fixed probability flag for sample 161 as it depends on current_metric_valid_bias.
+		fixedProbFlag$sample161 = false;
 	}
 
 	// Getter for current_metric_var.
@@ -132,10 +148,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for current_metric_var.
 	@Override
 	public final void set$current_metric_var(double[][] cv$value) {
+		// Set flags for all the side effects of current_metric_var including if probabilities
+		// need to be updated.
 		// Set current_metric_var with flag to mark that it has been set so another array
 		// doesn't need to be constructed
 		current_metric_var = cv$value;
 		setFlag$current_metric_var = true;
+		
+		// Unset the fixed probability flag for sample 111 as it depends on current_metric_var.
+		fixedProbFlag$sample111 = false;
+		
+		// Unset the fixed probability flag for sample 173 as it depends on current_metric_var.
+		fixedProbFlag$sample173 = false;
 	}
 
 	// Getter for fixedFlag$sample111.
@@ -387,10 +411,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for initialStateDistribution.
 	@Override
 	public final void set$initialStateDistribution(double[] cv$value) {
+		// Set flags for all the side effects of initialStateDistribution including if probabilities
+		// need to be updated.
 		// Set initialStateDistribution with flag to mark that it has been set so another
 		// array doesn't need to be constructed
 		initialStateDistribution = cv$value;
 		setFlag$initialStateDistribution = true;
+		
+		// Unset the fixed probability flag for sample 24 as it depends on initialStateDistribution.
+		fixedProbFlag$sample24 = false;
+		
+		// Unset the fixed probability flag for sample 50 as it depends on initialStateDistribution.
+		fixedProbFlag$sample50 = false;
 	}
 
 	// Getter for length$metric.
@@ -476,10 +508,17 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for m.
 	@Override
 	public final void set$m(double[][] cv$value) {
+		// Set flags for all the side effects of m including if probabilities need to be updated.
 		// Set m with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		m = cv$value;
 		setFlag$m = true;
+		
+		// Unset the fixed probability flag for sample 30 as it depends on m.
+		fixedProbFlag$sample30 = false;
+		
+		// Unset the fixed probability flag for sample 63 as it depends on m.
+		fixedProbFlag$sample63 = false;
 	}
 
 	// Getter for max_metric.
@@ -517,10 +556,15 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for metric_g.
 	@Override
 	public final void set$metric_g(double[][][] cv$value) {
+		// Set flags for all the side effects of metric_g including if probabilities need
+		// to be updated.
 		// Set metric_g with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		metric_g = cv$value;
 		setFlag$metric_g = true;
+		
+		// Unset the fixed probability flag for sample 173 as it depends on metric_g.
+		fixedProbFlag$sample173 = false;
 	}
 
 	// Getter for metric_valid.
@@ -585,10 +629,24 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for st.
 	@Override
 	public final void set$st(int[][] cv$value) {
+		// Set flags for all the side effects of st including if probabilities need to be
+		// updated.
 		// Set st with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		st = cv$value;
 		setFlag$st = true;
+		
+		// Unset the fixed probability flag for sample 50 as it depends on st.
+		fixedProbFlag$sample50 = false;
+		
+		// Unset the fixed probability flag for sample 63 as it depends on st.
+		fixedProbFlag$sample63 = false;
+		
+		// Unset the fixed probability flag for sample 161 as it depends on st.
+		fixedProbFlag$sample161 = false;
+		
+		// Unset the fixed probability flag for sample 173 as it depends on st.
+		fixedProbFlag$sample173 = false;
 	}
 
 	// Getter for v.

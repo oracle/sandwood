@@ -56,10 +56,17 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for a.
 	@Override
 	public final void set$a(int[] cv$value) {
+		// Set flags for all the side effects of a including if probabilities need to be updated.
 		// Set a with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		a = cv$value;
 		setFlag$a = true;
+		
+		// Unset the fixed probability flag for sample 36 as it depends on a.
+		fixedProbFlag$sample36 = false;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on a.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for b.
@@ -139,10 +146,15 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flips.
 	@Override
 	public final void set$flips(boolean[] cv$value) {
+		// Set flags for all the side effects of flips including if probabilities need to
+		// be updated.
 		// Set flips with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		flips = cv$value;
 		setFlag$flips = true;
+		
+		// Unset the fixed probability flag for sample 49 as it depends on flips.
+		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -204,10 +216,17 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for m.
 	@Override
 	public final void set$m(double[][] cv$value) {
+		// Set flags for all the side effects of m including if probabilities need to be updated.
 		// Set m with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		m = cv$value;
 		setFlag$m = true;
+		
+		// Unset the fixed probability flag for sample 18 as it depends on m.
+		fixedProbFlag$sample18 = false;
+		
+		// Unset the fixed probability flag for sample 36 as it depends on m.
+		fixedProbFlag$sample36 = false;
 	}
 
 	// Getter for n.

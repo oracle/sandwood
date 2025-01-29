@@ -40,6 +40,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$b0(double cv$value) {
 		b0 = cv$value;
+		fixedProbFlag$sample14 = false;
+		fixedProbFlag$sample27 = false;
 	}
 
 	@Override
@@ -50,6 +52,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$b1(double cv$value) {
 		b1 = cv$value;
+		fixedProbFlag$sample18 = false;
+		fixedProbFlag$sample27 = false;
 	}
 
 	@Override
@@ -136,6 +140,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$y(double[] cv$value) {
 		y = cv$value;
 		setFlag$y = true;
+		fixedProbFlag$sample27 = false;
 	}
 
 	@Override

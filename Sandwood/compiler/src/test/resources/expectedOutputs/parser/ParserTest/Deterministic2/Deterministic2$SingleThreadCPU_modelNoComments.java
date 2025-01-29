@@ -53,6 +53,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$a(int[] cv$value) {
 		a = cv$value;
 		setFlag$a = true;
+		fixedProbFlag$sample36 = false;
+		fixedProbFlag$sample49 = false;
 	}
 
 	@Override
@@ -104,6 +106,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample49 = false;
 	}
 
 	@Override
@@ -155,6 +158,8 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample18 = false;
+		fixedProbFlag$sample36 = false;
 	}
 
 	@Override

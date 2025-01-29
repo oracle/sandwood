@@ -114,10 +114,18 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	// Setter for arrivals.
 	@Override
 	public final void set$arrivals(int[] cv$value) {
+		// Set flags for all the side effects of arrivals including if probabilities need
+		// to be updated.
 		// Set arrivals with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		arrivals = cv$value;
 		setFlag$arrivals = true;
+		
+		// Unset the fixed probability flag for sample 51 as it depends on arrivals.
+		fixedProbFlag$sample51 = false;
+		
+		// Unset the fixed probability flag for sample 98 as it depends on arrivals.
+		fixedProbFlag$sample98 = false;
 	}
 
 	// Getter for exped.
@@ -219,10 +227,18 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	// Setter for lambda.
 	@Override
 	public final void set$lambda(double[] cv$value) {
+		// Set flags for all the side effects of lambda including if probabilities need to
+		// be updated.
 		// Set lambda with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		lambda = cv$value;
 		setFlag$lambda = true;
+		
+		// Unset the fixed probability flag for sample 43 as it depends on lambda.
+		fixedProbFlag$sample43 = false;
+		
+		// Unset the fixed probability flag for sample 51 as it depends on lambda.
+		fixedProbFlag$sample51 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -306,10 +322,18 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	// Setter for ut.
 	@Override
 	public final void set$ut(double[] cv$value) {
+		// Set flags for all the side effects of ut including if probabilities need to be
+		// updated.
 		// Set ut with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		ut = cv$value;
 		setFlag$ut = true;
+		
+		// Unset the fixed probability flag for sample 25 as it depends on ut.
+		fixedProbFlag$sample25 = false;
+		
+		// Unset the fixed probability flag for sample 98 as it depends on ut.
+		fixedProbFlag$sample98 = false;
 	}
 
 	// Getter for weekly_sales.

@@ -96,7 +96,14 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for b.
 	@Override
 	public final void set$b(double cv$value) {
+		// Set flags for all the side effects of b including if probabilities need to be updated.
 		b = cv$value;
+		
+		// Unset the fixed probability flag for sample 29 as it depends on b.
+		fixedProbFlag$sample29 = false;
+		
+		// Unset the fixed probability flag for sample 41 as it depends on b.
+		fixedProbFlag$sample41 = false;
 	}
 
 	// Getter for beta.
@@ -108,10 +115,18 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for beta.
 	@Override
 	public final void set$beta(double[] cv$value) {
+		// Set flags for all the side effects of beta including if probabilities need to be
+		// updated.
 		// Set beta with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		beta = cv$value;
 		setFlag$beta = true;
+		
+		// Unset the fixed probability flag for sample 41 as it depends on beta.
+		fixedProbFlag$sample41 = false;
+		
+		// Unset the fixed probability flag for sample 76 as it depends on beta.
+		fixedProbFlag$sample76 = false;
 	}
 
 	// Getter for choices.
@@ -123,10 +138,15 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for choices.
 	@Override
 	public final void set$choices(int[] cv$value) {
+		// Set flags for all the side effects of choices including if probabilities need to
+		// be updated.
 		// Set choices with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		choices = cv$value;
 		setFlag$choices = true;
+		
+		// Unset the fixed probability flag for sample 76 as it depends on choices.
+		fixedProbFlag$sample76 = false;
 	}
 
 	// Getter for fixedFlag$sample22.
@@ -340,7 +360,15 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for sigma.
 	@Override
 	public final void set$sigma(double cv$value) {
+		// Set flags for all the side effects of sigma including if probabilities need to
+		// be updated.
 		sigma = cv$value;
+		
+		// Unset the fixed probability flag for sample 35 as it depends on sigma.
+		fixedProbFlag$sample35 = false;
+		
+		// Unset the fixed probability flag for sample 41 as it depends on sigma.
+		fixedProbFlag$sample41 = false;
 	}
 
 	// Getter for ut.
@@ -352,10 +380,18 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for ut.
 	@Override
 	public final void set$ut(double[] cv$value) {
+		// Set flags for all the side effects of ut including if probabilities need to be
+		// updated.
 		// Set ut with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		ut = cv$value;
 		setFlag$ut = true;
+		
+		// Unset the fixed probability flag for sample 22 as it depends on ut.
+		fixedProbFlag$sample22 = false;
+		
+		// Unset the fixed probability flag for sample 76 as it depends on ut.
+		fixedProbFlag$sample76 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample22 using sampled

@@ -151,10 +151,15 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flips.
 	@Override
 	public final void set$flips(boolean[] cv$value) {
+		// Set flags for all the side effects of flips including if probabilities need to
+		// be updated.
 		// Set flips with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		flips = cv$value;
 		setFlag$flips = true;
+		
+		// Unset the fixed probability flag for sample 85 as it depends on flips.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -222,7 +227,14 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for q.
 	@Override
 	public final void set$q(double cv$value) {
+		// Set flags for all the side effects of q including if probabilities need to be updated.
 		q = cv$value;
+		
+		// Unset the fixed probability flag for sample 14 as it depends on q.
+		fixedProbFlag$sample14 = false;
+		
+		// Unset the fixed probability flag for sample 85 as it depends on q.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Getter for samples.
@@ -246,7 +258,14 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for t.
 	@Override
 	public final void set$t(double cv$value) {
+		// Set flags for all the side effects of t including if probabilities need to be updated.
 		t = cv$value;
+		
+		// Unset the fixed probability flag for sample 20 as it depends on t.
+		fixedProbFlag$sample20 = false;
+		
+		// Unset the fixed probability flag for sample 85 as it depends on t.
+		fixedProbFlag$sample85 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample14 using sampled

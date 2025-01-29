@@ -93,10 +93,15 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	// Setter for Sales.
 	@Override
 	public final void set$Sales(double[][] cv$value) {
+		// Set flags for all the side effects of Sales including if probabilities need to
+		// be updated.
 		// Set Sales with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		Sales = cv$value;
 		setFlag$Sales = true;
+		
+		// Unset the fixed probability flag for sample 86 as it depends on Sales.
+		fixedProbFlag$sample86 = false;
 	}
 
 	// Getter for T.
@@ -120,10 +125,18 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	// Setter for arrivals.
 	@Override
 	public final void set$arrivals(int[] cv$value) {
+		// Set flags for all the side effects of arrivals including if probabilities need
+		// to be updated.
 		// Set arrivals with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		arrivals = cv$value;
 		setFlag$arrivals = true;
+		
+		// Unset the fixed probability flag for sample 61 as it depends on arrivals.
+		fixedProbFlag$sample61 = false;
+		
+		// Unset the fixed probability flag for sample 86 as it depends on arrivals.
+		fixedProbFlag$sample86 = false;
 	}
 
 	// Getter for denom.
@@ -245,10 +258,18 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	// Setter for lambda.
 	@Override
 	public final void set$lambda(double[] cv$value) {
+		// Set flags for all the side effects of lambda including if probabilities need to
+		// be updated.
 		// Set lambda with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		lambda = cv$value;
 		setFlag$lambda = true;
+		
+		// Unset the fixed probability flag for sample 53 as it depends on lambda.
+		fixedProbFlag$sample53 = false;
+		
+		// Unset the fixed probability flag for sample 61 as it depends on lambda.
+		fixedProbFlag$sample61 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -344,10 +365,18 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	// Setter for ut.
 	@Override
 	public final void set$ut(double[] cv$value) {
+		// Set flags for all the side effects of ut including if probabilities need to be
+		// updated.
 		// Set ut with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		ut = cv$value;
 		setFlag$ut = true;
+		
+		// Unset the fixed probability flag for sample 25 as it depends on ut.
+		fixedProbFlag$sample25 = false;
+		
+		// Unset the fixed probability flag for sample 86 as it depends on ut.
+		fixedProbFlag$sample86 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample25 using sampled

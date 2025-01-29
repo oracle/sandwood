@@ -70,6 +70,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
+		fixedProbFlag$sample29 = false;
+		fixedProbFlag$sample55 = false;
 	}
 
 	@Override
@@ -153,6 +155,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample55 = false;
 	}
 
 	@Override
@@ -164,6 +167,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$initialCoin(double[] cv$value) {
 		initialCoin = cv$value;
 		setFlag$initialCoin = true;
+		fixedProbFlag$sample21 = false;
+		fixedProbFlag$sample36 = false;
 	}
 
 	@Override
@@ -220,6 +225,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample17 = false;
+		fixedProbFlag$sample46 = false;
 	}
 
 	@Override
@@ -256,6 +263,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
+		fixedProbFlag$sample36 = false;
+		fixedProbFlag$sample46 = false;
+		fixedProbFlag$sample55 = false;
 	}
 
 	@Override

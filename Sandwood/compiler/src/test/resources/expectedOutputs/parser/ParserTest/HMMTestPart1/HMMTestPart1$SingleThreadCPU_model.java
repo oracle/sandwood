@@ -53,10 +53,18 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[] cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		// Set bias with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		bias = cv$value;
 		setFlag$bias = true;
+		
+		// Unset the fixed probability flag for sample 24 as it depends on bias.
+		fixedProbFlag$sample24 = false;
+		
+		// Unset the fixed probability flag for sample 32 as it depends on bias.
+		fixedProbFlag$sample32 = false;
 	}
 
 	// Getter for fixedFlag$sample14.
@@ -152,7 +160,12 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flip.
 	@Override
 	public final void set$flip(boolean cv$value) {
+		// Set flags for all the side effects of flip including if probabilities need to be
+		// updated.
 		flip = cv$value;
+		
+		// Unset the fixed probability flag for sample 32 as it depends on flip.
+		fixedProbFlag$sample32 = false;
 	}
 
 	// Getter for flipMeasured.
@@ -212,10 +225,17 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for m.
 	@Override
 	public final void set$m(double[][] cv$value) {
+		// Set flags for all the side effects of m including if probabilities need to be updated.
 		// Set m with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		m = cv$value;
 		setFlag$m = true;
+		
+		// Unset the fixed probability flag for sample 14 as it depends on m.
+		fixedProbFlag$sample14 = false;
+		
+		// Unset the fixed probability flag for sample 29 as it depends on m.
+		fixedProbFlag$sample29 = false;
 	}
 
 	// Getter for st.
@@ -227,7 +247,15 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for st.
 	@Override
 	public final void set$st(int cv$value) {
+		// Set flags for all the side effects of st including if probabilities need to be
+		// updated.
 		st = cv$value;
+		
+		// Unset the fixed probability flag for sample 29 as it depends on st.
+		fixedProbFlag$sample29 = false;
+		
+		// Unset the fixed probability flag for sample 32 as it depends on st.
+		fixedProbFlag$sample32 = false;
 	}
 
 	// Getter for states.

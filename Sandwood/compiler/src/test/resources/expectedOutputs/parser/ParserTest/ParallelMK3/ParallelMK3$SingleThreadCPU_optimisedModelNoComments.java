@@ -63,6 +63,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$generated(double[] cv$value) {
 		generated = cv$value;
 		setFlag$generated = true;
+		fixedProbFlag$sample30 = false;
 	}
 
 	@Override
@@ -124,6 +125,8 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
 		setFlag$sample = true;
+		fixedProbFlag$sample19 = false;
+		fixedProbFlag$sample30 = false;
 	}
 
 	@Override

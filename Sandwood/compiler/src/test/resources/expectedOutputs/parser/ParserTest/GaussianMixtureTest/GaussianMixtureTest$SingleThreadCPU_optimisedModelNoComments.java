@@ -175,6 +175,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$mu(double[] cv$value) {
 		mu = cv$value;
 		setFlag$mu = true;
+		fixedProbFlag$sample23 = false;
+		fixedProbFlag$sample49 = false;
 	}
 
 	@Override
@@ -186,6 +188,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$phi(double[] cv$value) {
 		phi = cv$value;
 		setFlag$phi = true;
+		fixedProbFlag$sample13 = false;
+		fixedProbFlag$sample45 = false;
 	}
 
 	@Override
@@ -197,6 +201,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$sigma(double[] cv$value) {
 		sigma = cv$value;
 		setFlag$sigma = true;
+		fixedProbFlag$sample34 = false;
+		fixedProbFlag$sample49 = false;
 	}
 
 	@Override
@@ -208,6 +214,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$x(double[] cv$value) {
 		x = cv$value;
 		setFlag$x = true;
+		fixedProbFlag$sample49 = false;
 	}
 
 	@Override

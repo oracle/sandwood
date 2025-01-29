@@ -132,6 +132,8 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$output(boolean[] cv$value) {
 		output = cv$value;
 		setFlag$output = true;
+		fixedProbFlag$sample28 = false;
+		fixedProbFlag$sample34 = false;
 	}
 
 	@Override
@@ -143,6 +145,9 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$prior(double[] cv$value) {
 		prior = cv$value;
 		setFlag$prior = true;
+		fixedProbFlag$sample13 = false;
+		fixedProbFlag$sample28 = false;
+		fixedProbFlag$sample34 = false;
 	}
 
 	@Override

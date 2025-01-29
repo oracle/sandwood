@@ -58,6 +58,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
+		fixedProbFlag$sample30 = false;
+		fixedProbFlag$sample54 = false;
 	}
 
 	@Override
@@ -116,6 +118,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$flips(boolean[] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
+		fixedProbFlag$sample54 = false;
 	}
 
 	@Override
@@ -177,6 +180,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample20 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -208,6 +213,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
+		fixedProbFlag$sample38 = false;
+		fixedProbFlag$sample54 = false;
 	}
 
 	@Override

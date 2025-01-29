@@ -43,7 +43,15 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for b0.
 	@Override
 	public final void set$b0(double cv$value) {
+		// Set flags for all the side effects of b0 including if probabilities need to be
+		// updated.
 		b0 = cv$value;
+		
+		// Unset the fixed probability flag for sample 14 as it depends on b0.
+		fixedProbFlag$sample14 = false;
+		
+		// Unset the fixed probability flag for sample 27 as it depends on b0.
+		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for b1.
@@ -55,7 +63,15 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for b1.
 	@Override
 	public final void set$b1(double cv$value) {
+		// Set flags for all the side effects of b1 including if probabilities need to be
+		// updated.
 		b1 = cv$value;
+		
+		// Unset the fixed probability flag for sample 18 as it depends on b1.
+		fixedProbFlag$sample18 = false;
+		
+		// Unset the fixed probability flag for sample 27 as it depends on b1.
+		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for fixedFlag$sample14.
@@ -179,10 +195,14 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for y.
 	@Override
 	public final void set$y(double[] cv$value) {
+		// Set flags for all the side effects of y including if probabilities need to be updated.
 		// Set y with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		y = cv$value;
 		setFlag$y = true;
+		
+		// Unset the fixed probability flag for sample 27 as it depends on y.
+		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for yMeasured.

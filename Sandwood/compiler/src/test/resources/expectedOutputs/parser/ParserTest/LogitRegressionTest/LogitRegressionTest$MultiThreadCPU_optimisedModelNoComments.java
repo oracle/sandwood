@@ -48,6 +48,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
+		fixedProbFlag$sample39 = false;
+		fixedProbFlag$sample72 = false;
 	}
 
 	@Override
@@ -129,6 +131,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
 		setFlag$weights = true;
+		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample72 = false;
 	}
 
 	@Override
@@ -150,6 +154,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void set$y(boolean[][] cv$value) {
 		y = cv$value;
 		setFlag$y = true;
+		fixedProbFlag$sample72 = false;
 	}
 
 	@Override

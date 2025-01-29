@@ -54,7 +54,15 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		bias = cv$value;
+		
+		// Unset the fixed probability flag for sample 35 as it depends on bias.
+		fixedProbFlag$sample35 = false;
+		
+		// Unset the fixed probability flag for sample 63 as it depends on bias.
+		fixedProbFlag$sample63 = false;
 	}
 
 	// Getter for fixedFlag$sample28.
@@ -198,7 +206,15 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for tau.
 	@Override
 	public final void set$tau(double cv$value) {
+		// Set flags for all the side effects of tau including if probabilities need to be
+		// updated.
 		tau = cv$value;
+		
+		// Unset the fixed probability flag for sample 39 as it depends on tau.
+		fixedProbFlag$sample39 = false;
+		
+		// Unset the fixed probability flag for sample 63 as it depends on tau.
+		fixedProbFlag$sample63 = false;
 	}
 
 	// Getter for weights.
@@ -210,10 +226,18 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for weights.
 	@Override
 	public final void set$weights(double[] cv$value) {
+		// Set flags for all the side effects of weights including if probabilities need to
+		// be updated.
 		// Set weights with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		weights = cv$value;
 		setFlag$weights = true;
+		
+		// Unset the fixed probability flag for sample 28 as it depends on weights.
+		fixedProbFlag$sample28 = false;
+		
+		// Unset the fixed probability flag for sample 63 as it depends on weights.
+		fixedProbFlag$sample63 = false;
 	}
 
 	// Getter for x.
@@ -239,10 +263,14 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for y.
 	@Override
 	public final void set$y(double[] cv$value) {
+		// Set flags for all the side effects of y including if probabilities need to be updated.
 		// Set y with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		y = cv$value;
 		setFlag$y = true;
+		
+		// Unset the fixed probability flag for sample 63 as it depends on y.
+		fixedProbFlag$sample63 = false;
 	}
 
 	// Getter for yMeasured.

@@ -83,6 +83,8 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$bias(double[][] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
+		fixedProbFlag$sample34 = false;
+		fixedProbFlag$sample103 = false;
 	}
 
 	@Override
@@ -94,6 +96,7 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$events(int[][] cv$value) {
 		events = cv$value;
 		setFlag$events = true;
+		fixedProbFlag$sample103 = false;
 	}
 
 	@Override
@@ -199,6 +202,8 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$initialState(int cv$value) {
 		initialState = cv$value;
+		fixedProbFlag$sample53 = false;
+		fixedProbFlag$sample61 = false;
 	}
 
 	@Override
@@ -260,6 +265,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample26 = false;
+		fixedProbFlag$sample61 = false;
+		fixedProbFlag$sample81 = false;
 	}
 
 	@Override
@@ -296,6 +304,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
+		fixedProbFlag$sample61 = false;
+		fixedProbFlag$sample81 = false;
+		fixedProbFlag$sample103 = false;
 	}
 
 	@Override
@@ -317,6 +328,8 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
 		setFlag$weights = true;
+		fixedProbFlag$sample51 = false;
+		fixedProbFlag$sample53 = false;
 	}
 
 	private final void logProbabilityDistribution$sample103() {

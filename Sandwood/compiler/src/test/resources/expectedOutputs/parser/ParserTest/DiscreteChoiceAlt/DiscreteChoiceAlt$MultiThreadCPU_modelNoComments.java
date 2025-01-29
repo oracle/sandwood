@@ -55,6 +55,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$choices(int[] cv$value) {
 		choices = cv$value;
 		setFlag$choices = true;
+		fixedProbFlag$sample49 = false;
 	}
 
 	@Override
@@ -159,6 +160,8 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
 		setFlag$ut = true;
+		fixedProbFlag$sample19 = false;
+		fixedProbFlag$sample49 = false;
 	}
 
 	private final void logProbabilityValue$sample19() {

@@ -83,6 +83,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$Sales(double[][] cv$value) {
 		Sales = cv$value;
 		setFlag$Sales = true;
+		fixedProbFlag$sample86 = false;
 	}
 
 	@Override
@@ -104,6 +105,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
 		setFlag$arrivals = true;
+		fixedProbFlag$sample61 = false;
+		fixedProbFlag$sample86 = false;
 	}
 
 	@Override
@@ -172,6 +175,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
 		setFlag$lambda = true;
+		fixedProbFlag$sample53 = false;
+		fixedProbFlag$sample61 = false;
 	}
 
 	@Override
@@ -253,6 +258,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
 		setFlag$ut = true;
+		fixedProbFlag$sample25 = false;
+		fixedProbFlag$sample86 = false;
 	}
 
 	private final void logProbabilityValue$sample25() {

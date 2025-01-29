@@ -45,7 +45,15 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
+		// Set flags for all the side effects of bias including if probabilities need to be
+		// updated.
 		bias = cv$value;
+		
+		// Unset the fixed probability flag for sample 4 as it depends on bias.
+		fixedProbFlag$sample4 = false;
+		
+		// Unset the fixed probability flag for sample 6 as it depends on bias.
+		fixedProbFlag$sample6 = false;
 	}
 
 	// Getter for fixedFlag$sample4.
@@ -103,7 +111,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	// Setter for flip.
 	@Override
 	public final void set$flip(boolean cv$value) {
+		// Set flags for all the side effects of flip including if probabilities need to be
+		// updated.
 		flip = cv$value;
+		
+		// Unset the fixed probability flag for sample 6 as it depends on flip.
+		fixedProbFlag$sample6 = false;
 	}
 
 	// Getter for flipMeasured.

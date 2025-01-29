@@ -85,6 +85,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void set$b(double cv$value) {
 		b = cv$value;
+		fixedProbFlag$sample29 = false;
+		fixedProbFlag$sample41 = false;
 	}
 
 	@Override
@@ -96,6 +98,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	public final void set$beta(double[] cv$value) {
 		beta = cv$value;
 		setFlag$beta = true;
+		fixedProbFlag$sample41 = false;
+		fixedProbFlag$sample76 = false;
 	}
 
 	@Override
@@ -107,6 +111,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	public final void set$choices(int[] cv$value) {
 		choices = cv$value;
 		setFlag$choices = true;
+		fixedProbFlag$sample76 = false;
 	}
 
 	@Override
@@ -241,6 +246,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void set$sigma(double cv$value) {
 		sigma = cv$value;
+		fixedProbFlag$sample35 = false;
+		fixedProbFlag$sample41 = false;
 	}
 
 	@Override
@@ -252,6 +259,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
 		setFlag$ut = true;
+		fixedProbFlag$sample22 = false;
+		fixedProbFlag$sample76 = false;
 	}
 
 	private final void logProbabilityValue$sample22() {

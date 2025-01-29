@@ -50,6 +50,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
+		fixedProbFlag$sample24 = false;
+		fixedProbFlag$sample32 = false;
 	}
 
 	@Override
@@ -107,6 +109,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$flip(boolean cv$value) {
 		flip = cv$value;
+		fixedProbFlag$sample32 = false;
 	}
 
 	@Override
@@ -158,6 +161,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample14 = false;
+		fixedProbFlag$sample29 = false;
 	}
 
 	@Override
@@ -168,6 +173,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$st(int cv$value) {
 		st = cv$value;
+		fixedProbFlag$sample29 = false;
+		fixedProbFlag$sample32 = false;
 	}
 
 	@Override

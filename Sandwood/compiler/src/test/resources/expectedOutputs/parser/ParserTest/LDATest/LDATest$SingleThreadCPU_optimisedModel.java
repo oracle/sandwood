@@ -247,10 +247,18 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for phi.
 	@Override
 	public final void set$phi(double[][] cv$value) {
+		// Set flags for all the side effects of phi including if probabilities need to be
+		// updated.
 		// Set phi with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		phi = cv$value;
 		setFlag$phi = true;
+		
+		// Unset the fixed probability flag for sample 26 as it depends on phi.
+		fixedProbFlag$sample26 = false;
+		
+		// Unset the fixed probability flag for sample 64 as it depends on phi.
+		fixedProbFlag$sample64 = false;
 	}
 
 	// Getter for theta.
@@ -262,10 +270,18 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for theta.
 	@Override
 	public final void set$theta(double[][] cv$value) {
+		// Set flags for all the side effects of theta including if probabilities need to
+		// be updated.
 		// Set theta with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		theta = cv$value;
 		setFlag$theta = true;
+		
+		// Unset the fixed probability flag for sample 36 as it depends on theta.
+		fixedProbFlag$sample36 = false;
+		
+		// Unset the fixed probability flag for sample 61 as it depends on theta.
+		fixedProbFlag$sample61 = false;
 	}
 
 	// Getter for vocabSize.
@@ -289,10 +305,14 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for w.
 	@Override
 	public final void set$w(int[][] cv$value) {
+		// Set flags for all the side effects of w including if probabilities need to be updated.
 		// Set w with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		w = cv$value;
 		setFlag$w = true;
+		
+		// Unset the fixed probability flag for sample 64 as it depends on w.
+		fixedProbFlag$sample64 = false;
 	}
 
 	// Getter for z.

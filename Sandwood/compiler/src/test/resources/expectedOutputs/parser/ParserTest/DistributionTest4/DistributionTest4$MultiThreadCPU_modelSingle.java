@@ -190,10 +190,14 @@ class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for v.
 	@Override
 	public final void set$v(boolean[] cv$value) {
+		// Set flags for all the side effects of v including if probabilities need to be updated.
 		// Set v with flag to mark that it has been set so another array doesn't need to be
 		// constructed
 		v = cv$value;
 		setFlag$v = true;
+		
+		// Unset the fixed probability flag for sample 45 as it depends on v.
+		fixedProbFlag$sample45 = false;
 	}
 
 	// Getter for v1.
@@ -205,7 +209,15 @@ class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for v1.
 	@Override
 	public final void set$v1(int cv$value) {
+		// Set flags for all the side effects of v1 including if probabilities need to be
+		// updated.
 		v1 = cv$value;
+		
+		// Unset the fixed probability flag for sample 12 as it depends on v1.
+		fixedProbFlag$sample12 = false;
+		
+		// Unset the fixed probability flag for sample 45 as it depends on v1.
+		fixedProbFlag$sample45 = false;
 	}
 
 	// Getter for v2.
@@ -217,10 +229,21 @@ class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for v2.
 	@Override
 	public final void set$v2(int[] cv$value) {
+		// Set flags for all the side effects of v2 including if probabilities need to be
+		// updated.
 		// Set v2 with flag to mark that it has been set so another array doesn't need to
 		// be constructed
 		v2 = cv$value;
 		setFlag$v2 = true;
+		
+		// Unset the fixed probability flag for sample 18 as it depends on v2.
+		fixedProbFlag$sample18 = false;
+		
+		// Unset the fixed probability flag for sample 26 as it depends on v2.
+		fixedProbFlag$sample26 = false;
+		
+		// Unset the fixed probability flag for sample 45 as it depends on v2.
+		fixedProbFlag$sample45 = false;
 	}
 
 	// Getter for value.

@@ -147,10 +147,15 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for output.
 	@Override
 	public final void set$output(boolean[] cv$value) {
+		// Set flags for all the side effects of output including if probabilities need to
+		// be updated.
 		// Set output with flag to mark that it has been set so another array doesn't need
 		// to be constructed
 		output = cv$value;
 		setFlag$output = true;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on output.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for prior.
@@ -162,7 +167,15 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for prior.
 	@Override
 	public final void set$prior(double cv$value) {
+		// Set flags for all the side effects of prior including if probabilities need to
+		// be updated.
 		prior = cv$value;
+		
+		// Unset the fixed probability flag for sample 8 as it depends on prior.
+		fixedProbFlag$sample8 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on prior.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample16 using sampled

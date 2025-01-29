@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -37,9 +37,7 @@ public class Conjugates {
     public static final double sampleConjugateBetaBinomial(Rng rng, double alpha, double beta, double sum, double n) {
         alpha += sum;
         beta += n - sum;
-        double x = DistributionSampling.sampleGamma(rng, alpha);
-        double y = DistributionSampling.sampleGamma(rng, beta);
-        return x / (x + y);
+        return DistributionSampling.sampleBeta(rng, alpha, beta);
     }
 
     /**

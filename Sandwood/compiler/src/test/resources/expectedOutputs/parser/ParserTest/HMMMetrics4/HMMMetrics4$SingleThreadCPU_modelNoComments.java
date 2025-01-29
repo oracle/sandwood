@@ -99,6 +99,8 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$current_metric_mean(double[][] cv$value) {
 		current_metric_mean = cv$value;
 		setFlag$current_metric_mean = true;
+		fixedProbFlag$sample96 = false;
+		fixedProbFlag$sample173 = false;
 	}
 
 	@Override
@@ -110,6 +112,8 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$current_metric_valid_bias(double[][] cv$value) {
 		current_metric_valid_bias = cv$value;
 		setFlag$current_metric_valid_bias = true;
+		fixedProbFlag$sample126 = false;
+		fixedProbFlag$sample161 = false;
 	}
 
 	@Override
@@ -121,6 +125,8 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$current_metric_var(double[][] cv$value) {
 		current_metric_var = cv$value;
 		setFlag$current_metric_var = true;
+		fixedProbFlag$sample111 = false;
+		fixedProbFlag$sample173 = false;
 	}
 
 	@Override
@@ -241,6 +247,8 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$initialStateDistribution(double[] cv$value) {
 		initialStateDistribution = cv$value;
 		setFlag$initialStateDistribution = true;
+		fixedProbFlag$sample24 = false;
+		fixedProbFlag$sample50 = false;
 	}
 
 	@Override
@@ -312,6 +320,8 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
+		fixedProbFlag$sample30 = false;
+		fixedProbFlag$sample63 = false;
 	}
 
 	@Override
@@ -343,6 +353,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_g(double[][][] cv$value) {
 		metric_g = cv$value;
 		setFlag$metric_g = true;
+		fixedProbFlag$sample173 = false;
 	}
 
 	@Override
@@ -395,6 +406,10 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
+		fixedProbFlag$sample50 = false;
+		fixedProbFlag$sample63 = false;
+		fixedProbFlag$sample161 = false;
+		fixedProbFlag$sample173 = false;
 	}
 
 	@Override
