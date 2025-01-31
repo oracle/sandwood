@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -62,6 +62,8 @@ public abstract class ComputedDoubleArrayInternal extends ComputedVariableIntern
     public final void toJson(JsonEncoder e) throws IOException {
         switch(p) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 e.addObject(name(), map);
                 break;
             case NONE:
@@ -83,7 +85,6 @@ public abstract class ComputedDoubleArrayInternal extends ComputedVariableIntern
     public final void setValue(double[] value) {
         synchronized(model) {
             testSettable();
-            p = RetentionPolicy.NONE;
             map = value;
             setValueInternal(map);
         }
