@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -59,6 +59,8 @@ public abstract class ComputedBooleanInternal extends ComputedVariableInternal i
     public final void toJson(JsonEncoder e) throws IOException {
         switch(p) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 e.addBoolean(name(), map);
                 break;
             case NONE:
@@ -80,7 +82,6 @@ public abstract class ComputedBooleanInternal extends ComputedVariableInternal i
     public final void setValue(boolean value) {
         synchronized(model) {
             testSettable();
-            p = RetentionPolicy.NONE;
             map = value;
             setValueInternal(map);
         }

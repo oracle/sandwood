@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -39,6 +39,7 @@ import org.sandwood.runtime.model.variables.ComputedDoubleArray;
 import org.sandwood.runtime.model.variables.ComputedInteger;
 import org.sandwood.runtime.model.variables.ComputedIntegerArray;
 import org.sandwood.runtime.model.variables.ComputedVariable;
+import org.sandwood.runtime.model.variables.ComputedVariable.Immutability;
 import org.sandwood.runtime.model.variables.HasProbability;
 import org.sandwood.runtime.model.variables.ObservedVariable;
 import org.sandwood.runtime.model.variables.ObservedVariableShapeable;
@@ -555,6 +556,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected double[] getInferredValue(ComputedDouble arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 double[] toReturn = new double[1];
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -578,6 +581,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected double[][] getInferredValue(ComputedDoubleArray arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 double[][] toReturn = new double[1][];
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -601,6 +606,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected boolean[] getInferredValue(ComputedBoolean arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 boolean[] toReturn = new boolean[1];
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -624,6 +631,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected boolean[][] getInferredValue(ComputedBooleanArray arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 boolean[][] toReturn = new boolean[1][];
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -647,6 +656,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected int[] getInferredValue(ComputedInteger arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 int[] toReturn = new int[1];
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -670,6 +681,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected int[][] getInferredValue(ComputedIntegerArray arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 int[][] toReturn = new int[1][];
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -694,6 +707,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
     protected <A> A[][] getInferredValue(ComputedObjectArrayInternal<A> arg) {
         switch(arg.getRetentionPolicy()) {
             case MAP:
+            case MAP_AND_SAMPLE:
+            case NA:
                 A[][] toReturn = arg.constructArray(1);
                 toReturn[0] = arg.getMAP();
                 return toReturn;
@@ -813,7 +828,8 @@ public abstract class Model implements HasProbability, AutoCloseable {
             String name = p.poll();
             ComputedVariableInternal v = computedVariables.get(name);
             if(v.isSample) {
-                if(v.getRetentionPolicy() == RetentionPolicy.MAP)
+                if(v.isFixed() == Immutability.FIXED || v.getRetentionPolicy() == RetentionPolicy.MAP
+                        || v.getRetentionPolicy() == RetentionPolicy.MAP_AND_SAMPLE)
                     e.addVariable(v);
                 else // TODO work out what we should do here, as we may want to just average sampled
                      // values etc.

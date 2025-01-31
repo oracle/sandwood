@@ -1,13 +1,14 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.runtime.internal.model.variables;
 
+import org.sandwood.runtime.exceptions.RetentionPolicyException;
 import org.sandwood.runtime.internal.numericTools.LogSumExponential;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
@@ -64,7 +65,7 @@ public abstract class ComputedVariableInternal
             return valueComputed || valueSet;
         }
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -90,6 +91,11 @@ public abstract class ComputedVariableInternal
     @Override
     public final void setRetentionPolicy(RetentionPolicy p) {
         synchronized(model) {
+            if(p == RetentionPolicy.NA)
+                throw new RetentionPolicyException(
+                        "Unable to set the retention policy to NA. This is not a retention policy "
+                                + "variables can be assigned, it can only be returned by variables if their "
+                                + "value is fixed.");
             if(p != this.p) {
                 this.p = p;
                 valueComputed = false;
@@ -105,7 +111,10 @@ public abstract class ComputedVariableInternal
     @Override
     public final RetentionPolicy getRetentionPolicy() {
         synchronized(model) {
-            return p;
+            if(isFixed() == Immutability.FIXED)
+                return RetentionPolicy.NA;
+            else
+                return p;
         }
     }
 

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -33,7 +33,13 @@ public class GibbsCalculation {
                     sample.add(c);
                     c.initializeSamples(iterations);
                     break;
+                case MAP_AND_SAMPLE:
+                    map.add(c);
+                    sample.add(c);
+                    c.initializeSamples(iterations);
+                    break;
                 case NONE:
+                case NA:
                     // do nothing
                     break;
             }
