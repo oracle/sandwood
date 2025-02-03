@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -14,6 +14,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.And;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.ConstructInput;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.CopyBooleanTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Eq;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.NamedVariable;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.NegateBoolean;
@@ -96,6 +97,16 @@ public class BooleanVariable extends ScalarVariable<BooleanVariable> {
 
     public BooleanVariable notEq(BooleanVariable v) {
         return Eq.eq(this, v).negate();
+    }
+
+    @Override
+    public BooleanVariable copy() {
+        return booleanVariable(new CopyBooleanTask(this));
+    }
+
+    @Override
+    public BooleanVariable copy(Location location) {
+        return booleanVariable(new CopyBooleanTask(this, location));
     }
 
     /* Factory methods for construction */

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
@@ -272,8 +273,12 @@ public class SandwoodParser
   private TokenMapping tokenMapping;
 
   private List<String> constructorArgs = new ArrayList<String>(); 
-  //Initialize indent to depth required after the boilerplate code.
+  // Initialize indent to depth required after the boilerplate code.
   private int indent = 2;
+  // Record an array is being initialised.
+  private int arrayInitDepth = 0;
+  // Record the value that could be set before entering the last conditional.
+  Stack<Set<String>> ifAssignableVars = new Stack<Set<String >>();
 }
 
 PARSER_END(SandwoodParser)
@@ -1153,6 +1158,7 @@ void parse():
     functions = new ArrayList<TokenMap>();
     imports = new ArrayList<TokenMap>();
     unsetVars.push(new HashMap<String, VarDesc>());
+    ifAssignableVars.push(new HashSet<String>());
 }
 {
   [ PackageDeclaration() ]
@@ -1382,7 +1388,9 @@ void VariableDeclarator(List<TokenMap> sb, Type<?> type, Token[] typeTokens, Tok
 }
 
 boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
-{}
+{
+  Token id;
+}
 {
   ArrayInitializer(sb, type, name)
   { return false; }
@@ -1397,6 +1405,13 @@ boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
     )*
   ]
   { return true; }
+|
+  LOOKAHEAD(<IDENTIFIER> ("," | ";"))
+  id = <IDENTIFIER>
+  {
+   sb.add(tokenMap(id + ((arrayInitDepth==0)?".copy(" + location(id) + ")":""), id));
+   return true;
+  }
 | 
   Expression(sb)
   { return true; }
@@ -1428,6 +1443,7 @@ void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
 }
 {
   ob = "{"
+  { arrayInitDepth++; }
   [
     {
 	  arrayInitalize.add(tokenMap(indent() + "{\n", ob));
@@ -1472,6 +1488,7 @@ void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
       arrayInitalize.add(tokenMap(indent() + "}\n", ob));
     }
   ]
+  { arrayInitDepth--; }
   cb = "}"
   {
     sb.add(tokenMap("Variable.arrayVariable(" + location(ob, cb) + ", " + 
@@ -2436,6 +2453,10 @@ void StatementExpression(List<TokenMap> sb):
       }
         eq = "="
         (
+          LOOKAHEAD(<IDENTIFIER> ";")
+          t = <IDENTIFIER>
+          { assignExpression.add(tokenMap(t + ((!arrayIndex)?".copy(" + location(t) + ")":""), t)); }
+        | 
           Expression(assignExpression)
         |
           LOOKAHEAD(2) AllocationExpression(assignExpression)
@@ -2504,7 +2525,7 @@ void StatementExpression(List<TokenMap> sb):
 
 void VariableAssignment(List<TokenMap> sb):
 {
-  Token eq;
+  Token eq, val;
   IdentiferDesc id;
 }
 {
@@ -2521,11 +2542,25 @@ void VariableAssignment(List<TokenMap> sb):
           unsetVars.peek().put(id.source.image, null);
 
       //Add the assignment    
-      sb.add(tokenMap(id.name + " ", varDesc.nameLocation));
-      sb.add(tokenMap("= ", eq));
-      assignedValues.add(id.source.image);
+      sb.add(tokenMap(id.name, varDesc.nameLocation));
+      sb.add(tokenMap(" = ", eq));
   }
-  Expression(sb)
+  (    LOOKAHEAD(<IDENTIFIER> ";")
+    val = <IDENTIFIER>
+    {
+      if(ifAssignableVars.peek().contains(id.source.image)) { 
+        assignedValues.add(id.source.image);
+        sb.add(tokenMap(val.image, val));
+      }
+      else
+        sb.add(tokenMap(val.image + ".copy(" + location(val) + ")", val));
+    }
+  |
+    {
+      assignedValues.add(id.source.image);
+    }
+    Expression(sb)
+  )
 }
 
 private void IfStatement(List<TokenMap> sb):
@@ -2553,6 +2588,9 @@ private void IfStatement(List<TokenMap> sb):
     ifElseTokens.add(tokenMap("ifElse(guard$" + id +", () -> {\n"));
     indent++;
 
+    // record the set of variables available to set.
+    ifAssignableVars.push(unsetVars.peek().keySet());
+
     //Collect the values for the if branch.
     assignedValues = ifAssignedValues;
 
@@ -2574,6 +2612,9 @@ private void IfStatement(List<TokenMap> sb):
   }
   [ LOOKAHEAD(1) "else" StatementAlreadyBlocked(ifElseTokens) ]
   {
+    //Restore the outer set of variables available to set.
+    ifAssignableVars.pop();
+    
     //remove tag
     conditionalTag.pop();
     

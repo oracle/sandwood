@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -46,7 +46,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
-import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.CopyNumberTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
@@ -423,7 +422,7 @@ public class TreeUtils {
      * A method to look and see if the array an element is describing has already been declared as a local variable. If
      * it has not it will declare the array as a local variable and assign it the passed value.
      * 
-     * @param <A>            The type of the elements of the subarrays. 
+     * @param <A>            The type of the elements of the subarrays.
      * @param element        The element describing the sub arrays.
      * @param suffix         A suffix to add to temporary variable names if they need to be constructed.
      * @param declaredArrays A map recording the local variables that have already been constructed and the scope they
@@ -1268,8 +1267,8 @@ public class TreeUtils {
             throw new CompilerException("Scope type: " + toRebase.scope.getScopeType() + " cannot be rebased.");
         ForTask f = (ForTask) toRebase.scope;
         ScopeStack.pushScope(scope);
-        IntVariable start = IntVariable.intVariable(new CopyNumberTask<>(f.getStart()));
-        IntVariable end = IntVariable.intVariable(new CopyNumberTask<>(f.getEnd()));
+        IntVariable start = f.getStart().copy();
+        IntVariable end = f.getEnd().copy();
 
         ForTask newNoStates = null;
         try {

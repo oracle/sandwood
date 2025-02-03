@@ -270,6 +270,20 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      */
     void calculateIntermediate(boolean calculateIntermediate);
 
+    /**
+     * A method to copy this variable.
+     * 
+     * @return Returns a copy of this variable.
+     */
+    A copy();
+
+    /**
+     * A method to copy this variable.
+     * 
+     * @return Returns a copy of this variable.
+     */
+    A copy(Location location);
+
     boolean isSample();
 
     void setSample();

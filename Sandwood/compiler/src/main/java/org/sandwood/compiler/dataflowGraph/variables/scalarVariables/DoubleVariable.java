@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -14,6 +14,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Add;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.ConstructNumericInput;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.CopyNumberTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Divide;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DoubleToInt;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Eq;
@@ -341,6 +342,16 @@ public class DoubleVariable extends NumberVariable<DoubleVariable> {
 
     public BooleanVariable notEq(DoubleVariable v, Location location) {
         return Eq.eq(this, v, location).negate(location);
+    }
+
+    @Override
+    public DoubleVariable copy() {
+        return doubleVariable(new CopyNumberTask<>(this));
+    }
+
+    @Override
+    public DoubleVariable copy(Location location) {
+        return doubleVariable(new CopyNumberTask<>(this, location));
     }
 
     /* Factory methods for construction */
