@@ -110,7 +110,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         public Scope getScope() {
             return scope;
         }
-        
+
         /**
          * 
          * @return
@@ -398,7 +398,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                 arrayValue.outerArrayDesc.array = (ArrayVariable<ArrayVariable<C>>) instanceHandle();
                 arrayValue.outerArrayDesc.index = i;
                 arrayValue.outerArrayDesc.scope = ScopeStack.getCurrentScope();
-                arrayValue.outerArrayDesc.getTask = new GetArrayTask<>((PutTask<ArrayVariable<C>>)putTask);
+                arrayValue.outerArrayDesc.getTask = new GetArrayTask<>((PutTask<ArrayVariable<C>>) putTask);
             } else {
                 // Generate an error message as multiple assignments are not allowed.
                 ArrayVariable<A> thisArray = instanceHandle();
@@ -790,6 +790,16 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
             }
         }
         return putTasks;
+    }
+
+    @Override
+    public ArrayVariable<A> copy() {
+        throw new SandwoodModelException("Array variables cannot be assigned to multiple references.");
+    }
+
+    @Override
+    public ArrayVariable<A> copy(Location location) {
+        throw new SandwoodModelException("Array variables cannot be assigned to multiple references.", location);
     }
 
     /* parent */
