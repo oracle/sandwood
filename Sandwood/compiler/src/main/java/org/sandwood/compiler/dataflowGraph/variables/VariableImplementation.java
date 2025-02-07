@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -42,7 +42,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     private enum VisibilityMod {
         PRIVATE,
         PUBLIC,
-        NONE 
+        NONE
     }
 
     /** String to hold the expression used to construct the variable */
@@ -680,14 +680,21 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     @Override
     public void constructTrace(TraceCallback c) {
         TraceConstructionDesc desc = new TraceConstructionDesc(this, c);
-        this.constructTrace(desc);
+        constructTrace(desc);
     }
 
     @Override
     public void constructTrace(TraceConstructionDesc desc) {
         if(!desc.seenVar.contains(this)) {
             desc.seenVar.add(this);
-            parent.constructTrace(desc);
+            // If this is the start of the trace or this is not an observed value build the trace.
+            if(desc.trace.isEmpty() || !isObserved())
+                parent.constructTrace(desc);
+            else {
+                // Otherwise record the trace here.
+                desc.c.callback(desc.trace, desc.sink);
+            }
+
             desc.seenVar.remove(this);
         }
     }
