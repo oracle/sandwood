@@ -1159,7 +1159,7 @@ public class APICompile {
                     // generating this intermediate.
                     IRTreeReturn<BooleanVariable> guard = null;
                     if(restricted) {
-                        Set<SampleTask<?, ?>> sTasks = compilationCtx.traces.getSourceSampleTasks(intermediate);
+                        Set<SampleTask<?, ?>> sTasks = getSourceSampleTasks(intermediate, compilationCtx);
                         guard = constructGuard(sTasks);
                         compilationCtx.setCodeGuard(guard);
                     }
@@ -1196,7 +1196,7 @@ public class APICompile {
                 // generating this intermediate.
                 IRTreeReturn<BooleanVariable> guard = null;
                 if(restricted) {
-                    Set<SampleTask<?, ?>> sTasks = compilationCtx.traces.getSourceSampleTasks(v);
+                    Set<SampleTask<?, ?>> sTasks = getSourceSampleTasks(v, compilationCtx);
                     guard = constructGuard(sTasks);
                     compilationCtx.setCodeGuard(guard);
                 }
@@ -1214,6 +1214,35 @@ public class APICompile {
                     compilationCtx.clearCodeGuard();
             }
         }
+    }
+
+    /**
+     * Method to get all the sample tasks that a variable is dependent on when performing forward execution.
+     * 
+     * @param v              The variable to get the dependent sample tasks for.
+     * @param compilationCtx The compilaiton context.
+     * @return A set containing all the dependent variables.
+     */
+    private static Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v, CompilationContext compilationCtx) {
+        return getSourceSampleTasks(v, new HashSet<>(), compilationCtx.traces);
+    }
+
+    /**
+     * Method to get all the sample tasks that a variable is dependent on when performing forward execution.
+     * 
+     * @param v      The variable to get the dependent sample tasks for.
+     * @param traces The traces object to query.
+     * @param seen   A set containing all the variables already seen.
+     * @return A set containing all the dependent variables.
+     */
+    private static Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v, Set<Variable<?>> seen, Traces traces) {
+        Set<SampleTask<?, ?>> samples = traces.getSourceSampleTasks(v);
+        seen.add(v);
+        for(Variable<?> o:traces.getSourceObservedVariables(v)) {
+            if(!seen.contains(o))
+                samples.addAll(getSourceSampleTasks(o, seen, traces));
+        }
+        return samples;
     }
 
     private static <A extends Variable<A>> void constructVariableForward(Variable<A> v,

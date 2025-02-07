@@ -100,6 +100,8 @@ public class TracesImplementation extends Traces {
     private final Map<Variable<?>, Set<RandomVariable<?, ?>>> varToRV = new HashMap<>();
     // Variable to the sample tasks generating it.
     private final Map<Variable<?>, Set<SampleTask<?, ?>>> sourceTasks = new HashMap<>();
+    // Variable to the observed variable generating it.
+    private final Map<Variable<?>, Set<Variable<?>>> sourceObservedVars = new HashMap<>();
 
     // Set of all the distribution sample tasks.
     private final Set<DistributionSampleTask<?, ?>> distributionSampleTasks = new HashSet<>();
@@ -312,7 +314,8 @@ public class TracesImplementation extends Traces {
         TraceHandle handle = p.handle;
         Variable<?> sink = p.sink;
 
-        ProducingDataflowTask<?> sourceTask = handle.get(0).task;
+        DataflowTaskArgDesc d = handle.get(0);
+        ProducingDataflowTask<?> sourceTask = d.task;
         switch(sourceTask.getType()) {
             case SAMPLE: {
                 SampleTask<?, ?> sourceSample = (SampleTask<?, ?>) sourceTask;
@@ -359,7 +362,7 @@ public class TracesImplementation extends Traces {
                 }
                 break;
             }
-            case CONSTRUCT_INPUT:
+            case CONSTRUCT_INPUT: {
                 Variable<?> output = sourceTask.getOutput();
                 modelInputs.add(output);
                 /*
@@ -379,8 +382,27 @@ public class TracesImplementation extends Traces {
                     }
                 }
                 break;
-            default:
+            }
+            case CONSTANT_BOOLEAN:
+            case CONSTANT_DOUBLE:
+            case CONSTANT_INT:
                 break;
+            default: {
+                // This trace ended at an observed non input variable.
+
+                Variable<?> observedVar = sourceTask.getInput(d.argPos);
+
+                assert observedVar.isObserved();
+
+                // Record the observed variable as a source.
+                addVariableSource(handle, observedVar);
+
+                // Nothing progresses beyond this variable.
+                if(sink.getConsumers().size() == 1)
+                    findTerminalVariables(handle);
+
+                break;
+            }
         }
     }
 
@@ -432,7 +454,8 @@ public class TracesImplementation extends Traces {
 
         // Process the source, currently this only works on sample tasks
         // as everything else is deterministic.
-        ProducingDataflowTask<?> sourceTask = handle.get(0).task;
+        DataflowTaskArgDesc d = handle.get(0);
+        ProducingDataflowTask<?> sourceTask = d.task;
         switch(sourceTask.getType()) {
             case SAMPLE: {
                 // Get the sample task
@@ -480,11 +503,26 @@ public class TracesImplementation extends Traces {
                 sampleTraceDesc.toConsumingRV.put(sink, TraceHandle.getTraceHandle(splitTrace.fromConsumer));
                 break;
             }
-            case CONSTRUCT_INPUT:
+            case CONSTRUCT_INPUT: {
                 modelInputs.add(sourceTask.getOutput());
                 break;
-            default:
+            }
+            case CONSTANT_BOOLEAN:
+            case CONSTANT_DOUBLE:
+            case CONSTANT_INT:
                 break;
+            default: {
+                // This trace ended at an observed non input variable.
+
+                Variable<?> observedVar = sourceTask.getInput(d.argPos);
+
+                assert observedVar.isObserved();
+
+                // Record the observed variable as a source.
+                addVariableSource(handle, observedVar);
+
+                break;
+            }
         }
     }
 
@@ -762,7 +800,10 @@ public class TracesImplementation extends Traces {
     private void addTerminalChild(TraceSinkPair p) {
         TraceHandle h = p.handle;
         Variable<?> sink = p.sink;
-        ProducingDataflowTask<?> sourceTask = h.get(0).task;
+        DataflowTaskArgDesc d = h.get(0);
+        ProducingDataflowTask<?> sourceTask = d.task;
+
+        findTerminalVariables(h);
 
         switch(sourceTask.getType()) {
             case SAMPLE: {
@@ -785,11 +826,23 @@ public class TracesImplementation extends Traces {
                 }
                 break;
             }
-            case CONSTRUCT_INPUT:
+            case CONSTRUCT_INPUT: {
                 modelInputs.add(sourceTask.getOutput());
                 break;
-            default:
+            }
+            case CONSTANT_BOOLEAN:
+            case CONSTANT_DOUBLE:
+            case CONSTANT_INT:
                 break;
+            default: {
+                // This trace ended at an observed non input variable.
+                Variable<?> observedVar = sourceTask.getInput(d.argPos);
+                assert observedVar.isObserved();
+
+                // Record the observed variable as a source.
+                addVariableSource(h, observedVar);
+                break;
+            }
 
         }
     }
@@ -880,6 +933,17 @@ public class TracesImplementation extends Traces {
         }
     }
 
+    private void addVariableSource(TraceHandle t, Variable<?> source) {
+        assert source.isObserved();
+        int max = t.size();
+        for(int i = 0; i < max; i++) {
+            DataflowTask<?> d = t.get(i).task;
+            Variable<?> v = d.getOutput();
+            Set<Variable<?>> s = sourceObservedVars.computeIfAbsent(v, k -> new HashSet<>());
+            s.add(source);
+        }
+    }
+
     private void constructDependencies(DAGInfo dagInfo) {
         for(Variable<?> v:intermediateSampleTaskDependencies.keySet()) {
             Set<Variable<?>> vdep = new HashSet<>();
@@ -927,6 +991,15 @@ public class TracesImplementation extends Traces {
     public Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v) {
         Set<SampleTask<?, ?>> toReturn = new HashSet<>();
         Set<SampleTask<?, ?>> result = sourceTasks.get(v);
+        if(result != null)
+            toReturn.addAll(result);
+        return toReturn;
+    }
+
+    @Override
+    public Set<Variable<?>> getSourceObservedVariables(Variable<?> v) {
+        Set<Variable<?>> toReturn = new HashSet<>();
+        Set<Variable<?>> result = sourceObservedVars.get(v);
         if(result != null)
             toReturn.addAll(result);
         return toReturn;

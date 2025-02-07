@@ -296,7 +296,23 @@ public abstract class Traces {
 
     public abstract Set<Variable<?>> getRequiredIntermediates(Variable<?> v);
 
+    /**
+     * Method to get all the sample tasks that a variable depends on without a trace going via a random variable or
+     * observed variable.
+     * 
+     * @param intermediate The intermediate variable to get the sample tasks for.
+     * @return The set of sample tasks the variable depends on.
+     */
     public abstract Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> intermediate);
+
+    /**
+     * Method to get all the observed variables that a variable depends on without a trace going via a random variable.
+     * This set does not include model inputs
+     * 
+     * @param intermediate The intermediate variable to get the observed variables for.
+     * @return The set of observed variables the variable depends on.
+     */
+    public abstract Set<Variable<?>> getSourceObservedVariables(Variable<?> intermediate);
 
     public abstract Set<SampleTask<?, ?>> getObservedSampleTasks();
 
