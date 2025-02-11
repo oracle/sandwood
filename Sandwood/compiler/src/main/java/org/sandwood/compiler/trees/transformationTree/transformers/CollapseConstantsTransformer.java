@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -75,7 +75,6 @@ import org.sandwood.compiler.trees.transformationTree.TransTree;
 import org.sandwood.compiler.trees.transformationTree.TransTree.TransTreeType;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
 import org.sandwood.compiler.trees.transformationTree.TransTreeVoid;
-import org.sandwood.compiler.trees.transformationTree.WrappedTransReturn;
 import org.sandwood.compiler.trees.transformationTree.binop.TransAdd;
 import org.sandwood.compiler.trees.transformationTree.binop.TransAnd;
 import org.sandwood.compiler.trees.transformationTree.binop.TransBinOp;
@@ -94,6 +93,7 @@ import org.sandwood.compiler.trees.transformationTree.util.Bounds;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans.KnownValue;
 import org.sandwood.compiler.trees.transformationTree.util.RearrangeTree;
+import org.sandwood.compiler.trees.transformationTree.util.WrappedTransReturn;
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.ScopedVarSet;
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.VarDef;
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.VariableTracking;

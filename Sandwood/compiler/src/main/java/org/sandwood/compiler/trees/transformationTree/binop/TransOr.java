@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,9 +25,9 @@ import org.sandwood.compiler.trees.outputTree.OutputTreeReturn;
 import org.sandwood.compiler.trees.transformationTree.TransConstBoolean;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
-import org.sandwood.compiler.trees.transformationTree.WrappedTransReturn;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.Bounds;
+import org.sandwood.compiler.trees.transformationTree.util.WrappedTransReturn;
 import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
 public class TransOr extends TransTreeReturn<BooleanVariable> {

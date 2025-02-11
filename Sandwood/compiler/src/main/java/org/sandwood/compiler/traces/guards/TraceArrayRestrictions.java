@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.scopes.BlockScope;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
@@ -31,7 +32,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
-import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.BlockScope;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
@@ -310,9 +310,9 @@ public class TraceArrayRestrictions {
                     if(d.argPos == 0)
                         consumers.push(d.task);
                     break;
-                    // If it is a put and the put is not just being passed by (argPos!=0)
-                    // recover the corresponding get, construct a pairing and populate the
-                    // scope data.
+                // If it is a put and the put is not just being passed by (argPos!=0)
+                // recover the corresponding get, construct a pairing and populate the
+                // scope data.
                 case PUT:
                     assert (d.argPos != 0);
                     if(!consumers.isEmpty())
@@ -687,7 +687,7 @@ public class TraceArrayRestrictions {
             v = toProcess.pop();
             if(!seen.contains(v)) {
                 seen.add(v);
-                //If the value is an intermediate get the scopes that will be needed to dereference it.
+                // If the value is an intermediate get the scopes that will be needed to dereference it.
                 if(v.isIntermediate()) {
                     Scope s = v.scope();
                     while(s != GlobalScope.scope) {
@@ -872,10 +872,10 @@ public class TraceArrayRestrictions {
                     IRTreeReturn<IntVariable> index = putIndexes.get(ri);
                     if(index != null) {
                         // Check that the put was in the range of the range of the reduction
-                        IRTreeReturn<IntVariable> start = getForwardIR(ri.start, ri.start.scope(),
-                                innerScope, compilationCtx);
-                        IRTreeReturn<IntVariable> end = getForwardIR(ri.end, ri.end.scope(),
-                                innerScope, compilationCtx);
+                        IRTreeReturn<IntVariable> start = getForwardIR(ri.start, ri.start.scope(), innerScope,
+                                compilationCtx);
+                        IRTreeReturn<IntVariable> end = getForwardIR(ri.end, ri.end.scope(), innerScope,
+                                compilationCtx);
                         IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(start, index),
                                 IRTree.lessThan(index, end));
                         innerScope = new IfScope(innerScope, guard);
@@ -1002,7 +1002,7 @@ public class TraceArrayRestrictions {
         Variable<A> maskedResult = rs.reduceArrayValue(ri, putIndex, compilationCtx);
         compilationCtx.removeScopeSubstitute(rs.getEnclosingScope());
         innerScope = maskedResult.scope();
-        
+
         compilationCtx.addScopeSubstitute(rs, innerScope);
         compilationCtx.addSubstitute(output, putValue);
         compilationCtx.addSubstitute(rs.j, maskedResult);
@@ -1083,13 +1083,13 @@ public class TraceArrayRestrictions {
     private static <A extends Variable<A>> IRTreeReturn<A> getForwardIR(Variable<A> v, Scope sourceScope,
             Scope targetScope, CompilationContext compilationCtx) {
         Scope s = sourceScope;
-        while(s!=null) {
+        while(s != null) {
             compilationCtx.addScopeSubstitute(s, GlobalScope.scope);
             s = s.getEnclosingScope();
         }
-        
+
         s = targetScope;
-        while(s!=null) {
+        while(s != null) {
             compilationCtx.addScopeSubstitute(s, GlobalScope.scope);
             s = s.getEnclosingScope();
         }
@@ -1102,19 +1102,19 @@ public class TraceArrayRestrictions {
 
         compilationCtx.popInitializedArrays();
         compilationCtx.popScope();
-        
+
         s = targetScope;
         while(s != null) {
             compilationCtx.removeScopeSubstitute(s);
             s = s.getEnclosingScope();
         }
-        
+
         s = sourceScope;
         while(s != null) {
             compilationCtx.removeScopeSubstitute(s);
             s = s.getEnclosingScope();
         }
-        
+
         compilationCtx.addTreeToScope(targetScope, scopeTree);
         return t;
     }
