@@ -375,8 +375,10 @@ public abstract class Traces {
         groupedTraces.add(new LinkedHashSet<>());
 
         // For each handle
-        for(TraceHandle traceAdd:traces) {
+        for(TraceHandle t:traces) {
             Set<Set<TraceHandle>> toAddTraceSets = new LinkedHashSet<>();
+
+            boolean added = false;
 
             // For each existing set
             for(Set<TraceHandle> s:groupedTraces) {
@@ -385,20 +387,33 @@ public abstract class Traces {
                 // Construct a set containing all the traces in s that are
                 // dependent on the trace that is to be added.
                 for(TraceHandle traceCurrent:s) {
-                    if(dependentTraces(traceAdd, traceCurrent))
+                    if(dependentTraces(t, traceCurrent))
                         dependentTraces.add(traceCurrent);
                 }
                 // If all the traces are dependent on the trace we are adding.
-                if(s.size() == dependentTraces.size())
-                    s.add(traceAdd);
-                // If we couldn't add it anywhere, create a set containing the things
-                // that are dependent on each other and add that as a new set.
-                else {
-                    dependentTraces.add(traceAdd);
+                if(s.size() == dependentTraces.size()) {
+                    s.add(t);
+                    added = true;
+                }
+                // If at least one dependent trace has been found, but not all the traces in s are dependent on t create
+                // a new set containing the dependent traces and mark that to be added.
+                else if(dependentTraces.size() > 0) {
+                    dependentTraces.add(t);
                     toAddTraceSets.add(dependentTraces);
+                    added = true;
                 }
             }
-            groupedTraces.addAll(toAddTraceSets);
+
+            // If the trace was added complete by adding any new sets to grouped traces. The delay here is just to
+            // prevent the iterator of grouped traces throwing a set modified exception.
+            if(added) {
+                groupedTraces.addAll(toAddTraceSets);
+            } else {
+                // If no traces are dependent on the trace t put it in a new set on its own.
+                Set<TraceHandle> s = new HashSet<>();
+                s.add(t);
+                groupedTraces.add(s);
+            }
         }
         return groupedTraces;
     }

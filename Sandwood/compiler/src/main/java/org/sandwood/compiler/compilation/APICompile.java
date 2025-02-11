@@ -115,6 +115,10 @@ import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
 import org.sandwood.compiler.trees.transformationTree.TransSandwoodClassGenerated;
 
 public class APICompile {
+    // A flag used to make the compiler run in serial mode. THis is used to make it easier to debug errors in the
+    // compiler and should always be true in production systems.
+    public static final boolean parallel = true;
+
     /**
      * Method to compile a DAG into the corresponding Java files.
      *
@@ -130,7 +134,6 @@ public class APICompile {
     public static CompilationDesc compile(CompilationOptions compilationOptions, Variable<?>[] vs, String modelName,
             Set<String> helperClasses, String packageName, VariableName[] constructorArgs, String modelCode,
             String comment) {
-        final boolean parallel = true;
 
         // Collect the classes constructing the other simpler classes in the main
         // thread.

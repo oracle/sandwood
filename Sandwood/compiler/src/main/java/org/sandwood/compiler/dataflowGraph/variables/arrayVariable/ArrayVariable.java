@@ -194,6 +194,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         super(parent);
         isInput = source.isInput;
         instanceHandle = source.instanceHandle;
+        addChildLengths(source.getCurrentInstance().getPossibleChildLengths());
         instanceHandle.updateCurrentInstance(this);
         parentInstance = source;
         alias = source.getAlias();
@@ -215,7 +216,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                             lastIterating = s;
                         s = s.getEnclosingScope();
                     }
-                    if(s != null)
+                    if(lastIterating != null)
                         source.addChildLengths(newChildLengths, lastIterating);
                     break;
                 default:

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.RecursiveTask;
 
 import org.sandwood.common.execution.ExecutionType;
+import org.sandwood.compiler.compilation.APICompile;
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -42,8 +43,6 @@ public class TransSandwoodClassGenerated {
     private final Map<VariableName, TransTreeVoid> fieldTrees;
     private final List<TransFunction<?>> gettersAndSetters;
 
-    private final boolean parallel = true;
-
     public TransSandwoodClassGenerated(ClassName name, PackageName packageName, ClassName extendedClass,
             ClassName[] interfaces, String modelCode, Map<FunctionName, TransFunction<?>> functions,
             Map<VariableName, TransTreeVoid> fieldsTrees, List<TransFunction<?>> gettersAndSetters) {
@@ -65,7 +64,7 @@ public class TransSandwoodClassGenerated {
         public FunctionOptTask(TransFunction<?> f, Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
             this.f = f;
             this.constants = constants;
-            if(parallel)
+            if(APICompile.parallel)
                 fork();
         }
 
@@ -99,7 +98,7 @@ public class TransSandwoodClassGenerated {
 
         // Gather the results.
         for(FunctionOptTask t:functionTasks)
-            if(parallel) {
+            if(APICompile.parallel) {
                 TransFunction<?> f = t.join();
                 optimisedFunctions.put(f.name, f);
             } else {

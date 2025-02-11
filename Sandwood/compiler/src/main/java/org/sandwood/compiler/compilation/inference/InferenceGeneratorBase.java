@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -268,8 +268,13 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // Construct sample value and all the intermediate variables.
         if(funcData.sampleDesc.sample.isDistribution())
             addDistributionProbabilities(funcData, compilationCtx);
-        else
+        else {
+            compilationCtx.pushScope();
             addSampleValueTree(funcData, compilationCtx);
+            IRTreeVoid valueTree = compilationCtx.getOutermostScopeTree();
+            compilationCtx.popScope();
+            compilationCtx.addTreeToScope(GlobalScope.scope, valueTree);
+        }
 
         // Get the constructed tree.
         IRTreeVoid result = compilationCtx.getOutermostScopeTree();
