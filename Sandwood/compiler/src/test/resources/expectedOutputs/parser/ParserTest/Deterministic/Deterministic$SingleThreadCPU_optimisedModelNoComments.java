@@ -288,26 +288,41 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var34$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var34$stateProbabilityGlobal.length; cv$lseIndex += 1) {
-			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[cv$lseIndex];
+		{
+			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
+		{
+			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[2];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		{
+			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[3];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		double cv$lseElementValue = cv$var34$stateProbabilityGlobal[4];
+		if((cv$lseMax < cv$lseElementValue))
+			cv$lseMax = cv$lseElementValue;
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var34$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var34$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$var34$stateProbabilityGlobal.length; cv$indexName += 1)
-				cv$var34$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var34$stateProbabilityGlobal.length);
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+				cv$var34$stateProbabilityGlobal[cv$indexName] = 0.2;
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$var34$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				cv$var34$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var34$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		for(int cv$indexName = 5; cv$indexName < cv$var34$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var34$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		a[i$var26] = DistributionSampling.sampleCategorical(RNG$, cv$var34$stateProbabilityGlobal);
 		int index$i$8_1 = (i$var26 + 1);
 		if((index$i$8_1 < n))

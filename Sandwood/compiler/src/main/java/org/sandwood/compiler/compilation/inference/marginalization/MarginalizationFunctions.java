@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -157,21 +157,29 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
                 true);
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(sumName, constant(0.0), "The sum of all the probabilities in log space"));
-        compilationCtx.addTreeToScope(GlobalScope.scope, TreeUtils.lseAdd(sourceArray, sumName, "Sum all the values"));
+        compilationCtx.addTreeToScope(GlobalScope.scope,
+                TreeUtils.lseAdd(sourceArray, sumName, load(noStatesName), "Sum all the values"));
 
-        IRTreeReturn<DoubleVariable> normalizedIfValue = divideDI(constant(1.0), getIntField(sourceArray, "length"));
+        IRTreeReturn<DoubleVariable> normalizedIfValue = divideDI(constant(1.0), load(noStatesName));
         IRTreeVoid ifLoopBody = arrayPut(targetArray, load(indexName), normalizedIfValue, Tree.NoComment);
-        IRTreeVoid ifBody = forStmt(ifLoopBody, constant(0), getIntField(sourceArray, "length"), constant(1), indexName,
-                true, "Normalize log space values and move to normal space");
+        IRTreeVoid ifBody = forStmt(ifLoopBody, constant(0), load(noStatesName), constant(1), indexName, true,
+                "Normalize log space values and move to normal space");
 
         IRTreeReturn<DoubleVariable> normalizedElseValue = exp(
                 subtractDD(arrayGet(sourceArray, load(indexName)), load(sumName)));
         IRTreeVoid elseLoopBody = arrayPut(targetArray, load(indexName), normalizedElseValue, Tree.NoComment);
-        IRTreeVoid elseBody = forStmt(elseLoopBody, constant(0), getIntField(sourceArray, "length"), constant(1),
-                indexName, true, "Normalize log space values and move to normal space");
+        IRTreeVoid elseBody = forStmt(elseLoopBody, constant(0), load(noStatesName), constant(1), indexName, true,
+                "Normalize log space values and move to normal space");
 
         compilationCtx.addTreeToScope(GlobalScope.scope, ifElse(eq(load(sumName), constant(Double.NEGATIVE_INFINITY)),
                 ifBody, "If all the sum is zero, just share the probability evenly.", elseBody, Tree.NoComment));
+
+        IRTreeVoid zeroLoopBody = arrayPut(targetArray, load(indexName), constant(Double.NEGATIVE_INFINITY),
+                Tree.NoComment);
+        IRTreeVoid zeroLoop = forStmt(zeroLoopBody, load(noStatesName), getIntField(sourceArray, "length"), constant(1),
+                indexName, true, "Set array values that are not computed for the input to negative infinity.");
+        compilationCtx.addTreeToScope(GlobalScope.scope, zeroLoop);
+
     }
 
     @Override

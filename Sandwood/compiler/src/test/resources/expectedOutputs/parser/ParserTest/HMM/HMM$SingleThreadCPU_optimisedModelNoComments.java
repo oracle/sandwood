@@ -382,7 +382,8 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 	}
 
 	private final void sample36() {
-		for(int cv$valuePos = 0; cv$valuePos < states; cv$valuePos += 1) {
+		int cv$noStates = Math.max(0, states);
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			st[0] = cv$valuePos;
 			double[] cv$temp$0$var31 = m[0];
 			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var31.length)?Math.log(cv$temp$0$var31[cv$valuePos]):Double.NEGATIVE_INFINITY);
@@ -396,7 +397,7 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var33$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var33$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$var33$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -405,22 +406,25 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var33$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var33$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$var33$stateProbabilityGlobal.length; cv$indexName += 1)
-				cv$var33$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var33$stateProbabilityGlobal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$var33$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$noStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$var33$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$var33$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var33$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var33$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var33$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		st[0] = DistributionSampling.sampleCategorical(RNG$, cv$var33$stateProbabilityGlobal);
 	}
 
 	private final void sample46(int i) {
-		for(int cv$valuePos = 0; cv$valuePos < states; cv$valuePos += 1) {
+		int cv$noStates = Math.max(0, states);
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			st[i] = cv$valuePos;
 			double[] cv$temp$0$var41 = m[st[(i - 1)]];
 			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var41.length)?Math.log(cv$temp$0$var41[cv$valuePos]):Double.NEGATIVE_INFINITY);
@@ -434,7 +438,7 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var43$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var43$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$var43$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -443,17 +447,19 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var43$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var43$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
-				cv$var43$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var43$stateProbabilityGlobal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$var43$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$noStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$var43$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var43$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var43$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		st[i] = DistributionSampling.sampleCategorical(RNG$, cv$var43$stateProbabilityGlobal);
 	}
 

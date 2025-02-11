@@ -773,7 +773,16 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 38 drawn from Categorical 34. Inference was performed using variable
 	// marginalization.
 	private final void sample38(int i$var32) {
-		for(int cv$valuePos = 0; cv$valuePos < noStates; cv$valuePos += 1) {
+		// Variable declaration of cv$noStates moved.
+		// Declaration comment was:
+		// Calculate the number of states to evaluate.
+		// 
+		// variable marginalization
+		// 
+		// cv$noStates's comment
+		// Calculate the number of states to evaluate.
+		int cv$noStates = Math.max(0, noStates);
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Value of the variable at this index
 			st[i$var32] = cv$valuePos;
 			
@@ -796,15 +805,15 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			int reduceVar$var47$5 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction243Index = 0; cv$reduction243Index < i$var32; cv$reduction243Index += 1)
+			for(int cv$reduction249Index = 0; cv$reduction249Index < i$var32; cv$reduction249Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j$var45's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction243Index]);
-			for(int cv$reduction243Index = (i$var32 + 1); cv$reduction243Index < noCats; cv$reduction243Index += 1)
+				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction249Index]);
+			for(int cv$reduction249Index = (i$var32 + 1); cv$reduction249Index < noCats; cv$reduction249Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
@@ -813,7 +822,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// j$var45's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction243Index]);
+				reduceVar$var47$5 = (reduceVar$var47$5 + st[cv$reduction249Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -866,9 +875,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		double cv$lseMax = cv$var35$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var35$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var35$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -885,9 +892,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var35$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var35$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -900,19 +905,22 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var35$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var35$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var35$stateProbabilityGlobal.length);
+				cv$var35$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var35$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var35$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var35$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var35$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Get a local reference to the scratch space.
+			cv$var35$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.

@@ -1394,7 +1394,15 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 12 drawn from c. Inference was performed using variable marginalization.
 	private final void sample12() {
-		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
+		// Variable declaration of cv$noStates moved.
+		// Declaration comment was:
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// Calculate the number of states to evaluate.
+		// 
+		// variable marginalization
+		int cv$noStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
@@ -1574,9 +1582,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$lseMax = cv$var9$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var9$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var9$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -1593,9 +1599,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var9$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var9$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1608,30 +1612,43 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var9$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
-				distribution$sample12[cv$indexName] = (1.0 / cv$var9$stateProbabilityGlobal.length);
+				distribution$sample12[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var9$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
 				distribution$sample12[cv$indexName] = Math.exp((cv$var9$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var9$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Set the calculated probabilities to be the distribution values, and normalize
+			// 
+			// Local copy of the probability array
+			distribution$sample12[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 16 drawn from Categorical 12. Inference was performed using variable
 	// marginalization.
 	private final void sample16() {
-		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
+		// Variable declaration of cv$noStates moved.
+		// Declaration comment was:
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// Calculate the number of states to evaluate.
+		// 
+		// variable marginalization
+		int cv$noStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
@@ -1758,9 +1775,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$lseMax = cv$var13$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var13$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var13$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -1777,9 +1792,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var13$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var13$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1792,32 +1805,46 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var13$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
-				distribution$sample16[cv$indexName] = (1.0 / cv$var13$stateProbabilityGlobal.length);
+				distribution$sample16[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var13$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
 				distribution$sample16[cv$indexName] = Math.exp((cv$var13$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var13$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Set the calculated probabilities to be the distribution values, and normalize
+			// 
+			// Local copy of the probability array
+			distribution$sample16[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 22 drawn from Categorical 18. Inference was performed using variable
 	// marginalization.
 	private final void sample22(int i, int threadID$cv$i, Rng RNG$) {
+		// Variable declaration of cv$noStates moved.
+		// Declaration comment was:
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// Calculate the number of states to evaluate.
+		// 
+		// variable marginalization
+		int cv$noStates = weightings.length;
+		
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var19$stateProbabilityGlobal[threadID$cv$i];
-		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
@@ -1859,9 +1886,9 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$consumerDistributionProbabilityAccumulator = 0.0;
 			} else {
 				// Enumerating the possible outputs of Categorical 8.
-				for(int index$sample12$5 = 0; index$sample12$5 < weightings.length; index$sample12$5 += 1) {
+				for(int index$sample12$6 = 0; index$sample12$6 < weightings.length; index$sample12$6 += 1) {
 					// Update the probability of sampling this value from the distribution value.
-					double cv$probabilitySample12Value6 = distribution$sample12[index$sample12$5];
+					double cv$probabilitySample12Value7 = distribution$sample12[index$sample12$6];
 					
 					// Constructing a random variable input for use later.
 					// 
@@ -1872,34 +1899,34 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// Looking for a path between Sample 22 and consumer Bernoulli 31.
 					// 
 					// Value of the variable at this index
-					double var30 = ((double)index$sample12$5 / (cv$valuePos + v3[i]));
+					double var30 = ((double)index$sample12$6 / (cv$valuePos + v3[i]));
 					
 					// Record the probability of sample task 35 generating output with current configuration.
 					// 
 					// Substituted "j" with its value "i".
 					// 
 					// Substituted "cv$temp$2$var30" with its value "var30".
-					if(((Math.log(cv$probabilitySample12Value6) + DistributionSampling.logProbabilityBernoulli(v[i], var30)) < cv$accumulatedConsumerProbabilities))
+					if(((Math.log(cv$probabilitySample12Value7) + DistributionSampling.logProbabilityBernoulli(v[i], var30)) < cv$accumulatedConsumerProbabilities))
 						// Substituted "j" with its value "i".
 						// 
 						// Substituted "cv$temp$2$var30" with its value "var30".
-						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample12Value6) + DistributionSampling.logProbabilityBernoulli(v[i], var30)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample12Value7) + DistributionSampling.logProbabilityBernoulli(v[i], var30)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 					else {
 						// If the second value is -infinity.
 						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 							// Substituted "j" with its value "i".
 							// 
 							// Substituted "cv$temp$2$var30" with its value "var30".
-							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample12Value6) + DistributionSampling.logProbabilityBernoulli(v[i], var30));
+							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample12Value7) + DistributionSampling.logProbabilityBernoulli(v[i], var30));
 						else
 							// Substituted "j" with its value "i".
 							// 
 							// Substituted "cv$temp$2$var30" with its value "var30".
-							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample12Value6) + DistributionSampling.logProbabilityBernoulli(v[i], var30)))) + 1)) + Math.log(cv$probabilitySample12Value6)) + DistributionSampling.logProbabilityBernoulli(v[i], var30));
+							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample12Value7) + DistributionSampling.logProbabilityBernoulli(v[i], var30)))) + 1)) + Math.log(cv$probabilitySample12Value7)) + DistributionSampling.logProbabilityBernoulli(v[i], var30));
 					}
 					
 					// Recorded the probability of reaching sample task 35 with the current configuration.
-					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample12Value6);
+					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample12Value7);
 				}
 			}
 			
@@ -1946,7 +1973,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$lseMax = cv$stateProbabilityLocal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -1962,7 +1989,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 			
 			// Increment the value of the target, moving the value back into log space.
@@ -1974,19 +2001,31 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 28 drawn from c. Inference was performed using variable marginalization.
 	private final void sample28(int j) {
-		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
+		// Variable declaration of cv$noStates moved.
+		// Declaration comment was:
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// Calculate the number of states to evaluate.
+		// 
+		// variable marginalization
+		int cv$noStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
@@ -2075,33 +2114,27 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// Update the probability of sampling this value from the distribution value.
 						double cv$probabilitySample12Value5 = distribution$sample12[index$sample12$4];
 						if(fixedFlag$sample16) {
+							// Variable declaration of cv$temp$3$var30 moved.
+							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var30 = ((double)index$sample12$4 / (v2[0] + cv$valuePos));
+							double cv$temp$3$var30 = ((double)index$sample12$4 / (v2[0] + cv$valuePos));
 							
 							// Record the probability of sample task 35 generating output with current configuration.
 							// 
 							// Substituted "j" with its value "0".
-							// 
-							// Substituted "cv$temp$3$var30" with its value "var30".
-							if(((Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], var30)) < cv$accumulatedConsumerProbabilities))
+							if(((Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], cv$temp$3$var30)) < cv$accumulatedConsumerProbabilities))
 								// Substituted "j" with its value "0".
-								// 
-								// Substituted "cv$temp$3$var30" with its value "var30".
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], var30)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], cv$temp$3$var30)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								// If the second value is -infinity.
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$3$var30" with its value "var30".
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], var30));
+									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], cv$temp$3$var30));
 								else
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$3$var30" with its value "var30".
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], var30)))) + 1)) + Math.log(cv$probabilitySample12Value5)) + DistributionSampling.logProbabilityBernoulli(v[0], var30));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample12Value5) + DistributionSampling.logProbabilityBernoulli(v[0], cv$temp$3$var30)))) + 1)) + Math.log(cv$probabilitySample12Value5)) + DistributionSampling.logProbabilityBernoulli(v[0], cv$temp$3$var30));
 							}
 							
 							// Recorded the probability of reaching sample task 35 with the current configuration.
@@ -2215,25 +2248,22 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// Update the probability of sampling this value from the distribution value.
 						double cv$probabilitySample12Value20 = distribution$sample12[index$sample12$19];
 						if(fixedFlag$sample22) {
+							// Variable declaration of cv$temp$7$var30 moved.
+							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var30 = ((double)index$sample12$19 / (v2[j] + cv$valuePos));
+							double cv$temp$7$var30 = ((double)index$sample12$19 / (v2[j] + cv$valuePos));
 							
 							// Record the probability of sample task 35 generating output with current configuration.
-							// 
-							// Substituted "cv$temp$7$var30" with its value "var30".
-							if(((Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], var30)) < cv$accumulatedConsumerProbabilities))
-								// Substituted "cv$temp$7$var30" with its value "var30".
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], var30)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], cv$temp$7$var30)) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], cv$temp$7$var30)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								// If the second value is -infinity.
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									// Substituted "cv$temp$7$var30" with its value "var30".
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], var30));
+									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], cv$temp$7$var30));
 								else
-									// Substituted "cv$temp$7$var30" with its value "var30".
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], var30)))) + 1)) + Math.log(cv$probabilitySample12Value20)) + DistributionSampling.logProbabilityBernoulli(v[j], var30));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample12Value20) + DistributionSampling.logProbabilityBernoulli(v[j], cv$temp$7$var30)))) + 1)) + Math.log(cv$probabilitySample12Value20)) + DistributionSampling.logProbabilityBernoulli(v[j], cv$temp$7$var30));
 							}
 							
 							// Recorded the probability of reaching sample task 35 with the current configuration.
@@ -2314,9 +2344,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$lseMax = cv$var25$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var25$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var25$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -2333,9 +2361,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var25$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var25$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -2348,19 +2374,22 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var25$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var25$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var25$stateProbabilityGlobal.length);
+				cv$var25$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var25$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var25$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var25$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var25$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Get a local reference to the scratch space.
+			cv$var25$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 

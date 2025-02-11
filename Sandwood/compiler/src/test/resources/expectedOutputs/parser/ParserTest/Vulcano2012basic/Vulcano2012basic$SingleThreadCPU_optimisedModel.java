@@ -790,8 +790,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// The proposed new value for the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		
-		// Unrolled loop
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -827,17 +825,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Reduce for every value except a masked value which will be skipped.
 			// 
 			// Substituted "j$var28" with its value "var22".
-			for(int cv$reduction193Index = 0; cv$reduction193Index < var22; cv$reduction193Index += 1)
+			for(int cv$reduction196Index = 0; cv$reduction196Index < var22; cv$reduction196Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction193Index]);
+				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction196Index]);
 			
 			// Substituted "j$var28" with its value "var22".
-			for(int cv$reduction193Index = (var22 + 1); cv$reduction193Index < noProducts; cv$reduction193Index += 1)
+			for(int cv$reduction196Index = (var22 + 1); cv$reduction196Index < noProducts; cv$reduction196Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
@@ -846,7 +844,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction193Index]);
+				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction196Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -959,14 +957,14 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		double reduceVar$sum$0 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+		for(int cv$reduction139Index = 0; cv$reduction139Index < noProducts; cv$reduction139Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// l's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction136Index]);
+			reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction139Index]);
 		
 		// Write out the new sample value.
 		sum = reduceVar$sum$0;
@@ -1009,17 +1007,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// Reduce for every value except a masked value which will be skipped.
 		// 
 		// Substituted "j$var28" with its value "var22".
-		for(int cv$reduction193Index = 0; cv$reduction193Index < var22; cv$reduction193Index += 1)
+		for(int cv$reduction196Index = 0; cv$reduction196Index < var22; cv$reduction196Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// l's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction193Index]);
+			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction196Index]);
 		
 		// Substituted "j$var28" with its value "var22".
-		for(int cv$reduction193Index = (var22 + 1); cv$reduction193Index < noProducts; cv$reduction193Index += 1)
+		for(int cv$reduction196Index = (var22 + 1); cv$reduction196Index < noProducts; cv$reduction196Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Execute the reduction function, saving the result into the return value.
@@ -1028,7 +1026,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// l's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction193Index]);
+			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction196Index]);
 		
 		// Copy the result of the reduction into the variable returned by the reduction.
 		reduceVar$sum$1 = (Math.exp(cv$proposedValue) + reduceVar$sum$1);
@@ -1154,14 +1152,14 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			double reduceVar$sum$2 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction246Index = 0; cv$reduction246Index < noProducts; cv$reduction246Index += 1)
+			for(int cv$reduction249Index = 0; cv$reduction249Index < noProducts; cv$reduction249Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$2 = (reduceVar$sum$2 + exped[cv$reduction246Index]);
+				reduceVar$sum$2 = (reduceVar$sum$2 + exped[cv$reduction249Index]);
 			
 			// Write out the new sample value.
 			sum = reduceVar$sum$2;
@@ -1217,6 +1215,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// cv$temp$0$var56's comment
 			// Constructing a random variable input for use later.
+			// 
+			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var55]);
 			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1)
 				// Processing sample task 86 of consumer random variable null.
@@ -1238,7 +1238,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Substituted "cv$temp$2$var80" with its value "0.2".
 				// 
-				// Substituted "cv$temp$1$var79" with its value "var79".
+				// cv$temp$1$var79's comment
+				// Variable declaration of cv$temp$1$var79 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -1285,7 +1286,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Substituted "cv$temp$2$var80" with its value "0.2".
 			// 
-			// Substituted "cv$temp$1$var79" with its value "var79".
+			// cv$temp$1$var79's comment
+			// Variable declaration of cv$temp$1$var79 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
@@ -1297,10 +1299,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

@@ -765,10 +765,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// The probability ration for the proposed value and the current value.
 		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
-		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
@@ -883,10 +879,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

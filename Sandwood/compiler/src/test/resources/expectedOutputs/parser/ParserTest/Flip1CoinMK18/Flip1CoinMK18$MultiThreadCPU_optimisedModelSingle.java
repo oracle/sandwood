@@ -732,7 +732,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								// 
-								// Substituted "cv$temp$5$var72" with its value "var72".
+								// cv$temp$5$var72's comment
+								// Variable declaration of cv$temp$5$var72 moved.
 								// 
 								// Constructing a random variable input for use later.
 								// 
@@ -861,7 +862,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "cv$temp$5$var72" with its value "var72".
+							// cv$temp$5$var72's comment
+							// Variable declaration of cv$temp$5$var72 moved.
 							// 
 							// Constructing a random variable input for use later.
 							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var77], cv$proposedValue) + cv$accumulatedProbabilities);
@@ -972,7 +974,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								// 
-								// Substituted "cv$temp$2$var72" with its value "var72".
+								// cv$temp$2$var72's comment
+								// Variable declaration of cv$temp$2$var72 moved.
 								// 
 								// Constructing a random variable input for use later.
 								// 
@@ -1025,7 +1028,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "cv$temp$4$var72" with its value "var72".
+							// cv$temp$4$var72's comment
+							// Variable declaration of cv$temp$4$var72 moved.
 							// 
 							// Constructing a random variable input for use later.
 							// 
@@ -1051,7 +1055,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "cv$temp$5$var72" with its value "var72".
+						// cv$temp$5$var72's comment
+						// Variable declaration of cv$temp$5$var72 moved.
 						// 
 						// Constructing a random variable input for use later.
 						// 
@@ -1107,7 +1112,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "cv$temp$2$var72" with its value "var72".
+							// cv$temp$2$var72's comment
+							// Variable declaration of cv$temp$2$var72 moved.
 							// 
 							// Constructing a random variable input for use later.
 							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var77], cv$proposedValue) + cv$accumulatedProbabilities);
@@ -1153,7 +1159,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "cv$temp$4$var72" with its value "var72".
+						// cv$temp$4$var72's comment
+						// Variable declaration of cv$temp$4$var72 moved.
 						// 
 						// Constructing a random variable input for use later.
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var77], cv$proposedValue) + cv$accumulatedProbabilities);
@@ -1175,7 +1182,8 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "cv$temp$5$var72" with its value "var72".
+					// cv$temp$5$var72's comment
+					// Variable declaration of cv$temp$5$var72 moved.
 					// 
 					// Constructing a random variable input for use later.
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var77], cv$proposedValue) + cv$accumulatedProbabilities);

@@ -1,0 +1,18 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ 
+ package org.sandwood.compiler.tests.parser;
+
+public model RaggedArray6(boolean[] obs_measured) {
+	double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};
+	double[] b = { 0.35, 0.65 };
+	int y = categorical(b).sampleDistribution();
+	double[] d = dirichlet(a[y]).sample();
+	boolean[] obs = bernoulli(d[y]).sample(obs_measured.length);
+	obs.observe(obs_measured);
+}

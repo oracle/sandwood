@@ -566,6 +566,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 36 drawn from Categorical 33. Inference was performed using variable
 	// marginalization.
 	private final void sample36(int i$var26) {
+		// cv$noStates's comment
+		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Value of the variable at this index
 			a[i$var26] = cv$valuePos;
@@ -670,15 +672,30 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var34$stateProbabilityGlobal[0];
 		
-		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var34$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		// Unrolled loop
+		{
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[cv$lseIndex];
+			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
+		{
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[2];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		{
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var34$stateProbabilityGlobal[3];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		
+		// Get a local reference to the scratch space.
+		double cv$lseElementValue = cv$var34$stateProbabilityGlobal[4];
+		if((cv$lseMax < cv$lseElementValue))
+			cv$lseMax = cv$lseElementValue;
 		
 		// If the maximum value is -infinity return -infinity.
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
@@ -691,8 +708,9 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Offset values, move to normal space, and sum.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var34$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var34$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -706,18 +724,27 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var34$stateProbabilityGlobal.length; cv$indexName += 1)
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var34$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var34$stateProbabilityGlobal.length);
+				cv$var34$stateProbabilityGlobal[cv$indexName] = 0.2;
 		} else {
 			// Normalize log space values and move to normal space
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var34$stateProbabilityGlobal.length; cv$indexName += 1)
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var34$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var34$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = 5; cv$indexName < cv$var34$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Get a local reference to the scratch space.
+			cv$var34$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.

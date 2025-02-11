@@ -235,8 +235,8 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		ut[i$var12] = cv$proposedValue;
 		exped[i$var12] = Math.exp(ut[i$var12]);
 		double reduceVar$sum$8 = 0.0;
-		for(int cv$reduction373Index = 0; cv$reduction373Index < noProducts; cv$reduction373Index += 1)
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction373Index]);
+		for(int cv$reduction379Index = 0; cv$reduction379Index < noProducts; cv$reduction379Index += 1)
+			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction379Index]);
 		sum = reduceVar$sum$8;
 		for(int i$var38 = 0; i$var38 < noProducts; i$var38 += 1)
 			guard$sample19put43$global[i$var38] = false;
@@ -258,8 +258,8 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			ut[i$var12] = cv$originalValue;
 			exped[i$var12] = Math.exp(ut[i$var12]);
 			double reduceVar$sum$10 = 0.0;
-			for(int cv$reduction481Index = 0; cv$reduction481Index < noProducts; cv$reduction481Index += 1)
-				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction481Index]);
+			for(int cv$reduction487Index = 0; cv$reduction487Index < noProducts; cv$reduction487Index += 1)
+				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction487Index]);
 			sum = reduceVar$sum$10;
 			for(int i$var38 = 0; i$var38 < noProducts; i$var38 += 1)
 				guard$sample19put43$global[i$var38] = false;

@@ -409,8 +409,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 				if(!guard$sample25put95$global[t$var59][j$var88]) {
 					guard$sample25put95$global[t$var59][j$var88] = true;
 					double reduceVar$denom$10 = 0.0;
-					for(int cv$reduction898Index = 0; cv$reduction898Index <= noProducts; cv$reduction898Index += 1)
-						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var59][cv$reduction898Index]);
+					for(int cv$reduction907Index = 0; cv$reduction907Index <= noProducts; cv$reduction907Index += 1)
+						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var59][cv$reduction907Index]);
 					weekly_rates[t$var59][j$var88] = (weekly_ut[t$var59][j$var88] / reduceVar$denom$10);
 				}
 			}
@@ -455,8 +455,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 					if(!guard$sample25put95$global[t$var59][j$var88]) {
 						guard$sample25put95$global[t$var59][j$var88] = true;
 						double reduceVar$denom$13 = 0.0;
-						for(int cv$reduction1103Index = 0; cv$reduction1103Index <= noProducts; cv$reduction1103Index += 1)
-							reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var59][cv$reduction1103Index]);
+						for(int cv$reduction1112Index = 0; cv$reduction1112Index <= noProducts; cv$reduction1112Index += 1)
+							reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var59][cv$reduction1112Index]);
 						weekly_rates[t$var59][j$var88] = (weekly_ut[t$var59][j$var88] / reduceVar$denom$13);
 					}
 				}

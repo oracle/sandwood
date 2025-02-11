@@ -913,6 +913,9 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void sample45(int i$var40, int threadID$cv$i$var40, Rng RNG$) {
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var42$stateProbabilityGlobal[threadID$cv$i$var40];
+		
+		// cv$noStates's comment
+		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
@@ -960,12 +963,25 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Initialise the max to the first element.
 		double cv$lseMax = cv$stateProbabilityLocal[0];
 		
-		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
-			double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+		// Unrolled loop
+		{
+			double cv$lseElementValue = cv$stateProbabilityLocal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
+		{
+			double cv$lseElementValue = cv$stateProbabilityLocal[2];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		{
+			double cv$lseElementValue = cv$stateProbabilityLocal[3];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		double cv$lseElementValue = cv$stateProbabilityLocal[4];
+		if((cv$lseMax < cv$lseElementValue))
+			cv$lseMax = cv$lseElementValue;
 		
 		// If the maximum value is -infinity return -infinity.
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
@@ -977,7 +993,10 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+			// 
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 			
 			// Increment the value of the target, moving the value back into log space.
@@ -989,13 +1008,28 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			// 
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+				// cv$noStates's comment
+				// variable marginalization
+				cv$stateProbabilityLocal[cv$indexName] = 0.2;
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			// 
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// cv$noStates's comment
+		// variable marginalization
+		for(int cv$indexName = 5; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		z[i$var40] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal);

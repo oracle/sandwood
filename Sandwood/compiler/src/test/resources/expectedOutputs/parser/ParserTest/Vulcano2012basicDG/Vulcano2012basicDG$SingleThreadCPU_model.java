@@ -1598,6 +1598,13 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 34 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
 	private final void sample34(int var27) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// Metropolis-Hastings
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
+		
 		// The original value of the sample
 		double cv$originalValue = ut[var27];
 		
@@ -1616,7 +1623,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -1732,12 +1739,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																		double reduceVar$sum$0 = 0.0;
 																		
 																		// For each index in the array to be reduced
-																		for(int cv$reduction277Index = 0; cv$reduction277Index < avail[0].length; cv$reduction277Index += 1) {
+																		for(int cv$reduction280Index = 0; cv$reduction280Index < avail[0].length; cv$reduction280Index += 1) {
 																			// Set the left hand term of the reduction function to the return variable value.
 																			double k$var44 = reduceVar$sum$0;
 																			
 																			// Set the right hand term to a value from the array exped
-																			double l$var45 = exped[cv$reduction277Index];
+																			double l$var45 = exped[cv$reduction280Index];
 																			
 																			// Execute the reduction function, saving the result into the return value.
 																			// 
@@ -2223,12 +2230,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																																	double reduceVar$denom$0 = 0.0;
 																																	
 																																	// For each index in the array to be reduced
-																																	for(int cv$reduction716Index = 0; cv$reduction716Index < (avail[0].length + 1); cv$reduction716Index += 1) {
+																																	for(int cv$reduction719Index = 0; cv$reduction719Index < (avail[0].length + 1); cv$reduction719Index += 1) {
 																																		// Set the left hand term of the reduction function to the return variable value.
 																																		double k$var99 = reduceVar$denom$0;
 																																		
 																																		// Set the right hand term to a value from the array weekly_ut
-																																		double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction716Index];
+																																		double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction719Index];
 																																		
 																																		// Execute the reduction function, saving the result into the return value.
 																																		// 
@@ -2376,12 +2383,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																																double reduceVar$denom$2 = 0.0;
 																																
 																																// For each index in the array to be reduced
-																																for(int cv$reduction816Index = 0; cv$reduction816Index < (avail[0].length + 1); cv$reduction816Index += 1) {
+																																for(int cv$reduction819Index = 0; cv$reduction819Index < (avail[0].length + 1); cv$reduction819Index += 1) {
 																																	// Set the left hand term of the reduction function to the return variable value.
 																																	double k$var99 = reduceVar$denom$2;
 																																	
 																																	// Set the right hand term to a value from the array weekly_ut
-																																	double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction816Index];
+																																	double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction819Index];
 																																	
 																																	// Execute the reduction function, saving the result into the return value.
 																																	// 
@@ -2734,24 +2741,24 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																double reduceVar$sum$2 = 0.0;
 																
 																// Reduce for every value except a masked value which will be skipped.
-																for(int cv$reduction1120Index = 0; cv$reduction1120Index < j$var33; cv$reduction1120Index += 1) {
+																for(int cv$reduction1123Index = 0; cv$reduction1123Index < j$var33; cv$reduction1123Index += 1) {
 																	// Set the left hand term of the reduction function to the return variable value.
 																	double k$var44 = reduceVar$sum$2;
 																	
 																	// Set the right hand term to a value from the array exped
-																	double l$var45 = exped[cv$reduction1120Index];
+																	double l$var45 = exped[cv$reduction1123Index];
 																	
 																	// Execute the reduction function, saving the result into the return value.
 																	// 
 																	// Copy the result of the reduction into the variable returned by the reduction.
 																	reduceVar$sum$2 = (k$var44 + l$var45);
 																}
-																for(int cv$reduction1120Index = (j$var33 + 1); cv$reduction1120Index < avail[0].length; cv$reduction1120Index += 1) {
+																for(int cv$reduction1123Index = (j$var33 + 1); cv$reduction1123Index < avail[0].length; cv$reduction1123Index += 1) {
 																	// Set the left hand term of the reduction function to the return variable value.
 																	double k$var44 = reduceVar$sum$2;
 																	
 																	// Set the right hand term to a value from the array exped
-																	double l$var45 = exped[cv$reduction1120Index];
+																	double l$var45 = exped[cv$reduction1123Index];
 																	
 																	// Execute the reduction function, saving the result into the return value.
 																	// 
@@ -2791,24 +2798,24 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																																double reduceVar$denom$4 = 0.0;
 																																
 																																// Reduce for every value except a masked value which will be skipped.
-																																for(int cv$reduction1157Index = 0; cv$reduction1157Index < j$var86; cv$reduction1157Index += 1) {
+																																for(int cv$reduction1160Index = 0; cv$reduction1160Index < j$var86; cv$reduction1160Index += 1) {
 																																	// Set the left hand term of the reduction function to the return variable value.
 																																	double k$var99 = reduceVar$denom$4;
 																																	
 																																	// Set the right hand term to a value from the array weekly_ut
-																																	double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1157Index];
+																																	double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1160Index];
 																																	
 																																	// Execute the reduction function, saving the result into the return value.
 																																	// 
 																																	// Copy the result of the reduction into the variable returned by the reduction.
 																																	reduceVar$denom$4 = (k$var99 + l$var100);
 																																}
-																																for(int cv$reduction1157Index = (j$var86 + 1); cv$reduction1157Index < (avail[0].length + 1); cv$reduction1157Index += 1) {
+																																for(int cv$reduction1160Index = (j$var86 + 1); cv$reduction1160Index < (avail[0].length + 1); cv$reduction1160Index += 1) {
 																																	// Set the left hand term of the reduction function to the return variable value.
 																																	double k$var99 = reduceVar$denom$4;
 																																	
 																																	// Set the right hand term to a value from the array weekly_ut
-																																	double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1157Index];
+																																	double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1160Index];
 																																	
 																																	// Execute the reduction function, saving the result into the return value.
 																																	// 
@@ -2929,24 +2936,24 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																double reduceVar$sum$3 = 0.0;
 																
 																// Reduce for every value except a masked value which will be skipped.
-																for(int cv$reduction1192Index = 0; cv$reduction1192Index < j$var33; cv$reduction1192Index += 1) {
+																for(int cv$reduction1195Index = 0; cv$reduction1195Index < j$var33; cv$reduction1195Index += 1) {
 																	// Set the left hand term of the reduction function to the return variable value.
 																	double k$var44 = reduceVar$sum$3;
 																	
 																	// Set the right hand term to a value from the array exped
-																	double l$var45 = exped[cv$reduction1192Index];
+																	double l$var45 = exped[cv$reduction1195Index];
 																	
 																	// Execute the reduction function, saving the result into the return value.
 																	// 
 																	// Copy the result of the reduction into the variable returned by the reduction.
 																	reduceVar$sum$3 = (k$var44 + l$var45);
 																}
-																for(int cv$reduction1192Index = (j$var33 + 1); cv$reduction1192Index < avail[0].length; cv$reduction1192Index += 1) {
+																for(int cv$reduction1195Index = (j$var33 + 1); cv$reduction1195Index < avail[0].length; cv$reduction1195Index += 1) {
 																	// Set the left hand term of the reduction function to the return variable value.
 																	double k$var44 = reduceVar$sum$3;
 																	
 																	// Set the right hand term to a value from the array exped
-																	double l$var45 = exped[cv$reduction1192Index];
+																	double l$var45 = exped[cv$reduction1195Index];
 																	
 																	// Execute the reduction function, saving the result into the return value.
 																	// 
@@ -3121,24 +3128,24 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																														double reduceVar$denom$5 = 0.0;
 																														
 																														// Reduce for every value except a masked value which will be skipped.
-																														for(int cv$reduction1280Index = 0; cv$reduction1280Index < j$var86; cv$reduction1280Index += 1) {
+																														for(int cv$reduction1283Index = 0; cv$reduction1283Index < j$var86; cv$reduction1283Index += 1) {
 																															// Set the left hand term of the reduction function to the return variable value.
 																															double k$var99 = reduceVar$denom$5;
 																															
 																															// Set the right hand term to a value from the array weekly_ut
-																															double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1280Index];
+																															double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1283Index];
 																															
 																															// Execute the reduction function, saving the result into the return value.
 																															// 
 																															// Copy the result of the reduction into the variable returned by the reduction.
 																															reduceVar$denom$5 = (k$var99 + l$var100);
 																														}
-																														for(int cv$reduction1280Index = (j$var86 + 1); cv$reduction1280Index < (avail[0].length + 1); cv$reduction1280Index += 1) {
+																														for(int cv$reduction1283Index = (j$var86 + 1); cv$reduction1283Index < (avail[0].length + 1); cv$reduction1283Index += 1) {
 																															// Set the left hand term of the reduction function to the return variable value.
 																															double k$var99 = reduceVar$denom$5;
 																															
 																															// Set the right hand term to a value from the array weekly_ut
-																															double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1280Index];
+																															double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1283Index];
 																															
 																															// Execute the reduction function, saving the result into the return value.
 																															// 
@@ -3500,12 +3507,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																double reduceVar$sum$6 = 0.0;
 																
 																// For each index in the array to be reduced
-																for(int cv$reduction1462Index = 0; cv$reduction1462Index < avail[0].length; cv$reduction1462Index += 1) {
+																for(int cv$reduction1465Index = 0; cv$reduction1465Index < avail[0].length; cv$reduction1465Index += 1) {
 																	// Set the left hand term of the reduction function to the return variable value.
 																	double k$var44 = reduceVar$sum$6;
 																	
 																	// Set the right hand term to a value from the array exped
-																	double l$var45 = exped[cv$reduction1462Index];
+																	double l$var45 = exped[cv$reduction1465Index];
 																	
 																	// Execute the reduction function, saving the result into the return value.
 																	// 
@@ -3991,12 +3998,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																															double reduceVar$denom$6 = 0.0;
 																															
 																															// For each index in the array to be reduced
-																															for(int cv$reduction1901Index = 0; cv$reduction1901Index < (avail[0].length + 1); cv$reduction1901Index += 1) {
+																															for(int cv$reduction1904Index = 0; cv$reduction1904Index < (avail[0].length + 1); cv$reduction1904Index += 1) {
 																																// Set the left hand term of the reduction function to the return variable value.
 																																double k$var99 = reduceVar$denom$6;
 																																
 																																// Set the right hand term to a value from the array weekly_ut
-																																double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1901Index];
+																																double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction1904Index];
 																																
 																																// Execute the reduction function, saving the result into the return value.
 																																// 
@@ -4144,12 +4151,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 																														double reduceVar$denom$8 = 0.0;
 																														
 																														// For each index in the array to be reduced
-																														for(int cv$reduction2001Index = 0; cv$reduction2001Index < (avail[0].length + 1); cv$reduction2001Index += 1) {
+																														for(int cv$reduction2004Index = 0; cv$reduction2004Index < (avail[0].length + 1); cv$reduction2004Index += 1) {
 																															// Set the left hand term of the reduction function to the return variable value.
 																															double k$var99 = reduceVar$denom$8;
 																															
 																															// Set the right hand term to a value from the array weekly_ut
-																															double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction2001Index];
+																															double l$var100 = weekly_ut[((t - 0) / 1)][cv$reduction2004Index];
 																															
 																															// Execute the reduction function, saving the result into the return value.
 																															// 
@@ -4322,6 +4329,13 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 90 drawn from Poisson 79. Inference was performed using Metropolis-Hastings.
 	private final void sample90(int t) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// Metropolis-Hastings
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
+		
 		// Reduction of array null
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
@@ -4367,7 +4381,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			

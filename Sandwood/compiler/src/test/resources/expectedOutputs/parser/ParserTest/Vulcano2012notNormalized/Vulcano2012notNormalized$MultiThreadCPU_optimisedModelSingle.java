@@ -917,14 +917,14 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 					double reduceVar$denom$10 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction879Index = 0; cv$reduction879Index <= noProducts; cv$reduction879Index += 1)
+					for(int cv$reduction888Index = 0; cv$reduction888Index <= noProducts; cv$reduction888Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 						// l's comment
 						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var59][cv$reduction879Index]);
+						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var59][cv$reduction888Index]);
 					weekly_rates[t$var59][j$var88] = (weekly_ut[t$var59][j$var88] / reduceVar$denom$10);
 				}
 			}
@@ -1105,14 +1105,14 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 						double reduceVar$denom$13 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1084Index = 0; cv$reduction1084Index <= noProducts; cv$reduction1084Index += 1)
+						for(int cv$reduction1093Index = 0; cv$reduction1093Index <= noProducts; cv$reduction1093Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 							// l's comment
 							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var59][cv$reduction1084Index]);
+							reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var59][cv$reduction1093Index]);
 						weekly_rates[t$var59][j$var88] = (weekly_ut[t$var59][j$var88] / reduceVar$denom$13);
 					}
 				}
@@ -1203,6 +1203,16 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
+		// Variable declaration of cv$accumulatedProbabilities moved.
+		// Declaration comment was:
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// cv$temp$0$var47's comment
+		// Constructing a random variable input for use later.
+		// 
+		// Set the current value to the current state of the tree.
+		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
@@ -1216,6 +1226,27 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// cv$temp$0$var47's comment
 		// Constructing a random variable input for use later.
+		// 
+		// Set the current value to the current state of the tree.
+		// 
+		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+		// Declaration comment was:
+		// Processing sample task 98 of consumer random variable null.
+		// 
+		// Set an accumulator to sum the probabilities for each possible configuration of
+		// inputs.
+		// 
+		// Substituted "t$var59" with its value "t$var46".
+		// 
+		// cv$temp$1$weekly_rates's comment
+		// Substituted "t$var59" with its value "t$var46".
+		// 
+		// cv$temp$2$var92's comment
+		// Variable declaration of cv$temp$2$var92 moved.
+		// 
+		// Constructing a random variable input for use later.
+		// 
+		// Set the current value to the current state of the tree.
 		double cv$originalProbability = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t$var46], weekly_rates[t$var46], cv$originalValue) + DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var46]));
 		
 		// Update Sample and intermediate values
@@ -1242,6 +1273,23 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// cv$temp$0$var47's comment
 		// Constructing a random variable input for use later.
+		// 
+		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+		// Declaration comment was:
+		// Processing sample task 98 of consumer random variable null.
+		// 
+		// Set an accumulator to sum the probabilities for each possible configuration of
+		// inputs.
+		// 
+		// Substituted "t$var59" with its value "t$var46".
+		// 
+		// cv$temp$1$weekly_rates's comment
+		// Substituted "t$var59" with its value "t$var46".
+		// 
+		// cv$temp$2$var92's comment
+		// Variable declaration of cv$temp$2$var92 moved.
+		// 
+		// Constructing a random variable input for use later.
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t$var46], weekly_rates[t$var46], cv$proposedValue) + DistributionSampling.logProbabilityPoisson(cv$proposedValue, lambda[t$var46]));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
@@ -1249,10 +1297,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

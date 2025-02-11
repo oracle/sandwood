@@ -1032,10 +1032,7 @@ public class TreeUtils {
             List<ScopeDesc> elementScopes, ArrayType<?> type) {
         if(scopes.size() == 1) { // There are no outer scopes to apply, so just move on the inner parts.
             // is this an array?
-            if(v.getType().isArray())
-                return getArrayDescriptionInternal((ArrayVariable<?>) v, type, elementScopes);
-            else
-                return getArrayDescriptionInternal(scopes.get(0).scope, elementScopes, type);
+            return getArrayDescriptionInternal((ArrayVariable<?>) v, type, elementScopes);
         } else
             return getArrayDescriptionInternal(scopes.get(0).scope, scopes, v, elementScopes, 1, type);
     }
@@ -1364,7 +1361,7 @@ public class TreeUtils {
     }
 
     public static IRTreeVoid lseAdd(IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue,
-            VariableDescription<DoubleVariable> targetName, String comment) {
+            VariableDescription<DoubleVariable> targetName, IRTreeReturn<IntVariable> bound, String comment) {
         VariableDescription<DoubleVariable> maxName = VariableNames.calcVarName("lseMax", VariableType.DoubleVariable,
                 true);
         VariableDescription<DoubleVariable> elementName = VariableNames.calcVarName("lseElementValue",
@@ -1385,8 +1382,8 @@ public class TreeUtils {
         maxBody.add(initializeVariable(elementName, arrayGet(arrayValue, load(indexName)), Tree.NoComment));
         maxBody.add(ifElse(lessThan(load(maxName), load(elementName)),
                 store(maxName, load(elementName), Tree.NoComment), Tree.NoComment));
-        stmts.add(forStmt(sequential(maxBody, Tree.NoComment), constant(1), getIntField(arrayValue, "length"),
-                constant(1), indexName, true, "Find max value."));
+        stmts.add(forStmt(sequential(maxBody, Tree.NoComment), constant(1), bound, constant(1), indexName, true,
+                "Find max value."));
 
         // Sum all the values if max is not -infinity, otherwise return -infinity
         List<IRTreeVoid> sumStmts = new ArrayList<>();
@@ -1394,7 +1391,7 @@ public class TreeUtils {
         IRTreeVoid sumBody = store(sumName,
                 addDD(load(sumName), exp(subtractDD(arrayGet(arrayValue, load(indexName)), load(maxName)))),
                 Tree.NoComment);
-        sumStmts.add(forStmt(sumBody, constant(0), getIntField(arrayValue, "length"), constant(1), indexName, true,
+        sumStmts.add(forStmt(sumBody, constant(0), bound, constant(1), indexName, true,
                 "Offset values, move to normal space, and sum."));
         sumStmts.add(store(targetName, addDD(load(targetName), addDD(log(load(sumName)), load(maxName))),
                 "Increment the value of the target, moving the value back into log space."));
