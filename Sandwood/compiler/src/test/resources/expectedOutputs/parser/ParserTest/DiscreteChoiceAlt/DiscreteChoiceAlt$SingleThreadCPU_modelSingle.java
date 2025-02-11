@@ -593,6 +593,13 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 19 drawn from Gaussian 17. Inference was performed using Metropolis-Hastings.
 	private final void sample19(int i$var12) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// Metropolis-Hastings
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
+		
 		// The original value of the sample
 		double cv$originalValue = ut[i$var12];
 		
@@ -611,7 +618,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -667,12 +674,12 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 											double reduceVar$sum$0 = 0.0;
 											
 											// For each index in the array to be reduced
-											for(int cv$reduction88Index = 0; cv$reduction88Index < noProducts; cv$reduction88Index += 1) {
+											for(int cv$reduction91Index = 0; cv$reduction91Index < noProducts; cv$reduction91Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var31 = reduceVar$sum$0;
 												
 												// Set the right hand term to a value from the array exped
-												double j = exped[cv$reduction88Index];
+												double j = exped[cv$reduction91Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -789,24 +796,24 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 											double reduceVar$sum$1 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction153Index = 0; cv$reduction153Index < i$var23; cv$reduction153Index += 1) {
+											for(int cv$reduction156Index = 0; cv$reduction156Index < i$var23; cv$reduction156Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var31 = reduceVar$sum$1;
 												
 												// Set the right hand term to a value from the array exped
-												double j = exped[cv$reduction153Index];
+												double j = exped[cv$reduction156Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$sum$1 = (i$var31 + j);
 											}
-											for(int cv$reduction153Index = (i$var23 + 1); cv$reduction153Index < noProducts; cv$reduction153Index += 1) {
+											for(int cv$reduction156Index = (i$var23 + 1); cv$reduction156Index < noProducts; cv$reduction156Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var31 = reduceVar$sum$1;
 												
 												// Set the right hand term to a value from the array exped
-												double j = exped[cv$reduction153Index];
+												double j = exped[cv$reduction156Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1023,12 +1030,12 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 									double reduceVar$sum$2 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction196Index = 0; cv$reduction196Index < noProducts; cv$reduction196Index += 1) {
+									for(int cv$reduction199Index = 0; cv$reduction199Index < noProducts; cv$reduction199Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var31 = reduceVar$sum$2;
 										
 										// Set the right hand term to a value from the array exped
-										double j = exped[cv$reduction196Index];
+										double j = exped[cv$reduction199Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 

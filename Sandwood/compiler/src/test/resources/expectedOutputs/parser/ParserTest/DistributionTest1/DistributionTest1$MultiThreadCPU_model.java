@@ -265,9 +265,8 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								
 								// Update the probability of sampling this value from the distribution value.
 								double cv$probabilitySample9Value9 = (1.0 * distribution$sample9[index$sample9$8]);
-								int traceTempVariable$v2$11_1 = distributionTempVariable$v2$10;
 								{
-									double var11 = ((1.0 * v1) / traceTempVariable$v2$11_1);
+									double var11 = ((1.0 * v1) / distributionTempVariable$v2$10);
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample9Value9) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var11));
@@ -297,10 +296,9 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							
 							// Update the probability of sampling this value from the distribution value.
 							double cv$probabilitySample7Value4 = (1.0 * distribution$sample7[index$sample7$3]);
-							int traceTempVariable$v1$6_1 = distributionTempVariable$v1$5;
 							if(fixedFlag$sample9) {
 								{
-									double var11 = ((1.0 * traceTempVariable$v1$6_1) / v2);
+									double var11 = ((1.0 * distributionTempVariable$v1$5) / v2);
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample7Value4) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var11));
@@ -327,9 +325,8 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										
 										// Update the probability of sampling this value from the distribution value.
 										double cv$probabilitySample9Value14 = (cv$probabilitySample7Value4 * distribution$sample9[index$sample9$13]);
-										int traceTempVariable$v2$16_1 = distributionTempVariable$v2$15;
 										{
-											double var11 = ((1.0 * traceTempVariable$v1$6_1) / traceTempVariable$v2$16_1);
+											double var11 = ((1.0 * distributionTempVariable$v1$5) / distributionTempVariable$v2$15);
 											
 											// Store the value of the function call, so the function call is only made once.
 											double cv$weightedProbability = (Math.log(cv$probabilitySample9Value14) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var11));
@@ -873,9 +870,16 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// by sample task 7 drawn from Categorical 5. Inference was performed using variable
 	// marginalization.
 	private final void sample7() {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// variable marginalization
+			cv$noStates = Math.max(cv$noStates, weightings.length);
+		}
+		
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var6$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -953,13 +957,12 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											
 											// Update the probability of sampling this value from the distribution value.
 											double cv$probabilitySample9Value5 = (1.0 * distribution$sample9[index$sample9$4]);
-											int traceTempVariable$v2$7_1 = distributionTempVariable$v2$6;
 											{
 												{
 													double cv$temp$2$var11;
 													{
 														// Constructing a random variable input for use later.
-														double var11 = ((1.0 * traceTempVariable$v1$1_1) / traceTempVariable$v2$7_1);
+														double var11 = ((1.0 * traceTempVariable$v1$1_1) / distributionTempVariable$v2$6);
 														cv$temp$2$var11 = var11;
 													}
 													
@@ -1033,7 +1036,7 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -1049,7 +1052,7 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -1060,22 +1063,33 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 9 drawn from Categorical 7. Inference was performed using variable
 	// marginalization.
 	private final void sample9() {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// variable marginalization
+			cv$noStates = Math.max(cv$noStates, weightings.length);
+		}
+		
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var8$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < weightings.length; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -1153,13 +1167,12 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											
 											// Update the probability of sampling this value from the distribution value.
 											double cv$probabilitySample7Value5 = (1.0 * distribution$sample7[index$sample7$4]);
-											int traceTempVariable$v1$7_1 = distributionTempVariable$v1$6;
 											{
 												{
 													double cv$temp$2$var11;
 													{
 														// Constructing a random variable input for use later.
-														double var11 = ((1.0 * traceTempVariable$v1$7_1) / traceTempVariable$v2$1_1);
+														double var11 = ((1.0 * distributionTempVariable$v1$6) / traceTempVariable$v2$1_1);
 														cv$temp$2$var11 = var11;
 													}
 													
@@ -1233,7 +1246,7 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -1249,7 +1262,7 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -1260,13 +1273,17 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

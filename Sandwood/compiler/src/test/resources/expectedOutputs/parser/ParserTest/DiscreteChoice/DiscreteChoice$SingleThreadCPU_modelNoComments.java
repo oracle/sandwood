@@ -383,6 +383,10 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	private final void sample19(int i$var12) {
+		int cv$noStates = 0;
+		{
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
 		double cv$originalValue = ut[i$var12];
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -390,7 +394,7 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			cv$var = (0.1 * 0.1);
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
@@ -418,9 +422,9 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 									{
 										{
 											double reduceVar$sum$0 = 0.0;
-											for(int cv$reduction88Index = 0; cv$reduction88Index < noProducts; cv$reduction88Index += 1) {
+											for(int cv$reduction91Index = 0; cv$reduction91Index < noProducts; cv$reduction91Index += 1) {
 												double i$var31 = reduceVar$sum$0;
-												double j = exped[cv$reduction88Index];
+												double j = exped[cv$reduction91Index];
 												reduceVar$sum$0 = (i$var31 + j);
 											}
 											sum = reduceVar$sum$0;
@@ -505,14 +509,14 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 									{
 										if((0 < noProducts)) {
 											double reduceVar$sum$1 = 0.0;
-											for(int cv$reduction153Index = 0; cv$reduction153Index < i$var23; cv$reduction153Index += 1) {
+											for(int cv$reduction156Index = 0; cv$reduction156Index < i$var23; cv$reduction156Index += 1) {
 												double i$var31 = reduceVar$sum$1;
-												double j = exped[cv$reduction153Index];
+												double j = exped[cv$reduction156Index];
 												reduceVar$sum$1 = (i$var31 + j);
 											}
-											for(int cv$reduction153Index = (i$var23 + 1); cv$reduction153Index < noProducts; cv$reduction153Index += 1) {
+											for(int cv$reduction156Index = (i$var23 + 1); cv$reduction156Index < noProducts; cv$reduction156Index += 1) {
 												double i$var31 = reduceVar$sum$1;
-												double j = exped[cv$reduction153Index];
+												double j = exped[cv$reduction156Index];
 												reduceVar$sum$1 = (i$var31 + j);
 											}
 											double cv$reduced32 = reduceVar$sum$1;
@@ -647,9 +651,9 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 							{
 								{
 									double reduceVar$sum$2 = 0.0;
-									for(int cv$reduction196Index = 0; cv$reduction196Index < noProducts; cv$reduction196Index += 1) {
+									for(int cv$reduction199Index = 0; cv$reduction199Index < noProducts; cv$reduction199Index += 1) {
 										double i$var31 = reduceVar$sum$2;
-										double j = exped[cv$reduction196Index];
+										double j = exped[cv$reduction199Index];
 										reduceVar$sum$2 = (i$var31 + j);
 									}
 									sum = reduceVar$sum$2;

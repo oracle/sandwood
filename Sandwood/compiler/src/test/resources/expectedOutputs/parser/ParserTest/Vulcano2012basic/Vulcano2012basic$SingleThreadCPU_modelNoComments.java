@@ -571,6 +571,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	private final void sample25(int var22) {
+		int cv$noStates = 0;
+		{
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
 		double cv$originalValue = ut[var22];
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -578,7 +582,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			cv$var = (0.1 * 0.1);
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
@@ -606,9 +610,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 									{
 										{
 											double reduceVar$sum$0 = 0.0;
-											for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+											for(int cv$reduction139Index = 0; cv$reduction139Index < noProducts; cv$reduction139Index += 1) {
 												double k = reduceVar$sum$0;
-												double l = exped[cv$reduction136Index];
+												double l = exped[cv$reduction139Index];
 												reduceVar$sum$0 = (k + l);
 											}
 											sum = reduceVar$sum$0;
@@ -677,14 +681,14 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 									{
 										if((0 < noProducts)) {
 											double reduceVar$sum$1 = 0.0;
-											for(int cv$reduction193Index = 0; cv$reduction193Index < j$var28; cv$reduction193Index += 1) {
+											for(int cv$reduction196Index = 0; cv$reduction196Index < j$var28; cv$reduction196Index += 1) {
 												double k = reduceVar$sum$1;
-												double l = exped[cv$reduction193Index];
+												double l = exped[cv$reduction196Index];
 												reduceVar$sum$1 = (k + l);
 											}
-											for(int cv$reduction193Index = (j$var28 + 1); cv$reduction193Index < noProducts; cv$reduction193Index += 1) {
+											for(int cv$reduction196Index = (j$var28 + 1); cv$reduction196Index < noProducts; cv$reduction196Index += 1) {
 												double k = reduceVar$sum$1;
-												double l = exped[cv$reduction193Index];
+												double l = exped[cv$reduction196Index];
 												reduceVar$sum$1 = (k + l);
 											}
 											double cv$reduced38 = reduceVar$sum$1;
@@ -832,9 +836,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 							{
 								{
 									double reduceVar$sum$2 = 0.0;
-									for(int cv$reduction246Index = 0; cv$reduction246Index < noProducts; cv$reduction246Index += 1) {
+									for(int cv$reduction249Index = 0; cv$reduction249Index < noProducts; cv$reduction249Index += 1) {
 										double k = reduceVar$sum$2;
-										double l = exped[cv$reduction246Index];
+										double l = exped[cv$reduction249Index];
 										reduceVar$sum$2 = (k + l);
 									}
 									sum = reduceVar$sum$2;
@@ -890,6 +894,10 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	private final void sample61(int t$var55) {
+		int cv$noStates = 0;
+		{
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
 		int cv$originalValue = arrivals[t$var55];
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -899,7 +907,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
 		int cv$proposedValue = (cv$originalValue + (int)cv$offset);
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;

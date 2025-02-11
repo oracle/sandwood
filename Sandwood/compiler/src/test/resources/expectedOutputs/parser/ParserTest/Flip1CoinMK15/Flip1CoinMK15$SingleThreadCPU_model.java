@@ -316,12 +316,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double reduceVar$var28$6 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction240Index = 0; cv$reduction240Index < 2; cv$reduction240Index += 1) {
+									for(int cv$reduction243Index = 0; cv$reduction243Index < 2; cv$reduction243Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var25 = reduceVar$var28$6;
 										
 										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction240Index];
+										double j = c[cv$reduction243Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -356,12 +356,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double reduceVar$var28$7 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction251Index = 0; cv$reduction251Index < 2; cv$reduction251Index += 1) {
+									for(int cv$reduction254Index = 0; cv$reduction254Index < 2; cv$reduction254Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var25 = reduceVar$var28$7;
 										
 										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction251Index];
+										double j = c[cv$reduction254Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -461,12 +461,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double reduceVar$var28$8 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction269Index = 0; cv$reduction269Index < 2; cv$reduction269Index += 1) {
+									for(int cv$reduction272Index = 0; cv$reduction272Index < 2; cv$reduction272Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var25 = reduceVar$var28$8;
 										
 										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction269Index];
+										double j = c[cv$reduction272Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -501,12 +501,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double reduceVar$var28$9 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction280Index = 0; cv$reduction280Index < 2; cv$reduction280Index += 1) {
+									for(int cv$reduction283Index = 0; cv$reduction283Index < 2; cv$reduction283Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var25 = reduceVar$var28$9;
 										
 										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction280Index];
+										double j = c[cv$reduction283Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -636,6 +636,13 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 12 drawn from Beta 9. Inference was performed using Metropolis-Hastings.
 	private final void sample12() {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// Metropolis-Hastings
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
+		
 		// The original value of the sample
 		double cv$originalValue = b;
 		
@@ -654,7 +661,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -721,12 +728,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 											double reduceVar$var28$0 = 0.0;
 											
 											// For each index in the array to be reduced
-											for(int cv$reduction82Index = 0; cv$reduction82Index < 2; cv$reduction82Index += 1) {
+											for(int cv$reduction85Index = 0; cv$reduction85Index < 2; cv$reduction85Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var25 = reduceVar$var28$0;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction82Index];
+												double j = c[cv$reduction85Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -760,12 +767,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 											double reduceVar$var28$1 = 0.0;
 											
 											// For each index in the array to be reduced
-											for(int cv$reduction95Index = 0; cv$reduction95Index < 2; cv$reduction95Index += 1) {
+											for(int cv$reduction98Index = 0; cv$reduction98Index < 2; cv$reduction98Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var25 = reduceVar$var28$1;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction95Index];
+												double j = c[cv$reduction98Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -889,24 +896,24 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 											double reduceVar$var28$2 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction128Index = 0; cv$reduction128Index < 0; cv$reduction128Index += 1) {
+											for(int cv$reduction131Index = 0; cv$reduction131Index < 0; cv$reduction131Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var25 = reduceVar$var28$2;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction128Index];
+												double j = c[cv$reduction131Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var28$2 = (i$var25 + j);
 											}
-											for(int cv$reduction128Index = (0 + 1); cv$reduction128Index < 2; cv$reduction128Index += 1) {
+											for(int cv$reduction131Index = (0 + 1); cv$reduction131Index < 2; cv$reduction131Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var25 = reduceVar$var28$2;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction128Index];
+												double j = c[cv$reduction131Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1002,24 +1009,24 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 											double reduceVar$var28$3 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction151Index = 0; cv$reduction151Index < 1; cv$reduction151Index += 1) {
+											for(int cv$reduction154Index = 0; cv$reduction154Index < 1; cv$reduction154Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var25 = reduceVar$var28$3;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction151Index];
+												double j = c[cv$reduction154Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var28$3 = (i$var25 + j);
 											}
-											for(int cv$reduction151Index = (1 + 1); cv$reduction151Index < 2; cv$reduction151Index += 1) {
+											for(int cv$reduction154Index = (1 + 1); cv$reduction154Index < 2; cv$reduction154Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var25 = reduceVar$var28$3;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction151Index];
+												double j = c[cv$reduction154Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1181,12 +1188,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double reduceVar$var28$4 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction200Index = 0; cv$reduction200Index < 2; cv$reduction200Index += 1) {
+									for(int cv$reduction203Index = 0; cv$reduction203Index < 2; cv$reduction203Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var25 = reduceVar$var28$4;
 										
 										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction200Index];
+										double j = c[cv$reduction203Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -1220,12 +1227,12 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double reduceVar$var28$5 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction213Index = 0; cv$reduction213Index < 2; cv$reduction213Index += 1) {
+									for(int cv$reduction216Index = 0; cv$reduction216Index < 2; cv$reduction216Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double i$var25 = reduceVar$var28$5;
 										
 										// Set the right hand term to a value from the array c
-										double j = c[cv$reduction213Index];
+										double j = c[cv$reduction216Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 

@@ -1134,14 +1134,14 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				double reduceVar$sum$13 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction3109Index = 0; cv$reduction3109Index < avail[0].length; cv$reduction3109Index += 1)
+				for(int cv$reduction3118Index = 0; cv$reduction3118Index < avail[0].length; cv$reduction3118Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 					// l$var45's comment
 					// Set the right hand term to a value from the array exped
-					reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction3109Index]);
+					reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction3118Index]);
 				expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$13 * 0.3));
 			}
 		}
@@ -1311,14 +1311,14 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							double reduceVar$denom$15 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction3548Index = 0; cv$reduction3548Index <= avail[0].length; cv$reduction3548Index += 1)
+							for(int cv$reduction3557Index = 0; cv$reduction3557Index <= avail[0].length; cv$reduction3557Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 								// l$var100's comment
 								// Set the right hand term to a value from the array weekly_ut
-								reduceVar$denom$15 = (reduceVar$denom$15 + weekly_ut[t][cv$reduction3548Index]);
+								reduceVar$denom$15 = (reduceVar$denom$15 + weekly_ut[t][cv$reduction3557Index]);
 							weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$15);
 						}
 					}
@@ -1382,14 +1382,14 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						double reduceVar$denom$17 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction3648Index = 0; cv$reduction3648Index <= avail[0].length; cv$reduction3648Index += 1)
+						for(int cv$reduction3657Index = 0; cv$reduction3657Index <= avail[0].length; cv$reduction3657Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 							// l$var100's comment
 							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$17 = (reduceVar$denom$17 + weekly_ut[t][cv$reduction3648Index]);
+							reduceVar$denom$17 = (reduceVar$denom$17 + weekly_ut[t][cv$reduction3657Index]);
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$17);
 					}
 				}
@@ -1668,14 +1668,14 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					double reduceVar$sum$19 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction4294Index = 0; cv$reduction4294Index < avail[0].length; cv$reduction4294Index += 1)
+					for(int cv$reduction4303Index = 0; cv$reduction4303Index < avail[0].length; cv$reduction4303Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 						// l$var45's comment
 						// Set the right hand term to a value from the array exped
-						reduceVar$sum$19 = (reduceVar$sum$19 + exped[cv$reduction4294Index]);
+						reduceVar$sum$19 = (reduceVar$sum$19 + exped[cv$reduction4303Index]);
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$19 * 0.3));
 				}
 			}
@@ -1845,14 +1845,14 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 								double reduceVar$denom$21 = 0.0;
 								
 								// For each index in the array to be reduced
-								for(int cv$reduction4733Index = 0; cv$reduction4733Index <= avail[0].length; cv$reduction4733Index += 1)
+								for(int cv$reduction4742Index = 0; cv$reduction4742Index <= avail[0].length; cv$reduction4742Index += 1)
 									// Execute the reduction function, saving the result into the return value.
 									// 
 									// Copy the result of the reduction into the variable returned by the reduction.
 									// 
 									// l$var100's comment
 									// Set the right hand term to a value from the array weekly_ut
-									reduceVar$denom$21 = (reduceVar$denom$21 + weekly_ut[t][cv$reduction4733Index]);
+									reduceVar$denom$21 = (reduceVar$denom$21 + weekly_ut[t][cv$reduction4742Index]);
 								weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$21);
 							}
 						}
@@ -1916,14 +1916,14 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							double reduceVar$denom$23 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction4833Index = 0; cv$reduction4833Index <= avail[0].length; cv$reduction4833Index += 1)
+							for(int cv$reduction4842Index = 0; cv$reduction4842Index <= avail[0].length; cv$reduction4842Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 								// l$var100's comment
 								// Set the right hand term to a value from the array weekly_ut
-								reduceVar$denom$23 = (reduceVar$denom$23 + weekly_ut[t][cv$reduction4833Index]);
+								reduceVar$denom$23 = (reduceVar$denom$23 + weekly_ut[t][cv$reduction4842Index]);
 							weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$23);
 						}
 					}
@@ -2115,10 +2115,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

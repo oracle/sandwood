@@ -406,12 +406,11 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 						
 						// Enumerating the possible arguments for Categorical 42.
-						int traceTempVariable$var40$5_1 = DistributionSampling.sampleCategorical(RNG$, m[st[(index$i$1 - 1)]]);
 						if((index$i$1 == (i$var37 - 1))) {
 							for(int var15 = 0; var15 < states; var15 += 1) {
-								if((var15 == traceTempVariable$var40$5_1)) {
+								if((var15 == st[(i$var37 - 1)])) {
 									{
-										double[] var41 = m[traceTempVariable$var40$5_1];
+										double[] var41 = m[st[(i$var37 - 1)]];
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var41.length))?Math.log(var41[cv$sampleValue]):Double.NEGATIVE_INFINITY));
@@ -1626,9 +1625,16 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// by sample task 36 drawn from Categorical 32. Inference was performed using variable
 	// marginalization.
 	private final void sample36() {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// variable marginalization
+			cv$noStates = Math.max(cv$noStates, states);
+		}
+		
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var33$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < states; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -1922,7 +1928,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -1938,7 +1944,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -1949,13 +1955,17 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
@@ -1967,13 +1977,70 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// by sample task 46 drawn from Categorical 42. Inference was performed using variable
 	// marginalization.
 	private final void sample46(int i$var37) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		
+		// Exploring all the possible state counts for random variable 42.
+		// 
+		// Copy of index so that its values can be safely substituted
+		int index$i$1 = i$var37;
+		
+		// Enumerating the possible arguments for Categorical 42.
+		if((0 == (i$var37 - 1))) {
+			for(int var15 = 0; var15 < states; var15 += 1) {
+				if((var15 == st[(i$var37 - 1)]))
+					// variable marginalization
+					cv$noStates = Math.max(cv$noStates, states);
+			}
+		}
+		
+		// Enumerating the possible arguments for Categorical 42.
+		if((index$i$1 == (i$var37 - 1))) {
+			for(int var15 = 0; var15 < states; var15 += 1) {
+				if((var15 == st[(i$var37 - 1)]))
+					// variable marginalization
+					cv$noStates = Math.max(cv$noStates, states);
+			}
+		}
+		if(fixedFlag$sample46) {
+			for(int index$i$5_1 = 1; index$i$5_1 < samples; index$i$5_1 += 1) {
+				if((index$i$5_1 == (i$var37 - 1))) {
+					for(int var15 = 0; var15 < states; var15 += 1) {
+						if((var15 == st[(i$var37 - 1)]))
+							// variable marginalization
+							cv$noStates = Math.max(cv$noStates, states);
+					}
+				}
+			}
+		} else {
+			for(int index$i$6 = 1; index$i$6 < samples; index$i$6 += 1) {
+				if(!(index$i$6 == index$i$1)) {
+					// Enumerating the possible outputs of Categorical 42.
+					for(int index$sample46$7 = 0; index$sample46$7 < states; index$sample46$7 += 1) {
+						int distributionTempVariable$var43$9 = index$sample46$7;
+						
+						// Update the probability of sampling this value from the distribution value.
+						double cv$probabilitySample46Value8 = (1.0 * distribution$sample46[((index$i$6 - 1) / 1)][index$sample46$7]);
+						int traceTempVariable$var40$10_1 = distributionTempVariable$var43$9;
+						if((index$i$6 == (i$var37 - 1))) {
+							for(int var15 = 0; var15 < states; var15 += 1) {
+								if((var15 == traceTempVariable$var40$10_1))
+									// variable marginalization
+									cv$noStates = Math.max(cv$noStates, states);
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var43$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < states; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 42 creating
 			// sample task 46.
 			// Copy of index so that its values can be safely substituted
-			int index$i$1 = i$var37;
+			int index$i$14 = i$var37;
 			
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -2012,7 +2079,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							// Looking for a path between Sample 46 and consumer Categorical 42.
 							{
-								int traceTempVariable$var40$12_1 = cv$currentValue;
+								int traceTempVariable$var40$25_1 = cv$currentValue;
 							}
 						}
 						
@@ -2020,7 +2087,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							// Looking for a path between Sample 46 and consumer Bernoulli 51.
 							{
-								int traceTempVariable$var49$15_1 = cv$currentValue;
+								int traceTempVariable$var49$28_1 = cv$currentValue;
 								for(int j = 0; j < samples; j += 1) {
 									if((i$var37 == j)) {
 										// Processing sample task 55 of consumer random variable null.
@@ -2036,13 +2103,13 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 												// Enumerating the possible arguments for the variable Bernoulli 51 which is consuming
 												// the output of Sample task 46.
 												for(int var24 = 0; var24 < states; var24 += 1) {
-													if((var24 == traceTempVariable$var49$15_1)) {
+													if((var24 == traceTempVariable$var49$28_1)) {
 														{
 															{
 																double cv$temp$3$var50;
 																{
 																	// Constructing a random variable input for use later.
-																	double var50 = bias[traceTempVariable$var49$15_1];
+																	double var50 = bias[traceTempVariable$var49$28_1];
 																	cv$temp$3$var50 = var50;
 																}
 																
@@ -2102,16 +2169,16 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 			
 			// Enumerating the possible arguments for Categorical 42.
-			int traceTempVariable$var40$4_1 = cv$currentValue;
-			if((index$i$1 == (i$var37 - 1))) {
+			int traceTempVariable$var40$17_1 = cv$currentValue;
+			if((index$i$14 == (i$var37 - 1))) {
 				for(int var15 = 0; var15 < states; var15 += 1) {
-					if((var15 == traceTempVariable$var40$4_1)) {
+					if((var15 == traceTempVariable$var40$17_1)) {
 						// Record the reached probability density.
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 						double[] cv$temp$1$var41;
 						{
 							// Constructing a random variable input for use later.
-							double[] var41 = m[traceTempVariable$var40$4_1];
+							double[] var41 = m[traceTempVariable$var40$17_1];
 							cv$temp$1$var41 = var41;
 						}
 						
@@ -2123,7 +2190,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							// Looking for a path between Sample 46 and consumer Categorical 42.
 							{
-								int traceTempVariable$var40$13_1 = cv$currentValue;
+								int traceTempVariable$var40$26_1 = cv$currentValue;
 							}
 						}
 						
@@ -2131,7 +2198,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							// Looking for a path between Sample 46 and consumer Bernoulli 51.
 							{
-								int traceTempVariable$var49$16_1 = cv$currentValue;
+								int traceTempVariable$var49$29_1 = cv$currentValue;
 								for(int j = 0; j < samples; j += 1) {
 									if((i$var37 == j)) {
 										// Processing sample task 55 of consumer random variable null.
@@ -2147,13 +2214,13 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 												// Enumerating the possible arguments for the variable Bernoulli 51 which is consuming
 												// the output of Sample task 46.
 												for(int var24 = 0; var24 < states; var24 += 1) {
-													if((var24 == traceTempVariable$var49$16_1)) {
+													if((var24 == traceTempVariable$var49$29_1)) {
 														{
 															{
 																double cv$temp$4$var50;
 																{
 																	// Constructing a random variable input for use later.
-																	double var50 = bias[traceTempVariable$var49$16_1];
+																	double var50 = bias[traceTempVariable$var49$29_1];
 																	cv$temp$4$var50 = var50;
 																}
 																
@@ -2211,36 +2278,36 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 				}
 			}
-			for(int index$i$5 = 1; index$i$5 < samples; index$i$5 += 1) {
-				if(!(index$i$5 == index$i$1)) {
+			for(int index$i$18 = 1; index$i$18 < samples; index$i$18 += 1) {
+				if(!(index$i$18 == index$i$14)) {
 					// Enumerating the possible outputs of Categorical 42.
-					for(int index$sample46$6 = 0; index$sample46$6 < states; index$sample46$6 += 1) {
-						int distributionTempVariable$var43$8 = index$sample46$6;
+					for(int index$sample46$19 = 0; index$sample46$19 < states; index$sample46$19 += 1) {
+						int distributionTempVariable$var43$21 = index$sample46$19;
 						
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample46Value7 = (1.0 * distribution$sample46[((index$i$5 - 1) / 1)][index$sample46$6]);
-						int traceTempVariable$var40$9_1 = distributionTempVariable$var43$8;
-						if((index$i$5 == (i$var37 - 1))) {
+						double cv$probabilitySample46Value20 = (1.0 * distribution$sample46[((index$i$18 - 1) / 1)][index$sample46$19]);
+						int traceTempVariable$var40$22_1 = distributionTempVariable$var43$21;
+						if((index$i$18 == (i$var37 - 1))) {
 							for(int var15 = 0; var15 < states; var15 += 1) {
-								if((var15 == traceTempVariable$var40$9_1)) {
+								if((var15 == traceTempVariable$var40$22_1)) {
 									// Record the reached probability density.
-									cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample46Value7);
+									cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample46Value20);
 									double[] cv$temp$2$var41;
 									{
 										// Constructing a random variable input for use later.
-										double[] var41 = m[traceTempVariable$var40$9_1];
+										double[] var41 = m[traceTempVariable$var40$22_1];
 										cv$temp$2$var41 = var41;
 									}
 									
 									// An accumulator to allow the value for each distribution to be constructed before
 									// it is added to the index probabilities.
-									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample46Value7) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var41.length))?Math.log(cv$temp$2$var41[cv$currentValue]):Double.NEGATIVE_INFINITY));
+									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample46Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var41.length))?Math.log(cv$temp$2$var41[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									
 									// Processing random variable 42.
 									{
 										// Looking for a path between Sample 46 and consumer Categorical 42.
 										{
-											int traceTempVariable$var40$14_1 = cv$currentValue;
+											int traceTempVariable$var40$27_1 = cv$currentValue;
 										}
 									}
 									
@@ -2248,7 +2315,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 									{
 										// Looking for a path between Sample 46 and consumer Bernoulli 51.
 										{
-											int traceTempVariable$var49$17_1 = cv$currentValue;
+											int traceTempVariable$var49$30_1 = cv$currentValue;
 											for(int j = 0; j < samples; j += 1) {
 												if((i$var37 == j)) {
 													// Processing sample task 55 of consumer random variable null.
@@ -2264,13 +2331,13 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 															// Enumerating the possible arguments for the variable Bernoulli 51 which is consuming
 															// the output of Sample task 46.
 															for(int var24 = 0; var24 < states; var24 += 1) {
-																if((var24 == traceTempVariable$var49$17_1)) {
+																if((var24 == traceTempVariable$var49$30_1)) {
 																	{
 																		{
 																			double cv$temp$5$var50;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var50 = bias[traceTempVariable$var49$17_1];
+																				double var50 = bias[traceTempVariable$var49$30_1];
 																				cv$temp$5$var50 = var50;
 																			}
 																			
@@ -2336,13 +2403,13 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			{
 				// Looking for a path between Sample 46 and consumer Categorical 42.
 				{
-					int traceTempVariable$var40$27_1 = cv$currentValue;
-					for(int index$i$27_2 = 1; index$i$27_2 < samples; index$i$27_2 += 1) {
-						if((i$var37 == (index$i$27_2 - 1))) {
+					int traceTempVariable$var40$40_1 = cv$currentValue;
+					for(int index$i$40_2 = 1; index$i$40_2 < samples; index$i$40_2 += 1) {
+						if((i$var37 == (index$i$40_2 - 1))) {
 							// Processing sample task 46 of consumer random variable null.
 							{
 								// Copy of index so that its values can be safely substituted
-								int index$i$29 = index$i$27_2;
+								int index$i$42 = index$i$40_2;
 								
 								// A local array to hold the accumulated distributions of the sample tasks for each
 								// configuration of distributions.
@@ -2358,43 +2425,43 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Enumerating the possible arguments for the variable Categorical 42 which is consuming
 								// the output of Sample task 46.
 								for(int var15 = 0; var15 < states; var15 += 1) {
-									if((var15 == traceTempVariable$var40$27_1)) {
+									if((var15 == traceTempVariable$var40$40_1)) {
 										{
 											// Declare and zero an accumulator for tracking the reached source probability space.
 											double scopeVariable$reachedSourceProbability = 0.0;
 											
 											// Enumerating the possible arguments for Categorical 42.
 											if((0 == (i$var37 - 1))) {
-												for(int index$var15$32_1 = 0; index$var15$32_1 < states; index$var15$32_1 += 1) {
-													if((index$var15$32_1 == st[(i$var37 - 1)]))
+												for(int index$var15$45_1 = 0; index$var15$45_1 < states; index$var15$45_1 += 1) {
+													if((index$var15$45_1 == st[(i$var37 - 1)]))
 														// Add the probability of this argument configuration.
 														scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 												}
 											}
 											
 											// Enumerating the possible arguments for Categorical 42.
-											int traceTempVariable$var40$33_1 = cv$currentValue;
-											if((index$i$1 == (i$var37 - 1))) {
-												for(int index$var15$39_1 = 0; index$var15$39_1 < states; index$var15$39_1 += 1) {
-													if((index$var15$39_1 == traceTempVariable$var40$33_1))
+											int traceTempVariable$var40$46_1 = cv$currentValue;
+											if((index$i$14 == (i$var37 - 1))) {
+												for(int index$var15$52_1 = 0; index$var15$52_1 < states; index$var15$52_1 += 1) {
+													if((index$var15$52_1 == traceTempVariable$var40$46_1))
 														// Add the probability of this argument configuration.
 														scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 												}
 											}
-											for(int index$i$34 = 1; index$i$34 < samples; index$i$34 += 1) {
-												if((!(index$i$34 == index$i$1) && !(index$i$34 == index$i$29))) {
+											for(int index$i$47 = 1; index$i$47 < samples; index$i$47 += 1) {
+												if((!(index$i$47 == index$i$14) && !(index$i$47 == index$i$42))) {
 													// Enumerating the possible outputs of Categorical 42.
-													for(int index$sample46$35 = 0; index$sample46$35 < states; index$sample46$35 += 1) {
-														int distributionTempVariable$var43$37 = index$sample46$35;
+													for(int index$sample46$48 = 0; index$sample46$48 < states; index$sample46$48 += 1) {
+														int distributionTempVariable$var43$50 = index$sample46$48;
 														
 														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample46Value36 = (1.0 * distribution$sample46[((index$i$34 - 1) / 1)][index$sample46$35]);
-														int traceTempVariable$var40$38_1 = distributionTempVariable$var43$37;
-														if((index$i$34 == (i$var37 - 1))) {
-															for(int index$var15$40_1 = 0; index$var15$40_1 < states; index$var15$40_1 += 1) {
-																if((index$var15$40_1 == traceTempVariable$var40$38_1))
+														double cv$probabilitySample46Value49 = (1.0 * distribution$sample46[((index$i$47 - 1) / 1)][index$sample46$48]);
+														int traceTempVariable$var40$51_1 = distributionTempVariable$var43$50;
+														if((index$i$47 == (i$var37 - 1))) {
+															for(int index$var15$53_1 = 0; index$var15$53_1 < states; index$var15$53_1 += 1) {
+																if((index$var15$53_1 == traceTempVariable$var40$51_1))
 																	// Add the probability of this argument configuration.
-																	scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample46Value36);
+																	scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample46Value49);
 															}
 														}
 													}
@@ -2403,7 +2470,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 											double[] cv$temp$6$var41;
 											{
 												// Constructing a random variable input for use later.
-												double[] var41 = m[traceTempVariable$var40$27_1];
+												double[] var41 = m[traceTempVariable$var40$40_1];
 												cv$temp$6$var41 = var41;
 											}
 											
@@ -2420,7 +2487,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								}
 								
 								// A local copy of the samples' distribution.
-								double[] cv$sampleDistribution = distribution$sample46[((index$i$27_2 - 1) / 1)];
+								double[] cv$sampleDistribution = distribution$sample46[((index$i$40_2 - 1) / 1)];
 								
 								// The overlap of the distributions so far.
 								double cv$overlap = 0.0;
@@ -2470,7 +2537,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -2486,7 +2553,7 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -2497,13 +2564,17 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

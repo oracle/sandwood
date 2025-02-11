@@ -518,8 +518,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$2$bias's comment
-					// Variable declaration of cv$temp$2$bias moved.
+					// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
 					// 
 					// Set the current value to the current state of the tree.
 					// 
@@ -602,8 +601,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$bias's comment
-				// Variable declaration of cv$temp$2$bias moved.
+				// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var24], cv$proposedValue) + cv$accumulatedProbabilities);
 		} else {
 			double traceTempVariable$var18$5_2 = (cv$proposedValue / 2);
@@ -632,10 +630,6 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

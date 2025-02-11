@@ -784,11 +784,8 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 44 drawn from Categorical 40. Inference was performed using variable
 	// marginalization.
 	private final void sample44(int i$var35) {
+		// Unrolled loop
 		{
-			// Variable declaration of cv$currentValue moved.
-			// Declaration comment was:
-			// The value currently being tested
-			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
@@ -802,10 +799,6 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Variable declaration of cv$currentValue moved.
-			// Declaration comment was:
-			// The value currently being tested
-			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
@@ -813,16 +806,18 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			int index$i$1_2 = (i$var35 + 1);
 			if((index$i$1_2 < samples)) {
 				// Processing sample task 44 of consumer random variable null.
+				// Variable declaration of cv$temp$1$var39 moved.
+				// 
 				// Constructing a random variable input for use later.
 				// 
-				// Variable declaration of cv$currentValue moved.
-				// Declaration comment was:
-				// The value currently being tested
+				// Processing random variable 40.
+				// 
+				// Looking for a path between Sample 44 and consumer Categorical 40.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var39 = m[0];
+				double[] cv$temp$1$var39 = m[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -836,9 +831,7 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$1$var39" with its value "var39".
-				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < var39.length))?Math.log(var39[st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$1$var39.length))?Math.log(cv$temp$1$var39[st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// A check to ensure rounding of floating point values can never result in a negative
@@ -858,13 +851,12 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Substituted "j" with its value "i$var35".
 			// 
-			// Substituted "cv$temp$2$var47" with its value "var47".
-			// 
+			// cv$temp$2$var47's comment
 			// Constructing a random variable input for use later.
 			// 
-			// Variable declaration of cv$currentValue moved.
-			// Declaration comment was:
-			// The value currently being tested
+			// Processing random variable 48.
+			// 
+			// Looking for a path between Sample 44 and consumer Bernoulli 48.
 			// 
 			// Value of the variable at this index
 			// 
@@ -881,10 +873,6 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$var41$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
@@ -898,10 +886,6 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
@@ -909,16 +893,18 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		int index$i$1_2 = (i$var35 + 1);
 		if((index$i$1_2 < samples)) {
 			// Processing sample task 44 of consumer random variable null.
+			// Variable declaration of cv$temp$1$var39 moved.
+			// 
 			// Constructing a random variable input for use later.
 			// 
-			// Variable declaration of cv$currentValue moved.
-			// Declaration comment was:
-			// The value currently being tested
+			// Processing random variable 40.
+			// 
+			// Looking for a path between Sample 44 and consumer Categorical 40.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var39 = m[1];
+			double[] cv$temp$1$var39 = m[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -932,9 +918,7 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// Substituted "cv$temp$1$var39" with its value "var39".
-			cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < var39.length))?Math.log(var39[st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$1$var39.length))?Math.log(cv$temp$1$var39[st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// A check to ensure rounding of floating point values can never result in a negative
@@ -954,13 +938,12 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Substituted "j" with its value "i$var35".
 		// 
-		// Substituted "cv$temp$2$var47" with its value "var47".
-		// 
+		// cv$temp$2$var47's comment
 		// Constructing a random variable input for use later.
 		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
+		// Processing random variable 48.
+		// 
+		// Looking for a path between Sample 44 and consumer Bernoulli 48.
 		// 
 		// Value of the variable at this index
 		// 
@@ -988,54 +971,53 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var41$stateProbabilityGlobal[0];
 		
-		// Find max value.
+		// Unrolled loop
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var41$stateProbabilityGlobal.length; cv$lseIndex += 1) {
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var41$stateProbabilityGlobal[cv$lseIndex];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
+		double cv$lseElementValue = cv$var41$stateProbabilityGlobal[1];
+		if((cv$lseMax < cv$lseElementValue))
+			cv$lseMax = cv$lseElementValue;
 		
 		// If the maximum value is -infinity return -infinity.
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		
 		// Sum the values in the array.
-		else {
-			// Initialise the sum of the array elements
-			double cv$lseSum = 0.0;
-			
-			// Offset values, move to normal space, and sum.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var41$stateProbabilityGlobal.length; cv$lseIndex += 1)
-				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var41$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-			
+		else
 			// Increment the value of the target, moving the value back into log space.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-		}
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Initialise the sum of the array elements
+			cv$logSum = (Math.log((Math.exp((cv$var41$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var41$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			// 
+			// Unrolled loop
 			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var41$stateProbabilityGlobal.length; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var41$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var41$stateProbabilityGlobal.length);
+			cv$var41$stateProbabilityGlobal[0] = 0.5;
+			
+			// Get a local reference to the scratch space.
+			cv$var41$stateProbabilityGlobal[1] = 0.5;
 		} else {
-			// Normalize log space values and move to normal space
-			// 
+			// Unrolled loop
 			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var41$stateProbabilityGlobal.length; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var41$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var41$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			cv$var41$stateProbabilityGlobal[0] = Math.exp((cv$var41$stateProbabilityGlobal[0] - cv$logSum));
+			
+			// Get a local reference to the scratch space.
+			cv$var41$stateProbabilityGlobal[1] = Math.exp((cv$var41$stateProbabilityGlobal[1] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = 2; cv$indexName < cv$var41$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Get a local reference to the scratch space.
+			cv$var41$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.

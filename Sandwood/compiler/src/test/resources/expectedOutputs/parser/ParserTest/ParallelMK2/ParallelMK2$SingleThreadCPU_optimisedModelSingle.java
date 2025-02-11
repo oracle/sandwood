@@ -464,7 +464,10 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// Substituted "cv$temp$4$sample" with its value "cv$currentValue".
 					// 
-					// Substituted "cv$temp$5$var24" with its value "var24".
+					// Set the current value to the current state of the tree.
+					// 
+					// cv$temp$5$var24's comment
+					// Variable declaration of cv$temp$5$var24 moved.
 					// 
 					// Constructing a random variable input for use later.
 					// 
@@ -558,7 +561,8 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$4$sample" with its value "cv$currentValue".
 			// 
-			// Substituted "cv$temp$5$var24" with its value "var24".
+			// cv$temp$5$var24's comment
+			// Variable declaration of cv$temp$5$var24 moved.
 			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[index$i$5_2] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
@@ -569,10 +573,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

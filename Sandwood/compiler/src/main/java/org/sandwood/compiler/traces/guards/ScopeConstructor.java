@@ -568,7 +568,7 @@ public class ScopeConstructor {
                     ScopeDescription fixedTrace = TraceArrayRestrictions.constructRestriction(trace,
                             Collections.emptyMap(),
                             constructScopeSubstitutions(endScopes, fixedGuardDistribution, position),
-                            fixedGuardDistribution, id.get().next(), false, position, compilationCtx);
+                            fixedGuardDistribution, id.get().next(), true, position, compilationCtx);
                     toReturn.add(fixedTrace);
 
                     // Construct a distribution with the flag set to false.
@@ -585,7 +585,7 @@ public class ScopeConstructor {
                     // Construct a distribution that ensure that the trace is satisfied, but no values are changed as
                     // this distribution is fixed.
                     toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                            constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), false, position,
+                            constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), true, position,
                             compilationCtx));
                 else
                     // We have met this sample task before and if we are in this branch we know its values are not
@@ -595,13 +595,13 @@ public class ScopeConstructor {
             } else {
                 // Non distributed values are just treated as fixed values.
                 toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                        constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), false, position,
+                        constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), true, position,
                         compilationCtx));
             }
         } else {
             // Fixed values are just treated as fixed values.
             toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                    constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), false, position,
+                    constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), true, position,
                     compilationCtx));
         }
         return toReturn;
@@ -1221,7 +1221,7 @@ public class ScopeConstructor {
 
             Map<Set<TraceHandle>, Set<Set<TraceHandle>>> splitTraces = new LinkedHashMap<>();
             traceGroups.put(consumerToSampleTrace, splitTraces);
-            Set<Integer> validGets = getValidGets(consumerToSampleTrace);
+            Set<Integer> constraintGets = getConstraintGets(consumerToSampleTrace);
             // For each set of traces split and store the traces in the set.
             for(Set<TraceHandle> argTraces:rvDistTraces) {
                 Set<TraceHandle> rawTraces = consumerToSampleTraces.get(consumerToSampleTrace);
@@ -1241,7 +1241,7 @@ public class ScopeConstructor {
                         if(!rawTraces.contains(argTrace)) {
                             // If it goes to a different argument, or it is not used in an index or is used after the
                             // consumer trace executes it can be handled later
-                            if(argTrace.peek().argPos != argPos || !guardTrace(argTrace, validGets))
+                            if(argTrace.peek().argPos != argPos || !guardTrace(argTrace, constraintGets))
                                 postTraces.add(argTrace);
                             else
                                 preTraces.add(argTrace);
@@ -1263,10 +1263,16 @@ public class ScopeConstructor {
         return traceGroups;
     }
 
-    private Set<Integer> getValidGets(TraceHandle consumerToSampleTrace) {
+    /**
+     * Method to determine which get operations in a trace will be used to create guards.
+     * 
+     * @param constraintTrace
+     * @return A set containing the task ids of the gets that will be used in constraint generation.
+     */
+    private Set<Integer> getConstraintGets(TraceHandle constraintTrace) {
         Set<Integer> validGets = new HashSet<>();
         int validPuts = 0;
-        for(DataflowTaskArgDesc d:consumerToSampleTrace)
+        for(DataflowTaskArgDesc d:constraintTrace)
             switch(d.task.getType()) {
                 case GET:
                     if(d.argPos == 0 && validPuts > 0) {
@@ -1277,6 +1283,9 @@ public class ScopeConstructor {
                 case PUT:
                     if(d.argPos == 2)
                         validPuts++;
+                    break;
+                case REDUCE_INPUT:
+                    validPuts--;
                     break;
                 default:
                     break;

@@ -229,7 +229,7 @@ public class TraceArrayRestrictions {
         constructOpPairs(data);
 
         for(TraceHandle t:rawTraces)
-            getRequiredVariables(data, t);
+            getRequiredVariables(data, t, compilationCtx);
 
         if(position != 0) // No trace is set for zero as this is the initial scope constructor.
             getSubstitutionPoints(data, target.getTrace(position));
@@ -624,7 +624,8 @@ public class TraceArrayRestrictions {
      * @param data        The restrictionData object into which the results should be stored.
      * @param traceHandle The trace to examine.
      */
-    private static void getRequiredVariables(RestrictionsData data, TraceHandle traceHandle) {
+    private static void getRequiredVariables(RestrictionsData data, TraceHandle traceHandle,
+            CompilationContext compilationCtx) {
         Set<Variable<?>> requiredVariables = new HashSet<>();
 
         int size = traceHandle.size();
@@ -651,7 +652,7 @@ public class TraceArrayRestrictions {
                 default: {
                     if(data.passValues) {
                         Variable<?> v = d.task.getOutput();
-                        if(v.isIntermediate() && !v.getType().isArray())
+                        if(v.isIntermediate() && !v.getType().isArray() && !isSampleGeneration(v, compilationCtx))
                             requiredVariables.add(v);
                     }
                     break;
@@ -837,7 +838,7 @@ public class TraceArrayRestrictions {
                                             compilationCtx);
                             }
 
-                            if(!pt.value.getType().isArray()) {
+                            if(!pt.value.getType().isArray() && !isSampleGeneration(pt.value, compilationCtx)) {
                                 IRTreeReturn<?> t = getForwardIR(pt.value, pt.scope(), innerScope, compilationCtx);
                                 constructVarSubstitution(task.getOutput(), t, innerScope, data, varSubstitutions,
                                         compilationCtx);
@@ -976,6 +977,10 @@ public class TraceArrayRestrictions {
         target = target.addSubstitutions(position, s);
 
         return target;
+    }
+
+    private static boolean isSampleGeneration(Variable<?> v, CompilationContext compilationCtx) {
+        return compilationCtx.getSubstitute(v).getParent().getType() == DFType.SAMPLE;
     }
 
     private static <A extends Variable<A>> Scope processReductionInput(ReductionInput<A> ri,

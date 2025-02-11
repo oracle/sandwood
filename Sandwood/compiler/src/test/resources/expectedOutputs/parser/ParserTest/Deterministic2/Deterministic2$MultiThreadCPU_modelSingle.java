@@ -285,13 +285,15 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						int cv$sampleValue = a[i$var26];
 						
 						// Enumerating the possible arguments for Categorical 33.
-						for(int index$i$3_1 = 1; index$i$3_1 < n; index$i$3_1 += 1) {
-							if((0 == (index$i$3_1 - 1))) {
-								if((index$i$3_1 == i$var26)) {
+						int traceTempVariable$var29$3_1 = 0;
+						for(int index$i$3_2 = 1; index$i$3_2 < n; index$i$3_2 += 1) {
+							if((0 == (index$i$3_2 - 1))) {
+								int traceTempVariable$var31$3_3 = traceTempVariable$var29$3_1;
+								if((index$i$3_2 == i$var26)) {
 									for(int var16 = 0; var16 < states; var16 += 1) {
-										if((var16 == b[i$var26])) {
+										if((var16 == traceTempVariable$var31$3_3)) {
 											{
-												double[] var32 = m[b[i$var26]];
+												double[] var32 = m[traceTempVariable$var31$3_3];
 												
 												// Store the value of the function call, so the function call is only made once.
 												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
@@ -317,15 +319,14 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						}
 						
 						// Enumerating the possible arguments for Categorical 33.
-						int traceTempVariable$var29$5_1 = DistributionSampling.sampleCategorical(RNG$, m[b[index$i$1]]);
-						for(int index$i$5_2 = 1; index$i$5_2 < n; index$i$5_2 += 1) {
-							if((index$i$1 == (index$i$5_2 - 1))) {
-								int traceTempVariable$var31$5_3 = traceTempVariable$var29$5_1;
-								if((index$i$5_2 == i$var26)) {
+						for(int index$i$5_1 = 1; index$i$5_1 < n; index$i$5_1 += 1) {
+							if((index$i$1 == (index$i$5_1 - 1))) {
+								int traceTempVariable$var31$5_2 = a[(index$i$5_1 - 1)];
+								if((index$i$5_1 == i$var26)) {
 									for(int var16 = 0; var16 < states; var16 += 1) {
-										if((var16 == traceTempVariable$var31$5_3)) {
+										if((var16 == traceTempVariable$var31$5_2)) {
 											{
-												double[] var32 = m[traceTempVariable$var31$5_3];
+												double[] var32 = m[traceTempVariable$var31$5_2];
 												
 												// Store the value of the function call, so the function call is only made once.
 												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
@@ -353,11 +354,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 							for(int index$i$6_1 = 1; index$i$6_1 < n; index$i$6_1 += 1) {
 								for(int index$i$6_2 = 1; index$i$6_2 < n; index$i$6_2 += 1) {
 									if((index$i$6_1 == (index$i$6_2 - 1))) {
+										int traceTempVariable$var31$6_3 = a[(index$i$6_2 - 1)];
 										if((index$i$6_2 == i$var26)) {
 											for(int var16 = 0; var16 < states; var16 += 1) {
-												if((var16 == b[i$var26])) {
+												if((var16 == traceTempVariable$var31$6_3)) {
 													{
-														double[] var32 = m[b[i$var26]];
+														double[] var32 = m[traceTempVariable$var31$6_3];
 														
 														// Store the value of the function call, so the function call is only made once.
 														double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var32.length))?Math.log(var32[cv$sampleValue]):Double.NEGATIVE_INFINITY));
@@ -576,9 +578,10 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					boolean cv$sampleValue = flips[j];
 					
 					// Enumerating the possible arguments for Bernoulli 46.
+					int traceTempVariable$var43$2_1 = 0;
 					if((0 == (j + 1))) {
 						{
-							double var45 = (double)(1 / a[(j + 1)]);
+							double var45 = (double)(1 / traceTempVariable$var43$2_1);
 							
 							// Store the value of the function call, so the function call is only made once.
 							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var45));
@@ -1089,10 +1092,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Looking for a path between Sample 18 and consumer Categorical 33.
 				{
 					for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-						for(int index$i$2_1 = 1; index$i$2_1 < n; index$i$2_1 += 1) {
-							if((0 == (index$i$2_1 - 1))) {
-								if((index$i$2_1 == i$var26)) {
-									if((var16 == b[i$var26])) {
+						int traceTempVariable$var29$2_1 = 0;
+						for(int index$i$2_2 = 1; index$i$2_2 < n; index$i$2_2 += 1) {
+							if((0 == (index$i$2_2 - 1))) {
+								int traceTempVariable$var31$2_3 = traceTempVariable$var29$2_1;
+								if((index$i$2_2 == i$var26)) {
+									if((var16 == traceTempVariable$var31$2_3)) {
 										if(fixedFlag$sample36) {
 											// Processing sample task 36 of consumer random variable null.
 											{
@@ -1121,8 +1126,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 							for(int index$i$5_1 = 1; index$i$5_1 < n; index$i$5_1 += 1) {
 								for(int index$i$5_2 = 1; index$i$5_2 < n; index$i$5_2 += 1) {
 									if((index$i$5_1 == (index$i$5_2 - 1))) {
+										int traceTempVariable$var31$5_3 = a[(index$i$5_2 - 1)];
 										if((index$i$5_2 == i$var26)) {
-											if((var16 == b[i$var26])) {
+											if((var16 == traceTempVariable$var31$5_3)) {
 												if(fixedFlag$sample36) {
 													// Processing sample task 36 of consumer random variable null.
 													{
@@ -1197,10 +1203,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Looking for a path between Sample 18 and consumer Categorical 33.
 			{
 				for(int i$var26 = 1; i$var26 < n; i$var26 += 1) {
-					for(int index$i$23_1 = 1; index$i$23_1 < n; index$i$23_1 += 1) {
-						if((0 == (index$i$23_1 - 1))) {
-							if((index$i$23_1 == i$var26)) {
-								if((var16 == b[i$var26])) {
+					int traceTempVariable$var29$23_1 = 0;
+					for(int index$i$23_2 = 1; index$i$23_2 < n; index$i$23_2 += 1) {
+						if((0 == (index$i$23_2 - 1))) {
+							int traceTempVariable$var31$23_3 = traceTempVariable$var29$23_1;
+							if((index$i$23_2 == i$var26)) {
+								if((var16 == traceTempVariable$var31$23_3)) {
 									if(!fixedFlag$sample36) {
 										// Processing sample task 36 of consumer random variable null.
 										{
@@ -1235,8 +1243,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						for(int index$i$26_1 = 1; index$i$26_1 < n; index$i$26_1 += 1) {
 							for(int index$i$26_2 = 1; index$i$26_2 < n; index$i$26_2 += 1) {
 								if((index$i$26_1 == (index$i$26_2 - 1))) {
+									int traceTempVariable$var31$26_3 = a[(index$i$26_2 - 1)];
 									if((index$i$26_2 == i$var26)) {
-										if((var16 == b[i$var26])) {
+										if((var16 == traceTempVariable$var31$26_3)) {
 											if(!fixedFlag$sample36) {
 												// Processing sample task 36 of consumer random variable null.
 												{
@@ -1327,13 +1336,91 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// by sample task 36 drawn from Categorical 33. Inference was performed using variable
 	// marginalization.
 	private final void sample36(int i$var26) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		
+		// Exploring all the possible state counts for random variable 33.
+		// 
+		// Copy of index so that its values can be safely substituted
+		int index$i$1 = i$var26;
+		
+		// Enumerating the possible arguments for Categorical 33.
+		int traceTempVariable$var29$2_1 = 0;
+		for(int index$i$2_2 = 1; index$i$2_2 < n; index$i$2_2 += 1) {
+			if((0 == (index$i$2_2 - 1))) {
+				int traceTempVariable$var31$2_3 = traceTempVariable$var29$2_1;
+				if((index$i$2_2 == i$var26)) {
+					for(int var16 = 0; var16 < states; var16 += 1) {
+						if((var16 == traceTempVariable$var31$2_3))
+							// variable marginalization
+							cv$noStates = Math.max(cv$noStates, states);
+					}
+				}
+			}
+		}
+		
+		// Enumerating the possible arguments for Categorical 33.
+		for(int index$i$4_1 = 1; index$i$4_1 < n; index$i$4_1 += 1) {
+			if((index$i$1 == (index$i$4_1 - 1))) {
+				int traceTempVariable$var31$4_2 = a[(index$i$4_1 - 1)];
+				if((index$i$4_1 == i$var26)) {
+					for(int var16 = 0; var16 < states; var16 += 1) {
+						if((var16 == traceTempVariable$var31$4_2))
+							// variable marginalization
+							cv$noStates = Math.max(cv$noStates, states);
+					}
+				}
+			}
+		}
+		if(fixedFlag$sample36) {
+			for(int index$i$5_1 = 1; index$i$5_1 < n; index$i$5_1 += 1) {
+				for(int index$i$5_2 = 1; index$i$5_2 < n; index$i$5_2 += 1) {
+					if((index$i$5_1 == (index$i$5_2 - 1))) {
+						int traceTempVariable$var31$5_3 = a[(index$i$5_2 - 1)];
+						if((index$i$5_2 == i$var26)) {
+							for(int var16 = 0; var16 < states; var16 += 1) {
+								if((var16 == traceTempVariable$var31$5_3))
+									// variable marginalization
+									cv$noStates = Math.max(cv$noStates, states);
+							}
+						}
+					}
+				}
+			}
+		} else {
+			for(int index$i$6 = 1; index$i$6 < n; index$i$6 += 1) {
+				if(!(index$i$6 == index$i$1)) {
+					// Enumerating the possible outputs of Categorical 33.
+					for(int index$sample36$7 = 0; index$sample36$7 < states; index$sample36$7 += 1) {
+						int distributionTempVariable$var34$9 = index$sample36$7;
+						
+						// Update the probability of sampling this value from the distribution value.
+						double cv$probabilitySample36Value8 = (1.0 * distribution$sample36[((index$i$6 - 1) / 1)][index$sample36$7]);
+						int traceTempVariable$var29$10_1 = distributionTempVariable$var34$9;
+						for(int index$i$10_2 = 1; index$i$10_2 < n; index$i$10_2 += 1) {
+							if((index$i$6 == (index$i$10_2 - 1))) {
+								int traceTempVariable$var31$10_3 = traceTempVariable$var29$10_1;
+								if((index$i$10_2 == i$var26)) {
+									for(int var16 = 0; var16 < states; var16 += 1) {
+										if((var16 == traceTempVariable$var31$10_3))
+											// variable marginalization
+											cv$noStates = Math.max(cv$noStates, states);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var34$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < states; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 33 creating
 			// sample task 36.
 			// Copy of index so that its values can be safely substituted
-			int index$i$1 = i$var26;
+			int index$i$14 = i$var26;
 			
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -1352,17 +1439,19 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			cv$currentValue = cv$valuePos;
 			
 			// Enumerating the possible arguments for Categorical 33.
-			for(int index$i$2_1 = 1; index$i$2_1 < n; index$i$2_1 += 1) {
-				if((0 == (index$i$2_1 - 1))) {
-					if((index$i$2_1 == i$var26)) {
+			int traceTempVariable$var29$15_1 = 0;
+			for(int index$i$15_2 = 1; index$i$15_2 < n; index$i$15_2 += 1) {
+				if((0 == (index$i$15_2 - 1))) {
+					int traceTempVariable$var31$15_3 = traceTempVariable$var29$15_1;
+					if((index$i$15_2 == i$var26)) {
 						for(int var16 = 0; var16 < states; var16 += 1) {
-							if((var16 == b[i$var26])) {
+							if((var16 == traceTempVariable$var31$15_3)) {
 								// Record the reached probability density.
 								cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 								double[] cv$temp$0$var32;
 								{
 									// Constructing a random variable input for use later.
-									double[] var32 = m[b[i$var26]];
+									double[] var32 = m[traceTempVariable$var31$15_3];
 									cv$temp$0$var32 = var32;
 								}
 								
@@ -1374,10 +1463,10 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								{
 									// Looking for a path between Sample 36 and consumer Categorical 33.
 									{
-										int traceTempVariable$var29$12_1 = cv$currentValue;
-										for(int index$i$12_2 = 1; index$i$12_2 < n; index$i$12_2 += 1) {
-											if((i$var26 == (index$i$12_2 - 1))) {
-												int traceTempVariable$var31$12_3 = traceTempVariable$var29$12_1;
+										int traceTempVariable$var29$25_1 = cv$currentValue;
+										for(int index$i$25_2 = 1; index$i$25_2 < n; index$i$25_2 += 1) {
+											if((i$var26 == (index$i$25_2 - 1))) {
+												int traceTempVariable$var31$25_3 = traceTempVariable$var29$25_1;
 											}
 										}
 									}
@@ -1387,7 +1476,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								{
 									// Looking for a path between Sample 36 and consumer Bernoulli 46.
 									{
-										int traceTempVariable$var43$15_1 = cv$currentValue;
+										int traceTempVariable$var43$28_1 = cv$currentValue;
 										for(int j = 0; j < n; j += 1) {
 											if((i$var26 == (j + 1))) {
 												// Processing sample task 49 of consumer random variable null.
@@ -1406,7 +1495,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																	double cv$temp$3$var45;
 																	{
 																		// Constructing a random variable input for use later.
-																		double var45 = (double)(1 / traceTempVariable$var43$15_1);
+																		double var45 = (double)(1 / traceTempVariable$var43$28_1);
 																		cv$temp$3$var45 = var45;
 																	}
 																	
@@ -1467,19 +1556,19 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 			
 			// Enumerating the possible arguments for Categorical 33.
-			int traceTempVariable$var29$4_1 = cv$currentValue;
-			for(int index$i$4_2 = 1; index$i$4_2 < n; index$i$4_2 += 1) {
-				if((index$i$1 == (index$i$4_2 - 1))) {
-					int traceTempVariable$var31$4_3 = traceTempVariable$var29$4_1;
-					if((index$i$4_2 == i$var26)) {
+			int traceTempVariable$var29$17_1 = cv$currentValue;
+			for(int index$i$17_2 = 1; index$i$17_2 < n; index$i$17_2 += 1) {
+				if((index$i$14 == (index$i$17_2 - 1))) {
+					int traceTempVariable$var31$17_3 = traceTempVariable$var29$17_1;
+					if((index$i$17_2 == i$var26)) {
 						for(int var16 = 0; var16 < states; var16 += 1) {
-							if((var16 == traceTempVariable$var31$4_3)) {
+							if((var16 == traceTempVariable$var31$17_3)) {
 								// Record the reached probability density.
 								cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 								double[] cv$temp$1$var32;
 								{
 									// Constructing a random variable input for use later.
-									double[] var32 = m[traceTempVariable$var31$4_3];
+									double[] var32 = m[traceTempVariable$var31$17_3];
 									cv$temp$1$var32 = var32;
 								}
 								
@@ -1491,10 +1580,10 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								{
 									// Looking for a path between Sample 36 and consumer Categorical 33.
 									{
-										int traceTempVariable$var29$13_1 = cv$currentValue;
-										for(int index$i$13_2 = 1; index$i$13_2 < n; index$i$13_2 += 1) {
-											if((i$var26 == (index$i$13_2 - 1))) {
-												int traceTempVariable$var31$13_3 = traceTempVariable$var29$13_1;
+										int traceTempVariable$var29$26_1 = cv$currentValue;
+										for(int index$i$26_2 = 1; index$i$26_2 < n; index$i$26_2 += 1) {
+											if((i$var26 == (index$i$26_2 - 1))) {
+												int traceTempVariable$var31$26_3 = traceTempVariable$var29$26_1;
 											}
 										}
 									}
@@ -1504,7 +1593,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								{
 									// Looking for a path between Sample 36 and consumer Bernoulli 46.
 									{
-										int traceTempVariable$var43$16_1 = cv$currentValue;
+										int traceTempVariable$var43$29_1 = cv$currentValue;
 										for(int j = 0; j < n; j += 1) {
 											if((i$var26 == (j + 1))) {
 												// Processing sample task 49 of consumer random variable null.
@@ -1523,7 +1612,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																	double cv$temp$4$var45;
 																	{
 																		// Constructing a random variable input for use later.
-																		double var45 = (double)(1 / traceTempVariable$var43$16_1);
+																		double var45 = (double)(1 / traceTempVariable$var43$29_1);
 																		cv$temp$4$var45 = var45;
 																	}
 																	
@@ -1582,42 +1671,42 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					}
 				}
 			}
-			for(int index$i$5 = 1; index$i$5 < n; index$i$5 += 1) {
-				if(!(index$i$5 == index$i$1)) {
+			for(int index$i$18 = 1; index$i$18 < n; index$i$18 += 1) {
+				if(!(index$i$18 == index$i$14)) {
 					// Enumerating the possible outputs of Categorical 33.
-					for(int index$sample36$6 = 0; index$sample36$6 < states; index$sample36$6 += 1) {
-						int distributionTempVariable$var34$8 = index$sample36$6;
+					for(int index$sample36$19 = 0; index$sample36$19 < states; index$sample36$19 += 1) {
+						int distributionTempVariable$var34$21 = index$sample36$19;
 						
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample36Value7 = (1.0 * distribution$sample36[((index$i$5 - 1) / 1)][index$sample36$6]);
-						int traceTempVariable$var29$9_1 = distributionTempVariable$var34$8;
-						for(int index$i$9_2 = 1; index$i$9_2 < n; index$i$9_2 += 1) {
-							if((index$i$5 == (index$i$9_2 - 1))) {
-								int traceTempVariable$var31$9_3 = traceTempVariable$var29$9_1;
-								if((index$i$9_2 == i$var26)) {
+						double cv$probabilitySample36Value20 = (1.0 * distribution$sample36[((index$i$18 - 1) / 1)][index$sample36$19]);
+						int traceTempVariable$var29$22_1 = distributionTempVariable$var34$21;
+						for(int index$i$22_2 = 1; index$i$22_2 < n; index$i$22_2 += 1) {
+							if((index$i$18 == (index$i$22_2 - 1))) {
+								int traceTempVariable$var31$22_3 = traceTempVariable$var29$22_1;
+								if((index$i$22_2 == i$var26)) {
 									for(int var16 = 0; var16 < states; var16 += 1) {
-										if((var16 == traceTempVariable$var31$9_3)) {
+										if((var16 == traceTempVariable$var31$22_3)) {
 											// Record the reached probability density.
-											cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample36Value7);
+											cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample36Value20);
 											double[] cv$temp$2$var32;
 											{
 												// Constructing a random variable input for use later.
-												double[] var32 = m[traceTempVariable$var31$9_3];
+												double[] var32 = m[traceTempVariable$var31$22_3];
 												cv$temp$2$var32 = var32;
 											}
 											
 											// An accumulator to allow the value for each distribution to be constructed before
 											// it is added to the index probabilities.
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample36Value7) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var32.length))?Math.log(cv$temp$2$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample36Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var32.length))?Math.log(cv$temp$2$var32[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											
 											// Processing random variable 33.
 											{
 												// Looking for a path between Sample 36 and consumer Categorical 33.
 												{
-													int traceTempVariable$var29$14_1 = cv$currentValue;
-													for(int index$i$14_2 = 1; index$i$14_2 < n; index$i$14_2 += 1) {
-														if((i$var26 == (index$i$14_2 - 1))) {
-															int traceTempVariable$var31$14_3 = traceTempVariable$var29$14_1;
+													int traceTempVariable$var29$27_1 = cv$currentValue;
+													for(int index$i$27_2 = 1; index$i$27_2 < n; index$i$27_2 += 1) {
+														if((i$var26 == (index$i$27_2 - 1))) {
+															int traceTempVariable$var31$27_3 = traceTempVariable$var29$27_1;
 														}
 													}
 												}
@@ -1627,7 +1716,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 											{
 												// Looking for a path between Sample 36 and consumer Bernoulli 46.
 												{
-													int traceTempVariable$var43$17_1 = cv$currentValue;
+													int traceTempVariable$var43$30_1 = cv$currentValue;
 													for(int j = 0; j < n; j += 1) {
 														if((i$var26 == (j + 1))) {
 															// Processing sample task 49 of consumer random variable null.
@@ -1646,7 +1735,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																				double cv$temp$5$var45;
 																				{
 																					// Constructing a random variable input for use later.
-																					double var45 = (double)(1 / traceTempVariable$var43$17_1);
+																					double var45 = (double)(1 / traceTempVariable$var43$30_1);
 																					cv$temp$5$var45 = var45;
 																				}
 																				
@@ -1713,16 +1802,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			{
 				// Looking for a path between Sample 36 and consumer Categorical 33.
 				{
-					int traceTempVariable$var29$24_1 = cv$currentValue;
-					for(int index$i$24_2 = 1; index$i$24_2 < n; index$i$24_2 += 1) {
-						if((i$var26 == (index$i$24_2 - 1))) {
-							int traceTempVariable$var31$24_3 = traceTempVariable$var29$24_1;
-							for(int index$i$24_4 = 1; index$i$24_4 < n; index$i$24_4 += 1) {
-								if((index$i$24_2 == index$i$24_4)) {
+					int traceTempVariable$var29$37_1 = cv$currentValue;
+					for(int index$i$37_2 = 1; index$i$37_2 < n; index$i$37_2 += 1) {
+						if((i$var26 == (index$i$37_2 - 1))) {
+							int traceTempVariable$var31$37_3 = traceTempVariable$var29$37_1;
+							for(int index$i$37_4 = 1; index$i$37_4 < n; index$i$37_4 += 1) {
+								if((index$i$37_2 == index$i$37_4)) {
 									// Processing sample task 36 of consumer random variable null.
 									{
 										// Copy of index so that its values can be safely substituted
-										int index$i$26 = index$i$24_4;
+										int index$i$39 = index$i$37_4;
 										
 										// A local array to hold the accumulated distributions of the sample tasks for each
 										// configuration of distributions.
@@ -1738,17 +1827,19 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										// Enumerating the possible arguments for the variable Categorical 33 which is consuming
 										// the output of Sample task 36.
 										for(int var16 = 0; var16 < states; var16 += 1) {
-											if((var16 == traceTempVariable$var31$24_3)) {
+											if((var16 == traceTempVariable$var31$37_3)) {
 												{
 													// Declare and zero an accumulator for tracking the reached source probability space.
 													double scopeVariable$reachedSourceProbability = 0.0;
 													
 													// Enumerating the possible arguments for Categorical 33.
-													for(int index$i$28_1 = 1; index$i$28_1 < n; index$i$28_1 += 1) {
-														if((0 == (index$i$28_1 - 1))) {
-															if((index$i$28_1 == i$var26)) {
-																for(int index$var16$29_1 = 0; index$var16$29_1 < states; index$var16$29_1 += 1) {
-																	if((index$var16$29_1 == b[i$var26]))
+													int traceTempVariable$var29$41_1 = 0;
+													for(int index$i$41_2 = 1; index$i$41_2 < n; index$i$41_2 += 1) {
+														if((0 == (index$i$41_2 - 1))) {
+															int traceTempVariable$var31$41_3 = traceTempVariable$var29$41_1;
+															if((index$i$41_2 == i$var26)) {
+																for(int index$var16$42_1 = 0; index$var16$42_1 < states; index$var16$42_1 += 1) {
+																	if((index$var16$42_1 == traceTempVariable$var31$41_3))
 																		// Add the probability of this argument configuration.
 																		scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 																}
@@ -1757,36 +1848,36 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 													
 													// Enumerating the possible arguments for Categorical 33.
-													int traceTempVariable$var29$30_1 = cv$currentValue;
-													for(int index$i$30_2 = 1; index$i$30_2 < n; index$i$30_2 += 1) {
-														if((index$i$1 == (index$i$30_2 - 1))) {
-															int traceTempVariable$var31$30_3 = traceTempVariable$var29$30_1;
-															if((index$i$30_2 == i$var26)) {
-																for(int index$var16$36_1 = 0; index$var16$36_1 < states; index$var16$36_1 += 1) {
-																	if((index$var16$36_1 == traceTempVariable$var31$30_3))
+													int traceTempVariable$var29$43_1 = cv$currentValue;
+													for(int index$i$43_2 = 1; index$i$43_2 < n; index$i$43_2 += 1) {
+														if((index$i$14 == (index$i$43_2 - 1))) {
+															int traceTempVariable$var31$43_3 = traceTempVariable$var29$43_1;
+															if((index$i$43_2 == i$var26)) {
+																for(int index$var16$49_1 = 0; index$var16$49_1 < states; index$var16$49_1 += 1) {
+																	if((index$var16$49_1 == traceTempVariable$var31$43_3))
 																		// Add the probability of this argument configuration.
 																		scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 																}
 															}
 														}
 													}
-													for(int index$i$31 = 1; index$i$31 < n; index$i$31 += 1) {
-														if((!(index$i$31 == index$i$1) && !(index$i$31 == index$i$26))) {
+													for(int index$i$44 = 1; index$i$44 < n; index$i$44 += 1) {
+														if((!(index$i$44 == index$i$14) && !(index$i$44 == index$i$39))) {
 															// Enumerating the possible outputs of Categorical 33.
-															for(int index$sample36$32 = 0; index$sample36$32 < states; index$sample36$32 += 1) {
-																int distributionTempVariable$var34$34 = index$sample36$32;
+															for(int index$sample36$45 = 0; index$sample36$45 < states; index$sample36$45 += 1) {
+																int distributionTempVariable$var34$47 = index$sample36$45;
 																
 																// Update the probability of sampling this value from the distribution value.
-																double cv$probabilitySample36Value33 = (1.0 * distribution$sample36[((index$i$31 - 1) / 1)][index$sample36$32]);
-																int traceTempVariable$var29$35_1 = distributionTempVariable$var34$34;
-																for(int index$i$35_2 = 1; index$i$35_2 < n; index$i$35_2 += 1) {
-																	if((index$i$31 == (index$i$35_2 - 1))) {
-																		int traceTempVariable$var31$35_3 = traceTempVariable$var29$35_1;
-																		if((index$i$35_2 == i$var26)) {
-																			for(int index$var16$37_1 = 0; index$var16$37_1 < states; index$var16$37_1 += 1) {
-																				if((index$var16$37_1 == traceTempVariable$var31$35_3))
+																double cv$probabilitySample36Value46 = (1.0 * distribution$sample36[((index$i$44 - 1) / 1)][index$sample36$45]);
+																int traceTempVariable$var29$48_1 = distributionTempVariable$var34$47;
+																for(int index$i$48_2 = 1; index$i$48_2 < n; index$i$48_2 += 1) {
+																	if((index$i$44 == (index$i$48_2 - 1))) {
+																		int traceTempVariable$var31$48_3 = traceTempVariable$var29$48_1;
+																		if((index$i$48_2 == i$var26)) {
+																			for(int index$var16$50_1 = 0; index$var16$50_1 < states; index$var16$50_1 += 1) {
+																				if((index$var16$50_1 == traceTempVariable$var31$48_3))
 																					// Add the probability of this argument configuration.
-																					scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample36Value33);
+																					scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample36Value46);
 																			}
 																		}
 																	}
@@ -1797,7 +1888,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													double[] cv$temp$6$var32;
 													{
 														// Constructing a random variable input for use later.
-														double[] var32 = m[traceTempVariable$var31$24_3];
+														double[] var32 = m[traceTempVariable$var31$37_3];
 														cv$temp$6$var32 = var32;
 													}
 													
@@ -1814,7 +1905,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										}
 										
 										// A local copy of the samples' distribution.
-										double[] cv$sampleDistribution = distribution$sample36[((index$i$24_4 - 1) / 1)];
+										double[] cv$sampleDistribution = distribution$sample36[((index$i$37_4 - 1) / 1)];
 										
 										// The overlap of the distributions so far.
 										double cv$overlap = 0.0;
@@ -1866,7 +1957,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -1882,7 +1973,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$stateProbabilityLocal.length; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -1893,13 +1984,17 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$stateProbabilityLocal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -2072,14 +2167,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Iterate through possible values for var33's arguments.
 			// 
 			// Enumerating the possible arguments for Categorical 33.
-			for(int index$i$1_1 = 1; index$i$1_1 < n; index$i$1_1 += 1) {
-				if((0 == (index$i$1_1 - 1))) {
-					if((index$i$1_1 == i$var26)) {
+			int traceTempVariable$var29$1_1 = 0;
+			for(int index$i$1_2 = 1; index$i$1_2 < n; index$i$1_2 += 1) {
+				if((0 == (index$i$1_2 - 1))) {
+					int traceTempVariable$var31$1_3 = traceTempVariable$var29$1_1;
+					if((index$i$1_2 == i$var26)) {
 						for(int var16 = 0; var16 < states; var16 += 1) {
-							if((var16 == b[i$var26])) {
+							if((var16 == traceTempVariable$var31$1_3)) {
 								{
 									if(!fixedFlag$sample36) {
-										double[] var32 = m[b[i$var26]];
+										double[] var32 = m[traceTempVariable$var31$1_3];
 										for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 											// Save the probability of each value
 											cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));
@@ -2096,12 +2193,13 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				for(int index$i$3_1 = 1; index$i$3_1 < n; index$i$3_1 += 1) {
 					for(int index$i$3_2 = 1; index$i$3_2 < n; index$i$3_2 += 1) {
 						if((index$i$3_1 == (index$i$3_2 - 1))) {
+							int traceTempVariable$var31$3_3 = a[(index$i$3_2 - 1)];
 							if((index$i$3_2 == i$var26)) {
 								for(int var16 = 0; var16 < states; var16 += 1) {
-									if((var16 == b[i$var26])) {
+									if((var16 == traceTempVariable$var31$3_3)) {
 										{
 											if(!fixedFlag$sample36) {
-												double[] var32 = m[b[i$var26]];
+												double[] var32 = m[traceTempVariable$var31$3_3];
 												for(int index$var33 = 0; index$var33 < states; index$var33 += 1)
 													// Save the probability of each value
 													cv$distribution$sample36[index$var33] = (cv$distribution$sample36[index$var33] + (1.0 * (((0.0 <= index$var33) && (index$var33 < var32.length))?var32[index$var33]:0.0)));

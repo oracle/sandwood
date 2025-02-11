@@ -503,8 +503,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			if(!guard$sample34put61$global[j$var50]) {
 				guard$sample34put61$global[j$var50] = true;
 				double reduceVar$sum$0 = 0.0;
-				for(int cv$reduction277Index = 0; cv$reduction277Index < avail[0].length; cv$reduction277Index += 1)
-					reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction277Index]);
+				for(int cv$reduction280Index = 0; cv$reduction280Index < avail[0].length; cv$reduction280Index += 1)
+					reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction280Index]);
 				expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$0 * 0.3));
 			}
 		}
@@ -570,8 +570,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 						if(!guard$sample34put123$global[t][j$var107]) {
 							guard$sample34put123$global[t][j$var107] = true;
 							double reduceVar$denom$0 = 0.0;
-							for(int cv$reduction716Index = 0; cv$reduction716Index <= avail[0].length; cv$reduction716Index += 1)
-								reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t][cv$reduction716Index]);
+							for(int cv$reduction719Index = 0; cv$reduction719Index <= avail[0].length; cv$reduction719Index += 1)
+								reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t][cv$reduction719Index]);
 							weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$0);
 						}
 					}
@@ -595,8 +595,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					if(!guard$sample34put123$global[t][j$var107]) {
 						guard$sample34put123$global[t][j$var107] = true;
 						double reduceVar$denom$2 = 0.0;
-						for(int cv$reduction816Index = 0; cv$reduction816Index <= avail[0].length; cv$reduction816Index += 1)
-							reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t][cv$reduction816Index]);
+						for(int cv$reduction819Index = 0; cv$reduction819Index <= avail[0].length; cv$reduction819Index += 1)
+							reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t][cv$reduction819Index]);
 						weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$2);
 					}
 				}
@@ -672,8 +672,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				if(!guard$sample34put61$global[j$var50]) {
 					guard$sample34put61$global[j$var50] = true;
 					double reduceVar$sum$6 = 0.0;
-					for(int cv$reduction1462Index = 0; cv$reduction1462Index < avail[0].length; cv$reduction1462Index += 1)
-						reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction1462Index]);
+					for(int cv$reduction1465Index = 0; cv$reduction1465Index < avail[0].length; cv$reduction1465Index += 1)
+						reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction1465Index]);
 					expedNorm[j$var50] = (exped[j$var50] / (reduceVar$sum$6 * 0.3));
 				}
 			}
@@ -739,8 +739,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							if(!guard$sample34put123$global[t][j$var107]) {
 								guard$sample34put123$global[t][j$var107] = true;
 								double reduceVar$denom$6 = 0.0;
-								for(int cv$reduction1901Index = 0; cv$reduction1901Index <= avail[0].length; cv$reduction1901Index += 1)
-									reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t][cv$reduction1901Index]);
+								for(int cv$reduction1904Index = 0; cv$reduction1904Index <= avail[0].length; cv$reduction1904Index += 1)
+									reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t][cv$reduction1904Index]);
 								weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$6);
 							}
 						}
@@ -764,8 +764,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 						if(!guard$sample34put123$global[t][j$var107]) {
 							guard$sample34put123$global[t][j$var107] = true;
 							double reduceVar$denom$8 = 0.0;
-							for(int cv$reduction2001Index = 0; cv$reduction2001Index <= avail[0].length; cv$reduction2001Index += 1)
-								reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t][cv$reduction2001Index]);
+							for(int cv$reduction2004Index = 0; cv$reduction2004Index <= avail[0].length; cv$reduction2004Index += 1)
+								reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t][cv$reduction2004Index]);
 							weekly_rates[t][j$var107] = (weekly_ut[t][j$var107] / reduceVar$denom$8);
 						}
 					}

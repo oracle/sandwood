@@ -1291,6 +1291,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 36 drawn from Categorical 32. Inference was performed using variable
 	// marginalization.
 	private final void sample36() {
+		// cv$noStates's comment
+		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -1472,15 +1474,30 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var33$stateProbabilityGlobal[0];
 		
-		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var33$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		// Unrolled loop
+		{
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var33$stateProbabilityGlobal[cv$lseIndex];
+			double cv$lseElementValue = cv$var33$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
+		{
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var33$stateProbabilityGlobal[2];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		{
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var33$stateProbabilityGlobal[3];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+		}
+		
+		// Get a local reference to the scratch space.
+		double cv$lseElementValue = cv$var33$stateProbabilityGlobal[4];
+		if((cv$lseMax < cv$lseElementValue))
+			cv$lseMax = cv$lseElementValue;
 		
 		// If the maximum value is -infinity return -infinity.
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
@@ -1493,8 +1510,9 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Offset values, move to normal space, and sum.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var33$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var33$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1508,18 +1526,27 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var33$stateProbabilityGlobal.length; cv$indexName += 1)
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var33$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$var33$stateProbabilityGlobal.length);
+				cv$var33$stateProbabilityGlobal[cv$indexName] = 0.2;
 		} else {
 			// Normalize log space values and move to normal space
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var33$stateProbabilityGlobal.length; cv$indexName += 1)
+			// cv$noStates's comment
+			// variable marginalization
+			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var33$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var33$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = 5; cv$indexName < cv$var33$stateProbabilityGlobal.length; cv$indexName += 1)
+			// Get a local reference to the scratch space.
+			cv$var33$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
@@ -1532,7 +1559,52 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 46 drawn from Categorical 42. Inference was performed using variable
 	// marginalization.
 	private final void sample46(int i$var37) {
-		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		
+		// Enumerating the possible arguments for Categorical 42.
+		if((1 == i$var37)) {
+			int var15 = st[0];
+			
+			// Substituted "i$var37" with its value "1".
+			if(((0 <= var15) && (var15 < 5)))
+				// variable marginalization
+				cv$noStates = 5;
+		}
+		if(fixedFlag$sample46) {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((2 <= i$var37)) {
+				int var15 = st[(i$var37 - 1)];
+				if(((0 <= var15) && (var15 < 5)))
+					// variable marginalization
+					cv$noStates = 5;
+			}
+		} else {
+			int index$i$6 = (i$var37 - 1);
+			
+			// index$i$1's comment
+			// Exploring all the possible state counts for random variable 42.
+			// 
+			// Copy of index so that its values can be safely substituted
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			// 
+			// Substituted "index$i$6" with its value "(i$var37 - 1)".
+			if(((1 <= index$i$6) && !(index$i$6 == i$var37)))
+				// variable marginalization
+				cv$noStates = 5;
+		}
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 42 creating
 			// sample task 46.
 			// Initialize the summed probabilities to 0.
@@ -1578,37 +1650,37 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$stateProbabilityValue = (DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]) + ((cv$valuePos < cv$temp$0$var41.length)?Math.log(cv$temp$0$var41[cv$valuePos]):Double.NEGATIVE_INFINITY));
 				}
 			}
-			int index$i$5 = (i$var37 - 1);
+			int index$i$18 = (i$var37 - 1);
 			
-			// index$i$1's comment
+			// index$i$14's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
 			// 
-			// Substituted "index$i$5" with its value "(i$var37 - 1)".
-			if(((1 <= index$i$5) && !(index$i$5 == i$var37))) {
+			// Substituted "index$i$18" with its value "(i$var37 - 1)".
+			if(((1 <= index$i$18) && !(index$i$18 == i$var37))) {
 				// Enumerating the possible outputs of Categorical 42.
-				for(int index$sample46$6 = 0; index$sample46$6 < 5; index$sample46$6 += 1) {
+				for(int index$sample46$19 = 0; index$sample46$19 < 5; index$sample46$19 += 1) {
 					// Update the probability of sampling this value from the distribution value.
-					double cv$probabilitySample46Value7 = distribution$sample46[(index$i$5 - 1)][index$sample46$6];
+					double cv$probabilitySample46Value20 = distribution$sample46[(index$i$18 - 1)][index$sample46$19];
 					
 					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample46Value7);
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample46Value20);
 					
 					// Variable declaration of cv$temp$2$var41 moved.
 					// 
 					// Constructing a random variable input for use later.
-					double[] cv$temp$2$var41 = m[index$sample46$6];
+					double[] cv$temp$2$var41 = m[index$sample46$19];
 					
 					// Variable declaration of cv$accumulatedProbabilities moved.
 					// Declaration comment was:
@@ -1629,7 +1701,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// it is added to the index probabilities.
 					// 
 					// Value of the variable at this index
-					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[i$var37], bias[cv$valuePos]) + Math.log(cv$probabilitySample46Value7)) + ((cv$valuePos < cv$temp$2$var41.length)?Math.log(cv$temp$2$var41[cv$valuePos]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[i$var37], bias[cv$valuePos]) + Math.log(cv$probabilitySample46Value20)) + ((cv$valuePos < cv$temp$2$var41.length)?Math.log(cv$temp$2$var41[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					
 					// Add the values for the source and any standard consumers for this configuration
 					// of arguments to the source.
@@ -1644,8 +1716,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 			}
-			int index$i$27_2 = (i$var37 + 1);
-			if((index$i$27_2 < samples)) {
+			int index$i$40_2 = (i$var37 + 1);
+			if((index$i$40_2 < samples)) {
 				// Processing sample task 46 of consumer random variable null.
 				// Zero all the elements in the distribution accumulator
 				for(int cv$i = 0; cv$i < 5; cv$i += 1)
@@ -1658,41 +1730,41 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Enumerating the possible arguments for Categorical 42.
 				if((1 == i$var37)) {
-					int index$var15$32_1 = st[0];
+					int index$var15$45_1 = st[0];
 					
 					// Substituted "i$var37" with its value "1".
-					if(((0 <= index$var15$32_1) && (index$var15$32_1 < 5)))
+					if(((0 <= index$var15$45_1) && (index$var15$45_1 < 5)))
 						// Add the probability of this argument configuration.
 						// 
 						// Declare and zero an accumulator for tracking the reached source probability space.
 						scopeVariable$reachedSourceProbability = 1.0;
 				}
-				int index$i$34 = (i$var37 - 1);
+				int index$i$47 = (i$var37 - 1);
 				
-				// index$i$29's comment
+				// index$i$42's comment
 				// Copy of index so that its values can be safely substituted
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
 				// 
-				// Substituted "index$i$27_2" with its value "(i$var37 + 1)".
-				if((((1 <= index$i$34) && !(index$i$34 == i$var37)) && !(index$i$34 == index$i$27_2))) {
+				// Substituted "index$i$40_2" with its value "(i$var37 + 1)".
+				if((((1 <= index$i$47) && !(index$i$47 == i$var37)) && !(index$i$47 == index$i$40_2))) {
 					// Enumerating the possible outputs of Categorical 42.
-					for(int index$sample46$35 = 0; index$sample46$35 < 5; index$sample46$35 += 1)
+					for(int index$sample46$48 = 0; index$sample46$48 < 5; index$sample46$48 += 1)
 						// Add the probability of this argument configuration.
 						// 
-						// cv$probabilitySample46Value36's comment
+						// cv$probabilitySample46Value49's comment
 						// Update the probability of sampling this value from the distribution value.
-						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample46[(index$i$34 - 1)][index$sample46$35]);
+						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample46[(index$i$47 - 1)][index$sample46$48]);
 				}
 				
 				// Add the current distribution to the distribution accumulator.
@@ -1712,7 +1784,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var42, scopeVariable$reachedSourceProbability, m[cv$valuePos]);
 				
 				// A local copy of the samples' distribution.
-				double[] cv$sampleDistribution = distribution$sample46[(index$i$27_2 - 1)];
+				double[] cv$sampleDistribution = distribution$sample46[(index$i$40_2 - 1)];
 				
 				// The overlap of the distributions so far.
 				double cv$overlap = 0.0;
@@ -1782,9 +1854,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		double cv$lseMax = cv$var43$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$var43$stateProbabilityGlobal.length; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var43$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -1801,9 +1871,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$var43$stateProbabilityGlobal.length; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var43$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1816,19 +1884,20 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$localProbability[cv$indexName] = (1.0 / cv$var43$stateProbabilityGlobal.length);
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
 		} else {
 			// Normalize log space values and move to normal space
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 0; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$localProbability[cv$indexName] = Math.exp((cv$var43$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		// 
+		// Get a local reference to the scratch space.
+		for(int cv$indexName = cv$noStates; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

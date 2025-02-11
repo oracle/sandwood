@@ -391,10 +391,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
 				guard$sample25gaussian85$global[t$var68][var22] = false;
 			double reduceVar$sum$9 = 0.0;
-			for(int cv$reduction509Index = 0; cv$reduction509Index < var22; cv$reduction509Index += 1)
-				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction509Index]);
-			for(int cv$reduction509Index = (var22 + 1); cv$reduction509Index < noProducts; cv$reduction509Index += 1)
-				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction509Index]);
+			for(int cv$reduction518Index = 0; cv$reduction518Index < var22; cv$reduction518Index += 1)
+				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
+			for(int cv$reduction518Index = (var22 + 1); cv$reduction518Index < noProducts; cv$reduction518Index += 1)
+				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
 			reduceVar$sum$9 = (Math.exp(cv$originalValue) + reduceVar$sum$9);
 			for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 				for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
@@ -414,8 +414,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		ut[var22] = cv$proposedValue;
 		exped[var22] = Math.exp(ut[var22]);
 		double reduceVar$sum$8 = 0.0;
-		for(int cv$reduction452Index = 0; cv$reduction452Index < noProducts; cv$reduction452Index += 1)
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction452Index]);
+		for(int cv$reduction461Index = 0; cv$reduction461Index < noProducts; cv$reduction461Index += 1)
+			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction461Index]);
 		sum = reduceVar$sum$8;
 		denom = (reduceVar$sum$8 / s);
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
@@ -426,10 +426,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		for(int t$var68 = 0; t$var68 < T; t$var68 += 1)
 			guard$sample25gaussian85$global[t$var68][var22] = false;
 		double reduceVar$sum$9 = 0.0;
-		for(int cv$reduction509Index = 0; cv$reduction509Index < var22; cv$reduction509Index += 1)
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction509Index]);
-		for(int cv$reduction509Index = (var22 + 1); cv$reduction509Index < noProducts; cv$reduction509Index += 1)
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction509Index]);
+		for(int cv$reduction518Index = 0; cv$reduction518Index < var22; cv$reduction518Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
+		for(int cv$reduction518Index = (var22 + 1); cv$reduction518Index < noProducts; cv$reduction518Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction518Index]);
 		reduceVar$sum$9 = (Math.exp(cv$proposedValue) + reduceVar$sum$9);
 		for(int t$var68 = 0; t$var68 < T; t$var68 += 1) {
 			for(int j$var72 = 0; j$var72 < noProducts; j$var72 += 1) {
@@ -450,8 +450,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			ut[var22] = cv$originalValue;
 			exped[var22] = Math.exp(ut[var22]);
 			double reduceVar$sum$10 = 0.0;
-			for(int cv$reduction562Index = 0; cv$reduction562Index < noProducts; cv$reduction562Index += 1)
-				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction562Index]);
+			for(int cv$reduction571Index = 0; cv$reduction571Index < noProducts; cv$reduction571Index += 1)
+				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction571Index]);
 			sum = reduceVar$sum$10;
 			denom = (reduceVar$sum$10 / s);
 		}

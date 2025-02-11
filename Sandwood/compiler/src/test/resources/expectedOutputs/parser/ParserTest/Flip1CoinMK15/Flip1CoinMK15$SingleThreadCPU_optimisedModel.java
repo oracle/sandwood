@@ -480,8 +480,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$2$bias's comment
-					// Variable declaration of cv$temp$2$bias moved.
+					// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
 					// 
 					// Set the current value to the current state of the tree.
 					// 
@@ -510,7 +509,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction128Index" with its value "1".
+				// Substituted "cv$reduction131Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -531,7 +530,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction128Index" with its value "1".
+				// Substituted "cv$reduction131Index" with its value "1".
 				double reduceVar$var28$2 = ((b / 2) + c[1]);
 				
 				// Substituted "guard1" with its value "false".
@@ -577,7 +576,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// j's comment
 					// Set the right hand term to a value from the array c
 					// 
-					// Substituted "cv$reduction151Index" with its value "0".
+					// Substituted "cv$reduction154Index" with its value "0".
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
@@ -596,7 +595,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// j's comment
 					// Set the right hand term to a value from the array c
 					// 
-					// Substituted "cv$reduction151Index" with its value "0".
+					// Substituted "cv$reduction154Index" with its value "0".
 					double reduceVar$var28$3 = ((b / 2) + c[0]);
 					
 					// Processing sample task 40 of consumer random variable bernoulli.
@@ -656,7 +655,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction82Index" with its value "1".
+			// Substituted "cv$reduction85Index" with its value "1".
 			// 
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -665,7 +664,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction82Index" with its value "0".
+			// Substituted "cv$reduction85Index" with its value "0".
 			bias = (c[0] + c[1]);
 		
 		// An accumulator to allow the value for each distribution to be constructed before
@@ -696,8 +695,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$bias's comment
-				// Variable declaration of cv$temp$2$bias moved.
+				// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var34], cv$proposedValue) + cv$accumulatedProbabilities);
 		}
 		
@@ -722,7 +720,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction128Index" with its value "1".
+			// Substituted "cv$reduction131Index" with its value "1".
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -743,7 +741,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction128Index" with its value "1".
+			// Substituted "cv$reduction131Index" with its value "1".
 			double reduceVar$var28$2 = ((cv$proposedValue / 2) + c[1]);
 			
 			// Substituted "guard1" with its value "false".
@@ -789,7 +787,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction151Index" with its value "0".
+				// Substituted "cv$reduction154Index" with its value "0".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -808,7 +806,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction151Index" with its value "0".
+				// Substituted "cv$reduction154Index" with its value "0".
 				double reduceVar$var28$3 = ((cv$proposedValue / 2) + c[0]);
 				
 				// Processing sample task 40 of consumer random variable bernoulli.
@@ -882,7 +880,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction200Index" with its value "1".
+				// Substituted "cv$reduction203Index" with its value "1".
 				// 
 				// Execute the reduction function, saving the result into the return value.
 				// 
@@ -891,7 +889,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction200Index" with its value "0".
+				// Substituted "cv$reduction203Index" with its value "0".
 				bias = (c[0] + c[1]);
 		}
 	}

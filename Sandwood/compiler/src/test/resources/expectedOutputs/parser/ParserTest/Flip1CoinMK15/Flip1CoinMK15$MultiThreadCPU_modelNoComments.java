@@ -211,9 +211,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								if(!guard1) {
 									double reduceVar$var28$21 = 0.0;
-									for(int cv$reduction489Index = 0; cv$reduction489Index < 2; cv$reduction489Index += 1) {
+									for(int cv$reduction495Index = 0; cv$reduction495Index < 2; cv$reduction495Index += 1) {
 										double i$var25 = reduceVar$var28$21;
-										double j = c[cv$reduction489Index];
+										double j = c[cv$reduction495Index];
 										reduceVar$var28$21 = (i$var25 + j);
 									}
 									double traceTempVariable$bias$5_1 = reduceVar$var28$21;
@@ -232,9 +232,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								if(!guard1) {
 									double reduceVar$var28$22 = 0.0;
-									for(int cv$reduction500Index = 0; cv$reduction500Index < 2; cv$reduction500Index += 1) {
+									for(int cv$reduction506Index = 0; cv$reduction506Index < 2; cv$reduction506Index += 1) {
 										double i$var25 = reduceVar$var28$22;
-										double j = c[cv$reduction500Index];
+										double j = c[cv$reduction506Index];
 										reduceVar$var28$22 = (i$var25 + j);
 									}
 									double traceTempVariable$bias$6_1 = reduceVar$var28$22;
@@ -287,9 +287,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								if(!guard1) {
 									double reduceVar$var28$23 = 0.0;
-									for(int cv$reduction518Index = 0; cv$reduction518Index < 2; cv$reduction518Index += 1) {
+									for(int cv$reduction524Index = 0; cv$reduction524Index < 2; cv$reduction524Index += 1) {
 										double i$var25 = reduceVar$var28$23;
-										double j = c[cv$reduction518Index];
+										double j = c[cv$reduction524Index];
 										reduceVar$var28$23 = (i$var25 + j);
 									}
 									double traceTempVariable$bias$10_1 = reduceVar$var28$23;
@@ -308,9 +308,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								if(!guard1) {
 									double reduceVar$var28$24 = 0.0;
-									for(int cv$reduction529Index = 0; cv$reduction529Index < 2; cv$reduction529Index += 1) {
+									for(int cv$reduction535Index = 0; cv$reduction535Index < 2; cv$reduction535Index += 1) {
 										double i$var25 = reduceVar$var28$24;
-										double j = c[cv$reduction529Index];
+										double j = c[cv$reduction535Index];
 										reduceVar$var28$24 = (i$var25 + j);
 									}
 									double traceTempVariable$bias$11_1 = reduceVar$var28$24;
@@ -382,6 +382,10 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample12() {
+		int cv$noStates = 0;
+		{
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
 		double cv$originalValue = b;
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -389,7 +393,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$var = (0.1 * 0.1);
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
@@ -427,9 +431,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										if(!guard1) {
 											double reduceVar$var28$15 = 0.0;
-											for(int cv$reduction331Index = 0; cv$reduction331Index < 2; cv$reduction331Index += 1) {
+											for(int cv$reduction337Index = 0; cv$reduction337Index < 2; cv$reduction337Index += 1) {
 												double i$var25 = reduceVar$var28$15;
-												double j = c[cv$reduction331Index];
+												double j = c[cv$reduction337Index];
 												reduceVar$var28$15 = (i$var25 + j);
 											}
 											double traceTempVariable$bias$4_1 = reduceVar$var28$15;
@@ -450,9 +454,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										if(!guard1) {
 											double reduceVar$var28$16 = 0.0;
-											for(int cv$reduction344Index = 0; cv$reduction344Index < 2; cv$reduction344Index += 1) {
+											for(int cv$reduction350Index = 0; cv$reduction350Index < 2; cv$reduction350Index += 1) {
 												double i$var25 = reduceVar$var28$16;
-												double j = c[cv$reduction344Index];
+												double j = c[cv$reduction350Index];
 												reduceVar$var28$16 = (i$var25 + j);
 											}
 											double traceTempVariable$bias$5_1 = reduceVar$var28$16;
@@ -535,14 +539,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										if(((0 < c.length) && (0 < 2))) {
 											double reduceVar$var28$17 = 0.0;
-											for(int cv$reduction377Index = 0; cv$reduction377Index < 0; cv$reduction377Index += 1) {
+											for(int cv$reduction383Index = 0; cv$reduction383Index < 0; cv$reduction383Index += 1) {
 												double i$var25 = reduceVar$var28$17;
-												double j = c[cv$reduction377Index];
+												double j = c[cv$reduction383Index];
 												reduceVar$var28$17 = (i$var25 + j);
 											}
-											for(int cv$reduction377Index = (0 + 1); cv$reduction377Index < 2; cv$reduction377Index += 1) {
+											for(int cv$reduction383Index = (0 + 1); cv$reduction383Index < 2; cv$reduction383Index += 1) {
 												double i$var25 = reduceVar$var28$17;
-												double j = c[cv$reduction377Index];
+												double j = c[cv$reduction383Index];
 												reduceVar$var28$17 = (i$var25 + j);
 											}
 											double cv$reduced29 = reduceVar$var28$17;
@@ -603,14 +607,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										if(((0 < c.length) && (0 < 2))) {
 											double reduceVar$var28$18 = 0.0;
-											for(int cv$reduction400Index = 0; cv$reduction400Index < 1; cv$reduction400Index += 1) {
+											for(int cv$reduction406Index = 0; cv$reduction406Index < 1; cv$reduction406Index += 1) {
 												double i$var25 = reduceVar$var28$18;
-												double j = c[cv$reduction400Index];
+												double j = c[cv$reduction406Index];
 												reduceVar$var28$18 = (i$var25 + j);
 											}
-											for(int cv$reduction400Index = (1 + 1); cv$reduction400Index < 2; cv$reduction400Index += 1) {
+											for(int cv$reduction406Index = (1 + 1); cv$reduction406Index < 2; cv$reduction406Index += 1) {
 												double i$var25 = reduceVar$var28$18;
-												double j = c[cv$reduction400Index];
+												double j = c[cv$reduction406Index];
 												reduceVar$var28$18 = (i$var25 + j);
 											}
 											double cv$reduced29 = reduceVar$var28$18;
@@ -709,9 +713,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								if(!guard1) {
 									double reduceVar$var28$19 = 0.0;
-									for(int cv$reduction449Index = 0; cv$reduction449Index < 2; cv$reduction449Index += 1) {
+									for(int cv$reduction455Index = 0; cv$reduction455Index < 2; cv$reduction455Index += 1) {
 										double i$var25 = reduceVar$var28$19;
-										double j = c[cv$reduction449Index];
+										double j = c[cv$reduction455Index];
 										reduceVar$var28$19 = (i$var25 + j);
 									}
 									double traceTempVariable$bias$18_1 = reduceVar$var28$19;
@@ -732,9 +736,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								if(!guard1) {
 									double reduceVar$var28$20 = 0.0;
-									for(int cv$reduction462Index = 0; cv$reduction462Index < 2; cv$reduction462Index += 1) {
+									for(int cv$reduction468Index = 0; cv$reduction468Index < 2; cv$reduction468Index += 1) {
 										double i$var25 = reduceVar$var28$20;
-										double j = c[cv$reduction462Index];
+										double j = c[cv$reduction468Index];
 										reduceVar$var28$20 = (i$var25 + j);
 									}
 									double traceTempVariable$bias$19_1 = reduceVar$var28$20;

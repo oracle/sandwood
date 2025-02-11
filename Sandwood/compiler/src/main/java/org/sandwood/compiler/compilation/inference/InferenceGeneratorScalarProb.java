@@ -56,6 +56,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRLoad;
@@ -132,6 +133,9 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     private final static VariableDescription<IntVariable> valuePosName = VariableNames.calcVarName("valuePos",
             VariableType.IntVariable, false);
 
+    protected final static VariableDescription<IntVariable> noStatesName = VariableNames.calcVarName("noStates",
+            VariableType.IntVariable, false);
+
     // Flags for the different variables that we will need to construct for this
     // function.
     private final static VariableDescription<DoubleVariable> statesProbabilityValue = VariableNames
@@ -181,6 +185,20 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
     @Override
     protected void constructFunctionVariables(CompilationContext compilationCtx, FuncData funcData) {
+        compilationCtx.addTreeToScope(GlobalScope.scope,
+                initializeVariable(noStatesName, constant(0), "Calculate the number of states to evaluate."));
+
+        ScopeConstructor a = ScopeConstructor
+                .construct(funcData.sampleDesc.sample, funcData.distributionTraces,
+                        "Exploring all the possible state counts for random variable "
+                                + funcData.sampleDesc.sample.randomVariable.getId() + ".",
+                        Tree.NoComment, compilationCtx);
+        a = a.applyAllDistributedArguments();
+        a.addTree((TreeBuilderInfo info) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope, store(noStatesName,
+                    max(load(noStatesName), funcData.noStates.getForwardIR(compilationCtx)), getInferenceType()));
+        });
+
         constructFunctionVariablesProb(compilationCtx, funcData);
 
         currentValueName = VariableNames.calcVarName("currentValue", funcData.sampleDesc.output.getType(), true);
@@ -418,8 +436,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // A hack so that the variable name of the constructed value is saved to keep the optimised code cleaner. Just
         // the else branch will also generate correct code.
         VariableDescription<C> pName = v.getUniqueVarDesc();
-        if(!v.isIntermediate() && !v.isSample() && !v.isDeterministic()
-                && !compilationCtx.initialized(v)) {
+        if(!v.isIntermediate() && !v.isSample() && !v.isDeterministic() && !compilationCtx.initialized(v)) {
             compilationCtx.addTreeToScope(v.getParent().scope(),
                     initializeVariable(pName, value, "Constructing a random variable input for use later."));
             compilationCtx.addInitialized(v);
@@ -451,8 +468,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // Push the scope onto the stack.
         ScopeStack.pushScope(GlobalScope.scope);
 
-        ForTask loop = Sandwood.forLoop(Variable.intVariable(0), funcData.noStates, Variable.intVariable(1), true,
-                (i) -> {
+        ForTask loop = Sandwood.forLoop(Variable.intVariable(0), Variable.namedVariable(noStatesName),
+                Variable.intVariable(1), true, (i) -> {
                     i.setAlias(valuePosName);
                     i.setUniqueVarDesc(valuePosName);
                 });

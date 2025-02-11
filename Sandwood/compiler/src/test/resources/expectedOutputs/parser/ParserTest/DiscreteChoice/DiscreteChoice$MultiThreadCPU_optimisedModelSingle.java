@@ -513,14 +513,14 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		double reduceVar$sum$8 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction366Index = 0; cv$reduction366Index < noProducts; cv$reduction366Index += 1)
+		for(int cv$reduction372Index = 0; cv$reduction372Index < noProducts; cv$reduction372Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// j's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction366Index]);
+			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction372Index]);
 		
 		// Write out the new sample value.
 		sum = reduceVar$sum$8;
@@ -636,14 +636,14 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double reduceVar$sum$10 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction474Index = 0; cv$reduction474Index < noProducts; cv$reduction474Index += 1)
+			for(int cv$reduction480Index = 0; cv$reduction480Index < noProducts; cv$reduction480Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction474Index]);
+				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction480Index]);
 			
 			// Write out the new sample value.
 			sum = reduceVar$sum$10;

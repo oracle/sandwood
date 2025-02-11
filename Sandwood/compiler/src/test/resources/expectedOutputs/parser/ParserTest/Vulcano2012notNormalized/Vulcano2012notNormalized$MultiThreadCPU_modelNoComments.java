@@ -633,6 +633,10 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	private final void sample25(int var22) {
+		int cv$noStates = 0;
+		{
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
 		double cv$originalValue = ut[var22];
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -640,7 +644,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 			cv$var = (0.1 * 0.1);
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
@@ -717,9 +721,9 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 															guard$sample25put95[((t$var59 - 0) / 1)][((j$var88 - 0) / 1)] = true;
 															{
 																double reduceVar$denom$10 = 0.0;
-																for(int cv$reduction898Index = 0; cv$reduction898Index < (noProducts + 1); cv$reduction898Index += 1) {
+																for(int cv$reduction907Index = 0; cv$reduction907Index < (noProducts + 1); cv$reduction907Index += 1) {
 																	double k = reduceVar$denom$10;
-																	double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction898Index];
+																	double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction907Index];
 																	reduceVar$denom$10 = (k + l);
 																}
 																weekly_rates[((t$var59 - 0) / 1)][j$var88] = (weekly_ut[((t$var59 - 0) / 1)][j$var88] / reduceVar$denom$10);
@@ -817,14 +821,14 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 												{
 													if(((0 < weekly_ut[((t$var59 - 0) / 1)].length) && (0 < (noProducts + 1)))) {
 														double reduceVar$denom$12 = 0.0;
-														for(int cv$reduction989Index = 0; cv$reduction989Index < j$var68; cv$reduction989Index += 1) {
+														for(int cv$reduction998Index = 0; cv$reduction998Index < j$var68; cv$reduction998Index += 1) {
 															double k = reduceVar$denom$12;
-															double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction989Index];
+															double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction998Index];
 															reduceVar$denom$12 = (k + l);
 														}
-														for(int cv$reduction989Index = (j$var68 + 1); cv$reduction989Index < (noProducts + 1); cv$reduction989Index += 1) {
+														for(int cv$reduction998Index = (j$var68 + 1); cv$reduction998Index < (noProducts + 1); cv$reduction998Index += 1) {
 															double k = reduceVar$denom$12;
-															double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction989Index];
+															double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction998Index];
 															reduceVar$denom$12 = (k + l);
 														}
 														double cv$reduced83 = reduceVar$denom$12;
@@ -1024,9 +1028,9 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 													guard$sample25put95[((t$var59 - 0) / 1)][((j$var88 - 0) / 1)] = true;
 													{
 														double reduceVar$denom$13 = 0.0;
-														for(int cv$reduction1103Index = 0; cv$reduction1103Index < (noProducts + 1); cv$reduction1103Index += 1) {
+														for(int cv$reduction1112Index = 0; cv$reduction1112Index < (noProducts + 1); cv$reduction1112Index += 1) {
 															double k = reduceVar$denom$13;
-															double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction1103Index];
+															double l = weekly_ut[((t$var59 - 0) / 1)][cv$reduction1112Index];
 															reduceVar$denom$13 = (k + l);
 														}
 														weekly_rates[((t$var59 - 0) / 1)][j$var88] = (weekly_ut[((t$var59 - 0) / 1)][j$var88] / reduceVar$denom$13);
@@ -1100,6 +1104,10 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	private final void sample51(int t$var46, int threadID$cv$t$var46, Rng RNG$) {
+		int cv$noStates = 0;
+		{
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
 		int cv$originalValue = arrivals[t$var46];
 		double cv$originalProbability = 0.0;
 		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
@@ -1109,7 +1117,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		cv$offset = ((cv$offset <= 0.0)?(cv$offset - 1):(cv$offset + 1));
 		int cv$proposedValue = (cv$originalValue + (int)cv$offset);
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;

@@ -921,6 +921,13 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 25 drawn from Gaussian 18. Inference was performed using Metropolis-Hastings.
 	private final void sample25(int var22) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// Metropolis-Hastings
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
+		
 		// The original value of the sample
 		double cv$originalValue = ut[var22];
 		
@@ -939,7 +946,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -995,12 +1002,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 											double reduceVar$sum$8 = 0.0;
 											
 											// For each index in the array to be reduced
-											for(int cv$reduction452Index = 0; cv$reduction452Index < noProducts; cv$reduction452Index += 1) {
+											for(int cv$reduction461Index = 0; cv$reduction461Index < noProducts; cv$reduction461Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double k = reduceVar$sum$8;
 												
 												// Set the right hand term to a value from the array exped
-												double l = exped[cv$reduction452Index];
+												double l = exped[cv$reduction461Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1098,24 +1105,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 											double reduceVar$sum$9 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction509Index = 0; cv$reduction509Index < j$var28; cv$reduction509Index += 1) {
+											for(int cv$reduction518Index = 0; cv$reduction518Index < j$var28; cv$reduction518Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double k = reduceVar$sum$9;
 												
 												// Set the right hand term to a value from the array exped
-												double l = exped[cv$reduction509Index];
+												double l = exped[cv$reduction518Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$sum$9 = (k + l);
 											}
-											for(int cv$reduction509Index = (j$var28 + 1); cv$reduction509Index < noProducts; cv$reduction509Index += 1) {
+											for(int cv$reduction518Index = (j$var28 + 1); cv$reduction518Index < noProducts; cv$reduction518Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double k = reduceVar$sum$9;
 												
 												// Set the right hand term to a value from the array exped
-												double l = exped[cv$reduction509Index];
+												double l = exped[cv$reduction518Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1347,12 +1354,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 									double reduceVar$sum$10 = 0.0;
 									
 									// For each index in the array to be reduced
-									for(int cv$reduction562Index = 0; cv$reduction562Index < noProducts; cv$reduction562Index += 1) {
+									for(int cv$reduction571Index = 0; cv$reduction571Index < noProducts; cv$reduction571Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										double k = reduceVar$sum$10;
 										
 										// Set the right hand term to a value from the array exped
-										double l = exped[cv$reduction562Index];
+										double l = exped[cv$reduction571Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -1435,6 +1442,13 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 61 drawn from Poisson 57. Inference was performed using Metropolis-Hastings.
 	private final void sample61(int t$var55, int threadID$cv$t$var55, Rng RNG$) {
+		// Calculate the number of states to evaluate.
+		int cv$noStates = 0;
+		{
+			// Metropolis-Hastings
+			cv$noStates = Math.max(cv$noStates, 2);
+		}
+		
 		// The original value of the sample
 		int cv$originalValue = arrivals[t$var55];
 		
@@ -1459,7 +1473,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			

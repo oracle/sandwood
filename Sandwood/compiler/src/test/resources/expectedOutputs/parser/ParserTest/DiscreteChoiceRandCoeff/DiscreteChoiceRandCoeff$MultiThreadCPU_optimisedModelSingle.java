@@ -975,7 +975,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				}
 			}
 			for(int i = 0; i < noObs; i += 1) {
-				// Constraints moved from conditionals in inner loops/scopes/etc.
+				// Substituted "j$var48" with its value "var19".
 				if(!guard$sample22categorical75$global[i]) {
 					// Variable declaration of cv$temp$3$prob moved.
 					double[] cv$temp$3$prob = prob[i];
@@ -1051,14 +1051,14 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					double reduceVar$sum$15 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction949Index = 0; cv$reduction949Index < noProducts; cv$reduction949Index += 1)
+					for(int cv$reduction958Index = 0; cv$reduction958Index < noProducts; cv$reduction958Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 						// l's comment
 						// Set the right hand term to a value from the array exped
-						reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction949Index]);
+						reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction958Index]);
 					prob[i][j$var68] = (exped[i][j$var68] / reduceVar$sum$15);
 				}
 			}
@@ -1140,7 +1140,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			}
 		}
 		for(int i = 0; i < noObs; i += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
+			// Substituted "j$var48" with its value "var19".
 			if(!guard$sample22categorical75$global[i]) {
 				// The body will execute, so should not be executed again
 				// 
@@ -1230,14 +1230,14 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 						double reduceVar$sum$18 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1113Index = 0; cv$reduction1113Index < noProducts; cv$reduction1113Index += 1)
+						for(int cv$reduction1122Index = 0; cv$reduction1122Index < noProducts; cv$reduction1122Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 							// l's comment
 							// Set the right hand term to a value from the array exped
-							reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction1113Index]);
+							reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction1122Index]);
 						prob[i][j$var68] = (exped[i][j$var68] / reduceVar$sum$18);
 					}
 				}
@@ -1530,7 +1530,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 						double reduceVar$sum$20 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1228Index = 0; cv$reduction1228Index < noProducts; cv$reduction1228Index += 1)
+						for(int cv$reduction1240Index = 0; cv$reduction1240Index < noProducts; cv$reduction1240Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
@@ -1542,7 +1542,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var38".
-							reduceVar$sum$20 = (reduceVar$sum$20 + exped[var38][cv$reduction1228Index]);
+							reduceVar$sum$20 = (reduceVar$sum$20 + exped[var38][cv$reduction1240Index]);
 						
 						// Substituted "i" with its value "var38".
 						prob[var38][j$var68] = (exped[var38][j$var68] / reduceVar$sum$20);
@@ -1732,7 +1732,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 						double reduceVar$sum$23 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction1392Index = 0; cv$reduction1392Index < noProducts; cv$reduction1392Index += 1)
+						for(int cv$reduction1404Index = 0; cv$reduction1404Index < noProducts; cv$reduction1404Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
@@ -1744,7 +1744,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var38".
-							reduceVar$sum$23 = (reduceVar$sum$23 + exped[var38][cv$reduction1392Index]);
+							reduceVar$sum$23 = (reduceVar$sum$23 + exped[var38][cv$reduction1404Index]);
 						
 						// Substituted "i" with its value "var38".
 						prob[var38][j$var68] = (exped[var38][j$var68] / reduceVar$sum$23);

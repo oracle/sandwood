@@ -556,7 +556,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "cv$temp$2$var22" with its value "var22".
+				// cv$temp$2$var22's comment
+				// Variable declaration of cv$temp$2$var22 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -602,7 +603,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "cv$temp$2$var22" with its value "var22".
+			// cv$temp$2$var22's comment
+			// Variable declaration of cv$temp$2$var22 moved.
 			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
@@ -612,10 +614,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
@@ -684,7 +682,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "cv$temp$2$var22" with its value "var22".
+				// cv$temp$2$var22's comment
+				// Variable declaration of cv$temp$2$var22 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -730,7 +729,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "cv$temp$2$var22" with its value "var22".
+			// cv$temp$2$var22's comment
+			// Variable declaration of cv$temp$2$var22 moved.
 			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
@@ -740,10 +740,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.

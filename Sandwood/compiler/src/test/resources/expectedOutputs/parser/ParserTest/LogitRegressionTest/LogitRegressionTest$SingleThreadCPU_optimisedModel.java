@@ -2642,7 +2642,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Substituted "j$var60" with its value "0".
 				// 
-				// Substituted "cv$temp$2$var66" with its value "var66".
+				// cv$temp$2$var66's comment
+				// Variable declaration of cv$temp$2$var66 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -2670,7 +2671,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Substituted "j$var60" with its value "1".
 				// 
-				// Substituted "cv$temp$2$var66" with its value "var66".
+				// cv$temp$2$var66's comment
+				// Variable declaration of cv$temp$2$var66 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -2698,7 +2700,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Substituted "j$var60" with its value "2".
 				// 
-				// Substituted "cv$temp$2$var66" with its value "var66".
+				// cv$temp$2$var66's comment
+				// Variable declaration of cv$temp$2$var66 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -2750,7 +2753,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Substituted "j$var60" with its value "0".
 			// 
-			// Substituted "cv$temp$2$var66" with its value "var66".
+			// cv$temp$2$var66's comment
+			// Variable declaration of cv$temp$2$var66 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
@@ -2774,7 +2778,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Substituted "j$var60" with its value "1".
 			// 
-			// Substituted "cv$temp$2$var66" with its value "var66".
+			// cv$temp$2$var66's comment
+			// Variable declaration of cv$temp$2$var66 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
@@ -2798,7 +2803,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Substituted "j$var60" with its value "2".
 			// 
-			// Substituted "cv$temp$2$var66" with its value "var66".
+			// cv$temp$2$var66's comment
+			// Variable declaration of cv$temp$2$var66 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
@@ -2811,10 +2817,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// the random value is 0 an impossible value will be accepted.
 		// 
 		// The probability ration for the proposed value and the current value.
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
