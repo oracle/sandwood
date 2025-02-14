@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -29,7 +29,7 @@ public class TransFor extends TransTreeVoid {
     public final boolean parallel;
     public final boolean incrementing;
 
-    public static TransTreeVoid getFor(TransTreeVoid body, TransTreeReturn<IntVariable> start,
+    static TransTreeVoid getFor(TransTreeVoid body, TransTreeReturn<IntVariable> start,
             TransTreeReturn<IntVariable> end, TransTreeReturn<IntVariable> step,
             VariableDescription<IntVariable> indexDesc, boolean parallel, boolean incrementing, String comment) {
         if(body.type == TransTreeType.NOP)
@@ -41,7 +41,7 @@ public class TransFor extends TransTreeVoid {
     private TransFor(TransTreeVoid body, TransTreeReturn<IntVariable> start, TransTreeReturn<IntVariable> end,
             TransTreeReturn<IntVariable> step, VariableDescription<IntVariable> indexDesc, boolean parallel,
             boolean incrementing, String comment) {
-        super(TransTreeType.FOR, comment);
+        super(TransTreeType.FOR, start.size() + step.size() + end.size() + body.size() + 1, comment);
         this.body = body;
         this.start = start;
         this.end = end;
@@ -76,9 +76,9 @@ public class TransFor extends TransTreeVoid {
             return bodyTree; // NOP
         else {
             if(incrementing) {
-                int endSize = end.treeSize();
+                int endSize = end.size();
                 TransTreeReturn<IntVariable> altEnd = addII(end, constant(1)).collapseConstants();
-                int altEndSize = altEnd.treeSize();
+                int altEndSize = altEnd.size();
                 if(altEndSize <= endSize)
                     return OutputTree.forStmt(bodyTree, start.toOutputTreeReturnInternal(),
                             altEnd.toOutputTreeReturnInternal(), step.toOutputTreeReturnInternal(), indexDesc,
@@ -110,7 +110,8 @@ public class TransFor extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

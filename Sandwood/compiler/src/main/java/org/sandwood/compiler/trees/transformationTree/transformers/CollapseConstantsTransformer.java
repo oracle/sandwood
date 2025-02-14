@@ -369,9 +369,33 @@ public class CollapseConstantsTransformer extends Transformer {
         }
     }
 
+    private static class TreeTracker {
+        List<TransTreeReturn<?>> trees = new ArrayList<>();
+
+        public boolean contains(TransTreeReturn<?> tree) {
+            for(TransTreeReturn<?> t:trees) {
+                if(tree.containsEquivalent(t))
+                    return true;
+            }
+            return false;
+        }
+
+        public void add(TransTreeReturn<?> tree) {
+            trees.add(tree);
+        }
+
+        public void remove() {
+            trees.remove(trees.size() - 1);
+        }
+
+    }
+
     private final Bounds bounds;
     private final UpdatedVars updatedVars;
     private int embeddedDepth = 0;
+
+    // A set to track all the trees see so that it is not possible to enter an infinite loop.
+    private final TreeTracker seen = new TreeTracker();
 
     public CollapseConstantsTransformer(ArgDesc<?>[] args, KnownValuesTrans knownValues, TransTree<?> tree) {
         bounds = new Bounds(args, knownValues, tree);
@@ -442,117 +466,127 @@ public class CollapseConstantsTransformer extends Transformer {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public <X extends Variable<X>> TransTreeReturn<X> transformReturn(TransTreeReturn<X> tree) {
-        TransTreeReturn<X> toReturn;
+        TransTreeReturn<X> toReturn = null;
 
-        switch(tree.type) {
-            case LESS_THAN:
-            case LESS_THAN_EQUAL:
-                visitedNodes.add(tree);
-                toReturn = collapseConstants((TransBinOp) tree);
-                break;
-            case EQUALITY:
-                TransEq<?, ?> eq = (TransEq<?, ?>) tree;
-                if(eq.left.getOutputType() == VariableType.BooleanVariable) {
-                    if(eq.right.getOutputType() == VariableType.BooleanVariable)
-                        toReturn = collapseBooleanEq((TransEq<BooleanVariable, BooleanVariable>) eq);
-                    else
-                        toReturn = tree.applyTransformation(this);
-                } else {
-                    if(eq.right.getOutputType() == VariableType.BooleanVariable)
-                        toReturn = tree.applyTransformation(this);
-                    else
-                        toReturn = collapseConstants((TransEq<? extends NumberVariable, ? extends NumberVariable>) eq);
-                }
-                break;
+        // Check we are not in a loop.
+        if(!seen.contains(tree)) {
+            seen.add(tree);
 
-            case EXTERNAL_FUNCTION_CALL_RETURN:
-                visitedNodes.add(tree);
-                toReturn = collapseConstants((TransExternalFunctionCallReturn<X>) tree);
-                break;
+            switch(tree.type) {
+                case LESS_THAN:
+                case LESS_THAN_EQUAL:
+                    visitedNodes.add(tree);
+                    toReturn = collapseConstants((TransBinOp) tree);
+                    break;
+                case EQUALITY:
+                    TransEq<?, ?> eq = (TransEq<?, ?>) tree;
+                    if(eq.left.getOutputType() == VariableType.BooleanVariable) {
+                        if(eq.right.getOutputType() == VariableType.BooleanVariable)
+                            toReturn = collapseBooleanEq((TransEq<BooleanVariable, BooleanVariable>) eq);
+                        else
+                            toReturn = tree.applyTransformation(this);
+                    } else {
+                        if(eq.right.getOutputType() == VariableType.BooleanVariable)
+                            toReturn = tree.applyTransformation(this);
+                        else
+                            toReturn = collapseConstants(
+                                    (TransEq<? extends NumberVariable, ? extends NumberVariable>) eq);
+                    }
+                    break;
 
-            case MAX:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransMax<?>) tree);
-                break;
+                case EXTERNAL_FUNCTION_CALL_RETURN:
+                    visitedNodes.add(tree);
+                    toReturn = collapseConstants((TransExternalFunctionCallReturn<X>) tree);
+                    break;
 
-            case MIN:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransMin<?>) tree);
-                break;
+                case MAX:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransMax<?>) tree);
+                    break;
 
-            case DIVIDE:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransDivide<?, ?, ?>) tree);
-                break;
+                case MIN:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransMin<?>) tree);
+                    break;
 
-            case REMAINDER:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransRemainder<?, ?, ?>) tree);
-                break;
+                case DIVIDE:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransDivide<?, ?, ?>) tree);
+                    break;
 
-            case ADD:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransAdd<?, ?, ?>) tree);
-                break;
+                case REMAINDER:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransRemainder<?, ?, ?>) tree);
+                    break;
 
-            case SUBTRACT:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransSubtract<?, ?, ?>) tree);
-                break;
+                case ADD:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransAdd<?, ?, ?>) tree);
+                    break;
 
-            case MULTIPLY:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransMultiply<?, ?, ?>) tree);
-                break;
+                case SUBTRACT:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransSubtract<?, ?, ?>) tree);
+                    break;
 
-            case NEGATE_BOOLEAN:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransNegateBoolean) tree);
-                break;
+                case MULTIPLY:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransMultiply<?, ?, ?>) tree);
+                    break;
 
-            case NEGATE:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransNegate<?>) tree);
-                break;
+                case NEGATE_BOOLEAN:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransNegateBoolean) tree);
+                    break;
 
-            case CAST_DOUBLE:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToDouble) tree);
-                break;
+                case NEGATE:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransNegate<?>) tree);
+                    break;
 
-            case CAST_INT:
-                visitedNodes.add(tree);
-                toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToInteger) tree);
-                break;
+                case CAST_DOUBLE:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToDouble) tree);
+                    break;
 
-            case CONDITIONAL_ASSIGNMENT:
-                visitedNodes.add(tree);
-                toReturn = collapseConstants((TransConditionalAssignment) tree);
-                break;
+                case CAST_INT:
+                    visitedNodes.add(tree);
+                    toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToInteger) tree);
+                    break;
 
-            case ALLOCATE_ARRAY: // TODO Add code to add the constraint that the index is positive so 0 can be a lower
-                // bound.
-            case AND: // Constants are collapsed at construction time
-            case ARRAY_GET: // TODO Add code to add the constraint the that index is positive so 0 can be a lower bound.
-            case CONST_BOOLEAN:
-            case CONST_DOUBLE:
-            case CONST_INT:
-            case LOCAL_FUNCTION_CALL_RETURN:
-            case RV_FUNCTION_CALL_RETURN:
-            case GET_FIELD:
-            case LOAD:
-            case OR: // Constants are collapsed at construction time
-                toReturn = tree.applyTransformation(this);
-                break;
+                case CONDITIONAL_ASSIGNMENT:
+                    visitedNodes.add(tree);
+                    toReturn = collapseConstants((TransConditionalAssignment) tree);
+                    break;
 
-            default:
-                throw new CompilerException("Unknown tree type " + tree.type + " encountered");
+                case ALLOCATE_ARRAY: // TODO Add code to add the constraint that the index is positive so 0 can be a
+                                     // lower bound.
+                case AND: // Constants are collapsed at construction time
+                case ARRAY_GET: // TODO Add code to add the constraint the that index is positive so 0 can be a lower
+                                // bound.
+                case CONST_BOOLEAN:
+                case CONST_DOUBLE:
+                case CONST_INT:
+                case LOCAL_FUNCTION_CALL_RETURN:
+                case RV_FUNCTION_CALL_RETURN:
+                case GET_FIELD:
+                case LOAD:
+                case OR: // Constants are collapsed at construction time
+                    toReturn = tree.applyTransformation(this);
+                    break;
+
+                default:
+                    throw new CompilerException("Unknown tree type " + tree.type + " encountered");
+            }
+
+            seen.remove();
         }
 
         if(toReturn != null)
             bounds.addTransformedTree(tree, toReturn);
         else
             toReturn = tree;
+
         return toReturn;
     }
 

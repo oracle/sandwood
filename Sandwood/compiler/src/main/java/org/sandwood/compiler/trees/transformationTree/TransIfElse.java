@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -29,7 +29,7 @@ public class TransIfElse extends TransTreeVoid {
 
     private TransIfElse(TransTreeReturn<BooleanVariable> condition, TransTreeVoid ifBody, String ifComment,
             TransTreeVoid elseBody, String elseComment, Set<Tag> tags) {
-        super(TransTreeType.IF, ifComment);
+        super(TransTreeType.IF, condition.size() + ifBody.size() + elseBody.size() + 1, ifComment);
         this.condition = condition;
         this.ifBody = ifBody;
         this.elseBody = elseBody;
@@ -77,7 +77,8 @@ public class TransIfElse extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (tree.type != TransTreeType.IF))

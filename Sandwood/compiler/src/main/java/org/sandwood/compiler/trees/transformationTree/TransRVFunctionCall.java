@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -27,9 +27,9 @@ public class TransRVFunctionCall extends TransTreeVoid {
     public final RandomVariableType<?, ?> source, sink;
     public final TransTreeReturn<?>[] args;
 
-    TransRVFunctionCall(FunctionType t, RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink,
-            TransTreeReturn<?>[] args, String comment) {
-        super(TransTreeType.RV_FUNCTION_CALL, comment);
+    private TransRVFunctionCall(FunctionType t, RandomVariableType<?, ?> source, RandomVariableType<?, ?> sink,
+            TransTreeReturn<?>[] args, int size, String comment) {
+        super(TransTreeType.RV_FUNCTION_CALL, size, comment);
         this.funcType = t;
         this.source = source;
         this.sink = sink;
@@ -40,6 +40,14 @@ public class TransRVFunctionCall extends TransTreeVoid {
         assert args != null;
         for(TransTreeReturn<?> arg:args)
             assert arg != null;
+    }
+
+    public static TransRVFunctionCall getTransRVFunctionCall(FunctionType t, RandomVariableType<?, ?> source,
+            RandomVariableType<?, ?> sink, TransTreeReturn<?>[] args, String comment) {
+        int size = 1;
+        for(TransTreeReturn<?> a:args)
+            size += a.size();
+        return new TransRVFunctionCall(t, source, sink, args, size, comment);
     }
 
     @Override
@@ -87,7 +95,8 @@ public class TransRVFunctionCall extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))
@@ -117,7 +126,7 @@ public class TransRVFunctionCall extends TransTreeVoid {
         TransTreeReturn<?>[] a = new TransTreeReturn[size];
         for(int i = 0; i < size; i++)
             a[i] = (TransTreeReturn<?>) t.transform(args[i]);
-        return new TransRVFunctionCall(funcType, source, sink, a, comment);
+        return getTransRVFunctionCall(funcType, source, sink, a, comment);
     }
 
     @Override

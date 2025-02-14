@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -32,8 +32,7 @@ public class TransConditionalAssignment<A extends Variable<A>> extends TransTree
 
     private TransConditionalAssignment(TransTreeReturn<BooleanVariable> condition, TransTreeReturn<A> ifValue,
             TransTreeReturn<A> elseValue, Set<Tag> tags) {
-        super(TransTreeType.CONDITIONAL_ASSIGNMENT,
-                1 + condition.treeSize() + ifValue.treeSize() + elseValue.treeSize());
+        super(TransTreeType.CONDITIONAL_ASSIGNMENT, 1 + condition.size() + ifValue.size() + elseValue.size());
         this.condition = condition;
         this.ifValue = ifValue;
         this.elseValue = elseValue;
@@ -75,7 +74,8 @@ public class TransConditionalAssignment<A extends Variable<A>> extends TransTree
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (tree.type != TransTreeType.CONDITIONAL_ASSIGNMENT))

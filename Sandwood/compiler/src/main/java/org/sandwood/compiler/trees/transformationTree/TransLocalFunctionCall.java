@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,10 +25,18 @@ public class TransLocalFunctionCall extends TransTreeVoid {
     private final FunctionName name;
     private final TransTreeReturn<?>[] args;
 
-    TransLocalFunctionCall(FunctionName name, TransTreeReturn<?>[] args, String comment) {
-        super(TransTreeType.LOCAL_FUNCTION_CALL, comment);
+    private TransLocalFunctionCall(FunctionName name, TransTreeReturn<?>[] args, int size, String comment) {
+        super(TransTreeType.LOCAL_FUNCTION_CALL, size, comment);
         this.name = name;
         this.args = args;
+    }
+
+    static TransLocalFunctionCall getTransLocalFunctionCall(FunctionName name, TransTreeReturn<?>[] args,
+            String comment) {
+        int size = 1;
+        for(TransTreeReturn<?> a:args)
+            size += a.size();
+        return new TransLocalFunctionCall(name, args, size, comment);
     }
 
     @Override
@@ -74,7 +82,8 @@ public class TransLocalFunctionCall extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))
@@ -97,7 +106,7 @@ public class TransLocalFunctionCall extends TransTreeVoid {
         TransTreeReturn<?>[] a = new TransTreeReturn[size];
         for(int i = 0; i < size; i++)
             a[i] = (TransTreeReturn<?>) t.transform(args[i]);
-        return new TransLocalFunctionCall(name, a, comment);
+        return getTransLocalFunctionCall(name, a, comment);
     }
 
     @Override

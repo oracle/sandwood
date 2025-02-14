@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -171,10 +171,33 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     }
 
     public final TransTreeType type;
+    private final int size;
 
-    protected TransTree(TransTreeType type) {
+    protected TransTree(TransTreeType type, int size) {
         super();
         this.type = type;
+        this.size = size;
+    }
+
+    public final int size() {
+        return size;
+    }
+
+    /**
+     * Method to test if a tree is a subtree of this tree.
+     * 
+     * @param t The tree to test if it is a component of this tree.
+     * @return Returns true if at least one copy of this t is found in this tree.
+     */
+    public boolean containsEquivalent(TransTree<?> t) {
+        if(size == t.size)
+            return equivalent(t);
+        else if(size > t.size) {
+            for(TransTree<?> tree:getChildren())
+                if(tree.containsEquivalent(t))
+                    return true;
+        }
+        return false;
     }
 
     @Override
@@ -224,7 +247,26 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
      * @param substitutions A Map of variable names to substitute and the names they should be substituted with.
      * @return Return true if the structure of the two trees is the same once the substitution is applied.
      */
-    public abstract boolean equivalent(TransTree<?> other,
+    public final boolean equivalent(TransTree<?> other,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+        if((substitutions.isEmpty() && equivalentHashCode() != other.equivalentHashCode()) || size != other.size)
+            return false;
+        else
+            return equivalentInternal(other, substitutions);
+    }
+
+    /**
+     * A method for comparing if two trees to see if they have the same structure and access the same variables if some
+     * variable names are substituted.
+     * 
+     * An example of when this would be used is when comparing two loop bodies where the loop index has a different
+     * name.
+     * 
+     * @param other         The tree to compare against.
+     * @param substitutions A Map of variable names to substitute and the names they should be substituted with.
+     * @return Return true if the structure of the two trees is the same once the substitution is applied.
+     */
+    protected abstract boolean equivalentInternal(TransTree<?> other,
             Map<VariableDescription<?>, VariableDescription<?>> substitutions);
 
     protected int equivalentHashCode(TransTreeReturn<?>[] trees) {
@@ -461,11 +503,11 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
 
     public static TransRVFunctionCall functionCall(FunctionType t, RandomVariableType<?, ?> source,
             RandomVariableType<?, ?> sink, TransTreeReturn<?>[] args, String comment) {
-        return new TransRVFunctionCall(t, source, sink, args, comment);
+        return TransRVFunctionCall.getTransRVFunctionCall(t, source, sink, args, comment);
     }
 
     public static TransLocalFunctionCall functionCall(FunctionName name, TransTreeReturn<?>[] args, String comment) {
-        return new TransLocalFunctionCall(name, args, comment);
+        return TransLocalFunctionCall.getTransLocalFunctionCall(name, args, comment);
     }
 
     public static <X extends Variable<X>> TransRVFunctionCallReturn<X> functionCallReturn(FunctionType t,

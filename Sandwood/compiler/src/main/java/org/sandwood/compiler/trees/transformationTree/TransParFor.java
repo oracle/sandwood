@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,7 +25,7 @@ public class TransParFor extends TransTreeVoid {
 
     private TransParFor(int parDepth, TransTreeReturn<IntVariable> start, TransTreeReturn<IntVariable> end,
             TransTreeReturn<IntVariable> step, TransParForLambda body, String comment) {
-        super(TransTreeType.FORK_JOIN_FOR, comment);
+        super(TransTreeType.FORK_JOIN_FOR, start.size() + step.size() + end.size() + body.size() + 1, comment);
         this.parDepth = parDepth;
         this.start = start;
         this.end = end;
@@ -42,7 +42,8 @@ public class TransParFor extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(tree.type != TransTreeType.FORK_JOIN_FOR)
             return false;
         TransParFor other = (TransParFor) tree;
