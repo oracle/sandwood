@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,7 +25,7 @@ public class TransTreeScope extends TransTreeVoid {
     public final TransTreeVoid tree;
 
     private TransTreeScope(TransTreeVoid tree, String comment) {
-        super(TransTreeType.SCOPE, comment);
+        super(TransTreeType.SCOPE, tree.size() + 1, comment);
         this.tree = tree;
     }
 
@@ -57,7 +57,8 @@ public class TransTreeScope extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> t, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> t,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == t)
             return true;
         if((t == null) || (type != t.type))

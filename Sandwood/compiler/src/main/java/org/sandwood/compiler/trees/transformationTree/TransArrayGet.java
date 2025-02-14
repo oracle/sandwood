@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -27,7 +27,7 @@ public class TransArrayGet<X extends Variable<X>> extends TransTreeReturn<X> {
     public final TransTreeReturn<IntVariable> index;
 
     TransArrayGet(TransTreeReturn<ArrayVariable<X>> array, TransTreeReturn<IntVariable> index) {
-        super(TransTreeType.ARRAY_GET, 1 + array.treeSize() + index.treeSize());
+        super(TransTreeType.ARRAY_GET, 1 + array.size() + index.size());
         assert array != null : "Construction argument \"array\" equal to null";
         assert array.getOutputType() instanceof ArrayType;
         assert index != null : "Construction argument \"index\" equal to null";
@@ -60,7 +60,8 @@ public class TransArrayGet<X extends Variable<X>> extends TransTreeReturn<X> {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

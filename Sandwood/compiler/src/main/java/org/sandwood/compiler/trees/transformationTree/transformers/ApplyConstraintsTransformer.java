@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -261,9 +261,9 @@ public class ApplyConstraintsTransformer extends Transformer {
                 // TODO remove this or move it to collapse constants, it is here to simplify
                 // tracking changes as we move the way loop bounds are encoded.
                 if(incrementing) {
-                    int endSize = transEnd.treeSize();
+                    int endSize = transEnd.size();
                     TransTreeReturn<IntVariable> altEnd = addII(transEnd, constant(1)).collapseConstants();
-                    if(altEnd.treeSize() <= endSize)
+                    if(altEnd.size() <= endSize)
                         condition = and(lessThanEqual(transStart, value).copy(visitedNodes),
                                 lessThan(value, altEnd).copy(visitedNodes), condition);
                     else

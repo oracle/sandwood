@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -32,16 +32,16 @@ public class TransNewArray<X extends Variable<X>> extends TransTreeReturn<ArrayV
     private final ArrayType<X> varType;
 
     TransNewArray(List<TransTreeReturn<IntVariable>> lengths, ArrayType<X> varType) {
-        super(TransTreeType.ALLOCATE_ARRAY, treeSize(lengths));
+        super(TransTreeType.ALLOCATE_ARRAY, size(lengths));
         this.lengths = lengths;
         this.varType = varType;
     }
 
-    private static int treeSize(List<TransTreeReturn<IntVariable>> lengths) {
-        int treeSize = 1;
+    private static int size(List<TransTreeReturn<IntVariable>> lengths) {
+        int size = 1;
         for(TransTreeReturn<?> t:lengths)
-            treeSize += t.treeSize();
-        return treeSize;
+            size += t.size();
+        return size;
     }
 
     @Override
@@ -75,7 +75,8 @@ public class TransNewArray<X extends Variable<X>> extends TransTreeReturn<ArrayV
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

@@ -34,7 +34,7 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
 
     TransRVFunctionCallReturn(FunctionType t, Type<X> outputType, RandomVariableType<?, ?> source,
             RandomVariableType<?, ?> sink, TransTreeReturn<?>... args) {
-        super(TransTreeType.RV_FUNCTION_CALL_RETURN, treeSize(args));
+        super(TransTreeType.RV_FUNCTION_CALL_RETURN, size(args));
         this.funcType = t;
         this.outputType = outputType;
         this.source = source;
@@ -48,11 +48,11 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
             assert arg != null;
     }
 
-    private static int treeSize(TransTreeReturn<?>... args) {
-        int treeSize = 1;
+    private static int size(TransTreeReturn<?>... args) {
+        int size = 1;
         for(TransTreeReturn<?> t:args)
-            treeSize += t.treeSize();
-        return treeSize;
+            size += t.size();
+        return size;
     }
 
     @Override
@@ -107,7 +107,8 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

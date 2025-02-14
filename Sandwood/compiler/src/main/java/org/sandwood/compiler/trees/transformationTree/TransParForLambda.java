@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -28,7 +28,7 @@ public class TransParForLambda extends TransTreeVoid {
 
     private TransParForLambda(int parDepth, VariableDescription<IntVariable> startDesc,
             VariableDescription<IntVariable> endDesc, VariableDescription<IntVariable> threadID, TransTreeVoid body) {
-        super(TransTreeType.PAR_FOR_LAMBDA, Tree.NoComment);
+        super(TransTreeType.PAR_FOR_LAMBDA, body.size() + 1, Tree.NoComment);
         this.parDepth = parDepth;
         this.startDesc = startDesc;
         this.endDesc = endDesc;
@@ -45,7 +45,8 @@ public class TransParForLambda extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(tree.type != TransTreeType.PAR_FOR_LAMBDA)
             return false;
         TransParForLambda p = (TransParForLambda) tree;

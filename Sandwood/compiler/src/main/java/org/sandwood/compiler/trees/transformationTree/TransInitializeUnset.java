@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -26,7 +26,7 @@ public class TransInitializeUnset<A extends Variable<A>> extends TransTreeVoid {
     private final Visibility visibility;
 
     TransInitializeUnset(Visibility visibility, VariableDescription<A> varDesc, String comment) {
-        super(TransTreeType.INITIALIZE_UNSET, comment);
+        super(TransTreeType.INITIALIZE_UNSET, 1, comment);
         this.varDesc = varDesc;
         this.visibility = visibility;
     }
@@ -56,7 +56,8 @@ public class TransInitializeUnset<A extends Variable<A>> extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

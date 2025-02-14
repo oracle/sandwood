@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -27,17 +27,17 @@ public class TransLocalFunctionCallReturn<X extends Variable<X>> extends TransTr
     private final Type<X> outputType;
 
     TransLocalFunctionCallReturn(Type<X> outputType, String name, TransTreeReturn<?>... args) {
-        super(TransTreeType.LOCAL_FUNCTION_CALL_RETURN, treeSize(args));
+        super(TransTreeType.LOCAL_FUNCTION_CALL_RETURN, size(args));
         this.name = name;
         this.args = args;
         this.outputType = outputType;
     }
 
-    private static int treeSize(TransTreeReturn<?>... args) {
-        int treeSize = 1;
+    private static int size(TransTreeReturn<?>... args) {
+        int size = 1;
         for(TransTreeReturn<?> t:args)
-            treeSize += t.treeSize();
-        return treeSize;
+            size += t.size();
+        return size;
     }
 
     @Override
@@ -83,7 +83,8 @@ public class TransLocalFunctionCallReturn<X extends Variable<X>> extends TransTr
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

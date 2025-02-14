@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,28 +25,8 @@ public class TransSequential extends TransTreeVoid {
 
     private final List<TransTreeVoid> trees = new ArrayList<>();
 
-    private TransSequential(TransTreeVoid[] trees, String comment) {
-        super(TransTreeType.SEQUENTIAL, comment);
-        for(TransTreeVoid t:trees) {
-            if(t == null)
-                throw new CompilerException("Trees with the value null are not allowed as inputs.");
-
-            if(t.type == TransTreeType.SEQUENTIAL) {
-                TransSequential ts = (TransSequential) t;
-                this.trees.addAll(ts.trees);
-                // TODO Change this line so that the sequential comment is not tied to the
-                // first tree, otherwise if the first tree is removed the comment disappears
-                // even if it applies to the whole block. Maybe by not collapsing sequential
-                // nodes. This will require checking everywhere that getTrees, or Trees is used.
-                ts.trees.get(0).postfixComment(ts.comment);
-            } else
-                this.trees.add(t);
-        }
-        assert (this.trees.size() > 1);
-    }
-
-    private TransSequential(List<TransTreeVoid> trees, String comment) {
-        super(TransTreeType.SEQUENTIAL, comment);
+    private TransSequential(List<TransTreeVoid> trees, int size, String comment) {
+        super(TransTreeType.SEQUENTIAL, size, comment);
         for(TransTreeVoid t:trees) {
             if(t == null)
                 throw new CompilerException("Trees with the value null are not allowed as inputs.");
@@ -94,7 +74,8 @@ public class TransSequential extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))
@@ -132,7 +113,10 @@ public class TransSequential extends TransTreeVoid {
             t.prefixComment(comment);
             return t;
         }
-        return new TransSequential(ts, comment);
+        int size = 1;
+        for(TransTreeVoid t:ts)
+            size += t.size();
+        return new TransSequential(ts, size, comment);
     }
 
     static TransTreeVoid getTransSequential(TransTreeVoid[] ts, String comment) {

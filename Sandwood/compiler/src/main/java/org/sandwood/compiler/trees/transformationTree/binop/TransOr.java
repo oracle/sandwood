@@ -34,16 +34,16 @@ public class TransOr extends TransTreeReturn<BooleanVariable> {
     private final Set<WrappedTransReturn<BooleanVariable>> constraints = new LinkedHashSet<>();
 
     private TransOr(List<WrappedTransReturn<BooleanVariable>> constraints) {
-        super(TransTreeType.OR, treeSize(constraints));
+        super(TransTreeType.OR, size(constraints));
         assert (constraints.size() > 1);
         this.constraints.addAll(constraints);
     }
 
-    private static int treeSize(List<WrappedTransReturn<BooleanVariable>> constraints) {
-        int treeSize = constraints.size() - 1;
+    private static int size(List<WrappedTransReturn<BooleanVariable>> constraints) {
+        int size = constraints.size() - 1;
         for(WrappedTransReturn<BooleanVariable> w:constraints)
-            treeSize += w.tree.treeSize();
-        return treeSize;
+            size += w.tree.size();
+        return size;
     }
 
     public static TransTreeReturn<BooleanVariable> getTransOr(List<TransTreeReturn<BooleanVariable>> constraints) {
@@ -116,7 +116,8 @@ public class TransOr extends TransTreeReturn<BooleanVariable> {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(type != tree.type)
             return false;
         TransOr orTree = (TransOr) tree;

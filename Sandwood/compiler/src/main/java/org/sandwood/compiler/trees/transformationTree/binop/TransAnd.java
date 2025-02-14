@@ -34,7 +34,7 @@ public class TransAnd extends TransTreeReturn<BooleanVariable> {
     private final Set<WrappedTransReturn<BooleanVariable>> constraints = new LinkedHashSet<>();
 
     private TransAnd(List<WrappedTransReturn<BooleanVariable>> constraints) {
-        super(TransTreeType.AND, treeSize(constraints));
+        super(TransTreeType.AND, size(constraints));
         assert (constraints.size() > 1);
         this.constraints.addAll(constraints);
     }
@@ -62,11 +62,11 @@ public class TransAnd extends TransTreeReturn<BooleanVariable> {
             return new TransAnd(toPass);
     }
 
-    private static int treeSize(List<WrappedTransReturn<BooleanVariable>> constraints) {
-        int treeSize = constraints.size() - 1;
+    private static int size(List<WrappedTransReturn<BooleanVariable>> constraints) {
+        int size = constraints.size() - 1;
         for(WrappedTransReturn<BooleanVariable> w:constraints)
-            treeSize += w.tree.treeSize();
-        return treeSize;
+            size += w.tree.size();
+        return size;
     }
 
     @Override
@@ -116,7 +116,8 @@ public class TransAnd extends TransTreeReturn<BooleanVariable> {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(type != tree.type)
             return false;
         TransAnd andTree = (TransAnd) tree;

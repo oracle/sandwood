@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,7 +25,7 @@ public class TransStore<X extends Variable<X>> extends TransTreeVoid {
     public final TransTreeReturn<X> value;
 
     TransStore(VariableDescription<X> varDesc, TransTreeReturn<X> value, String comment) {
-        super(TransTreeType.STORE, comment);
+        super(TransTreeType.STORE, value.size() + 1, comment);
         this.varDesc = varDesc;
         this.value = value;
     }
@@ -55,7 +55,8 @@ public class TransStore<X extends Variable<X>> extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

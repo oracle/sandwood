@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -27,7 +27,7 @@ public class TransGetIntField extends TransTreeReturn<IntVariable> {
     private final TransTreeReturn<?> tree;
 
     TransGetIntField(TransTreeReturn<?> tree, String name) {
-        super(TransTreeType.GET_FIELD, 1 + tree.treeSize());
+        super(TransTreeType.GET_FIELD, 1 + tree.size());
         this.name = name;
         this.tree = tree;
     }
@@ -57,7 +57,8 @@ public class TransGetIntField extends TransTreeReturn<IntVariable> {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> otherTree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> otherTree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == otherTree)
             return true;
         if((otherTree == null) || (type != otherTree.type))

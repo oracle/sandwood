@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -101,9 +101,9 @@ public class CollapseUnrequiredForLoopsTransformer extends Transformer {
         tf.addNodes(visitedNodes);
         TransTreeReturn<BooleanVariable> guard;
         if(tf.incrementing) {
-            int endSize = tf.end.treeSize();
+            int endSize = tf.end.size();
             TransTreeReturn<IntVariable> altEnd = addII(tf.end, constant(1)).collapseConstants();
-            int altEndSize = altEnd.treeSize();
+            int altEndSize = altEnd.size();
             if(altEndSize <= endSize)
                 guard = TransTree.lessThan(tf.start, altEnd);
             else

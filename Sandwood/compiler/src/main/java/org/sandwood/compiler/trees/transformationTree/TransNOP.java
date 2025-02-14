@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -23,7 +23,7 @@ public class TransNOP extends TransTreeVoid {
     public static final TransNOP nop = new TransNOP();
 
     private TransNOP() {
-        super(TransTreeType.NOP, Tree.NoComment);
+        super(TransTreeType.NOP, 0, Tree.NoComment);
     }
 
     @Override
@@ -42,7 +42,8 @@ public class TransNOP extends TransTreeVoid {
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         return tree == nop;
     }
 

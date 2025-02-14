@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -29,7 +29,7 @@ public class TransExternalFunctionCallReturn<X extends Variable<X>> extends Tran
     public final Type<X> outputType;
 
     TransExternalFunctionCallReturn(ExternalFunction func, Type<X> outputType, TransTreeReturn<?>... args) {
-        super(TransTreeType.EXTERNAL_FUNCTION_CALL_RETURN, treeSize(args));
+        super(TransTreeType.EXTERNAL_FUNCTION_CALL_RETURN, size(args));
         this.func = func;
         this.outputType = outputType;
         this.args = args;
@@ -40,11 +40,11 @@ public class TransExternalFunctionCallReturn<X extends Variable<X>> extends Tran
             assert arg != null;
     }
 
-    private static int treeSize(TransTreeReturn<?>... args) {
-        int treeSize = 1;
+    private static int size(TransTreeReturn<?>... args) {
+        int size = 1;
         for(TransTreeReturn<?> t:args)
-            treeSize += t.treeSize();
-        return treeSize;
+            size += t.size();
+        return size;
     }
 
     @Override
@@ -93,7 +93,8 @@ public class TransExternalFunctionCallReturn<X extends Variable<X>> extends Tran
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))
@@ -137,13 +138,13 @@ public class TransExternalFunctionCallReturn<X extends Variable<X>> extends Tran
         if(func.monotonic) {
             if(func.increasing) {
                 TransTreeReturn<?>[] maxArgs = new TransTreeReturn<?>[args.length];
-                for(int i=0; i<args.length; i++) {
+                for(int i = 0; i < args.length; i++) {
                     maxArgs[i] = args[i].maxValue(bounds);
                 }
                 return new TransExternalFunctionCallReturn<>(func, outputType, maxArgs);
             } else {
                 TransTreeReturn<?>[] minArgs = new TransTreeReturn<?>[args.length];
-                for(int i=0; i<args.length; i++) {
+                for(int i = 0; i < args.length; i++) {
                     minArgs[i] = args[i].minValue(bounds);
                 }
                 return new TransExternalFunctionCallReturn<>(func, outputType, minArgs);
@@ -158,13 +159,13 @@ public class TransExternalFunctionCallReturn<X extends Variable<X>> extends Tran
         if(func.monotonic) {
             if(func.increasing) {
                 TransTreeReturn<?>[] minArgs = new TransTreeReturn<?>[args.length];
-                for(int i=0; i<args.length; i++) {
+                for(int i = 0; i < args.length; i++) {
                     minArgs[i] = args[i].minValue(bounds);
                 }
                 return new TransExternalFunctionCallReturn<>(func, outputType, minArgs);
             } else {
                 TransTreeReturn<?>[] maxArgs = new TransTreeReturn<?>[args.length];
-                for(int i=0; i<args.length; i++) {
+                for(int i = 0; i < args.length; i++) {
                     maxArgs[i] = args[i].maxValue(bounds);
                 }
                 return new TransExternalFunctionCallReturn<>(func, outputType, maxArgs);

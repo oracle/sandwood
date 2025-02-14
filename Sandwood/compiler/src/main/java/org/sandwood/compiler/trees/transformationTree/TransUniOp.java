@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -22,7 +22,7 @@ public abstract class TransUniOp<A extends Variable<A>, B extends Variable<B>> e
     private final String description;
 
     public TransUniOp(TransTreeType type, TransTreeReturn<A> input, Type<B> outputType, String description) {
-        super(type, 1 + input.treeSize());
+        super(type, 1 + input.size());
         this.input = input;
         this.outputType = outputType;
         this.description = description;
@@ -42,7 +42,8 @@ public abstract class TransUniOp<A extends Variable<A>, B extends Variable<B>> e
     }
 
     @Override
-    public boolean equivalent(TransTree<?> tree, Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
+    public boolean equivalentInternal(TransTree<?> tree,
+            Map<VariableDescription<?>, VariableDescription<?>> substitutions) {
         if(this == tree)
             return true;
         if((tree == null) || (type != tree.type))

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -23,11 +23,9 @@ public abstract class TransTreeReturn<X extends Variable<X>> extends TransTree<T
 
     private boolean deterministic = true;
     private boolean deterministicSet = false;
-    private final int size;
 
     protected TransTreeReturn(TransTreeType type, int size) {
-        super(type);
-        this.size = size;
+        super(type, size);
     }
 
     public abstract Type<X> getOutputType();
@@ -43,10 +41,6 @@ public abstract class TransTreeReturn<X extends Variable<X>> extends TransTree<T
     public abstract TransTreeReturn<X> maxValue(Bounds bounds);
 
     public abstract TransTreeReturn<X> minValue(Bounds bounds);
-
-    public final int treeSize() {
-        return size;
-    }
 
     public boolean deterministic() {
         if(!deterministicSet) {
