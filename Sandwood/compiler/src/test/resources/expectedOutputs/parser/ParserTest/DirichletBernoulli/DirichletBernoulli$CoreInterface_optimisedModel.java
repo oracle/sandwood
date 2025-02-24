@@ -2,23 +2,23 @@ package org.sandwood.compiler.tests.parser;
 
 interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 
-	// Getter for fixedFlag$sample20.
-	public boolean get$fixedFlag$sample20();
+	// Getter for fixedFlag$sample17.
+	public boolean get$fixedFlag$sample17();
 
-	// Setter for fixedFlag$sample20.
-	public void set$fixedFlag$sample20(boolean cv$value);
+	// Setter for fixedFlag$sample17.
+	public void set$fixedFlag$sample17(boolean cv$value);
 
-	// Getter for fixedFlag$sample42.
-	public boolean get$fixedFlag$sample42();
+	// Getter for fixedFlag$sample38.
+	public boolean get$fixedFlag$sample38();
 
-	// Setter for fixedFlag$sample42.
-	public void set$fixedFlag$sample42(boolean cv$value);
+	// Setter for fixedFlag$sample38.
+	public void set$fixedFlag$sample38(boolean cv$value);
 
-	// Getter for fixedFlag$sample55.
-	public boolean get$fixedFlag$sample55();
+	// Getter for fixedFlag$sample51.
+	public boolean get$fixedFlag$sample51();
 
-	// Setter for fixedFlag$sample55.
-	public void set$fixedFlag$sample55(boolean cv$value);
+	// Setter for fixedFlag$sample51.
+	public void set$fixedFlag$sample51(boolean cv$value);
 
 	// Getter for length.
 	public int get$length();

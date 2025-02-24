@@ -3,10 +3,10 @@ package org.sandwood.compiler.tests.parser;
 interface RaggedArray$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[][] get$a();
 	public double[][] get$b();
-	public boolean get$fixedFlag$sample76();
-	public void set$fixedFlag$sample76(boolean cv$value);
-	public boolean get$fixedFlag$sample93();
-	public void set$fixedFlag$sample93(boolean cv$value);
+	public boolean get$fixedFlag$sample73();
+	public void set$fixedFlag$sample73(boolean cv$value);
+	public boolean get$fixedFlag$sample89();
+	public void set$fixedFlag$sample89(boolean cv$value);
 	public int get$i();
 	public void set$i(int cv$value);
 	public int get$length$obs_measured();

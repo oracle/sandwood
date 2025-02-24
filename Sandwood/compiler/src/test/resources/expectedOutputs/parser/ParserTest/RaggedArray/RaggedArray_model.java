@@ -34,13 +34,13 @@ public class RaggedArray extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample76(fixed);
+                system$c.set$fixedFlag$sample73(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample76())
+            if(system$c.get$fixedFlag$sample73())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class RaggedArray extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample93(fixed);
+                system$c.set$fixedFlag$sample89(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample93())
+            if(system$c.get$fixedFlag$sample89())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -105,13 +105,13 @@ public class RaggedArray extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample76(fixed);
+                system$c.set$fixedFlag$sample73(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample76())
+            if(system$c.get$fixedFlag$sample73())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -260,9 +260,9 @@ public class RaggedArray extends Model {
 
         //Set fixed flags
         if(i.isSet())
-            newCore.set$fixedFlag$sample76(oldCore.get$fixedFlag$sample76());
+            newCore.set$fixedFlag$sample73(oldCore.get$fixedFlag$sample73());
         if(obs.isSet())
-            newCore.set$fixedFlag$sample93(oldCore.get$fixedFlag$sample93());
+            newCore.set$fixedFlag$sample89(oldCore.get$fixedFlag$sample89());
     }
 
     /**

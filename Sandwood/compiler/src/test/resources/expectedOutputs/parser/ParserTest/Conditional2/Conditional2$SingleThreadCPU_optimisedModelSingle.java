@@ -6,11 +6,11 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional2$CoreInterface {
 	
 	// Declare the variables for the model.
-	private double[] cv$var6$stateProbabilityGlobal;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample7 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample7 = false;
+	private double[] cv$var4$stateProbabilityGlobal;
+	private boolean fixedFlag$sample21 = false;
+	private boolean fixedFlag$sample4 = false;
+	private boolean fixedProbFlag$sample21 = false;
+	private boolean fixedProbFlag$sample4 = false;
 	private boolean guard;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -18,8 +18,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$guard;
 	private double logProbability$value;
 	private double logProbability$value2;
-	private double logProbability$var20;
-	private double logProbability$var21;
+	private double logProbability$var18;
+	private double logProbability$var19;
 	private double[] observedValue;
 	private boolean setFlag$value = false;
 	private boolean system$gibbsForward = true;
@@ -30,44 +30,44 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample24.
+	// Getter for fixedFlag$sample21.
 	@Override
-	public final boolean get$fixedFlag$sample24() {
-		return fixedFlag$sample24;
+	public final boolean get$fixedFlag$sample21() {
+		return fixedFlag$sample21;
 	}
 
-	// Setter for fixedFlag$sample24.
+	// Setter for fixedFlag$sample21.
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
+	public final void set$fixedFlag$sample21(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
 		// need to be updated.
-		fixedFlag$sample24 = cv$value;
+		fixedFlag$sample21 = cv$value;
 		
-		// Should the probability of sample 24 be set to fixed. This will only every change
+		// Should the probability of sample 21 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample24" with its value "cv$value".
-		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
+		// Substituted "fixedFlag$sample21" with its value "cv$value".
+		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
 	}
 
-	// Getter for fixedFlag$sample7.
+	// Getter for fixedFlag$sample4.
 	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
+	public final boolean get$fixedFlag$sample4() {
+		return fixedFlag$sample4;
 	}
 
-	// Setter for fixedFlag$sample7.
+	// Setter for fixedFlag$sample4.
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
+	public final void set$fixedFlag$sample4(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample4 including if probabilities
 		// need to be updated.
-		fixedFlag$sample7 = cv$value;
+		fixedFlag$sample4 = cv$value;
 		
-		// Should the probability of sample 7 be set to fixed. This will only every change
+		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample7" with its value "cv$value".
-		fixedProbFlag$sample7 = (cv$value && fixedProbFlag$sample7);
+		// Substituted "fixedFlag$sample4" with its value "cv$value".
+		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
 	}
 
 	// Getter for guard.
@@ -83,8 +83,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// be updated.
 		guard = cv$value;
 		
-		// Unset the fixed probability flag for sample 7 as it depends on guard.
-		fixedProbFlag$sample7 = false;
+		// Unset the fixed probability flag for sample 4 as it depends on guard.
+		fixedProbFlag$sample4 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -153,8 +153,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		value = cv$value;
 		setFlag$value = true;
 		
-		// Unset the fixed probability flag for sample 24 as it depends on value.
-		fixedProbFlag$sample24 = false;
+		// Unset the fixed probability flag for sample 21 as it depends on value.
+		fixedProbFlag$sample21 = false;
 	}
 
 	// Getter for value2.
@@ -163,12 +163,12 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return value2;
 	}
 
-	// Calculate the probability of the samples represented by sample24 using sampled
+	// Calculate the probability of the samples represented by sample21 using sampled
 	// values.
-	private final void logProbabilityValue$sample24() {
-		// Determine if we need to calculate the values for sample task 24 or if we should
+	private final void logProbabilityValue$sample21() {
+		// Determine if we need to calculate the values for sample task 21 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample24) {
+		if(!fixedProbFlag$sample21) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
@@ -193,7 +193,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			}
-			logProbability$var20 = cv$sampleAccumulator;
+			logProbability$var18 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			// 
@@ -201,7 +201,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$var21 = cv$sampleAccumulator;
+			logProbability$var19 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -237,41 +237,41 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample24 = fixedFlag$sample24;
+			fixedProbFlag$sample21 = fixedFlag$sample21;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var20 = logProbability$var21;
+			logProbability$var18 = logProbability$var19;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$value = (logProbability$value + logProbability$var21);
+			logProbability$value = (logProbability$value + logProbability$var19);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!guard)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$value2 = (logProbability$value2 + logProbability$var21);
+				logProbability$value2 = (logProbability$value2 + logProbability$var19);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var21);
+			logProbability$$model = (logProbability$$model + logProbability$var19);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var21);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var19);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample7 using sampled values.
-	private final void logProbabilityValue$sample7() {
-		// Determine if we need to calculate the values for sample task 7 or if we should
+	// Calculate the probability of the samples represented by sample4 using sampled values.
+	private final void logProbabilityValue$sample4() {
+		// Determine if we need to calculate the values for sample task 4 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample7) {
+		if(!fixedProbFlag$sample4) {
 			// Generating probabilities for sample task
 			// Store the value of the function call, so the function call is only made once.
 			// 
@@ -280,7 +280,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((guard && !(value2[0] == 1.0)))
-				// Looking for a path between Put 19 and consumer double[] 29.
+				// Looking for a path between Put 16 and consumer double[] 27.
 				cv$weightedProbability = Double.NEGATIVE_INFINITY;
 			
 			// Add the probability of this sample task to the sample task accumulator.
@@ -433,7 +433,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -456,7 +456,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+			fixedProbFlag$sample4 = fixedFlag$sample4;
 		}
 		// Using cached values.
 		else {
@@ -509,15 +509,15 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 7 drawn from bernoulli. Inference was performed using variable marginalization.
-	private final void sample7() {
+	// by sample task 4 drawn from bernoulli. Inference was performed using variable marginalization.
+	private final void sample4() {
 		// Write out the new value of the sample.
 		// 
 		// Variable declaration of cv$currentValue moved.
@@ -540,7 +540,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var4" with its value "0.5".
+		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
 		// Variable declaration of cv$currentValue moved.
 		// Declaration comment was:
@@ -549,7 +549,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "0".
-		cv$var6$stateProbabilityGlobal[0] = DistributionSampling.logProbabilityBernoulli(false, 0.5);
+		cv$var4$stateProbabilityGlobal[0] = DistributionSampling.logProbabilityBernoulli(false, 0.5);
 		
 		// Write out the new value of the sample.
 		// 
@@ -566,7 +566,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// inputs.
 		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 		
-		// Looking for a path between Put 19 and consumer double[] 29.
+		// Looking for a path between Put 16 and consumer double[] 27.
 		// 
 		// Check observed variable is possible
 		if((value2[0] == 1.0))
@@ -591,7 +591,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var4" with its value "0.5".
+		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
 		// Variable declaration of cv$currentValue moved.
 		// Declaration comment was:
@@ -600,7 +600,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		cv$var6$stateProbabilityGlobal[1] = (cv$accumulatedConsumerProbabilities + DistributionSampling.logProbabilityBernoulli(true, 0.5));
+		cv$var4$stateProbabilityGlobal[1] = (cv$accumulatedConsumerProbabilities + DistributionSampling.logProbabilityBernoulli(true, 0.5));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -612,12 +612,12 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialise the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var6$stateProbabilityGlobal[0];
+		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
 		
 		// Unrolled loop
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var6$stateProbabilityGlobal[1];
+		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		
@@ -636,36 +636,37 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Get a local reference to the scratch space.
 			// 
 			// Initialise the sum of the array elements
-			cv$logSum = (Math.log((Math.exp((cv$var6$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var6$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			cv$logSum = (Math.log((Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
 			// Get a local reference to the scratch space.
-			cv$var6$stateProbabilityGlobal[0] = 0.5;
+			cv$var4$stateProbabilityGlobal[0] = 0.5;
 			
 			// Get a local reference to the scratch space.
-			cv$var6$stateProbabilityGlobal[1] = 0.5;
+			cv$var4$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
 			// Get a local reference to the scratch space.
-			cv$var6$stateProbabilityGlobal[0] = Math.exp((cv$var6$stateProbabilityGlobal[0] - cv$logSum));
+			cv$var4$stateProbabilityGlobal[0] = Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$logSum));
 			
 			// Get a local reference to the scratch space.
-			cv$var6$stateProbabilityGlobal[1] = Math.exp((cv$var6$stateProbabilityGlobal[1] - cv$logSum));
+			cv$var4$stateProbabilityGlobal[1] = Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = 2; cv$indexName < cv$var6$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = 2; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var6$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// Get a local reference to the scratch space.
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var6$stateProbabilityGlobal) == 1);
+		// cv$numNumStates's comment
+		// variable marginalization
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -673,12 +674,12 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for cv$var6$stateProbabilityGlobal
+		// Constructor for cv$var4$stateProbabilityGlobal
 		// 
 		// Allocate scratch space.
 		// 
-		// Allocation of cv$var6$stateProbabilityGlobal for single threaded execution
-		cv$var6$stateProbabilityGlobal = new double[2];
+		// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
+		cv$var4$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -699,16 +700,16 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(guard) {
-			if(!fixedFlag$sample7)
+			if(!fixedFlag$sample4)
 				value[0] = 1.0;
 		} else {
-			if((!fixedFlag$sample7 || !fixedFlag$sample24))
+			if((!fixedFlag$sample4 || !fixedFlag$sample21))
 				value[0] = DistributionSampling.sampleUniform(RNG$);
 		}
-		if((!fixedFlag$sample7 || !fixedFlag$sample24))
+		if((!fixedFlag$sample4 || !fixedFlag$sample21))
 			value2[0] = value[0];
 	}
 
@@ -716,7 +717,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
@@ -724,7 +725,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
@@ -732,8 +733,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample7)
-			sample7();
+		if(!fixedFlag$sample4)
+			sample4();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
@@ -757,11 +758,11 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$bernoulli = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
-		if(!fixedProbFlag$sample7)
+		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
-		logProbability$var20 = 0.0;
-		if(!fixedProbFlag$sample24)
-			logProbability$var21 = 0.0;
+		logProbability$var18 = 0.0;
+		if(!fixedProbFlag$sample21)
+			logProbability$var19 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -781,9 +782,9 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample7)
-			logProbabilityValue$sample7();
-		logProbabilityValue$sample24();
+		if(fixedFlag$sample4)
+			logProbabilityValue$sample4();
+		logProbabilityValue$sample21();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -801,8 +802,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample24();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample21();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -819,8 +820,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample24();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample21();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then

@@ -292,7 +292,9 @@ public class TraceArrayRestrictions {
                     }
                     break;
                 default:
-                    if(sourceTrace.isEmpty() && d.equals(sourceTrace.peek()))
+                    if(sourceTrace.isEmpty())
+                        return;
+                    if(d.equals(sourceTrace.peek()))
                         sourceTrace.pop();
             }
         }
@@ -330,7 +332,8 @@ public class TraceArrayRestrictions {
                         data.usedPuts.put((PutTask<?>) d.task, consumers.pop());
                     break;
                 case REDUCE_INPUT:
-                    consumers.push(d.task);
+                    if(d.argPos == 3)
+                        consumers.push(d.task);
                     break;
                 default:
                     break;
@@ -792,7 +795,8 @@ public class TraceArrayRestrictions {
     private static ScopeDescription constructRestrictionInternal(RestrictionsData data, ScopeDescription target,
             int position, CompilationContext compilationCtx) {
 
-        target.applySubstitutions(position, compilationCtx);
+        if(position != 0 && !data.existingStartScopes.isEmpty())
+            target.applySubstitutions(position - 1, compilationCtx);
 
         Map<Variable<?>, VariablePair<?>> varSubstitutions = new HashMap<>();
 
@@ -986,7 +990,8 @@ public class TraceArrayRestrictions {
         for(Variable<?> v:varSubstitutions.keySet())
             compilationCtx.removeSubstitute(v);
 
-        target.removeSubstitutions(position, compilationCtx);
+        if(position != 0 && !data.existingStartScopes.isEmpty())
+            target.removeSubstitutions(position - 1, compilationCtx);
 
         Substitutions s = constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions);
         target = target.insertScope(innerScope, data.existingScopes, compilationCtx);

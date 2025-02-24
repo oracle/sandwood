@@ -34,13 +34,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample190(fixed);
+                system$c.set$fixedFlag$sample180(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample190())
+            if(system$c.get$fixedFlag$sample180())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample87(fixed);
+                system$c.set$fixedFlag$sample77(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample87())
+            if(system$c.get$fixedFlag$sample77())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -104,13 +104,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample140(fixed);
+                system$c.set$fixedFlag$sample130(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample140())
+            if(system$c.get$fixedFlag$sample130())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -139,13 +139,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample46(fixed);
+                system$c.set$fixedFlag$sample36(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample46())
+            if(system$c.get$fixedFlag$sample36())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -179,13 +179,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample39(fixed);
+                system$c.set$fixedFlag$sample30(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample39())
+            if(system$c.get$fixedFlag$sample30())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -214,13 +214,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample195(fixed);
+                system$c.set$fixedFlag$sample185(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample195())
+            if(system$c.get$fixedFlag$sample185())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -249,13 +249,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample105(fixed);
+                system$c.set$fixedFlag$sample95(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample105())
+            if(system$c.get$fixedFlag$sample95())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -284,13 +284,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample157(fixed);
+                system$c.set$fixedFlag$sample147(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample157())
+            if(system$c.get$fixedFlag$sample147())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -319,13 +319,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample200(fixed);
+                system$c.set$fixedFlag$sample190(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample200())
+            if(system$c.get$fixedFlag$sample190())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -354,13 +354,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample123(fixed);
+                system$c.set$fixedFlag$sample113(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample123())
+            if(system$c.get$fixedFlag$sample113())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -389,13 +389,13 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample174(fixed);
+                system$c.set$fixedFlag$sample164(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample174())
+            if(system$c.get$fixedFlag$sample164())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -424,18 +424,18 @@ public class HMMMetrics extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample49(fixed);
-                system$c.set$fixedFlag$sample67(fixed);
+                system$c.set$fixedFlag$sample39(fixed);
+                system$c.set$fixedFlag$sample57(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample49 = system$c.get$fixedFlag$sample49();
-            boolean fixedFlag$sample67 = system$c.get$fixedFlag$sample67();
-            if(fixedFlag$sample49 && fixedFlag$sample67)
+            boolean fixedFlag$sample39 = system$c.get$fixedFlag$sample39();
+            boolean fixedFlag$sample57 = system$c.get$fixedFlag$sample57();
+            if(fixedFlag$sample39 && fixedFlag$sample57)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample49 || fixedFlag$sample67)
+            else if(fixedFlag$sample39 || fixedFlag$sample57)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -660,30 +660,30 @@ public class HMMMetrics extends Model {
 
         //Set fixed flags
         if(cpu.isSet())
-            newCore.set$fixedFlag$sample190(oldCore.get$fixedFlag$sample190());
+            newCore.set$fixedFlag$sample180(oldCore.get$fixedFlag$sample180());
         if(cpuMean.isSet())
-            newCore.set$fixedFlag$sample87(oldCore.get$fixedFlag$sample87());
+            newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
         if(cpuVar.isSet())
-            newCore.set$fixedFlag$sample140(oldCore.get$fixedFlag$sample140());
+            newCore.set$fixedFlag$sample130(oldCore.get$fixedFlag$sample130());
         if(initialStateDistribution.isSet())
-            newCore.set$fixedFlag$sample46(oldCore.get$fixedFlag$sample46());
+            newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
         if(m.isSet())
-            newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
+            newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30());
         if(mem.isSet())
-            newCore.set$fixedFlag$sample195(oldCore.get$fixedFlag$sample195());
+            newCore.set$fixedFlag$sample185(oldCore.get$fixedFlag$sample185());
         if(memMean.isSet())
-            newCore.set$fixedFlag$sample105(oldCore.get$fixedFlag$sample105());
+            newCore.set$fixedFlag$sample95(oldCore.get$fixedFlag$sample95());
         if(memVar.isSet())
-            newCore.set$fixedFlag$sample157(oldCore.get$fixedFlag$sample157());
+            newCore.set$fixedFlag$sample147(oldCore.get$fixedFlag$sample147());
         if(pageFaults.isSet())
-            newCore.set$fixedFlag$sample200(oldCore.get$fixedFlag$sample200());
+            newCore.set$fixedFlag$sample190(oldCore.get$fixedFlag$sample190());
         if(pageFaultsMean.isSet())
-            newCore.set$fixedFlag$sample123(oldCore.get$fixedFlag$sample123());
+            newCore.set$fixedFlag$sample113(oldCore.get$fixedFlag$sample113());
         if(pageFaultsVar.isSet())
-            newCore.set$fixedFlag$sample174(oldCore.get$fixedFlag$sample174());
+            newCore.set$fixedFlag$sample164(oldCore.get$fixedFlag$sample164());
         if(st.isSet()){
-            newCore.set$fixedFlag$sample49(oldCore.get$fixedFlag$sample49());
-            newCore.set$fixedFlag$sample67(oldCore.get$fixedFlag$sample67());
+            newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
+            newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
         }
     }
 

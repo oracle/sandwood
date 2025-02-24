@@ -8,16 +8,16 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	
 	// Declare the variables for the model.
 	private double[] bias;
-	private double[] cv$var32$countGlobal;
-	private double[] cv$var63$stateProbabilityGlobal;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample51 = false;
-	private boolean fixedFlag$sample66 = false;
-	private boolean fixedFlag$sample91 = false;
-	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample51 = false;
-	private boolean fixedProbFlag$sample66 = false;
-	private boolean fixedProbFlag$sample91 = false;
+	private double[] cv$var30$countGlobal;
+	private double[] cv$var61$stateProbabilityGlobal;
+	private boolean fixedFlag$sample30 = false;
+	private boolean fixedFlag$sample47 = false;
+	private boolean fixedFlag$sample62 = false;
+	private boolean fixedFlag$sample87 = false;
+	private boolean fixedProbFlag$sample30 = false;
+	private boolean fixedProbFlag$sample47 = false;
+	private boolean fixedProbFlag$sample62 = false;
+	private boolean fixedProbFlag$sample87 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private int length$flipsMeasured;
@@ -26,15 +26,15 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double logProbability$m;
-	private double[] logProbability$sample66;
-	private double[] logProbability$sample91;
+	private double[] logProbability$sample62;
+	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var20;
-	private double logProbability$var32;
-	private double logProbability$var36;
-	private double logProbability$var48;
-	private double[] logProbability$var62;
-	private double[] logProbability$var86;
+	private double logProbability$var18;
+	private double logProbability$var30;
+	private double logProbability$var34;
+	private double logProbability$var46;
+	private double[] logProbability$var60;
+	private double[] logProbability$var84;
 	private double[][] m;
 	private int noCats;
 	private int noFlips;
@@ -67,109 +67,109 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		bias = cv$value;
 		setFlag$bias = true;
 		
-		// Unset the fixed probability flag for sample 51 as it depends on bias.
-		fixedProbFlag$sample51 = false;
+		// Unset the fixed probability flag for sample 47 as it depends on bias.
+		fixedProbFlag$sample47 = false;
 		
-		// Unset the fixed probability flag for sample 91 as it depends on bias.
-		fixedProbFlag$sample91 = false;
+		// Unset the fixed probability flag for sample 87 as it depends on bias.
+		fixedProbFlag$sample87 = false;
 	}
 
-	// Getter for fixedFlag$sample34.
+	// Getter for fixedFlag$sample30.
 	@Override
-	public final boolean get$fixedFlag$sample34() {
-		return fixedFlag$sample34;
+	public final boolean get$fixedFlag$sample30() {
+		return fixedFlag$sample30;
 	}
 
-	// Setter for fixedFlag$sample34.
+	// Setter for fixedFlag$sample30.
 	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
+	public final void set$fixedFlag$sample30(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample30 including if probabilities
 		// need to be updated.
-		fixedFlag$sample34 = cv$value;
+		fixedFlag$sample30 = cv$value;
 		
-		// Should the probability of sample 34 be set to fixed. This will only every change
+		// Should the probability of sample 30 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
+		// Substituted "fixedFlag$sample30" with its value "cv$value".
+		fixedProbFlag$sample30 = (cv$value && fixedProbFlag$sample30);
 		
-		// Should the probability of sample 66 be set to fixed. This will only every change
+		// Should the probability of sample 62 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample66 = (cv$value && fixedProbFlag$sample66);
+		// Substituted "fixedFlag$sample30" with its value "cv$value".
+		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
 	}
 
-	// Getter for fixedFlag$sample51.
+	// Getter for fixedFlag$sample47.
 	@Override
-	public final boolean get$fixedFlag$sample51() {
-		return fixedFlag$sample51;
+	public final boolean get$fixedFlag$sample47() {
+		return fixedFlag$sample47;
 	}
 
-	// Setter for fixedFlag$sample51.
+	// Setter for fixedFlag$sample47.
 	@Override
-	public final void set$fixedFlag$sample51(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample51 including if probabilities
+	public final void set$fixedFlag$sample47(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
 		// need to be updated.
-		fixedFlag$sample51 = cv$value;
+		fixedFlag$sample47 = cv$value;
 		
-		// Should the probability of sample 51 be set to fixed. This will only every change
+		// Should the probability of sample 47 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample51" with its value "cv$value".
-		fixedProbFlag$sample51 = (cv$value && fixedProbFlag$sample51);
+		// Substituted "fixedFlag$sample47" with its value "cv$value".
+		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample51" with its value "cv$value".
-		fixedProbFlag$sample91 = (cv$value && fixedProbFlag$sample91);
+		// Substituted "fixedFlag$sample47" with its value "cv$value".
+		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
 	}
 
-	// Getter for fixedFlag$sample66.
+	// Getter for fixedFlag$sample62.
 	@Override
-	public final boolean get$fixedFlag$sample66() {
-		return fixedFlag$sample66;
+	public final boolean get$fixedFlag$sample62() {
+		return fixedFlag$sample62;
 	}
 
-	// Setter for fixedFlag$sample66.
+	// Setter for fixedFlag$sample62.
 	@Override
-	public final void set$fixedFlag$sample66(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample66 including if probabilities
+	public final void set$fixedFlag$sample62(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample62 including if probabilities
 		// need to be updated.
-		fixedFlag$sample66 = cv$value;
+		fixedFlag$sample62 = cv$value;
 		
-		// Should the probability of sample 66 be set to fixed. This will only every change
+		// Should the probability of sample 62 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample66" with its value "cv$value".
-		fixedProbFlag$sample66 = (cv$value && fixedProbFlag$sample66);
+		// Substituted "fixedFlag$sample62" with its value "cv$value".
+		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample66" with its value "cv$value".
-		fixedProbFlag$sample91 = (cv$value && fixedProbFlag$sample91);
+		// Substituted "fixedFlag$sample62" with its value "cv$value".
+		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
 	}
 
-	// Getter for fixedFlag$sample91.
+	// Getter for fixedFlag$sample87.
 	@Override
-	public final boolean get$fixedFlag$sample91() {
-		return fixedFlag$sample91;
+	public final boolean get$fixedFlag$sample87() {
+		return fixedFlag$sample87;
 	}
 
-	// Setter for fixedFlag$sample91.
+	// Setter for fixedFlag$sample87.
 	@Override
-	public final void set$fixedFlag$sample91(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample91 including if probabilities
+	public final void set$fixedFlag$sample87(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample87 including if probabilities
 		// need to be updated.
-		fixedFlag$sample91 = cv$value;
+		fixedFlag$sample87 = cv$value;
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample91" with its value "cv$value".
-		fixedProbFlag$sample91 = (cv$value && fixedProbFlag$sample91);
+		// Substituted "fixedFlag$sample87" with its value "cv$value".
+		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
 	}
 
 	// Getter for flips.
@@ -188,8 +188,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		flips = cv$value;
 		setFlag$flips = true;
 		
-		// Unset the fixed probability flag for sample 91 as it depends on flips.
-		fixedProbFlag$sample91 = false;
+		// Unset the fixed probability flag for sample 87 as it depends on flips.
+		fixedProbFlag$sample87 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -269,11 +269,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		m = cv$value;
 		setFlag$m = true;
 		
-		// Unset the fixed probability flag for sample 34 as it depends on m.
-		fixedProbFlag$sample34 = false;
+		// Unset the fixed probability flag for sample 30 as it depends on m.
+		fixedProbFlag$sample30 = false;
 		
-		// Unset the fixed probability flag for sample 66 as it depends on m.
-		fixedProbFlag$sample66 = false;
+		// Unset the fixed probability flag for sample 62 as it depends on m.
+		fixedProbFlag$sample62 = false;
 	}
 
 	// Getter for noCats.
@@ -316,11 +316,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		st = cv$value;
 		setFlag$st = true;
 		
-		// Unset the fixed probability flag for sample 66 as it depends on st.
-		fixedProbFlag$sample66 = false;
+		// Unset the fixed probability flag for sample 62 as it depends on st.
+		fixedProbFlag$sample62 = false;
 		
-		// Unset the fixed probability flag for sample 91 as it depends on st.
-		fixedProbFlag$sample91 = false;
+		// Unset the fixed probability flag for sample 87 as it depends on st.
+		fixedProbFlag$sample87 = false;
 	}
 
 	// Getter for v.
@@ -329,16 +329,16 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		return v;
 	}
 
-	// Calculate the probability of the samples represented by sample34 using sampled
+	// Calculate the probability of the samples represented by sample30 using sampled
 	// values.
-	private final void logProbabilityValue$sample34() {
-		// Determine if we need to calculate the values for sample task 34 or if we should
+	private final void logProbabilityValue$sample30() {
+		// Determine if we need to calculate the values for sample task 30 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample34) {
+		if(!fixedProbFlag$sample30) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var31 = 0; var31 < noCats; var31 += 1)
+			for(int var29 = 0; var29 < noCats; var29 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -354,11 +354,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var31], v));
-			logProbability$var20 = cv$sampleAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var29], v, noStates));
+			logProbability$var18 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var32 = cv$sampleAccumulator;
+			logProbability$var30 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -378,7 +378,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
+			if(fixedFlag$sample30)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -387,42 +387,42 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample34 = fixedFlag$sample34;
+			fixedProbFlag$sample30 = fixedFlag$sample30;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var20 = logProbability$var32;
+			logProbability$var18 = logProbability$var30;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$m = (logProbability$m + logProbability$var32);
+			logProbability$m = (logProbability$m + logProbability$var30);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var32);
+			logProbability$$model = (logProbability$$model + logProbability$var30);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
+			if(fixedFlag$sample30)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var32);
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var30);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample51 using sampled
+	// Calculate the probability of the samples represented by sample47 using sampled
 	// values.
-	private final void logProbabilityValue$sample51() {
-		// Determine if we need to calculate the values for sample task 51 or if we should
+	private final void logProbabilityValue$sample47() {
+		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample51) {
+		if(!fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var47 = 0; var47 < noFlips; var47 += 1)
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -438,11 +438,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var47], 1.0, 1.0));
-			logProbability$var36 = cv$sampleAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var45], 1.0, 1.0));
+			logProbability$var34 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var48 = cv$sampleAccumulator;
+			logProbability$var46 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -462,7 +462,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample51)
+			if(fixedFlag$sample47)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -471,45 +471,44 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample51 = fixedFlag$sample51;
+			fixedProbFlag$sample47 = fixedFlag$sample47;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var36 = logProbability$var48;
+			logProbability$var34 = logProbability$var46;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$bias = (logProbability$bias + logProbability$var48);
+			logProbability$bias = (logProbability$bias + logProbability$var46);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var48);
+			logProbability$$model = (logProbability$$model + logProbability$var46);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample51)
+			if(fixedFlag$sample47)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var48);
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var46);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample66 using sampled
+	// Calculate the probability of the samples represented by sample62 using sampled
 	// values.
-	private final void logProbabilityValue$sample66() {
-		// Determine if we need to calculate the values for sample task 66 or if we should
+	private final void logProbabilityValue$sample62() {
+		// Determine if we need to calculate the values for sample task 62 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample66) {
+		if(!fixedProbFlag$sample62) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = st[i$var60];
-				double[] var61 = m[i$var60];
+				int cv$sampleValue = st[i$var58];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -530,7 +529,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var61.length))?Math.log(var61[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[i$var58][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -543,10 +542,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var62[i$var60] = cv$distributionAccumulator;
+				logProbability$var60[i$var58] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample66[i$var60] = cv$distributionAccumulator;
+				logProbability$sample62[i$var58] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -557,23 +556,23 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample66)
+			if(fixedFlag$sample62)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample66 = (fixedFlag$sample66 && fixedFlag$sample34);
+			fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedFlag$sample30);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample66[i$var60];
+				double cv$rvAccumulator = logProbability$sample62[i$var58];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var62[i$var60] = cv$rvAccumulator;
+				logProbability$var60[i$var58] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -584,37 +583,37 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample66)
+			if(fixedFlag$sample62)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample91 using sampled
+	// Calculate the probability of the samples represented by sample87 using sampled
 	// values.
-	private final void logProbabilityValue$sample91() {
-		// Determine if we need to calculate the values for sample task 91 or if we should
+	private final void logProbabilityValue$sample87() {
+		// Determine if we need to calculate the values for sample task 87 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample91) {
+		if(!fixedProbFlag$sample87) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Reduction of array st
 				// 
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				int reduceVar$var84$2 = 0;
+				int reduceVar$var82$2 = 0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noCats; cv$reduction82Index += 1)
+				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// j$var82's comment
+					// j$var80's comment
 					// Set the right hand term to a value from the array st
-					reduceVar$var84$2 = (reduceVar$var84$2 + st[cv$reduction82Index]);
+					reduceVar$var82$2 = (reduceVar$var82$2 + st[cv$reduction78Index]);
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -639,7 +638,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j$var75], bias[reduceVar$var84$2]);
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$2]);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -652,10 +651,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var86[j$var75] = cv$distributionAccumulator;
+				logProbability$var84[j$var73] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample91[j$var75] = cv$distributionAccumulator;
+				logProbability$sample87[j$var73] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -667,18 +666,18 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample91 = ((fixedFlag$sample91 && fixedFlag$sample51) && fixedFlag$sample66);
+			fixedProbFlag$sample87 = ((fixedFlag$sample87 && fixedFlag$sample47) && fixedFlag$sample62);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample91[j$var75];
+				double cv$rvAccumulator = logProbability$sample87[j$var73];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var86[j$var75] = cv$rvAccumulator;
+				logProbability$var84[j$var73] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -691,149 +690,147 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 34 drawn from Dirichlet 20. Inference was performed using a Dirichlet
+	// by sample task 30 drawn from Dirichlet 18. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample34(int var31) {
+	private final void sample30(int var29) {
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
 		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
 			// A local reference to the scratch space.
-			cv$var32$countGlobal[cv$loopIndex] = 0.0;
+			cv$var30$countGlobal[cv$loopIndex] = 0.0;
 		
-		// Processing sample task 66 of consumer random variable null.
+		// Processing sample task 62 of consumer random variable null.
 		// 
-		// Increment the sample counter with the value sampled by sample task 66 of random
-		// variable var62
+		// Increment the sample counter with the value sampled by sample task 62 of random
+		// variable var60
 		// 
 		// A local reference to the scratch space.
-		cv$var32$countGlobal[st[var31]] = (cv$var32$countGlobal[st[var31]] + 1.0);
+		cv$var30$countGlobal[st[var29]] = (cv$var30$countGlobal[st[var29]] + 1.0);
 		
 		// Calculate the new sample value
 		// 
 		// Calculate a new sample value and write it into cv$targetLocal.
 		// 
 		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var32$countGlobal, m[var31]);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var30$countGlobal, m[var29], noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 51 drawn from Beta 36. Inference was performed using a Beta to Bernoulli/Binomial
+	// by sample task 47 drawn from Beta 34. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
-	private final void sample51(int var47) {
+	private final void sample47(int var45) {
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
 		// Local variable to record the number of samples.
 		int cv$count = 0;
 		
-		// Processing random variable 86.
+		// Processing random variable 84.
 		// 
-		// Looking for a path between Sample 51 and consumer Bernoulli 86.
+		// Looking for a path between Sample 47 and consumer Bernoulli 84.
 		// 
 		// Reduction of array st
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		int reduceVar$var84$0 = 0;
+		int reduceVar$var82$0 = 0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction82Index = 0; cv$reduction82Index < noCats; cv$reduction82Index += 1)
+		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j$var82's comment
+			// j$var80's comment
 			// Set the right hand term to a value from the array st
-			reduceVar$var84$0 = (reduceVar$var84$0 + st[cv$reduction82Index]);
-		if((var47 == reduceVar$var84$0)) {
-			for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1) {
-				// Processing sample task 91 of consumer random variable null.
+			reduceVar$var82$0 = (reduceVar$var82$0 + st[cv$reduction78Index]);
+		if((var45 == reduceVar$var82$0)) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+				// Processing sample task 87 of consumer random variable null.
 				// 
-				// Include the value sampled by task 91 from random variable var86.
+				// Include the value sampled by task 87 from random variable var84.
 				// Increment the number of samples.
 				cv$count = (cv$count + 1);
 				
 				// If the sample value was positive increase the count
-				if(flips[j$var75])
+				if(flips[j$var73])
 					cv$sum = (cv$sum + 1);
 			}
 		}
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		bias[var47] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 66 drawn from Categorical 62. Inference was performed using variable
+	// by sample task 62 drawn from Categorical 60. Inference was performed using variable
 	// marginalization.
-	private final void sample66(int i$var60) {
-		// Variable declaration of cv$noStates moved.
+	private final void sample62(int i$var58) {
+		// Variable declaration of cv$numNumStates moved.
 		// Declaration comment was:
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
 		// 
-		// cv$noStates's comment
+		// cv$numNumStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$noStates = Math.max(0, noStates);
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
+		int cv$numNumStates = Math.max(0, noStates);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			// Value of the variable at this index
-			st[i$var60] = cv$valuePos;
-			
-			// Variable declaration of cv$temp$0$var61 moved.
-			// 
-			// Constructing a random variable input for use later.
-			double[] cv$temp$0$var61 = m[i$var60];
+			st[i$var58] = cv$valuePos;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			double cv$accumulatedProbabilities = ((cv$valuePos < cv$temp$0$var61.length)?Math.log(cv$temp$0$var61[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			// 
+			// cv$temp$0$var59's comment
+			// Constructing a random variable input for use later.
+			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Reduction of array st
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			int reduceVar$var84$1 = 0;
+			int reduceVar$var82$1 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction213Index = 0; cv$reduction213Index < i$var60; cv$reduction213Index += 1)
+			for(int cv$reduction210Index = 0; cv$reduction210Index < i$var58; cv$reduction210Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var82's comment
+				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var84$1 = (reduceVar$var84$1 + st[cv$reduction213Index]);
-			for(int cv$reduction213Index = (i$var60 + 1); cv$reduction213Index < noCats; cv$reduction213Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction210Index]);
+			for(int cv$reduction210Index = (i$var58 + 1); cv$reduction210Index < noCats; cv$reduction210Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var82's comment
+				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var84$1 = (reduceVar$var84$1 + st[cv$reduction213Index]);
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction210Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// Processing random variable 86.
+			// Processing random variable 84.
 			// 
 			// Value of the variable at this index
-			reduceVar$var84$1 = (cv$valuePos + reduceVar$var84$1);
-			for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1)
-				// Processing sample task 91 of consumer random variable null.
+			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
+				// Processing sample task 87 of consumer random variable null.
 				// 
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 91 with the current configuration.
+				// Recorded the probability of reaching sample task 87 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
@@ -843,11 +840,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$1$var85's comment
-				// Variable declaration of cv$temp$1$var85 moved.
+				// cv$temp$2$var83's comment
+				// Variable declaration of cv$temp$2$var83 moved.
 				// 
 				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j$var75], bias[reduceVar$var84$1]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$1]) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -856,7 +853,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var63$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
+			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		
 		// This value is not used before it is set again, so removing the value declaration.
@@ -869,12 +866,12 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Initialise the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var63$stateProbabilityGlobal[0];
+		double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var63$stateProbabilityGlobal[cv$lseIndex];
+			double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 		}
@@ -889,9 +886,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var63$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
 			// Increment the value of the target, moving the value back into log space.
 			// 
@@ -902,28 +899,28 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var63$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$noStates);
+				cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var63$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var63$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+				cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$var63$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var63$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
 		// Get a local reference to the scratch space.
-		st[i$var60] = DistributionSampling.sampleCategorical(RNG$, cv$var63$stateProbabilityGlobal);
+		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numNumStates);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -932,22 +929,16 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
-		// Constructor for cv$var32$countGlobal
+		// Constructor for cv$var30$countGlobal
 		// 
-		// Calculate the longest array this random variable could produce and allocate an
-		// array large enough to handle this.
-		int cv$max = 0;
-		if((0 < noCats))
-			cv$max = (length$flipsMeasured / noCats);
+		// Allocation of cv$var30$countGlobal for single threaded execution
+		cv$var30$countGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
 		
-		// Allocation of cv$var32$countGlobal for single threaded execution
-		cv$var32$countGlobal = new double[cv$max];
-		
-		// Allocation of cv$var63$stateProbabilityGlobal for single threaded execution
+		// Allocation of cv$var61$stateProbabilityGlobal for single threaded execution
 		// 
-		// Variable to record the maximum value of Task Get 64. Initially set to the value
-		// of putTask 35.
-		cv$var63$stateProbabilityGlobal = new double[((0.0 <= noCats)?(length$flipsMeasured / noCats):((noCats < 0.0)?(length$flipsMeasured / noCats):length$flipsMeasured))];
+		// Variable to record the maximum value of Task Get 60. Initially set to the value
+		// of putTask 31.
+		cv$var61$stateProbabilityGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -960,8 +951,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(!setFlag$m) {
 			// Constructor for m
 			m = new double[noCats][];
-			for(int var31 = 0; var31 < noCats; var31 += 1)
-				m[var31] = new double[(length$flipsMeasured / noCats)];
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				m[var29] = new double[(length$flipsMeasured / noCats)];
 		}
 		
 		// If bias has not been set already allocate space.
@@ -979,17 +970,17 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Constructor for flips
 			flips = new boolean[length$flipsMeasured];
 		
-		// Constructor for logProbability$var62
-		logProbability$var62 = new double[noCats];
+		// Constructor for logProbability$var60
+		logProbability$var60 = new double[noCats];
 		
-		// Constructor for logProbability$sample66
-		logProbability$sample66 = new double[noCats];
+		// Constructor for logProbability$sample62
+		logProbability$sample62 = new double[noCats];
 		
-		// Constructor for logProbability$var86
-		logProbability$var86 = new double[length$flipsMeasured];
+		// Constructor for logProbability$var84
+		logProbability$var84 = new double[length$flipsMeasured];
 		
-		// Constructor for logProbability$sample91
-		logProbability$sample91 = new double[length$flipsMeasured];
+		// Constructor for logProbability$sample87
+		logProbability$sample87 = new double[length$flipsMeasured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -999,41 +990,41 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var31 = 0; var31 < noCats; var31 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, m[var31]);
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample51) {
-			for(int var47 = 0; var47 < noFlips; var47 += 1)
-				bias[var47] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample47) {
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample66) {
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-				st[i$var60] = DistributionSampling.sampleCategorical(RNG$, m[i$var60]);
+		if(!fixedFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample91) {
-			for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1) {
+		if(!fixedFlag$sample87) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Reduction of array st
 				// 
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				int reduceVar$var84$3 = 0;
+				int reduceVar$var82$3 = 0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noCats; cv$reduction82Index += 1)
+				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// j$var82's comment
+					// j$var80's comment
 					// Set the right hand term to a value from the array st
-					reduceVar$var84$3 = (reduceVar$var84$3 + st[cv$reduction82Index]);
-				flips[j$var75] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var84$3]);
+					reduceVar$var82$3 = (reduceVar$var82$3 + st[cv$reduction78Index]);
+				flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$3]);
 			}
 		}
 	}
@@ -1043,21 +1034,21 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var31 = 0; var31 < noCats; var31 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, m[var31]);
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample51) {
-			for(int var47 = 0; var47 < noFlips; var47 += 1)
-				bias[var47] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample47) {
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample66) {
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-				st[i$var60] = DistributionSampling.sampleCategorical(RNG$, m[i$var60]);
+		if(!fixedFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
 		}
 	}
 
@@ -1066,21 +1057,21 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var31 = 0; var31 < noCats; var31 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, m[var31]);
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample51) {
-			for(int var47 = 0; var47 < noFlips; var47 += 1)
-				bias[var47] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample47) {
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample66) {
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-				st[i$var60] = DistributionSampling.sampleCategorical(RNG$, m[i$var60]);
+		if(!fixedFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
 		}
 	}
 
@@ -1090,41 +1081,41 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample34) {
-				for(int var31 = 0; var31 < noCats; var31 += 1)
-					sample34(var31);
+			if(!fixedFlag$sample30) {
+				for(int var29 = 0; var29 < noCats; var29 += 1)
+					sample30(var29);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample51) {
-				for(int var47 = 0; var47 < noFlips; var47 += 1)
-					sample51(var47);
+			if(!fixedFlag$sample47) {
+				for(int var45 = 0; var45 < noFlips; var45 += 1)
+					sample47(var45);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample66) {
-				for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-					sample66(i$var60);
+			if(!fixedFlag$sample62) {
+				for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+					sample62(i$var58);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample66) {
-				for(int i$var60 = (noCats - 1); i$var60 >= 0; i$var60 -= 1)
-					sample66(i$var60);
+			if(!fixedFlag$sample62) {
+				for(int i$var58 = (noCats - 1); i$var58 >= 0; i$var58 -= 1)
+					sample62(i$var58);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample51) {
-				for(int var47 = (noFlips - 1); var47 >= 0; var47 -= 1)
-					sample51(var47);
+			if(!fixedFlag$sample47) {
+				for(int var45 = (noFlips - 1); var45 >= 0; var45 -= 1)
+					sample47(var45);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample34) {
-				for(int var31 = (noCats - 1); var31 >= 0; var31 -= 1)
-					sample34(var31);
+			if(!fixedFlag$sample30) {
+				for(int var29 = (noCats - 1); var29 >= 0; var29 -= 1)
+					sample30(var29);
 			}
 		}
 		
@@ -1138,8 +1129,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void initializeConstants() {
 		noFlips = length$flipsMeasured;
 		noStates = (length$flipsMeasured / noCats);
-		for(int i$var17 = 0; i$var17 < (length$flipsMeasured / noCats); i$var17 += 1)
-			v[i$var17] = 0.1;
+		for(int i$var15 = 0; i$var15 < (length$flipsMeasured / noCats); i$var15 += 1)
+			v[i$var15] = 0.1;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1152,27 +1143,27 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var20 = 0.0;
+		logProbability$var18 = 0.0;
 		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample34)
-			logProbability$var32 = 0.0;
-		logProbability$var36 = 0.0;
+		if(!fixedProbFlag$sample30)
+			logProbability$var30 = 0.0;
+		logProbability$var34 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample51)
-			logProbability$var48 = 0.0;
-		for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-			logProbability$var62[i$var60] = 0.0;
+		if(!fixedProbFlag$sample47)
+			logProbability$var46 = 0.0;
+		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+			logProbability$var60[i$var58] = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample66) {
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-				logProbability$sample66[i$var60] = 0.0;
+		if(!fixedProbFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				logProbability$sample62[i$var58] = 0.0;
 		}
-		for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1)
-			logProbability$var86[j$var75] = 0.0;
+		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
+			logProbability$var84[j$var73] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample91) {
-			for(int j$var75 = 0; j$var75 < noFlips; j$var75 += 1)
-				logProbability$sample91[j$var75] = 0.0;
+		if(!fixedProbFlag$sample87) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
+				logProbability$sample87[j$var73] = 0.0;
 		}
 	}
 
@@ -1193,13 +1184,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample34)
-			logProbabilityValue$sample34();
-		if(fixedFlag$sample51)
-			logProbabilityValue$sample51();
-		if(fixedFlag$sample66)
-			logProbabilityValue$sample66();
-		logProbabilityValue$sample91();
+		if(fixedFlag$sample30)
+			logProbabilityValue$sample30();
+		if(fixedFlag$sample47)
+			logProbabilityValue$sample47();
+		if(fixedFlag$sample62)
+			logProbabilityValue$sample62();
+		logProbabilityValue$sample87();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1217,10 +1208,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample34();
-		logProbabilityValue$sample51();
-		logProbabilityValue$sample66();
-		logProbabilityValue$sample91();
+		logProbabilityValue$sample30();
+		logProbabilityValue$sample47();
+		logProbabilityValue$sample62();
+		logProbabilityValue$sample87();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1237,10 +1228,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample34();
-		logProbabilityValue$sample51();
-		logProbabilityValue$sample66();
-		logProbabilityValue$sample91();
+		logProbabilityValue$sample30();
+		logProbabilityValue$sample47();
+		logProbabilityValue$sample62();
+		logProbabilityValue$sample87();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1249,21 +1240,21 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var31 = 0; var31 < noCats; var31 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, m[var31]);
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample51) {
-			for(int var47 = 0; var47 < noFlips; var47 += 1)
-				bias[var47] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample47) {
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample66) {
-			for(int i$var60 = 0; i$var60 < noCats; i$var60 += 1)
-				st[i$var60] = DistributionSampling.sampleCategorical(RNG$, m[i$var60]);
+		if(!fixedFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are

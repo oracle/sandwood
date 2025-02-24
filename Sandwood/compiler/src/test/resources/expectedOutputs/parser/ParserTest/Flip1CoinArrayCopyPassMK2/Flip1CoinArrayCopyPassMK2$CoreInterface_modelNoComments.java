@@ -5,10 +5,10 @@ interface Flip1CoinArrayCopyPassMK2$CoreInterface extends org.sandwood.runtime.i
 	public double get$b();
 	public double[] get$bias();
 	public void set$bias(double[] cv$value);
-	public boolean get$fixedFlag$sample13();
-	public void set$fixedFlag$sample13(boolean cv$value);
-	public boolean get$fixedFlag$sample34();
-	public void set$fixedFlag$sample34(boolean cv$value);
+	public boolean get$fixedFlag$sample10();
+	public void set$fixedFlag$sample10(boolean cv$value);
+	public boolean get$fixedFlag$sample31();
+	public void set$fixedFlag$sample31(boolean cv$value);
 	public boolean[] get$flips();
 	public void set$flips(boolean[] cv$value);
 	public boolean[] get$flipsMeasured();

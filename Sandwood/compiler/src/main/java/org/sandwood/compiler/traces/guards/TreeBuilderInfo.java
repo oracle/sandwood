@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -17,6 +17,7 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
+import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 public class TreeBuilderInfo {
@@ -56,6 +57,10 @@ public class TreeBuilderInfo {
             s = s.getEnclosingScope();
         }
         return scopes;
+    }
+
+    public TraceHandle getTrace() {
+        return d.getTrace(position);
     }
 
     public void removeSubstitutions(CompilationContext compilationCtx) {

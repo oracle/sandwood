@@ -847,8 +847,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Write out the new value of the sample.
 		// 
-		// Get a local reference to the scratch space.
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal) == 1);
+		// cv$numNumStates's comment
+		// variable marginalization
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(guard)

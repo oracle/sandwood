@@ -6,18 +6,18 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
-	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample8 = false;
-	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample8 = false;
+	private boolean fixedFlag$sample19 = false;
+	private boolean fixedFlag$sample5 = false;
+	private boolean fixedProbFlag$sample19 = false;
+	private boolean fixedProbFlag$sample5 = false;
 	private int length$observed;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bernoulli;
 	private double logProbability$output;
 	private double logProbability$prior;
-	private double logProbability$var21;
-	private double logProbability$var6;
+	private double logProbability$var19;
+	private double logProbability$var4;
 	private boolean[] observed;
 	private boolean[] output;
 	private double prior;
@@ -40,50 +40,50 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		return 1.0;
 	}
 
-	// Getter for fixedFlag$sample23.
+	// Getter for fixedFlag$sample19.
 	@Override
-	public final boolean get$fixedFlag$sample23() {
-		return fixedFlag$sample23;
+	public final boolean get$fixedFlag$sample19() {
+		return fixedFlag$sample19;
 	}
 
-	// Setter for fixedFlag$sample23.
+	// Setter for fixedFlag$sample19.
 	@Override
-	public final void set$fixedFlag$sample23(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample23 including if probabilities
+	public final void set$fixedFlag$sample19(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
 		// need to be updated.
-		fixedFlag$sample23 = cv$value;
+		fixedFlag$sample19 = cv$value;
 		
-		// Should the probability of sample 23 be set to fixed. This will only every change
+		// Should the probability of sample 19 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample23" with its value "cv$value".
-		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
+		// Substituted "fixedFlag$sample19" with its value "cv$value".
+		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
 
-	// Getter for fixedFlag$sample8.
+	// Getter for fixedFlag$sample5.
 	@Override
-	public final boolean get$fixedFlag$sample8() {
-		return fixedFlag$sample8;
+	public final boolean get$fixedFlag$sample5() {
+		return fixedFlag$sample5;
 	}
 
-	// Setter for fixedFlag$sample8.
+	// Setter for fixedFlag$sample5.
 	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample8 including if probabilities
+	public final void set$fixedFlag$sample5(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
 		// need to be updated.
-		fixedFlag$sample8 = cv$value;
+		fixedFlag$sample5 = cv$value;
 		
-		// Should the probability of sample 8 be set to fixed. This will only every change
+		// Should the probability of sample 5 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample8" with its value "cv$value".
-		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
+		// Substituted "fixedFlag$sample5" with its value "cv$value".
+		fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
 		
-		// Should the probability of sample 23 be set to fixed. This will only every change
+		// Should the probability of sample 19 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample8" with its value "cv$value".
-		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
+		// Substituted "fixedFlag$sample5" with its value "cv$value".
+		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
 
 	// Getter for length$observed.
@@ -158,8 +158,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		output = cv$value;
 		setFlag$output = true;
 		
-		// Unset the fixed probability flag for sample 23 as it depends on output.
-		fixedProbFlag$sample23 = false;
+		// Unset the fixed probability flag for sample 19 as it depends on output.
+		fixedProbFlag$sample19 = false;
 	}
 
 	// Getter for prior.
@@ -175,23 +175,23 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// be updated.
 		prior = cv$value;
 		
-		// Unset the fixed probability flag for sample 8 as it depends on prior.
-		fixedProbFlag$sample8 = false;
+		// Unset the fixed probability flag for sample 5 as it depends on prior.
+		fixedProbFlag$sample5 = false;
 		
-		// Unset the fixed probability flag for sample 23 as it depends on prior.
-		fixedProbFlag$sample23 = false;
+		// Unset the fixed probability flag for sample 19 as it depends on prior.
+		fixedProbFlag$sample19 = false;
 	}
 
-	// Calculate the probability of the samples represented by sample23 using sampled
+	// Calculate the probability of the samples represented by sample19 using sampled
 	// values.
-	private final void logProbabilityValue$sample23() {
-		// Determine if we need to calculate the values for sample task 23 or if we should
+	private final void logProbabilityValue$sample19() {
+		// Determine if we need to calculate the values for sample task 19 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample23) {
+		if(!fixedProbFlag$sample19) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var20 = 0; var20 < length$observed; var20 += 1)
+			for(int var18 = 0; var18 < length$observed; var18 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -207,11 +207,11 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[var20], prior));
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[var18], prior));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var21 = cv$sampleAccumulator;
+			logProbability$var19 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -237,34 +237,34 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample8);
+			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample5);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$var21;
+			logProbability$bernoulli = logProbability$var19;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$output = (logProbability$output + logProbability$var21);
+			logProbability$output = (logProbability$output + logProbability$var19);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var21);
+			logProbability$$model = (logProbability$$model + logProbability$var19);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var21);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var19);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample8 using sampled values.
-	private final void logProbabilityValue$sample8() {
-		// Determine if we need to calculate the values for sample task 8 or if we should
+	// Calculate the probability of the samples represented by sample5 using sampled values.
+	private final void logProbabilityValue$sample5() {
+		// Determine if we need to calculate the values for sample task 5 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample8) {
+		if(!fixedProbFlag$sample5) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -294,7 +294,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var6 = cv$distributionAccumulator;
+			logProbability$var4 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$prior = cv$distributionAccumulator;
@@ -317,7 +317,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample8)
+			if(fixedFlag$sample5)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -334,13 +334,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample8 = fixedFlag$sample8;
+			fixedProbFlag$sample5 = fixedFlag$sample5;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var6 = logProbability$prior;
+			logProbability$var4 = logProbability$prior;
 			
 			// Add probability to model
 			// 
@@ -349,15 +349,15 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample8)
+			if(fixedFlag$sample5)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$prior);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 8 drawn from Uniform 6. Inference was performed using Metropolis-Hastings.
-	private final void sample8() {
+	// by sample task 5 drawn from Uniform 4. Inference was performed using Metropolis-Hastings.
+	private final void sample5() {
 		// The original value of the sample
 		double cv$originalValue = prior;
 		
@@ -390,12 +390,12 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// The original value of the sample
 			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
-			// Processing sample task 23 of consumer random variable bernoulli.
-			for(int var20 = 0; var20 < length$observed; var20 += 1)
+			// Processing sample task 19 of consumer random variable bernoulli.
+			for(int var18 = 0; var18 < length$observed; var18 += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 23 with the current configuration.
+				// Recorded the probability of reaching sample task 19 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
@@ -410,7 +410,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var20], prior) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var18], prior) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -432,12 +432,12 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// Substituted "cv$temp$0$a" with its value "0.0".
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
 		
-		// Processing sample task 23 of consumer random variable bernoulli.
-		for(int var20 = 0; var20 < length$observed; var20 += 1)
+		// Processing sample task 19 of consumer random variable bernoulli.
+		for(int var18 = 0; var18 < length$observed; var18 += 1)
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 23 with the current configuration.
+			// Recorded the probability of reaching sample task 19 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
@@ -448,7 +448,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// inputs.
 			// 
 			// Substituted "cv$temp$2$prior" with its value "cv$currentValue".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var20], cv$proposedValue) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[var18], cv$proposedValue) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -489,13 +489,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample8)
+		if(!fixedFlag$sample5)
 			prior = DistributionSampling.sampleUniform(RNG$);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample23) {
-			for(int var20 = 0; var20 < length$observed; var20 += 1)
-				output[var20] = DistributionSampling.sampleBernoulli(RNG$, prior);
+		if(!fixedFlag$sample19) {
+			for(int var18 = 0; var18 < length$observed; var18 += 1)
+				output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
 		}
 	}
 
@@ -503,7 +503,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample8)
+		if(!fixedFlag$sample5)
 			prior = DistributionSampling.sampleUniform(RNG$);
 	}
 
@@ -511,7 +511,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample8)
+		if(!fixedFlag$sample5)
 			prior = DistributionSampling.sampleUniform(RNG$);
 	}
 
@@ -519,8 +519,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample8)
-			sample8();
+		if(!fixedFlag$sample5)
+			sample5();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
@@ -541,13 +541,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
-		if(!fixedProbFlag$sample8)
+		logProbability$var4 = 0.0;
+		if(!fixedProbFlag$sample5)
 			logProbability$prior = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample23)
-			logProbability$var21 = 0.0;
+		if(!fixedProbFlag$sample19)
+			logProbability$var19 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -567,9 +567,9 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample8)
-			logProbabilityValue$sample8();
-		logProbabilityValue$sample23();
+		if(fixedFlag$sample5)
+			logProbabilityValue$sample5();
+		logProbabilityValue$sample19();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -587,8 +587,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample8();
-		logProbabilityValue$sample23();
+		logProbabilityValue$sample5();
+		logProbabilityValue$sample19();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -605,8 +605,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample8();
-		logProbabilityValue$sample23();
+		logProbabilityValue$sample5();
+		logProbabilityValue$sample19();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -614,7 +614,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample8)
+		if(!fixedFlag$sample5)
 			prior = DistributionSampling.sampleUniform(RNG$);
 		
 		// Calculate the probabilities for every sample task in the model. These values are

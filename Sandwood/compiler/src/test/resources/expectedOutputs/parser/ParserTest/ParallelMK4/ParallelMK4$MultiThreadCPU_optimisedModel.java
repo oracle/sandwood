@@ -7,10 +7,10 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK4$CoreInterface {
 	
 	// Declare the variables for the model.
-	private boolean fixedFlag$sample112 = false;
-	private boolean fixedFlag$sample68 = false;
-	private boolean fixedProbFlag$sample112 = false;
-	private boolean fixedProbFlag$sample68 = false;
+	private boolean fixedFlag$sample103 = false;
+	private boolean fixedFlag$sample61 = false;
+	private boolean fixedProbFlag$sample103 = false;
+	private boolean fixedProbFlag$sample61 = false;
 	private int[] generated;
 	private double[][] indirection1;
 	private double[][] indirection2;
@@ -20,10 +20,10 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$generated;
 	private double logProbability$indirection1;
 	private double logProbability$indirection2;
-	private double[] logProbability$sample112;
-	private double[][] logProbability$sample68;
-	private double[] logProbability$var102;
-	private double[][] logProbability$var60;
+	private double[] logProbability$sample103;
+	private double[][] logProbability$sample61;
+	private double[] logProbability$var100;
+	private double[][] logProbability$var58;
 	private int[] observed;
 	private boolean setFlag$generated = false;
 	private boolean setFlag$indirection1 = false;
@@ -33,50 +33,50 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample112.
+	// Getter for fixedFlag$sample103.
 	@Override
-	public final boolean get$fixedFlag$sample112() {
-		return fixedFlag$sample112;
+	public final boolean get$fixedFlag$sample103() {
+		return fixedFlag$sample103;
 	}
 
-	// Setter for fixedFlag$sample112.
+	// Setter for fixedFlag$sample103.
 	@Override
-	public final void set$fixedFlag$sample112(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample112 including if probabilities
+	public final void set$fixedFlag$sample103(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample103 including if probabilities
 		// need to be updated.
-		fixedFlag$sample112 = cv$value;
+		fixedFlag$sample103 = cv$value;
 		
-		// Should the probability of sample 112 be set to fixed. This will only every change
+		// Should the probability of sample 103 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample112" with its value "cv$value".
-		fixedProbFlag$sample112 = (cv$value && fixedProbFlag$sample112);
+		// Substituted "fixedFlag$sample103" with its value "cv$value".
+		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
 	}
 
-	// Getter for fixedFlag$sample68.
+	// Getter for fixedFlag$sample61.
 	@Override
-	public final boolean get$fixedFlag$sample68() {
-		return fixedFlag$sample68;
+	public final boolean get$fixedFlag$sample61() {
+		return fixedFlag$sample61;
 	}
 
-	// Setter for fixedFlag$sample68.
+	// Setter for fixedFlag$sample61.
 	@Override
-	public final void set$fixedFlag$sample68(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample68 including if probabilities
+	public final void set$fixedFlag$sample61(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample61 including if probabilities
 		// need to be updated.
-		fixedFlag$sample68 = cv$value;
+		fixedFlag$sample61 = cv$value;
 		
-		// Should the probability of sample 68 be set to fixed. This will only every change
+		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample68" with its value "cv$value".
-		fixedProbFlag$sample68 = (cv$value && fixedProbFlag$sample68);
+		// Substituted "fixedFlag$sample61" with its value "cv$value".
+		fixedProbFlag$sample61 = (cv$value && fixedProbFlag$sample61);
 		
-		// Should the probability of sample 112 be set to fixed. This will only every change
+		// Should the probability of sample 103 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample68" with its value "cv$value".
-		fixedProbFlag$sample112 = (cv$value && fixedProbFlag$sample112);
+		// Substituted "fixedFlag$sample61" with its value "cv$value".
+		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
 	}
 
 	// Getter for generated.
@@ -95,8 +95,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		generated = cv$value;
 		setFlag$generated = true;
 		
-		// Unset the fixed probability flag for sample 112 as it depends on generated.
-		fixedProbFlag$sample112 = false;
+		// Unset the fixed probability flag for sample 103 as it depends on generated.
+		fixedProbFlag$sample103 = false;
 	}
 
 	// Getter for indirection1.
@@ -115,11 +115,11 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		indirection1 = cv$value;
 		setFlag$indirection1 = true;
 		
-		// Unset the fixed probability flag for sample 68 as it depends on indirection1.
-		fixedProbFlag$sample68 = false;
+		// Unset the fixed probability flag for sample 61 as it depends on indirection1.
+		fixedProbFlag$sample61 = false;
 		
-		// Unset the fixed probability flag for sample 112 as it depends on indirection1.
-		fixedProbFlag$sample112 = false;
+		// Unset the fixed probability flag for sample 103 as it depends on indirection1.
+		fixedProbFlag$sample103 = false;
 	}
 
 	// Getter for indirection2.
@@ -184,19 +184,18 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		observed = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample112 using sampled
+	// Calculate the probability of the samples represented by sample103 using sampled
 	// values.
-	private final void logProbabilityValue$sample112() {
-		// Determine if we need to calculate the values for sample task 112 or if we should
+	private final void logProbabilityValue$sample103() {
+		// Determine if we need to calculate the values for sample task 103 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample112) {
+		if(!fixedProbFlag$sample103) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
 				// The sample value to calculate the probability of generating
 				int cv$sampleValue = generated[m];
-				double[] var101 = indirection2[m];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -217,7 +216,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var101.length))?Math.log(var101[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 10))?Math.log(indirection2[m][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -230,10 +229,10 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var102[m] = cv$distributionAccumulator;
+				logProbability$var100[m] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample112[m] = cv$distributionAccumulator;
+				logProbability$sample103[m] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -245,7 +244,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample112 = (fixedFlag$sample112 && fixedFlag$sample68);
+			fixedProbFlag$sample103 = (fixedFlag$sample103 && fixedFlag$sample61);
 		}
 		// Using cached values.
 		else {
@@ -254,9 +253,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample112[m];
+				double cv$rvAccumulator = logProbability$sample103[m];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var102[m] = cv$rvAccumulator;
+				logProbability$var100[m] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -268,12 +267,12 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample68 using sampled
+	// Calculate the probability of the samples represented by sample61 using sampled
 	// values.
-	private final void logProbabilityValue$sample68() {
-		// Determine if we need to calculate the values for sample task 68 or if we should
+	private final void logProbabilityValue$sample61() {
+		// Determine if we need to calculate the values for sample task 61 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample68) {
+		if(!fixedProbFlag$sample61) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -314,10 +313,10 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Accumulator for sample probabilities for a specific instance of the random variable.
-					logProbability$var60[i][j] = cv$distributionAccumulator;
+					logProbability$var58[i][j] = cv$distributionAccumulator;
 					
 					// Store the sample task probability
-					logProbability$sample68[i][j] = cv$distributionAccumulator;
+					logProbability$sample61[i][j] = cv$distributionAccumulator;
 					
 					// Update the variable probability
 					logProbability$indirection2 = (logProbability$indirection2 + cv$distributionAccumulator);
@@ -332,12 +331,12 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample68)
+			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample68 = fixedFlag$sample68;
+			fixedProbFlag$sample61 = fixedFlag$sample61;
 		}
 		// Using cached values.
 		else {
@@ -346,9 +345,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
-					double cv$sampleValue = logProbability$sample68[i][j];
+					double cv$sampleValue = logProbability$sample61[i][j];
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
-					logProbability$var60[i][j] = cv$sampleValue;
+					logProbability$var58[i][j] = cv$sampleValue;
 					
 					// Update the variable probability
 					logProbability$indirection2 = (logProbability$indirection2 + cv$sampleValue);
@@ -363,21 +362,16 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample68)
+			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 68 drawn from Uniform 60. Inference was performed using Metropolis-Hastings.
-	private final void sample68(int i, int j, int threadID$cv$i, Rng RNG$) {
+	// by sample task 61 drawn from Uniform 58. Inference was performed using Metropolis-Hastings.
+	private final void sample61(int i, int j, int threadID$cv$i, Rng RNG$) {
 		// The original value of the sample
 		double cv$originalValue = indirection1[i][j];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		double cv$originalProbability;
 		
 		// Calculate a proposed variance.
 		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
@@ -389,63 +383,25 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// The proposed new value for the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		
-		// Unrolled loop
-		{
-			// Variable declaration of cv$temp$2$var101 moved.
-			// 
-			// Constructing a random variable input for use later.
-			// 
-			// Substituted "m" with its value "i".
-			double[] cv$temp$2$var101 = indirection2[i];
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			// 
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 112 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Substituted "cv$temp$0$var58" with its value "0.0".
-			// 
-			// Set the current value to the current state of the tree.
-			cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < cv$temp$2$var101.length))?Math.log(cv$temp$2$var101[generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
-		}
-		indirection1[i][j] = cv$proposedValue;
-		
-		// Substituted "k" with its value "i".
-		// 
-		// Substituted "k" with its value "i".
-		indirection2[i][j] = indirection1[i][j];
-		
-		// Variable declaration of cv$temp$2$var101 moved.
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Substituted "m" with its value "i".
-		double[] cv$temp$2$var101 = indirection2[i];
-		
-		// Variable declaration of cv$accumulatedProbabilities moved.
+		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
+		// This value is not used before it is set again, so removing the value declaration.
 		// 
-		// Substituted "cv$temp$0$var58" with its value "0.0".
+		// The probability of the random variable generating the originally sampled value
+		// 
+		// Unrolled loop
+		// 
+		// Initialize a log space accumulator to take the product of all the distribution
+		// probabilities.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
-		// Recorded the probability of reaching sample task 112 with the current configuration.
+		// Recorded the probability of reaching sample task 103 with the current configuration.
 		// 
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
@@ -453,8 +409,37 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var58" with its value "0.0".
-		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < cv$temp$2$var101.length))?Math.log(cv$temp$2$var101[generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		// Substituted "cv$temp$0$var56" with its value "0.0".
+		// 
+		// Set the current value to the current state of the tree.
+		double cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		indirection1[i][j] = cv$proposedValue;
+		
+		// Substituted "k" with its value "i".
+		// 
+		// Substituted "k" with its value "i".
+		indirection2[i][j] = indirection1[i][j];
+		
+		// Variable declaration of cv$accumulatedProbabilities moved.
+		// Declaration comment was:
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Substituted "cv$temp$0$var56" with its value "0.0".
+		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 103 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Substituted "cv$temp$0$var56" with its value "0.0".
+		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -501,37 +486,37 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		if(!setFlag$indirection1) {
 			// Constructor for indirection1
 			indirection1 = new double[length$observed][];
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
-				indirection1[var18] = new double[10];
+			for(int var16 = 0; var16 < length$observed; var16 += 1)
+				indirection1[var16] = new double[10];
 		}
 		
 		// Constructor for indirection2
 		indirection2 = new double[length$observed][];
-		for(int var33 = 0; var33 < length$observed; var33 += 1)
-			indirection2[var33] = new double[10];
+		for(int var31 = 0; var31 < length$observed; var31 += 1)
+			indirection2[var31] = new double[10];
 		
-		// Constructor for logProbability$var60
-		logProbability$var60 = new double[length$observed][];
+		// Constructor for logProbability$var58
+		logProbability$var58 = new double[length$observed][];
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var60[i] = new double[10];
+			logProbability$var58[i] = new double[10];
 		
-		// Constructor for logProbability$sample68
-		logProbability$sample68 = new double[length$observed][];
+		// Constructor for logProbability$sample61
+		logProbability$sample61 = new double[length$observed][];
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$sample68[i] = new double[10];
+			logProbability$sample61[i] = new double[10];
 		
-		// Constructor for logProbability$var102
-		logProbability$var102 = new double[length$observed];
+		// Constructor for logProbability$var100
+		logProbability$var100 = new double[length$observed];
 		
-		// Constructor for logProbability$sample112
-		logProbability$sample112 = new double[length$observed];
+		// Constructor for logProbability$sample103
+		logProbability$sample103 = new double[length$observed];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample68) {
+		if(!fixedFlag$sample61) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -539,7 +524,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1) {
-							double[] var57 = indirection1[i];
+							double[] var55 = indirection1[i];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -548,7 +533,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-											var57[j] = DistributionSampling.sampleUniform(RNG$2);
+											var55[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -564,7 +549,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {
 							int k = index$k;
 							int threadID$k = threadID$index$k;
-							double[] var85 = indirection2[k];
+							double[] var83 = indirection2[k];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -573,7 +558,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int l = forStart$l; l < forEnd$l; l += 1)
-											var85[l] = indirection1[k][l];
+											var83[l] = indirection1[k][l];
 								}
 							);
 						}
@@ -582,7 +567,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample112)
+		if(!fixedFlag$sample103)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$m, int forEnd$m, int threadID$m, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -590,7 +575,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int m = forStart$m; m < forEnd$m; m += 1)
-							generated[m] = DistributionSampling.sampleCategorical(RNG$1, indirection2[m]);
+							generated[m] = DistributionSampling.sampleCategorical(RNG$1, indirection2[m], 10);
 				}
 			);
 
@@ -601,7 +586,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample68) {
+		if(!fixedFlag$sample61) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -609,7 +594,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1) {
-							double[] var57 = indirection1[i];
+							double[] var55 = indirection1[i];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -618,7 +603,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-											var57[j] = DistributionSampling.sampleUniform(RNG$2);
+											var55[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -634,7 +619,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {
 							int k = index$k;
 							int threadID$k = threadID$index$k;
-							double[] var85 = indirection2[k];
+							double[] var83 = indirection2[k];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -643,7 +628,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int l = forStart$l; l < forEnd$l; l += 1)
-											var85[l] = indirection1[k][l];
+											var83[l] = indirection1[k][l];
 								}
 							);
 						}
@@ -657,7 +642,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample68) {
+		if(!fixedFlag$sample61) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -665,7 +650,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1) {
-							double[] var57 = indirection1[i];
+							double[] var55 = indirection1[i];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -674,7 +659,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-											var57[j] = DistributionSampling.sampleUniform(RNG$2);
+											var55[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -690,7 +675,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {
 							int k = index$k;
 							int threadID$k = threadID$index$k;
-							double[] var85 = indirection2[k];
+							double[] var83 = indirection2[k];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -699,7 +684,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int l = forStart$l; l < forEnd$l; l += 1)
-											var85[l] = indirection1[k][l];
+											var83[l] = indirection1[k][l];
 								}
 							);
 						}
@@ -712,7 +697,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(!fixedFlag$sample68) {
+		if(!fixedFlag$sample61) {
 			// Infer the samples in chronological order.
 			if(system$gibbsForward)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -723,7 +708,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// generator.
 							for(int i = forStart$i; i < forEnd$i; i += 1) {
 								for(int j = 0; j < 10; j += 1)
-									sample68(i, j, threadID$i, RNG$1);
+									sample61(i, j, threadID$i, RNG$1);
 							}
 					}
 				);
@@ -737,7 +722,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// generator.
 							for(int i = forStart$i; i < forEnd$i; i += 1) {
 								for(int j = 9; j >= 0; j -= 1)
-									sample68(i, j, threadID$i, RNG$1);
+									sample61(i, j, threadID$i, RNG$1);
 							}
 					}
 				);
@@ -764,22 +749,22 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$$evidence = 0.0;
 		for(int i = 0; i < length$observed; i += 1) {
 			for(int j = 0; j < 10; j += 1)
-				logProbability$var60[i][j] = 0.0;
+				logProbability$var58[i][j] = 0.0;
 		}
 		logProbability$indirection2 = 0.0;
 		logProbability$indirection1 = 0.0;
-		if(!fixedProbFlag$sample68) {
+		if(!fixedProbFlag$sample61) {
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1)
-					logProbability$sample68[i][j] = 0.0;
+					logProbability$sample61[i][j] = 0.0;
 			}
 		}
 		for(int m = 0; m < length$observed; m += 1)
-			logProbability$var102[m] = 0.0;
+			logProbability$var100[m] = 0.0;
 		logProbability$generated = 0.0;
-		if(!fixedProbFlag$sample112) {
+		if(!fixedProbFlag$sample103) {
 			for(int m = 0; m < length$observed; m += 1)
-				logProbability$sample112[m] = 0.0;
+				logProbability$sample103[m] = 0.0;
 		}
 	}
 
@@ -800,9 +785,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample68)
-			logProbabilityValue$sample68();
-		logProbabilityValue$sample112();
+		if(fixedFlag$sample61)
+			logProbabilityValue$sample61();
+		logProbabilityValue$sample103();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -820,8 +805,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample68();
-		logProbabilityValue$sample112();
+		logProbabilityValue$sample61();
+		logProbabilityValue$sample103();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -838,8 +823,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample68();
-		logProbabilityValue$sample112();
+		logProbabilityValue$sample61();
+		logProbabilityValue$sample103();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -848,7 +833,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample68) {
+		if(!fixedFlag$sample61) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -856,7 +841,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1) {
-							double[] var57 = indirection1[i];
+							double[] var55 = indirection1[i];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -865,7 +850,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-											var57[j] = DistributionSampling.sampleUniform(RNG$2);
+											var55[j] = DistributionSampling.sampleUniform(RNG$2);
 								}
 							);
 						}
@@ -881,7 +866,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {
 							int k = index$k;
 							int threadID$k = threadID$index$k;
-							double[] var85 = indirection2[k];
+							double[] var83 = indirection2[k];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -890,7 +875,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int l = forStart$l; l < forEnd$l; l += 1)
-											var85[l] = indirection1[k][l];
+											var83[l] = indirection1[k][l];
 								}
 							);
 						}
@@ -930,7 +915,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {
 							int k = index$k;
 							int threadID$k = threadID$index$k;
-							double[] var85 = indirection2[k];
+							double[] var83 = indirection2[k];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 10, 1,
@@ -939,7 +924,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int l = forStart$l; l < forEnd$l; l += 1)
-											var85[l] = indirection1[k][l];
+											var83[l] = indirection1[k][l];
 								}
 							);
 						}

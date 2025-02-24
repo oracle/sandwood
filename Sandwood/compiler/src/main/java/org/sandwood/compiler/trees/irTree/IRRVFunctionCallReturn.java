@@ -287,10 +287,11 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
                 case LOG_PROBABILITY: {
                     IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
                     IRTreeReturn<ArrayVariable<DoubleVariable>> elementProbs = (IRTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
+                    IRTreeReturn<IntVariable> length = (IRTreeReturn<IntVariable>) args[2];
 
                     List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
                     constraints.add(greaterThanEqual(value, constant(0.0)));
-                    constraints.add(lessThan(value, IRTree.getIntField(elementProbs, "length")));
+                    constraints.add(lessThan(value, length));
                     IRTreeReturn<BooleanVariable> guard = and(constraints);
 
                     return (IRTreeReturn<X>) conditionalAssignment(guard, log(arrayGet(elementProbs, value)),
@@ -299,10 +300,11 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
                 case PROBABILITY: {
                     IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
                     IRTreeReturn<ArrayVariable<DoubleVariable>> elementProbs = (IRTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
+                    IRTreeReturn<IntVariable> length = (IRTreeReturn<IntVariable>) args[2];
 
                     List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
                     constraints.add(greaterThanEqual(value, constant(0.0)));
-                    constraints.add(lessThan(value, IRTree.getIntField(elementProbs, "length")));
+                    constraints.add(lessThan(value, length));
                     IRTreeReturn<BooleanVariable> guard = and(constraints);
 
                     return (IRTreeReturn<X>) conditionalAssignment(guard, arrayGet(elementProbs, value), constant(0.0));

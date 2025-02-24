@@ -1,12 +1,14 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.compiler.dataflowGraph.variables.randomVariables;
+
+import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.util.TreeUtils;
@@ -15,6 +17,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.Rando
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -22,8 +25,8 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 public abstract class ArrayRandomVariable<A extends Variable<A>, B extends ArrayRandomVariable<A, B>>
         extends RandomVariableImplementation<ArrayVariable<A>, B> {
 
-    protected ArrayRandomVariable(
-            RandomVariableConstructorTask<ArrayVariable<A>, B> parent, Type<ArrayVariable<A>> outputType) {
+    protected ArrayRandomVariable(RandomVariableConstructorTask<ArrayVariable<A>, B> parent,
+            Type<ArrayVariable<A>> outputType) {
         super(parent, outputType);
     }
 
@@ -42,6 +45,10 @@ public abstract class ArrayRandomVariable<A extends Variable<A>, B extends Array
 
     protected abstract void getSampleTree(IRTreeReturn<ArrayVariable<A>> sample, Scope scope,
             CompilationContext compilationCtx);
+
+    public abstract Set<VariableWrapper<IntVariable>> getPossibleLengths();
+
+    public abstract IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx);
 
     public abstract IRTreeReturn<IntVariable> getMaxLength(CompilationContext compilationCtx);
 

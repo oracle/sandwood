@@ -14,17 +14,17 @@ interface Flip1CoinArrayCopyPassMK2$CoreInterface extends org.sandwood.runtime.i
 	// Setter for bias.
 	public void set$bias(double[] cv$value);
 
-	// Getter for fixedFlag$sample13.
-	public boolean get$fixedFlag$sample13();
+	// Getter for fixedFlag$sample10.
+	public boolean get$fixedFlag$sample10();
 
-	// Setter for fixedFlag$sample13.
-	public void set$fixedFlag$sample13(boolean cv$value);
+	// Setter for fixedFlag$sample10.
+	public void set$fixedFlag$sample10(boolean cv$value);
 
-	// Getter for fixedFlag$sample34.
-	public boolean get$fixedFlag$sample34();
+	// Getter for fixedFlag$sample31.
+	public boolean get$fixedFlag$sample31();
 
-	// Setter for fixedFlag$sample34.
-	public void set$fixedFlag$sample34(boolean cv$value);
+	// Setter for fixedFlag$sample31.
+	public void set$fixedFlag$sample31(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -92,10 +92,6 @@ public final class VariableNames {
 
     private static final String lengthPrefix = "length" + Name.prefix;
 
-    public static boolean isLengthName(String name) {
-        return name.startsWith(lengthPrefix);
-    }
-
     public static boolean isLengthName(VariableName name) {
         return name.getName().startsWith(lengthPrefix);
     }
@@ -106,6 +102,13 @@ public final class VariableNames {
 
     public static VariableName lengthName(VariableName name) {
         return new VariableName(lengthPrefix + name, name.comment);
+    }
+
+    private static final String lengthCVPrefix = "lengthCV" + Name.prefix;
+
+    public static VariableDescription<IntVariable> lengthCVName(VariableName name, int taskId, int tag) {
+        return new VariableDescription<>(lengthCVPrefix + name + Name.prefix + taskId + "_" + tag,
+                VariableType.IntVariable, true);
     }
 
     private static final String shape = "Shape";
@@ -256,10 +259,12 @@ public final class VariableNames {
     public static <A extends Variable<A>> VariableDescription<A> guardName(DataflowTask<?> start, DataflowTask<?> end,
             int id, Type<A> type) {
         if(id == 1)
-            return new VariableDescription<>(guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id(), type,
+            return new VariableDescription<>(
+                    guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id(), type,
                     true);
         else
-            return new VariableDescription<>(guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id() + id, type,
+            return new VariableDescription<>(
+                    guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id() + id, type,
                     true);
 
     }
@@ -268,7 +273,7 @@ public final class VariableNames {
         String[] words = type.getDescription().split(" ");
         boolean first = true;
         StringBuilder sb = new StringBuilder();
-        for(int i=0; i<words.length; i++) {
+        for(int i = 0; i < words.length; i++) {
             if(!words[i].isEmpty()) {
                 if(first) {
                     sb.append(Character.toLowerCase(words[i].charAt(0)) + words[i].substring(1));

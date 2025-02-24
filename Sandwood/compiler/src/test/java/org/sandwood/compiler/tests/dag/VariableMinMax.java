@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -65,12 +65,12 @@ public class VariableMinMax {
                 ArrayVariable<IntVariable> a = observeArray("a", VariableType.arrayType(VariableType.IntVariable));
                 return a.get(Variable.intVariable(0));
             });
-            min.add("// Calculate the minimum size of the inputs to array a.\nint cv$var5$min = 2147483647;\n"
-                    + "cv$var5$min = Math.min(cv$var5$min, a[0]);\n");
-            max.add("// Calculate the maximum size of the inputs to array a.\nint cv$var5$max = -2147483648;\n"
-                    + "cv$var5$max = Math.max(cv$var5$max, a[0]);\n");
-            minName.add("cv$var5$min");
-            maxName.add("cv$var5$max");
+            min.add("// Calculate the minimum size of the inputs to array a.\nint cv$var3$min = 2147483647;\n"
+                    + "cv$var3$min = Math.min(cv$var3$min, a[0]);\n");
+            max.add("// Calculate the maximum size of the inputs to array a.\nint cv$var3$max = -2147483648;\n"
+                    + "cv$var3$max = Math.max(cv$var3$max, a[0]);\n");
+            minName.add("cv$var3$min");
+            maxName.add("cv$var3$max");
         }
 
         {
@@ -79,12 +79,12 @@ public class VariableMinMax {
                         VariableType.arrayType(VariableType.DoubleVariable));
                 return a.get(Variable.intVariable(0));
             });
-            min.add("// Calculate the minimum size of the inputs to array a.\ndouble cv$var5$min = Double.POSITIVE_INFINITY;\n"
-                    + "cv$var5$min = Math.min(cv$var5$min, a[0]);\n");
-            max.add("// Calculate the maximum size of the inputs to array a.\ndouble cv$var5$max = Double.NEGATIVE_INFINITY;\n"
-                    + "cv$var5$max = Math.max(cv$var5$max, a[0]);\n");
-            minName.add("cv$var5$min");
-            maxName.add("cv$var5$max");
+            min.add("// Calculate the minimum size of the inputs to array a.\ndouble cv$var3$min = Double.POSITIVE_INFINITY;\n"
+                    + "cv$var3$min = Math.min(cv$var3$min, a[0]);\n");
+            max.add("// Calculate the maximum size of the inputs to array a.\ndouble cv$var3$max = Double.NEGATIVE_INFINITY;\n"
+                    + "cv$var3$max = Math.max(cv$var3$max, a[0]);\n");
+            minName.add("cv$var3$min");
+            maxName.add("cv$var3$max");
         }
         {
             variableConstructor.add(() -> {
@@ -96,12 +96,12 @@ public class VariableMinMax {
                 });
                 return v.value;
             });
-            min.add("// Calculate the minimum size of the inputs to array a.\nint cv$var15$min = 2147483647;\n"
-                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var15$min = Math.min(cv$var15$min, a[i]);\n");
-            max.add("// Calculate the maximum size of the inputs to array a.\nint cv$var15$max = -2147483648;\n"
-                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var15$max = Math.max(cv$var15$max, a[i]);\n");
-            minName.add("cv$var15$min");
-            maxName.add("cv$var15$max");
+            min.add("// Calculate the minimum size of the inputs to array a.\nint cv$var13$min = 2147483647;\n"
+                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var13$min = Math.min(cv$var13$min, a[i]);\n");
+            max.add("// Calculate the maximum size of the inputs to array a.\nint cv$var13$max = -2147483648;\n"
+                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var13$max = Math.max(cv$var13$max, a[i]);\n");
+            minName.add("cv$var13$min");
+            maxName.add("cv$var13$max");
         }
         {
             variableConstructor.add(() -> {
@@ -114,12 +114,12 @@ public class VariableMinMax {
                 });
                 return v.value;
             });
-            min.add("// Calculate the minimum size of the inputs to array a.\ndouble cv$var15$min = Double.POSITIVE_INFINITY;\n"
-                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var15$min = Math.min(cv$var15$min, a[i]);\n");
-            max.add("// Calculate the maximum size of the inputs to array a.\ndouble cv$var15$max = Double.NEGATIVE_INFINITY;\n"
-                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var15$max = Math.max(cv$var15$max, a[i]);\n");
-            minName.add("cv$var15$min");
-            maxName.add("cv$var15$max");
+            min.add("// Calculate the minimum size of the inputs to array a.\ndouble cv$var13$min = Double.POSITIVE_INFINITY;\n"
+                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var13$min = Math.min(cv$var13$min, a[i]);\n");
+            max.add("// Calculate the maximum size of the inputs to array a.\ndouble cv$var13$max = Double.NEGATIVE_INFINITY;\n"
+                    + "for(int i = 0; i < a.length; i += 1)\n\tcv$var13$max = Math.max(cv$var13$max, a[i]);\n");
+            minName.add("cv$var13$min");
+            maxName.add("cv$var13$max");
         }
         {
             variableConstructor.add(() -> {
@@ -133,22 +133,24 @@ public class VariableMinMax {
                     parFor(intVariable(0), ai0.length(), intVariable(2), true, (j) -> {
                         j.setAlias("j");
                         v.value = ai0.get(j);
+                        v.value.setPublic();
+                        v.value.setAlias("value");
                     });
                 });
                 return v.value;
             });
-            min.add("// Calculate the minimum size of the inputs to array var19.\nint cv$var32$min = 2147483647;\n"
-                    + "for(int i = 0; i < a.length; i += 3) {\n\tint[][] cv$var32$minArray0 = a[i];\n"
-                    + "\tint[] cv$var32$minArray1 = cv$var32$minArray0[0];\n"
+            min.add("// Calculate the minimum size of the inputs to array var15.\nint cv$var26$min = 2147483647;\n"
+                    + "for(int i = 0; i < a.length; i += 3) {\n\tint[][] cv$var26$minArray0 = a[i];\n"
+                    + "\tint[] cv$var26$minArray1 = cv$var26$minArray0[0];\n"
                     + "\tfor(int j = 0; j < a[i][0].length; j += 2)\n"
-                    + "\t\tcv$var32$min = Math.min(cv$var32$min, cv$var32$minArray1[j]);\n}\n");
-            max.add("// Calculate the maximum size of the inputs to array var19.\n"
-                    + "int cv$var32$max = -2147483648;\nfor(int i = 0; i < a.length; i += 3) {\n"
-                    + "\tint[][] cv$var32$maxArray0 = a[i];\n\tint[] cv$var32$maxArray1 = cv$var32$maxArray0[0];\n"
+                    + "\t\tcv$var26$min = Math.min(cv$var26$min, cv$var26$minArray1[j]);\n}\n");
+            max.add("// Calculate the maximum size of the inputs to array var15.\n"
+                    + "int cv$var26$max = -2147483648;\nfor(int i = 0; i < a.length; i += 3) {\n"
+                    + "\tint[][] cv$var26$maxArray0 = a[i];\n\tint[] cv$var26$maxArray1 = cv$var26$maxArray0[0];\n"
                     + "\tfor(int j = 0; j < a[i][0].length; j += 2)\n"
-                    + "\t\tcv$var32$max = Math.max(cv$var32$max, cv$var32$maxArray1[j]);\n}\n");
-            minName.add("cv$var32$min");
-            maxName.add("cv$var32$max");
+                    + "\t\tcv$var26$max = Math.max(cv$var26$max, cv$var26$maxArray1[j]);\n}\n");
+            minName.add("cv$var26$min");
+            maxName.add("cv$var26$max");
         }
         {
             variableConstructor.add(() -> {
@@ -162,22 +164,24 @@ public class VariableMinMax {
                     parFor(intVariable(0), ai.length(), intVariable(2), true, (j) -> {
                         j.setAlias("j");
                         v.value = ai.get(j).get(Variable.intVariable(0));
+                        v.value.setPublic();
+                        v.value.setAlias("value");
                     });
                 });
                 return v.value;
             });
-            min.add("// Calculate the minimum size of the inputs to array var29.\n"
-                    + "double cv$var31$min = Double.POSITIVE_INFINITY;\nfor(int i = 0; i < a.length; i += 3) {\n"
-                    + "\tdouble[][] cv$var31$minArray0 = a[i];\n\tfor(int j = 0; j < a[i].length; j += 2) {\n"
-                    + "\t\tdouble[] cv$var31$minArray1 = cv$var31$minArray0[j];\n"
-                    + "\t\tcv$var31$min = Math.min(cv$var31$min, cv$var31$minArray1[0]);\n\t}\n" + "}\n");
-            max.add("// Calculate the maximum size of the inputs to array var29.\n"
-                    + "double cv$var31$max = Double.NEGATIVE_INFINITY;\nfor(int i = 0; i < a.length; i += 3) {\n"
-                    + "\tdouble[][] cv$var31$maxArray0 = a[i];\n\tfor(int j = 0; j < a[i].length; j += 2) {\n"
-                    + "\t\tdouble[] cv$var31$maxArray1 = cv$var31$maxArray0[j];\n"
-                    + "\t\tcv$var31$max = Math.max(cv$var31$max, cv$var31$maxArray1[0]);\n" + "\t}\n}\n");
-            minName.add("cv$var31$min");
-            maxName.add("cv$var31$max");
+            min.add("// Calculate the minimum size of the inputs to array var24.\n"
+                    + "double cv$var26$min = Double.POSITIVE_INFINITY;\nfor(int i = 0; i < a.length; i += 3) {\n"
+                    + "\tdouble[][] cv$var26$minArray0 = a[i];\n\tfor(int j = 0; j < a[i].length; j += 2) {\n"
+                    + "\t\tdouble[] cv$var26$minArray1 = cv$var26$minArray0[j];\n"
+                    + "\t\tcv$var26$min = Math.min(cv$var26$min, cv$var26$minArray1[0]);\n\t}\n" + "}\n");
+            max.add("// Calculate the maximum size of the inputs to array var24.\n"
+                    + "double cv$var26$max = Double.NEGATIVE_INFINITY;\nfor(int i = 0; i < a.length; i += 3) {\n"
+                    + "\tdouble[][] cv$var26$maxArray0 = a[i];\n\tfor(int j = 0; j < a[i].length; j += 2) {\n"
+                    + "\t\tdouble[] cv$var26$maxArray1 = cv$var26$maxArray0[j];\n"
+                    + "\t\tcv$var26$max = Math.max(cv$var26$max, cv$var26$maxArray1[0]);\n" + "\t}\n}\n");
+            minName.add("cv$var26$min");
+            maxName.add("cv$var26$max");
         }
 
         noTests = variableConstructor.size();
@@ -203,6 +207,7 @@ public class VariableMinMax {
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         CompilerState.reset();
         NumberVariable<?> v = variableConstructor.get(i).getVariable();
+
         Traces traces = TracesImplementation.getTraces(v);
         CompilationContext compilationCtx = new CompilationContext(new CompilationOptions(), traces,
                 ExecutionType.SingleThreadCPU);

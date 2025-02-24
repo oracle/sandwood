@@ -1,12 +1,14 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.compiler.dataflowGraph.variables.randomVariables;
+
+import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
@@ -16,6 +18,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.Multi
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -42,8 +45,8 @@ public class Multinomial extends ArrayRandomVariable<IntVariable, Multinomial> {
 
     @Override
     public ArrayVariable<IntVariable> sample(Location location) {
-        return ArrayVariable.getArrayVariable(new SingleArraySampleTask<>(
-                VariableType.arrayType(VariableType.IntVariable), this, p.getPossibleLengths(), location));
+        return ArrayVariable.getArrayVariable(
+                new SingleArraySampleTask<>(VariableType.arrayType(VariableType.IntVariable), this, location));
     }
 
     @Override
@@ -63,7 +66,17 @@ public class Multinomial extends ArrayRandomVariable<IntVariable, Multinomial> {
         // constructing lots of arrays
 
         compilationCtx.addTreeToScope(scope, IRTree.functionCall(FunctionType.SAMPLE, getType(), Tree.NoComment,
-                p.getForwardIR(compilationCtx), n.getForwardIR(compilationCtx), sample));
+                p.getForwardIR(compilationCtx), p.getLength(compilationCtx), n.getForwardIR(compilationCtx), sample));
+    }
+
+    @Override
+    public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
+        return p.getPossibleLengths();
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        return p.getLength(compilationCtx);
     }
 
     @Override

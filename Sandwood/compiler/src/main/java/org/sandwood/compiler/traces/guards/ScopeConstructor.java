@@ -305,7 +305,7 @@ public class ScopeConstructor {
      * @param compilationCtx The compilation context.
      * @return An object that will create the required additional scopes.
      */
-    public static ScopeConstructor construct(SampleTask<?, ?> task, String comment, CompilationContext compilationCtx) {
+    public static ScopeConstructor construct(DataflowTask<?> task, String comment, CompilationContext compilationCtx) {
         return construct(task, task.scope(), comment, compilationCtx);
     }
 
@@ -524,9 +524,9 @@ public class ScopeConstructor {
                 // For each distribution sample already created in this distribution description for the sample task at
                 // the origin of this trace construct a guard to see if the created sample task satisfies this trace.
                 DistributionSampleTask<A, ?> disSampleTask = (DistributionSampleTask<A, ?>) sampleTask;
-                for(SampleDesc<?> sampleDesc:d.getExistingSamples(disSampleTask)) {
+                for(DistSampleDesc<?> sampleDesc:d.getExistingSamples(disSampleTask)) {
                     ScopeDescription sampleD = d.addSubstitution(position, disSampleTask.getOutput(),
-                            (SampleDesc<A>) sampleDesc);
+                            (DistSampleDesc<A>) sampleDesc);
                     if(sampleDesc.sampleValue != null) {
                         // Create a new description that includes a guard checking this trace is satisfied by the scopes
                         // in subScopes.
@@ -641,7 +641,7 @@ public class ScopeConstructor {
         // Construct a scope to test if this scope has already been used. Push the enclosing scope onto the stack.
 
         IRTreeReturn<BooleanVariable> guard = constant(true);
-        for(SampleDesc<?> s:d.getExistingSamples(sampleTask)) {
+        for(DistSampleDesc<?> s:d.getExistingSamples(sampleTask)) {
             IRTreeReturn<BooleanVariable> subGuard = constant(true);
             Map<ForTask, IntVariable> m = s.scopeSubstitutions;
             for(ForTask k:m.keySet()) {
@@ -682,11 +682,11 @@ public class ScopeConstructor {
                 Integer.toString(id.get().next()));
 
         // Get the number of states that this variable could be generating.
-        IntVariable noStates = r.getNoStates();
+        IntVariable numStates = r.getNumStates();
 
         // Construct the for loop to iterate through all the possible states.
         ScopeStack.pushScope(scope.innerScope);
-        ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,
+        ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), numStates, Variable.intVariable(1), true,
                 (index) -> {
                     // Set alias for better readability, this has no effect on the generated code.
                     index.setAlias(indexName);
@@ -842,6 +842,11 @@ public class ScopeConstructor {
     public ScopeConstructor addConstraints(Set<TraceHandle> traces, Set<Set<TraceHandle>> rvDistTraces,
             Values arrayValues) {
         return addConstraints(traces, rvDistTraces, GUARDS, arrayValues, FORWARDS);
+    }
+
+    public ScopeConstructor addBackConstraints(Set<TraceHandle> traces, Guards guards,
+            Set<Set<TraceHandle>> rvDistTraces) {
+        return addConstraints(traces, rvDistTraces, guards, IGNORE_VALUES, BACKWARDS);
     }
 
     public ScopeConstructor addBackConstraints(Set<TraceHandle> traces, Set<Set<TraceHandle>> rvDistTraces,
@@ -1193,7 +1198,7 @@ public class ScopeConstructor {
         d.removeSubstitutions(compilationCtx);
 
         d = d.insertScope(target, compilationCtx);
-        SampleDesc<A> sampleDesc = new SampleDesc<>(sampleValue, taskScopes);
+        DistSampleDesc<A> sampleDesc = new DistSampleDesc<>(sampleValue, taskScopes);
         d = d.addSampleDesc((DistributionSampleTask<?, ?>) sampleTask, sampleDesc, compilationCtx);
         return d;
     }
@@ -1462,6 +1467,7 @@ public class ScopeConstructor {
     private void addTree(ScopeDescription targetScope, int position, TreeBuilder treeBuilder) {
         // Create a new scope to construct the user provided tree in.
         compilationCtx.pushScope();
+        compilationCtx.pushExploredDistSamples(targetScope.getExistingSamples());
         compilationCtx.pushInitializedArrays();
 
         TreeBuilderInfo treeBuilderInfo = new TreeBuilderInfo(targetScope, tasks);
@@ -1478,6 +1484,7 @@ public class ScopeConstructor {
 
         // Restore the initial compilation context.
         compilationCtx.popInitializedArrays();
+        compilationCtx.popExploredDistSamples();
         compilationCtx.popScope();
 
         if(!treeBuilderInfo.backTraceInfo.traceConstructedCorrectly())

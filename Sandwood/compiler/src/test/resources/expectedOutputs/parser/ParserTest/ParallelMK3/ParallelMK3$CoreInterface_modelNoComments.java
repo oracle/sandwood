@@ -1,10 +1,10 @@
 package org.sandwood.compiler.tests.parser;
 
 interface ParallelMK3$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
-	public boolean get$fixedFlag$sample26();
-	public void set$fixedFlag$sample26(boolean cv$value);
-	public boolean get$fixedFlag$sample44();
-	public void set$fixedFlag$sample44(boolean cv$value);
+	public boolean get$fixedFlag$sample21();
+	public void set$fixedFlag$sample21(boolean cv$value);
+	public boolean get$fixedFlag$sample38();
+	public void set$fixedFlag$sample38(boolean cv$value);
 	public double[] get$generated();
 	public void set$generated(double[] cv$value);
 	public double[] get$indirection();

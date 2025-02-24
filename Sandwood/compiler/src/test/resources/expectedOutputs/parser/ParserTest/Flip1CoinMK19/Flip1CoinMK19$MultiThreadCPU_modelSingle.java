@@ -10,12 +10,12 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private int a;
 	private int b;
 	private double[][] bias;
-	private boolean fixedFlag$sample13 = false;
-	private boolean fixedFlag$sample19 = false;
-	private boolean fixedFlag$sample51 = false;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample51 = false;
+	private boolean fixedFlag$sample10 = false;
+	private boolean fixedFlag$sample16 = false;
+	private boolean fixedFlag$sample48 = false;
+	private boolean fixedProbFlag$sample10 = false;
+	private boolean fixedProbFlag$sample16 = false;
+	private boolean fixedProbFlag$sample48 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private double logProbability$$evidence;
@@ -25,9 +25,9 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$flips;
 	private double logProbability$q;
 	private double logProbability$t;
-	private double logProbability$var11;
-	private double logProbability$var17;
-	private double logProbability$var49;
+	private double logProbability$var15;
+	private double logProbability$var47;
+	private double logProbability$var9;
 	private double q;
 	private int samples;
 	private boolean setFlag$flips = false;
@@ -68,66 +68,66 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		return bias;
 	}
 
-	// Getter for fixedFlag$sample13.
+	// Getter for fixedFlag$sample10.
 	@Override
-	public final boolean get$fixedFlag$sample13() {
-		return fixedFlag$sample13;
+	public final boolean get$fixedFlag$sample10() {
+		return fixedFlag$sample10;
 	}
 
-	// Setter for fixedFlag$sample13.
+	// Setter for fixedFlag$sample10.
 	@Override
-	public final void set$fixedFlag$sample13(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample13 including if probabilities
+	public final void set$fixedFlag$sample10(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample10 including if probabilities
 		// need to be updated.
-		fixedFlag$sample13 = cv$value;
+		fixedFlag$sample10 = cv$value;
 		
-		// Should the probability of sample 13 be set to fixed. This will only every change
+		// Should the probability of sample 10 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample13 = (fixedFlag$sample13 && fixedProbFlag$sample13);
+		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
 		
-		// Should the probability of sample 51 be set to fixed. This will only every change
+		// Should the probability of sample 48 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample51 = (fixedFlag$sample13 && fixedProbFlag$sample51);
+		fixedProbFlag$sample48 = (fixedFlag$sample10 && fixedProbFlag$sample48);
 	}
 
-	// Getter for fixedFlag$sample19.
+	// Getter for fixedFlag$sample16.
 	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
+	public final boolean get$fixedFlag$sample16() {
+		return fixedFlag$sample16;
 	}
 
-	// Setter for fixedFlag$sample19.
+	// Setter for fixedFlag$sample16.
 	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
+	public final void set$fixedFlag$sample16(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
 		// need to be updated.
-		fixedFlag$sample19 = cv$value;
+		fixedFlag$sample16 = cv$value;
 		
-		// Should the probability of sample 19 be set to fixed. This will only every change
+		// Should the probability of sample 16 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
+		fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedProbFlag$sample16);
 		
-		// Should the probability of sample 51 be set to fixed. This will only every change
+		// Should the probability of sample 48 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample51 = (fixedFlag$sample19 && fixedProbFlag$sample51);
+		fixedProbFlag$sample48 = (fixedFlag$sample16 && fixedProbFlag$sample48);
 	}
 
-	// Getter for fixedFlag$sample51.
+	// Getter for fixedFlag$sample48.
 	@Override
-	public final boolean get$fixedFlag$sample51() {
-		return fixedFlag$sample51;
+	public final boolean get$fixedFlag$sample48() {
+		return fixedFlag$sample48;
 	}
 
-	// Setter for fixedFlag$sample51.
+	// Setter for fixedFlag$sample48.
 	@Override
-	public final void set$fixedFlag$sample51(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample51 including if probabilities
+	public final void set$fixedFlag$sample48(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample48 including if probabilities
 		// need to be updated.
-		fixedFlag$sample51 = cv$value;
+		fixedFlag$sample48 = cv$value;
 		
-		// Should the probability of sample 51 be set to fixed. This will only every change
+		// Should the probability of sample 48 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedProbFlag$sample51);
+		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
 	}
 
 	// Getter for flips.
@@ -146,8 +146,8 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		flips = cv$value;
 		setFlag$flips = true;
 		
-		// Unset the fixed probability flag for sample 51 as it depends on flips.
-		fixedProbFlag$sample51 = false;
+		// Unset the fixed probability flag for sample 48 as it depends on flips.
+		fixedProbFlag$sample48 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -218,11 +218,11 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set flags for all the side effects of q including if probabilities need to be updated.
 		q = cv$value;
 		
-		// Unset the fixed probability flag for sample 13 as it depends on q.
-		fixedProbFlag$sample13 = false;
+		// Unset the fixed probability flag for sample 10 as it depends on q.
+		fixedProbFlag$sample10 = false;
 		
-		// Unset the fixed probability flag for sample 51 as it depends on q.
-		fixedProbFlag$sample51 = false;
+		// Unset the fixed probability flag for sample 48 as it depends on q.
+		fixedProbFlag$sample48 = false;
 	}
 
 	// Getter for samples.
@@ -249,19 +249,19 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set flags for all the side effects of t including if probabilities need to be updated.
 		t = cv$value;
 		
-		// Unset the fixed probability flag for sample 19 as it depends on t.
-		fixedProbFlag$sample19 = false;
+		// Unset the fixed probability flag for sample 16 as it depends on t.
+		fixedProbFlag$sample16 = false;
 		
-		// Unset the fixed probability flag for sample 51 as it depends on t.
-		fixedProbFlag$sample51 = false;
+		// Unset the fixed probability flag for sample 48 as it depends on t.
+		fixedProbFlag$sample48 = false;
 	}
 
-	// Calculate the probability of the samples represented by sample13 using sampled
+	// Calculate the probability of the samples represented by sample10 using sampled
 	// values.
-	private final void logProbabilityValue$sample13() {
-		// Determine if we need to calculate the values for sample task 13 or if we should
+	private final void logProbabilityValue$sample10() {
+		// Determine if we need to calculate the values for sample task 10 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample13) {
+		if(!fixedProbFlag$sample10) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -279,11 +279,11 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$sampleValue = q;
 				{
 					{
-						double var9 = 1.0;
-						double var10 = 1.0;
+						double var7 = 1.0;
+						double var8 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var9, var10));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var7, var8));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -315,7 +315,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var11 = cv$sampleAccumulator;
+			logProbability$var9 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$q = cv$sampleProbability;
@@ -340,12 +340,12 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample13)
+			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample13 = fixedFlag$sample13;
+			fixedProbFlag$sample10 = fixedFlag$sample10;
 		}
 		// Using cached values.
 		else {
@@ -356,7 +356,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$q;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var11 = cv$rvAccumulator;
+			logProbability$var9 = cv$rvAccumulator;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
@@ -378,17 +378,17 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample13)
+			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample19 using sampled
+	// Calculate the probability of the samples represented by sample16 using sampled
 	// values.
-	private final void logProbabilityValue$sample19() {
-		// Determine if we need to calculate the values for sample task 19 or if we should
+	private final void logProbabilityValue$sample16() {
+		// Determine if we need to calculate the values for sample task 16 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample19) {
+		if(!fixedProbFlag$sample16) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -406,11 +406,11 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$sampleValue = t;
 				{
 					{
-						double var15 = 1.0;
-						double var16 = 1.0;
+						double var13 = 1.0;
+						double var14 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var15, var16));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var13, var14));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -442,7 +442,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var17 = cv$sampleAccumulator;
+			logProbability$var15 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$t = cv$sampleProbability;
@@ -467,12 +467,12 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample19)
+			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample19 = fixedFlag$sample19;
+			fixedProbFlag$sample16 = fixedFlag$sample16;
 		}
 		// Using cached values.
 		else {
@@ -483,7 +483,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$t;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var17 = cv$rvAccumulator;
+			logProbability$var15 = cv$rvAccumulator;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
@@ -505,24 +505,24 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample19)
+			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample51 using sampled
+	// Calculate the probability of the samples represented by sample48 using sampled
 	// values.
-	private final void logProbabilityValue$sample51() {
-		// Determine if we need to calculate the values for sample task 51 or if we should
+	private final void logProbabilityValue$sample48() {
+		// Determine if we need to calculate the values for sample task 48 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample51) {
+		if(!fixedProbFlag$sample48) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var48 = 0; var48 < samples; var48 += 1) {
+			for(int var46 = 0; var46 < samples; var46 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -530,15 +530,15 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = flips[var48];
+					boolean cv$sampleValue = flips[var46];
 					{
 						{
 							double[] inner = bias[0];
 							inner[0] = q;
-							double var36 = inner[b];
+							double var34 = inner[b];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var36));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var34));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -574,7 +574,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var49 = cv$sampleAccumulator;
+			logProbability$var47 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -585,7 +585,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample51 = ((fixedFlag$sample51 && fixedFlag$sample13) && fixedFlag$sample19);
+			fixedProbFlag$sample48 = ((fixedFlag$sample48 && fixedFlag$sample10) && fixedFlag$sample16);
 		}
 		// Using cached values.
 		else {
@@ -593,7 +593,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var49;
+			double cv$sampleValue = logProbability$var47;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$bernoulli = cv$rvAccumulator;
@@ -608,29 +608,29 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 13 drawn from Beta 11. Inference was performed using a Beta to Bernoulli/Binomial
+	// by sample task 10 drawn from Beta 9. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
-	private final void sample13() {
+	private final void sample10() {
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
 		// Local variable to record the number of samples.
 		int cv$count = 0;
 		{
-			// Processing random variable 37.
+			// Processing random variable 35.
 			{
-				// Looking for a path between Sample 13 and consumer Bernoulli 37.
+				// Looking for a path between Sample 10 and consumer Bernoulli 35.
 				{
 					if((0 == b)) {
-						// Processing sample task 51 of consumer random variable bernoulli.
+						// Processing sample task 48 of consumer random variable bernoulli.
 						{
-							for(int var48 = 0; var48 < samples; var48 += 1) {
-								// Include the value sampled by task 51 from random variable bernoulli.
+							for(int var46 = 0; var46 < samples; var46 += 1) {
+								// Include the value sampled by task 48 from random variable bernoulli.
 								// Increment the number of samples.
 								cv$count = (cv$count + 1);
 								
 								// If the sample value was positive increase the count
-								if(flips[var48])
+								if(flips[var46])
 									cv$sum = (cv$sum + 1);
 							}
 						}
@@ -652,30 +652,30 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 19 drawn from Beta 17. Inference was performed using a Beta to Bernoulli/Binomial
+	// by sample task 16 drawn from Beta 15. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
-	private final void sample19() {
+	private final void sample16() {
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
 		// Local variable to record the number of samples.
 		int cv$count = 0;
 		{
-			// Processing random variable 37.
+			// Processing random variable 35.
 			{
-				// Looking for a path between Sample 19 and consumer Bernoulli 37.
+				// Looking for a path between Sample 16 and consumer Bernoulli 35.
 				{
 					if((0 == 0)) {
 						if((1 == b)) {
-							// Processing sample task 51 of consumer random variable bernoulli.
+							// Processing sample task 48 of consumer random variable bernoulli.
 							{
-								for(int var48 = 0; var48 < samples; var48 += 1) {
-									// Include the value sampled by task 51 from random variable bernoulli.
+								for(int var46 = 0; var46 < samples; var46 += 1) {
+									// Include the value sampled by task 48 from random variable bernoulli.
 									// Increment the number of samples.
 									cv$count = (cv$count + 1);
 									
 									// If the sample value was positive increase the count
-									if(flips[var48])
+									if(flips[var46])
 										cv$sum = (cv$sum + 1);
 								}
 							}
@@ -691,8 +691,8 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Guards to ensure that bias is only updated when there is a valid path.
 		{
 			{
-				double[] var30 = bias[0];
-				var30[1] = t;
+				double[] var28 = bias[0];
+				var28[1] = t;
 			}
 		}
 	}
@@ -724,28 +724,28 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample19)
+		if(!fixedFlag$sample16)
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[] inner = bias[0];
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample10)
 			inner[0] = q;
-		double[] var30 = bias[0];
-		if(!fixedFlag$sample19)
-			var30[1] = t;
-		if(!fixedFlag$sample51)
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
+		if(!fixedFlag$sample48)
 			inner[0] = q;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, samples, 1,
-			(int forStart$var48, int forEnd$var48, int threadID$var48, org.sandwood.random.internal.Rng RNG$1) -> { 
+			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int var48 = forStart$var48; var48 < forEnd$var48; var48 += 1) {
-						if(!fixedFlag$sample51)
-							flips[var48] = DistributionSampling.sampleBernoulli(RNG$1, inner[b]);
+					for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
+						if(!fixedFlag$sample48)
+							flips[var46] = DistributionSampling.sampleBernoulli(RNG$1, inner[b]);
 					}
 			}
 		);
@@ -755,7 +755,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
@@ -763,7 +763,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
@@ -772,17 +772,17 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample13)
-				sample13();
-			if(!fixedFlag$sample19)
-				sample19();
+			if(!fixedFlag$sample10)
+				sample10();
+			if(!fixedFlag$sample16)
+				sample16();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample19)
-				sample19();
-			if(!fixedFlag$sample13)
-				sample13();
+			if(!fixedFlag$sample16)
+				sample16();
+			if(!fixedFlag$sample10)
+				sample10();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -804,17 +804,17 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var11 = 0.0;
+		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample13)
+		if(!fixedProbFlag$sample10)
 			logProbability$q = 0.0;
-		logProbability$var17 = 0.0;
-		if(!fixedProbFlag$sample19)
+		logProbability$var15 = 0.0;
+		if(!fixedProbFlag$sample16)
 			logProbability$t = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample51)
-			logProbability$var49 = 0.0;
+		if(!fixedProbFlag$sample48)
+			logProbability$var47 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -834,11 +834,11 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample13)
-			logProbabilityValue$sample13();
-		if(fixedFlag$sample19)
-			logProbabilityValue$sample19();
-		logProbabilityValue$sample51();
+		if(fixedFlag$sample10)
+			logProbabilityValue$sample10();
+		if(fixedFlag$sample16)
+			logProbabilityValue$sample16();
+		logProbabilityValue$sample48();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -856,9 +856,9 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample13();
-		logProbabilityValue$sample19();
-		logProbabilityValue$sample51();
+		logProbabilityValue$sample10();
+		logProbabilityValue$sample16();
+		logProbabilityValue$sample48();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -875,9 +875,9 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample13();
-		logProbabilityValue$sample19();
-		logProbabilityValue$sample51();
+		logProbabilityValue$sample10();
+		logProbabilityValue$sample16();
+		logProbabilityValue$sample48();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -885,7 +885,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample13)
+		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
 		// Calculate the probabilities for every sample task in the model. These values are
@@ -914,8 +914,8 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			inner[0] = q;
 		}
 		if(true) {
-			double[] var30 = bias[0];
-			var30[1] = t;
+			double[] var28 = bias[0];
+			var28[1] = t;
 		}
 	}
 

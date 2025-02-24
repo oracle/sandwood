@@ -8,29 +8,29 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Setter for bias.
 	public void set$bias(double[] cv$value);
 
-	// Getter for fixedFlag$sample34.
-	public boolean get$fixedFlag$sample34();
+	// Getter for fixedFlag$sample30.
+	public boolean get$fixedFlag$sample30();
 
-	// Setter for fixedFlag$sample34.
-	public void set$fixedFlag$sample34(boolean cv$value);
+	// Setter for fixedFlag$sample30.
+	public void set$fixedFlag$sample30(boolean cv$value);
 
-	// Getter for fixedFlag$sample51.
-	public boolean get$fixedFlag$sample51();
+	// Getter for fixedFlag$sample47.
+	public boolean get$fixedFlag$sample47();
 
-	// Setter for fixedFlag$sample51.
-	public void set$fixedFlag$sample51(boolean cv$value);
+	// Setter for fixedFlag$sample47.
+	public void set$fixedFlag$sample47(boolean cv$value);
 
-	// Getter for fixedFlag$sample66.
-	public boolean get$fixedFlag$sample66();
+	// Getter for fixedFlag$sample62.
+	public boolean get$fixedFlag$sample62();
 
-	// Setter for fixedFlag$sample66.
-	public void set$fixedFlag$sample66(boolean cv$value);
+	// Setter for fixedFlag$sample62.
+	public void set$fixedFlag$sample62(boolean cv$value);
 
-	// Getter for fixedFlag$sample91.
-	public boolean get$fixedFlag$sample91();
+	// Getter for fixedFlag$sample87.
+	public boolean get$fixedFlag$sample87();
 
-	// Setter for fixedFlag$sample91.
-	public void set$fixedFlag$sample91(boolean cv$value);
+	// Setter for fixedFlag$sample87.
+	public void set$fixedFlag$sample87(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

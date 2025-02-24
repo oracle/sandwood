@@ -197,13 +197,6 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
     ObserveVariableTask<A> getObservation();
 
     /**
-     * Method to use to change the parent of a variable when restructuring the dag.
-     * 
-     * @param alternative A new parent to use instead of the original one.
-     */
-    void changeParent(ProducingDataflowTask<A> alternative);
-
-    /**
      * Method to remove a task from the set of consumers when restructuring the graph.
      * 
      * @param t The task to remove
@@ -342,6 +335,14 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
     void setIsDistribution();
 
     boolean isDistribution();
+
+    /**
+     * Method to determine if a variable is constant from the perspective of this variable
+     * 
+     * @param v The variable to test this variable relative too.
+     * @return Is this variable constant relative to the passed variable
+     */
+    boolean isConstant(Variable<?> v);
 
     void setNonDeterministic();
 

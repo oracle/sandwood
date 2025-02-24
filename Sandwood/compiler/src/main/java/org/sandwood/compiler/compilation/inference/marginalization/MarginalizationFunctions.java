@@ -98,7 +98,7 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
         final VariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameLocal;
 
         protected MarginalizationData(SampleTask<A, B> sample, CompilationContext compilationCtx) {
-            super(sample, sample.randomVariable.getNoStates(), compilationCtx);
+            super(sample, sample.randomVariable.getNumStates(), compilationCtx);
 
             statesProbabilityNameGlobal = VariableNames.calcVarName(sampleDesc.output, "stateProbabilityGlobal",
                     VariableType.arrayType(VariableType.DoubleVariable));
@@ -146,7 +146,7 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
         normalizeArray(arrayValue, arrayValue, compilationCtx);
 
         return funcData.sourceRandom.getStateValue(functionCallReturn(FunctionType.SAMPLE, VariableType.IntVariable,
-                VariableType.Categorical, arrayValue));
+                VariableType.Categorical, arrayValue, load(numStatesName)));
     }
 
     private void normalizeArray(IRTreeReturn<ArrayVariable<DoubleVariable>> sourceArray,
@@ -158,17 +158,17 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(sumName, constant(0.0), "The sum of all the probabilities in log space"));
         compilationCtx.addTreeToScope(GlobalScope.scope,
-                TreeUtils.lseAdd(sourceArray, sumName, load(noStatesName), "Sum all the values"));
+                TreeUtils.lseAdd(sourceArray, sumName, load(numStatesName), "Sum all the values"));
 
-        IRTreeReturn<DoubleVariable> normalizedIfValue = divideDI(constant(1.0), load(noStatesName));
+        IRTreeReturn<DoubleVariable> normalizedIfValue = divideDI(constant(1.0), load(numStatesName));
         IRTreeVoid ifLoopBody = arrayPut(targetArray, load(indexName), normalizedIfValue, Tree.NoComment);
-        IRTreeVoid ifBody = forStmt(ifLoopBody, constant(0), load(noStatesName), constant(1), indexName, true,
+        IRTreeVoid ifBody = forStmt(ifLoopBody, constant(0), load(numStatesName), constant(1), indexName, true,
                 "Normalize log space values and move to normal space");
 
         IRTreeReturn<DoubleVariable> normalizedElseValue = exp(
                 subtractDD(arrayGet(sourceArray, load(indexName)), load(sumName)));
         IRTreeVoid elseLoopBody = arrayPut(targetArray, load(indexName), normalizedElseValue, Tree.NoComment);
-        IRTreeVoid elseBody = forStmt(elseLoopBody, constant(0), load(noStatesName), constant(1), indexName, true,
+        IRTreeVoid elseBody = forStmt(elseLoopBody, constant(0), load(numStatesName), constant(1), indexName, true,
                 "Normalize log space values and move to normal space");
 
         compilationCtx.addTreeToScope(GlobalScope.scope, ifElse(eq(load(sumName), constant(Double.NEGATIVE_INFINITY)),
@@ -176,8 +176,9 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
 
         IRTreeVoid zeroLoopBody = arrayPut(targetArray, load(indexName), constant(Double.NEGATIVE_INFINITY),
                 Tree.NoComment);
-        IRTreeVoid zeroLoop = forStmt(zeroLoopBody, load(noStatesName), getIntField(sourceArray, "length"), constant(1),
-                indexName, true, "Set array values that are not computed for the input to negative infinity.");
+        IRTreeVoid zeroLoop = forStmt(zeroLoopBody, load(numStatesName), getIntField(sourceArray, "length"),
+                constant(1), indexName, true,
+                "Set array values that are not computed for the input to negative infinity.");
         compilationCtx.addTreeToScope(GlobalScope.scope, zeroLoop);
 
     }

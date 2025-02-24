@@ -363,10 +363,10 @@ class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 10 drawn from Uniform 9. Inference was performed using Metropolis-Hastings.
 	private final void sample10() {
 		// Calculate the number of states to evaluate.
-		int cv$noStates = 0;
+		int cv$numNumStates = 0;
 		{
 			// Metropolis-Hastings
-			cv$noStates = Math.max(cv$noStates, 2);
+			cv$numNumStates = Math.max(cv$numNumStates, 2);
 		}
 		
 		// The original value of the sample
@@ -387,7 +387,7 @@ class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			

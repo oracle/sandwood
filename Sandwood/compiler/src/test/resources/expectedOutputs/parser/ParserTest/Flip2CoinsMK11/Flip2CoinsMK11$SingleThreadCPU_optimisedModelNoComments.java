@@ -7,14 +7,14 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK11$CoreInterface {
 	private double[] bias;
 	private int coins;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample87 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample87 = false;
+	private boolean fixedFlag$sample22 = false;
+	private boolean fixedFlag$sample49 = false;
+	private boolean fixedFlag$sample77 = false;
+	private boolean fixedFlag$sample9 = false;
+	private boolean fixedProbFlag$sample22 = false;
+	private boolean fixedProbFlag$sample49 = false;
+	private boolean fixedProbFlag$sample77 = false;
+	private boolean fixedProbFlag$sample9 = false;
 	private boolean[][] flips;
 	private boolean[][] flipsMeasured;
 	private int[] length$flipsMeasured;
@@ -25,10 +25,10 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$beta;
 	private double logProbability$bias;
 	private double logProbability$flips;
-	private double[] logProbability$sample57;
-	private double[] logProbability$sample87;
-	private double logProbability$var13;
-	private double logProbability$var26;
+	private double[] logProbability$sample49;
+	private double[] logProbability$sample77;
+	private double logProbability$var22;
+	private double logProbability$var9;
 	private boolean setFlag$bias = false;
 	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
@@ -46,10 +46,10 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
-		fixedProbFlag$sample15 = false;
-		fixedProbFlag$sample28 = false;
-		fixedProbFlag$sample57 = false;
-		fixedProbFlag$sample87 = false;
+		fixedProbFlag$sample9 = false;
+		fixedProbFlag$sample22 = false;
+		fixedProbFlag$sample49 = false;
+		fixedProbFlag$sample77 = false;
 	}
 
 	@Override
@@ -58,51 +58,51 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample15() {
-		return fixedFlag$sample15;
+	public final boolean get$fixedFlag$sample22() {
+		return fixedFlag$sample22;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value) {
-		fixedFlag$sample15 = cv$value;
-		fixedProbFlag$sample15 = (cv$value && fixedProbFlag$sample15);
-		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+	public final void set$fixedFlag$sample22(boolean cv$value) {
+		fixedFlag$sample22 = cv$value;
+		fixedProbFlag$sample22 = (cv$value && fixedProbFlag$sample22);
+		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample28() {
-		return fixedFlag$sample28;
+	public final boolean get$fixedFlag$sample49() {
+		return fixedFlag$sample49;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample28(boolean cv$value) {
-		fixedFlag$sample28 = cv$value;
-		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
-		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+	public final void set$fixedFlag$sample49(boolean cv$value) {
+		fixedFlag$sample49 = cv$value;
+		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
+	public final boolean get$fixedFlag$sample77() {
+		return fixedFlag$sample77;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value) {
-		fixedFlag$sample57 = cv$value;
-		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
+	public final void set$fixedFlag$sample77(boolean cv$value) {
+		fixedFlag$sample77 = cv$value;
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample87() {
-		return fixedFlag$sample87;
+	public final boolean get$fixedFlag$sample9() {
+		return fixedFlag$sample9;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample87(boolean cv$value) {
-		fixedFlag$sample87 = cv$value;
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+	public final void set$fixedFlag$sample9(boolean cv$value) {
+		fixedFlag$sample9 = cv$value;
+		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
+		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
 	@Override
@@ -114,8 +114,8 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	public final void set$flips(boolean[][] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
-		fixedProbFlag$sample57 = false;
-		fixedProbFlag$sample87 = false;
+		fixedProbFlag$sample49 = false;
+		fixedProbFlag$sample77 = false;
 	}
 
 	@Override
@@ -173,59 +173,40 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		return logProbability$flips;
 	}
 
-	private final void logProbabilityValue$sample15() {
-		if(!fixedProbFlag$sample15) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0);
-			logProbability$beta = (logProbability$beta + cv$distributionAccumulator);
-			logProbability$var13 = cv$distributionAccumulator;
-			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample15)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample15 = fixedFlag$sample15;
-		} else {
-			logProbability$beta = (logProbability$beta + logProbability$var13);
-			logProbability$bias = (logProbability$bias + logProbability$var13);
-			logProbability$$model = (logProbability$$model + logProbability$var13);
-			if(fixedFlag$sample15)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var13);
-		}
-	}
-
-	private final void logProbabilityValue$sample28() {
-		if(!fixedProbFlag$sample28) {
+	private final void logProbabilityValue$sample22() {
+		if(!fixedProbFlag$sample22) {
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var25 = 1; i$var25 < coins; i$var25 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[i$var25], 1.0, 1.0));
+			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[i$var21], 1.0, 1.0));
 			logProbability$beta = (logProbability$beta + cv$sampleAccumulator);
-			logProbability$var26 = cv$sampleAccumulator;
+			logProbability$var22 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample28)
+			if(fixedFlag$sample22)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample28 = fixedFlag$sample28;
+			fixedProbFlag$sample22 = fixedFlag$sample22;
 		} else {
-			logProbability$beta = (logProbability$beta + logProbability$var26);
-			logProbability$bias = (logProbability$bias + logProbability$var26);
-			logProbability$$model = (logProbability$$model + logProbability$var26);
-			if(fixedFlag$sample28)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var26);
+			logProbability$beta = (logProbability$beta + logProbability$var22);
+			logProbability$bias = (logProbability$bias + logProbability$var22);
+			logProbability$$model = (logProbability$$model + logProbability$var22);
+			if(fixedFlag$sample22)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var22);
 		}
 	}
 
-	private final void logProbabilityValue$sample57() {
-		if(!fixedProbFlag$sample57) {
+	private final void logProbabilityValue$sample49() {
+		if(!fixedProbFlag$sample49) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var53 = 0; var53 < length$flipsMeasured[0]; var53 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[0][var53], bias[0]));
+			for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[0][var48], bias[0]));
 			logProbability$bernoulli1[0] = cv$sampleAccumulator;
-			logProbability$sample57[0] = cv$sampleAccumulator;
+			logProbability$sample49[0] = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample57 = ((fixedFlag$sample57 && fixedFlag$sample15) && fixedFlag$sample28);
+			fixedProbFlag$sample49 = ((fixedFlag$sample49 && fixedFlag$sample9) && fixedFlag$sample22);
 		} else {
-			double cv$rvAccumulator = logProbability$sample57[0];
+			double cv$rvAccumulator = logProbability$sample49[0];
 			logProbability$bernoulli1[0] = cv$rvAccumulator;
 			logProbability$flips = (logProbability$flips + cv$rvAccumulator);
 			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
@@ -233,25 +214,25 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	private final void logProbabilityValue$sample87() {
-		if(!fixedProbFlag$sample87) {
+	private final void logProbabilityValue$sample77() {
+		if(!fixedProbFlag$sample77) {
 			double cv$accumulator = 0.0;
 			for(int k = 1; k < coins; k += 1) {
 				double cv$sampleAccumulator = 0.0;
-				for(int var81 = 0; var81 < length$flipsMeasured[k]; var81 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[k][var81], bias[k]));
+				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1)
+					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[k][var75], bias[k]));
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli2[(k - 1)] = cv$sampleAccumulator;
-				logProbability$sample87[(k - 1)] = cv$sampleAccumulator;
+				logProbability$sample77[(k - 1)] = cv$sampleAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample87 = ((fixedFlag$sample87 && fixedFlag$sample15) && fixedFlag$sample28);
+			fixedProbFlag$sample77 = ((fixedFlag$sample77 && fixedFlag$sample9) && fixedFlag$sample22);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int k = 1; k < coins; k += 1) {
-				double cv$rvAccumulator = logProbability$sample87[(k - 1)];
+				double cv$rvAccumulator = logProbability$sample77[(k - 1)];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$bernoulli2[(k - 1)] = cv$rvAccumulator;
 			}
@@ -261,26 +242,45 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	private final void sample15() {
+	private final void logProbabilityValue$sample9() {
+		if(!fixedProbFlag$sample9) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0);
+			logProbability$beta = (logProbability$beta + cv$distributionAccumulator);
+			logProbability$var9 = cv$distributionAccumulator;
+			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			if(fixedFlag$sample9)
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			fixedProbFlag$sample9 = fixedFlag$sample9;
+		} else {
+			logProbability$beta = (logProbability$beta + logProbability$var9);
+			logProbability$bias = (logProbability$bias + logProbability$var9);
+			logProbability$$model = (logProbability$$model + logProbability$var9);
+			if(fixedFlag$sample9)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var9);
+		}
+	}
+
+	private final void sample22(int i$var21) {
 		int cv$sum = 0;
 		int cv$count = 0;
-		for(int var53 = 0; var53 < length$flipsMeasured[0]; var53 += 1) {
+		for(int var75 = 0; var75 < length$flipsMeasured[i$var21]; var75 += 1) {
 			cv$count = (cv$count + 1);
-			if(flips[0][var53])
+			if(flips[i$var21][var75])
+				cv$sum = (cv$sum + 1);
+		}
+		bias[i$var21] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	private final void sample9() {
+		int cv$sum = 0;
+		int cv$count = 0;
+		for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1) {
+			cv$count = (cv$count + 1);
+			if(flips[0][var48])
 				cv$sum = (cv$sum + 1);
 		}
 		bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
-	private final void sample28(int i$var25) {
-		int cv$sum = 0;
-		int cv$count = 0;
-		for(int var81 = 0; var81 < length$flipsMeasured[i$var25]; var81 += 1) {
-			cv$count = (cv$count + 1);
-			if(flips[i$var25][var81])
-				cv$sum = (cv$sum + 1);
-		}
-		bias[i$var25] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override
@@ -297,69 +297,69 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		if(!setFlag$bias)
 			bias = new double[length$flipsMeasured.length];
 		logProbability$bernoulli1 = new double[1];
-		logProbability$sample57 = new double[1];
+		logProbability$sample49 = new double[1];
 		logProbability$bernoulli2 = new double[(length$flipsMeasured.length - 1)];
-		logProbability$sample87 = new double[(length$flipsMeasured.length - 1)];
+		logProbability$sample77 = new double[(length$flipsMeasured.length - 1)];
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample15)
+		if(!fixedFlag$sample9)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample28) {
-			for(int i$var25 = 1; i$var25 < coins; i$var25 += 1)
-				bias[i$var25] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample22) {
+			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+				bias[i$var21] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample57) {
-			boolean[] var44 = flips[0];
-			for(int var53 = 0; var53 < length$flipsMeasured[0]; var53 += 1)
-				var44[var53] = DistributionSampling.sampleBernoulli(RNG$, bias[0]);
+		if(!fixedFlag$sample49) {
+			boolean[] var39 = flips[0];
+			for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1)
+				var39[var48] = DistributionSampling.sampleBernoulli(RNG$, bias[0]);
 		}
-		if(!fixedFlag$sample87) {
+		if(!fixedFlag$sample77) {
 			for(int k = 1; k < coins; k += 1) {
-				boolean[] var72 = flips[k];
-				for(int var81 = 0; var81 < length$flipsMeasured[k]; var81 += 1)
-					var72[var81] = DistributionSampling.sampleBernoulli(RNG$, bias[k]);
+				boolean[] var66 = flips[k];
+				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1)
+					var66[var75] = DistributionSampling.sampleBernoulli(RNG$, bias[k]);
 			}
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample15)
+		if(!fixedFlag$sample9)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample28) {
-			for(int i$var25 = 1; i$var25 < coins; i$var25 += 1)
-				bias[i$var25] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample22) {
+			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+				bias[i$var21] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample15)
+		if(!fixedFlag$sample9)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample28) {
-			for(int i$var25 = 1; i$var25 < coins; i$var25 += 1)
-				bias[i$var25] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample22) {
+			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+				bias[i$var21] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample15)
-				sample15();
-			if(!fixedFlag$sample28) {
-				for(int i$var25 = 1; i$var25 < coins; i$var25 += 1)
-					sample28(i$var25);
+			if(!fixedFlag$sample9)
+				sample9();
+			if(!fixedFlag$sample22) {
+				for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+					sample22(i$var21);
 			}
 		} else {
-			if(!fixedFlag$sample28) {
-				for(int i$var25 = (coins - 1); i$var25 >= 1; i$var25 -= 1)
-					sample28(i$var25);
+			if(!fixedFlag$sample22) {
+				for(int i$var21 = (coins - 1); i$var21 >= 1; i$var21 -= 1)
+					sample22(i$var21);
 			}
-			if(!fixedFlag$sample15)
-				sample15();
+			if(!fixedFlag$sample9)
+				sample9();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -374,19 +374,19 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$$evidence = 0.0;
 		logProbability$beta = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample15)
-			logProbability$var13 = 0.0;
-		if(!fixedProbFlag$sample28)
-			logProbability$var26 = 0.0;
+		if(!fixedProbFlag$sample9)
+			logProbability$var9 = 0.0;
+		if(!fixedProbFlag$sample22)
+			logProbability$var22 = 0.0;
 		logProbability$bernoulli1[0] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample57)
-			logProbability$sample57[0] = 0.0;
+		if(!fixedProbFlag$sample49)
+			logProbability$sample49[0] = 0.0;
 		for(int k = 1; k < coins; k += 1)
 			logProbability$bernoulli2[(k - 1)] = 0.0;
-		if(!fixedProbFlag$sample87) {
+		if(!fixedProbFlag$sample77) {
 			for(int k = 1; k < coins; k += 1)
-				logProbability$sample87[(k - 1)] = 0.0;
+				logProbability$sample77[(k - 1)] = 0.0;
 		}
 	}
 
@@ -398,48 +398,48 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample15)
-			logProbabilityValue$sample15();
-		if(fixedFlag$sample28)
-			logProbabilityValue$sample28();
-		logProbabilityValue$sample57();
-		logProbabilityValue$sample87();
+		if(fixedFlag$sample9)
+			logProbabilityValue$sample9();
+		if(fixedFlag$sample22)
+			logProbabilityValue$sample22();
+		logProbabilityValue$sample49();
+		logProbabilityValue$sample77();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample15();
-		logProbabilityValue$sample28();
-		logProbabilityValue$sample57();
-		logProbabilityValue$sample87();
+		logProbabilityValue$sample9();
+		logProbabilityValue$sample22();
+		logProbabilityValue$sample49();
+		logProbabilityValue$sample77();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample15();
-		logProbabilityValue$sample28();
-		logProbabilityValue$sample57();
-		logProbabilityValue$sample87();
+		logProbabilityValue$sample9();
+		logProbabilityValue$sample22();
+		logProbabilityValue$sample49();
+		logProbabilityValue$sample77();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample15)
+		if(!fixedFlag$sample9)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample28) {
-			for(int i$var25 = 1; i$var25 < coins; i$var25 += 1)
-				bias[i$var25] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample22) {
+			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+				bias[i$var21] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		logModelProbabilitiesVal();
 	}
 
 	@Override
 	public final void propogateObservedValues() {
-		for(int i$var94 = (coins - 1); i$var94 >= 0; i$var94 -= 1) {
-			boolean[] cv$source1 = flipsMeasured[(coins - (i$var94 + 1))];
-			boolean[] cv$target1 = flips[i$var94];
+		for(int i$var88 = (coins - 1); i$var88 >= 0; i$var88 -= 1) {
+			boolean[] cv$source1 = flipsMeasured[(coins - (i$var88 + 1))];
+			boolean[] cv$target1 = flips[i$var88];
 			int cv$length1 = cv$target1.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 				cv$target1[cv$index1] = cv$source1[cv$index1];

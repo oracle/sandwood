@@ -12,23 +12,23 @@ interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	// Setter for bias.
 	public void set$bias(double cv$value);
 
-	// Getter for fixedFlag$sample16.
-	public boolean get$fixedFlag$sample16();
+	// Getter for fixedFlag$sample21.
+	public boolean get$fixedFlag$sample21();
 
-	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
+	// Setter for fixedFlag$sample21.
+	public void set$fixedFlag$sample21(boolean cv$value);
 
-	// Getter for fixedFlag$sample29.
-	public boolean get$fixedFlag$sample29();
+	// Getter for fixedFlag$sample35.
+	public boolean get$fixedFlag$sample35();
 
-	// Setter for fixedFlag$sample29.
-	public void set$fixedFlag$sample29(boolean cv$value);
+	// Setter for fixedFlag$sample35.
+	public void set$fixedFlag$sample35(boolean cv$value);
 
-	// Getter for fixedFlag$sample43.
-	public boolean get$fixedFlag$sample43();
+	// Getter for fixedFlag$sample8.
+	public boolean get$fixedFlag$sample8();
 
-	// Setter for fixedFlag$sample43.
-	public void set$fixedFlag$sample43(boolean cv$value);
+	// Setter for fixedFlag$sample8.
+	public void set$fixedFlag$sample8(boolean cv$value);
 
 	// Getter for flips1.
 	public boolean[] get$flips1();

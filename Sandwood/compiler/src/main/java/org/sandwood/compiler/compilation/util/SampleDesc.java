@@ -52,7 +52,7 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
     /**
      * The intermediate variable that is the outermost point before the value starts being consumed.
      */
-    public final Variable<A> output;
+    public final A output;
 
     /** Collection of all the intermediate values. */
     private final IntermediateDesc intermediates;
@@ -116,9 +116,9 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
      * @param compilationCtx The compilation context.
      */
     protected void setIntermediateValues(CompilationContext compilationCtx) {
-        //Check if the compiler is doing inference, if it is observed variables should not be updated.
+        // Check if the compiler is doing inference, if it is observed variables should not be updated.
         boolean inferring = compilationCtx.inInference();
-        
+
         // Mark a stop point so that the constructed trees do not go beyond this point
         output.markStopPoint();
 

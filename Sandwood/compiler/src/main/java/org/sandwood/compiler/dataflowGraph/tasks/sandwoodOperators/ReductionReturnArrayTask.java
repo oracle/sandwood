@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -23,14 +23,20 @@ public class ReductionReturnArrayTask<A extends Variable<A>> extends ReductionRe
         implements ArrayProducingDataflowTask<A> {
     private final ArrayVariable<A> array;
 
-    public ReductionReturnArrayTask(ArrayVariable<A> array, Location location) {
-        super(array, location);
+    public ReductionReturnArrayTask(ArrayVariable<A> array, ArrayReductionInput<A> leftInput,
+            ArrayReductionInput<A> rightInput, Location location) {
+        super(array, leftInput, rightInput, location);
         this.array = array;
     }
 
     @Override
     public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
         return array.getPossibleLengths();
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        return array.getLength(compilationCtx);
     }
 
     @Override

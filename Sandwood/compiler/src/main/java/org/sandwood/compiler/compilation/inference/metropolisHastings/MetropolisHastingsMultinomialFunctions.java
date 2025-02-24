@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -17,7 +17,6 @@ import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.eq;
 import static org.sandwood.compiler.trees.irTree.IRTree.forStmt;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCallReturn;
-import static org.sandwood.compiler.trees.irTree.IRTree.getIntField;
 import static org.sandwood.compiler.trees.irTree.IRTree.ifElse;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
@@ -86,7 +85,7 @@ public class MetropolisHastingsMultinomialFunctions extends MetropolisHastingsAr
         IRTreeReturn<ArrayVariable<IntVariable>> target = funcData.getTarget();
 
         // Array Length
-        IRTreeReturn<IntVariable> arrayLengthTree = getIntField(funcData.getTarget(), "length");
+        IRTreeReturn<IntVariable> arrayLengthTree = funcData.sourceRandom.getLength(compilationCtx);
         IRTreeVoid arrayLengthTreeInit = initializeVariable(arrayLength, arrayLengthTree, Tree.NoComment);
         compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
 

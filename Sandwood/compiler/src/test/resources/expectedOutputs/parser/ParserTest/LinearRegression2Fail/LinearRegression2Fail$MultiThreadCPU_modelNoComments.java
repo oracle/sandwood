@@ -5,23 +5,23 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LinearRegression2Fail$CoreInterface {
 	private double b0;
 	private double b1;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample22 = false;
-	private boolean fixedFlag$sample38 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample22 = false;
-	private boolean fixedProbFlag$sample38 = false;
+	private boolean fixedFlag$sample11 = false;
+	private boolean fixedFlag$sample15 = false;
+	private boolean fixedFlag$sample31 = false;
+	private boolean fixedFlag$sample7 = false;
+	private boolean fixedProbFlag$sample11 = false;
+	private boolean fixedProbFlag$sample15 = false;
+	private boolean fixedProbFlag$sample31 = false;
+	private boolean fixedProbFlag$sample7 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double[] logProbability$sample38;
+	private double[] logProbability$sample31;
 	private double logProbability$var10;
 	private double logProbability$var14;
-	private double logProbability$var18;
-	private double[] logProbability$var34;
+	private double[] logProbability$var30;
+	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -44,8 +44,8 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$b0(double cv$value) {
 		b0 = cv$value;
-		fixedProbFlag$sample14 = false;
-		fixedProbFlag$sample38 = false;
+		fixedProbFlag$sample7 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -56,55 +56,55 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$b1(double cv$value) {
 		b1 = cv$value;
-		fixedProbFlag$sample18 = false;
-		fixedProbFlag$sample38 = false;
+		fixedProbFlag$sample11 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
+	public final boolean get$fixedFlag$sample11() {
+		return fixedFlag$sample11;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		fixedFlag$sample14 = cv$value;
-		fixedProbFlag$sample14 = (fixedFlag$sample14 && fixedProbFlag$sample14);
-		fixedProbFlag$sample38 = (fixedFlag$sample14 && fixedProbFlag$sample38);
+	public final void set$fixedFlag$sample11(boolean cv$value) {
+		fixedFlag$sample11 = cv$value;
+		fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
+		fixedProbFlag$sample31 = (fixedFlag$sample11 && fixedProbFlag$sample31);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample18() {
-		return fixedFlag$sample18;
+	public final boolean get$fixedFlag$sample15() {
+		return fixedFlag$sample15;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
-		fixedFlag$sample18 = cv$value;
-		fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedProbFlag$sample18);
-		fixedProbFlag$sample38 = (fixedFlag$sample18 && fixedProbFlag$sample38);
+	public final void set$fixedFlag$sample15(boolean cv$value) {
+		fixedFlag$sample15 = cv$value;
+		fixedProbFlag$sample15 = (fixedFlag$sample15 && fixedProbFlag$sample15);
+		fixedProbFlag$sample31 = (fixedFlag$sample15 && fixedProbFlag$sample31);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample22() {
-		return fixedFlag$sample22;
+	public final boolean get$fixedFlag$sample31() {
+		return fixedFlag$sample31;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample22(boolean cv$value) {
-		fixedFlag$sample22 = cv$value;
-		fixedProbFlag$sample22 = (fixedFlag$sample22 && fixedProbFlag$sample22);
-		fixedProbFlag$sample38 = (fixedFlag$sample22 && fixedProbFlag$sample38);
+	public final void set$fixedFlag$sample31(boolean cv$value) {
+		fixedFlag$sample31 = cv$value;
+		fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedProbFlag$sample31);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
+	public final boolean get$fixedFlag$sample7() {
+		return fixedFlag$sample7;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		fixedFlag$sample38 = cv$value;
-		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
+	public final void set$fixedFlag$sample7(boolean cv$value) {
+		fixedFlag$sample7 = cv$value;
+		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
+		fixedProbFlag$sample31 = (fixedFlag$sample7 && fixedProbFlag$sample31);
 	}
 
 	@Override
@@ -150,8 +150,8 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$variance(double cv$value) {
 		variance = cv$value;
-		fixedProbFlag$sample22 = false;
-		fixedProbFlag$sample38 = false;
+		fixedProbFlag$sample15 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -173,7 +173,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	public final void set$y(double[] cv$value) {
 		y = cv$value;
 		setFlag$y = true;
-		fixedProbFlag$sample38 = false;
+		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -186,18 +186,18 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 		yMeasured = cv$value;
 	}
 
-	private final void logProbabilityValue$sample14() {
-		if(!fixedProbFlag$sample14) {
+	private final void logProbabilityValue$sample11() {
+		if(!fixedProbFlag$sample11) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = b0;
+				double cv$sampleValue = b1;
 				{
 					{
-						double var8 = 0.0;
-						double var9 = 2.0;
+						double var8 = 1.0;
+						double var9 = 5.0;
 						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
@@ -219,37 +219,37 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var10 = cv$sampleAccumulator;
-			logProbability$b0 = cv$sampleProbability;
+			logProbability$b1 = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample14)
+			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample14 = fixedFlag$sample14;
+			fixedProbFlag$sample11 = fixedFlag$sample11;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b0;
+			double cv$sampleValue = logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var10 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample14)
+			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample18() {
-		if(!fixedProbFlag$sample18) {
+	private final void logProbabilityValue$sample15() {
+		if(!fixedProbFlag$sample15) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = b1;
+				double cv$sampleValue = variance;
 				{
 					{
 						double var12 = 1.0;
-						double var13 = 5.0;
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var12) / Math.sqrt(var13))) - (0.5 * Math.log(var13))));
+						double var13 = 1.0;
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var12, var13));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -270,77 +270,26 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var14 = cv$sampleAccumulator;
-			logProbability$b1 = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample18)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample18 = fixedFlag$sample18;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b1;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var14 = cv$rvAccumulator;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample18)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample22() {
-		if(!fixedProbFlag$sample22) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			double cv$probabilityReached = 0.0;
-			{
-				double cv$sampleValue = variance;
-				{
-					{
-						double var16 = 1.0;
-						double var17 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var16, var17));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
 			logProbability$variance = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample22)
+			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample22 = fixedFlag$sample22;
+			fixedProbFlag$sample15 = fixedFlag$sample15;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			double cv$sampleValue = logProbability$variance;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
+			logProbability$var14 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample22)
+			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample38() {
-		if(!fixedProbFlag$sample38) {
+	private final void logProbabilityValue$sample31() {
+		if(!fixedProbFlag$sample31) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -350,8 +299,8 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 					double cv$sampleValue = y[i];
 					{
 						{
-							double var33 = (b0 + (b1 * x[i]));
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var33) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
+							double var29 = (b0 + (b1 * x[i]));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var29) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -371,21 +320,21 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 				double cv$sampleProbability = cv$distributionAccumulator;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var34[((i - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample38[((i - 0) / 1)] = cv$sampleProbability;
+				logProbability$var30[((i - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$sample31[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample38 = (((fixedFlag$sample38 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample22);
+			fixedProbFlag$sample31 = (((fixedFlag$sample31 && fixedFlag$sample7) && fixedFlag$sample11) && fixedFlag$sample15);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample38[((i - 0) / 1)];
+				double cv$sampleValue = logProbability$sample31[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var34[((i - 0) / 1)] = cv$rvAccumulator;
+				logProbability$var30[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -393,32 +342,58 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	private final void sample14() {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		{
+	private final void logProbabilityValue$sample7() {
+		if(!fixedProbFlag$sample7) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			double cv$probabilityReached = 0.0;
 			{
+				double cv$sampleValue = b0;
 				{
-					for(int i = 0; i < noSamples; i += 1) {
-						double cv$denominator = 1.0;
-						double cv$numerator = 0.0;
-						cv$numerator = (cv$numerator + (b1 * x[i]));
-						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-						cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-						if(cv$sigmaNotFound) {
-							cv$sigmaValue = variance;
-							cv$sigmaNotFound = false;
+					{
+						double var4 = 0.0;
+						double var5 = 2.0;
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var4) / Math.sqrt(var5))) - (0.5 * Math.log(var5))));
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
+			if((cv$probabilityReached == 0.0))
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var6 = cv$sampleAccumulator;
+			logProbability$b0 = cv$sampleProbability;
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample7)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample7 = fixedFlag$sample7;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$b0;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var6 = cv$rvAccumulator;
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample7)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
-		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
-	private final void sample18() {
+	private final void sample11() {
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
@@ -445,22 +420,47 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 		b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
-	private final void sample22() {
+	private final void sample15() {
 		double cv$sum = 0.0;
 		int cv$count = 0;
 		{
 			{
 				{
 					for(int i = 0; i < noSamples; i += 1) {
-						double cv$var34$mu = (b0 + (b1 * x[i]));
-						double cv$var34$diff = (cv$var34$mu - y[i]);
-						cv$sum = (cv$sum + (cv$var34$diff * cv$var34$diff));
+						double cv$var30$mu = (b0 + (b1 * x[i]));
+						double cv$var30$diff = (cv$var30$mu - y[i]);
+						cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
 						cv$count = (cv$count + 1);
 					}
 				}
 			}
 		}
 		variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	private final void sample7() {
+		double cv$sum = 0.0;
+		double cv$denominatorSquareSum = 0.0;
+		boolean cv$sigmaNotFound = true;
+		double cv$sigmaValue = 1.0;
+		{
+			{
+				{
+					for(int i = 0; i < noSamples; i += 1) {
+						double cv$denominator = 1.0;
+						double cv$numerator = 0.0;
+						cv$numerator = (cv$numerator + (b1 * x[i]));
+						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+						cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+						if(cv$sigmaNotFound) {
+							cv$sigmaValue = variance;
+							cv$sigmaNotFound = false;
+						}
+					}
+				}
+			}
+		}
+		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	@Override
@@ -474,25 +474,25 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 			}
 		}
 		{
-			logProbability$var34 = new double[((((x.length - 1) - 0) / 1) + 1)];
+			logProbability$var30 = new double[((((x.length - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample38 = new double[((((x.length - 1) - 0) / 1) + 1)];
+			logProbability$sample31 = new double[((((x.length - 1) - 0) / 1) + 1)];
 		}
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		parallelFor(RNG$, 0, noSamples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample38)
+						if(!fixedFlag$sample31)
 							y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$1)) + (b0 + (b1 * x[i])));
 					}
 			}
@@ -501,40 +501,40 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample14)
-				sample14();
-			if(!fixedFlag$sample18)
-				sample18();
-			if(!fixedFlag$sample22)
-				sample22();
+			if(!fixedFlag$sample7)
+				sample7();
+			if(!fixedFlag$sample11)
+				sample11();
+			if(!fixedFlag$sample15)
+				sample15();
 		} else {
-			if(!fixedFlag$sample22)
-				sample22();
-			if(!fixedFlag$sample18)
-				sample18();
-			if(!fixedFlag$sample14)
-				sample14();
+			if(!fixedFlag$sample15)
+				sample15();
+			if(!fixedFlag$sample11)
+				sample11();
+			if(!fixedFlag$sample7)
+				sample7();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -547,21 +547,21 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var10 = 0.0;
-		if(!fixedProbFlag$sample14)
+		logProbability$var6 = 0.0;
+		if(!fixedProbFlag$sample7)
 			logProbability$b0 = 0.0;
-		logProbability$var14 = 0.0;
-		if(!fixedProbFlag$sample18)
+		logProbability$var10 = 0.0;
+		if(!fixedProbFlag$sample11)
 			logProbability$b1 = 0.0;
-		logProbability$var18 = 0.0;
-		if(!fixedProbFlag$sample22)
+		logProbability$var14 = 0.0;
+		if(!fixedProbFlag$sample15)
 			logProbability$variance = 0.0;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var34[((i - 0) / 1)] = 0.0;
+			logProbability$var30[((i - 0) / 1)] = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample38) {
+		if(!fixedProbFlag$sample31) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample38[((i - 0) / 1)] = 0.0;
+				logProbability$sample31[((i - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -573,40 +573,40 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
-		if(fixedFlag$sample18)
-			logProbabilityValue$sample18();
-		if(fixedFlag$sample22)
-			logProbabilityValue$sample22();
-		logProbabilityValue$sample38();
+		if(fixedFlag$sample7)
+			logProbabilityValue$sample7();
+		if(fixedFlag$sample11)
+			logProbabilityValue$sample11();
+		if(fixedFlag$sample15)
+			logProbabilityValue$sample15();
+		logProbabilityValue$sample31();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample18();
-		logProbabilityValue$sample22();
-		logProbabilityValue$sample38();
+		logProbabilityValue$sample7();
+		logProbabilityValue$sample11();
+		logProbabilityValue$sample15();
+		logProbabilityValue$sample31();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample18();
-		logProbabilityValue$sample22();
-		logProbabilityValue$sample38();
+		logProbabilityValue$sample7();
+		logProbabilityValue$sample11();
+		logProbabilityValue$sample15();
+		logProbabilityValue$sample31();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		logModelProbabilitiesVal();
 	}

@@ -14,29 +14,29 @@ interface LinearRegressionBasic$CoreInterface extends org.sandwood.runtime.inter
 	// Setter for b1.
 	public void set$b1(double cv$value);
 
-	// Getter for fixedFlag$sample14.
-	public boolean get$fixedFlag$sample14();
+	// Getter for fixedFlag$sample11.
+	public boolean get$fixedFlag$sample11();
 
-	// Setter for fixedFlag$sample14.
-	public void set$fixedFlag$sample14(boolean cv$value);
+	// Setter for fixedFlag$sample11.
+	public void set$fixedFlag$sample11(boolean cv$value);
 
-	// Getter for fixedFlag$sample18.
-	public boolean get$fixedFlag$sample18();
+	// Getter for fixedFlag$sample15.
+	public boolean get$fixedFlag$sample15();
 
-	// Setter for fixedFlag$sample18.
-	public void set$fixedFlag$sample18(boolean cv$value);
+	// Setter for fixedFlag$sample15.
+	public void set$fixedFlag$sample15(boolean cv$value);
 
-	// Getter for fixedFlag$sample22.
-	public boolean get$fixedFlag$sample22();
+	// Getter for fixedFlag$sample31.
+	public boolean get$fixedFlag$sample31();
 
-	// Setter for fixedFlag$sample22.
-	public void set$fixedFlag$sample22(boolean cv$value);
+	// Setter for fixedFlag$sample31.
+	public void set$fixedFlag$sample31(boolean cv$value);
 
-	// Getter for fixedFlag$sample38.
-	public boolean get$fixedFlag$sample38();
+	// Getter for fixedFlag$sample7.
+	public boolean get$fixedFlag$sample7();
 
-	// Setter for fixedFlag$sample38.
-	public void set$fixedFlag$sample38(boolean cv$value);
+	// Setter for fixedFlag$sample7.
+	public void set$fixedFlag$sample7(boolean cv$value);
 
 	// Getter for logProbability$b0.
 	public double get$logProbability$b0();

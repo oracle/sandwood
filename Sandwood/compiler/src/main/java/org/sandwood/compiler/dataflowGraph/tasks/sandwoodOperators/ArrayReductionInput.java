@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -33,6 +33,11 @@ public class ArrayReductionInput<A extends Variable<A>> extends ReductionInput<A
     @Override
     public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
         return emptyValue.getParent().getPossibleLengths();
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        return emptyValue.getLength(compilationCtx);
     }
 
     @Override

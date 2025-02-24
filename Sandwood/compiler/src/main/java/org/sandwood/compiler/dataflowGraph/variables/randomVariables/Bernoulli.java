@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,14 +11,20 @@ package org.sandwood.compiler.dataflowGraph.variables.randomVariables;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.eq;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
+import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SingleSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.BernoulliTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -68,8 +74,23 @@ public class Bernoulli extends DistributableRandomVariable<BooleanVariable, Bern
     }
 
     @Override
-    public IntVariable getNoStates() {
-        return Variable.intVariable(2);
+    protected boolean numStatesIsDistribution() {
+        return false;
+    }
+
+    @Override
+    protected Set<VariableWrapper<IntVariable>> getPossibleNumStates() {
+        Set<VariableWrapper<IntVariable>> s = new HashSet<>();
+        s.add(new VariableWrapper<>(getNumStatesInternal()));
+        return s;
+    }
+
+    @Override
+    protected IntVariable getNumStatesInternal() {
+        ScopeStack.pushScope(GlobalScope.scope);
+        IntVariable i = Variable.intVariable(2);
+        ScopeStack.popScope(GlobalScope.scope);
+        return i;
     }
 
     public static Bernoulli bernoulli(double p) {

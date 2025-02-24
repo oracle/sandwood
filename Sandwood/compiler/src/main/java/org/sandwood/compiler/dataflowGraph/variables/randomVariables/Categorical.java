@@ -1,12 +1,14 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.compiler.dataflowGraph.variables.randomVariables;
+
+import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
@@ -16,6 +18,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.Categ
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -60,11 +63,21 @@ public class Categorical extends NumericDistributableRandomVariable<IntVariable,
     @Override
     public IRTreeReturn<IntVariable> getSampleTree(IntVariable sample, CompilationContext compilationCtx) {
         return IRTree.functionCallReturn(FunctionType.SAMPLE, VariableType.IntVariable, getType(),
-                elementWeights.getForwardIR(compilationCtx));
+                elementWeights.getForwardIR(compilationCtx), elementWeights.getLength(compilationCtx));
     }
 
     @Override
-    public IntVariable getNoStates() {
+    protected boolean numStatesIsDistribution() {
+        return elementWeights.isDistribution();
+    }
+
+    @Override
+    protected Set<VariableWrapper<IntVariable>> getPossibleNumStates() {
+        return elementWeights.getPossibleLengths();
+    }
+
+    @Override
+    protected IntVariable getNumStatesInternal() {
         return elementWeights.scopedLength(getParent().getLocation());
     }
 

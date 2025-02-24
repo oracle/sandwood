@@ -6,11 +6,11 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional2d$CoreInterface {
 	
 	// Declare the variables for the model.
-	private double[] cv$var6$stateProbabilityGlobal;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample7 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample7 = false;
+	private double[] cv$var4$stateProbabilityGlobal;
+	private boolean fixedFlag$sample4 = false;
+	private boolean fixedFlag$sample8 = false;
+	private boolean fixedProbFlag$sample4 = false;
+	private boolean fixedProbFlag$sample8 = false;
 	private boolean guard;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -19,7 +19,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$u;
 	private double logProbability$value;
 	private double logProbability$value2;
-	private double logProbability$var9;
+	private double logProbability$var7;
 	private double[] observedValue;
 	private boolean system$gibbsForward = true;
 	private double u;
@@ -30,40 +30,40 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample11.
+	// Getter for fixedFlag$sample4.
 	@Override
-	public final boolean get$fixedFlag$sample11() {
-		return fixedFlag$sample11;
+	public final boolean get$fixedFlag$sample4() {
+		return fixedFlag$sample4;
 	}
 
-	// Setter for fixedFlag$sample11.
+	// Setter for fixedFlag$sample4.
 	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
+	public final void set$fixedFlag$sample4(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample4 including if probabilities
 		// need to be updated.
-		fixedFlag$sample11 = cv$value;
+		fixedFlag$sample4 = cv$value;
 		
-		// Should the probability of sample 11 be set to fixed. This will only every change
+		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
+		fixedProbFlag$sample4 = (fixedFlag$sample4 && fixedProbFlag$sample4);
 	}
 
-	// Getter for fixedFlag$sample7.
+	// Getter for fixedFlag$sample8.
 	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
+	public final boolean get$fixedFlag$sample8() {
+		return fixedFlag$sample8;
 	}
 
-	// Setter for fixedFlag$sample7.
+	// Setter for fixedFlag$sample8.
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
+	public final void set$fixedFlag$sample8(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample8 including if probabilities
 		// need to be updated.
-		fixedFlag$sample7 = cv$value;
+		fixedFlag$sample8 = cv$value;
 		
-		// Should the probability of sample 7 be set to fixed. This will only every change
+		// Should the probability of sample 8 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
+		fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedProbFlag$sample8);
 	}
 
 	// Getter for guard.
@@ -79,8 +79,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// be updated.
 		guard = cv$value;
 		
-		// Unset the fixed probability flag for sample 7 as it depends on guard.
-		fixedProbFlag$sample7 = false;
+		// Unset the fixed probability flag for sample 4 as it depends on guard.
+		fixedProbFlag$sample4 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -151,8 +151,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Set flags for all the side effects of u including if probabilities need to be updated.
 		u = cv$value;
 		
-		// Unset the fixed probability flag for sample 11 as it depends on u.
-		fixedProbFlag$sample11 = false;
+		// Unset the fixed probability flag for sample 8 as it depends on u.
+		fixedProbFlag$sample8 = false;
 	}
 
 	// Getter for value.
@@ -167,164 +167,11 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		return value2;
 	}
 
-	// Calculate the probability of the samples represented by sample11 using sampled
-	// values.
-	private final void logProbabilityValue$sample11() {
-		// Determine if we need to calculate the values for sample task 11 or if we should
+	// Calculate the probability of the samples represented by sample4 using sampled values.
+	private final void logProbabilityValue$sample4() {
+		// Determine if we need to calculate the values for sample task 4 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample11) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// An accumulator for log probabilities.
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			
-			// An accumulator for the distributed probability space covered.
-			double cv$probabilityReached = 0.0;
-			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = u;
-				{
-					{
-						double var7 = 0.0;
-						double var8 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((var7 <= cv$sampleValue) && (cv$sampleValue <= var8))?(-Math.log((var8 - var7))):Double.NEGATIVE_INFINITY));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				// Return negative infinity if no distribution probability space is reached.
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				// Scale the probability relative to the observed distribution space.
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
-			
-			// Store the sample task probability
-			logProbability$u = cv$sampleProbability;
-			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value2 = true;
-						
-						// Update the variable probability
-						logProbability$value2 = (logProbability$value2 + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample11 = fixedFlag$sample11;
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$u;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
-			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value2 = true;
-						
-						// Update the variable probability
-						logProbability$value2 = (logProbability$value2 + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample7 using sampled values.
-	private final void logProbabilityValue$sample7() {
-		// Determine if we need to calculate the values for sample task 7 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample7) {
+		if(!fixedProbFlag$sample4) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -342,10 +189,10 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				boolean cv$sampleValue = guard;
 				{
 					{
-						double var4 = 0.5;
+						double var2 = 0.5;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var4));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var2));
 						{
 							{
 								if(guard) {
@@ -425,12 +272,12 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+			fixedProbFlag$sample4 = fixedFlag$sample4;
 		}
 		// Using cached values.
 		else {
@@ -476,24 +323,176 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
+	// Calculate the probability of the samples represented by sample8 using sampled values.
+	private final void logProbabilityValue$sample8() {
+		// Determine if we need to calculate the values for sample task 8 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample8) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = u;
+				{
+					{
+						double var5 = 0.0;
+						double var6 = 1.0;
+						
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + (((var5 <= cv$sampleValue) && (cv$sampleValue <= var6))?(-Math.log((var6 - var5))):Double.NEGATIVE_INFINITY));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
+					}
+				}
+			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var7 = cv$sampleAccumulator;
+			
+			// Store the sample task probability
+			logProbability$u = cv$sampleProbability;
+			
+			// Guard to ensure that value is only updated once for this probability.
+			boolean cv$guard$value = false;
+			
+			// Guard to ensure that value2 is only updated once for this probability.
+			boolean cv$guard$value2 = false;
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				if(!guard) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$value) {
+						// Set the guard so the update is only applied once.
+						cv$guard$value = true;
+						
+						// Update the variable probability
+						logProbability$value = (logProbability$value + cv$accumulator);
+					}
+				}
+			}
+			{
+				if(!guard) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$value2) {
+						// Set the guard so the update is only applied once.
+						cv$guard$value2 = true;
+						
+						// Update the variable probability
+						logProbability$value2 = (logProbability$value2 + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample8 = fixedFlag$sample8;
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$u;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var7 = cv$rvAccumulator;
+			
+			// Guard to ensure that value is only updated once for this probability.
+			boolean cv$guard$value = false;
+			
+			// Guard to ensure that value2 is only updated once for this probability.
+			boolean cv$guard$value2 = false;
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				if(!guard) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$value) {
+						// Set the guard so the update is only applied once.
+						cv$guard$value = true;
+						
+						// Update the variable probability
+						logProbability$value = (logProbability$value + cv$accumulator);
+					}
+				}
+			}
+			{
+				if(!guard) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$value2) {
+						// Set the guard so the update is only applied once.
+						cv$guard$value2 = true;
+						
+						// Update the variable probability
+						logProbability$value2 = (logProbability$value2 + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 7 drawn from bernoulli. Inference was performed using variable marginalization.
-	private final void sample7() {
+	// by sample task 4 drawn from bernoulli. Inference was performed using variable marginalization.
+	private final void sample4() {
 		// Calculate the number of states to evaluate.
-		int cv$noStates = 0;
+		int cv$numNumStates = 0;
 		{
 			// variable marginalization
-			cv$noStates = Math.max(cv$noStates, 2);
+			cv$numNumStates = Math.max(cv$numNumStates, 2);
 		}
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var6$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
+		double[] cv$stateProbabilityLocal = cv$var4$stateProbabilityGlobal;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -515,16 +514,16 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double cv$temp$0$var4;
+				double cv$temp$0$var2;
 				{
-					cv$temp$0$var4 = 0.5;
+					cv$temp$0$var2 = 0.5;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var4));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var2));
 				
-				// Processing conditional point20.
+				// Processing conditional point17.
 				{
 					{
 						{
@@ -607,7 +606,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -623,7 +622,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -634,20 +633,20 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$noStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal) == 1);
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates) == 1);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -655,8 +654,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Allocation of cv$var6$stateProbabilityGlobal for single threaded execution
-		cv$var6$stateProbabilityGlobal = new double[2];
+		// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
+		cv$var4$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -674,17 +673,17 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(!fixedFlag$sample11)
+		if(!fixedFlag$sample8)
 			u = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		if(guard)
 			value = 1.0;
 		else {
-			if(!fixedFlag$sample11)
+			if(!fixedFlag$sample8)
 				value = u;
 		}
-		if(!(fixedFlag$sample7 && fixedFlag$sample11))
+		if(!(fixedFlag$sample4 && fixedFlag$sample8))
 			value2[0] = value;
 	}
 
@@ -692,7 +691,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
@@ -700,7 +699,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
@@ -709,13 +708,13 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample7)
-				sample7();
+			if(!fixedFlag$sample4)
+				sample4();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample7)
-				sample7();
+			if(!fixedFlag$sample4)
+				sample4();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -738,12 +737,12 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
-		if(!fixedProbFlag$sample7)
+		logProbability$value = 0.0;
+		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
-		logProbability$var9 = 0.0;
-		if(!fixedProbFlag$sample11)
+		logProbability$var7 = 0.0;
+		if(!fixedProbFlag$sample8)
 			logProbability$u = 0.0;
 	}
 
@@ -764,9 +763,9 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample7)
-			logProbabilityValue$sample7();
-		logProbabilityValue$sample11();
+		if(fixedFlag$sample4)
+			logProbabilityValue$sample4();
+		logProbabilityValue$sample8();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -784,8 +783,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample11();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample8();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -802,8 +801,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample11();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample8();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then

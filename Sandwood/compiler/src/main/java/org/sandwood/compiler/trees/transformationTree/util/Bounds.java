@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -184,7 +184,7 @@ public class Bounds {
         Map<TreeID, Stack<MinMax>> m = bounds.get(desc);
         if(m == null) {
             // Special case for array lengths.
-            if(VariableNames.isLengthName(desc.name.getName()))
+            if(VariableNames.isLengthName(desc.name))
                 return (TransTreeReturn<X>) TransTree.constant(0);
             else
                 return null;
@@ -258,7 +258,7 @@ public class Bounds {
     private <X extends Variable<X>> TransTreeReturn<X> getMin(VariableDescription<?> desc, Stack<MinMax> s) {
         if(s == null) {
             // Special case for array lengths.
-            if(VariableNames.isLengthName(desc.name.getName()))
+            if(VariableNames.isLengthName(desc.name))
                 return (TransTreeReturn<X>) TransTree.constant(0);
             else
                 return null;

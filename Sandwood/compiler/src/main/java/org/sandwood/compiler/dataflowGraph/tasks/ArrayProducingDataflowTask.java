@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -20,6 +20,8 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 public interface ArrayProducingDataflowTask<A extends Variable<A>> extends ProducingDataflowTask<ArrayVariable<A>> {
 
     Set<VariableWrapper<IntVariable>> getPossibleLengths();
+
+    IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx);
 
     IRTreeReturn<IntVariable> getMaxLength(CompilationContext compilationCtx);
 

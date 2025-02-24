@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -10,6 +10,9 @@ package org.sandwood.compiler.dataflowGraph.variables.randomVariables;
 
 import static org.sandwood.compiler.trees.irTree.IRTree.addII;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
@@ -21,6 +24,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.Binom
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
@@ -71,12 +75,24 @@ public class Binomial extends NumericDistributableRandomVariable<IntVariable, Bi
     }
 
     @Override
-    public IntVariable getNoStates() {
+    protected boolean numStatesIsDistribution() {
+        return length.isDistribution();
+    }
+
+    @Override
+    protected Set<VariableWrapper<IntVariable>> getPossibleNumStates() {
+        Set<VariableWrapper<IntVariable>> s = new HashSet<>();
+        s.add(new VariableWrapper<>(length));
+        return s;
+    }
+
+    @Override
+    protected IntVariable getNumStatesInternal() {
         Scope enclosingScope = length.scope();
         ScopeStack.pushScope(enclosingScope);
-        IntVariable noStates = length.add(Variable.intVariable(1));
+        IntVariable numStates = length.add(Variable.intVariable(1));
         ScopeStack.popScope(enclosingScope);
-        return noStates;
+        return numStates;
     }
 
     public static Binomial binomial(double p, int length) {

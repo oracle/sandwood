@@ -32,13 +32,13 @@ public class LinearRegression2Fail extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample14(fixed);
+                system$c.set$fixedFlag$sample7(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample14())
+            if(system$c.get$fixedFlag$sample7())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -67,13 +67,13 @@ public class LinearRegression2Fail extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample18(fixed);
+                system$c.set$fixedFlag$sample11(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample18())
+            if(system$c.get$fixedFlag$sample11())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -102,13 +102,13 @@ public class LinearRegression2Fail extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample22(fixed);
+                system$c.set$fixedFlag$sample15(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample22())
+            if(system$c.get$fixedFlag$sample15())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -137,13 +137,13 @@ public class LinearRegression2Fail extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample38(fixed);
+                system$c.set$fixedFlag$sample31(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample38())
+            if(system$c.get$fixedFlag$sample31())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -277,13 +277,13 @@ public class LinearRegression2Fail extends Model {
 
         //Set fixed flags
         if(b0.isSet())
-            newCore.set$fixedFlag$sample14(oldCore.get$fixedFlag$sample14());
+            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
         if(b1.isSet())
-            newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
+            newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
         if(variance.isSet())
-            newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
+            newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15());
         if(y.isSet())
-            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
+            newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31());
     }
 
     /**

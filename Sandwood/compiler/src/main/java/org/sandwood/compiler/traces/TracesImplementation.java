@@ -25,12 +25,14 @@ import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.ConstructArrayInput;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
+import org.sandwood.compiler.dataflowGraph.transformations.DAGTransformations;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -123,6 +125,10 @@ public class TracesImplementation extends Traces {
     // A set of model generated variables whose value is fixed by either direct or later observations.
     private final Set<Variable<?>> evidenceVariables = new HashSet<>();
 
+    // A map from tasks that generate an array from an array to traces that describe the possible histories of the array
+    // in the outer array.
+    private final Map<GetTask<?>, LengthTraceDesc> lengthTraces = new HashMap<>();
+
     /**
      * TODO currently using a variable as a means of collecting the graph, a neater way would be nice, but I don't want
      * state to leak between programs, so some form of context object would be required, and a clean way of adding that
@@ -133,6 +139,8 @@ public class TracesImplementation extends Traces {
     }
 
     public static Traces getTraces(Variable<?>... vs) {
+        // Apply DAG transformations before we start the rest of the compilation.
+        DAGTransformations.apply(vs);
         return new TracesImplementation(vs);
     }
 
@@ -217,17 +225,94 @@ public class TracesImplementation extends Traces {
 
         constructDependencies(dagInfo);
 
+        constructArrayLengthTraces(dagInfo);
+
         constructInputSets();
 
         setUniqueNames();
+    }
+
+    /**
+     * A method to extract from traces all the traces between the putting of an array into an array and the point that
+     * array is returned by a get, or an array computed from the array is returned.
+     * 
+     * @param dagInfo
+     */
+    private void constructArrayLengthTraces(DAGInfo dagInfo) {
+        List<Trace> partialTraces = new ArrayList<>();
+        Trace sourceTrace = new Trace();
+        for(TraceSinkPair p:dagInfo.allTraces()) {
+            sourceTrace.clear();
+            for(int i = 0; i < p.handle.size(); i++) {
+                DataflowTaskArgDesc d = p.handle.get(i);
+                sourceTrace.add(d);
+                switch(d.task.getType()) {
+                    case GET:
+                        LengthTraceDesc ld = lengthTraces.computeIfAbsent((GetTask<?>) d.task,
+                                k -> new LengthTraceDesc());
+                        if(!partialTraces.isEmpty()) {
+                            for(Trace t:partialTraces)
+                                t.add(d);
+                            Trace trace = partialTraces.remove(partialTraces.size() - 1);
+                            ld.addTraceToPut(TraceHandle.getTraceHandle(trace));
+                        }
+                        break;
+                    case GET_LENGTH:
+                        partialTraces.clear();
+                        break;
+                    case PUT:
+                        if(d.argPos == 2) {
+                            PutTask<?> pt = (PutTask<?>) d.task;
+                            if(pt.value.getType().isArray()) {
+                                Trace trace = new Trace();
+                                partialTraces.add(trace);
+                                for(Trace t:partialTraces)
+                                    t.add(d);
+                            }
+                        } else {
+                            partialTraces.clear();
+                        }
+                        break;
+                    case REDUCE_INPUT:
+                        if(d.argPos == 2) {
+                            for(Trace t:partialTraces)
+                                t.add(d);
+                        } else
+                            partialTraces.clear();
+                        break;
+                    case REDUCTION_RETURN:
+                        for(Trace t:partialTraces)
+                            t.add(d);
+                        break;
+                    default:
+                        assert partialTraces.isEmpty();
+                        break;
+
+                }
+            }
+            partialTraces.clear();
+        }
+
+    }
+
+    @Override
+    public LengthTraceDesc getLengthTraces(GetTask<?> t) {
+        return lengthTraces.get(t);
     }
 
     private void constructInputSets() {
         // Index to allow the variables to be looked up by name quickly.
         Map<VariableName, Variable<?>> inputNames = new HashMap<>();
         for(Variable<?> v:observedVariables) {
-            if(v.getParent().getType() == DFType.CONSTRUCT_INPUT)
+            ProducingDataflowTask<?> d = v.getParent();
+            if(d.getType() == DFType.CONSTRUCT_INPUT) {
                 inputNames.put(v.getVarDesc().name, v);
+                if(v.getType().isArray()) {
+                    Variable<?> shape = ((ConstructArrayInput<?>) d).shapeVar();
+                    if(shape != null)
+                        inputNames.put(shape.getVarDesc().name, shape);
+                }
+            }
         }
 
         for(Variable<?> v:observedVariables) {
@@ -394,13 +479,19 @@ public class TracesImplementation extends Traces {
             }
             case CONSTRUCT_INPUT: {
                 Variable<?> output = sourceTask.getOutput();
-                modelInputs.add(output);
+                if(shapeParameterRequired(handle)) {
+                    Variable<?> lengthVar = ((ConstructArrayInput<?>) sourceTask).shapeVar();
+                    modelInputs.add(lengthVar);
+                    namedVariables.put(lengthVar.getVarDesc().name, lengthVar);
+                    allVariables.add(lengthVar);
+                } else
+                    modelInputs.add(output);
                 /*
                  * Check that none of the deterministic intermediates have been removed. If they have this means that
                  * the model is consuming and conditioning on the same values. This is currently not supported as it
-                 * does not allow the execution of models in cases such as linear regression. In future we should weaken
-                 * this by subclassing the model class and and providing models that do not support execution if this
-                 * separation is not maintained.
+                 * does not allow the execution of models in cases such as linear regression. TODO In future we should
+                 * weaken this by subclassing the model class and and providing models that do not support execution if
+                 * this separation is not maintained.
                  */
                 int size = handle.size();
                 for(int i = 1; i < size; i++) {
@@ -434,6 +525,29 @@ public class TracesImplementation extends Traces {
                 break;
             }
         }
+    }
+
+    private boolean shapeParameterRequired(TraceHandle handle) {
+        ProducingDataflowTask<?> t = handle.get(0).task;
+        if(t.getOutputType().isArray()) {
+            if(((ConstructArrayInput<?>) t).shapeVar() == null)
+                return false;
+            int length = handle.size();
+            for(int i = 1; i < length; i++) {
+                DataflowTaskArgDesc d = handle.get(i);
+                switch(d.task.getType()) {
+                    case GET:
+                        if(d.argPos != 0)
+                            return false;
+                        break;
+                    case GET_LENGTH:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+        return false;
     }
 
     private DataflowTaskArgDesc recordConditionalTrace(SampleTask<?, ?> sourceSample, TraceHandle handle) {
@@ -524,7 +638,7 @@ public class TracesImplementation extends Traces {
         SplitConditionalTraces s = conditionalTraces.computeIfAbsent(breakPoint.task,
                 k -> new SplitConditionalTraces());
         s.addSinkToConditional(TraceHandle.getTraceHandle(start));
-        s.addConditionalToSource(d, (SampleTask<?,?>) end.get(0).task, TraceHandle.getTraceHandle(end));
+        s.addConditionalToSource(d, (SampleTask<?, ?>) end.get(0).task, TraceHandle.getTraceHandle(end));
 
         recordObservedConditionalTraces(h);
     }
@@ -732,12 +846,19 @@ public class TracesImplementation extends Traces {
                 setSampleVariableTraces.add(toSampleHandle);
                 addToVarToSample(splitTrace.sampleVar, sourceRV);
 
-                SampleTraceDesc sampleTraceDesc = sampleTrace.computeIfAbsent(sourceSample, k -> new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle));
+                SampleTraceDesc sampleTraceDesc = sampleTrace.computeIfAbsent(sourceSample,
+                        k -> new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle));
                 sampleTraceDesc.toConsumingRV.put(sink, TraceHandle.getTraceHandle(splitTrace.fromConsumer));
                 break;
             }
             case CONSTRUCT_INPUT: {
-                modelInputs.add(sourceTask.getOutput());
+                if(shapeParameterRequired(handle)) {
+                    Variable<?> lengthVar = ((ConstructArrayInput<?>) sourceTask).shapeVar();
+                    modelInputs.add(lengthVar);
+                    namedVariables.put(lengthVar.getVarDesc().name, lengthVar);
+                    allVariables.add(lengthVar);
+                } else
+                    modelInputs.add(sourceTask.getOutput());
                 break;
             }
             case CONSTANT_BOOLEAN:
@@ -771,13 +892,13 @@ public class TracesImplementation extends Traces {
                     // should be ignored.
                     case ARRAY_CONSTRUCTOR:
                         return false;
-                        // If the value goes via condition the trace should be ignored as the condition will appear in the
-                        // traces that go via the values.
+                    // If the value goes via condition the trace should be ignored as the condition will appear in the
+                    // traces that go via the values.
                     case IF_ASSIGNMENT:
                         if(d.task.getOutputType().isArray() && d.argPos == 0)
                             return false;
                         break;
-                        // As all passed arrays are populated this operation does not need to be filtered out.
+                    // As all passed arrays are populated this operation does not need to be filtered out.
                     case CONSTRUCT_INPUT:
                         break;
                     case GET:
@@ -1031,25 +1152,25 @@ public class TracesImplementation extends Traces {
     }
 
     private void addTerminalChild(TraceSinkPair p) {
-        TraceHandle h = p.handle;
+        TraceHandle handle = p.handle;
         Variable<?> sink = p.sink;
-        DataflowTaskArgDesc d = h.get(0);
+        DataflowTaskArgDesc d = handle.get(0);
         ProducingDataflowTask<?> sourceTask = d.task;
 
-        findTerminalVariables(h);
+        findTerminalVariables(handle);
 
         switch(sourceTask.getType()) {
             case SAMPLE: {
                 SampleTask<?, ?> sourceSample = (SampleTask<?, ?>) sourceTask;
                 RandomVariable<?, ?> sourceRV = sourceSample.randomVariable;
-                addIntermediates(h);
+                addIntermediates(handle);
                 allSampleTasks.add(sourceSample);
                 sink = sink.getCurrentInstance();
-                findTerminalVariables(h);
+                findTerminalVariables(handle);
                 addToVarToSample(sink, sourceRV);
-                addVariableSource(h, sourceSample);
+                addVariableSource(handle, sourceSample);
 
-                SplitTrace splitTrace = splitTrace(h);
+                SplitTrace splitTrace = splitTrace(handle);
 
                 TraceHandle toSampleHandle = TraceHandle.getTraceHandle(splitTrace.toSample);
                 SampleTraceDesc intermediateDesc = sampleTrace.get(sourceSample);
@@ -1060,7 +1181,13 @@ public class TracesImplementation extends Traces {
                 break;
             }
             case CONSTRUCT_INPUT: {
-                modelInputs.add(sourceTask.getOutput());
+                if(shapeParameterRequired(handle)) {
+                    Variable<?> lengthVar = ((ConstructArrayInput<?>) sourceTask).shapeVar();
+                    modelInputs.add(lengthVar);
+                    namedVariables.put(lengthVar.getVarDesc().name, lengthVar);
+                    allVariables.add(lengthVar);
+                } else
+                    modelInputs.add(sourceTask.getOutput());
                 break;
             }
             case CONSTANT_BOOLEAN:
@@ -1073,7 +1200,7 @@ public class TracesImplementation extends Traces {
                 assert observedVar.isObserved();
 
                 // Record the observed variable as a source.
-                addVariableSource(h, observedVar);
+                addVariableSource(handle, observedVar);
                 break;
             }
 
@@ -1081,7 +1208,7 @@ public class TracesImplementation extends Traces {
     }
 
     private void setFlags(TraceSinkPair p) {
-        if(!p.handle.get(0).task.deterministic()) {
+        if(!p.handle.get(0).task.isDeterministic()) {
             for(DataflowTaskArgDesc a:p.handle)
                 a.task.setNonDeterministic();
             p.sink.setNonDeterministic();
@@ -1150,14 +1277,17 @@ public class TracesImplementation extends Traces {
 
     /**
      * A method to record the variables set by a sample task.
-     * @param h The trace from the sample task.
-     * @param changePoint The point that a trace stops being observed, null if there is no point where the trace changes from observed to unobserved.
+     * 
+     * @param h           The trace from the sample task.
+     * @param changePoint The point that a trace stops being observed, null if there is no point where the trace changes
+     *                    from observed to unobserved.
      */
     private void addIntermediates(TraceHandle h, DataflowTaskArgDesc changePoint) {
         SampleTask<?, ?> sample = (SampleTask<?, ?>) h.get(0).task;
         Set<Variable<?>> intermediateVars = h.getIntermediates();
 
-        IntermediateDesc intermediates = sampleToIntermediates.computeIfAbsent(sample, k -> new IntermediateDesc(sample));
+        IntermediateDesc intermediates = sampleToIntermediates.computeIfAbsent(sample,
+                k -> new IntermediateDesc(sample));
         intermediates.addVariables(intermediateVars, h, changePoint);
 
         for(Variable<?> v:intermediateVars) {

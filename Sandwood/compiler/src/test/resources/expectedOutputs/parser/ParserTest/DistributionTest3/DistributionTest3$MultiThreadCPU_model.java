@@ -6,24 +6,24 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest3$CoreInterface {
 	
 	// Declare the variables for the model.
+	private double[] cv$var4$stateProbabilityGlobal;
 	private double[] cv$var6$stateProbabilityGlobal;
-	private double[] cv$var8$stateProbabilityGlobal;
-	private double[] distribution$sample7;
-	private double[] distribution$sample9;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample7 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample7 = false;
-	private boolean fixedProbFlag$sample9 = false;
+	private double[] distribution$sample4;
+	private double[] distribution$sample6;
+	private boolean fixedFlag$sample12 = false;
+	private boolean fixedFlag$sample4 = false;
+	private boolean fixedFlag$sample6 = false;
+	private boolean fixedProbFlag$sample12 = false;
+	private boolean fixedProbFlag$sample4 = false;
+	private boolean fixedProbFlag$sample6 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$v;
 	private double logProbability$v1;
 	private double logProbability$v2;
-	private double logProbability$var13;
+	private double logProbability$var11;
+	private double logProbability$var3;
 	private double logProbability$var5;
-	private double logProbability$var7;
 	private boolean system$gibbsForward = true;
 	private boolean v;
 	private int v1;
@@ -35,66 +35,66 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample15.
+	// Getter for fixedFlag$sample12.
 	@Override
-	public final boolean get$fixedFlag$sample15() {
-		return fixedFlag$sample15;
+	public final boolean get$fixedFlag$sample12() {
+		return fixedFlag$sample12;
 	}
 
-	// Setter for fixedFlag$sample15.
+	// Setter for fixedFlag$sample12.
 	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample15 including if probabilities
+	public final void set$fixedFlag$sample12(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample12 including if probabilities
 		// need to be updated.
-		fixedFlag$sample15 = cv$value;
+		fixedFlag$sample12 = cv$value;
 		
-		// Should the probability of sample 15 be set to fixed. This will only every change
+		// Should the probability of sample 12 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample15 = (fixedFlag$sample15 && fixedProbFlag$sample15);
+		fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedProbFlag$sample12);
 	}
 
-	// Getter for fixedFlag$sample7.
+	// Getter for fixedFlag$sample4.
 	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
+	public final boolean get$fixedFlag$sample4() {
+		return fixedFlag$sample4;
 	}
 
-	// Setter for fixedFlag$sample7.
+	// Setter for fixedFlag$sample4.
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
+	public final void set$fixedFlag$sample4(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample4 including if probabilities
 		// need to be updated.
-		fixedFlag$sample7 = cv$value;
+		fixedFlag$sample4 = cv$value;
 		
-		// Should the probability of sample 7 be set to fixed. This will only every change
+		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
+		fixedProbFlag$sample4 = (fixedFlag$sample4 && fixedProbFlag$sample4);
 		
-		// Should the probability of sample 15 be set to fixed. This will only every change
+		// Should the probability of sample 12 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample15 = (fixedFlag$sample7 && fixedProbFlag$sample15);
+		fixedProbFlag$sample12 = (fixedFlag$sample4 && fixedProbFlag$sample12);
 	}
 
-	// Getter for fixedFlag$sample9.
+	// Getter for fixedFlag$sample6.
 	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
+	public final boolean get$fixedFlag$sample6() {
+		return fixedFlag$sample6;
 	}
 
-	// Setter for fixedFlag$sample9.
+	// Setter for fixedFlag$sample6.
 	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
+	public final void set$fixedFlag$sample6(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample6 including if probabilities
 		// need to be updated.
-		fixedFlag$sample9 = cv$value;
+		fixedFlag$sample6 = cv$value;
 		
-		// Should the probability of sample 9 be set to fixed. This will only every change
+		// Should the probability of sample 6 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
+		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
 		
-		// Should the probability of sample 15 be set to fixed. This will only every change
+		// Should the probability of sample 12 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample15 = (fixedFlag$sample9 && fixedProbFlag$sample15);
+		fixedProbFlag$sample12 = (fixedFlag$sample6 && fixedProbFlag$sample12);
 	}
 
 	// Getter for logProbability$$evidence.
@@ -139,8 +139,8 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Set flags for all the side effects of v including if probabilities need to be updated.
 		v = cv$value;
 		
-		// Unset the fixed probability flag for sample 15 as it depends on v.
-		fixedProbFlag$sample15 = false;
+		// Unset the fixed probability flag for sample 12 as it depends on v.
+		fixedProbFlag$sample12 = false;
 	}
 
 	// Getter for v1.
@@ -156,11 +156,11 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// updated.
 		v1 = cv$value;
 		
-		// Unset the fixed probability flag for sample 7 as it depends on v1.
-		fixedProbFlag$sample7 = false;
+		// Unset the fixed probability flag for sample 4 as it depends on v1.
+		fixedProbFlag$sample4 = false;
 		
-		// Unset the fixed probability flag for sample 15 as it depends on v1.
-		fixedProbFlag$sample15 = false;
+		// Unset the fixed probability flag for sample 12 as it depends on v1.
+		fixedProbFlag$sample12 = false;
 	}
 
 	// Getter for v2.
@@ -176,11 +176,11 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// updated.
 		v2 = cv$value;
 		
-		// Unset the fixed probability flag for sample 9 as it depends on v2.
-		fixedProbFlag$sample9 = false;
+		// Unset the fixed probability flag for sample 6 as it depends on v2.
+		fixedProbFlag$sample6 = false;
 		
-		// Unset the fixed probability flag for sample 15 as it depends on v2.
-		fixedProbFlag$sample15 = false;
+		// Unset the fixed probability flag for sample 12 as it depends on v2.
+		fixedProbFlag$sample12 = false;
 	}
 
 	// Getter for value.
@@ -209,12 +209,12 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		weightings = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample15 using probability
+	// Calculate the probability of the samples represented by sample12 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample15() {
-		// Determine if we need to calculate the values for sample task 15 or if we should
+	private final void logProbabilityDistribution$sample12() {
+		// Determine if we need to calculate the values for sample task 12 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample15) {
+		if(!fixedProbFlag$sample12) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -228,20 +228,20 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			
-			// Look for paths between the variable and the sample task 15 including any distribution
+			// Look for paths between the variable and the sample task 12 including any distribution
 			// values.
 			{
 				// The sample value to calculate the probability of generating
 				boolean cv$sampleValue = v;
 				
-				// Enumerating the possible arguments for Bernoulli 13.
-				if(fixedFlag$sample7) {
-					if(fixedFlag$sample9) {
+				// Enumerating the possible arguments for Bernoulli 11.
+				if(fixedFlag$sample4) {
+					if(fixedFlag$sample6) {
 						{
-							double var12 = (((1.0 * v1) + v1) / v2);
+							double var10 = (((1.0 * v1) + v1) / v2);
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -259,17 +259,17 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						}
 					} else {
 						if(true) {
-							// Enumerating the possible outputs of Categorical 7.
-							for(int index$sample9$14 = 0; index$sample9$14 < weightings.length; index$sample9$14 += 1) {
-								int distributionTempVariable$v2$16 = index$sample9$14;
+							// Enumerating the possible outputs of Categorical 5.
+							for(int index$sample6$14 = 0; index$sample6$14 < weightings.length; index$sample6$14 += 1) {
+								int distributionTempVariable$v2$16 = index$sample6$14;
 								
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample9Value15 = (1.0 * distribution$sample9[index$sample9$14]);
+								double cv$probabilitySample6Value15 = (1.0 * distribution$sample6[index$sample6$14]);
 								{
-									double var12 = (((1.0 * v1) + v1) / distributionTempVariable$v2$16);
+									double var10 = (((1.0 * v1) + v1) / distributionTempVariable$v2$16);
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample9Value15) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample6Value15) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -283,32 +283,32 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									}
 									
 									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample9Value15);
+									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample6Value15);
 								}
 							}
 						}
 					}
 				} else {
 					if(true) {
-						// Enumerating the possible outputs of Categorical 5.
-						for(int index$sample7$3 = 0; index$sample7$3 < weightings.length; index$sample7$3 += 1) {
-							int distributionTempVariable$v1$5 = index$sample7$3;
+						// Enumerating the possible outputs of Categorical 3.
+						for(int index$sample4$3 = 0; index$sample4$3 < weightings.length; index$sample4$3 += 1) {
+							int distributionTempVariable$v1$5 = index$sample4$3;
 							
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample7Value4 = (1.0 * distribution$sample7[index$sample7$3]);
+							double cv$probabilitySample4Value4 = (1.0 * distribution$sample4[index$sample4$3]);
 							if(!true) {
-								// Enumerating the possible outputs of Categorical 5.
-								for(int index$sample7$9 = 0; index$sample7$9 < weightings.length; index$sample7$9 += 1) {
-									int distributionTempVariable$v1$11 = index$sample7$9;
+								// Enumerating the possible outputs of Categorical 3.
+								for(int index$sample4$9 = 0; index$sample4$9 < weightings.length; index$sample4$9 += 1) {
+									int distributionTempVariable$v1$11 = index$sample4$9;
 									
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample7Value10 = (cv$probabilitySample7Value4 * distribution$sample7[index$sample7$9]);
-									if(fixedFlag$sample9) {
+									double cv$probabilitySample4Value10 = (cv$probabilitySample4Value4 * distribution$sample4[index$sample4$9]);
+									if(fixedFlag$sample6) {
 										{
-											double var12 = (((1.0 * distributionTempVariable$v1$11) + distributionTempVariable$v1$11) / v2);
+											double var10 = (((1.0 * distributionTempVariable$v1$11) + distributionTempVariable$v1$11) / v2);
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = (Math.log(cv$probabilitySample7Value10) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+											double cv$weightedProbability = (Math.log(cv$probabilitySample4Value10) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -322,21 +322,21 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											}
 											
 											// Add the probability of this distribution configuration to the accumulator.
-											cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample7Value10);
+											cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample4Value10);
 										}
 									} else {
 										if(true) {
-											// Enumerating the possible outputs of Categorical 7.
-											for(int index$sample9$24 = 0; index$sample9$24 < weightings.length; index$sample9$24 += 1) {
-												int distributionTempVariable$v2$26 = index$sample9$24;
+											// Enumerating the possible outputs of Categorical 5.
+											for(int index$sample6$24 = 0; index$sample6$24 < weightings.length; index$sample6$24 += 1) {
+												int distributionTempVariable$v2$26 = index$sample6$24;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample9Value25 = (cv$probabilitySample7Value10 * distribution$sample9[index$sample9$24]);
+												double cv$probabilitySample6Value25 = (cv$probabilitySample4Value10 * distribution$sample6[index$sample6$24]);
 												{
-													double var12 = (((1.0 * distributionTempVariable$v1$11) + distributionTempVariable$v1$11) / distributionTempVariable$v2$26);
+													double var10 = (((1.0 * distributionTempVariable$v1$11) + distributionTempVariable$v1$11) / distributionTempVariable$v2$26);
 													
 													// Store the value of the function call, so the function call is only made once.
-													double cv$weightedProbability = (Math.log(cv$probabilitySample9Value25) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+													double cv$weightedProbability = (Math.log(cv$probabilitySample6Value25) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 													
 													// Add the probability of this sample task to the distribution accumulator.
 													if((cv$weightedProbability < cv$distributionAccumulator))
@@ -350,19 +350,19 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 													}
 													
 													// Add the probability of this distribution configuration to the accumulator.
-													cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample9Value25);
+													cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample6Value25);
 												}
 											}
 										}
 									}
 								}
 							}
-							if(fixedFlag$sample9) {
+							if(fixedFlag$sample6) {
 								{
-									double var12 = (((1.0 * distributionTempVariable$v1$5) + distributionTempVariable$v1$5) / v2);
+									double var10 = (((1.0 * distributionTempVariable$v1$5) + distributionTempVariable$v1$5) / v2);
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample7Value4) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample4Value4) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -376,21 +376,21 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									}
 									
 									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample7Value4);
+									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample4Value4);
 								}
 							} else {
 								if(true) {
-									// Enumerating the possible outputs of Categorical 7.
-									for(int index$sample9$19 = 0; index$sample9$19 < weightings.length; index$sample9$19 += 1) {
-										int distributionTempVariable$v2$21 = index$sample9$19;
+									// Enumerating the possible outputs of Categorical 5.
+									for(int index$sample6$19 = 0; index$sample6$19 < weightings.length; index$sample6$19 += 1) {
+										int distributionTempVariable$v2$21 = index$sample6$19;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample9Value20 = (cv$probabilitySample7Value4 * distribution$sample9[index$sample9$19]);
+										double cv$probabilitySample6Value20 = (cv$probabilitySample4Value4 * distribution$sample6[index$sample6$19]);
 										{
-											double var12 = (((1.0 * distributionTempVariable$v1$5) + distributionTempVariable$v1$5) / distributionTempVariable$v2$21);
+											double var10 = (((1.0 * distributionTempVariable$v1$5) + distributionTempVariable$v1$5) / distributionTempVariable$v2$21);
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = (Math.log(cv$probabilitySample9Value20) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+											double cv$weightedProbability = (Math.log(cv$probabilitySample6Value20) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -404,7 +404,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											}
 											
 											// Add the probability of this distribution configuration to the accumulator.
-											cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample9Value20);
+											cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample6Value20);
 										}
 									}
 								}
@@ -427,7 +427,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var13 = cv$sampleAccumulator;
+			logProbability$var11 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v = cv$sampleProbability;
@@ -438,7 +438,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample15 = ((fixedFlag$sample15 && fixedFlag$sample7) && fixedFlag$sample9);
+			fixedProbFlag$sample12 = ((fixedFlag$sample12 && fixedFlag$sample4) && fixedFlag$sample6);
 		}
 		// Using cached values.
 		else {
@@ -449,7 +449,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$v;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var13 = cv$rvAccumulator;
+			logProbability$var11 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -457,15 +457,15 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample7 using probability
+	// Calculate the probability of the samples represented by sample4 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample7() {
-		// Determine if we need to calculate the values for sample task 7 or if we should
+	private final void logProbabilityDistribution$sample4() {
+		// Determine if we need to calculate the values for sample task 4 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample7) {
+		if(!fixedProbFlag$sample4) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample7) {
+			if(fixedFlag$sample4) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -516,7 +516,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var5 = cv$sampleAccumulator;
+				logProbability$var3 = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$v1 = cv$sampleProbability;
@@ -526,12 +526,12 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample7)
+				if(fixedFlag$sample4)
 					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample7 = fixedFlag$sample7;
+				fixedProbFlag$sample4 = fixedFlag$sample4;
 			}
 		}
 		// Using cached values.
@@ -543,27 +543,27 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$v1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var5 = cv$rvAccumulator;
+			logProbability$var3 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample9 using probability
+	// Calculate the probability of the samples represented by sample6 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample9() {
-		// Determine if we need to calculate the values for sample task 9 or if we should
+	private final void logProbabilityDistribution$sample6() {
+		// Determine if we need to calculate the values for sample task 6 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!fixedProbFlag$sample6) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample9) {
+			if(fixedFlag$sample6) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -614,7 +614,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var7 = cv$sampleAccumulator;
+				logProbability$var5 = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$v2 = cv$sampleProbability;
@@ -624,12 +624,12 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample9)
+				if(fixedFlag$sample6)
 					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample9 = fixedFlag$sample9;
+				fixedProbFlag$sample6 = fixedFlag$sample6;
 			}
 		}
 		// Using cached values.
@@ -641,24 +641,24 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$v2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
+			logProbability$var5 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
+			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample15 using sampled
+	// Calculate the probability of the samples represented by sample12 using sampled
 	// values.
-	private final void logProbabilityValue$sample15() {
-		// Determine if we need to calculate the values for sample task 15 or if we should
+	private final void logProbabilityValue$sample12() {
+		// Determine if we need to calculate the values for sample task 12 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample15) {
+		if(!fixedProbFlag$sample12) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -676,10 +676,10 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				boolean cv$sampleValue = v;
 				{
 					{
-						double var12 = (((1.0 * v1) + v1) / v2);
+						double var10 = (((1.0 * v1) + v1) / v2);
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var12));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var10));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -711,7 +711,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var13 = cv$sampleAccumulator;
+			logProbability$var11 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v = cv$sampleProbability;
@@ -722,7 +722,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample15 = ((fixedFlag$sample15 && fixedFlag$sample7) && fixedFlag$sample9);
+			fixedProbFlag$sample12 = ((fixedFlag$sample12 && fixedFlag$sample4) && fixedFlag$sample6);
 		}
 		// Using cached values.
 		else {
@@ -733,7 +733,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$v;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var13 = cv$rvAccumulator;
+			logProbability$var11 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -741,11 +741,11 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample7 using sampled values.
-	private final void logProbabilityValue$sample7() {
-		// Determine if we need to calculate the values for sample task 7 or if we should
+	// Calculate the probability of the samples represented by sample4 using sampled values.
+	private final void logProbabilityValue$sample4() {
+		// Determine if we need to calculate the values for sample task 4 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample7) {
+		if(!fixedProbFlag$sample4) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -796,7 +796,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var5 = cv$sampleAccumulator;
+			logProbability$var3 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v1 = cv$sampleProbability;
@@ -806,12 +806,12 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+			fixedProbFlag$sample4 = fixedFlag$sample4;
 		}
 		// Using cached values.
 		else {
@@ -822,23 +822,23 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$v1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var5 = cv$rvAccumulator;
+			logProbability$var3 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample9 using sampled values.
-	private final void logProbabilityValue$sample9() {
-		// Determine if we need to calculate the values for sample task 9 or if we should
+	// Calculate the probability of the samples represented by sample6 using sampled values.
+	private final void logProbabilityValue$sample6() {
+		// Determine if we need to calculate the values for sample task 6 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!fixedProbFlag$sample6) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -889,7 +889,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
+			logProbability$var5 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v2 = cv$sampleProbability;
@@ -899,12 +899,12 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
+			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = fixedFlag$sample9;
+			fixedProbFlag$sample6 = fixedFlag$sample6;
 		}
 		// Using cached values.
 		else {
@@ -915,32 +915,32 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$v2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
+			logProbability$var5 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
+			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 7 drawn from Categorical 5. Inference was performed using variable
+	// by sample task 4 drawn from Categorical 3. Inference was performed using variable
 	// marginalization.
-	private final void sample7() {
+	private final void sample4() {
 		// Calculate the number of states to evaluate.
-		int cv$noStates = 0;
+		int cv$numNumStates = 0;
 		{
 			// variable marginalization
-			cv$noStates = Math.max(cv$noStates, weightings.length);
+			cv$numNumStates = Math.max(cv$numNumStates, weightings.length);
 		}
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var6$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
+		double[] cv$stateProbabilityLocal = cv$var4$stateProbabilityGlobal;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -963,17 +963,21 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					cv$temp$0$weightings = weightings;
 				}
+				int cv$temp$1$$var171;
+				{
+					cv$temp$1$$var171 = weightings.length;
+				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$weightings.length))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var171))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
-				// Processing random variable 13.
+				// Processing random variable 11.
 				{
 					{
 						int traceTempVariable$v1$1_1 = cv$currentValue;
 						
-						// Processing sample task 15 of consumer random variable null.
+						// Processing sample task 12 of consumer random variable null.
 						{
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
@@ -983,306 +987,63 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							{
-								// Enumerating the possible arguments for the variable Bernoulli 13 which is consuming
-								// the output of Sample task 7.
-								if(fixedFlag$sample9) {
+								// Enumerating the possible arguments for the variable Bernoulli 11 which is consuming
+								// the output of Sample task 4.
+								if(fixedFlag$sample6) {
 									{
 										{
-											double cv$temp$1$var12;
+											double cv$temp$2$var10;
 											{
 												// Constructing a random variable input for use later.
-												double var12 = (((1.0 * traceTempVariable$v1$1_1) + traceTempVariable$v1$1_1) / v2);
-												cv$temp$1$var12 = var12;
+												double var10 = (((1.0 * traceTempVariable$v1$1_1) + traceTempVariable$v1$1_1) / v2);
+												cv$temp$2$var10 = var10;
 											}
 											
-											// Record the probability of sample task 15 generating output with current configuration.
-											if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+											// Record the probability of sample task 12 generating output with current configuration.
+											if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 											else {
 												// If the second value is -infinity.
 												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12));
+													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10));
 												else
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)));
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)));
 											}
 											
-											// Recorded the probability of reaching sample task 15 with the current configuration.
-											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-										}
-									}
-								} else {
-									if(true) {
-										// Enumerating the possible outputs of Categorical 7.
-										for(int index$sample9$4 = 0; index$sample9$4 < weightings.length; index$sample9$4 += 1) {
-											int distributionTempVariable$v2$6 = index$sample9$4;
-											
-											// Update the probability of sampling this value from the distribution value.
-											double cv$probabilitySample9Value5 = (1.0 * distribution$sample9[index$sample9$4]);
-											{
-												{
-													double cv$temp$2$var12;
-													{
-														// Constructing a random variable input for use later.
-														double var12 = (((1.0 * traceTempVariable$v1$1_1) + traceTempVariable$v1$1_1) / distributionTempVariable$v2$6);
-														cv$temp$2$var12 = var12;
-													}
-													
-													// Record the probability of sample task 15 generating output with current configuration.
-													if(((Math.log(cv$probabilitySample9Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12));
-														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)))) + 1)) + (Math.log(cv$probabilitySample9Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)));
-													}
-													
-													// Recorded the probability of reaching sample task 15 with the current configuration.
-													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample9Value5);
-												}
-											}
-										}
-									}
-								}
-							}
-							
-							// A check to ensure rounding of floating point values can never result in a negative
-							// value.
-							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-							
-							// Multiply (log space add) in the probability of the sample task to the overall probability
-							// for this configuration of the source random variable.
-							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-							else {
-								// If the second value is -infinity.
-								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-								else
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-							}
-						}
-					}
-				}
-				
-				// Add the values for the source and any standard consumers for this configuration
-				// of arguments to the source.
-				if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-					cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-				else {
-					// If the second value is -infinity.
-					if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-						cv$stateProbabilityValue = cv$accumulatedProbabilities;
-					else
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-				}
-			}
-			
-			// Save the calculated index value into the array of index value probabilities
-			cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-		}
-		
-		// Set the calculated probabilities to be the distribution values, and normalize
-		// 
-		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample7;
-		
-		// The sum of all the probabilities in log space
-		double cv$logSum = 0.0;
-		
-		// Sum all the values
-		{
-			// Initialise the max to the first element.
-			double cv$lseMax = cv$stateProbabilityLocal[0];
-			
-			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
-				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			
-			// If the maximum value is -infinity return -infinity.
-			if((cv$lseMax == Double.NEGATIVE_INFINITY))
-				cv$logSum = Double.NEGATIVE_INFINITY;
-			
-			// Sum the values in the array.
-			else {
-				// Initialise the sum of the array elements
-				double cv$lseSum = 0.0;
-				
-				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
-					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-				
-				// Increment the value of the target, moving the value back into log space.
-				cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
-			}
-		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
-		} else {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 9 drawn from Categorical 7. Inference was performed using variable
-	// marginalization.
-	private final void sample9() {
-		// Calculate the number of states to evaluate.
-		int cv$noStates = 0;
-		{
-			// variable marginalization
-			cv$noStates = Math.max(cv$noStates, weightings.length);
-		}
-		
-		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var8$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
-			// Initialize the summed probabilities to 0.
-			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-			
-			// Initialize a counter to track the reached distributions.
-			double cv$reachedDistributionSourceRV = 0.0;
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			double cv$accumulatedDistributionProbabilities = 0.0;
-			
-			// The value currently being tested
-			int cv$currentValue;
-			
-			// Value of the variable at this index
-			cv$currentValue = cv$valuePos;
-			{
-				// Record the reached probability density.
-				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double[] cv$temp$0$weightings;
-				{
-					cv$temp$0$weightings = weightings;
-				}
-				
-				// An accumulator to allow the value for each distribution to be constructed before
-				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$weightings.length))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
-				
-				// Processing random variable 13.
-				{
-					{
-						int traceTempVariable$v2$1_1 = cv$currentValue;
-						
-						// Processing sample task 15 of consumer random variable null.
-						{
-							// Set an accumulator to sum the probabilities for each possible configuration of
-							// inputs.
-							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-							
-							// Set an accumulator to record the consumer distributions not seen. Initially set
-							// to 1 as seen values will be deducted from this value.
-							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							{
-								// Enumerating the possible arguments for the variable Bernoulli 13 which is consuming
-								// the output of Sample task 9.
-								if(fixedFlag$sample7) {
-									{
-										{
-											double cv$temp$1$var12;
-											{
-												// Constructing a random variable input for use later.
-												double var12 = (((1.0 * v1) + v1) / traceTempVariable$v2$1_1);
-												cv$temp$1$var12 = var12;
-											}
-											
-											// Record the probability of sample task 15 generating output with current configuration.
-											if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-											else {
-												// If the second value is -infinity.
-												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12));
-												else
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$1$var12)));
-											}
-											
-											// Recorded the probability of reaching sample task 15 with the current configuration.
+											// Recorded the probability of reaching sample task 12 with the current configuration.
 											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 										}
 									}
 								} else {
 									if(true) {
 										// Enumerating the possible outputs of Categorical 5.
-										for(int index$sample7$4 = 0; index$sample7$4 < weightings.length; index$sample7$4 += 1) {
-											int distributionTempVariable$v1$6 = index$sample7$4;
+										for(int index$sample6$4 = 0; index$sample6$4 < weightings.length; index$sample6$4 += 1) {
+											int distributionTempVariable$v2$6 = index$sample6$4;
 											
 											// Update the probability of sampling this value from the distribution value.
-											double cv$probabilitySample7Value5 = (1.0 * distribution$sample7[index$sample7$4]);
-											if(!true) {
-												// Enumerating the possible outputs of Categorical 5.
-												for(int index$sample7$10 = 0; index$sample7$10 < weightings.length; index$sample7$10 += 1) {
-													int distributionTempVariable$v1$12 = index$sample7$10;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample7Value11 = (cv$probabilitySample7Value5 * distribution$sample7[index$sample7$10]);
-													{
-														{
-															double cv$temp$3$var12;
-															{
-																// Constructing a random variable input for use later.
-																double var12 = (((1.0 * distributionTempVariable$v1$12) + distributionTempVariable$v1$12) / traceTempVariable$v2$1_1);
-																cv$temp$3$var12 = var12;
-															}
-															
-															// Record the probability of sample task 15 generating output with current configuration.
-															if(((Math.log(cv$probabilitySample7Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var12)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample7Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var12)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample7Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var12));
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample7Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var12)))) + 1)) + (Math.log(cv$probabilitySample7Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var12)));
-															}
-															
-															// Recorded the probability of reaching sample task 15 with the current configuration.
-															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample7Value11);
-														}
-													}
-												}
-											}
+											double cv$probabilitySample6Value5 = (1.0 * distribution$sample6[index$sample6$4]);
 											{
 												{
-													double cv$temp$2$var12;
+													double cv$temp$3$var10;
 													{
 														// Constructing a random variable input for use later.
-														double var12 = (((1.0 * distributionTempVariable$v1$6) + distributionTempVariable$v1$6) / traceTempVariable$v2$1_1);
-														cv$temp$2$var12 = var12;
+														double var10 = (((1.0 * traceTempVariable$v1$1_1) + traceTempVariable$v1$1_1) / distributionTempVariable$v2$6);
+														cv$temp$3$var10 = var10;
 													}
 													
-													// Record the probability of sample task 15 generating output with current configuration.
-													if(((Math.log(cv$probabilitySample7Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample7Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													// Record the probability of sample task 12 generating output with current configuration.
+													if(((Math.log(cv$probabilitySample6Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample6Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample7Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12));
+															cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample6Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample7Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)))) + 1)) + (Math.log(cv$probabilitySample7Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var12)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample6Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)))) + 1)) + (Math.log(cv$probabilitySample6Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)));
 													}
 													
-													// Recorded the probability of reaching sample task 15 with the current configuration.
-													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample7Value5);
+													// Recorded the probability of reaching sample task 12 with the current configuration.
+													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample6Value5);
 												}
 											}
 										}
@@ -1329,7 +1090,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Set the calculated probabilities to be the distribution values, and normalize
 		// 
 		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample9;
+		double[] cv$localProbability = distribution$sample4;
 		
 		// The sum of all the probabilities in log space
 		double cv$logSum = 0.0;
@@ -1340,7 +1101,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -1356,7 +1117,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -1367,16 +1128,263 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$numNumStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 6 drawn from Categorical 5. Inference was performed using variable
+	// marginalization.
+	private final void sample6() {
+		// Calculate the number of states to evaluate.
+		int cv$numNumStates = 0;
+		{
+			// variable marginalization
+			cv$numNumStates = Math.max(cv$numNumStates, weightings.length);
+		}
+		
+		// Get a local reference to the scratch space.
+		double[] cv$stateProbabilityLocal = cv$var6$stateProbabilityGlobal;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			// Initialize the summed probabilities to 0.
+			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+			
+			// Initialize a counter to track the reached distributions.
+			double cv$reachedDistributionSourceRV = 0.0;
+			
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			double cv$accumulatedDistributionProbabilities = 0.0;
+			
+			// The value currently being tested
+			int cv$currentValue;
+			
+			// Value of the variable at this index
+			cv$currentValue = cv$valuePos;
+			{
+				// Record the reached probability density.
+				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+				double[] cv$temp$0$weightings;
+				{
+					cv$temp$0$weightings = weightings;
+				}
+				int cv$temp$1$$var191;
+				{
+					cv$temp$1$$var191 = weightings.length;
+				}
+				
+				// An accumulator to allow the value for each distribution to be constructed before
+				// it is added to the index probabilities.
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var191))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				
+				// Processing random variable 11.
+				{
+					{
+						int traceTempVariable$v2$1_1 = cv$currentValue;
+						
+						// Processing sample task 12 of consumer random variable null.
+						{
+							// Set an accumulator to sum the probabilities for each possible configuration of
+							// inputs.
+							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+							
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							double cv$consumerDistributionProbabilityAccumulator = 1.0;
+							{
+								// Enumerating the possible arguments for the variable Bernoulli 11 which is consuming
+								// the output of Sample task 6.
+								if(fixedFlag$sample4) {
+									{
+										{
+											double cv$temp$2$var10;
+											{
+												// Constructing a random variable input for use later.
+												double var10 = (((1.0 * v1) + v1) / traceTempVariable$v2$1_1);
+												cv$temp$2$var10 = var10;
+											}
+											
+											// Record the probability of sample task 12 generating output with current configuration.
+											if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+											else {
+												// If the second value is -infinity.
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10));
+												else
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$2$var10)));
+											}
+											
+											// Recorded the probability of reaching sample task 12 with the current configuration.
+											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+										}
+									}
+								} else {
+									if(true) {
+										// Enumerating the possible outputs of Categorical 3.
+										for(int index$sample4$4 = 0; index$sample4$4 < weightings.length; index$sample4$4 += 1) {
+											int distributionTempVariable$v1$6 = index$sample4$4;
+											
+											// Update the probability of sampling this value from the distribution value.
+											double cv$probabilitySample4Value5 = (1.0 * distribution$sample4[index$sample4$4]);
+											if(!true) {
+												// Enumerating the possible outputs of Categorical 3.
+												for(int index$sample4$10 = 0; index$sample4$10 < weightings.length; index$sample4$10 += 1) {
+													int distributionTempVariable$v1$12 = index$sample4$10;
+													
+													// Update the probability of sampling this value from the distribution value.
+													double cv$probabilitySample4Value11 = (cv$probabilitySample4Value5 * distribution$sample4[index$sample4$10]);
+													{
+														{
+															double cv$temp$4$var10;
+															{
+																// Constructing a random variable input for use later.
+																double var10 = (((1.0 * distributionTempVariable$v1$12) + distributionTempVariable$v1$12) / traceTempVariable$v2$1_1);
+																cv$temp$4$var10 = var10;
+															}
+															
+															// Record the probability of sample task 12 generating output with current configuration.
+															if(((Math.log(cv$probabilitySample4Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$4$var10)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample4Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$4$var10)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample4Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$4$var10));
+																else
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample4Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$4$var10)))) + 1)) + (Math.log(cv$probabilitySample4Value11) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$4$var10)));
+															}
+															
+															// Recorded the probability of reaching sample task 12 with the current configuration.
+															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample4Value11);
+														}
+													}
+												}
+											}
+											{
+												{
+													double cv$temp$3$var10;
+													{
+														// Constructing a random variable input for use later.
+														double var10 = (((1.0 * distributionTempVariable$v1$6) + distributionTempVariable$v1$6) / traceTempVariable$v2$1_1);
+														cv$temp$3$var10 = var10;
+													}
+													
+													// Record the probability of sample task 12 generating output with current configuration.
+													if(((Math.log(cv$probabilitySample4Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample4Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													else {
+														// If the second value is -infinity.
+														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+															cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample4Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10));
+														else
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample4Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)))) + 1)) + (Math.log(cv$probabilitySample4Value5) + DistributionSampling.logProbabilityBernoulli(v, cv$temp$3$var10)));
+													}
+													
+													// Recorded the probability of reaching sample task 12 with the current configuration.
+													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample4Value5);
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							// A check to ensure rounding of floating point values can never result in a negative
+							// value.
+							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+							
+							// Multiply (log space add) in the probability of the sample task to the overall probability
+							// for this configuration of the source random variable.
+							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+							else {
+								// If the second value is -infinity.
+								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+								else
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+							}
+						}
+					}
+				}
+				
+				// Add the values for the source and any standard consumers for this configuration
+				// of arguments to the source.
+				if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+					cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+				else {
+					// If the second value is -infinity.
+					if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+						cv$stateProbabilityValue = cv$accumulatedProbabilities;
+					else
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// Save the calculated index value into the array of index value probabilities
+			cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+		}
+		
+		// Set the calculated probabilities to be the distribution values, and normalize
+		// 
+		// Local copy of the probability array
+		double[] cv$localProbability = distribution$sample6;
+		
+		// The sum of all the probabilities in log space
+		double cv$logSum = 0.0;
+		
+		// Sum all the values
+		{
+			// Initialise the max to the first element.
+			double cv$lseMax = cv$stateProbabilityLocal[0];
+			
+			// Find max value.
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialise the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
+			}
+		}
+		
+		// If all the sum is zero, just share the probability evenly.
+		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+			// Normalize log space values and move to normal space
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$numNumStates);
+		} else {
+			// Normalize log space values and move to normal space
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+		}
+		
+		// Set array values that are not computed for the input to negative infinity.
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
@@ -1386,30 +1394,30 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
+		// Constructor for cv$var4$stateProbabilityGlobal
+		{
+			// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
+			cv$var4$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
 		// Constructor for cv$var6$stateProbabilityGlobal
 		{
 			// Allocation of cv$var6$stateProbabilityGlobal for single threaded execution
 			cv$var6$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var8$stateProbabilityGlobal
-		{
-			// Allocation of cv$var8$stateProbabilityGlobal for single threaded execution
-			cv$var8$stateProbabilityGlobal = new double[weightings.length];
 		}
 	}
 
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// Constructor for distribution$sample7
+		// Constructor for distribution$sample4
 		{
-			distribution$sample7 = new double[weightings.length];
+			distribution$sample4 = new double[weightings.length];
 		}
 		
-		// Constructor for distribution$sample9
+		// Constructor for distribution$sample6
 		{
-			distribution$sample9 = new double[weightings.length];
+			distribution$sample6 = new double[weightings.length];
 		}
 		
 		// Allocate scratch space
@@ -1419,11 +1427,11 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings);
-		if(!fixedFlag$sample9)
-			v2 = DistributionSampling.sampleCategorical(RNG$, weightings);
-		if(!fixedFlag$sample15)
+		if(!fixedFlag$sample4)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample6)
+			v2 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample12)
 			v = DistributionSampling.sampleBernoulli(RNG$, (((1.0 * v1) + v1) / v2));
 	}
 
@@ -1432,23 +1440,23 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Create local copy of variable probabilities.
-		double[] cv$distribution$sample7 = distribution$sample7;
-		for(int index$var5 = 0; index$var5 < weightings.length; index$var5 += 1) {
+		double[] cv$distribution$sample4 = distribution$sample4;
+		for(int index$var3 = 0; index$var3 < weightings.length; index$var3 += 1) {
 			// Probability for this value
-			double cv$value = (((0.0 <= index$var5) && (index$var5 < weightings.length))?weightings[index$var5]:0.0);
-			if(!fixedFlag$sample7)
+			double cv$value = (((0.0 <= index$var3) && (index$var3 < weightings.length))?weightings[index$var3]:0.0);
+			if(!fixedFlag$sample4)
 				// Save the probability of each value
-				cv$distribution$sample7[index$var5] = cv$value;
+				cv$distribution$sample4[index$var3] = cv$value;
 		}
 		
 		// Create local copy of variable probabilities.
-		double[] cv$distribution$sample9 = distribution$sample9;
-		for(int index$var7 = 0; index$var7 < weightings.length; index$var7 += 1) {
+		double[] cv$distribution$sample6 = distribution$sample6;
+		for(int index$var5 = 0; index$var5 < weightings.length; index$var5 += 1) {
 			// Probability for this value
-			double cv$value = (((0.0 <= index$var7) && (index$var7 < weightings.length))?weightings[index$var7]:0.0);
-			if(!fixedFlag$sample9)
+			double cv$value = (((0.0 <= index$var5) && (index$var5 < weightings.length))?weightings[index$var5]:0.0);
+			if(!fixedFlag$sample6)
 				// Save the probability of each value
-				cv$distribution$sample9[index$var7] = cv$value;
+				cv$distribution$sample6[index$var5] = cv$value;
 		}
 	}
 
@@ -1456,10 +1464,10 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings);
-		if(!fixedFlag$sample9)
-			v2 = DistributionSampling.sampleCategorical(RNG$, weightings);
+		if(!fixedFlag$sample4)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample6)
+			v2 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1467,17 +1475,17 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample7)
-				sample7();
-			if(!fixedFlag$sample9)
-				sample9();
+			if(!fixedFlag$sample4)
+				sample4();
+			if(!fixedFlag$sample6)
+				sample6();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample9)
-				sample9();
-			if(!fixedFlag$sample7)
-				sample7();
+			if(!fixedFlag$sample6)
+				sample6();
+			if(!fixedFlag$sample4)
+				sample4();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -1499,14 +1507,14 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
-		if(!fixedProbFlag$sample7)
+		logProbability$var3 = 0.0;
+		if(!fixedProbFlag$sample4)
 			logProbability$v1 = 0.0;
-		logProbability$var7 = 0.0;
-		if(!fixedProbFlag$sample9)
+		logProbability$var5 = 0.0;
+		if(!fixedProbFlag$sample6)
 			logProbability$v2 = 0.0;
-		logProbability$var13 = 0.0;
-		if(!fixedProbFlag$sample15)
+		logProbability$var11 = 0.0;
+		if(!fixedProbFlag$sample12)
 			logProbability$v = 0.0;
 	}
 
@@ -1527,7 +1535,7 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		logProbabilityValue$sample15();
+		logProbabilityValue$sample12();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1542,9 +1550,9 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using distributions where
 		// appropriate.
-		logProbabilityDistribution$sample7();
-		logProbabilityDistribution$sample9();
-		logProbabilityDistribution$sample15();
+		logProbabilityDistribution$sample4();
+		logProbabilityDistribution$sample6();
+		logProbabilityDistribution$sample12();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1557,9 +1565,9 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample9();
-		logProbabilityValue$sample15();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample6();
+		logProbabilityValue$sample12();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1567,10 +1575,10 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample7)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings);
-		if(!fixedFlag$sample9)
-			v2 = DistributionSampling.sampleCategorical(RNG$, weightings);
+		if(!fixedFlag$sample4)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample6)
+			v2 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -20,7 +20,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 public class SingleSampleTask<A extends Variable<A>, B extends RandomVariable<A, B>> extends SampleTask<A, B> {
 
-    public final RandomVariable<A, B> randomVariable;
+    public final B randomVariable;
     private final Type<A> baseType;
 
     public SingleSampleTask(Type<A> baseType, B randomVariable, Location location) {

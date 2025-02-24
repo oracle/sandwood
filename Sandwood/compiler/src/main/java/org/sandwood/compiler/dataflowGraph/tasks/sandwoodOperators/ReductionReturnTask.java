@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -24,10 +24,13 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 public class ReductionReturnTask<A extends Variable<A>> extends ProducingDataflowTaskImplementation<A> {
 
     public final Variable<A> var;
+    public final ReductionInput<A> leftInput, rightInput;
 
-    public ReductionReturnTask(A var, Location location) {
+    public ReductionReturnTask(A var, ReductionInput<A> leftInput, ReductionInput<A> rightInput, Location location) {
         super(DFType.REDUCTION_RETURN, var.getType(), location, var);
         this.var = var;
+        this.leftInput = leftInput;
+        this.rightInput = rightInput;
         inlineableTask = false;
     }
 

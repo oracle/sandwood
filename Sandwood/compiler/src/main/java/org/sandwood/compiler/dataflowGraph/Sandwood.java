@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -47,12 +47,12 @@ import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 
 public class Sandwood {
-    
+
     /**
      * Private constructor to prevent this object being instantiated.
      */
     private Sandwood() {}
-    
+
     public interface LoopBody<I extends Variable<I>> {
         void body(I i);
     }
@@ -75,10 +75,6 @@ public class Sandwood {
 
     public interface IfElseAssignmentBoolean {
         BooleanVariable body();
-    }
-
-    public interface IfElseAssignmentArray<A extends Variable<A>> {
-        A body();
     }
 
     public static ForTask forLoop(IntVariable start, IntVariable end, IntVariable step, boolean incrementing,
@@ -140,13 +136,14 @@ public class Sandwood {
             A ifValue, A elseValue, IfScope ifScope, Location location) {
         Type<A> type = ifValue.getType();
         if(type instanceof VariableType.NumberType) {
-            return (A) ((NumberType<B>) type)
-                    .getInstance(new IfElseNumberAssignmentTask<>(guard, (B) ifValue, (B) elseValue, 
-                            ifScope, location));
+            return (A) ((NumberType<B>) type).getInstance(
+                    new IfElseNumberAssignmentTask<>(guard, (B) ifValue, (B) elseValue, ifScope, location));
         } else if(type instanceof VariableType.BooleanType) {
             return (A) ((BooleanType) type).getInstance(new IfElseAssignmentTask<>(guard, (BooleanVariable) ifValue,
                     (BooleanVariable) elseValue, ifScope, location));
-        } else
+        } else if(type.isArray())
+            throw new SandwoodModelException("Arrays cannot be assigned into other arrays in a conditional.", location);
+        else
             throw new CompilerException("Unexpected type " + type);
     }
 
@@ -177,7 +174,8 @@ public class Sandwood {
         DoubleVariable elseValue = elseValueLambda.body();
         ScopeStack.popScope(elseScope);
 
-        return DoubleVariable.doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
+        return DoubleVariable
+                .doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
     }
 
     public static DoubleVariable ifElseLambdaAssignment(BooleanVariable guard, IfElseAssignmentInt ifValueLambda,
@@ -208,8 +206,8 @@ public class Sandwood {
         IntVariable elseValue = elseValueLambda.body();
         ScopeStack.popScope(elseScope);
 
-        return DoubleVariable
-                .doubleVariable(new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue.castToDouble(), ifScope, location));
+        return DoubleVariable.doubleVariable(
+                new IfElseNumberAssignmentTask<>(guard, ifValue, elseValue.castToDouble(), ifScope, location));
     }
 
     public static BooleanVariable ifElseLambdaAssignment(BooleanVariable guard, IfElseAssignmentBoolean ifValueLambda,
@@ -224,7 +222,8 @@ public class Sandwood {
         BooleanVariable elseValue = elseValueLambda.body();
         ScopeStack.popScope(elseScope);
 
-        return BooleanVariable.booleanVariable(new IfElseAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
+        return BooleanVariable
+                .booleanVariable(new IfElseAssignmentTask<>(guard, ifValue, elseValue, ifScope, location));
     }
 
     public static IfScope ifScope(BooleanVariable guard) {
@@ -309,16 +308,16 @@ public class Sandwood {
         ReductionScope<ArrayVariable<A>> reduction = new ReductionScope<>(start, end, a, emptyValue);
         ScopeStack.pushScope(reduction);
 
-        ArrayVariable<A> i = a
-                .arrayElementInstance(new ArrayReductionInput<>(start, end, emptyValue, a, true, location));
+        ArrayReductionInput<A> leftInput = new ArrayReductionInput<>(start, end, emptyValue, a, true, location);
+        ArrayVariable<A> i = a.arrayElementInstance(leftInput);
         reduction.setFirstArg(i);
-        ArrayVariable<A> j = a
-                .arrayElementInstance(new ArrayReductionInput<>(start, end, emptyValue, a, false, location));
+        ArrayReductionInput<A> rightInput = new ArrayReductionInput<>(start, end, emptyValue, a, false, location);
+        ArrayVariable<A> j = a.arrayElementInstance(rightInput);
         reduction.setSecondArg(j);
 
         ArrayVariable<A> r = function.body(i, j);
 
-        ReductionReturnArrayTask<A> returnTask = new ReductionReturnArrayTask<>(r, location);
+        ReductionReturnArrayTask<A> returnTask = new ReductionReturnArrayTask<>(r, leftInput, rightInput, location);
         r = r.getType().getInstance(returnTask);
         reduction.setReturnVar(r);
 
@@ -334,16 +333,18 @@ public class Sandwood {
         ReductionScope<BooleanVariable> reduction = new ReductionScope<>(start, end, a, emptyValue);
         ScopeStack.pushScope(reduction);
 
-        BooleanVariable i = a.booleanElementInstance(new ReductionInput<>(start, end, emptyValue, a, true, location));
+        ReductionInput<BooleanVariable> leftInput = new ReductionInput<>(start, end, emptyValue, a, true, location);
+        BooleanVariable i = a.booleanElementInstance(leftInput);
         reduction.setFirstArg(i);
-        BooleanVariable j = a.booleanElementInstance(new ReductionInput<>(start, end, emptyValue, a, false, location));
+        ReductionInput<BooleanVariable> rightInput = new ReductionInput<>(start, end, emptyValue, a, false, location);
+        BooleanVariable j = a.booleanElementInstance(rightInput);
         reduction.setSecondArg(j);
 
         BooleanVariable r = function.body(i, j);
 
         ScopeStack.popScope(reduction);
-        
-        ReductionReturnTask<BooleanVariable> returnTask = new ReductionReturnTask<>(r, location);
+
+        ReductionReturnTask<BooleanVariable> returnTask = new ReductionReturnTask<>(r, leftInput, rightInput, location);
         r = r.getType().getInstance(returnTask);
         reduction.setReturnVar(r);
 
@@ -355,16 +356,18 @@ public class Sandwood {
         ReductionScope<A> reduction = new ReductionScope<>(start, end, a, emptyValue);
         ScopeStack.pushScope(reduction);
 
-        A i = a.numberElementInstance(new NumberReductionInput<>(start, end, emptyValue, a, true, location));
+        NumberReductionInput<A> leftInput = new NumberReductionInput<>(start, end, emptyValue, a, true, location);
+        A i = a.numberElementInstance(leftInput);
         reduction.setFirstArg(i);
-        A j = a.numberElementInstance(new NumberReductionInput<>(start, end, emptyValue, a, false, location));
+        NumberReductionInput<A> rightInput = new NumberReductionInput<>(start, end, emptyValue, a, false, location);
+        A j = a.numberElementInstance(rightInput);
         reduction.setSecondArg(j);
 
         A r = function.body(i, j);
-        
+
         ScopeStack.popScope(reduction);
-        
-        ReductionReturnNumberTask<A> returnTask = new ReductionReturnNumberTask<>(r, location);
+
+        ReductionReturnNumberTask<A> returnTask = new ReductionReturnNumberTask<>(r, leftInput, rightInput, location);
         r = r.getType().getInstance(returnTask);
         reduction.setReturnVar(r);
 

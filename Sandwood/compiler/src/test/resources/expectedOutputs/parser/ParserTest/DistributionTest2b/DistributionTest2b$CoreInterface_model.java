@@ -2,23 +2,17 @@ package org.sandwood.compiler.tests.parser;
 
 interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 
-	// Getter for fixedFlag$sample12.
-	public boolean get$fixedFlag$sample12();
+	// Getter for fixedFlag$sample23.
+	public boolean get$fixedFlag$sample23();
 
-	// Setter for fixedFlag$sample12.
-	public void set$fixedFlag$sample12(boolean cv$value);
+	// Setter for fixedFlag$sample23.
+	public void set$fixedFlag$sample23(boolean cv$value);
 
-	// Getter for fixedFlag$sample16.
-	public boolean get$fixedFlag$sample16();
+	// Getter for fixedFlag$sample36.
+	public boolean get$fixedFlag$sample36();
 
-	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
-
-	// Getter for fixedFlag$sample30.
-	public boolean get$fixedFlag$sample30();
-
-	// Setter for fixedFlag$sample30.
-	public void set$fixedFlag$sample30(boolean cv$value);
+	// Setter for fixedFlag$sample36.
+	public void set$fixedFlag$sample36(boolean cv$value);
 
 	// Getter for fixedFlag$sample43.
 	public boolean get$fixedFlag$sample43();
@@ -26,11 +20,17 @@ interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal
 	// Setter for fixedFlag$sample43.
 	public void set$fixedFlag$sample43(boolean cv$value);
 
-	// Getter for fixedFlag$sample50.
-	public boolean get$fixedFlag$sample50();
+	// Getter for fixedFlag$sample5.
+	public boolean get$fixedFlag$sample5();
 
-	// Setter for fixedFlag$sample50.
-	public void set$fixedFlag$sample50(boolean cv$value);
+	// Setter for fixedFlag$sample5.
+	public void set$fixedFlag$sample5(boolean cv$value);
+
+	// Getter for fixedFlag$sample9.
+	public boolean get$fixedFlag$sample9();
+
+	// Setter for fixedFlag$sample9.
+	public void set$fixedFlag$sample9(boolean cv$value);
 
 	// Getter for length$value.
 	public int get$length$value();

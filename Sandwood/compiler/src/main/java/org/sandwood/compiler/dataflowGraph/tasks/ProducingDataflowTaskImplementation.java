@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -22,7 +22,7 @@ public abstract class ProducingDataflowTaskImplementation<A extends Variable<A>>
         implements ProducingDataflowTask<A> {
 
     /**
-     * Flag to say if the value produced here will be the same in every iteration of the code.
+     * Flag to say if the value produced here will be the same in every execution of the code.
      */
     private boolean deterministic;
 
@@ -59,7 +59,7 @@ public abstract class ProducingDataflowTaskImplementation<A extends Variable<A>>
     }
 
     @Override
-    public boolean deterministic() {
+    public boolean isDeterministic() {
         return deterministic;
     }
 

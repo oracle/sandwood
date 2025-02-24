@@ -6,19 +6,19 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart4$CoreInterface {
 	private double[] bias;
-	private double[] cv$var125$stateProbabilityGlobal;
-	private double[] cv$var32$countGlobal;
-	private double[] cv$var85$stateProbabilityGlobal;
-	private boolean fixedFlag$sample130 = false;
-	private boolean fixedFlag$sample197 = false;
-	private boolean fixedFlag$sample33 = false;
-	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample90 = false;
-	private boolean fixedProbFlag$sample130 = false;
-	private boolean fixedProbFlag$sample197 = false;
-	private boolean fixedProbFlag$sample33 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample90 = false;
+	private double[] cv$var121$stateProbabilityGlobal;
+	private double[] cv$var28$countGlobal;
+	private double[] cv$var81$stateProbabilityGlobal;
+	private boolean fixedFlag$sample124 = false;
+	private boolean fixedFlag$sample191 = false;
+	private boolean fixedFlag$sample28 = false;
+	private boolean fixedFlag$sample45 = false;
+	private boolean fixedFlag$sample84 = false;
+	private boolean fixedProbFlag$sample124 = false;
+	private boolean fixedProbFlag$sample191 = false;
+	private boolean fixedProbFlag$sample28 = false;
+	private boolean fixedProbFlag$sample45 = false;
+	private boolean fixedProbFlag$sample84 = false;
 	private boolean[][][] flips;
 	private boolean[][][] flipsMeasured;
 	private int[][] length$flipsMeasured;
@@ -27,17 +27,17 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double logProbability$m;
-	private double[][][] logProbability$sample130;
-	private double[][][] logProbability$sample197;
+	private double[][][] logProbability$sample124;
+	private double[][][] logProbability$sample191;
 	private double logProbability$st;
-	private double[][][] logProbability$var124;
-	private double[][][] logProbability$var189;
-	private double logProbability$var20;
+	private double[][][] logProbability$var120;
+	private double logProbability$var16;
+	private double[][][] logProbability$var185;
+	private double logProbability$var28;
 	private double logProbability$var32;
-	private double logProbability$var36;
-	private double logProbability$var48;
-	private double logProbability$var84;
-	private double logProbability$var85;
+	private double logProbability$var44;
+	private double logProbability$var80;
+	private double logProbability$var81;
 	private double[][] m;
 	private int samples;
 	private boolean setFlag$bias = false;
@@ -61,68 +61,68 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
-		fixedProbFlag$sample50 = false;
-		fixedProbFlag$sample197 = false;
+		fixedProbFlag$sample45 = false;
+		fixedProbFlag$sample191 = false;
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample130() {
-		return fixedFlag$sample130;
+	public final boolean get$fixedFlag$sample124() {
+		return fixedFlag$sample124;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample130(boolean cv$value) {
-		fixedFlag$sample130 = cv$value;
-		fixedProbFlag$sample130 = (cv$value && fixedProbFlag$sample130);
-		fixedProbFlag$sample197 = (cv$value && fixedProbFlag$sample197);
+	public final void set$fixedFlag$sample124(boolean cv$value) {
+		fixedFlag$sample124 = cv$value;
+		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
+		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample197() {
-		return fixedFlag$sample197;
+	public final boolean get$fixedFlag$sample191() {
+		return fixedFlag$sample191;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample197(boolean cv$value) {
-		fixedFlag$sample197 = cv$value;
-		fixedProbFlag$sample197 = (cv$value && fixedProbFlag$sample197);
+	public final void set$fixedFlag$sample191(boolean cv$value) {
+		fixedFlag$sample191 = cv$value;
+		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
+	public final boolean get$fixedFlag$sample28() {
+		return fixedFlag$sample28;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value) {
-		fixedFlag$sample33 = cv$value;
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
-		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
-		fixedProbFlag$sample130 = (cv$value && fixedProbFlag$sample130);
+	public final void set$fixedFlag$sample28(boolean cv$value) {
+		fixedFlag$sample28 = cv$value;
+		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
+		fixedProbFlag$sample84 = (cv$value && fixedProbFlag$sample84);
+		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample50() {
-		return fixedFlag$sample50;
+	public final boolean get$fixedFlag$sample45() {
+		return fixedFlag$sample45;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample50(boolean cv$value) {
-		fixedFlag$sample50 = cv$value;
-		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
-		fixedProbFlag$sample197 = (cv$value && fixedProbFlag$sample197);
+	public final void set$fixedFlag$sample45(boolean cv$value) {
+		fixedFlag$sample45 = cv$value;
+		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample90() {
-		return fixedFlag$sample90;
+	public final boolean get$fixedFlag$sample84() {
+		return fixedFlag$sample84;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample90(boolean cv$value) {
-		fixedFlag$sample90 = cv$value;
-		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
-		fixedProbFlag$sample197 = (cv$value && fixedProbFlag$sample197);
+	public final void set$fixedFlag$sample84(boolean cv$value) {
+		fixedFlag$sample84 = cv$value;
+		fixedProbFlag$sample84 = (cv$value && fixedProbFlag$sample84);
+		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$flips(boolean[][][] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
-		fixedProbFlag$sample197 = false;
+		fixedProbFlag$sample191 = false;
 	}
 
 	@Override
@@ -196,9 +196,9 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
 		setFlag$m = true;
-		fixedProbFlag$sample33 = false;
-		fixedProbFlag$sample90 = false;
-		fixedProbFlag$sample130 = false;
+		fixedProbFlag$sample28 = false;
+		fixedProbFlag$sample84 = false;
+		fixedProbFlag$sample124 = false;
 	}
 
 	@Override
@@ -215,9 +215,9 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$st(int[][][] cv$value) {
 		st = cv$value;
 		setFlag$st = true;
-		fixedProbFlag$sample90 = false;
-		fixedProbFlag$sample130 = false;
-		fixedProbFlag$sample197 = false;
+		fixedProbFlag$sample84 = false;
+		fixedProbFlag$sample124 = false;
+		fixedProbFlag$sample191 = false;
 	}
 
 	@Override
@@ -230,69 +230,68 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return v;
 	}
 
-	private final void logProbabilityValue$sample130() {
-		if(!fixedProbFlag$sample130) {
+	private final void logProbabilityValue$sample124() {
+		if(!fixedProbFlag$sample124) {
 			double cv$accumulator = 0.0;
 			for(int i1 = 1; i1 < samples; i1 += 1) {
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1) {
 						int cv$sampleValue = st[i1][j1][k1];
-						double[] var123 = m[0];
-						double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var123.length))?Math.log(var123[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+						double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 2))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var124[(i1 - 1)][j1][k1] = cv$distributionAccumulator;
-						logProbability$sample130[(i1 - 1)][j1][k1] = cv$distributionAccumulator;
+						logProbability$var120[(i1 - 1)][j1][k1] = cv$distributionAccumulator;
+						logProbability$sample124[(i1 - 1)][j1][k1] = cv$distributionAccumulator;
 					}
 				}
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample130)
+			if(fixedFlag$sample124)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample130 = (fixedFlag$sample130 && fixedFlag$sample33);
+			fixedProbFlag$sample124 = (fixedFlag$sample124 && fixedFlag$sample28);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i1 = 1; i1 < samples; i1 += 1) {
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1) {
-						double cv$rvAccumulator = logProbability$sample130[(i1 - 1)][j1][k1];
+						double cv$rvAccumulator = logProbability$sample124[(i1 - 1)][j1][k1];
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var124[(i1 - 1)][j1][k1] = cv$rvAccumulator;
+						logProbability$var120[(i1 - 1)][j1][k1] = cv$rvAccumulator;
 					}
 				}
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample130)
+			if(fixedFlag$sample124)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample197() {
-		if(!fixedProbFlag$sample197) {
+	private final void logProbabilityValue$sample191() {
+		if(!fixedProbFlag$sample191) {
 			double cv$accumulator = 0.0;
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1) {
 						double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[l][n][p], bias[st[p][l][n]]);
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var189[l][p][n] = cv$distributionAccumulator;
-						logProbability$sample197[l][p][n] = cv$distributionAccumulator;
+						logProbability$var185[l][p][n] = cv$distributionAccumulator;
+						logProbability$sample191[l][p][n] = cv$distributionAccumulator;
 					}
 				}
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample197 = (((fixedFlag$sample197 && fixedFlag$sample50) && fixedFlag$sample90) && fixedFlag$sample130);
+			fixedProbFlag$sample191 = (((fixedFlag$sample191 && fixedFlag$sample45) && fixedFlag$sample84) && fixedFlag$sample124);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1) {
-						double cv$rvAccumulator = logProbability$sample197[l][p][n];
+						double cv$rvAccumulator = logProbability$sample191[l][p][n];
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var189[l][p][n] = cv$rvAccumulator;
+						logProbability$var185[l][p][n] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -302,115 +301,110 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	private final void logProbabilityValue$sample33() {
-		if(!fixedProbFlag$sample33) {
-			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v) + DistributionSampling.logProbabilityDirichlet(m[1], v));
-			logProbability$var20 = cv$sampleAccumulator;
-			logProbability$var32 = cv$sampleAccumulator;
+	private final void logProbabilityValue$sample28() {
+		if(!fixedProbFlag$sample28) {
+			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
+			logProbability$var16 = cv$sampleAccumulator;
+			logProbability$var28 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample33)
+			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample33 = fixedFlag$sample33;
+			fixedProbFlag$sample28 = fixedFlag$sample28;
 		} else {
-			logProbability$var20 = logProbability$var32;
-			logProbability$m = (logProbability$m + logProbability$var32);
-			logProbability$$model = (logProbability$$model + logProbability$var32);
-			if(fixedFlag$sample33)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var32);
+			logProbability$var16 = logProbability$var28;
+			logProbability$m = (logProbability$m + logProbability$var28);
+			logProbability$$model = (logProbability$$model + logProbability$var28);
+			if(fixedFlag$sample28)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var28);
 		}
 	}
 
-	private final void logProbabilityValue$sample50() {
-		if(!fixedProbFlag$sample50) {
+	private final void logProbabilityValue$sample45() {
+		if(!fixedProbFlag$sample45) {
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(bias[1], 1.0, 1.0));
-			logProbability$var36 = cv$sampleAccumulator;
-			logProbability$var48 = cv$sampleAccumulator;
+			logProbability$var32 = cv$sampleAccumulator;
+			logProbability$var44 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample50)
+			if(fixedFlag$sample45)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample50 = fixedFlag$sample50;
+			fixedProbFlag$sample45 = fixedFlag$sample45;
 		} else {
-			logProbability$var36 = logProbability$var48;
-			logProbability$bias = (logProbability$bias + logProbability$var48);
-			logProbability$$model = (logProbability$$model + logProbability$var48);
-			if(fixedFlag$sample50)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var48);
+			logProbability$var32 = logProbability$var44;
+			logProbability$bias = (logProbability$bias + logProbability$var44);
+			logProbability$$model = (logProbability$$model + logProbability$var44);
+			if(fixedFlag$sample45)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var44);
 		}
 	}
 
-	private final void logProbabilityValue$sample90() {
-		if(!fixedProbFlag$sample90) {
+	private final void logProbabilityValue$sample84() {
+		if(!fixedProbFlag$sample84) {
 			int cv$sampleValue = st[0][0][0];
-			double[] var83 = m[0];
-			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < var83.length))?Math.log(var83[cv$sampleValue]):Double.NEGATIVE_INFINITY);
-			logProbability$var84 = cv$distributionAccumulator;
-			logProbability$var85 = cv$distributionAccumulator;
+			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 2))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+			logProbability$var80 = cv$distributionAccumulator;
+			logProbability$var81 = cv$distributionAccumulator;
 			logProbability$st = (logProbability$st + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample90)
+			if(fixedFlag$sample84)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample90 = (fixedFlag$sample90 && fixedFlag$sample33);
+			fixedProbFlag$sample84 = (fixedFlag$sample84 && fixedFlag$sample28);
 		} else {
-			logProbability$var84 = logProbability$var85;
-			logProbability$st = (logProbability$st + logProbability$var85);
-			logProbability$$model = (logProbability$$model + logProbability$var85);
-			if(fixedFlag$sample90)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var85);
+			logProbability$var80 = logProbability$var81;
+			logProbability$st = (logProbability$st + logProbability$var81);
+			logProbability$$model = (logProbability$$model + logProbability$var81);
+			if(fixedFlag$sample84)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var81);
 		}
 	}
 
-	private final void sample130(int i1, int j1, int k1) {
-		{
-			double[] cv$temp$0$var123 = m[0];
-			cv$var125$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[0]) + ((0 < cv$temp$0$var123.length)?Math.log(cv$temp$0$var123[0]):Double.NEGATIVE_INFINITY));
-		}
-		double[] cv$temp$0$var123 = m[0];
-		cv$var125$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[1]) + ((1 < cv$temp$0$var123.length)?Math.log(cv$temp$0$var123[1]):Double.NEGATIVE_INFINITY));
+	private final void sample124(int i1, int j1, int k1) {
+		cv$var121$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[0]) + Math.log(m[0][0]));
+		cv$var121$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[1]) + Math.log(m[0][1]));
 		double cv$logSum;
-		double cv$lseMax = cv$var125$stateProbabilityGlobal[0];
-		double cv$lseElementValue = cv$var125$stateProbabilityGlobal[1];
+		double cv$lseMax = cv$var121$stateProbabilityGlobal[0];
+		double cv$lseElementValue = cv$var121$stateProbabilityGlobal[1];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else
-			cv$logSum = (Math.log((Math.exp((cv$var125$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var125$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			cv$logSum = (Math.log((Math.exp((cv$var121$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var121$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			cv$var125$stateProbabilityGlobal[0] = 0.5;
-			cv$var125$stateProbabilityGlobal[1] = 0.5;
+			cv$var121$stateProbabilityGlobal[0] = 0.5;
+			cv$var121$stateProbabilityGlobal[1] = 0.5;
 		} else {
-			cv$var125$stateProbabilityGlobal[0] = Math.exp((cv$var125$stateProbabilityGlobal[0] - cv$logSum));
-			cv$var125$stateProbabilityGlobal[1] = Math.exp((cv$var125$stateProbabilityGlobal[1] - cv$logSum));
+			cv$var121$stateProbabilityGlobal[0] = Math.exp((cv$var121$stateProbabilityGlobal[0] - cv$logSum));
+			cv$var121$stateProbabilityGlobal[1] = Math.exp((cv$var121$stateProbabilityGlobal[1] - cv$logSum));
 		}
-		for(int cv$indexName = 2; cv$indexName < cv$var125$stateProbabilityGlobal.length; cv$indexName += 1)
-			cv$var125$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		st[i1][j1][k1] = DistributionSampling.sampleCategorical(RNG$, cv$var125$stateProbabilityGlobal);
+		for(int cv$indexName = 2; cv$indexName < cv$var121$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var121$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+		st[i1][j1][k1] = DistributionSampling.sampleCategorical(RNG$, cv$var121$stateProbabilityGlobal, 2);
 	}
 
-	private final void sample33(int var31) {
-		cv$var32$countGlobal[0] = 0.0;
-		cv$var32$countGlobal[1] = 0.0;
-		if((var31 == 0)) {
-			cv$var32$countGlobal[st[0][0][0]] = (cv$var32$countGlobal[st[0][0][0]] + 1.0);
+	private final void sample28(int var27) {
+		cv$var28$countGlobal[0] = 0.0;
+		cv$var28$countGlobal[1] = 0.0;
+		if((var27 == 0)) {
+			cv$var28$countGlobal[st[0][0][0]] = (cv$var28$countGlobal[st[0][0][0]] + 1.0);
 			for(int i1 = 1; i1 < samples; i1 += 1) {
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						cv$var32$countGlobal[st[i1][j1][k1]] = (cv$var32$countGlobal[st[i1][j1][k1]] + 1.0);
+						cv$var28$countGlobal[st[i1][j1][k1]] = (cv$var28$countGlobal[st[i1][j1][k1]] + 1.0);
 				}
 			}
 		}
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var32$countGlobal, m[var31]);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, m[var27], 2);
 	}
 
-	private final void sample50(int var47) {
+	private final void sample45(int var43) {
 		int cv$sum = 0;
 		int cv$count = 0;
 		for(int l = 0; l < samples; l += 1) {
 			for(int p = 0; p < samples; p += 1) {
 				for(int n = 0; n < samples; n += 1) {
-					if((var47 == st[p][l][n])) {
+					if((var43 == st[p][l][n])) {
 						cv$count = (cv$count + 1);
 						if(flips[l][n][p])
 							cv$sum = (cv$sum + 1);
@@ -418,48 +412,46 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			}
 		}
-		bias[var47] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
-	private final void sample90() {
+	private final void sample84() {
 		{
-			double[] cv$temp$0$var83 = m[0];
-			double cv$accumulatedProbabilities = ((0 < cv$temp$0$var83.length)?Math.log(cv$temp$0$var83[0]):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = Math.log(m[0][0]);
 			if((0 < samples))
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0][0][0], bias[0]) + cv$accumulatedProbabilities);
-			cv$var85$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			cv$var81$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
-		double[] cv$temp$0$var83 = m[0];
-		double cv$accumulatedProbabilities = ((1 < cv$temp$0$var83.length)?Math.log(cv$temp$0$var83[1]):Double.NEGATIVE_INFINITY);
+		double cv$accumulatedProbabilities = Math.log(m[0][1]);
 		if((0 < samples))
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0][0][0], bias[1]) + cv$accumulatedProbabilities);
-		cv$var85$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		cv$var81$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
-		double cv$lseMax = cv$var85$stateProbabilityGlobal[0];
-		double cv$lseElementValue = cv$var85$stateProbabilityGlobal[1];
+		double cv$lseMax = cv$var81$stateProbabilityGlobal[0];
+		double cv$lseElementValue = cv$var81$stateProbabilityGlobal[1];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		if((cv$lseMax == Double.NEGATIVE_INFINITY))
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else
-			cv$logSum = (Math.log((Math.exp((cv$var85$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var85$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			cv$logSum = (Math.log((Math.exp((cv$var81$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var81$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			cv$var85$stateProbabilityGlobal[0] = 0.5;
-			cv$var85$stateProbabilityGlobal[1] = 0.5;
+			cv$var81$stateProbabilityGlobal[0] = 0.5;
+			cv$var81$stateProbabilityGlobal[1] = 0.5;
 		} else {
-			cv$var85$stateProbabilityGlobal[0] = Math.exp((cv$var85$stateProbabilityGlobal[0] - cv$logSum));
-			cv$var85$stateProbabilityGlobal[1] = Math.exp((cv$var85$stateProbabilityGlobal[1] - cv$logSum));
+			cv$var81$stateProbabilityGlobal[0] = Math.exp((cv$var81$stateProbabilityGlobal[0] - cv$logSum));
+			cv$var81$stateProbabilityGlobal[1] = Math.exp((cv$var81$stateProbabilityGlobal[1] - cv$logSum));
 		}
-		for(int cv$indexName = 2; cv$indexName < cv$var85$stateProbabilityGlobal.length; cv$indexName += 1)
-			cv$var85$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, cv$var85$stateProbabilityGlobal);
+		for(int cv$indexName = 2; cv$indexName < cv$var81$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var81$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+		st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, cv$var81$stateProbabilityGlobal, 2);
 	}
 
 	@Override
 	public final void allocateScratch() {
-		cv$var32$countGlobal = new double[2];
-		cv$var85$stateProbabilityGlobal = new double[2];
-		cv$var125$stateProbabilityGlobal = new double[2];
+		cv$var28$countGlobal = new double[2];
+		cv$var81$stateProbabilityGlobal = new double[2];
+		cv$var121$stateProbabilityGlobal = new double[2];
 	}
 
 	@Override
@@ -474,9 +466,9 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			bias = new double[2];
 		if(!setFlag$st) {
 			st = new int[length$flipsMeasured.length][][];
-			for(int i$var61 = 0; i$var61 < length$flipsMeasured.length; i$var61 += 1) {
+			for(int i$var57 = 0; i$var57 < length$flipsMeasured.length; i$var57 += 1) {
 				int[][] subarray$0 = new int[length$flipsMeasured.length][];
-				st[i$var61] = subarray$0;
+				st[i$var57] = subarray$0;
 				for(int j = 0; j < length$flipsMeasured.length; j += 1)
 					subarray$0[j] = new int[length$flipsMeasured.length];
 			}
@@ -490,31 +482,31 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					subarray$0[j2] = new boolean[length$flipsMeasured.length];
 			}
 		}
-		logProbability$var124 = new double[(length$flipsMeasured.length - 1)][][];
+		logProbability$var120 = new double[(length$flipsMeasured.length - 1)][][];
 		for(int i1 = 1; i1 < length$flipsMeasured.length; i1 += 1) {
 			double[][] subarray$0 = new double[length$flipsMeasured.length][];
-			logProbability$var124[(i1 - 1)] = subarray$0;
+			logProbability$var120[(i1 - 1)] = subarray$0;
 			for(int j1 = 0; j1 < length$flipsMeasured.length; j1 += 1)
 				subarray$0[j1] = new double[length$flipsMeasured.length];
 		}
-		logProbability$sample130 = new double[(length$flipsMeasured.length - 1)][][];
+		logProbability$sample124 = new double[(length$flipsMeasured.length - 1)][][];
 		for(int i1 = 1; i1 < length$flipsMeasured.length; i1 += 1) {
 			double[][] subarray$0 = new double[length$flipsMeasured.length][];
-			logProbability$sample130[(i1 - 1)] = subarray$0;
+			logProbability$sample124[(i1 - 1)] = subarray$0;
 			for(int j1 = 0; j1 < length$flipsMeasured.length; j1 += 1)
 				subarray$0[j1] = new double[length$flipsMeasured.length];
 		}
-		logProbability$var189 = new double[length$flipsMeasured.length][][];
+		logProbability$var185 = new double[length$flipsMeasured.length][][];
 		for(int l = 0; l < length$flipsMeasured.length; l += 1) {
 			double[][] subarray$0 = new double[length$flipsMeasured.length][];
-			logProbability$var189[l] = subarray$0;
+			logProbability$var185[l] = subarray$0;
 			for(int p = 0; p < length$flipsMeasured.length; p += 1)
 				subarray$0[p] = new double[length$flipsMeasured.length];
 		}
-		logProbability$sample197 = new double[length$flipsMeasured.length][][];
+		logProbability$sample191 = new double[length$flipsMeasured.length][][];
 		for(int l = 0; l < length$flipsMeasured.length; l += 1) {
 			double[][] subarray$0 = new double[length$flipsMeasured.length][];
-			logProbability$sample197[l] = subarray$0;
+			logProbability$sample191[l] = subarray$0;
 			for(int p = 0; p < length$flipsMeasured.length; p += 1)
 				subarray$0[p] = new double[length$flipsMeasured.length];
 		}
@@ -523,31 +515,31 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample33) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+		if(!fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
-		if(!fixedFlag$sample50) {
+		if(!fixedFlag$sample45) {
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample90)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		if(!fixedFlag$sample130) {
+		if(!fixedFlag$sample84)
+			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!fixedFlag$sample124) {
 			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var120 = st[i1];
+				int[][] var116 = st[i1];
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						var120[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0]);
+						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 				}
 			}
 		}
-		if(!fixedFlag$sample197) {
+		if(!fixedFlag$sample191) {
 			for(int l = 0; l < samples; l += 1) {
-				boolean[][] var183 = flips[l];
+				boolean[][] var179 = flips[l];
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1)
-						var183[n][p] = DistributionSampling.sampleBernoulli(RNG$, bias[st[p][l][n]]);
+						var179[n][p] = DistributionSampling.sampleBernoulli(RNG$, bias[st[p][l][n]]);
 				}
 			}
 		}
@@ -555,22 +547,22 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample33) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+		if(!fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
-		if(!fixedFlag$sample50) {
+		if(!fixedFlag$sample45) {
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample90)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		if(!fixedFlag$sample130) {
+		if(!fixedFlag$sample84)
+			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!fixedFlag$sample124) {
 			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var120 = st[i1];
+				int[][] var116 = st[i1];
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						var120[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0]);
+						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 				}
 			}
 		}
@@ -578,22 +570,22 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample33) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+		if(!fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
-		if(!fixedFlag$sample50) {
+		if(!fixedFlag$sample45) {
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample90)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		if(!fixedFlag$sample130) {
+		if(!fixedFlag$sample84)
+			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!fixedFlag$sample124) {
 			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var120 = st[i1];
+				int[][] var116 = st[i1];
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						var120[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0]);
+						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 				}
 			}
 		}
@@ -602,42 +594,42 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample33) {
-				sample33(0);
-				sample33(1);
+			if(!fixedFlag$sample28) {
+				sample28(0);
+				sample28(1);
 			}
-			if(!fixedFlag$sample50) {
-				sample50(0);
-				sample50(1);
+			if(!fixedFlag$sample45) {
+				sample45(0);
+				sample45(1);
 			}
-			if(!fixedFlag$sample90)
-				sample90();
-			if(!fixedFlag$sample130) {
+			if(!fixedFlag$sample84)
+				sample84();
+			if(!fixedFlag$sample124) {
 				for(int i1 = 1; i1 < samples; i1 += 1) {
 					for(int j1 = 0; j1 < samples; j1 += 1) {
 						for(int k1 = 0; k1 < samples; k1 += 1)
-							sample130(i1, j1, k1);
+							sample124(i1, j1, k1);
 					}
 				}
 			}
 		} else {
-			if(!fixedFlag$sample130) {
+			if(!fixedFlag$sample124) {
 				for(int i1 = (samples - 1); i1 >= 1; i1 -= 1) {
 					for(int j1 = (samples - 1); j1 >= 0; j1 -= 1) {
 						for(int k1 = (samples - 1); k1 >= 0; k1 -= 1)
-							sample130(i1, j1, k1);
+							sample124(i1, j1, k1);
 					}
 				}
 			}
-			if(!fixedFlag$sample90)
-				sample90();
-			if(!fixedFlag$sample50) {
-				sample50(1);
-				sample50(0);
+			if(!fixedFlag$sample84)
+				sample84();
+			if(!fixedFlag$sample45) {
+				sample45(1);
+				sample45(0);
 			}
-			if(!fixedFlag$sample33) {
-				sample33(1);
-				sample33(0);
+			if(!fixedFlag$sample28) {
+				sample28(1);
+				sample28(0);
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
@@ -653,44 +645,44 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var20 = 0.0;
+		logProbability$var16 = 0.0;
 		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample33)
-			logProbability$var32 = 0.0;
-		logProbability$var36 = 0.0;
+		if(!fixedProbFlag$sample28)
+			logProbability$var28 = 0.0;
+		logProbability$var32 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample50)
-			logProbability$var48 = 0.0;
-		logProbability$var84 = 0.0;
+		if(!fixedProbFlag$sample45)
+			logProbability$var44 = 0.0;
+		logProbability$var80 = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample90)
-			logProbability$var85 = 0.0;
+		if(!fixedProbFlag$sample84)
+			logProbability$var81 = 0.0;
 		for(int i1 = 1; i1 < samples; i1 += 1) {
 			for(int j1 = 0; j1 < samples; j1 += 1) {
 				for(int k1 = 0; k1 < samples; k1 += 1)
-					logProbability$var124[(i1 - 1)][j1][k1] = 0.0;
+					logProbability$var120[(i1 - 1)][j1][k1] = 0.0;
 			}
 		}
-		if(!fixedProbFlag$sample130) {
+		if(!fixedProbFlag$sample124) {
 			for(int i1 = 1; i1 < samples; i1 += 1) {
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						logProbability$sample130[(i1 - 1)][j1][k1] = 0.0;
+						logProbability$sample124[(i1 - 1)][j1][k1] = 0.0;
 				}
 			}
 		}
 		for(int l = 0; l < samples; l += 1) {
 			for(int p = 0; p < samples; p += 1) {
 				for(int n = 0; n < samples; n += 1)
-					logProbability$var189[l][p][n] = 0.0;
+					logProbability$var185[l][p][n] = 0.0;
 			}
 		}
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample197) {
+		if(!fixedProbFlag$sample191) {
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1)
-						logProbability$sample197[l][p][n] = 0.0;
+						logProbability$sample191[l][p][n] = 0.0;
 				}
 			}
 		}
@@ -704,55 +696,55 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample33)
-			logProbabilityValue$sample33();
-		if(fixedFlag$sample50)
-			logProbabilityValue$sample50();
-		if(fixedFlag$sample90)
-			logProbabilityValue$sample90();
-		if(fixedFlag$sample130)
-			logProbabilityValue$sample130();
-		logProbabilityValue$sample197();
+		if(fixedFlag$sample28)
+			logProbabilityValue$sample28();
+		if(fixedFlag$sample45)
+			logProbabilityValue$sample45();
+		if(fixedFlag$sample84)
+			logProbabilityValue$sample84();
+		if(fixedFlag$sample124)
+			logProbabilityValue$sample124();
+		logProbabilityValue$sample191();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample33();
-		logProbabilityValue$sample50();
-		logProbabilityValue$sample90();
-		logProbabilityValue$sample130();
-		logProbabilityValue$sample197();
+		logProbabilityValue$sample28();
+		logProbabilityValue$sample45();
+		logProbabilityValue$sample84();
+		logProbabilityValue$sample124();
+		logProbabilityValue$sample191();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample33();
-		logProbabilityValue$sample50();
-		logProbabilityValue$sample90();
-		logProbabilityValue$sample130();
-		logProbabilityValue$sample197();
+		logProbabilityValue$sample28();
+		logProbabilityValue$sample45();
+		logProbabilityValue$sample84();
+		logProbabilityValue$sample124();
+		logProbabilityValue$sample191();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample33) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+		if(!fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
-		if(!fixedFlag$sample50) {
+		if(!fixedFlag$sample45) {
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample90)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		if(!fixedFlag$sample130) {
+		if(!fixedFlag$sample84)
+			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!fixedFlag$sample124) {
 			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var120 = st[i1];
+				int[][] var116 = st[i1];
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						var120[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0]);
+						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 				}
 			}
 		}

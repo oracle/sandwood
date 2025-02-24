@@ -10,16 +10,15 @@ package org.sandwood.compiler.dataflowGraph.variables.arrayVariable;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
-import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
+import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.ArrayConstructTask;
@@ -31,7 +30,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetNumberTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
-import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.CopyNumberTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.NamedArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
@@ -132,20 +130,13 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
      * The instance that was generated when a put was performed on this instance
      */
     private ArrayVariable<A> childInstance = null;
-    /**
-     * The instance this array was generated from, null if it is an unmodified array.
-     */
-    private final ArrayVariable<A> parentInstance;
-
-    /** Set of lengths of arrays added to this array */
-    private final Set<VariableWrapper<IntVariable>> childLengths = new HashSet<>();
 
     /**
      * Set of possible lengths of this array. If there is more than one length in here we will have to fall back on the
      * classic array.length code, but it is useful to keep the whole set so a max can be performed over it during
      * allocation if required.
      */
-    private final Set<VariableWrapper<IntVariable>> arrayLengths;
+    private Set<VariableWrapper<IntVariable>> arrayLengths = null;
 
     /**
      * A flag to mark if this array is an input and so its value is fixed.
@@ -166,8 +157,6 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         super(parent);
         currentInstance = this;
         instanceHandle = this;
-        arrayLengths = parent.getPossibleLengths();
-        parentInstance = null;
         outerArrayDesc = new OuterArrayDesc<>();
 
         switch(parent.getType()) {
@@ -194,48 +183,11 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         super(parent);
         isInput = source.isInput;
         instanceHandle = source.instanceHandle;
-        addChildLengths(source.getCurrentInstance().getPossibleChildLengths());
         instanceHandle.updateCurrentInstance(this);
-        parentInstance = source;
         alias = source.getAlias();
         comment = source.getComment();
         setScope(source.scope());
-        arrayLengths = parent.getPossibleLengths();
         outerArrayDesc = source.outerArrayDesc;
-
-        if(getElementType().getTypeSingleton() == VariableType.Array) {
-            switch(parent.getType()) {
-                case PUT:
-                    Set<VariableWrapper<IntVariable>> newChildLengths = ((ArrayVariable<?>) ((PutTask<A>) parent).value)
-                            .getPossibleLengths();
-                    addChildLengths(newChildLengths);
-                    Scope s = parent.scope();
-                    Scope lastIterating = null;
-                    while(s != GlobalScope.scope) {
-                        if(s.iterating())
-                            lastIterating = s;
-                        s = s.getEnclosingScope();
-                    }
-                    if(lastIterating != null)
-                        source.addChildLengths(newChildLengths, lastIterating);
-                    break;
-                default:
-                    throw new CompilerException("Currently, only puts are allowed to modify arrays.");
-            }
-        }
-    }
-
-    private void addChildLengths(Set<VariableWrapper<IntVariable>> newChildLengths, Scope lastIterating) {
-        Scope s = getParent().scope();
-        while(s != GlobalScope.scope) {
-            if(s == lastIterating) {
-                childLengths.addAll(newChildLengths);
-                if(parentInstance != null)
-                    parentInstance.addChildLengths(newChildLengths, lastIterating);
-                return;
-            }
-            s = s.getEnclosingScope();
-        }
     }
 
     // TODO remove this once the type of parent is generic.
@@ -484,35 +436,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
     }
 
     public IntVariable length(Location location) {
-        // Trace the origin of the array
-        Stack<GetTask<?>> gets = new Stack<>();
-        Variable<?> lengthVar = traceSource(gets);
-
-        if(lengthVar != null) { // If it came from an input construct an array to hold the lengths and variables
-            // representing the lengths.
-            // Calculate the dimension of the input array
-            int arrayDim = lengthVar.getType().getDepth() + 1;
-
-            // Construct the gets required to get the correct value.
-            while(!gets.isEmpty()) {
-                GetTask<?> g = gets.pop();
-                lengthVar = ((ArrayVariable<?>) lengthVar).get(g.index, location);
-                arrayDim--;
-            }
-
-            // Construct the length for this array.
-            if(arrayDim == 1) {
-                CopyNumberTask<IntVariable> lengthCopy = new CopyNumberTask<>((IntVariable) lengthVar, location);
-                GetArrayLengthTask lengthTask = new GetArrayLengthTask(instanceHandle(), lengthCopy, location);
-                return IntVariable.intVariable(lengthTask);
-            } else {
-                GetArrayLengthTask lengthTask = new GetArrayLengthTask((ArrayVariable<?>) lengthVar, location);
-                GetArrayLengthTask lengthTask2 = new GetArrayLengthTask(instanceHandle(), lengthTask, location);
-                return IntVariable.intVariable(lengthTask2);
-            }
-        } else {// If it did not come from an input just give the length
-            return IntVariable.intVariable(new GetArrayLengthTask(this, location));
-        }
+        return IntVariable.intVariable(new GetArrayLengthTask(this, location));
     }
 
     public ArrayProducingDataflowTask<?> getSource() {
@@ -523,37 +447,21 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
             return d;
     }
 
-    /**
-     * Method to find the outermost array of a given array value. It will return this array if it was an input, or
-     * return null if this array was declared inside the model.
-     * 
-     * @param gets
-     * @return
-     */
-    private Variable<?> traceSource(Stack<GetTask<?>> gets) {
-        ArrayVariable<?> v = this;
-        ProducingDataflowTask<?> p = v.instanceHandle().getParent();
-
-        // Run through all the parents to the ultimate source.
-        while(p.getType() == DFType.GET) {
-            GetTask<?> get = (GetTask<?>) p;
-            gets.push(get);
-            v = get.array;
-            p = v.instanceHandle().getParent();
+    public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
+        if(arrayLengths == null) {
+            // Constructing the set before the search protects against loops.
+            arrayLengths = new HashSet<>();
+            arrayLengths.addAll(getParent().getPossibleLengths());
         }
-
-        // If the array came from an input construction return it, otherwise return
-        // null.
-        if(p.getType() == DFType.CONSTRUCT_INPUT) {
-            ConstructArrayInput<?> c = (ConstructArrayInput<?>) p;
-            return c.lengthVar;
-        } else {
-            return null;
-        }
+        return arrayLengths;
     }
 
-    public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
-        return new HashSet<>(arrayLengths);
+    public Set<VariableWrapper<IntVariable>> getPossibleElementLengths(DataflowTask<A> t) {
+        Set<VariableWrapper<IntVariable>> elementLengths = new HashSet<>();
+        for(PutTask<A> pt:getPuts(t.scope(), t.id())) {
+            elementLengths.addAll(((ArrayVariable<?>) pt.value).getPossibleLengths());
+        }
+        return elementLengths;
     }
 
     /**
@@ -718,16 +626,31 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         return v;
     }
 
-    public Set<VariableWrapper<IntVariable>> getPossibleChildLengths() {
-        return childLengths;
-    }
-
-    public void addChildLengths(Set<VariableWrapper<IntVariable>> possibleLengths) {
-        childLengths.addAll(possibleLengths);
-    }
-
     public boolean isSubArray() {
         return outerArrayDesc.array != null;
+    }
+
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        if(this != instanceHandle())
+            return instanceHandle().getLength(compilationCtx);
+
+        Set<VariableWrapper<IntVariable>> arrayLengths = getPossibleLengths();
+        if(arrayLengths.size() == 1) {
+            IntVariable length = arrayLengths.iterator().next().value;
+            if(length.isConstant(this) && getParent().getType() != DFType.CONSTRUCT_INPUT) {
+                return length.getForwardIR(compilationCtx);
+            }
+        }
+
+        if(isDistribution())
+            throw new SandwoodModelException(
+                    "This array is generated by a distribution. Arrays like this must be of constant length.",
+                    getLocation());
+
+        compilationCtx.addLengthArray(this);
+        IRTreeReturn<IntVariable> length = getParent().getLength(compilationCtx);
+        compilationCtx.removeLengthArray(this);
+        return length;
     }
 
     public IRTreeReturn<IntVariable> getMaxLength(CompilationContext compilationCtx) {
@@ -796,8 +719,8 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
     @Override
     public ArrayVariable<A> copy() {
         throw new SandwoodModelException("unable to assign array " + getAlias()
-        + " to another reference as arrays are reference types and currently only"
-        + " value types can be assigned to multiple variables.");
+                + " to another reference as arrays are reference types and currently only"
+                + " value types can be assigned to multiple variables.");
     }
 
     @Override

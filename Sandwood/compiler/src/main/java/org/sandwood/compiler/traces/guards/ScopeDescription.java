@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -112,7 +112,7 @@ class ScopeDescription {
         public final Set<Set<TraceHandle>> postTraceSets;
 
         ConstraintData(TraceHandle trace, Direction direction) {
-            this.task = (direction == FORWARDS?trace.peek():trace.get(0)).task;
+            this.task = (direction == FORWARDS ? trace.peek() : trace.get(0)).task;
             this.trace = trace;
             this.postTraceSets = null;
             Map<DataflowTask<?>, Substitutions> subs = new HashMap<>();
@@ -152,7 +152,7 @@ class ScopeDescription {
      * are the for scopes created within the distribution description. The values are what we need to compare against,
      * and the keys are the scopes we can get by querying the sample task.
      */
-    private final Map<DistributionSampleTask<?, ?>, List<SampleDesc<?>>> sampleDescriptions;
+    private final Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions;
     /** The inner scope that additional scopes or trees should be added too. */
     final Scope innerScope;
     /** A tree describing the probability of this distribution. */
@@ -215,7 +215,7 @@ class ScopeDescription {
         this.existingScopes = Collections.unmodifiableSet(existingScopes);
         knownFlags = new HashMap<>();
         List<ConstraintData> cd = new ArrayList<>();
-        sampleDescriptions = new HashMap<>();
+        sampleDescriptions = new HashMap<>(compilationCtx.peekExploredDistSamples());
         cd.add(new ConstraintData(task, distributionTraces));
         constraintData = Collections.unmodifiableList(cd);
         compilationCtx.touchScope(innerScope);
@@ -265,11 +265,11 @@ class ScopeDescription {
             s = s.getEnclosingScope();
         }
 
-        SampleDesc<A> sampleDesc = new SampleDesc<>(sampleValue, sampleIndexes);
+        DistSampleDesc<A> sampleDesc = new DistSampleDesc<>(sampleValue, sampleIndexes);
 
-        Map<DistributionSampleTask<?, ?>, List<SampleDesc<?>>> sampleDescriptions = new HashMap<>(
+        Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions = new HashMap<>(
                 this.sampleDescriptions);
-        List<SampleDesc<?>> l = sampleDescriptions.get(sampleTask);
+        List<DistSampleDesc<?>> l = sampleDescriptions.get(sampleTask);
         if(l == null)
             l = new ArrayList<>();
         else
@@ -290,7 +290,7 @@ class ScopeDescription {
      */
     private ScopeDescription(Scope innerScope, IRTreeReturn<DoubleVariable> probability, Set<ForTask> existingScopes,
             List<ConstraintData> constraintData,
-            Map<DistributionSampleTask<?, ?>, List<SampleDesc<?>>> sampleDescriptions,
+            Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions,
             CompilationContext compilationCtx, ScopeDescription d) {
         this.innerScope = innerScope;
         this.probability = probability;
@@ -344,12 +344,12 @@ class ScopeDescription {
     }
 
     public <A extends Variable<A>> ScopeDescription addSubstitution(int position, Variable<A> sampleOutput,
-            SampleDesc<A> sampleDesc) {
+            DistSampleDesc<A> sampleDesc) {
         return new ScopeDescription(position, sampleOutput, sampleDesc, this);
     }
 
-    private <A extends Variable<A>> ScopeDescription(int position, Variable<A> sampleOutput, SampleDesc<A> sampleDesc,
-            ScopeDescription d) {
+    private <A extends Variable<A>> ScopeDescription(int position, Variable<A> sampleOutput,
+            DistSampleDesc<A> sampleDesc, ScopeDescription d) {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
@@ -469,12 +469,12 @@ class ScopeDescription {
      * @param sampleDesc The map of scopes from the DAG to scopes that were created for this instance of the sample
      *                   task.
      */
-    public ScopeDescription addSampleDesc(DistributionSampleTask<?, ?> sampleTask, SampleDesc<?> sampleDesc,
+    public ScopeDescription addSampleDesc(DistributionSampleTask<?, ?> sampleTask, DistSampleDesc<?> sampleDesc,
             CompilationContext compilationCtx) {
-        Map<DistributionSampleTask<?, ?>, List<SampleDesc<?>>> sampleDescriptions = new HashMap<>(
+        Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions = new HashMap<>(
                 this.sampleDescriptions);
-        List<SampleDesc<?>> newDescs;
-        List<SampleDesc<?>> existingDescs = sampleDescriptions.get(sampleTask);
+        List<DistSampleDesc<?>> newDescs;
+        List<DistSampleDesc<?>> existingDescs = sampleDescriptions.get(sampleTask);
         if(existingDescs != null)
             newDescs = new ArrayList<>(existingDescs);
         else
@@ -614,12 +614,22 @@ class ScopeDescription {
      * @return A list of maps with each map representing the substitutions for one execution of the sampleTask. Multiple
      *         executions happen when the task appears inside a loop.
      */
-    public List<SampleDesc<?>> getExistingSamples(DistributionSampleTask<?, ?> sampleTask) {
-        List<SampleDesc<?>> scopes = sampleDescriptions.get(sampleTask);
+    public List<DistSampleDesc<?>> getExistingSamples(DistributionSampleTask<?, ?> sampleTask) {
+        List<DistSampleDesc<?>> scopes = sampleDescriptions.get(sampleTask);
         if(scopes == null)
             return Collections.emptyList();
         else
             return scopes;
+    }
+
+    /**
+     * Method to get a map of substitution maps for all constructed distribution sample task. Each element in each list
+     * represents an instance of the sample task represented by this distribution description.
+     * 
+     * @return
+     */
+    public Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> getExistingSamples() {
+        return sampleDescriptions;
     }
 
     /**

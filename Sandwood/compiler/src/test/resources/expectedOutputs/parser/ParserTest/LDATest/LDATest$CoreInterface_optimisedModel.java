@@ -14,29 +14,29 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	// Setter for documents.
 	public void set$documents(int[][] cv$value);
 
-	// Getter for fixedFlag$sample102.
-	public boolean get$fixedFlag$sample102();
+	// Getter for fixedFlag$sample42.
+	public boolean get$fixedFlag$sample42();
 
-	// Setter for fixedFlag$sample102.
-	public void set$fixedFlag$sample102(boolean cv$value);
+	// Setter for fixedFlag$sample42.
+	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample105.
-	public boolean get$fixedFlag$sample105();
+	// Getter for fixedFlag$sample58.
+	public boolean get$fixedFlag$sample58();
 
-	// Setter for fixedFlag$sample105.
-	public void set$fixedFlag$sample105(boolean cv$value);
+	// Setter for fixedFlag$sample58.
+	public void set$fixedFlag$sample58(boolean cv$value);
 
-	// Getter for fixedFlag$sample47.
-	public boolean get$fixedFlag$sample47();
+	// Getter for fixedFlag$sample90.
+	public boolean get$fixedFlag$sample90();
 
-	// Setter for fixedFlag$sample47.
-	public void set$fixedFlag$sample47(boolean cv$value);
+	// Setter for fixedFlag$sample90.
+	public void set$fixedFlag$sample90(boolean cv$value);
 
-	// Getter for fixedFlag$sample64.
-	public boolean get$fixedFlag$sample64();
+	// Getter for fixedFlag$sample93.
+	public boolean get$fixedFlag$sample93();
 
-	// Setter for fixedFlag$sample64.
-	public void set$fixedFlag$sample64(boolean cv$value);
+	// Setter for fixedFlag$sample93.
+	public void set$fixedFlag$sample93(boolean cv$value);
 
 	// Getter for length$documents.
 	public int[] get$length$documents();

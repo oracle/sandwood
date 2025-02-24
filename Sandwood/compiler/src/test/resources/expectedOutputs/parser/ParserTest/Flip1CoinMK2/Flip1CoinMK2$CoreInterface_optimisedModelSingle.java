@@ -14,17 +14,17 @@ interface Flip1CoinMK2$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for bias.
 	public void set$bias(double cv$value);
 
-	// Getter for fixedFlag$sample22.
-	public boolean get$fixedFlag$sample22();
+	// Getter for fixedFlag$sample19.
+	public boolean get$fixedFlag$sample19();
 
-	// Setter for fixedFlag$sample22.
-	public void set$fixedFlag$sample22(boolean cv$value);
+	// Setter for fixedFlag$sample19.
+	public void set$fixedFlag$sample19(boolean cv$value);
 
-	// Getter for fixedFlag$sample9.
-	public boolean get$fixedFlag$sample9();
+	// Getter for fixedFlag$sample6.
+	public boolean get$fixedFlag$sample6();
 
-	// Setter for fixedFlag$sample9.
-	public void set$fixedFlag$sample9(boolean cv$value);
+	// Setter for fixedFlag$sample6.
+	public void set$fixedFlag$sample6(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();
