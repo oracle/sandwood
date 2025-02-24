@@ -527,7 +527,8 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                 /*
                  * If this put is writing the value to the array that get is reading do not explore the put.
                  */
-                if(gt.getOutput().instanceHandle() == value.instanceHandle() && gt.array.instanceHandle() == array.instanceHandle()) {
+                if(gt.getOutput().instanceHandle() == value.instanceHandle()
+                        && gt.array.instanceHandle() == array.instanceHandle()) {
                     skipImplicit = true;
                 }
             }
@@ -625,6 +626,12 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
             }
             i++;
         }
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        throw new CompilerException(
+                "This can only be called on the creator of the instance handle, and put tasks cannot create instance handles.");
     }
 
     @Override

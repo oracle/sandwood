@@ -39,13 +39,13 @@ public class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed);
+                system$c.set$fixedFlag$sample42(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample47())
+            if(system$c.get$fixedFlag$sample42())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -79,13 +79,13 @@ public class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample64(fixed);
+                system$c.set$fixedFlag$sample58(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample64())
+            if(system$c.get$fixedFlag$sample58())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -119,13 +119,13 @@ public class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample105(fixed);
+                system$c.set$fixedFlag$sample93(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample105())
+            if(system$c.get$fixedFlag$sample93())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -308,11 +308,11 @@ public class LDATest extends Model {
 
         //Set fixed flags
         if(phi.isSet())
-            newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
+            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
         if(theta.isSet())
-            newCore.set$fixedFlag$sample64(oldCore.get$fixedFlag$sample64());
+            newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
         if(w.isSet())
-            newCore.set$fixedFlag$sample105(oldCore.get$fixedFlag$sample105());
+            newCore.set$fixedFlag$sample93(oldCore.get$fixedFlag$sample93());
     }
 
     /**

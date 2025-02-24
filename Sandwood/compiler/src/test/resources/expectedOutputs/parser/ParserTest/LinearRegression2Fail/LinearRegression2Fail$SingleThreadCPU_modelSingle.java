@@ -7,23 +7,23 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Declare the variables for the model.
 	private double b0;
 	private double b1;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample22 = false;
-	private boolean fixedFlag$sample38 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample22 = false;
-	private boolean fixedProbFlag$sample38 = false;
+	private boolean fixedFlag$sample11 = false;
+	private boolean fixedFlag$sample15 = false;
+	private boolean fixedFlag$sample31 = false;
+	private boolean fixedFlag$sample7 = false;
+	private boolean fixedProbFlag$sample11 = false;
+	private boolean fixedProbFlag$sample15 = false;
+	private boolean fixedProbFlag$sample31 = false;
+	private boolean fixedProbFlag$sample7 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
 	private double logProbability$var10;
 	private double logProbability$var14;
-	private double logProbability$var18;
-	private double logProbability$var34;
-	private double logProbability$var35;
+	private double logProbability$var30;
+	private double logProbability$var31;
+	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -51,11 +51,11 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// updated.
 		b0 = cv$value;
 		
-		// Unset the fixed probability flag for sample 14 as it depends on b0.
-		fixedProbFlag$sample14 = false;
+		// Unset the fixed probability flag for sample 7 as it depends on b0.
+		fixedProbFlag$sample7 = false;
 		
-		// Unset the fixed probability flag for sample 38 as it depends on b0.
-		fixedProbFlag$sample38 = false;
+		// Unset the fixed probability flag for sample 31 as it depends on b0.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for b1.
@@ -71,95 +71,95 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// updated.
 		b1 = cv$value;
 		
-		// Unset the fixed probability flag for sample 18 as it depends on b1.
-		fixedProbFlag$sample18 = false;
+		// Unset the fixed probability flag for sample 11 as it depends on b1.
+		fixedProbFlag$sample11 = false;
 		
-		// Unset the fixed probability flag for sample 38 as it depends on b1.
-		fixedProbFlag$sample38 = false;
+		// Unset the fixed probability flag for sample 31 as it depends on b1.
+		fixedProbFlag$sample31 = false;
 	}
 
-	// Getter for fixedFlag$sample14.
+	// Getter for fixedFlag$sample11.
 	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
+	public final boolean get$fixedFlag$sample11() {
+		return fixedFlag$sample11;
 	}
 
-	// Setter for fixedFlag$sample14.
+	// Setter for fixedFlag$sample11.
 	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample14 including if probabilities
+	public final void set$fixedFlag$sample11(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
 		// need to be updated.
-		fixedFlag$sample14 = cv$value;
+		fixedFlag$sample11 = cv$value;
 		
-		// Should the probability of sample 14 be set to fixed. This will only every change
+		// Should the probability of sample 11 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample14 = (fixedFlag$sample14 && fixedProbFlag$sample14);
+		fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
 		
-		// Should the probability of sample 38 be set to fixed. This will only every change
+		// Should the probability of sample 31 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample38 = (fixedFlag$sample14 && fixedProbFlag$sample38);
+		fixedProbFlag$sample31 = (fixedFlag$sample11 && fixedProbFlag$sample31);
 	}
 
-	// Getter for fixedFlag$sample18.
+	// Getter for fixedFlag$sample15.
 	@Override
-	public final boolean get$fixedFlag$sample18() {
-		return fixedFlag$sample18;
+	public final boolean get$fixedFlag$sample15() {
+		return fixedFlag$sample15;
 	}
 
-	// Setter for fixedFlag$sample18.
+	// Setter for fixedFlag$sample15.
 	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
+	public final void set$fixedFlag$sample15(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample15 including if probabilities
 		// need to be updated.
-		fixedFlag$sample18 = cv$value;
+		fixedFlag$sample15 = cv$value;
 		
-		// Should the probability of sample 18 be set to fixed. This will only every change
+		// Should the probability of sample 15 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedProbFlag$sample18);
+		fixedProbFlag$sample15 = (fixedFlag$sample15 && fixedProbFlag$sample15);
 		
-		// Should the probability of sample 38 be set to fixed. This will only every change
+		// Should the probability of sample 31 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample38 = (fixedFlag$sample18 && fixedProbFlag$sample38);
+		fixedProbFlag$sample31 = (fixedFlag$sample15 && fixedProbFlag$sample31);
 	}
 
-	// Getter for fixedFlag$sample22.
+	// Getter for fixedFlag$sample31.
 	@Override
-	public final boolean get$fixedFlag$sample22() {
-		return fixedFlag$sample22;
+	public final boolean get$fixedFlag$sample31() {
+		return fixedFlag$sample31;
 	}
 
-	// Setter for fixedFlag$sample22.
+	// Setter for fixedFlag$sample31.
 	@Override
-	public final void set$fixedFlag$sample22(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample22 including if probabilities
+	public final void set$fixedFlag$sample31(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
 		// need to be updated.
-		fixedFlag$sample22 = cv$value;
+		fixedFlag$sample31 = cv$value;
 		
-		// Should the probability of sample 22 be set to fixed. This will only every change
+		// Should the probability of sample 31 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample22 = (fixedFlag$sample22 && fixedProbFlag$sample22);
-		
-		// Should the probability of sample 38 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample38 = (fixedFlag$sample22 && fixedProbFlag$sample38);
+		fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedProbFlag$sample31);
 	}
 
-	// Getter for fixedFlag$sample38.
+	// Getter for fixedFlag$sample7.
 	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
+	public final boolean get$fixedFlag$sample7() {
+		return fixedFlag$sample7;
 	}
 
-	// Setter for fixedFlag$sample38.
+	// Setter for fixedFlag$sample7.
 	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample38 including if probabilities
+	public final void set$fixedFlag$sample7(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
 		// need to be updated.
-		fixedFlag$sample38 = cv$value;
+		fixedFlag$sample7 = cv$value;
 		
-		// Should the probability of sample 38 be set to fixed. This will only every change
+		// Should the probability of sample 7 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
+		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
+		
+		// Should the probability of sample 31 be set to fixed. This will only every change
+		// the flag to false.
+		fixedProbFlag$sample31 = (fixedFlag$sample7 && fixedProbFlag$sample31);
 	}
 
 	// Getter for logProbability$$evidence.
@@ -217,11 +217,11 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// to be updated.
 		variance = cv$value;
 		
-		// Unset the fixed probability flag for sample 22 as it depends on variance.
-		fixedProbFlag$sample22 = false;
+		// Unset the fixed probability flag for sample 15 as it depends on variance.
+		fixedProbFlag$sample15 = false;
 		
-		// Unset the fixed probability flag for sample 38 as it depends on variance.
-		fixedProbFlag$sample38 = false;
+		// Unset the fixed probability flag for sample 31 as it depends on variance.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for x.
@@ -253,8 +253,8 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 38 as it depends on y.
-		fixedProbFlag$sample38 = false;
+		// Unset the fixed probability flag for sample 31 as it depends on y.
+		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for yMeasured.
@@ -271,12 +271,12 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample14 using sampled
+	// Calculate the probability of the samples represented by sample11 using sampled
 	// values.
-	private final void logProbabilityValue$sample14() {
-		// Determine if we need to calculate the values for sample task 14 or if we should
+	private final void logProbabilityValue$sample11() {
+		// Determine if we need to calculate the values for sample task 11 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample14) {
+		if(!fixedProbFlag$sample11) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -291,11 +291,11 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$probabilityReached = 0.0;
 			{
 				// The sample value to calculate the probability of generating
-				double cv$sampleValue = b0;
+				double cv$sampleValue = b1;
 				{
 					{
-						double var8 = 0.0;
-						double var9 = 2.0;
+						double var8 = 1.0;
+						double var9 = 5.0;
 						
 						// Store the value of the function call, so the function call is only made once.
 						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))));
@@ -333,19 +333,19 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			logProbability$var10 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$b0 = cv$sampleProbability;
+			logProbability$b1 = cv$sampleProbability;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample14)
+			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample14 = fixedFlag$sample14;
+			fixedProbFlag$sample11 = fixedFlag$sample11;
 		}
 		// Using cached values.
 		else {
@@ -353,7 +353,7 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b0;
+			double cv$sampleValue = logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var10 = cv$rvAccumulator;
@@ -363,17 +363,17 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample14)
+			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample18 using sampled
+	// Calculate the probability of the samples represented by sample15 using sampled
 	// values.
-	private final void logProbabilityValue$sample18() {
-		// Determine if we need to calculate the values for sample task 18 or if we should
+	private final void logProbabilityValue$sample15() {
+		// Determine if we need to calculate the values for sample task 15 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample18) {
+		if(!fixedProbFlag$sample15) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -388,14 +388,14 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$probabilityReached = 0.0;
 			{
 				// The sample value to calculate the probability of generating
-				double cv$sampleValue = b1;
+				double cv$sampleValue = variance;
 				{
 					{
 						double var12 = 1.0;
-						double var13 = 5.0;
+						double var13 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var12) / Math.sqrt(var13))) - (0.5 * Math.log(var13))));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var12, var13));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -430,103 +430,6 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			logProbability$var14 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$b1 = cv$sampleProbability;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample18)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample18 = fixedFlag$sample18;
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b1;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var14 = cv$rvAccumulator;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample18)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample22 using sampled
-	// values.
-	private final void logProbabilityValue$sample22() {
-		// Determine if we need to calculate the values for sample task 22 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample22) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// An accumulator for log probabilities.
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			
-			// An accumulator for the distributed probability space covered.
-			double cv$probabilityReached = 0.0;
-			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = variance;
-				{
-					{
-						double var16 = 1.0;
-						double var17 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var16, var17));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				// Return negative infinity if no distribution probability space is reached.
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				// Scale the probability relative to the observed distribution space.
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
-			
-			// Store the sample task probability
 			logProbability$variance = cv$sampleProbability;
 			
 			// Add probability to model
@@ -534,12 +437,12 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample22)
+			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample22 = fixedFlag$sample22;
+			fixedProbFlag$sample15 = fixedFlag$sample15;
 		}
 		// Using cached values.
 		else {
@@ -550,24 +453,24 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$variance;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
+			logProbability$var14 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample22)
+			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample38 using sampled
+	// Calculate the probability of the samples represented by sample31 using sampled
 	// values.
-	private final void logProbabilityValue$sample38() {
-		// Determine if we need to calculate the values for sample task 38 or if we should
+	private final void logProbabilityValue$sample31() {
+		// Determine if we need to calculate the values for sample task 31 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample38) {
+		if(!fixedProbFlag$sample31) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -585,10 +488,10 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 					double cv$sampleValue = y[i];
 					{
 						{
-							double var33 = (b0 + (b1 * x[i]));
+							double var29 = (b0 + (b1 * x[i]));
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var33) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var29) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -621,10 +524,10 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var34 = cv$sampleAccumulator;
+			logProbability$var30 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var35 = cv$accumulator;
+			logProbability$var31 = cv$accumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -635,7 +538,7 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample38 = (((fixedFlag$sample38 && fixedFlag$sample14) && fixedFlag$sample18) && fixedFlag$sample22);
+			fixedProbFlag$sample31 = (((fixedFlag$sample31 && fixedFlag$sample7) && fixedFlag$sample11) && fixedFlag$sample15);
 		}
 		// Using cached values.
 		else {
@@ -643,10 +546,10 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var35;
+			double cv$sampleValue = logProbability$var31;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var34 = cv$rvAccumulator;
+			logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -657,61 +560,106 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 14 drawn from Gaussian 10. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample14() {
-		// State to record the weighting of each sample that is consumed. This is the:
-		// sum of the sample denominator*(the sample value - the sample nominator).
-		double cv$sum = 0.0;
-		
-		// State for storing the sum of the squares of the sample denominators.
-		double cv$denominatorSquareSum = 0.0;
-		
-		// Flag to record if we have a value for Sigma.
-		boolean cv$sigmaNotFound = true;
-		
-		// State for the value of sigma once we find it.
-		double cv$sigmaValue = 1.0;
-		{
-			// Processing random variable 34.
+	// Calculate the probability of the samples represented by sample7 using sampled values.
+	private final void logProbabilityValue$sample7() {
+		// Determine if we need to calculate the values for sample task 7 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample7) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
 			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = b0;
 				{
-					for(int i = 0; i < noSamples; i += 1) {
-						// State for tracking the changes that happen to the sampled value between it being
-						// consumed and it being produced.
-						double cv$denominator = 1.0;
-						double cv$numerator = 0.0;
-						cv$numerator = (cv$numerator + (b1 * x[i]));
+					{
+						double var4 = 0.0;
+						double var5 = 2.0;
 						
-						// Record the value of a sample generated by a consuming sample 38 of random variable
-						// var34.
-						// 
-						// Add the denominator squared to the sample denominator
-						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var4) / Math.sqrt(var5))) - (0.5 * Math.log(var5))));
 						
-						// Add the weighting of the sample to the sum.
-						cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-						
-						// If we have not got the value of sigma yet record it and set a flag so it is not
-						// recorded again.
-						if(cv$sigmaNotFound) {
-							cv$sigmaValue = variance;
-							cv$sigmaNotFound = false;
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var6 = cv$sampleAccumulator;
+			
+			// Store the sample task probability
+			logProbability$b0 = cv$sampleProbability;
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample7)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample7 = fixedFlag$sample7;
 		}
-		
-		// Write out the new value of the sample.
-		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$b0;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var6 = cv$rvAccumulator;
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample7)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 18 drawn from Gaussian 14. Inference was performed using a Gaussian
+	// by sample task 11 drawn from Gaussian 10. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
-	private final void sample18() {
+	private final void sample11() {
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -725,7 +673,7 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// State for the value of sigma once we find it.
 		double cv$sigmaValue = 1.0;
 		{
-			// Processing random variable 34.
+			// Processing random variable 30.
 			{
 				{
 					for(int i = 0; i < noSamples; i += 1) {
@@ -737,8 +685,8 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 						cv$denominator = (cv$denominator * x[i]);
 						cv$numerator = (b0 + cv$numerator);
 						
-						// Record the value of a sample generated by a consuming sample 38 of random variable
-						// var34.
+						// Record the value of a sample generated by a consuming sample 31 of random variable
+						// var30.
 						// 
 						// Add the denominator squared to the sample denominator
 						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
@@ -762,9 +710,9 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 22 drawn from InverseGamma 18. Inference was performed using a Inverse
+	// by sample task 15 drawn from InverseGamma 14. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
-	private final void sample22() {
+	private final void sample15() {
 		// Variable to track the sum of the difference between the samples and the random
 		// variables mean squared.
 		double cv$sum = 0.0;
@@ -772,20 +720,20 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// Variable to record the number of samples from consuming random variables.
 		int cv$count = 0;
 		{
-			// Processing random variable 34.
+			// Processing random variable 30.
 			{
 				{
 					for(int i = 0; i < noSamples; i += 1) {
-						// The mean parameter for Gaussian var34.
-						double cv$var34$mu = (b0 + (b1 * x[i]));
+						// The mean parameter for Gaussian var30.
+						double cv$var30$mu = (b0 + (b1 * x[i]));
 						
-						// Consume sample task 38 from random variable var34.
+						// Consume sample task 31 from random variable var30.
 						// 
 						// The difference between the mean parameter and the value sampled from the Gaussian.
-						double cv$var34$diff = (cv$var34$mu - y[i]);
+						double cv$var30$diff = (cv$var30$mu - y[i]);
 						
 						// Include this sample by adding the square of the difference to the sum.
-						cv$sum = (cv$sum + (cv$var34$diff * cv$var34$diff));
+						cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
 						
 						// Increment the number of samples in the calculation.
 						cv$count = (cv$count + 1);
@@ -796,6 +744,57 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		
 		// Write out the new value of the sample.
 		variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 7 drawn from Gaussian 6. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void sample7() {
+		// State to record the weighting of each sample that is consumed. This is the:
+		// sum of the sample denominator*(the sample value - the sample nominator).
+		double cv$sum = 0.0;
+		
+		// State for storing the sum of the squares of the sample denominators.
+		double cv$denominatorSquareSum = 0.0;
+		
+		// Flag to record if we have a value for Sigma.
+		boolean cv$sigmaNotFound = true;
+		
+		// State for the value of sigma once we find it.
+		double cv$sigmaValue = 1.0;
+		{
+			// Processing random variable 30.
+			{
+				{
+					for(int i = 0; i < noSamples; i += 1) {
+						// State for tracking the changes that happen to the sampled value between it being
+						// consumed and it being produced.
+						double cv$denominator = 1.0;
+						double cv$numerator = 0.0;
+						cv$numerator = (cv$numerator + (b1 * x[i]));
+						
+						// Record the value of a sample generated by a consuming sample 31 of random variable
+						// var30.
+						// 
+						// Add the denominator squared to the sample denominator
+						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+						
+						// Add the weighting of the sample to the sum.
+						cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+						
+						// If we have not got the value of sigma yet record it and set a flag so it is not
+						// recorded again.
+						if(cv$sigmaNotFound) {
+							cv$sigmaValue = variance;
+							cv$sigmaNotFound = false;
+						}
+					}
+				}
+			}
+		}
+		
+		// Write out the new value of the sample.
+		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -819,14 +818,14 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		for(int i = 0; i < noSamples; i += 1) {
-			if(!fixedFlag$sample38)
+			if(!fixedFlag$sample31)
 				y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + (b0 + (b1 * x[i])));
 		}
 	}
@@ -835,11 +834,11 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
 
@@ -847,11 +846,11 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
 
@@ -860,21 +859,21 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample14)
-				sample14();
-			if(!fixedFlag$sample18)
-				sample18();
-			if(!fixedFlag$sample22)
-				sample22();
+			if(!fixedFlag$sample7)
+				sample7();
+			if(!fixedFlag$sample11)
+				sample11();
+			if(!fixedFlag$sample15)
+				sample15();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample22)
-				sample22();
-			if(!fixedFlag$sample18)
-				sample18();
-			if(!fixedFlag$sample14)
-				sample14();
+			if(!fixedFlag$sample15)
+				sample15();
+			if(!fixedFlag$sample11)
+				sample11();
+			if(!fixedFlag$sample7)
+				sample7();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -898,19 +897,19 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var10 = 0.0;
-		if(!fixedProbFlag$sample14)
+		logProbability$var6 = 0.0;
+		if(!fixedProbFlag$sample7)
 			logProbability$b0 = 0.0;
-		logProbability$var14 = 0.0;
-		if(!fixedProbFlag$sample18)
+		logProbability$var10 = 0.0;
+		if(!fixedProbFlag$sample11)
 			logProbability$b1 = 0.0;
-		logProbability$var18 = 0.0;
-		if(!fixedProbFlag$sample22)
+		logProbability$var14 = 0.0;
+		if(!fixedProbFlag$sample15)
 			logProbability$variance = 0.0;
-		logProbability$var34 = 0.0;
+		logProbability$var30 = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample38)
-			logProbability$var35 = 0.0;
+		if(!fixedProbFlag$sample31)
+			logProbability$var31 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -930,13 +929,13 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
-		if(fixedFlag$sample18)
-			logProbabilityValue$sample18();
-		if(fixedFlag$sample22)
-			logProbabilityValue$sample22();
-		logProbabilityValue$sample38();
+		if(fixedFlag$sample7)
+			logProbabilityValue$sample7();
+		if(fixedFlag$sample11)
+			logProbabilityValue$sample11();
+		if(fixedFlag$sample15)
+			logProbabilityValue$sample15();
+		logProbabilityValue$sample31();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -954,10 +953,10 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample18();
-		logProbabilityValue$sample22();
-		logProbabilityValue$sample38();
+		logProbabilityValue$sample7();
+		logProbabilityValue$sample11();
+		logProbabilityValue$sample15();
+		logProbabilityValue$sample31();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -974,10 +973,10 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample18();
-		logProbabilityValue$sample22();
-		logProbabilityValue$sample38();
+		logProbabilityValue$sample7();
+		logProbabilityValue$sample11();
+		logProbabilityValue$sample15();
+		logProbabilityValue$sample31();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -985,11 +984,11 @@ class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample22)
+		if(!fixedFlag$sample15)
 			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		
 		// Calculate the probabilities for every sample task in the model. These values are

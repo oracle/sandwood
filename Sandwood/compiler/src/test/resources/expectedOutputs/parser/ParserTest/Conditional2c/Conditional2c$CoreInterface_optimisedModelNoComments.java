@@ -1,10 +1,10 @@
 package org.sandwood.compiler.tests.parser;
 
 interface Conditional2c$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
-	public boolean get$fixedFlag$sample13();
-	public void set$fixedFlag$sample13(boolean cv$value);
-	public boolean get$fixedFlag$sample7();
-	public void set$fixedFlag$sample7(boolean cv$value);
+	public boolean get$fixedFlag$sample10();
+	public void set$fixedFlag$sample10(boolean cv$value);
+	public boolean get$fixedFlag$sample4();
+	public void set$fixedFlag$sample4(boolean cv$value);
 	public boolean get$guard();
 	public void set$guard(boolean cv$value);
 	public double get$logProbability$bernoulli();

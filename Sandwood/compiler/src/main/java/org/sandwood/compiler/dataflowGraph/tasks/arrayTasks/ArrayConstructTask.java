@@ -89,7 +89,7 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
     protected IRTreeReturn<IntVariable> getInverseIRInternal(int argPos, IRTreeReturn<ArrayVariable<A>> taskOutput,
             BackTraceInfo backTraceInfo, CompilationContext compilationCtx) {
         backTraceInfo.clearGets();
-        return IRTree.getIntField(taskOutput, "length");
+        return length.getForwardIR(compilationCtx);
     }
 
     @Override
@@ -105,6 +105,11 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
         Set<VariableWrapper<IntVariable>> lengthSet = new HashSet<>();
         lengthSet.add(new VariableWrapper<>(length));
         return lengthSet;
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        return length.getForwardIR(compilationCtx);
     }
 
     @Override

@@ -71,7 +71,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
-import org.sandwood.compiler.dataflowGraph.transformations.DAGTransformations;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -147,9 +146,6 @@ public class APICompile {
             PackageName targetPackageName = new PackageName(packageName);
             ModelClassName className = ModelClassName.modelName(modelName, helperClasses);
             ClassName modelInterface = className.interfaceName();
-
-            // Apply DAG transformations before we start the rest of the compilation.
-            DAGTransformations.apply(vs);
 
             // Start the compilation of the model.
             Traces traces = TracesImplementation.getTraces(vs);
@@ -879,7 +875,8 @@ public class APICompile {
         for(DistributionSampleTask<?, ?> rv:compilationCtx.traces.getDistributionSampleTasks()) {
             ScopeStack.pushScope(rv.scope());
 
-            IntVariable noStates = rv.randomVariable.getNoStates();
+            // This is ok as the number of states must be a constant for a distributed sample.
+            IntVariable noStates = rv.randomVariable.getNumStates();
             ArrayVariable<DoubleVariable> v = Variable.arrayVariable(VariableType.DoubleVariable, noStates);
 
             VariableDescription<ArrayVariable<DoubleVariable>> distributionName = VariableNames.distribution(rv);
@@ -1574,7 +1571,7 @@ public class APICompile {
                 VariableDescription<IntVariable> indexName = VariableNames.indexName(rv.getVarDesc());
 
                 // Get the number of states that this variable could be generating.
-                IntVariable noStates = rv.getNoStates();
+                IntVariable noStates = rv.getNumStates();
 
                 ScopeStack.pushScope(rvScope);
                 ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,
@@ -1607,7 +1604,7 @@ public class APICompile {
 
                 // Iterate through each value adding it to the available values
                 // Get the number of states that this variable could be generating.
-                IntVariable noStates = rv.getNoStates();
+                IntVariable noStates = rv.getNumStates();
 
                 ScopeStack.pushScope(rvScope);
                 ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,
@@ -1641,7 +1638,7 @@ public class APICompile {
                         initializeVariable(sum, constant(0.0), "Sum the values in the array"));
 
                 // Get the number of states that this variable could be generating.
-                IntVariable noStates = rv.getNoStates();
+                IntVariable noStates = rv.getNumStates();
                 {
                     ScopeStack.pushScope(rvScope);
                     ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1),
@@ -1694,7 +1691,7 @@ public class APICompile {
             VariableDescription<IntVariable> indexName = VariableNames.indexName(rv.getVarDesc());
 
             // Get the number of states that this variable could be generating.
-            IntVariable noStates = rv.getNoStates();
+            IntVariable noStates = rv.getNumStates();
 
             ScopeStack.pushScope(rvScope);
             ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,

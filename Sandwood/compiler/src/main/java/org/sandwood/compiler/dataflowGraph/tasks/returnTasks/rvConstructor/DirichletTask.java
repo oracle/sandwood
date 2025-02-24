@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -16,7 +16,11 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 
 public class DirichletTask extends RandomVariableConstructorTask<ArrayVariable<DoubleVariable>, Dirichlet> {
+    public final ArrayVariable<DoubleVariable> beta;
+
     public DirichletTask(ArrayVariable<DoubleVariable> beta, Location location) {
         super(DFType.DIRICHLET, VariableType.Dirichlet, location, beta.getCurrentInstance());
+
+        this.beta = beta.getCurrentInstance();
     }
 }

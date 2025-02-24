@@ -34,13 +34,13 @@ public class DiscreteChoiceAlt extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample81(fixed);
+                system$c.set$fixedFlag$sample78(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample81())
+            if(system$c.get$fixedFlag$sample78())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -70,13 +70,13 @@ public class DiscreteChoiceAlt extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
+                system$c.set$fixedFlag$sample24(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
+            if(system$c.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -106,13 +106,13 @@ public class DiscreteChoiceAlt extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
+                system$c.set$fixedFlag$sample24(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
+            if(system$c.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -142,13 +142,13 @@ public class DiscreteChoiceAlt extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
+                system$c.set$fixedFlag$sample24(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
+            if(system$c.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -177,13 +177,13 @@ public class DiscreteChoiceAlt extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
+                system$c.set$fixedFlag$sample24(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
+            if(system$c.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -338,9 +338,9 @@ public class DiscreteChoiceAlt extends Model {
 
         //Set fixed flags
         if(choices.isSet())
-            newCore.set$fixedFlag$sample81(oldCore.get$fixedFlag$sample81());
+            newCore.set$fixedFlag$sample78(oldCore.get$fixedFlag$sample78());
         if(ut.isSet())
-            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
+            newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
     }
 
     /**

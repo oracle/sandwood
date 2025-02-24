@@ -34,13 +34,13 @@ public class Flip1CoinMK13 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample9(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample9())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -70,13 +70,13 @@ public class Flip1CoinMK13 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample9(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample9())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -105,13 +105,13 @@ public class Flip1CoinMK13 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample44(fixed);
+                system$c.set$fixedFlag$sample40(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample44())
+            if(system$c.get$fixedFlag$sample40())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -296,9 +296,9 @@ public class Flip1CoinMK13 extends Model {
 
         //Set fixed flags
         if(b.isSet())
-            newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
+            newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
         if(flips.isSet())
-            newCore.set$fixedFlag$sample44(oldCore.get$fixedFlag$sample44());
+            newCore.set$fixedFlag$sample40(oldCore.get$fixedFlag$sample40());
     }
 
     /**

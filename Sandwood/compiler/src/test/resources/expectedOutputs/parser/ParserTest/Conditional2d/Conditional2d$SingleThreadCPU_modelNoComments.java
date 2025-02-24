@@ -4,11 +4,11 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional2d$CoreInterface {
-	private double[] cv$var6$stateProbabilityGlobal;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample7 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample7 = false;
+	private double[] cv$var4$stateProbabilityGlobal;
+	private boolean fixedFlag$sample4 = false;
+	private boolean fixedFlag$sample8 = false;
+	private boolean fixedProbFlag$sample4 = false;
+	private boolean fixedProbFlag$sample8 = false;
 	private boolean guard;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -17,7 +17,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$u;
 	private double logProbability$value;
 	private double logProbability$value2;
-	private double logProbability$var9;
+	private double logProbability$var7;
 	private double[] observedValue;
 	private boolean system$gibbsForward = true;
 	private double u;
@@ -29,25 +29,25 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample11() {
-		return fixedFlag$sample11;
+	public final boolean get$fixedFlag$sample4() {
+		return fixedFlag$sample4;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value) {
-		fixedFlag$sample11 = cv$value;
-		fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
+	public final void set$fixedFlag$sample4(boolean cv$value) {
+		fixedFlag$sample4 = cv$value;
+		fixedProbFlag$sample4 = (fixedFlag$sample4 && fixedProbFlag$sample4);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
+	public final boolean get$fixedFlag$sample8() {
+		return fixedFlag$sample8;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
-		fixedFlag$sample7 = cv$value;
-		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
+	public final void set$fixedFlag$sample8(boolean cv$value) {
+		fixedFlag$sample8 = cv$value;
+		fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedProbFlag$sample8);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$guard(boolean cv$value) {
 		guard = cv$value;
-		fixedProbFlag$sample7 = false;
+		fixedProbFlag$sample4 = false;
 	}
 
 	@Override
@@ -114,7 +114,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$u(double cv$value) {
 		u = cv$value;
-		fixedProbFlag$sample11 = false;
+		fixedProbFlag$sample8 = false;
 	}
 
 	@Override
@@ -127,93 +127,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		return value2;
 	}
 
-	private final void logProbabilityValue$sample11() {
-		if(!fixedProbFlag$sample11) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			double cv$probabilityReached = 0.0;
-			{
-				double cv$sampleValue = u;
-				{
-					{
-						double var7 = 0.0;
-						double var8 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + (((var7 <= cv$sampleValue) && (cv$sampleValue <= var8))?(-Math.log((var8 - var7))):Double.NEGATIVE_INFINITY));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
-			logProbability$u = cv$sampleProbability;
-			boolean cv$guard$value = false;
-			boolean cv$guard$value2 = false;
-			{
-				if(!guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					if(!cv$guard$value2) {
-						cv$guard$value2 = true;
-						logProbability$value2 = (logProbability$value2 + cv$accumulator);
-					}
-				}
-			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample11 = fixedFlag$sample11;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$u;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
-			boolean cv$guard$value = false;
-			boolean cv$guard$value2 = false;
-			{
-				if(!guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					if(!cv$guard$value2) {
-						cv$guard$value2 = true;
-						logProbability$value2 = (logProbability$value2 + cv$accumulator);
-					}
-				}
-			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample7() {
-		if(!fixedProbFlag$sample7) {
+	private final void logProbabilityValue$sample4() {
+		if(!fixedProbFlag$sample4) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -222,8 +137,8 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				boolean cv$sampleValue = guard;
 				{
 					{
-						double var4 = 0.5;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var4));
+						double var2 = 0.5;
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var2));
 						{
 							{
 								if(guard) {
@@ -268,9 +183,9 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+			fixedProbFlag$sample4 = fixedFlag$sample4;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -293,18 +208,103 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample7)
+			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void sample7() {
-		int cv$noStates = 0;
-		{
-			cv$noStates = Math.max(cv$noStates, 2);
+	private final void logProbabilityValue$sample8() {
+		if(!fixedProbFlag$sample8) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			double cv$probabilityReached = 0.0;
+			{
+				double cv$sampleValue = u;
+				{
+					{
+						double var5 = 0.0;
+						double var6 = 1.0;
+						double cv$weightedProbability = (Math.log(1.0) + (((var5 <= cv$sampleValue) && (cv$sampleValue <= var6))?(-Math.log((var6 - var5))):Double.NEGATIVE_INFINITY));
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						}
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
+					}
+				}
+			}
+			if((cv$probabilityReached == 0.0))
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var7 = cv$sampleAccumulator;
+			logProbability$u = cv$sampleProbability;
+			boolean cv$guard$value = false;
+			boolean cv$guard$value2 = false;
+			{
+				if(!guard) {
+					if(!cv$guard$value) {
+						cv$guard$value = true;
+						logProbability$value = (logProbability$value + cv$accumulator);
+					}
+				}
+			}
+			{
+				if(!guard) {
+					if(!cv$guard$value2) {
+						cv$guard$value2 = true;
+						logProbability$value2 = (logProbability$value2 + cv$accumulator);
+					}
+				}
+			}
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample8 = fixedFlag$sample8;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$u;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var7 = cv$rvAccumulator;
+			boolean cv$guard$value = false;
+			boolean cv$guard$value2 = false;
+			{
+				if(!guard) {
+					if(!cv$guard$value) {
+						cv$guard$value = true;
+						logProbability$value = (logProbability$value + cv$accumulator);
+					}
+				}
+			}
+			{
+				if(!guard) {
+					if(!cv$guard$value2) {
+						cv$guard$value2 = true;
+						logProbability$value2 = (logProbability$value2 + cv$accumulator);
+					}
+				}
+			}
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
-		double[] cv$stateProbabilityLocal = cv$var6$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
+	}
+
+	private final void sample4() {
+		int cv$numNumStates = 0;
+		{
+			cv$numNumStates = Math.max(cv$numNumStates, 2);
+		}
+		double[] cv$stateProbabilityLocal = cv$var4$stateProbabilityGlobal;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
@@ -313,11 +313,11 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			guard = cv$currentValue;
 			{
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double cv$temp$0$var4;
+				double cv$temp$0$var2;
 				{
-					cv$temp$0$var4 = 0.5;
+					cv$temp$0$var2 = 0.5;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var4));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var2));
 				{
 					{
 						{
@@ -368,7 +368,7 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		double cv$logSum = 0.0;
 		{
 			double cv$lseMax = cv$stateProbabilityLocal[0];
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -377,26 +377,26 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$logSum = Double.NEGATIVE_INFINITY;
 			else {
 				double cv$lseSum = 0.0;
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
 			}
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$noStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal) == 1);
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates) == 1);
 	}
 
 	@Override
 	public final void allocateScratch() {
-		cv$var6$stateProbabilityGlobal = new double[2];
+		cv$var4$stateProbabilityGlobal = new double[2];
 	}
 
 	@Override
@@ -409,40 +409,40 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(!fixedFlag$sample11)
+		if(!fixedFlag$sample8)
 			u = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		if(guard)
 			value = 1.0;
 		else {
-			if(!fixedFlag$sample11)
+			if(!fixedFlag$sample8)
 				value = u;
 		}
-		if(!(fixedFlag$sample7 && fixedFlag$sample11))
+		if(!(fixedFlag$sample4 && fixedFlag$sample8))
 			value2[0] = value;
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
+		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample7)
-				sample7();
+			if(!fixedFlag$sample4)
+				sample4();
 		} else {
-			if(!fixedFlag$sample7)
-				sample7();
+			if(!fixedFlag$sample4)
+				sample4();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -454,12 +454,12 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
-		if(!fixedProbFlag$sample7)
+		logProbability$value = 0.0;
+		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
-		logProbability$var9 = 0.0;
-		if(!fixedProbFlag$sample11)
+		logProbability$var7 = 0.0;
+		if(!fixedProbFlag$sample8)
 			logProbability$u = 0.0;
 	}
 
@@ -471,23 +471,23 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample7)
-			logProbabilityValue$sample7();
-		logProbabilityValue$sample11();
+		if(fixedFlag$sample4)
+			logProbabilityValue$sample4();
+		logProbabilityValue$sample8();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample11();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample8();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample7();
-		logProbabilityValue$sample11();
+		logProbabilityValue$sample4();
+		logProbabilityValue$sample8();
 	}
 
 	@Override

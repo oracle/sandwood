@@ -6,12 +6,12 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DirichletBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
-	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample55 = false;
+	private boolean fixedFlag$sample17 = false;
+	private boolean fixedFlag$sample38 = false;
+	private boolean fixedFlag$sample51 = false;
+	private boolean fixedProbFlag$sample17 = false;
+	private boolean fixedProbFlag$sample38 = false;
+	private boolean fixedProbFlag$sample51 = false;
 	private int length;
 	private int length$observed;
 	private double logProbability$$evidence;
@@ -20,9 +20,9 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$b2;
 	private double logProbability$output;
 	private double logProbability$prior;
-	private double logProbability$var18;
-	private double logProbability$var40;
-	private double logProbability$var53;
+	private double logProbability$var16;
+	private double logProbability$var38;
+	private double logProbability$var51;
 	private boolean[] observed;
 	private boolean[] output;
 	private double[] prior;
@@ -35,66 +35,66 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample20.
+	// Getter for fixedFlag$sample17.
 	@Override
-	public final boolean get$fixedFlag$sample20() {
-		return fixedFlag$sample20;
+	public final boolean get$fixedFlag$sample17() {
+		return fixedFlag$sample17;
 	}
 
-	// Setter for fixedFlag$sample20.
+	// Setter for fixedFlag$sample17.
 	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
+	public final void set$fixedFlag$sample17(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
 		// need to be updated.
-		fixedFlag$sample20 = cv$value;
+		fixedFlag$sample17 = cv$value;
 		
-		// Should the probability of sample 20 be set to fixed. This will only every change
+		// Should the probability of sample 17 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
+		fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
 		
-		// Should the probability of sample 42 be set to fixed. This will only every change
+		// Should the probability of sample 38 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample42 = (fixedFlag$sample20 && fixedProbFlag$sample42);
+		fixedProbFlag$sample38 = (fixedFlag$sample17 && fixedProbFlag$sample38);
 		
-		// Should the probability of sample 55 be set to fixed. This will only every change
+		// Should the probability of sample 51 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample55 = (fixedFlag$sample20 && fixedProbFlag$sample55);
+		fixedProbFlag$sample51 = (fixedFlag$sample17 && fixedProbFlag$sample51);
 	}
 
-	// Getter for fixedFlag$sample42.
+	// Getter for fixedFlag$sample38.
 	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
+	public final boolean get$fixedFlag$sample38() {
+		return fixedFlag$sample38;
 	}
 
-	// Setter for fixedFlag$sample42.
+	// Setter for fixedFlag$sample38.
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
+	public final void set$fixedFlag$sample38(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample38 including if probabilities
 		// need to be updated.
-		fixedFlag$sample42 = cv$value;
+		fixedFlag$sample38 = cv$value;
 		
-		// Should the probability of sample 42 be set to fixed. This will only every change
+		// Should the probability of sample 38 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
+		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
 	}
 
-	// Getter for fixedFlag$sample55.
+	// Getter for fixedFlag$sample51.
 	@Override
-	public final boolean get$fixedFlag$sample55() {
-		return fixedFlag$sample55;
+	public final boolean get$fixedFlag$sample51() {
+		return fixedFlag$sample51;
 	}
 
-	// Setter for fixedFlag$sample55.
+	// Setter for fixedFlag$sample51.
 	@Override
-	public final void set$fixedFlag$sample55(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample55 including if probabilities
+	public final void set$fixedFlag$sample51(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample51 including if probabilities
 		// need to be updated.
-		fixedFlag$sample55 = cv$value;
+		fixedFlag$sample51 = cv$value;
 		
-		// Should the probability of sample 55 be set to fixed. This will only every change
+		// Should the probability of sample 51 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedProbFlag$sample55);
+		fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedProbFlag$sample51);
 	}
 
 	// Getter for length.
@@ -181,11 +181,11 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		output = cv$value;
 		setFlag$output = true;
 		
-		// Unset the fixed probability flag for sample 42 as it depends on output.
-		fixedProbFlag$sample42 = false;
+		// Unset the fixed probability flag for sample 38 as it depends on output.
+		fixedProbFlag$sample38 = false;
 		
-		// Unset the fixed probability flag for sample 55 as it depends on output.
-		fixedProbFlag$sample55 = false;
+		// Unset the fixed probability flag for sample 51 as it depends on output.
+		fixedProbFlag$sample51 = false;
 	}
 
 	// Getter for prior.
@@ -204,14 +204,14 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		prior = cv$value;
 		setFlag$prior = true;
 		
-		// Unset the fixed probability flag for sample 20 as it depends on prior.
-		fixedProbFlag$sample20 = false;
+		// Unset the fixed probability flag for sample 17 as it depends on prior.
+		fixedProbFlag$sample17 = false;
 		
-		// Unset the fixed probability flag for sample 42 as it depends on prior.
-		fixedProbFlag$sample42 = false;
+		// Unset the fixed probability flag for sample 38 as it depends on prior.
+		fixedProbFlag$sample38 = false;
 		
-		// Unset the fixed probability flag for sample 55 as it depends on prior.
-		fixedProbFlag$sample55 = false;
+		// Unset the fixed probability flag for sample 51 as it depends on prior.
+		fixedProbFlag$sample51 = false;
 	}
 
 	// Getter for v.
@@ -220,12 +220,12 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		return v;
 	}
 
-	// Calculate the probability of the samples represented by sample20 using sampled
+	// Calculate the probability of the samples represented by sample17 using sampled
 	// values.
-	private final void logProbabilityValue$sample20() {
-		// Determine if we need to calculate the values for sample task 20 or if we should
+	private final void logProbabilityValue$sample17() {
+		// Determine if we need to calculate the values for sample task 17 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample20) {
+		if(!fixedProbFlag$sample17) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -244,7 +244,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				{
 					{
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, 2));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -276,7 +276,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
+			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$prior = cv$sampleProbability;
@@ -286,12 +286,12 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
+			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample20 = fixedFlag$sample20;
+			fixedProbFlag$sample17 = fixedFlag$sample17;
 		}
 		// Using cached values.
 		else {
@@ -302,31 +302,31 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
+			logProbability$var16 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
+			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample42 using sampled
+	// Calculate the probability of the samples represented by sample38 using sampled
 	// values.
-	private final void logProbabilityValue$sample42() {
-		// Determine if we need to calculate the values for sample task 42 or if we should
+	private final void logProbabilityValue$sample38() {
+		// Determine if we need to calculate the values for sample task 38 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample42) {
+		if(!fixedProbFlag$sample38) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var39 = 0; i$var39 < (length / 2); i$var39 += 1) {
+			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -334,13 +334,13 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = output[i$var39];
+					boolean cv$sampleValue = output[i$var37];
 					{
 						{
-							double var21 = prior[0];
+							double var19 = prior[0];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var21));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var19));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -376,7 +376,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$b1 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var40 = cv$sampleAccumulator;
+			logProbability$var38 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -387,7 +387,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedFlag$sample20);
+			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample17);
 		}
 		// Using cached values.
 		else {
@@ -395,7 +395,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var40;
+			double cv$sampleValue = logProbability$var38;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$b1 = cv$rvAccumulator;
@@ -409,19 +409,19 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample55 using sampled
+	// Calculate the probability of the samples represented by sample51 using sampled
 	// values.
-	private final void logProbabilityValue$sample55() {
-		// Determine if we need to calculate the values for sample task 55 or if we should
+	private final void logProbabilityValue$sample51() {
+		// Determine if we need to calculate the values for sample task 51 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample55) {
+		if(!fixedProbFlag$sample51) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var52 = (length / 2); i$var52 < length; i$var52 += 1) {
+			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -429,13 +429,13 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = output[i$var52];
+					boolean cv$sampleValue = output[i$var50];
 					{
 						{
-							double var24 = prior[1];
+							double var22 = prior[1];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var24));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var22));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -471,7 +471,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$b2 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var53 = cv$sampleAccumulator;
+			logProbability$var51 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -482,7 +482,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedFlag$sample20);
+			fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedFlag$sample17);
 		}
 		// Using cached values.
 		else {
@@ -490,7 +490,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var53;
+			double cv$sampleValue = logProbability$var51;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$b2 = cv$rvAccumulator;
@@ -505,8 +505,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 20 drawn from Dirichlet 18. Inference was performed using Metropolis-Hastings.
-	private final void sample20() {
+	// by sample task 17 drawn from Dirichlet 16. Inference was performed using Metropolis-Hastings.
+	private final void sample17() {
 		// A reference local to the function for the sample variable.
 		double[] cv$targetLocal = prior;
 		
@@ -516,7 +516,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// The probability of the random variable generating the new sample value.
 		double cv$proposedProbability = 0.0;
-		int cv$arrayLength = cv$targetLocal.length;
+		int cv$arrayLength = 2;
 		
 		// Pick a value in the array to adjust.
 		int cv$indexToChange = (int)(0.0 + ((cv$arrayLength - 0.0) * DistributionSampling.sampleUniform(RNG$)));
@@ -610,17 +610,21 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				{
 					cv$temp$0$v = v;
 				}
+				int cv$temp$1$$var98;
+				{
+					cv$temp$1$$var98 = 2;
+				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var98));
 				
-				// Processing random variable 22.
+				// Processing random variable 20.
 				{
 					{
-						// Processing sample task 42 of consumer random variable b1.
+						// Processing sample task 38 of consumer random variable b1.
 						{
-							for(int i$var39 = 0; i$var39 < (length / 2); i$var39 += 1) {
+							for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -632,25 +636,25 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 									{
 										{
 											{
-												double cv$temp$1$var21;
+												double cv$temp$2$var19;
 												{
 													// Constructing a random variable input for use later.
-													double var21 = prior[0];
-													cv$temp$1$var21 = var21;
+													double var19 = prior[0];
+													cv$temp$2$var19 = var19;
 												}
 												
-												// Record the probability of sample task 42 generating output with current configuration.
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$1$var21)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$1$var21)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												// Record the probability of sample task 38 generating output with current configuration.
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var37], cv$temp$2$var19)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var37], cv$temp$2$var19)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$1$var21));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var37], cv$temp$2$var19));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$1$var21)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var39], cv$temp$1$var21)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var37], cv$temp$2$var19)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var37], cv$temp$2$var19)));
 												}
 												
-												// Recorded the probability of reaching sample task 42 with the current configuration.
+												// Recorded the probability of reaching sample task 38 with the current configuration.
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
 										}
@@ -677,12 +681,12 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 				
-				// Processing random variable 25.
+				// Processing random variable 23.
 				{
 					{
-						// Processing sample task 55 of consumer random variable b2.
+						// Processing sample task 51 of consumer random variable b2.
 						{
-							for(int i$var52 = (length / 2); i$var52 < length; i$var52 += 1) {
+							for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -694,25 +698,25 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 									{
 										{
 											{
-												double cv$temp$2$var24;
+												double cv$temp$3$var22;
 												{
 													// Constructing a random variable input for use later.
-													double var24 = prior[1];
-													cv$temp$2$var24 = var24;
+													double var22 = prior[1];
+													cv$temp$3$var22 = var22;
 												}
 												
-												// Record the probability of sample task 55 generating output with current configuration.
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var52], cv$temp$2$var24)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var52], cv$temp$2$var24)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												// Record the probability of sample task 51 generating output with current configuration.
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var50], cv$temp$3$var22)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var50], cv$temp$3$var22)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var52], cv$temp$2$var24));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var50], cv$temp$3$var22));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var52], cv$temp$2$var24)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var52], cv$temp$2$var24)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var50], cv$temp$3$var22)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[i$var50], cv$temp$3$var22)));
 												}
 												
-												// Recorded the probability of reaching sample task 55 with the current configuration.
+												// Recorded the probability of reaching sample task 51 with the current configuration.
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
 										}
@@ -822,15 +826,15 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, prior);
-		for(int i$var39 = 0; i$var39 < (length / 2); i$var39 += 1) {
-			if(!fixedFlag$sample42)
-				output[i$var39] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
+		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+			if(!fixedFlag$sample38)
+				output[i$var37] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
 		}
-		for(int i$var52 = (length / 2); i$var52 < length; i$var52 += 1) {
-			if(!fixedFlag$sample55)
-				output[i$var52] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
+		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+			if(!fixedFlag$sample51)
+				output[i$var50] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
 		}
 	}
 
@@ -838,16 +842,16 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, prior);
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, prior);
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -855,13 +859,13 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample20)
-				sample20();
+			if(!fixedFlag$sample17)
+				sample17();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample20)
-				sample20();
+			if(!fixedFlag$sample17)
+				sample17();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -872,8 +876,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// etc.
 	@Override
 	public final void initializeConstants() {
-		for(int var15 = 0; var15 < 2; var15 += 1)
-			v[var15] = 0.1;
+		for(int var13 = 0; var13 < 2; var13 += 1)
+			v[var13] = 0.1;
 		length = length$observed;
 	}
 
@@ -887,16 +891,16 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
-		if(!fixedProbFlag$sample20)
+		logProbability$var16 = 0.0;
+		if(!fixedProbFlag$sample17)
 			logProbability$prior = 0.0;
 		logProbability$b1 = 0.0;
 		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample42)
-			logProbability$var40 = 0.0;
+		if(!fixedProbFlag$sample38)
+			logProbability$var38 = 0.0;
 		logProbability$b2 = 0.0;
-		if(!fixedProbFlag$sample55)
-			logProbability$var53 = 0.0;
+		if(!fixedProbFlag$sample51)
+			logProbability$var51 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -916,10 +920,10 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample20)
-			logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample55();
+		if(fixedFlag$sample17)
+			logProbabilityValue$sample17();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample51();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -937,9 +941,9 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample55();
+		logProbabilityValue$sample17();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample51();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -956,9 +960,9 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample20();
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample55();
+		logProbabilityValue$sample17();
+		logProbabilityValue$sample38();
+		logProbabilityValue$sample51();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -966,8 +970,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, prior);
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

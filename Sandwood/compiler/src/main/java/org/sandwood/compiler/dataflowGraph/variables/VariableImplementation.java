@@ -87,7 +87,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     private final static AtomicInteger nextID = new AtomicInteger();
 
     /**
-     * A flag to say if this value will be the same in every iteration of the code. The value may vary for example it is
+     * A flag to say if this value will be the same in every execution of the code. The value may vary for example it is
      * an index in a for loop, but it is not dependent on any randomised elements.
      **/
     private boolean deterministic;
@@ -117,7 +117,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         parent.setOutput((A) this);
         consumers = new HashSet<>();
         enclosingScope = parent.scope();
-        deterministic = parent.deterministic();
+        deterministic = parent.isDeterministic();
         distribution = parent.isDistribution();
         if(uniqueName == null)
             constructUniqueName(parent.getOutputType());
@@ -143,6 +143,23 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
             for(DataflowTask<?> t:consumers)
                 t.setIsDistribution();
         }
+    }
+
+    /**
+     * Method to determine if a variable is constant from the perspective of this variable
+     * 
+     * @param v The variable to test this variable relative too.
+     * @return Is this variable constant relative to the passed variable
+     */
+    @Override
+    public boolean isConstant(Variable<?> v) {
+        if(!isDeterministic())
+            return false;
+        Scope vScope = v.scope();
+        Scope s = scope();
+        while(vScope != null && vScope != s)
+            vScope = vScope.getEnclosingScope();
+        return vScope != null;
     }
 
     @Override
@@ -431,18 +448,6 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     }
 
     /**
-     * Method to use to change the parent of a variable when restructuring the dag.
-     * 
-     * @param alternative A new parent to use instead of the original one.
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void changeParent(ProducingDataflowTask<A> alternative) {
-        this.parent = alternative;
-        parent.setOutput((A) this);
-    }
-
-    /**
      * Method to remove a task from the set of consumers when restructuring the graph.
      * 
      * @param t The task to remove
@@ -664,7 +669,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
                 constructTrace(dagInfo::addObservedChild);
                 o.source.constructTrace(dagInfo::addObservedSource);
             }
-        } else if(consumers.isEmpty() && scope() == GlobalScope.scope && !this.isPrivate()) { // Terminal
+        } else if(consumers.isEmpty() && !isPrivate()) { // Terminal
             // variables.
             constructTrace(dagInfo::addTerminalChild);
         }
@@ -809,7 +814,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
      */
     @Override
     public Location getLocation() {
-        if(location==null)
+        if(location == null)
             return parent.getLocation();
         else
             return location;

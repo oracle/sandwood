@@ -800,8 +800,9 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Write out the new value of the sample.
 		// 
-		// Get a local reference to the scratch space.
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal) == 1);
+		// cv$numNumStates's comment
+		// variable marginalization
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
 		if(guard)

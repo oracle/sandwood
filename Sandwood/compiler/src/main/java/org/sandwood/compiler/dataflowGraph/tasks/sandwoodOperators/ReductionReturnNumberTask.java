@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -18,8 +18,9 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 public class ReductionReturnNumberTask<A extends NumberVariable<A>> extends ReductionReturnTask<A>
         implements NumberProducingDataflowTask<A> {
 
-    public ReductionReturnNumberTask(A var, Location location) {
-        super(var, location);
+    public ReductionReturnNumberTask(A var, NumberReductionInput<A> leftInput, NumberReductionInput<A> rightInput,
+            Location location) {
+        super(var, leftInput, rightInput, location);
     }
 
     @Override

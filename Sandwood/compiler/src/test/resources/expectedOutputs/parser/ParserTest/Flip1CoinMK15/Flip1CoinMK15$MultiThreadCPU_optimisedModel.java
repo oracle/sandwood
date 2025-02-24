@@ -9,10 +9,10 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double b;
 	private double bias;
 	private double[] c;
-	private boolean fixedFlag$sample12 = false;
-	private boolean fixedFlag$sample54 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private boolean fixedProbFlag$sample54 = false;
+	private boolean fixedFlag$sample50 = false;
+	private boolean fixedFlag$sample8 = false;
+	private boolean fixedProbFlag$sample50 = false;
+	private boolean fixedProbFlag$sample8 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private boolean guard1;
@@ -24,8 +24,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bias;
 	private double logProbability$c;
 	private double logProbability$flips;
-	private double logProbability$var49;
-	private double logProbability$var9;
+	private double logProbability$var47;
+	private double logProbability$var7;
 	private int samples;
 	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
@@ -46,11 +46,11 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set flags for all the side effects of b including if probabilities need to be updated.
 		b = cv$value;
 		
-		// Unset the fixed probability flag for sample 12 as it depends on b.
-		fixedProbFlag$sample12 = false;
+		// Unset the fixed probability flag for sample 8 as it depends on b.
+		fixedProbFlag$sample8 = false;
 		
-		// Unset the fixed probability flag for sample 54 as it depends on b.
-		fixedProbFlag$sample54 = false;
+		// Unset the fixed probability flag for sample 50 as it depends on b.
+		fixedProbFlag$sample50 = false;
 	}
 
 	// Getter for bias.
@@ -59,50 +59,50 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		return bias;
 	}
 
-	// Getter for fixedFlag$sample12.
+	// Getter for fixedFlag$sample50.
 	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
+	public final boolean get$fixedFlag$sample50() {
+		return fixedFlag$sample50;
 	}
 
-	// Setter for fixedFlag$sample12.
+	// Setter for fixedFlag$sample50.
 	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample12 including if probabilities
+	public final void set$fixedFlag$sample50(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample50 including if probabilities
 		// need to be updated.
-		fixedFlag$sample12 = cv$value;
+		fixedFlag$sample50 = cv$value;
 		
-		// Should the probability of sample 12 be set to fixed. This will only every change
+		// Should the probability of sample 50 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample12" with its value "cv$value".
-		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
-		
-		// Should the probability of sample 54 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample12" with its value "cv$value".
-		fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
+		// Substituted "fixedFlag$sample50" with its value "cv$value".
+		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
 	}
 
-	// Getter for fixedFlag$sample54.
+	// Getter for fixedFlag$sample8.
 	@Override
-	public final boolean get$fixedFlag$sample54() {
-		return fixedFlag$sample54;
+	public final boolean get$fixedFlag$sample8() {
+		return fixedFlag$sample8;
 	}
 
-	// Setter for fixedFlag$sample54.
+	// Setter for fixedFlag$sample8.
 	@Override
-	public final void set$fixedFlag$sample54(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample54 including if probabilities
+	public final void set$fixedFlag$sample8(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample8 including if probabilities
 		// need to be updated.
-		fixedFlag$sample54 = cv$value;
+		fixedFlag$sample8 = cv$value;
 		
-		// Should the probability of sample 54 be set to fixed. This will only every change
+		// Should the probability of sample 8 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample54" with its value "cv$value".
-		fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
+		// Substituted "fixedFlag$sample8" with its value "cv$value".
+		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
+		
+		// Should the probability of sample 50 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample8" with its value "cv$value".
+		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
 	}
 
 	// Getter for flips.
@@ -121,8 +121,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		flips = cv$value;
 		setFlag$flips = true;
 		
-		// Unset the fixed probability flag for sample 54 as it depends on flips.
-		fixedProbFlag$sample54 = false;
+		// Unset the fixed probability flag for sample 50 as it depends on flips.
+		fixedProbFlag$sample50 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -205,12 +205,89 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		return samples;
 	}
 
-	// Calculate the probability of the samples represented by sample12 using sampled
+	// Calculate the probability of the samples represented by sample50 using sampled
 	// values.
-	private final void logProbabilityValue$sample12() {
-		// Determine if we need to calculate the values for sample task 12 or if we should
+	private final void logProbabilityValue$sample50() {
+		// Determine if we need to calculate the values for sample task 50 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample12) {
+		if(!fixedProbFlag$sample50) {
+			// Generating probabilities for sample task
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			for(int var46 = 0; var46 < samples; var46 += 1)
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var46], bias));
+			logProbability$bernoulli = cv$sampleAccumulator;
+			
+			// Store the random variable instance probability
+			logProbability$var47 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
+			
+			// Add probability to model
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample8);
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			logProbability$bernoulli = logProbability$var47;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$flips = (logProbability$flips + logProbability$var47);
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var47);
+			
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var47);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample8 using sampled values.
+	private final void logProbabilityValue$sample8() {
+		// Determine if we need to calculate the values for sample task 8 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample8) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -240,7 +317,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var9 = cv$distributionAccumulator;
+			logProbability$var7 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b = cv$distributionAccumulator;
@@ -316,7 +393,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample12)
+			if(fixedFlag$sample8)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -333,13 +410,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample12 = fixedFlag$sample12;
+			fixedProbFlag$sample8 = fixedFlag$sample8;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var9 = logProbability$b;
+			logProbability$var7 = logProbability$b;
 			if(guard1)
 				// Update the variable probability
 				// 
@@ -368,93 +445,15 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample12)
+			if(fixedFlag$sample8)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$b);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample54 using sampled
-	// values.
-	private final void logProbabilityValue$sample54() {
-		// Determine if we need to calculate the values for sample task 54 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample54) {
-			// Generating probabilities for sample task
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			for(int var48 = 0; var48 < samples; var48 += 1)
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var48], bias));
-			logProbability$bernoulli = cv$sampleAccumulator;
-			
-			// Store the random variable instance probability
-			logProbability$var49 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
-			
-			// Add probability to model
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample54 = (fixedFlag$sample54 && fixedFlag$sample12);
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			logProbability$bernoulli = logProbability$var49;
-			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$flips = (logProbability$flips + logProbability$var49);
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var49);
-			
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var49);
-		}
-	}
-
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 12 drawn from Beta 9. Inference was performed using Metropolis-Hastings.
-	private final void sample12() {
+	// by sample task 8 drawn from Beta 7. Inference was performed using Metropolis-Hastings.
+	private final void sample8() {
 		// The original value of the sample
 		double cv$originalValue = b;
 		
@@ -482,28 +481,19 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var8" with its value "1.0".
+			// Substituted "cv$temp$1$var6" with its value "1.0".
 			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
-			
-			// Processing random variable 37.
-			// 
-			// Guard to check that at most one copy of the code is executed for a given set of
-			// loop iterations.
-			boolean guard$sample12bernoulli42 = false;
 			if(guard1) {
-				// The body will execute, so should not be executed again
-				guard$sample12bernoulli42 = true;
-				
-				// Processing sample task 54 of consumer random variable bernoulli.
-				for(int var48 = 0; var48 < samples; var48 += 1)
+				// Processing sample task 50 of consumer random variable bernoulli.
+				for(int var46 = 0; var46 < samples; var46 += 1)
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 54 with the current configuration.
+					// Recorded the probability of reaching sample task 50 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
@@ -518,35 +508,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var48], b) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], b) + cv$accumulatedProbabilities);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && (0 < c.length))) {
-				// Variable declaration of reduceVar$var35$16 moved.
+			else {
+				// Variable declaration of reduceVar$var33$16 moved.
 				// Declaration comment was:
-				// Variable declaration of reduceVar$var35$16 moved.
-				// Declaration comment was:
-				// Reduction of array c
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction424Index" with its value "1".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// Variable declaration of reduceVar$var35$16 moved.
+				// Variable declaration of reduceVar$var33$16 moved.
 				// Declaration comment was:
 				// Reduction of array c
 				// 
@@ -563,92 +532,47 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction424Index" with its value "1".
-				double reduceVar$var35$16 = ((b / 2) + c[1]);
+				// Substituted "cv$reduction421Index" with its value "1".
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// Variable declaration of reduceVar$var33$16 moved.
+				// Declaration comment was:
+				// Reduction of array c
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				// 
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction421Index" with its value "1".
+				double reduceVar$var33$16 = ((b / 2) + c[1]);
 				
-				// Substituted "guard1" with its value "false".
-				if(!guard$sample12bernoulli42) {
-					// The body will execute, so should not be executed again
-					guard$sample12bernoulli42 = true;
-					
-					// Processing sample task 54 of consumer random variable bernoulli.
-					for(int var48 = 0; var48 < samples; var48 += 1)
-						// A check to ensure rounding of floating point values can never result in a negative
-						// value.
-						// 
-						// Recorded the probability of reaching sample task 54 with the current configuration.
-						// 
-						// Set an accumulator to record the consumer distributions not seen. Initially set
-						// to 1 as seen values will be deducted from this value.
-						// 
-						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-						// Declaration comment was:
-						// Set an accumulator to sum the probabilities for each possible configuration of
-						// inputs.
-						// 
-						// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var48], reduceVar$var35$16) + cv$accumulatedProbabilities);
-				}
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample12bernoulli42) {
-					// Variable declaration of reduceVar$var35$17 moved.
+				// Processing sample task 50 of consumer random variable bernoulli.
+				for(int var46 = 0; var46 < samples; var46 += 1)
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 50 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Variable declaration of reduceVar$var35$17 moved.
-					// Declaration comment was:
-					// Reduction of array c
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
 					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					// 
-					// Execute the reduction function, saving the result into the return value.
-					// 
-					// Copy the result of the reduction into the variable returned by the reduction.
-					// 
-					// j's comment
-					// Set the right hand term to a value from the array c
-					// 
-					// Substituted "cv$reduction445Index" with its value "0".
-					// 
-					// Copy the result of the reduction into the variable returned by the reduction.
-					// 
-					// Variable declaration of reduceVar$var35$17 moved.
-					// Declaration comment was:
-					// Reduction of array c
-					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					// 
-					// Execute the reduction function, saving the result into the return value.
-					// 
-					// Copy the result of the reduction into the variable returned by the reduction.
-					// 
-					// j's comment
-					// Set the right hand term to a value from the array c
-					// 
-					// Substituted "cv$reduction445Index" with its value "0".
-					double reduceVar$var35$17 = ((b / 2) + c[0]);
-					
-					// Processing sample task 54 of consumer random variable bernoulli.
-					for(int var48 = 0; var48 < samples; var48 += 1)
-						// A check to ensure rounding of floating point values can never result in a negative
-						// value.
-						// 
-						// Recorded the probability of reaching sample task 54 with the current configuration.
-						// 
-						// Set an accumulator to record the consumer distributions not seen. Initially set
-						// to 1 as seen values will be deducted from this value.
-						// 
-						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-						// Declaration comment was:
-						// Set an accumulator to sum the probabilities for each possible configuration of
-						// inputs.
-						// 
-						// Substituted "cv$temp$4$bias" with its value "traceTempVariable$bias$8_4".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var48], reduceVar$var35$17) + cv$accumulatedProbabilities);
-				}
+					// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], reduceVar$var33$16) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -681,13 +605,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// i$var32's comment
+			// i$var30's comment
 			// Set the left hand term of the reduction function to the return variable value.
 			// 
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction34Index" with its value "1".
+			// Substituted "cv$reduction30Index" with its value "1".
 			// 
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -696,31 +620,22 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction34Index" with its value "0".
+			// Substituted "cv$reduction30Index" with its value "0".
 			bias = (c[0] + c[1]);
 		}
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var8" with its value "1.0".
+		// Substituted "cv$temp$1$var6" with its value "1.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
-		
-		// Processing random variable 37.
-		// 
-		// Guard to check that at most one copy of the code is executed for a given set of
-		// loop iterations.
-		boolean guard$sample12bernoulli42 = false;
 		if(guard1) {
-			// The body will execute, so should not be executed again
-			guard$sample12bernoulli42 = true;
-			
-			// Processing sample task 54 of consumer random variable bernoulli.
-			for(int var48 = 0; var48 < samples; var48 += 1)
+			// Processing sample task 50 of consumer random variable bernoulli.
+			for(int var46 = 0; var46 < samples; var46 += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 54 with the current configuration.
+				// Recorded the probability of reaching sample task 50 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
@@ -731,35 +646,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var48], cv$proposedValue) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], cv$proposedValue) + cv$accumulatedProbabilities);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((!guard1 && (0 < c.length))) {
-			// Variable declaration of reduceVar$var35$16 moved.
+		else {
+			// Variable declaration of reduceVar$var33$16 moved.
 			// Declaration comment was:
-			// Variable declaration of reduceVar$var35$16 moved.
-			// Declaration comment was:
-			// Reduction of array c
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction424Index" with its value "1".
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// Variable declaration of reduceVar$var35$16 moved.
+			// Variable declaration of reduceVar$var33$16 moved.
 			// Declaration comment was:
 			// Reduction of array c
 			// 
@@ -776,92 +670,47 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction424Index" with its value "1".
-			double reduceVar$var35$16 = ((cv$proposedValue / 2) + c[1]);
+			// Substituted "cv$reduction421Index" with its value "1".
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// Variable declaration of reduceVar$var33$16 moved.
+			// Declaration comment was:
+			// Reduction of array c
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction421Index" with its value "1".
+			double reduceVar$var33$16 = ((cv$proposedValue / 2) + c[1]);
 			
-			// Substituted "guard1" with its value "false".
-			if(!guard$sample12bernoulli42) {
-				// The body will execute, so should not be executed again
-				guard$sample12bernoulli42 = true;
-				
-				// Processing sample task 54 of consumer random variable bernoulli.
-				for(int var48 = 0; var48 < samples; var48 += 1)
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 54 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var48], reduceVar$var35$16) + cv$accumulatedProbabilities);
-			}
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard$sample12bernoulli42) {
-				// Variable declaration of reduceVar$var35$17 moved.
+			// Processing sample task 50 of consumer random variable bernoulli.
+			for(int var46 = 0; var46 < samples; var46 += 1)
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 50 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Variable declaration of reduceVar$var35$17 moved.
-				// Declaration comment was:
-				// Reduction of array c
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
 				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction445Index" with its value "0".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// Variable declaration of reduceVar$var35$17 moved.
-				// Declaration comment was:
-				// Reduction of array c
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction445Index" with its value "0".
-				double reduceVar$var35$17 = ((cv$proposedValue / 2) + c[0]);
-				
-				// Processing sample task 54 of consumer random variable bernoulli.
-				for(int var48 = 0; var48 < samples; var48 += 1)
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 54 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Substituted "cv$temp$4$bias" with its value "traceTempVariable$bias$8_4".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var48], reduceVar$var35$17) + cv$accumulatedProbabilities);
-			}
+				// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], reduceVar$var33$16) + cv$accumulatedProbabilities);
 		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
@@ -907,13 +756,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// i$var32's comment
+				// i$var30's comment
 				// Set the left hand term of the reduction function to the return variable value.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "1".
+				// Substituted "cv$reduction30Index" with its value "1".
 				// 
 				// Execute the reduction function, saving the result into the return value.
 				// 
@@ -922,7 +771,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "0".
+				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
 		}
@@ -951,7 +800,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample12) {
+		if(!fixedFlag$sample8) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			if(guard1)
 				bias = b;
@@ -961,34 +810,34 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// i$var32's comment
+				// i$var30's comment
 				// Set the left hand term of the reduction function to the return variable value.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "1".
+				// Substituted "cv$reduction30Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "0".
+				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample54)
+		if(!fixedFlag$sample50)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$var48, int forEnd$var48, int threadID$var48, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var48 = forStart$var48; var48 < forEnd$var48; var48 += 1)
-							flips[var48] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+						for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1)
+							flips[var46] = DistributionSampling.sampleBernoulli(RNG$1, bias);
 				}
 			);
 
@@ -999,7 +848,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample12) {
+		if(!fixedFlag$sample8) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			if(guard1)
 				bias = b;
@@ -1009,20 +858,20 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// i$var32's comment
+				// i$var30's comment
 				// Set the left hand term of the reduction function to the return variable value.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "1".
+				// Substituted "cv$reduction30Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "0".
+				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
 		}
@@ -1033,7 +882,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample12) {
+		if(!fixedFlag$sample8) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			if(guard1)
 				bias = b;
@@ -1043,20 +892,20 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// i$var32's comment
+				// i$var30's comment
 				// Set the left hand term of the reduction function to the return variable value.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "1".
+				// Substituted "cv$reduction30Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "0".
+				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
 		}
@@ -1066,8 +915,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample12)
-			sample12();
+		if(!fixedFlag$sample8)
+			sample8();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
@@ -1090,15 +939,15 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
+		logProbability$var7 = 0.0;
 		logProbability$bias = 0.0;
 		logProbability$c = 0.0;
-		if(!fixedProbFlag$sample12)
+		if(!fixedProbFlag$sample8)
 			logProbability$b = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample54)
-			logProbability$var49 = 0.0;
+		if(!fixedProbFlag$sample50)
+			logProbability$var47 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -1118,9 +967,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample12)
-			logProbabilityValue$sample12();
-		logProbabilityValue$sample54();
+		if(fixedFlag$sample8)
+			logProbabilityValue$sample8();
+		logProbabilityValue$sample50();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1138,8 +987,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample12();
-		logProbabilityValue$sample54();
+		logProbabilityValue$sample8();
+		logProbabilityValue$sample50();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -1156,8 +1005,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample12();
-		logProbabilityValue$sample54();
+		logProbabilityValue$sample8();
+		logProbabilityValue$sample50();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -1166,7 +1015,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample12) {
+		if(!fixedFlag$sample8) {
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			if(guard1)
 				bias = b;
@@ -1176,20 +1025,20 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// i$var32's comment
+				// i$var30's comment
 				// Set the left hand term of the reduction function to the return variable value.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "1".
+				// Substituted "cv$reduction30Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction34Index" with its value "0".
+				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
 		}
@@ -1204,8 +1053,8 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void propogateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		for(int i$var60 = (samples - 1); i$var60 >= 0; i$var60 -= 1)
-			flips[i$var60] = flipsMeasured[i$var60];
+		for(int i$var58 = (samples - 1); i$var58 >= 0; i$var58 -= 1)
+			flips[i$var58] = flipsMeasured[i$var58];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
@@ -1222,13 +1071,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// i$var32's comment
+			// i$var30's comment
 			// Set the left hand term of the reduction function to the return variable value.
 			// 
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction34Index" with its value "1".
+			// Substituted "cv$reduction30Index" with its value "1".
 			// 
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -1237,7 +1086,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction34Index" with its value "0".
+			// Substituted "cv$reduction30Index" with its value "0".
 			bias = (c[0] + c[1]);
 		}
 	}

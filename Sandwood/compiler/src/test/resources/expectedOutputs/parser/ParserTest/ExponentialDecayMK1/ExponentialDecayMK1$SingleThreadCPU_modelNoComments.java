@@ -9,18 +9,18 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double b;
 	private double[] decay;
 	private double[] decayDetected;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample23 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample23 = false;
+	private boolean fixedFlag$sample19 = false;
+	private boolean fixedFlag$sample6 = false;
+	private boolean fixedProbFlag$sample19 = false;
+	private boolean fixedProbFlag$sample6 = false;
 	private int length$decayDetected;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$decay;
 	private double logProbability$exponential;
 	private double logProbability$rate;
-	private double logProbability$var21;
-	private double logProbability$var7;
+	private double logProbability$var19;
+	private double logProbability$var5;
 	private double rate;
 	private int samples;
 	private boolean setFlag$decay = false;
@@ -59,7 +59,7 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$decay(double[] cv$value) {
 		decay = cv$value;
 		setFlag$decay = true;
-		fixedProbFlag$sample23 = false;
+		fixedProbFlag$sample19 = false;
 	}
 
 	@Override
@@ -73,26 +73,26 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample10() {
-		return fixedFlag$sample10;
+	public final boolean get$fixedFlag$sample19() {
+		return fixedFlag$sample19;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample10(boolean cv$value) {
-		fixedFlag$sample10 = cv$value;
-		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
-		fixedProbFlag$sample23 = (fixedFlag$sample10 && fixedProbFlag$sample23);
+	public final void set$fixedFlag$sample19(boolean cv$value) {
+		fixedFlag$sample19 = cv$value;
+		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample23() {
-		return fixedFlag$sample23;
+	public final boolean get$fixedFlag$sample6() {
+		return fixedFlag$sample6;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample23(boolean cv$value) {
-		fixedFlag$sample23 = cv$value;
-		fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedProbFlag$sample23);
+	public final void set$fixedFlag$sample6(boolean cv$value) {
+		fixedFlag$sample6 = cv$value;
+		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
+		fixedProbFlag$sample19 = (fixedFlag$sample6 && fixedProbFlag$sample19);
 	}
 
 	@Override
@@ -138,8 +138,8 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$rate(double cv$value) {
 		rate = cv$value;
-		fixedProbFlag$sample10 = false;
-		fixedProbFlag$sample23 = false;
+		fixedProbFlag$sample6 = false;
+		fixedProbFlag$sample19 = false;
 	}
 
 	@Override
@@ -147,8 +147,59 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 		return samples;
 	}
 
-	private final void logProbabilityValue$sample10() {
-		if(!fixedProbFlag$sample10) {
+	private final void logProbabilityValue$sample19() {
+		if(!fixedProbFlag$sample19) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			for(int var18 = 0; var18 < samples; var18 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					double cv$sampleValue = decay[var18];
+					{
+						{
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$exponential = cv$sampleAccumulator;
+			logProbability$var19 = cv$sampleAccumulator;
+			logProbability$decay = (logProbability$decay + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$var19;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$exponential = cv$rvAccumulator;
+			logProbability$decay = (logProbability$decay + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample6() {
+		if(!fixedProbFlag$sample6) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -177,85 +228,34 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
+			logProbability$var5 = cv$sampleAccumulator;
 			logProbability$rate = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample10)
+			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample10 = fixedFlag$sample10;
+			fixedProbFlag$sample6 = fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			double cv$sampleValue = logProbability$rate;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
+			logProbability$var5 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample10)
+			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample23() {
-		if(!fixedProbFlag$sample23) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			for(int var20 = 0; var20 < samples; var20 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					double cv$sampleValue = decay[var20];
-					{
-						{
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$exponential = cv$sampleAccumulator;
-			logProbability$var21 = cv$sampleAccumulator;
-			logProbability$decay = (logProbability$decay + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedFlag$sample10);
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var21;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$exponential = cv$rvAccumulator;
-			logProbability$decay = (logProbability$decay + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void sample10() {
+	private final void sample6() {
 		double cv$sum = 0.0;
 		int cv$count = 0;
 		{
 			{
 				{
 					{
-						for(int var20 = 0; var20 < samples; var20 += 1) {
-							cv$sum = (cv$sum + decay[var20]);
+						for(int var18 = 0; var18 < samples; var18 += 1) {
+							cv$sum = (cv$sum + decay[var18]);
 							cv$count = (cv$count + 1);
 						}
 					}
@@ -279,34 +279,34 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample10)
+		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		for(int var20 = 0; var20 < samples; var20 += 1) {
-			if(!fixedFlag$sample23)
-				decay[var20] = (DistributionSampling.sampleExponential(RNG$) / rate);
+		for(int var18 = 0; var18 < samples; var18 += 1) {
+			if(!fixedFlag$sample19)
+				decay[var18] = (DistributionSampling.sampleExponential(RNG$) / rate);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample10)
+		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample10)
+		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample10)
-				sample10();
+			if(!fixedFlag$sample6)
+				sample6();
 		} else {
-			if(!fixedFlag$sample10)
-				sample10();
+			if(!fixedFlag$sample6)
+				sample6();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -319,13 +319,13 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
-		if(!fixedProbFlag$sample10)
+		logProbability$var5 = 0.0;
+		if(!fixedProbFlag$sample6)
 			logProbability$rate = 0.0;
 		logProbability$exponential = 0.0;
 		logProbability$decay = 0.0;
-		if(!fixedProbFlag$sample23)
-			logProbability$var21 = 0.0;
+		if(!fixedProbFlag$sample19)
+			logProbability$var19 = 0.0;
 	}
 
 	@Override
@@ -336,28 +336,28 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample10)
-			logProbabilityValue$sample10();
-		logProbabilityValue$sample23();
+		if(fixedFlag$sample6)
+			logProbabilityValue$sample6();
+		logProbabilityValue$sample19();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample10();
-		logProbabilityValue$sample23();
+		logProbabilityValue$sample6();
+		logProbabilityValue$sample19();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample10();
-		logProbabilityValue$sample23();
+		logProbabilityValue$sample6();
+		logProbabilityValue$sample19();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample10)
+		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 		logModelProbabilitiesVal();
 	}

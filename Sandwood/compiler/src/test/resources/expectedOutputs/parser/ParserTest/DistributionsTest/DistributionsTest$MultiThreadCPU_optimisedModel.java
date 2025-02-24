@@ -8,20 +8,20 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Declare the variables for the model.
 	private double b0;
 	private double b1;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample34 = false;
+	private boolean fixedFlag$sample11 = false;
+	private boolean fixedFlag$sample27 = false;
+	private boolean fixedFlag$sample7 = false;
+	private boolean fixedProbFlag$sample11 = false;
+	private boolean fixedProbFlag$sample27 = false;
+	private boolean fixedProbFlag$sample7 = false;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double[] logProbability$sample34;
+	private double[] logProbability$sample27;
 	private double logProbability$var10;
-	private double logProbability$var14;
-	private double[] logProbability$var30;
+	private double[] logProbability$var26;
+	private double logProbability$var6;
 	private double logProbability$y;
 	private int noSamples;
 	private boolean setFlag$y = false;
@@ -47,11 +47,11 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// updated.
 		b0 = cv$value;
 		
-		// Unset the fixed probability flag for sample 14 as it depends on b0.
-		fixedProbFlag$sample14 = false;
+		// Unset the fixed probability flag for sample 7 as it depends on b0.
+		fixedProbFlag$sample7 = false;
 		
-		// Unset the fixed probability flag for sample 34 as it depends on b0.
-		fixedProbFlag$sample34 = false;
+		// Unset the fixed probability flag for sample 27 as it depends on b0.
+		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for b1.
@@ -67,83 +67,83 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// updated.
 		b1 = cv$value;
 		
-		// Unset the fixed probability flag for sample 18 as it depends on b1.
-		fixedProbFlag$sample18 = false;
+		// Unset the fixed probability flag for sample 11 as it depends on b1.
+		fixedProbFlag$sample11 = false;
 		
-		// Unset the fixed probability flag for sample 34 as it depends on b1.
-		fixedProbFlag$sample34 = false;
+		// Unset the fixed probability flag for sample 27 as it depends on b1.
+		fixedProbFlag$sample27 = false;
 	}
 
-	// Getter for fixedFlag$sample14.
+	// Getter for fixedFlag$sample11.
 	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
+	public final boolean get$fixedFlag$sample11() {
+		return fixedFlag$sample11;
 	}
 
-	// Setter for fixedFlag$sample14.
+	// Setter for fixedFlag$sample11.
 	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample14 including if probabilities
+	public final void set$fixedFlag$sample11(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
 		// need to be updated.
-		fixedFlag$sample14 = cv$value;
+		fixedFlag$sample11 = cv$value;
 		
-		// Should the probability of sample 14 be set to fixed. This will only every change
+		// Should the probability of sample 11 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample14" with its value "cv$value".
-		fixedProbFlag$sample14 = (cv$value && fixedProbFlag$sample14);
+		// Substituted "fixedFlag$sample11" with its value "cv$value".
+		fixedProbFlag$sample11 = (cv$value && fixedProbFlag$sample11);
 		
-		// Should the probability of sample 34 be set to fixed. This will only every change
+		// Should the probability of sample 27 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample14" with its value "cv$value".
-		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
+		// Substituted "fixedFlag$sample11" with its value "cv$value".
+		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
 
-	// Getter for fixedFlag$sample18.
+	// Getter for fixedFlag$sample27.
 	@Override
-	public final boolean get$fixedFlag$sample18() {
-		return fixedFlag$sample18;
+	public final boolean get$fixedFlag$sample27() {
+		return fixedFlag$sample27;
 	}
 
-	// Setter for fixedFlag$sample18.
+	// Setter for fixedFlag$sample27.
 	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
+	public final void set$fixedFlag$sample27(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
 		// need to be updated.
-		fixedFlag$sample18 = cv$value;
+		fixedFlag$sample27 = cv$value;
 		
-		// Should the probability of sample 18 be set to fixed. This will only every change
+		// Should the probability of sample 27 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample18" with its value "cv$value".
-		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
-		
-		// Should the probability of sample 34 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample18" with its value "cv$value".
-		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
+		// Substituted "fixedFlag$sample27" with its value "cv$value".
+		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
 
-	// Getter for fixedFlag$sample34.
+	// Getter for fixedFlag$sample7.
 	@Override
-	public final boolean get$fixedFlag$sample34() {
-		return fixedFlag$sample34;
+	public final boolean get$fixedFlag$sample7() {
+		return fixedFlag$sample7;
 	}
 
-	// Setter for fixedFlag$sample34.
+	// Setter for fixedFlag$sample7.
 	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
+	public final void set$fixedFlag$sample7(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
 		// need to be updated.
-		fixedFlag$sample34 = cv$value;
+		fixedFlag$sample7 = cv$value;
 		
-		// Should the probability of sample 34 be set to fixed. This will only every change
+		// Should the probability of sample 7 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
+		// Substituted "fixedFlag$sample7" with its value "cv$value".
+		fixedProbFlag$sample7 = (cv$value && fixedProbFlag$sample7);
+		
+		// Should the probability of sample 27 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample7" with its value "cv$value".
+		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
 
 	// Getter for logProbability$$evidence.
@@ -211,8 +211,8 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 34 as it depends on y.
-		fixedProbFlag$sample34 = false;
+		// Unset the fixed probability flag for sample 27 as it depends on y.
+		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for yMeasured.
@@ -229,108 +229,12 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample14 using sampled
+	// Calculate the probability of the samples represented by sample11 using sampled
 	// values.
-	private final void logProbabilityValue$sample14() {
-		// Determine if we need to calculate the values for sample task 14 or if we should
+	private final void logProbabilityValue$sample11() {
+		// Determine if we need to calculate the values for sample task 11 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample14) {
-			// Generating probabilities for sample task
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			// 
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var10 = cv$distributionAccumulator;
-			
-			// Store the sample task probability
-			logProbability$b0 = cv$distributionAccumulator;
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample14)
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample14 = fixedFlag$sample14;
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			logProbability$var10 = logProbability$b0;
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$b0);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample14)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$b0);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample18 using sampled
-	// values.
-	private final void logProbabilityValue$sample18() {
-		// Determine if we need to calculate the values for sample task 18 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample18) {
+		if(!fixedProbFlag$sample11) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -360,7 +264,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var14 = cv$distributionAccumulator;
+			logProbability$var10 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b1 = cv$distributionAccumulator;
@@ -383,7 +287,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample18)
+			if(fixedFlag$sample11)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -400,13 +304,13 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample18 = fixedFlag$sample18;
+			fixedProbFlag$sample11 = fixedFlag$sample11;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var14 = logProbability$b1;
+			logProbability$var10 = logProbability$b1;
 			
 			// Add probability to model
 			// 
@@ -415,18 +319,18 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample18)
+			if(fixedFlag$sample11)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$b1);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample34 using sampled
+	// Calculate the probability of the samples represented by sample27 using sampled
 	// values.
-	private final void logProbabilityValue$sample34() {
-		// Determine if we need to calculate the values for sample task 34 or if we should
+	private final void logProbabilityValue$sample27() {
+		// Determine if we need to calculate the values for sample task 27 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample34) {
+		if(!fixedProbFlag$sample27) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -467,10 +371,10 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var30[i] = cv$distributionAccumulator;
+				logProbability$var26[i] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample34[i] = cv$distributionAccumulator;
+				logProbability$sample27[i] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
@@ -482,7 +386,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample34 = ((fixedFlag$sample34 && fixedFlag$sample14) && fixedFlag$sample18);
+			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample7) && fixedFlag$sample11);
 		}
 		// Using cached values.
 		else {
@@ -491,9 +395,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample34[i];
+				double cv$rvAccumulator = logProbability$sample27[i];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var30[i] = cv$rvAccumulator;
+				logProbability$var26[i] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -505,135 +409,104 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 14 drawn from Cauchy 10. Inference was performed using Metropolis-Hastings.
-	private final void sample14() {
-		// The original value of the sample
-		double cv$originalValue = b0;
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		double cv$originalProbability;
-		
-		// Calculate a proposed variance.
-		// 
-		// The original value of the sample
-		double cv$var = ((b0 * b0) * 0.010000000000000002);
-		
-		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		
-		// The proposed new value for the sample
-		// 
-		// The original value of the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b0);
-		{
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Substituted "cv$temp$1$var9" with its value "2.0".
-			// 
-			// Set the current value to the current state of the tree.
-			// 
-			// The original value of the sample
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
-			
-			// Processing random variable 30.
-			for(int i = 0; i < noSamples; i += 1)
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 34 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 34 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				// 
-				// cv$temp$2$var29's comment
-				// Variable declaration of cv$temp$2$var29 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Set the current value to the current state of the tree.
-				// 
-				// The original value of the sample
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		b0 = cv$proposedValue;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var9" with its value "2.0".
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
-		
-		// Processing random variable 30.
-		for(int i = 0; i < noSamples; i += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 34 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+	// Calculate the probability of the samples represented by sample7 using sampled values.
+	private final void logProbabilityValue$sample7() {
+		// Determine if we need to calculate the values for sample task 7 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample7) {
+			// Generating probabilities for sample task
+			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
-			// Processing sample task 34 of consumer random variable null.
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
 			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
+			// Store the value of the function call, so the function call is only made once.
 			// 
-			// cv$temp$2$var29's comment
-			// Variable declaration of cv$temp$2$var29 moved.
+			// The sample value to calculate the probability of generating
 			// 
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
-			// If it is not revert the changes.
+			// Scale the probability relative to the observed distribution space.
 			// 
-			// Set the sample value
+			// Add the probability of this distribution configuration to the accumulator.
 			// 
-			// Write out the new value of the sample.
-			b0 = cv$originalValue;
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$var6 = cv$distributionAccumulator;
+			
+			// Store the sample task probability
+			logProbability$b0 = cv$distributionAccumulator;
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample7)
+				// Variable declaration of cv$accumulator moved.
+				// Declaration comment was:
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample7 = fixedFlag$sample7;
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			logProbability$var6 = logProbability$b0;
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$b0);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample7)
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$b0);
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 18 drawn from HalfCauchy 14. Inference was performed using Metropolis-Hastings.
-	private final void sample18() {
+	// by sample task 11 drawn from HalfCauchy 10. Inference was performed using Metropolis-Hastings.
+	private final void sample11() {
 		// The original value of the sample
 		double cv$originalValue = b1;
 		
@@ -659,32 +532,32 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var13" with its value "5.0".
+			// Substituted "cv$temp$1$var9" with its value "5.0".
 			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
 			
-			// Processing random variable 30.
+			// Processing random variable 26.
 			for(int i = 0; i < noSamples; i += 1)
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 34 with the current configuration.
+				// Recorded the probability of reaching sample task 27 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 34 of consumer random variable null.
+				// Processing sample task 27 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$var29's comment
-				// Variable declaration of cv$temp$2$var29 moved.
+				// cv$temp$2$var25's comment
+				// Variable declaration of cv$temp$2$var25 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -710,28 +583,28 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var13" with its value "5.0".
+		// Substituted "cv$temp$1$var9" with its value "5.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
 		
-		// Processing random variable 30.
+		// Processing random variable 26.
 		for(int i = 0; i < noSamples; i += 1)
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 34 with the current configuration.
+			// Recorded the probability of reaching sample task 27 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 34 of consumer random variable null.
+			// Processing sample task 27 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var29's comment
-			// Variable declaration of cv$temp$2$var29 moved.
+			// cv$temp$2$var25's comment
+			// Variable declaration of cv$temp$2$var25 moved.
 			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
@@ -757,6 +630,132 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			b1 = cv$originalValue;
 	}
 
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 7 drawn from Cauchy 6. Inference was performed using Metropolis-Hastings.
+	private final void sample7() {
+		// The original value of the sample
+		double cv$originalValue = b0;
+		
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// The probability of the random variable generating the originally sampled value
+		double cv$originalProbability;
+		
+		// Calculate a proposed variance.
+		// 
+		// The original value of the sample
+		double cv$var = ((b0 * b0) * 0.010000000000000002);
+		
+		// Ensure the variance is at least 0.01
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		
+		// The proposed new value for the sample
+		// 
+		// The original value of the sample
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b0);
+		{
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Substituted "cv$temp$1$var5" with its value "2.0".
+			// 
+			// Set the current value to the current state of the tree.
+			// 
+			// The original value of the sample
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
+			
+			// Processing random variable 26.
+			for(int i = 0; i < noSamples; i += 1)
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 27 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Processing sample task 27 of consumer random variable null.
+				// 
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// cv$temp$2$var25's comment
+				// Variable declaration of cv$temp$2$var25 moved.
+				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Set the current value to the current state of the tree.
+				// 
+				// The original value of the sample
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		
+		// Update Sample and intermediate values
+		// 
+		// Write out the new value of the sample.
+		b0 = cv$proposedValue;
+		
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Substituted "cv$temp$1$var5" with its value "2.0".
+		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
+		
+		// Processing random variable 26.
+		for(int i = 0; i < noSamples; i += 1)
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 27 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+			// Declaration comment was:
+			// Processing sample task 27 of consumer random variable null.
+			// 
+			// Set an accumulator to sum the probabilities for each possible configuration of
+			// inputs.
+			// 
+			// cv$temp$2$var25's comment
+			// Variable declaration of cv$temp$2$var25 moved.
+			// 
+			// Constructing a random variable input for use later.
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		// 
+		// The probability ration for the proposed value and the current value.
+		// 
+		// Initialize a log space accumulator to take the product of all the distribution
+		// probabilities.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+			// If it is not revert the changes.
+			// 
+			// Set the sample value
+			// 
+			// Write out the new value of the sample.
+			b0 = cv$originalValue;
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -771,23 +770,23 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Constructor for y
 			y = new double[x.length];
 		
-		// Constructor for logProbability$var30
-		logProbability$var30 = new double[x.length];
+		// Constructor for logProbability$var26
+		logProbability$var26 = new double[x.length];
 		
-		// Constructor for logProbability$sample34
-		logProbability$sample34 = new double[x.length];
+		// Constructor for logProbability$sample27
+		logProbability$sample27 = new double[x.length];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34)
+		if(!fixedFlag$sample27)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noSamples, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -805,9 +804,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
 	}
 
@@ -815,9 +814,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
 	}
 
@@ -826,17 +825,17 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample14)
-				sample14();
-			if(!fixedFlag$sample18)
-				sample18();
+			if(!fixedFlag$sample7)
+				sample7();
+			if(!fixedFlag$sample11)
+				sample11();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample18)
-				sample18();
-			if(!fixedFlag$sample14)
-				sample14();
+			if(!fixedFlag$sample11)
+				sample11();
+			if(!fixedFlag$sample7)
+				sample7();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -860,18 +859,18 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var10 = 0.0;
-		if(!fixedProbFlag$sample14)
+		logProbability$var6 = 0.0;
+		if(!fixedProbFlag$sample7)
 			logProbability$b0 = 0.0;
-		logProbability$var14 = 0.0;
-		if(!fixedProbFlag$sample18)
+		logProbability$var10 = 0.0;
+		if(!fixedProbFlag$sample11)
 			logProbability$b1 = 0.0;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var30[i] = 0.0;
+			logProbability$var26[i] = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample34) {
+		if(!fixedProbFlag$sample27) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample34[i] = 0.0;
+				logProbability$sample27[i] = 0.0;
 		}
 	}
 
@@ -892,11 +891,11 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
-		if(fixedFlag$sample18)
-			logProbabilityValue$sample18();
-		logProbabilityValue$sample34();
+		if(fixedFlag$sample7)
+			logProbabilityValue$sample7();
+		if(fixedFlag$sample11)
+			logProbabilityValue$sample11();
+		logProbabilityValue$sample27();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -914,9 +913,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample18();
-		logProbabilityValue$sample34();
+		logProbabilityValue$sample7();
+		logProbabilityValue$sample11();
+		logProbabilityValue$sample27();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -933,9 +932,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample14();
-		logProbabilityValue$sample18();
-		logProbabilityValue$sample34();
+		logProbabilityValue$sample7();
+		logProbabilityValue$sample11();
+		logProbabilityValue$sample27();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -943,9 +942,9 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample14)
+		if(!fixedFlag$sample7)
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample18)
+		if(!fixedFlag$sample11)
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
 		
 		// Calculate the probabilities for every sample task in the model. These values are

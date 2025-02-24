@@ -290,8 +290,9 @@ public class ProbabilityTests {
     @Test
     void testDirichlet() throws IOException {
         DataReader d = new DataReader("dirichlet");
-        double[] param = new double[3];
-        double[] value = new double[3];
+        int length = 3;
+        double[] param = new double[length];
+        double[] value = new double[length];
 
         for(double i = 0.1; i < 5; i++) {
             param[0] = i;
@@ -305,7 +306,7 @@ public class ProbabilityTests {
                             value[1] = m;
                             for(double n = 0.1; n < 1 - (l + m); n += 0.1) {
                                 value[2] = n;
-                                double localValue = DistributionSampling.probabilityDirichlet(value, param);
+                                double localValue = DistributionSampling.probabilityDirichlet(value, length, param);
                                 double storedValue = d.read(param, value);
                                 testValueNormal(localValue, storedValue, param[0], param[1], param[2], value[0],
                                         value[1], value[2]);
@@ -321,8 +322,9 @@ public class ProbabilityTests {
     @Test
     void testLogDirichlet() throws IOException {
         DataReader d = new DataReader("logDirichlet");
-        double[] param = new double[3];
-        double[] value = new double[3];
+        int length = 3;
+        double[] param = new double[length];
+        double[] value = new double[length];
 
         for(double i = 0.1; i < 5; i++) {
             param[0] = i;
@@ -336,7 +338,7 @@ public class ProbabilityTests {
                             value[1] = m;
                             for(double n = 0.1; n < 1 - (l + m); n += 0.1) {
                                 value[2] = n;
-                                double localValue = DistributionSampling.logProbabilityDirichlet(value, param);
+                                double localValue = DistributionSampling.logProbabilityDirichlet(value, param, length);
                                 double storedValue = d.read(param, value);
                                 testValueLog(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
                                         value[2]);
@@ -408,8 +410,9 @@ public class ProbabilityTests {
     @Test
     void testMultinomial() throws IOException {
         DataReader d = new DataReader("multinomial");
-        double[] param = new double[3];
-        int[] value = new int[3];
+        int length = 3;
+        double[] param = new double[length];
+        int[] value = new int[length];
 
         for(double i = 0; i < 1; i += 0.1) {
             param[0] = i;
@@ -422,7 +425,7 @@ public class ProbabilityTests {
                         for(int m = 0; m <= n - l; m++) {
                             value[1] = m;
                             value[2] = n - (l + m);
-                            double localValue = DistributionSampling.probabilityMultinomial(value, param, n);
+                            double localValue = DistributionSampling.probabilityMultinomial(value, param, length, n);
                             double storedValue = d.read(param, value);
                             testValueNormal(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
                                     value[2]);
@@ -437,8 +440,9 @@ public class ProbabilityTests {
     @Test
     void testLogMultinomial() throws IOException {
         DataReader d = new DataReader("logMultinomial");
-        double[] param = new double[3];
-        int[] value = new int[3];
+        int length = 3;
+        double[] param = new double[length];
+        int[] value = new int[length];
 
         for(double i = 0; i < 1; i += 0.1) {
             param[0] = i;
@@ -451,7 +455,7 @@ public class ProbabilityTests {
                         for(int m = 0; m <= n - l; m++) {
                             value[1] = m;
                             value[2] = n - (l + m);
-                            double localValue = DistributionSampling.logProbabilityMultinomial(value, param, n);
+                            double localValue = DistributionSampling.logProbabilityMultinomial(value, param, length, n);
                             double storedValue = d.read(param, value);
                             testValueLog(localValue, storedValue, param[0], param[1], param[2], value[0], value[1],
                                     value[2]);

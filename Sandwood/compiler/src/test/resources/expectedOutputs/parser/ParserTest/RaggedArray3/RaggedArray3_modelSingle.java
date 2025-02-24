@@ -34,13 +34,13 @@ public class RaggedArray3 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed);
+                system$c.set$fixedFlag$sample39(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample42())
+            if(system$c.get$fixedFlag$sample39())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class RaggedArray3 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample57(fixed);
+                system$c.set$fixedFlag$sample53(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample57())
+            if(system$c.get$fixedFlag$sample53())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -223,9 +223,9 @@ public class RaggedArray3 extends Model {
 
         //Set fixed flags
         if(d.isSet())
-            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
+            newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
         if(obs.isSet())
-            newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
+            newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
     }
 
     /**

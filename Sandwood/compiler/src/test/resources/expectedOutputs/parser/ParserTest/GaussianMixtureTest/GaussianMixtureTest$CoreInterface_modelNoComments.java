@@ -2,16 +2,16 @@ package org.sandwood.compiler.tests.parser;
 
 interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[] get$alpha();
-	public boolean get$fixedFlag$sample20();
-	public void set$fixedFlag$sample20(boolean cv$value);
-	public boolean get$fixedFlag$sample37();
-	public void set$fixedFlag$sample37(boolean cv$value);
-	public boolean get$fixedFlag$sample55();
-	public void set$fixedFlag$sample55(boolean cv$value);
-	public boolean get$fixedFlag$sample73();
-	public void set$fixedFlag$sample73(boolean cv$value);
-	public boolean get$fixedFlag$sample77();
-	public void set$fixedFlag$sample77(boolean cv$value);
+	public boolean get$fixedFlag$sample17();
+	public void set$fixedFlag$sample17(boolean cv$value);
+	public boolean get$fixedFlag$sample34();
+	public void set$fixedFlag$sample34(boolean cv$value);
+	public boolean get$fixedFlag$sample52();
+	public void set$fixedFlag$sample52(boolean cv$value);
+	public boolean get$fixedFlag$sample68();
+	public void set$fixedFlag$sample68(boolean cv$value);
+	public boolean get$fixedFlag$sample72();
+	public void set$fixedFlag$sample72(boolean cv$value);
 	public int get$k();
 	public int get$length$xMeasured();
 	public void set$length$xMeasured(int cv$value);

@@ -34,13 +34,13 @@ public class Conditional2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample4(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample7())
+            if(system$c.get$fixedFlag$sample4())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -70,18 +70,18 @@ public class Conditional2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed);
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample21(fixed);
+                system$c.set$fixedFlag$sample4(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample24 = system$c.get$fixedFlag$sample24();
-            boolean fixedFlag$sample7 = system$c.get$fixedFlag$sample7();
-            if(fixedFlag$sample24 && fixedFlag$sample7)
+            boolean fixedFlag$sample21 = system$c.get$fixedFlag$sample21();
+            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
+            if(fixedFlag$sample21 && fixedFlag$sample4)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample24 || fixedFlag$sample7)
+            else if(fixedFlag$sample21 || fixedFlag$sample4)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -111,18 +111,18 @@ public class Conditional2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed);
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample21(fixed);
+                system$c.set$fixedFlag$sample4(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample24 = system$c.get$fixedFlag$sample24();
-            boolean fixedFlag$sample7 = system$c.get$fixedFlag$sample7();
-            if(fixedFlag$sample24 && fixedFlag$sample7)
+            boolean fixedFlag$sample21 = system$c.get$fixedFlag$sample21();
+            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
+            if(fixedFlag$sample21 && fixedFlag$sample4)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample24 || fixedFlag$sample7)
+            else if(fixedFlag$sample21 || fixedFlag$sample4)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -227,10 +227,10 @@ public class Conditional2 extends Model {
 
         //Set fixed flags
         if(guard.isSet())
-            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
         if(value.isSet()){
-            newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
-            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+            newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
+            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
         }
     }
 

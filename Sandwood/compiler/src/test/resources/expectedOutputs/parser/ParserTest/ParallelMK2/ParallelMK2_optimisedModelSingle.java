@@ -34,13 +34,13 @@ public class ParallelMK2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample38(fixed);
+                system$c.set$fixedFlag$sample32(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample38())
+            if(system$c.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class ParallelMK2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample32(fixed);
+                system$c.set$fixedFlag$sample26(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample32())
+            if(system$c.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -196,7 +196,7 @@ public class ParallelMK2 extends Model {
 
         //Set fixed flags
         if(generated.isSet())
-            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
+            newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
     }
 
     /**

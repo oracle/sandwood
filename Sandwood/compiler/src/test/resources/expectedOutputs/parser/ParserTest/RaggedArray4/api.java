@@ -58,7 +58,7 @@ public class RaggedArray4 extends GeneratedAPIBuilder {
         b.setAlias("b");
         b.setLocation(location(13, 14, 13, 14));
 
-        IntVariable y = categorical(b, location(14, 13, 14, 26)).sampleDistribution(location(14, 28, 14, 47));
+        IntVariable y = categorical(b, location(14, 13, 14, 26)).sample(location(14, 28, 14, 35));
         y.setAlias("y");
         y.setLocation(location(14, 9, 14, 9));
 
@@ -92,7 +92,7 @@ public class RaggedArray4 extends GeneratedAPIBuilder {
              + "public model RaggedArray4(int[] obs_measured) {\n"
              + "    double[][] a = {{0.4, 0.6}, {0.2, 0.3, 0.5}};\n"
              + "    double[] b = { 0.35, 0.65 };\n"
-             + "    int y = categorical(b).sampleDistribution();\n"
+             + "    int y = categorical(b).sample();\n"
              + "    double[] d = dirichlet(a[y]).sample();\n"
              + "    int[] obs = categorical(d).sample(obs_measured.length);\n"
              + "    obs.observe(obs_measured);\n"

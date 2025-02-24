@@ -52,6 +52,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
@@ -354,7 +355,7 @@ public class ProbabilityFunction {
                 "Should the probability of sample " + sampleTask.id()
                         + " be set to fixed. This will only every change the flag to false.");
         compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
-        
+
         // Add side effect to clear the flag if a dependency is changed.
         SampleTraceDesc sampleDesc = compilationCtx.traces.getSampleTrace(sampleTask);
         VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
@@ -718,14 +719,16 @@ public class ProbabilityFunction {
             CompilationContext compilationCtx) {
         List<Variable<?>> randomInputs = random.getParent().getInputs();
         int noInputs = randomInputs.size();
-        IRTreeReturn<?>[] args = new IRTreeReturn<?>[noInputs + 1];
-        args[0] = value;
+        List<IRTreeReturn<?>> args = new ArrayList<>();
+        args.add(value);
         for(int i = 0; i < noInputs; i++) {
             Variable<?> v = randomInputs.get(i);
             constructInput(v, compilationCtx);
-            args[i + 1] = loadArg(v, compilationCtx);
+            args.add(loadArg(v, compilationCtx));
+            if(v.getType().isArray())
+                args.add(((ArrayVariable<?>) v).getLength(compilationCtx));
         }
-        return args;
+        return args.toArray(new IRTreeReturn<?>[args.size()]);
     }
 
     public static IRTreeReturn<DoubleVariable> getSampleProbability(RandomVariable<?, ?> random,

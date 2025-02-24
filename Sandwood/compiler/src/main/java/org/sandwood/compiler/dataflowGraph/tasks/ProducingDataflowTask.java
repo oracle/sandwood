@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -22,7 +22,7 @@ public interface ProducingDataflowTask<A extends Variable<A>> extends DataflowTa
 
     void setNonDeterministic();
 
-    boolean deterministic();
+    boolean isDeterministic();
 
     void constructTrace(TraceConstructionDesc desc);
 

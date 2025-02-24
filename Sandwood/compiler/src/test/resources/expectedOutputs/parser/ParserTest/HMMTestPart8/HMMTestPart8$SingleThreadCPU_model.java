@@ -8,21 +8,21 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	
 	// Declare the variables for the model.
 	private double[] bias;
-	private double[] cv$distributionAccumulator$var71;
-	private double[] cv$var30$countGlobal;
-	private double[] cv$var54$stateProbabilityGlobal;
-	private double[] cv$var72$stateProbabilityGlobal;
-	private double[][] distribution$sample75;
-	private boolean fixedFlag$sample31 = false;
-	private boolean fixedFlag$sample48 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample75 = false;
-	private boolean fixedFlag$sample91 = false;
-	private boolean fixedProbFlag$sample31 = false;
-	private boolean fixedProbFlag$sample48 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private boolean fixedProbFlag$sample91 = false;
+	private double[] cv$distributionAccumulator$var69;
+	private double[] cv$var28$countGlobal;
+	private double[] cv$var52$stateProbabilityGlobal;
+	private double[] cv$var70$stateProbabilityGlobal;
+	private double[][] distribution$sample71;
+	private boolean fixedFlag$sample28 = false;
+	private boolean fixedFlag$sample45 = false;
+	private boolean fixedFlag$sample53 = false;
+	private boolean fixedFlag$sample71 = false;
+	private boolean fixedFlag$sample87 = false;
+	private boolean fixedProbFlag$sample28 = false;
+	private boolean fixedProbFlag$sample45 = false;
+	private boolean fixedProbFlag$sample53 = false;
+	private boolean fixedProbFlag$sample71 = false;
+	private boolean fixedProbFlag$sample87 = false;
 	private boolean[] flips;
 	private boolean[] flipsMeasured;
 	private int length$flipsMeasured;
@@ -31,17 +31,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double logProbability$m;
-	private double[] logProbability$sample75;
-	private double[] logProbability$sample91;
+	private double[] logProbability$sample71;
+	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var18;
-	private double logProbability$var30;
-	private double logProbability$var34;
-	private double logProbability$var46;
-	private double logProbability$var53;
-	private double logProbability$var54;
-	private double[] logProbability$var71;
-	private double[] logProbability$var87;
+	private double logProbability$var16;
+	private double logProbability$var28;
+	private double logProbability$var32;
+	private double logProbability$var44;
+	private double logProbability$var51;
+	private double logProbability$var52;
+	private double[] logProbability$var69;
+	private double[] logProbability$var85;
 	private double[][] m;
 	private int samples;
 	private boolean setFlag$bias = false;
@@ -73,125 +73,125 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		bias = cv$value;
 		setFlag$bias = true;
 		
-		// Unset the fixed probability flag for sample 48 as it depends on bias.
-		fixedProbFlag$sample48 = false;
+		// Unset the fixed probability flag for sample 45 as it depends on bias.
+		fixedProbFlag$sample45 = false;
 		
-		// Unset the fixed probability flag for sample 91 as it depends on bias.
-		fixedProbFlag$sample91 = false;
+		// Unset the fixed probability flag for sample 87 as it depends on bias.
+		fixedProbFlag$sample87 = false;
 	}
 
-	// Getter for fixedFlag$sample31.
+	// Getter for fixedFlag$sample28.
 	@Override
-	public final boolean get$fixedFlag$sample31() {
-		return fixedFlag$sample31;
+	public final boolean get$fixedFlag$sample28() {
+		return fixedFlag$sample28;
 	}
 
-	// Setter for fixedFlag$sample31.
+	// Setter for fixedFlag$sample28.
 	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
+	public final void set$fixedFlag$sample28(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample28 including if probabilities
 		// need to be updated.
-		fixedFlag$sample31 = cv$value;
+		fixedFlag$sample28 = cv$value;
 		
-		// Should the probability of sample 31 be set to fixed. This will only every change
+		// Should the probability of sample 28 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedProbFlag$sample31);
+		fixedProbFlag$sample28 = (fixedFlag$sample28 && fixedProbFlag$sample28);
 		
-		// Should the probability of sample 57 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample31 && fixedProbFlag$sample57);
+		fixedProbFlag$sample53 = (fixedFlag$sample28 && fixedProbFlag$sample53);
 		
-		// Should the probability of sample 75 be set to fixed. This will only every change
+		// Should the probability of sample 71 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample75 = (fixedFlag$sample31 && fixedProbFlag$sample75);
+		fixedProbFlag$sample71 = (fixedFlag$sample28 && fixedProbFlag$sample71);
 	}
 
-	// Getter for fixedFlag$sample48.
+	// Getter for fixedFlag$sample45.
 	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
+	public final boolean get$fixedFlag$sample45() {
+		return fixedFlag$sample45;
 	}
 
-	// Setter for fixedFlag$sample48.
+	// Setter for fixedFlag$sample45.
 	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample48 including if probabilities
+	public final void set$fixedFlag$sample45(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample45 including if probabilities
 		// need to be updated.
-		fixedFlag$sample48 = cv$value;
+		fixedFlag$sample45 = cv$value;
 		
-		// Should the probability of sample 48 be set to fixed. This will only every change
+		// Should the probability of sample 45 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
+		fixedProbFlag$sample45 = (fixedFlag$sample45 && fixedProbFlag$sample45);
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample91 = (fixedFlag$sample48 && fixedProbFlag$sample91);
+		fixedProbFlag$sample87 = (fixedFlag$sample45 && fixedProbFlag$sample87);
 	}
 
-	// Getter for fixedFlag$sample57.
+	// Getter for fixedFlag$sample53.
 	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
+	public final boolean get$fixedFlag$sample53() {
+		return fixedFlag$sample53;
 	}
 
-	// Setter for fixedFlag$sample57.
+	// Setter for fixedFlag$sample53.
 	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample57 including if probabilities
+	public final void set$fixedFlag$sample53(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
 		// need to be updated.
-		fixedFlag$sample57 = cv$value;
+		fixedFlag$sample53 = cv$value;
 		
-		// Should the probability of sample 57 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedProbFlag$sample57);
+		fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedProbFlag$sample53);
 		
-		// Should the probability of sample 75 be set to fixed. This will only every change
+		// Should the probability of sample 71 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample75 = (fixedFlag$sample57 && fixedProbFlag$sample75);
+		fixedProbFlag$sample71 = (fixedFlag$sample53 && fixedProbFlag$sample71);
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample91 = (fixedFlag$sample57 && fixedProbFlag$sample91);
+		fixedProbFlag$sample87 = (fixedFlag$sample53 && fixedProbFlag$sample87);
 	}
 
-	// Getter for fixedFlag$sample75.
+	// Getter for fixedFlag$sample71.
 	@Override
-	public final boolean get$fixedFlag$sample75() {
-		return fixedFlag$sample75;
+	public final boolean get$fixedFlag$sample71() {
+		return fixedFlag$sample71;
 	}
 
-	// Setter for fixedFlag$sample75.
+	// Setter for fixedFlag$sample71.
 	@Override
-	public final void set$fixedFlag$sample75(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample75 including if probabilities
+	public final void set$fixedFlag$sample71(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample71 including if probabilities
 		// need to be updated.
-		fixedFlag$sample75 = cv$value;
+		fixedFlag$sample71 = cv$value;
 		
-		// Should the probability of sample 75 be set to fixed. This will only every change
+		// Should the probability of sample 71 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedProbFlag$sample75);
+		fixedProbFlag$sample71 = (fixedFlag$sample71 && fixedProbFlag$sample71);
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample91 = (fixedFlag$sample75 && fixedProbFlag$sample91);
+		fixedProbFlag$sample87 = (fixedFlag$sample71 && fixedProbFlag$sample87);
 	}
 
-	// Getter for fixedFlag$sample91.
+	// Getter for fixedFlag$sample87.
 	@Override
-	public final boolean get$fixedFlag$sample91() {
-		return fixedFlag$sample91;
+	public final boolean get$fixedFlag$sample87() {
+		return fixedFlag$sample87;
 	}
 
-	// Setter for fixedFlag$sample91.
+	// Setter for fixedFlag$sample87.
 	@Override
-	public final void set$fixedFlag$sample91(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample91 including if probabilities
+	public final void set$fixedFlag$sample87(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample87 including if probabilities
 		// need to be updated.
-		fixedFlag$sample91 = cv$value;
+		fixedFlag$sample87 = cv$value;
 		
-		// Should the probability of sample 91 be set to fixed. This will only every change
+		// Should the probability of sample 87 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample91 = (fixedFlag$sample91 && fixedProbFlag$sample91);
+		fixedProbFlag$sample87 = (fixedFlag$sample87 && fixedProbFlag$sample87);
 	}
 
 	// Getter for flips.
@@ -210,8 +210,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		flips = cv$value;
 		setFlag$flips = true;
 		
-		// Unset the fixed probability flag for sample 91 as it depends on flips.
-		fixedProbFlag$sample91 = false;
+		// Unset the fixed probability flag for sample 87 as it depends on flips.
+		fixedProbFlag$sample87 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -291,14 +291,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		m = cv$value;
 		setFlag$m = true;
 		
-		// Unset the fixed probability flag for sample 31 as it depends on m.
-		fixedProbFlag$sample31 = false;
+		// Unset the fixed probability flag for sample 28 as it depends on m.
+		fixedProbFlag$sample28 = false;
 		
-		// Unset the fixed probability flag for sample 57 as it depends on m.
-		fixedProbFlag$sample57 = false;
+		// Unset the fixed probability flag for sample 53 as it depends on m.
+		fixedProbFlag$sample53 = false;
 		
-		// Unset the fixed probability flag for sample 75 as it depends on m.
-		fixedProbFlag$sample75 = false;
+		// Unset the fixed probability flag for sample 71 as it depends on m.
+		fixedProbFlag$sample71 = false;
 	}
 
 	// Getter for samples.
@@ -323,14 +323,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		st = cv$value;
 		setFlag$st = true;
 		
-		// Unset the fixed probability flag for sample 57 as it depends on st.
-		fixedProbFlag$sample57 = false;
+		// Unset the fixed probability flag for sample 53 as it depends on st.
+		fixedProbFlag$sample53 = false;
 		
-		// Unset the fixed probability flag for sample 75 as it depends on st.
-		fixedProbFlag$sample75 = false;
+		// Unset the fixed probability flag for sample 71 as it depends on st.
+		fixedProbFlag$sample71 = false;
 		
-		// Unset the fixed probability flag for sample 91 as it depends on st.
-		fixedProbFlag$sample91 = false;
+		// Unset the fixed probability flag for sample 87 as it depends on st.
+		fixedProbFlag$sample87 = false;
 	}
 
 	// Getter for states.
@@ -345,19 +345,19 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return v;
 	}
 
-	// Calculate the probability of the samples represented by sample75 using probability
+	// Calculate the probability of the samples represented by sample71 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample75() {
-		// Determine if we need to calculate the values for sample task 75 or if we should
+	private final void logProbabilityDistribution$sample71() {
+		// Determine if we need to calculate the values for sample task 71 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample75) {
+		if(!fixedProbFlag$sample71) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample75) {
+			if(fixedFlag$sample71) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
-				for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+				for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 					// Accumulator for sample probabilities for a specific instance of the random variable.
 					double cv$sampleAccumulator = 0.0;
 					
@@ -367,24 +367,24 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// An accumulator for the distributed probability space covered.
 					double cv$probabilityReached = 0.0;
 					
-					// Look for paths between the variable and the sample task 75 including any distribution
+					// Look for paths between the variable and the sample task 71 including any distribution
 					// values.
 					// 
 					// Copy of index so that its values can be safely substituted
-					int index$i$1 = i$var66;
+					int index$i$1 = i$var64;
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = st[i$var66];
+						int cv$sampleValue = st[i$var64];
 						
-						// Enumerating the possible arguments for Categorical 71.
-						if((0 == (i$var66 - 1))) {
-							for(int var29 = 0; var29 < states; var29 += 1) {
-								if((var29 == st[(i$var66 - 1)])) {
+						// Enumerating the possible arguments for Categorical 69.
+						if((0 == (i$var64 - 1))) {
+							for(int var27 = 0; var27 < states; var27 += 1) {
+								if((var27 == st[(i$var64 - 1)])) {
 									{
-										double[] var70 = m[st[(i$var66 - 1)]];
+										double[] var68 = m[st[(i$var64 - 1)]];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var70.length))?Math.log(var70[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -404,15 +404,15 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							}
 						}
 						
-						// Enumerating the possible arguments for Categorical 71.
-						if((index$i$1 == (i$var66 - 1))) {
-							for(int var29 = 0; var29 < states; var29 += 1) {
-								if((var29 == st[(i$var66 - 1)])) {
+						// Enumerating the possible arguments for Categorical 69.
+						if((index$i$1 == (i$var64 - 1))) {
+							for(int var27 = 0; var27 < states; var27 += 1) {
+								if((var27 == st[(i$var64 - 1)])) {
 									{
-										double[] var70 = m[st[(i$var66 - 1)]];
+										double[] var68 = m[st[(i$var64 - 1)]];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var70.length))?Math.log(var70[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -431,16 +431,16 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 								}
 							}
 						}
-						if(fixedFlag$sample75) {
+						if(fixedFlag$sample71) {
 							for(int index$i$6_1 = 1; index$i$6_1 < samples; index$i$6_1 += 1) {
-								if((index$i$6_1 == (i$var66 - 1))) {
-									for(int var29 = 0; var29 < states; var29 += 1) {
-										if((var29 == st[(i$var66 - 1)])) {
+								if((index$i$6_1 == (i$var64 - 1))) {
+									for(int var27 = 0; var27 < states; var27 += 1) {
+										if((var27 == st[(i$var64 - 1)])) {
 											{
-												double[] var70 = m[st[(i$var66 - 1)]];
+												double[] var68 = m[st[(i$var64 - 1)]];
 												
 												// Store the value of the function call, so the function call is only made once.
-												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var70.length))?Math.log(var70[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 												
 												// Add the probability of this sample task to the distribution accumulator.
 												if((cv$weightedProbability < cv$distributionAccumulator))
@@ -463,21 +463,20 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						} else {
 							for(int index$i$7 = 1; index$i$7 < samples; index$i$7 += 1) {
 								if(!(index$i$7 == index$i$1)) {
-									// Enumerating the possible outputs of Categorical 71.
-									for(int index$sample75$8 = 0; index$sample75$8 < states; index$sample75$8 += 1) {
-										int distributionTempVariable$var72$10 = index$sample75$8;
+									// Enumerating the possible outputs of Categorical 69.
+									for(int index$sample71$8 = 0; index$sample71$8 < states; index$sample71$8 += 1) {
+										int distributionTempVariable$var70$10 = index$sample71$8;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample75Value9 = (1.0 * distribution$sample75[((index$i$7 - 1) / 1)][index$sample75$8]);
-										int traceTempVariable$var69$11_1 = distributionTempVariable$var72$10;
-										if((index$i$7 == (i$var66 - 1))) {
-											for(int var29 = 0; var29 < states; var29 += 1) {
-												if((var29 == traceTempVariable$var69$11_1)) {
+										double cv$probabilitySample71Value9 = (1.0 * distribution$sample71[((index$i$7 - 1) / 1)][index$sample71$8]);
+										if((index$i$7 == (i$var64 - 1))) {
+											for(int var27 = 0; var27 < states; var27 += 1) {
+												if((var27 == st[(i$var64 - 1)])) {
 													{
-														double[] var70 = m[traceTempVariable$var69$11_1];
+														double[] var68 = m[st[(i$var64 - 1)]];
 														
 														// Store the value of the function call, so the function call is only made once.
-														double cv$weightedProbability = (Math.log(cv$probabilitySample75Value9) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var70.length))?Math.log(var70[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+														double cv$weightedProbability = (Math.log(cv$probabilitySample71Value9) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 														
 														// Add the probability of this sample task to the distribution accumulator.
 														if((cv$weightedProbability < cv$distributionAccumulator))
@@ -491,7 +490,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 														}
 														
 														// Add the probability of this distribution configuration to the accumulator.
-														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample75Value9);
+														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample71Value9);
 													}
 												}
 											}
@@ -515,14 +514,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var71[((i$var66 - 1) / 1)] = cv$sampleAccumulator;
+					logProbability$var69[((i$var64 - 1) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
-					logProbability$sample75[((i$var66 - 1) / 1)] = cv$sampleProbability;
+					logProbability$sample71[((i$var64 - 1) / 1)] = cv$sampleProbability;
 				}
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample75)
+				if(fixedFlag$sample71)
 					// Update the variable probability
 					logProbability$st = (logProbability$st + cv$accumulator);
 				
@@ -531,12 +530,12 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample75)
+				if(fixedFlag$sample71)
 					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample75 = ((fixedFlag$sample75 && fixedFlag$sample31) && fixedFlag$sample57);
+				fixedProbFlag$sample71 = ((fixedFlag$sample71 && fixedFlag$sample28) && fixedFlag$sample53);
 			}
 		}
 		// Using cached values.
@@ -544,16 +543,16 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample75[((i$var66 - 1) / 1)];
+				double cv$sampleValue = logProbability$sample71[((i$var64 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var71[((i$var66 - 1) / 1)] = cv$rvAccumulator;
+				logProbability$var69[((i$var64 - 1) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample75)
+			if(fixedFlag$sample71)
 				// Update the variable probability
 				logProbability$st = (logProbability$st + cv$accumulator);
 			
@@ -562,17 +561,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
+			if(fixedFlag$sample71)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample91 using probability
+	// Calculate the probability of the samples represented by sample87 using probability
 	// distributions.
-	private final void logProbabilityDistribution$sample91() {
-		// Determine if we need to calculate the values for sample task 91 or if we should
+	private final void logProbabilityDistribution$sample87() {
+		// Determine if we need to calculate the values for sample task 87 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample91) {
+		if(!fixedProbFlag$sample87) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -586,21 +585,21 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				
-				// Look for paths between the variable and the sample task 91 including any distribution
+				// Look for paths between the variable and the sample task 87 including any distribution
 				// values.
 				{
 					// The sample value to calculate the probability of generating
 					boolean cv$sampleValue = flips[j];
 					
-					// Enumerating the possible arguments for Bernoulli 87.
+					// Enumerating the possible arguments for Bernoulli 85.
 					if((0 == j)) {
-						for(int var45 = 0; var45 < states; var45 += 1) {
-							if((var45 == st[j])) {
+						for(int var43 = 0; var43 < states; var43 += 1) {
+							if((var43 == st[j])) {
 								{
-									double var86 = bias[st[j]];
+									double var84 = bias[st[j]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var86));
+									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var84));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -620,17 +619,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						}
 					}
 					
-					// Enumerating the possible arguments for Bernoulli 87.
-					if(fixedFlag$sample75) {
-						for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-							if((i$var66 == j)) {
-								for(int var45 = 0; var45 < states; var45 += 1) {
-									if((var45 == st[j])) {
+					// Enumerating the possible arguments for Bernoulli 85.
+					if(fixedFlag$sample71) {
+						for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+							if((i$var64 == j)) {
+								for(int var43 = 0; var43 < states; var43 += 1) {
+									if((var43 == st[j])) {
 										{
-											double var86 = bias[st[j]];
+											double var84 = bias[st[j]];
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var86));
+											double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var84));
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -651,23 +650,22 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							}
 						}
 					} else {
-						for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+						for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 							if(true) {
-								// Enumerating the possible outputs of Categorical 71.
-								for(int index$sample75$6 = 0; index$sample75$6 < states; index$sample75$6 += 1) {
-									int distributionTempVariable$var72$8 = index$sample75$6;
+								// Enumerating the possible outputs of Categorical 69.
+								for(int index$sample71$6 = 0; index$sample71$6 < states; index$sample71$6 += 1) {
+									int distributionTempVariable$var70$8 = index$sample71$6;
 									
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample75Value7 = (1.0 * distribution$sample75[((i$var66 - 1) / 1)][index$sample75$6]);
-									int traceTempVariable$var85$9_1 = distributionTempVariable$var72$8;
-									if((i$var66 == j)) {
-										for(int var45 = 0; var45 < states; var45 += 1) {
-											if((var45 == traceTempVariable$var85$9_1)) {
+									double cv$probabilitySample71Value7 = (1.0 * distribution$sample71[((i$var64 - 1) / 1)][index$sample71$6]);
+									if((i$var64 == j)) {
+										for(int var43 = 0; var43 < states; var43 += 1) {
+											if((var43 == st[j])) {
 												{
-													double var86 = bias[traceTempVariable$var85$9_1];
+													double var84 = bias[st[j]];
 													
 													// Store the value of the function call, so the function call is only made once.
-													double cv$weightedProbability = (Math.log(cv$probabilitySample75Value7) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var86));
+													double cv$weightedProbability = (Math.log(cv$probabilitySample71Value7) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var84));
 													
 													// Add the probability of this sample task to the distribution accumulator.
 													if((cv$weightedProbability < cv$distributionAccumulator))
@@ -681,7 +679,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													}
 													
 													// Add the probability of this distribution configuration to the accumulator.
-													cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample75Value7);
+													cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample71Value7);
 												}
 											}
 										}
@@ -705,10 +703,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var87[((j - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$var85[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample91[((j - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample87[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -720,7 +718,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample91 = (((fixedFlag$sample91 && fixedFlag$sample48) && fixedFlag$sample57) && fixedFlag$sample75);
+			fixedProbFlag$sample87 = (((fixedFlag$sample87 && fixedFlag$sample45) && fixedFlag$sample53) && fixedFlag$sample71);
 		}
 		// Using cached values.
 		else {
@@ -729,10 +727,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample91[((j - 0) / 1)];
+				double cv$sampleValue = logProbability$sample87[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var87[((j - 0) / 1)] = cv$rvAccumulator;
+				logProbability$var85[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -744,19 +742,19 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample31 using sampled
+	// Calculate the probability of the samples represented by sample28 using sampled
 	// values.
-	private final void logProbabilityValue$sample31() {
-		// Determine if we need to calculate the values for sample task 31 or if we should
+	private final void logProbabilityValue$sample28() {
+		// Determine if we need to calculate the values for sample task 28 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample31) {
+		if(!fixedProbFlag$sample28) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var29 = 0; var29 < states; var29 += 1) {
+			for(int var27 = 0; var27 < states; var27 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -764,11 +762,11 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					double[] cv$sampleValue = m[var29];
+					double[] cv$sampleValue = m[var27];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, states));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -801,10 +799,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
+			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var30 = cv$sampleAccumulator;
+			logProbability$var28 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -814,12 +812,12 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample31)
+			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample31 = fixedFlag$sample31;
+			fixedProbFlag$sample28 = fixedFlag$sample28;
 		}
 		// Using cached values.
 		else {
@@ -827,10 +825,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var30;
+			double cv$sampleValue = logProbability$var28;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
+			logProbability$var16 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -840,24 +838,24 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample31)
+			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample48 using sampled
+	// Calculate the probability of the samples represented by sample45 using sampled
 	// values.
-	private final void logProbabilityValue$sample48() {
-		// Determine if we need to calculate the values for sample task 48 or if we should
+	private final void logProbabilityValue$sample45() {
+		// Determine if we need to calculate the values for sample task 45 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample48) {
+		if(!fixedProbFlag$sample45) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var45 = 0; var45 < states; var45 += 1) {
+			for(int var43 = 0; var43 < states; var43 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -865,14 +863,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias[var45];
+					double cv$sampleValue = bias[var43];
 					{
 						{
-							double var32 = 1.0;
-							double var33 = 1.0;
+							double var30 = 1.0;
+							double var31 = 1.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var32, var33));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var30, var31));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -905,10 +903,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var34 = cv$sampleAccumulator;
+			logProbability$var32 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var46 = cv$sampleAccumulator;
+			logProbability$var44 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -918,12 +916,12 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample48)
+			if(fixedFlag$sample45)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample48 = fixedFlag$sample48;
+			fixedProbFlag$sample45 = fixedFlag$sample45;
 		}
 		// Using cached values.
 		else {
@@ -931,10 +929,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var46;
+			double cv$sampleValue = logProbability$var44;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var34 = cv$rvAccumulator;
+			logProbability$var32 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -944,17 +942,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample48)
+			if(fixedFlag$sample45)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample57 using sampled
+	// Calculate the probability of the samples represented by sample53 using sampled
 	// values.
-	private final void logProbabilityValue$sample57() {
-		// Determine if we need to calculate the values for sample task 57 or if we should
+	private final void logProbabilityValue$sample53() {
+		// Determine if we need to calculate the values for sample task 53 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -972,10 +970,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				int cv$sampleValue = st[0];
 				{
 					{
-						double[] var52 = m[0];
+						double[] var50 = m[0];
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var52.length))?Math.log(var52[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(var50[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1007,10 +1005,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var53 = cv$sampleAccumulator;
+			logProbability$var51 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$var54 = cv$sampleProbability;
+			logProbability$var52 = cv$sampleProbability;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -1020,12 +1018,12 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(fixedFlag$sample53)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedFlag$sample31);
+			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample28);
 		}
 		// Using cached values.
 		else {
@@ -1033,10 +1031,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var54;
+			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var53 = cv$rvAccumulator;
+			logProbability$var51 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -1046,21 +1044,21 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(fixedFlag$sample53)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample75 using sampled
+	// Calculate the probability of the samples represented by sample71 using sampled
 	// values.
-	private final void logProbabilityValue$sample75() {
-		// Determine if we need to calculate the values for sample task 75 or if we should
+	private final void logProbabilityValue$sample71() {
+		// Determine if we need to calculate the values for sample task 71 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample75) {
+		if(!fixedProbFlag$sample71) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -1071,16 +1069,16 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$probabilityReached = 0.0;
 				
 				// Copy of index so that its values can be safely substituted
-				int index$i$1 = i$var66;
+				int index$i$1 = i$var64;
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = st[i$var66];
+					int cv$sampleValue = st[i$var64];
 					{
 						{
-							double[] var70 = m[st[(i$var66 - 1)]];
+							double[] var68 = m[st[(i$var64 - 1)]];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < var70.length))?Math.log(var70[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1112,10 +1110,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var71[((i$var66 - 1) / 1)] = cv$sampleAccumulator;
+				logProbability$var69[((i$var64 - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample75[((i$var66 - 1) / 1)] = cv$sampleProbability;
+				logProbability$sample71[((i$var64 - 1) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -1126,24 +1124,24 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
+			if(fixedFlag$sample71)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample75 = ((fixedFlag$sample75 && fixedFlag$sample31) && fixedFlag$sample57);
+			fixedProbFlag$sample71 = ((fixedFlag$sample71 && fixedFlag$sample28) && fixedFlag$sample53);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample75[((i$var66 - 1) / 1)];
+				double cv$sampleValue = logProbability$sample71[((i$var64 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var71[((i$var66 - 1) / 1)] = cv$rvAccumulator;
+				logProbability$var69[((i$var64 - 1) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -1154,17 +1152,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
+			if(fixedFlag$sample71)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample91 using sampled
+	// Calculate the probability of the samples represented by sample87 using sampled
 	// values.
-	private final void logProbabilityValue$sample91() {
-		// Determine if we need to calculate the values for sample task 91 or if we should
+	private final void logProbabilityValue$sample87() {
+		// Determine if we need to calculate the values for sample task 87 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample91) {
+		if(!fixedProbFlag$sample87) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1182,10 +1180,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					boolean cv$sampleValue = flips[j];
 					{
 						{
-							double var86 = bias[st[j]];
+							double var84 = bias[st[j]];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var86));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var84));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1217,10 +1215,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var87[((j - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$var85[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample91[((j - 0) / 1)] = cv$sampleProbability;
+				logProbability$sample87[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
@@ -1232,7 +1230,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample91 = (((fixedFlag$sample91 && fixedFlag$sample48) && fixedFlag$sample57) && fixedFlag$sample75);
+			fixedProbFlag$sample87 = (((fixedFlag$sample87 && fixedFlag$sample45) && fixedFlag$sample53) && fixedFlag$sample71);
 		}
 		// Using cached values.
 		else {
@@ -1241,10 +1239,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample91[((j - 0) / 1)];
+				double cv$sampleValue = logProbability$sample87[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var87[((j - 0) / 1)] = cv$rvAccumulator;
+				logProbability$var85[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -1257,14 +1255,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 31 drawn from Dirichlet 18. Inference was performed using a Dirichlet
+	// by sample task 28 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample31(int var29) {
+	private final void sample28(int var27) {
 		// A reference local to the function for the sample variable.
-		double[] cv$targetLocal = m[var29];
+		double[] cv$targetLocal = m[var27];
 		
 		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var30$countGlobal;
+		double[] cv$countLocal = cv$var28$countGlobal;
 		
 		// Get the length of the array
 		int cv$arrayLength = states;
@@ -1273,19 +1271,19 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
 		{
-			// Processing random variable 53.
+			// Processing random variable 51.
 			{
-				// Looking for a path between Sample 31 and consumer Categorical 53.
+				// Looking for a path between Sample 28 and consumer Categorical 51.
 				{
-					if((var29 == 0)) {
-						// Processing sample task 57 of consumer random variable null.
+					if((var27 == 0)) {
+						// Processing sample task 53 of consumer random variable null.
 						{
 							{
 								{
 									{
 										{
-											// Increment the sample counter with the value sampled by sample task 57 of random
-											// variable var53
+											// Increment the sample counter with the value sampled by sample task 53 of random
+											// variable var51
 											cv$countLocal[st[0]] = (cv$countLocal[st[0]] + 1.0);
 										}
 									}
@@ -1296,25 +1294,25 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			}
 			
-			// Processing random variable 71.
+			// Processing random variable 69.
 			{
-				// Looking for a path between Sample 31 and consumer Categorical 71.
+				// Looking for a path between Sample 28 and consumer Categorical 69.
 				{
-					for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-						if((0 == (i$var66 - 1))) {
-							if((var29 == st[(i$var66 - 1)])) {
-								if(fixedFlag$sample75) {
-									// Processing sample task 75 of consumer random variable null.
+					for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+						if((0 == (i$var64 - 1))) {
+							if((var27 == st[(i$var64 - 1)])) {
+								if(fixedFlag$sample71) {
+									// Processing sample task 71 of consumer random variable null.
 									{
 										// Copy of index so that its values can be safely substituted
-										int index$i$17 = i$var66;
+										int index$i$17 = i$var64;
 										{
 											{
 												{
 													{
-														// Increment the sample counter with the value sampled by sample task 75 of random
-														// variable var71
-														cv$countLocal[st[i$var66]] = (cv$countLocal[st[i$var66]] + 1.0);
+														// Increment the sample counter with the value sampled by sample task 71 of random
+														// variable var69
+														cv$countLocal[st[i$var64]] = (cv$countLocal[st[i$var64]] + 1.0);
 													}
 												}
 											}
@@ -1324,23 +1322,23 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							}
 						}
 					}
-					for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-						if(fixedFlag$sample75) {
+					for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+						if(fixedFlag$sample71) {
 							for(int index$i$8_1 = 1; index$i$8_1 < samples; index$i$8_1 += 1) {
-								if((index$i$8_1 == (i$var66 - 1))) {
-									if((var29 == st[(i$var66 - 1)])) {
-										if(fixedFlag$sample75) {
-											// Processing sample task 75 of consumer random variable null.
+								if((index$i$8_1 == (i$var64 - 1))) {
+									if((var27 == st[(i$var64 - 1)])) {
+										if(fixedFlag$sample71) {
+											// Processing sample task 71 of consumer random variable null.
 											{
 												// Copy of index so that its values can be safely substituted
-												int index$i$19 = i$var66;
+												int index$i$19 = i$var64;
 												{
 													{
 														{
 															{
-																// Increment the sample counter with the value sampled by sample task 75 of random
-																// variable var71
-																cv$countLocal[st[i$var66]] = (cv$countLocal[st[i$var66]] + 1.0);
+																// Increment the sample counter with the value sampled by sample task 71 of random
+																// variable var69
+																cv$countLocal[st[i$var64]] = (cv$countLocal[st[i$var64]] + 1.0);
 															}
 														}
 													}
@@ -1353,27 +1351,26 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						} else {
 							for(int index$i$9 = 1; index$i$9 < samples; index$i$9 += 1) {
 								if(true) {
-									// Enumerating the possible outputs of Categorical 71.
-									for(int index$sample75$10 = 0; index$sample75$10 < states; index$sample75$10 += 1) {
-										int distributionTempVariable$var72$12 = index$sample75$10;
+									// Enumerating the possible outputs of Categorical 69.
+									for(int index$sample71$10 = 0; index$sample71$10 < states; index$sample71$10 += 1) {
+										int distributionTempVariable$var70$12 = index$sample71$10;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample75Value11 = (1.0 * distribution$sample75[((index$i$9 - 1) / 1)][index$sample75$10]);
-										int traceTempVariable$var69$13_1 = distributionTempVariable$var72$12;
-										if((index$i$9 == (i$var66 - 1))) {
-											if((var29 == traceTempVariable$var69$13_1)) {
-												if(fixedFlag$sample75) {
-													// Processing sample task 75 of consumer random variable null.
+										double cv$probabilitySample71Value11 = (1.0 * distribution$sample71[((index$i$9 - 1) / 1)][index$sample71$10]);
+										if((index$i$9 == (i$var64 - 1))) {
+											if((var27 == st[(i$var64 - 1)])) {
+												if(fixedFlag$sample71) {
+													// Processing sample task 71 of consumer random variable null.
 													{
 														// Copy of index so that its values can be safely substituted
-														int index$i$21 = i$var66;
+														int index$i$21 = i$var64;
 														{
 															{
 																{
 																	{
-																		// Increment the sample counter with the value sampled by sample task 75 of random
-																		// variable var71
-																		cv$countLocal[st[i$var66]] = (cv$countLocal[st[i$var66]] + cv$probabilitySample75Value11);
+																		// Increment the sample counter with the value sampled by sample task 71 of random
+																		// variable var69
+																		cv$countLocal[st[i$var64]] = (cv$countLocal[st[i$var64]] + cv$probabilitySample71Value11);
 																	}
 																}
 															}
@@ -1391,18 +1388,18 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		
-		// Processing random variable 71.
+		// Processing random variable 69.
 		{
-			// Looking for a path between Sample 31 and consumer Categorical 71.
+			// Looking for a path between Sample 28 and consumer Categorical 69.
 			{
-				for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-					if((0 == (i$var66 - 1))) {
-						if((var29 == st[(i$var66 - 1)])) {
-							if(!fixedFlag$sample75) {
-								// Processing sample task 75 of consumer random variable null.
+				for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+					if((0 == (i$var64 - 1))) {
+						if((var27 == st[(i$var64 - 1)])) {
+							if(!fixedFlag$sample71) {
+								// Processing sample task 71 of consumer random variable null.
 								{
 									// Copy of index so that its values can be safely substituted
-									int index$i$38 = i$var66;
+									int index$i$38 = i$var64;
 									{
 										{
 											// Declare and zero an accumulator for tracking the reached source probability space.
@@ -1417,7 +1414,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 											
 											// Merge the distribution probabilities into the count
 											for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-												cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample75[((i$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+												cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample71[((i$var64 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 										}
 									}
 								}
@@ -1425,16 +1422,16 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						}
 					}
 				}
-				for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-					if(fixedFlag$sample75) {
+				for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+					if(fixedFlag$sample71) {
 						for(int index$i$29_1 = 1; index$i$29_1 < samples; index$i$29_1 += 1) {
-							if((index$i$29_1 == (i$var66 - 1))) {
-								if((var29 == st[(i$var66 - 1)])) {
-									if(!fixedFlag$sample75) {
-										// Processing sample task 75 of consumer random variable null.
+							if((index$i$29_1 == (i$var64 - 1))) {
+								if((var27 == st[(i$var64 - 1)])) {
+									if(!fixedFlag$sample71) {
+										// Processing sample task 71 of consumer random variable null.
 										{
 											// Copy of index so that its values can be safely substituted
-											int index$i$40 = i$var66;
+											int index$i$40 = i$var64;
 											{
 												{
 													// Declare and zero an accumulator for tracking the reached source probability space.
@@ -1449,7 +1446,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													
 													// Merge the distribution probabilities into the count
 													for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-														cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample75[((i$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+														cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample71[((i$var64 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 												}
 											}
 										}
@@ -1460,20 +1457,19 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					} else {
 						for(int index$i$30 = 1; index$i$30 < samples; index$i$30 += 1) {
 							if(true) {
-								// Enumerating the possible outputs of Categorical 71.
-								for(int index$sample75$31 = 0; index$sample75$31 < states; index$sample75$31 += 1) {
-									int distributionTempVariable$var72$33 = index$sample75$31;
+								// Enumerating the possible outputs of Categorical 69.
+								for(int index$sample71$31 = 0; index$sample71$31 < states; index$sample71$31 += 1) {
+									int distributionTempVariable$var70$33 = index$sample71$31;
 									
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample75Value32 = (1.0 * distribution$sample75[((index$i$30 - 1) / 1)][index$sample75$31]);
-									int traceTempVariable$var69$34_1 = distributionTempVariable$var72$33;
-									if((index$i$30 == (i$var66 - 1))) {
-										if((var29 == traceTempVariable$var69$34_1)) {
-											if(!fixedFlag$sample75) {
-												// Processing sample task 75 of consumer random variable null.
+									double cv$probabilitySample71Value32 = (1.0 * distribution$sample71[((index$i$30 - 1) / 1)][index$sample71$31]);
+									if((index$i$30 == (i$var64 - 1))) {
+										if((var27 == st[(i$var64 - 1)])) {
+											if(!fixedFlag$sample71) {
+												// Processing sample task 71 of consumer random variable null.
 												{
 													// Copy of index so that its values can be safely substituted
-													int index$i$42 = i$var66;
+													int index$i$42 = i$var64;
 													{
 														{
 															// Declare and zero an accumulator for tracking the reached source probability space.
@@ -1484,11 +1480,11 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 															}
 															
 															// The probability of reaching the consumer with this set of consumer arguments
-															double cv$distributionProbability = (scopeVariable$reachedSourceProbability * cv$probabilitySample75Value32);
+															double cv$distributionProbability = (scopeVariable$reachedSourceProbability * cv$probabilitySample71Value32);
 															
 															// Merge the distribution probabilities into the count
 															for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample75[((i$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample71[((i$var64 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 														}
 													}
 												}
@@ -1506,33 +1502,33 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Calculate the new sample value
 		// 
 		// Calculate a new sample value and write it into cv$targetLocal.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal, states);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 48 drawn from Beta 34. Inference was performed using a Beta to Bernoulli/Binomial
+	// by sample task 45 drawn from Beta 32. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
-	private final void sample48(int var45) {
+	private final void sample45(int var43) {
 		// Local variable to record the number of true samples.
 		double cv$sum = 0.0;
 		
 		// Local variable to record the number of samples.
 		double cv$count = 0.0;
 		{
-			// Processing random variable 87.
+			// Processing random variable 85.
 			{
-				// Looking for a path between Sample 48 and consumer Bernoulli 87.
+				// Looking for a path between Sample 45 and consumer Bernoulli 85.
 				{
 					for(int j = 0; j < samples; j += 1) {
 						if((0 == j)) {
-							if((var45 == st[j])) {
-								// Processing sample task 91 of consumer random variable null.
+							if((var43 == st[j])) {
+								// Processing sample task 87 of consumer random variable null.
 								{
 									{
 										{
 											{
 												{
-													// Include the value sampled by task 91 from random variable var87.
+													// Include the value sampled by task 87 from random variable var85.
 													// Increment the number of samples.
 													cv$count = (cv$count + 1.0);
 													
@@ -1548,17 +1544,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						}
 					}
 					for(int j = 0; j < samples; j += 1) {
-						if(fixedFlag$sample75) {
-							for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-								if((i$var66 == j)) {
-									if((var45 == st[j])) {
-										// Processing sample task 91 of consumer random variable null.
+						if(fixedFlag$sample71) {
+							for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+								if((i$var64 == j)) {
+									if((var43 == st[j])) {
+										// Processing sample task 87 of consumer random variable null.
 										{
 											{
 												{
 													{
 														{
-															// Include the value sampled by task 91 from random variable var87.
+															// Include the value sampled by task 87 from random variable var85.
 															// Increment the number of samples.
 															cv$count = (cv$count + 1.0);
 															
@@ -1574,30 +1570,29 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 								}
 							}
 						} else {
-							for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+							for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 								if(true) {
-									// Enumerating the possible outputs of Categorical 71.
-									for(int index$sample75$7 = 0; index$sample75$7 < states; index$sample75$7 += 1) {
-										int distributionTempVariable$var72$9 = index$sample75$7;
+									// Enumerating the possible outputs of Categorical 69.
+									for(int index$sample71$7 = 0; index$sample71$7 < states; index$sample71$7 += 1) {
+										int distributionTempVariable$var70$9 = index$sample71$7;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample75Value8 = (1.0 * distribution$sample75[((i$var66 - 1) / 1)][index$sample75$7]);
-										int traceTempVariable$var85$10_1 = distributionTempVariable$var72$9;
-										if((i$var66 == j)) {
-											if((var45 == traceTempVariable$var85$10_1)) {
-												// Processing sample task 91 of consumer random variable null.
+										double cv$probabilitySample71Value8 = (1.0 * distribution$sample71[((i$var64 - 1) / 1)][index$sample71$7]);
+										if((i$var64 == j)) {
+											if((var43 == st[j])) {
+												// Processing sample task 87 of consumer random variable null.
 												{
 													{
 														{
 															{
 																{
-																	// Include the value sampled by task 91 from random variable var87.
+																	// Include the value sampled by task 87 from random variable var85.
 																	// Increment the number of samples.
-																	cv$count = (cv$count + cv$probabilitySample75Value8);
+																	cv$count = (cv$count + cv$probabilitySample71Value8);
 																	
 																	// If the sample value was positive increase the count
 																	if(flips[j])
-																		cv$sum = (cv$sum + cv$probabilitySample75Value8);
+																		cv$sum = (cv$sum + cv$probabilitySample71Value8);
 																}
 															}
 														}
@@ -1616,24 +1611,24 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		double var46 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var45] = var46;
+		double var44 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		bias[var43] = var44;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 57 drawn from Categorical 53. Inference was performed using variable
+	// by sample task 53 drawn from Categorical 51. Inference was performed using variable
 	// marginalization.
-	private final void sample57() {
+	private final void sample53() {
 		// Calculate the number of states to evaluate.
-		int cv$noStates = 0;
+		int cv$numNumStates = 0;
 		{
 			// variable marginalization
-			cv$noStates = Math.max(cv$noStates, states);
+			cv$numNumStates = Math.max(cv$numNumStates, states);
 		}
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var54$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
+		double[] cv$stateProbabilityLocal = cv$var52$stateProbabilityGlobal;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			
@@ -1652,34 +1647,40 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			int var54 = cv$currentValue;
+			int var52 = cv$currentValue;
 			st[0] = cv$currentValue;
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double[] cv$temp$0$var52;
+				double[] cv$temp$0$var50;
 				{
 					// Constructing a random variable input for use later.
-					double[] var52 = m[0];
-					cv$temp$0$var52 = var52;
+					double[] var50 = m[0];
+					cv$temp$0$var50 = var50;
+				}
+				int cv$temp$1$$var260;
+				{
+					// Constructing a random variable input for use later.
+					int $var260 = states;
+					cv$temp$1$$var260 = $var260;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var52.length))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var260))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
-				// Processing random variable 71.
+				// Processing random variable 69.
 				{
-					// Looking for a path between Sample 57 and consumer Categorical 71.
+					// Looking for a path between Sample 53 and consumer Categorical 69.
 					{
-						int traceTempVariable$var69$1_1 = cv$currentValue;
-						for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-							if((0 == (i$var66 - 1))) {
-								if(fixedFlag$sample75) {
-									// Processing sample task 75 of consumer random variable null.
+						int traceTempVariable$var67$1_1 = cv$currentValue;
+						for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+							if((0 == (i$var64 - 1))) {
+								if(fixedFlag$sample71) {
+									// Processing sample task 71 of consumer random variable null.
 									{
 										// Copy of index so that its values can be safely substituted
-										int index$i$3 = i$var66;
+										int index$i$3 = i$var64;
 										
 										// Set an accumulator to sum the probabilities for each possible configuration of
 										// inputs.
@@ -1689,31 +1690,37 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 										// to 1 as seen values will be deducted from this value.
 										double cv$consumerDistributionProbabilityAccumulator = 1.0;
 										{
-											// Enumerating the possible arguments for the variable Categorical 71 which is consuming
-											// the output of Sample task 57.
-											for(int var29 = 0; var29 < states; var29 += 1) {
-												if((var29 == traceTempVariable$var69$1_1)) {
+											// Enumerating the possible arguments for the variable Categorical 69 which is consuming
+											// the output of Sample task 53.
+											for(int var27 = 0; var27 < states; var27 += 1) {
+												if((var27 == st[(i$var64 - 1)])) {
 													{
 														{
-															double[] cv$temp$1$var70;
+															double[] cv$temp$2$var68;
 															{
 																// Constructing a random variable input for use later.
-																double[] var70 = m[traceTempVariable$var69$1_1];
-																cv$temp$1$var70 = var70;
+																double[] var68 = m[traceTempVariable$var67$1_1];
+																cv$temp$2$var68 = var68;
+															}
+															int cv$temp$3$$var271;
+															{
+																// Constructing a random variable input for use later.
+																int $var271 = states;
+																cv$temp$3$$var271 = $var271;
 															}
 															
-															// Record the probability of sample task 75 generating output with current configuration.
-															if(((Math.log(1.0) + (((0.0 <= st[i$var66]) && (st[i$var66] < cv$temp$1$var70.length))?Math.log(cv$temp$1$var70[st[i$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var66]) && (st[i$var66] < cv$temp$1$var70.length))?Math.log(cv$temp$1$var70[st[i$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															// Record the probability of sample task 71 generating output with current configuration.
+															if(((Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var271))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var271))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																// If the second value is -infinity.
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var66]) && (st[i$var66] < cv$temp$1$var70.length))?Math.log(cv$temp$1$var70[st[i$var66]]):Double.NEGATIVE_INFINITY));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var271))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var66]) && (st[i$var66] < cv$temp$1$var70.length))?Math.log(cv$temp$1$var70[st[i$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var66]) && (st[i$var66] < cv$temp$1$var70.length))?Math.log(cv$temp$1$var70[st[i$var66]]):Double.NEGATIVE_INFINITY)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var271))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var271))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)));
 															}
 															
-															// Recorded the probability of reaching sample task 75 with the current configuration.
+															// Recorded the probability of reaching sample task 71 with the current configuration.
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
@@ -1743,14 +1750,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 				
-				// Processing random variable 87.
+				// Processing random variable 85.
 				{
-					// Looking for a path between Sample 57 and consumer Bernoulli 87.
+					// Looking for a path between Sample 53 and consumer Bernoulli 85.
 					{
-						int traceTempVariable$var85$6_1 = cv$currentValue;
+						int traceTempVariable$var83$6_1 = cv$currentValue;
 						for(int j = 0; j < samples; j += 1) {
 							if((0 == j)) {
-								// Processing sample task 91 of consumer random variable null.
+								// Processing sample task 87 of consumer random variable null.
 								{
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
@@ -1760,31 +1767,31 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 									// to 1 as seen values will be deducted from this value.
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									{
-										// Enumerating the possible arguments for the variable Bernoulli 87 which is consuming
-										// the output of Sample task 57.
-										for(int var45 = 0; var45 < states; var45 += 1) {
-											if((var45 == traceTempVariable$var85$6_1)) {
+										// Enumerating the possible arguments for the variable Bernoulli 85 which is consuming
+										// the output of Sample task 53.
+										for(int var43 = 0; var43 < states; var43 += 1) {
+											if((var43 == st[j])) {
 												{
 													{
-														double cv$temp$2$var86;
+														double cv$temp$4$var84;
 														{
 															// Constructing a random variable input for use later.
-															double var86 = bias[traceTempVariable$var85$6_1];
-															cv$temp$2$var86 = var86;
+															double var84 = bias[traceTempVariable$var83$6_1];
+															cv$temp$4$var84 = var84;
 														}
 														
-														// Record the probability of sample task 91 generating output with current configuration.
-														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$2$var86)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$2$var86)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														// Record the probability of sample task 87 generating output with current configuration.
+														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var84)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															// If the second value is -infinity.
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$2$var86));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var84));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$2$var86)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$2$var86)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var84)));
 														}
 														
-														// Recorded the probability of reaching sample task 91 with the current configuration.
+														// Recorded the probability of reaching sample task 87 with the current configuration.
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
 												}
@@ -1826,22 +1833,22 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			}
 			
-			// Processing random variable 71.
+			// Processing random variable 69.
 			{
-				// Looking for a path between Sample 57 and consumer Categorical 71.
+				// Looking for a path between Sample 53 and consumer Categorical 69.
 				{
-					int traceTempVariable$var69$10_1 = cv$currentValue;
-					for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-						if((0 == (i$var66 - 1))) {
-							if(!fixedFlag$sample75) {
-								// Processing sample task 75 of consumer random variable null.
+					int traceTempVariable$var67$10_1 = cv$currentValue;
+					for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+						if((0 == (i$var64 - 1))) {
+							if(!fixedFlag$sample71) {
+								// Processing sample task 71 of consumer random variable null.
 								{
 									// Copy of index so that its values can be safely substituted
-									int index$i$12 = i$var66;
+									int index$i$12 = i$var64;
 									
 									// A local array to hold the accumulated distributions of the sample tasks for each
 									// configuration of distributions.
-									double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var71;
+									double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var69;
 									
 									// Zero all the elements in the distribution accumulator
 									for(int cv$i = 0; cv$i < states; cv$i += 1)
@@ -1850,10 +1857,10 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 									// Zero an accumulator to track the probabilities reached.
 									double cv$reachedDistributionProbability = 0.0;
 									
-									// Enumerating the possible arguments for the variable Categorical 71 which is consuming
-									// the output of Sample task 57.
-									for(int var29 = 0; var29 < states; var29 += 1) {
-										if((var29 == traceTempVariable$var69$10_1)) {
+									// Enumerating the possible arguments for the variable Categorical 69 which is consuming
+									// the output of Sample task 53.
+									for(int var27 = 0; var27 < states; var27 += 1) {
+										if((var27 == st[(i$var64 - 1)])) {
 											{
 												// Declare and zero an accumulator for tracking the reached source probability space.
 												double scopeVariable$reachedSourceProbability = 0.0;
@@ -1861,11 +1868,17 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													// Add the probability of this argument configuration.
 													scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 												}
-												double[] cv$temp$3$var70;
+												double[] cv$temp$5$var68;
 												{
 													// Constructing a random variable input for use later.
-													double[] var70 = m[traceTempVariable$var69$10_1];
-													cv$temp$3$var70 = var70;
+													double[] var68 = m[traceTempVariable$var67$10_1];
+													cv$temp$5$var68 = var68;
+												}
+												int cv$temp$6$$var291;
+												{
+													// Constructing a random variable input for use later.
+													int $var291 = states;
+													cv$temp$6$$var291 = $var291;
 												}
 												
 												// The probability of reaching the consumer with this set of consumer arguments
@@ -1875,13 +1888,13 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 												cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 												
 												// Add the current distribution to the distribution accumulator.
-												DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$3$var70);
+												DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$5$var68, cv$temp$6$$var291);
 											}
 										}
 									}
 									
 									// A local copy of the samples' distribution.
-									double[] cv$sampleDistribution = distribution$sample75[((i$var66 - 1) / 1)];
+									double[] cv$sampleDistribution = distribution$sample71[((i$var64 - 1) / 1)];
 									
 									// The overlap of the distributions so far.
 									double cv$overlap = 0.0;
@@ -1927,7 +1940,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -1943,7 +1956,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -1954,78 +1967,77 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$noStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
-		int var54 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal);
-		st[0] = var54;
+		int var52 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
+		st[0] = var52;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 75 drawn from Categorical 71. Inference was performed using variable
+	// by sample task 71 drawn from Categorical 69. Inference was performed using variable
 	// marginalization.
-	private final void sample75(int i$var66) {
+	private final void sample71(int i$var64) {
 		// Calculate the number of states to evaluate.
-		int cv$noStates = 0;
+		int cv$numNumStates = 0;
 		
-		// Exploring all the possible state counts for random variable 71.
+		// Exploring all the possible state counts for random variable 69.
 		// 
 		// Copy of index so that its values can be safely substituted
-		int index$i$1 = i$var66;
+		int index$i$1 = i$var64;
 		
-		// Enumerating the possible arguments for Categorical 71.
-		if((0 == (i$var66 - 1))) {
-			for(int var29 = 0; var29 < states; var29 += 1) {
-				if((var29 == st[(i$var66 - 1)]))
+		// Enumerating the possible arguments for Categorical 69.
+		if((0 == (i$var64 - 1))) {
+			for(int var27 = 0; var27 < states; var27 += 1) {
+				if((var27 == st[(i$var64 - 1)]))
 					// variable marginalization
-					cv$noStates = Math.max(cv$noStates, states);
+					cv$numNumStates = Math.max(cv$numNumStates, states);
 			}
 		}
 		
-		// Enumerating the possible arguments for Categorical 71.
-		if((index$i$1 == (i$var66 - 1))) {
-			for(int var29 = 0; var29 < states; var29 += 1) {
-				if((var29 == st[(i$var66 - 1)]))
+		// Enumerating the possible arguments for Categorical 69.
+		if((index$i$1 == (i$var64 - 1))) {
+			for(int var27 = 0; var27 < states; var27 += 1) {
+				if((var27 == st[(i$var64 - 1)]))
 					// variable marginalization
-					cv$noStates = Math.max(cv$noStates, states);
+					cv$numNumStates = Math.max(cv$numNumStates, states);
 			}
 		}
-		if(fixedFlag$sample75) {
+		if(fixedFlag$sample71) {
 			for(int index$i$5_1 = 1; index$i$5_1 < samples; index$i$5_1 += 1) {
-				if((index$i$5_1 == (i$var66 - 1))) {
-					for(int var29 = 0; var29 < states; var29 += 1) {
-						if((var29 == st[(i$var66 - 1)]))
+				if((index$i$5_1 == (i$var64 - 1))) {
+					for(int var27 = 0; var27 < states; var27 += 1) {
+						if((var27 == st[(i$var64 - 1)]))
 							// variable marginalization
-							cv$noStates = Math.max(cv$noStates, states);
+							cv$numNumStates = Math.max(cv$numNumStates, states);
 					}
 				}
 			}
 		} else {
 			for(int index$i$6 = 1; index$i$6 < samples; index$i$6 += 1) {
 				if(!(index$i$6 == index$i$1)) {
-					// Enumerating the possible outputs of Categorical 71.
-					for(int index$sample75$7 = 0; index$sample75$7 < states; index$sample75$7 += 1) {
-						int distributionTempVariable$var72$9 = index$sample75$7;
+					// Enumerating the possible outputs of Categorical 69.
+					for(int index$sample71$7 = 0; index$sample71$7 < states; index$sample71$7 += 1) {
+						int distributionTempVariable$var70$9 = index$sample71$7;
 						
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample75Value8 = (1.0 * distribution$sample75[((index$i$6 - 1) / 1)][index$sample75$7]);
-						int traceTempVariable$var69$10_1 = distributionTempVariable$var72$9;
-						if((index$i$6 == (i$var66 - 1))) {
-							for(int var29 = 0; var29 < states; var29 += 1) {
-								if((var29 == traceTempVariable$var69$10_1))
+						double cv$probabilitySample71Value8 = (1.0 * distribution$sample71[((index$i$6 - 1) / 1)][index$sample71$7]);
+						if((index$i$6 == (i$var64 - 1))) {
+							for(int var27 = 0; var27 < states; var27 += 1) {
+								if((var27 == st[(i$var64 - 1)]))
 									// variable marginalization
-									cv$noStates = Math.max(cv$noStates, states);
+									cv$numNumStates = Math.max(cv$numNumStates, states);
 							}
 						}
 					}
@@ -2034,12 +2046,12 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var72$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$noStates; cv$valuePos += 1) {
-			// Exploring all the possible distribution values for random variable 71 creating
-			// sample task 75.
+		double[] cv$stateProbabilityLocal = cv$var70$stateProbabilityGlobal;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			// Exploring all the possible distribution values for random variable 69 creating
+			// sample task 71.
 			// Copy of index so that its values can be safely substituted
-			int index$i$14 = i$var66;
+			int index$i$14 = i$var64;
 			
 			// Initialize the summed probabilities to 0.
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -2057,39 +2069,45 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Value of the variable at this index
 			cv$currentValue = cv$valuePos;
 			
-			// Enumerating the possible arguments for Categorical 71.
-			if((0 == (i$var66 - 1))) {
-				for(int var29 = 0; var29 < states; var29 += 1) {
-					if((var29 == st[(i$var66 - 1)])) {
+			// Enumerating the possible arguments for Categorical 69.
+			if((0 == (i$var64 - 1))) {
+				for(int var27 = 0; var27 < states; var27 += 1) {
+					if((var27 == st[(i$var64 - 1)])) {
 						// Record the reached probability density.
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						double[] cv$temp$0$var70;
+						double[] cv$temp$0$var68;
 						{
 							// Constructing a random variable input for use later.
-							double[] var70 = m[st[(i$var66 - 1)]];
-							cv$temp$0$var70 = var70;
+							double[] var68 = m[st[(i$var64 - 1)]];
+							cv$temp$0$var68 = var68;
+						}
+						int cv$temp$1$$var338;
+						{
+							// Constructing a random variable input for use later.
+							int $var338 = states;
+							cv$temp$1$$var338 = $var338;
 						}
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
-						double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$0$var70.length))?Math.log(cv$temp$0$var70[cv$currentValue]):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var338))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 						
-						// Processing random variable 71.
+						// Processing random variable 69.
 						{
-							// Looking for a path between Sample 75 and consumer Categorical 71.
+							// Looking for a path between Sample 71 and consumer Categorical 69.
 							{
-								int traceTempVariable$var69$25_1 = cv$currentValue;
+								int traceTempVariable$var67$25_1 = cv$currentValue;
 							}
 						}
 						
-						// Processing random variable 87.
+						// Processing random variable 85.
 						{
-							// Looking for a path between Sample 75 and consumer Bernoulli 87.
+							// Looking for a path between Sample 71 and consumer Bernoulli 85.
 							{
-								int traceTempVariable$var85$28_1 = cv$currentValue;
+								int traceTempVariable$var83$28_1 = cv$currentValue;
 								for(int j = 0; j < samples; j += 1) {
-									if((i$var66 == j)) {
-										// Processing sample task 91 of consumer random variable null.
+									if((i$var64 == j)) {
+										// Processing sample task 87 of consumer random variable null.
 										{
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -2099,31 +2117,31 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 											// to 1 as seen values will be deducted from this value.
 											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 											{
-												// Enumerating the possible arguments for the variable Bernoulli 87 which is consuming
-												// the output of Sample task 75.
-												for(int var45 = 0; var45 < states; var45 += 1) {
-													if((var45 == traceTempVariable$var85$28_1)) {
+												// Enumerating the possible arguments for the variable Bernoulli 85 which is consuming
+												// the output of Sample task 71.
+												for(int var43 = 0; var43 < states; var43 += 1) {
+													if((var43 == st[j])) {
 														{
 															{
-																double cv$temp$3$var86;
+																double cv$temp$6$var84;
 																{
 																	// Constructing a random variable input for use later.
-																	double var86 = bias[traceTempVariable$var85$28_1];
-																	cv$temp$3$var86 = var86;
+																	double var84 = bias[traceTempVariable$var83$28_1];
+																	cv$temp$6$var84 = var84;
 																}
 																
-																// Record the probability of sample task 91 generating output with current configuration.
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var86)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var86)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																// Record the probability of sample task 87 generating output with current configuration.
+																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$6$var84)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$6$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var86));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$6$var84));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var86)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$3$var86)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$6$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$6$var84)));
 																}
 																
-																// Recorded the probability of reaching sample task 91 with the current configuration.
+																// Recorded the probability of reaching sample task 87 with the current configuration.
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
 														}
@@ -2167,40 +2185,46 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			}
 			
-			// Enumerating the possible arguments for Categorical 71.
-			int traceTempVariable$var69$17_1 = cv$currentValue;
-			if((index$i$14 == (i$var66 - 1))) {
-				for(int var29 = 0; var29 < states; var29 += 1) {
-					if((var29 == traceTempVariable$var69$17_1)) {
+			// Enumerating the possible arguments for Categorical 69.
+			int traceTempVariable$var67$17_1 = cv$currentValue;
+			if((index$i$14 == (i$var64 - 1))) {
+				for(int var27 = 0; var27 < states; var27 += 1) {
+					if((var27 == st[(i$var64 - 1)])) {
 						// Record the reached probability density.
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						double[] cv$temp$1$var70;
+						double[] cv$temp$2$var68;
 						{
 							// Constructing a random variable input for use later.
-							double[] var70 = m[traceTempVariable$var69$17_1];
-							cv$temp$1$var70 = var70;
+							double[] var68 = m[traceTempVariable$var67$17_1];
+							cv$temp$2$var68 = var68;
+						}
+						int cv$temp$3$$var339;
+						{
+							// Constructing a random variable input for use later.
+							int $var339 = states;
+							cv$temp$3$$var339 = $var339;
 						}
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
-						double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var70.length))?Math.log(cv$temp$1$var70[cv$currentValue]):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var339))?Math.log(cv$temp$2$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 						
-						// Processing random variable 71.
+						// Processing random variable 69.
 						{
-							// Looking for a path between Sample 75 and consumer Categorical 71.
+							// Looking for a path between Sample 71 and consumer Categorical 69.
 							{
-								int traceTempVariable$var69$26_1 = cv$currentValue;
+								int traceTempVariable$var67$26_1 = cv$currentValue;
 							}
 						}
 						
-						// Processing random variable 87.
+						// Processing random variable 85.
 						{
-							// Looking for a path between Sample 75 and consumer Bernoulli 87.
+							// Looking for a path between Sample 71 and consumer Bernoulli 85.
 							{
-								int traceTempVariable$var85$29_1 = cv$currentValue;
+								int traceTempVariable$var83$29_1 = cv$currentValue;
 								for(int j = 0; j < samples; j += 1) {
-									if((i$var66 == j)) {
-										// Processing sample task 91 of consumer random variable null.
+									if((i$var64 == j)) {
+										// Processing sample task 87 of consumer random variable null.
 										{
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -2210,31 +2234,31 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 											// to 1 as seen values will be deducted from this value.
 											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 											{
-												// Enumerating the possible arguments for the variable Bernoulli 87 which is consuming
-												// the output of Sample task 75.
-												for(int var45 = 0; var45 < states; var45 += 1) {
-													if((var45 == traceTempVariable$var85$29_1)) {
+												// Enumerating the possible arguments for the variable Bernoulli 85 which is consuming
+												// the output of Sample task 71.
+												for(int var43 = 0; var43 < states; var43 += 1) {
+													if((var43 == st[j])) {
 														{
 															{
-																double cv$temp$4$var86;
+																double cv$temp$7$var84;
 																{
 																	// Constructing a random variable input for use later.
-																	double var86 = bias[traceTempVariable$var85$29_1];
-																	cv$temp$4$var86 = var86;
+																	double var84 = bias[traceTempVariable$var83$29_1];
+																	cv$temp$7$var84 = var84;
 																}
 																
-																// Record the probability of sample task 91 generating output with current configuration.
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var86)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var86)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																// Record the probability of sample task 87 generating output with current configuration.
+																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$7$var84)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$7$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var86));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$7$var84));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var86)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var86)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$7$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$7$var84)));
 																}
 																
-																// Recorded the probability of reaching sample task 91 with the current configuration.
+																// Recorded the probability of reaching sample task 87 with the current configuration.
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
 														}
@@ -2279,45 +2303,51 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 			for(int index$i$18 = 1; index$i$18 < samples; index$i$18 += 1) {
 				if(!(index$i$18 == index$i$14)) {
-					// Enumerating the possible outputs of Categorical 71.
-					for(int index$sample75$19 = 0; index$sample75$19 < states; index$sample75$19 += 1) {
-						int distributionTempVariable$var72$21 = index$sample75$19;
+					// Enumerating the possible outputs of Categorical 69.
+					for(int index$sample71$19 = 0; index$sample71$19 < states; index$sample71$19 += 1) {
+						int distributionTempVariable$var70$21 = index$sample71$19;
 						
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample75Value20 = (1.0 * distribution$sample75[((index$i$18 - 1) / 1)][index$sample75$19]);
-						int traceTempVariable$var69$22_1 = distributionTempVariable$var72$21;
-						if((index$i$18 == (i$var66 - 1))) {
-							for(int var29 = 0; var29 < states; var29 += 1) {
-								if((var29 == traceTempVariable$var69$22_1)) {
+						double cv$probabilitySample71Value20 = (1.0 * distribution$sample71[((index$i$18 - 1) / 1)][index$sample71$19]);
+						int traceTempVariable$var67$22_1 = cv$currentValue;
+						if((index$i$18 == (i$var64 - 1))) {
+							for(int var27 = 0; var27 < states; var27 += 1) {
+								if((var27 == st[(i$var64 - 1)])) {
 									// Record the reached probability density.
-									cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample75Value20);
-									double[] cv$temp$2$var70;
+									cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample71Value20);
+									double[] cv$temp$4$var68;
 									{
 										// Constructing a random variable input for use later.
-										double[] var70 = m[traceTempVariable$var69$22_1];
-										cv$temp$2$var70 = var70;
+										double[] var68 = m[traceTempVariable$var67$22_1];
+										cv$temp$4$var68 = var68;
+									}
+									int cv$temp$5$$var340;
+									{
+										// Constructing a random variable input for use later.
+										int $var340 = states;
+										cv$temp$5$$var340 = $var340;
 									}
 									
 									// An accumulator to allow the value for each distribution to be constructed before
 									// it is added to the index probabilities.
-									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample75Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$2$var70.length))?Math.log(cv$temp$2$var70[cv$currentValue]):Double.NEGATIVE_INFINITY));
+									double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample71Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var340))?Math.log(cv$temp$4$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									
-									// Processing random variable 71.
+									// Processing random variable 69.
 									{
-										// Looking for a path between Sample 75 and consumer Categorical 71.
+										// Looking for a path between Sample 71 and consumer Categorical 69.
 										{
-											int traceTempVariable$var69$27_1 = cv$currentValue;
+											int traceTempVariable$var67$27_1 = distributionTempVariable$var70$21;
 										}
 									}
 									
-									// Processing random variable 87.
+									// Processing random variable 85.
 									{
-										// Looking for a path between Sample 75 and consumer Bernoulli 87.
+										// Looking for a path between Sample 71 and consumer Bernoulli 85.
 										{
-											int traceTempVariable$var85$30_1 = cv$currentValue;
+											int traceTempVariable$var83$30_1 = distributionTempVariable$var70$21;
 											for(int j = 0; j < samples; j += 1) {
-												if((i$var66 == j)) {
-													// Processing sample task 91 of consumer random variable null.
+												if((i$var64 == j)) {
+													// Processing sample task 87 of consumer random variable null.
 													{
 														// Set an accumulator to sum the probabilities for each possible configuration of
 														// inputs.
@@ -2327,31 +2357,31 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 														// to 1 as seen values will be deducted from this value.
 														double cv$consumerDistributionProbabilityAccumulator = 1.0;
 														{
-															// Enumerating the possible arguments for the variable Bernoulli 87 which is consuming
-															// the output of Sample task 75.
-															for(int var45 = 0; var45 < states; var45 += 1) {
-																if((var45 == traceTempVariable$var85$30_1)) {
+															// Enumerating the possible arguments for the variable Bernoulli 85 which is consuming
+															// the output of Sample task 71.
+															for(int var43 = 0; var43 < states; var43 += 1) {
+																if((var43 == st[j])) {
 																	{
 																		{
-																			double cv$temp$5$var86;
+																			double cv$temp$8$var84;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var86 = bias[traceTempVariable$var85$30_1];
-																				cv$temp$5$var86 = var86;
+																				double var84 = bias[traceTempVariable$var83$30_1];
+																				cv$temp$8$var84 = var84;
 																			}
 																			
-																			// Record the probability of sample task 91 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var86)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var86)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			// Record the probability of sample task 87 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$8$var84)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$8$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var86));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$8$var84));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var86)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$5$var86)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$8$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$8$var84)));
 																			}
 																			
-																			// Recorded the probability of reaching sample task 91 with the current configuration.
+																			// Recorded the probability of reaching sample task 87 with the current configuration.
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
 																	}
@@ -2398,21 +2428,21 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			}
 			
-			// Processing random variable 71.
+			// Processing random variable 69.
 			{
-				// Looking for a path between Sample 75 and consumer Categorical 71.
+				// Looking for a path between Sample 71 and consumer Categorical 69.
 				{
-					int traceTempVariable$var69$40_1 = cv$currentValue;
+					int traceTempVariable$var67$40_1 = cv$currentValue;
 					for(int index$i$40_2 = 1; index$i$40_2 < samples; index$i$40_2 += 1) {
-						if((i$var66 == (index$i$40_2 - 1))) {
-							// Processing sample task 75 of consumer random variable null.
+						if((i$var64 == (index$i$40_2 - 1))) {
+							// Processing sample task 71 of consumer random variable null.
 							{
 								// Copy of index so that its values can be safely substituted
 								int index$i$42 = index$i$40_2;
 								
 								// A local array to hold the accumulated distributions of the sample tasks for each
 								// configuration of distributions.
-								double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var71;
+								double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var69;
 								
 								// Zero all the elements in the distribution accumulator
 								for(int cv$i = 0; cv$i < states; cv$i += 1)
@@ -2421,56 +2451,62 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 								// Zero an accumulator to track the probabilities reached.
 								double cv$reachedDistributionProbability = 0.0;
 								
-								// Enumerating the possible arguments for the variable Categorical 71 which is consuming
-								// the output of Sample task 75.
-								for(int var29 = 0; var29 < states; var29 += 1) {
-									if((var29 == traceTempVariable$var69$40_1)) {
+								// Enumerating the possible arguments for the variable Categorical 69 which is consuming
+								// the output of Sample task 71.
+								for(int var27 = 0; var27 < states; var27 += 1) {
+									if((var27 == st[(index$i$40_2 - 1)])) {
 										{
 											// Declare and zero an accumulator for tracking the reached source probability space.
 											double scopeVariable$reachedSourceProbability = 0.0;
 											
-											// Enumerating the possible arguments for Categorical 71.
-											if((0 == (i$var66 - 1))) {
-												for(int index$var29$45_1 = 0; index$var29$45_1 < states; index$var29$45_1 += 1) {
-													if((index$var29$45_1 == st[(i$var66 - 1)]))
+											// Enumerating the possible arguments for Categorical 69.
+											if((0 == (i$var64 - 1))) {
+												for(int index$var27$45_1 = 0; index$var27$45_1 < states; index$var27$45_1 += 1) {
+													if((index$var27$45_1 == st[(i$var64 - 1)]))
 														// Add the probability of this argument configuration.
 														scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 												}
 											}
 											
-											// Enumerating the possible arguments for Categorical 71.
-											int traceTempVariable$var69$46_1 = cv$currentValue;
-											if((index$i$14 == (i$var66 - 1))) {
-												for(int index$var29$52_1 = 0; index$var29$52_1 < states; index$var29$52_1 += 1) {
-													if((index$var29$52_1 == traceTempVariable$var69$46_1))
+											// Enumerating the possible arguments for Categorical 69.
+											int traceTempVariable$var67$46_1 = cv$currentValue;
+											if((index$i$14 == (i$var64 - 1))) {
+												for(int index$var27$52_1 = 0; index$var27$52_1 < states; index$var27$52_1 += 1) {
+													if((index$var27$52_1 == st[(i$var64 - 1)]))
 														// Add the probability of this argument configuration.
 														scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 												}
 											}
 											for(int index$i$47 = 1; index$i$47 < samples; index$i$47 += 1) {
 												if((!(index$i$47 == index$i$14) && !(index$i$47 == index$i$42))) {
-													// Enumerating the possible outputs of Categorical 71.
-													for(int index$sample75$48 = 0; index$sample75$48 < states; index$sample75$48 += 1) {
-														int distributionTempVariable$var72$50 = index$sample75$48;
+													// Enumerating the possible outputs of Categorical 69.
+													for(int index$sample71$48 = 0; index$sample71$48 < states; index$sample71$48 += 1) {
+														int distributionTempVariable$var70$50 = index$sample71$48;
 														
 														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample75Value49 = (1.0 * distribution$sample75[((index$i$47 - 1) / 1)][index$sample75$48]);
-														int traceTempVariable$var69$51_1 = distributionTempVariable$var72$50;
-														if((index$i$47 == (i$var66 - 1))) {
-															for(int index$var29$53_1 = 0; index$var29$53_1 < states; index$var29$53_1 += 1) {
-																if((index$var29$53_1 == traceTempVariable$var69$51_1))
+														double cv$probabilitySample71Value49 = (1.0 * distribution$sample71[((index$i$47 - 1) / 1)][index$sample71$48]);
+														int traceTempVariable$var67$51_1 = cv$currentValue;
+														if((index$i$47 == (i$var64 - 1))) {
+															for(int index$var27$53_1 = 0; index$var27$53_1 < states; index$var27$53_1 += 1) {
+																if((index$var27$53_1 == st[(i$var64 - 1)]))
 																	// Add the probability of this argument configuration.
-																	scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample75Value49);
+																	scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample71Value49);
 															}
 														}
 													}
 												}
 											}
-											double[] cv$temp$6$var70;
+											double[] cv$temp$9$var68;
 											{
 												// Constructing a random variable input for use later.
-												double[] var70 = m[traceTempVariable$var69$40_1];
-												cv$temp$6$var70 = var70;
+												double[] var68 = m[traceTempVariable$var67$40_1];
+												cv$temp$9$var68 = var68;
+											}
+											int cv$temp$10$$var378;
+											{
+												// Constructing a random variable input for use later.
+												int $var378 = states;
+												cv$temp$10$$var378 = $var378;
 											}
 											
 											// The probability of reaching the consumer with this set of consumer arguments
@@ -2480,13 +2516,13 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 											cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 											
 											// Add the current distribution to the distribution accumulator.
-											DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$6$var70);
+											DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var68, cv$temp$10$$var378);
 										}
 									}
 								}
 								
 								// A local copy of the samples' distribution.
-								double[] cv$sampleDistribution = distribution$sample75[((index$i$40_2 - 1) / 1)];
+								double[] cv$sampleDistribution = distribution$sample71[((index$i$40_2 - 1) / 1)];
 								
 								// The overlap of the distributions so far.
 								double cv$overlap = 0.0;
@@ -2525,7 +2561,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set the calculated probabilities to be the distribution values, and normalize
 		// 
 		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample75[((i$var66 - 1) / 1)];
+		double[] cv$localProbability = distribution$sample71[((i$var64 - 1) / 1)];
 		
 		// The sum of all the probabilities in log space
 		double cv$logSum = 0.0;
@@ -2536,7 +2572,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$noStates; cv$lseIndex += 1) {
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
 				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
@@ -2552,7 +2588,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$noStates; cv$lseIndex += 1)
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
 					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
@@ -2563,16 +2599,16 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$noStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$numNumStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$noStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$noStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
@@ -2582,46 +2618,40 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
-		// Constructor for cv$var30$countGlobal
+		// Constructor for cv$var28$countGlobal
 		{
-			// Calculate the longest array this random variable could produce and allocate an
-			// array large enough to handle this.
-			int cv$max = 0;
-			for(int var29 = 0; var29 < 5; var29 += 1)
-				cv$max = Math.max(cv$max, 5);
-			
-			// Allocation of cv$var30$countGlobal for single threaded execution
-			cv$var30$countGlobal = new double[cv$max];
+			// Allocation of cv$var28$countGlobal for single threaded execution
+			cv$var28$countGlobal = new double[5];
 		}
 		
-		// Constructor for cv$distributionAccumulator$var71
+		// Constructor for cv$distributionAccumulator$var69
 		{
-			// Variable to record the maximum value of Task Get 73. Initially set to the value
-			// of putTask 32.
-			int cv$var31$max = 5;
+			// Variable to record the maximum value of Task Get 69. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 5;
 			
-			// Allocation of cv$distributionAccumulator$var71 for single threaded execution
-			cv$distributionAccumulator$var71 = new double[cv$var31$max];
+			// Allocation of cv$distributionAccumulator$var69 for single threaded execution
+			cv$distributionAccumulator$var69 = new double[cv$var29$max];
 		}
 		
-		// Constructor for cv$var54$stateProbabilityGlobal
+		// Constructor for cv$var52$stateProbabilityGlobal
 		{
-			// Variable to record the maximum value of Task Get 55. Initially set to the value
-			// of putTask 32.
-			int cv$var31$max = 5;
+			// Variable to record the maximum value of Task Get 51. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 5;
 			
-			// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
-			cv$var54$stateProbabilityGlobal = new double[cv$var31$max];
+			// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
+			cv$var52$stateProbabilityGlobal = new double[cv$var29$max];
 		}
 		
-		// Constructor for cv$var72$stateProbabilityGlobal
+		// Constructor for cv$var70$stateProbabilityGlobal
 		{
-			// Variable to record the maximum value of Task Get 73. Initially set to the value
-			// of putTask 32.
-			int cv$var31$max = 5;
+			// Variable to record the maximum value of Task Get 69. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 5;
 			
-			// Allocation of cv$var72$stateProbabilityGlobal for single threaded execution
-			cv$var72$stateProbabilityGlobal = new double[cv$var31$max];
+			// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+			cv$var70$stateProbabilityGlobal = new double[cv$var29$max];
 		}
 	}
 
@@ -2638,8 +2668,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constructor for m
 			{
 				m = new double[5][];
-				for(int var29 = 0; var29 < 5; var29 += 1)
-					m[var29] = new double[5];
+				for(int var27 = 0; var27 < 5; var27 += 1)
+					m[var27] = new double[5];
 			}
 		}
 		
@@ -2667,31 +2697,31 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		
-		// Constructor for distribution$sample75
+		// Constructor for distribution$sample71
 		{
-			distribution$sample75 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)][];
-			for(int i$var66 = 1; i$var66 < length$flipsMeasured; i$var66 += 1)
-				distribution$sample75[((i$var66 - 1) / 1)] = new double[5];
+			distribution$sample71 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)][];
+			for(int i$var64 = 1; i$var64 < length$flipsMeasured; i$var64 += 1)
+				distribution$sample71[((i$var64 - 1) / 1)] = new double[5];
 		}
 		
-		// Constructor for logProbability$var71
+		// Constructor for logProbability$var69
 		{
-			logProbability$var71 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)];
+			logProbability$var69 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample75
+		// Constructor for logProbability$sample71
 		{
-			logProbability$sample75 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)];
+			logProbability$sample71 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var87
+		// Constructor for logProbability$var85
 		{
-			logProbability$var87 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
+			logProbability$var85 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$sample91
+		// Constructor for logProbability$sample87
 		{
-			logProbability$sample91 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
+			logProbability$sample87 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -2701,23 +2731,23 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int var29 = 0; var29 < states; var29 += 1) {
-			double[] var30 = m[var29];
-			if(!fixedFlag$sample31)
-				DistributionSampling.sampleDirichlet(RNG$, v, var30);
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
 		}
-		for(int var45 = 0; var45 < states; var45 += 1) {
-			if(!fixedFlag$sample48)
-				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample57)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-			if(!fixedFlag$sample75)
-				st[i$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var66 - 1)]]);
+		if(!fixedFlag$sample53)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+			if(!fixedFlag$sample71)
+				st[i$var64] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var64 - 1)]], states);
 		}
 		for(int j = 0; j < samples; j += 1) {
-			if(!fixedFlag$sample91)
+			if(!fixedFlag$sample87)
 				flips[j] = DistributionSampling.sampleBernoulli(RNG$, bias[st[j]]);
 		}
 	}
@@ -2726,56 +2756,56 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		for(int var29 = 0; var29 < states; var29 += 1) {
-			double[] var30 = m[var29];
-			if(!fixedFlag$sample31)
-				DistributionSampling.sampleDirichlet(RNG$, v, var30);
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
 		}
-		for(int var45 = 0; var45 < states; var45 += 1) {
-			if(!fixedFlag$sample48)
-				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample57)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
+		if(!fixedFlag$sample53)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 			// Create local copy of variable probabilities.
-			double[] cv$distribution$sample75 = distribution$sample75[((i$var66 - 1) / 1)];
-			for(int index$var71 = 0; index$var71 < states; index$var71 += 1) {
-				if(!fixedFlag$sample75)
+			double[] cv$distribution$sample71 = distribution$sample71[((i$var64 - 1) / 1)];
+			for(int index$var69 = 0; index$var69 < states; index$var69 += 1) {
+				if(!fixedFlag$sample71)
 					// Zero the probability of each value
-					cv$distribution$sample75[index$var71] = 0.0;
+					cv$distribution$sample71[index$var69] = 0.0;
 			}
 			
-			// Iterate through possible values for var71's arguments.
+			// Iterate through possible values for var69's arguments.
 			// 
-			// Enumerating the possible arguments for Categorical 71.
-			if((0 == (i$var66 - 1))) {
-				for(int var29 = 0; var29 < states; var29 += 1) {
-					if((var29 == st[(i$var66 - 1)])) {
+			// Enumerating the possible arguments for Categorical 69.
+			if((0 == (i$var64 - 1))) {
+				for(int var27 = 0; var27 < states; var27 += 1) {
+					if((var27 == st[(i$var64 - 1)])) {
 						{
-							if(!fixedFlag$sample75) {
-								double[] var70 = m[st[(i$var66 - 1)]];
-								for(int index$var71 = 0; index$var71 < states; index$var71 += 1)
+							if(!fixedFlag$sample71) {
+								double[] var68 = m[st[(i$var64 - 1)]];
+								for(int index$var69 = 0; index$var69 < states; index$var69 += 1)
 									// Save the probability of each value
-									cv$distribution$sample75[index$var71] = (cv$distribution$sample75[index$var71] + (1.0 * (((0.0 <= index$var71) && (index$var71 < var70.length))?var70[index$var71]:0.0)));
+									cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + (1.0 * (((0.0 <= index$var69) && (index$var69 < states))?var68[index$var69]:0.0)));
 							}
 						}
 					}
 				}
 			}
 			
-			// Enumerating the possible arguments for Categorical 71.
-			if(fixedFlag$sample75) {
+			// Enumerating the possible arguments for Categorical 69.
+			if(fixedFlag$sample71) {
 				for(int index$i$3_1 = 1; index$i$3_1 < samples; index$i$3_1 += 1) {
-					if((index$i$3_1 == (i$var66 - 1))) {
-						for(int var29 = 0; var29 < states; var29 += 1) {
-							if((var29 == st[(i$var66 - 1)])) {
+					if((index$i$3_1 == (i$var64 - 1))) {
+						for(int var27 = 0; var27 < states; var27 += 1) {
+							if((var27 == st[(i$var64 - 1)])) {
 								{
-									if(!fixedFlag$sample75) {
-										double[] var70 = m[st[(i$var66 - 1)]];
-										for(int index$var71 = 0; index$var71 < states; index$var71 += 1)
+									if(!fixedFlag$sample71) {
+										double[] var68 = m[st[(i$var64 - 1)]];
+										for(int index$var69 = 0; index$var69 < states; index$var69 += 1)
 											// Save the probability of each value
-											cv$distribution$sample75[index$var71] = (cv$distribution$sample75[index$var71] + (1.0 * (((0.0 <= index$var71) && (index$var71 < var70.length))?var70[index$var71]:0.0)));
+											cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + (1.0 * (((0.0 <= index$var69) && (index$var69 < states))?var68[index$var69]:0.0)));
 									}
 								}
 							}
@@ -2785,22 +2815,21 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			} else {
 				for(int index$i$4 = 1; index$i$4 < samples; index$i$4 += 1) {
 					if(true) {
-						// Enumerating the possible outputs of Categorical 71.
-						for(int index$sample75$5 = 0; index$sample75$5 < states; index$sample75$5 += 1) {
-							int distributionTempVariable$var72$7 = index$sample75$5;
+						// Enumerating the possible outputs of Categorical 69.
+						for(int index$sample71$5 = 0; index$sample71$5 < states; index$sample71$5 += 1) {
+							int distributionTempVariable$var70$7 = index$sample71$5;
 							
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample75Value6 = (1.0 * distribution$sample75[((index$i$4 - 1) / 1)][index$sample75$5]);
-							int traceTempVariable$var69$8_1 = distributionTempVariable$var72$7;
-							if((index$i$4 == (i$var66 - 1))) {
-								for(int var29 = 0; var29 < states; var29 += 1) {
-									if((var29 == traceTempVariable$var69$8_1)) {
+							double cv$probabilitySample71Value6 = (1.0 * distribution$sample71[((index$i$4 - 1) / 1)][index$sample71$5]);
+							if((index$i$4 == (i$var64 - 1))) {
+								for(int var27 = 0; var27 < states; var27 += 1) {
+									if((var27 == st[(i$var64 - 1)])) {
 										{
-											if(!fixedFlag$sample75) {
-												double[] var70 = m[traceTempVariable$var69$8_1];
-												for(int index$var71 = 0; index$var71 < states; index$var71 += 1)
+											if(!fixedFlag$sample71) {
+												double[] var68 = m[st[(i$var64 - 1)]];
+												for(int index$var69 = 0; index$var69 < states; index$var69 += 1)
 													// Save the probability of each value
-													cv$distribution$sample75[index$var71] = (cv$distribution$sample75[index$var71] + (cv$probabilitySample75Value6 * (((0.0 <= index$var71) && (index$var71 < var70.length))?var70[index$var71]:0.0)));
+													cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + (cv$probabilitySample71Value6 * (((0.0 <= index$var69) && (index$var69 < states))?var68[index$var69]:0.0)));
 											}
 										}
 									}
@@ -2812,16 +2841,16 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 			
 			// Sum the values in the array
-			double cv$var71$sum = 0.0;
-			for(int index$var71 = 0; index$var71 < states; index$var71 += 1) {
-				if(!fixedFlag$sample75)
+			double cv$var69$sum = 0.0;
+			for(int index$var69 = 0; index$var69 < states; index$var69 += 1) {
+				if(!fixedFlag$sample71)
 					// sum the probability of each value
-					cv$var71$sum = (cv$var71$sum + cv$distribution$sample75[index$var71]);
+					cv$var69$sum = (cv$var69$sum + cv$distribution$sample71[index$var69]);
 			}
-			for(int index$var71 = 0; index$var71 < states; index$var71 += 1) {
-				if(!fixedFlag$sample75)
+			for(int index$var69 = 0; index$var69 < states; index$var69 += 1) {
+				if(!fixedFlag$sample71)
 					// Normalise the probability of each value
-					cv$distribution$sample75[index$var71] = (cv$distribution$sample75[index$var71] / cv$var71$sum);
+					cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] / cv$var69$sum);
 			}
 		}
 	}
@@ -2830,20 +2859,20 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int var29 = 0; var29 < states; var29 += 1) {
-			double[] var30 = m[var29];
-			if(!fixedFlag$sample31)
-				DistributionSampling.sampleDirichlet(RNG$, v, var30);
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
 		}
-		for(int var45 = 0; var45 < states; var45 += 1) {
-			if(!fixedFlag$sample48)
-				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample57)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-			if(!fixedFlag$sample75)
-				st[i$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var66 - 1)]]);
+		if(!fixedFlag$sample53)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+			if(!fixedFlag$sample71)
+				st[i$var64] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var64 - 1)]], states);
 		}
 	}
 
@@ -2852,36 +2881,36 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			for(int var29 = 0; var29 < states; var29 += 1) {
-				if(!fixedFlag$sample31)
-					sample31(var29);
+			for(int var27 = 0; var27 < states; var27 += 1) {
+				if(!fixedFlag$sample28)
+					sample28(var27);
 			}
-			for(int var45 = 0; var45 < states; var45 += 1) {
-				if(!fixedFlag$sample48)
-					sample48(var45);
+			for(int var43 = 0; var43 < states; var43 += 1) {
+				if(!fixedFlag$sample45)
+					sample45(var43);
 			}
-			if(!fixedFlag$sample57)
-				sample57();
-			for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-				if(!fixedFlag$sample75)
-					sample75(i$var66);
+			if(!fixedFlag$sample53)
+				sample53();
+			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+				if(!fixedFlag$sample71)
+					sample71(i$var64);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int i$var66 = (samples - ((((samples - 1) - 1) % 1) + 1)); i$var66 >= ((1 - 1) + 1); i$var66 -= 1) {
-				if(!fixedFlag$sample75)
-					sample75(i$var66);
+			for(int i$var64 = (samples - ((((samples - 1) - 1) % 1) + 1)); i$var64 >= ((1 - 1) + 1); i$var64 -= 1) {
+				if(!fixedFlag$sample71)
+					sample71(i$var64);
 			}
-			if(!fixedFlag$sample57)
-				sample57();
-			for(int var45 = (states - ((((states - 1) - 0) % 1) + 1)); var45 >= ((0 - 1) + 1); var45 -= 1) {
-				if(!fixedFlag$sample48)
-					sample48(var45);
+			if(!fixedFlag$sample53)
+				sample53();
+			for(int var43 = (states - ((((states - 1) - 0) % 1) + 1)); var43 >= ((0 - 1) + 1); var43 -= 1) {
+				if(!fixedFlag$sample45)
+					sample45(var43);
 			}
-			for(int var29 = (states - ((((states - 1) - 0) % 1) + 1)); var29 >= ((0 - 1) + 1); var29 -= 1) {
-				if(!fixedFlag$sample31)
-					sample31(var29);
+			for(int var27 = (states - ((((states - 1) - 0) % 1) + 1)); var27 >= ((0 - 1) + 1); var27 -= 1) {
+				if(!fixedFlag$sample28)
+					sample28(var27);
 			}
 		}
 		
@@ -2894,8 +2923,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void initializeConstants() {
 		states = 5;
-		for(int i$var15 = 0; i$var15 < 5; i$var15 += 1)
-			v[i$var15] = 0.1;
+		for(int i$var13 = 0; i$var13 < 5; i$var13 += 1)
+			v[i$var13] = 0.1;
 		samples = length$flipsMeasured;
 	}
 
@@ -2909,30 +2938,30 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
+		logProbability$var16 = 0.0;
 		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample31)
-			logProbability$var30 = 0.0;
-		logProbability$var34 = 0.0;
+		if(!fixedProbFlag$sample28)
+			logProbability$var28 = 0.0;
+		logProbability$var32 = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample48)
-			logProbability$var46 = 0.0;
-		logProbability$var53 = 0.0;
+		if(!fixedProbFlag$sample45)
+			logProbability$var44 = 0.0;
+		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample57)
-			logProbability$var54 = 0.0;
-		for(int i$var66 = 1; i$var66 < samples; i$var66 += 1)
-			logProbability$var71[((i$var66 - 1) / 1)] = 0.0;
-		if(!fixedProbFlag$sample75) {
-			for(int i$var66 = 1; i$var66 < samples; i$var66 += 1)
-				logProbability$sample75[((i$var66 - 1) / 1)] = 0.0;
+		if(!fixedProbFlag$sample53)
+			logProbability$var52 = 0.0;
+		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1)
+			logProbability$var69[((i$var64 - 1) / 1)] = 0.0;
+		if(!fixedProbFlag$sample71) {
+			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1)
+				logProbability$sample71[((i$var64 - 1) / 1)] = 0.0;
 		}
 		for(int j = 0; j < samples; j += 1)
-			logProbability$var87[((j - 0) / 1)] = 0.0;
+			logProbability$var85[((j - 0) / 1)] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample91) {
+		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < samples; j += 1)
-				logProbability$sample91[((j - 0) / 1)] = 0.0;
+				logProbability$sample87[((j - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -2953,13 +2982,13 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample31)
-			logProbabilityValue$sample31();
-		if(fixedFlag$sample48)
-			logProbabilityValue$sample48();
-		if(fixedFlag$sample57)
-			logProbabilityValue$sample57();
-		logProbabilityValue$sample91();
+		if(fixedFlag$sample28)
+			logProbabilityValue$sample28();
+		if(fixedFlag$sample45)
+			logProbabilityValue$sample45();
+		if(fixedFlag$sample53)
+			logProbabilityValue$sample53();
+		logProbabilityValue$sample87();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2977,11 +3006,11 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample31();
-		logProbabilityValue$sample48();
-		logProbabilityValue$sample57();
-		logProbabilityDistribution$sample75();
-		logProbabilityDistribution$sample91();
+		logProbabilityValue$sample28();
+		logProbabilityValue$sample45();
+		logProbabilityValue$sample53();
+		logProbabilityDistribution$sample71();
+		logProbabilityDistribution$sample87();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -2998,11 +3027,11 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample31();
-		logProbabilityValue$sample48();
-		logProbabilityValue$sample57();
-		logProbabilityValue$sample75();
-		logProbabilityValue$sample91();
+		logProbabilityValue$sample28();
+		logProbabilityValue$sample45();
+		logProbabilityValue$sample53();
+		logProbabilityValue$sample71();
+		logProbabilityValue$sample87();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -3010,20 +3039,20 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		for(int var29 = 0; var29 < states; var29 += 1) {
-			double[] var30 = m[var29];
-			if(!fixedFlag$sample31)
-				DistributionSampling.sampleDirichlet(RNG$, v, var30);
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
 		}
-		for(int var45 = 0; var45 < states; var45 += 1) {
-			if(!fixedFlag$sample48)
-				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
-		if(!fixedFlag$sample57)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0]);
-		for(int i$var66 = 1; i$var66 < samples; i$var66 += 1) {
-			if(!fixedFlag$sample75)
-				st[i$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var66 - 1)]]);
+		if(!fixedFlag$sample53)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
+			if(!fixedFlag$sample71)
+				st[i$var64] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var64 - 1)]], states);
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are

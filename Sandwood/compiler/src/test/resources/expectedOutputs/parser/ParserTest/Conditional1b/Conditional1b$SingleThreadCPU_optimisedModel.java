@@ -548,8 +548,9 @@ class Conditional1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// Write out the new value of the sample.
 		// 
-		// Get a local reference to the scratch space.
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal) == 1);
+		// cv$numNumStates's comment
+		// variable marginalization
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

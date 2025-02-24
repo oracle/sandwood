@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -15,11 +15,9 @@ import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCall;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
-import static org.sandwood.compiler.trees.irTree.IRTree.max;
 import static org.sandwood.compiler.trees.irTree.IRTree.multiplyDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.multiplyDI;
 import static org.sandwood.compiler.trees.irTree.IRTree.newArray;
-import static org.sandwood.compiler.trees.irTree.IRTree.store;
 
 import java.util.List;
 import java.util.Set;
@@ -98,11 +96,13 @@ public class DirichletToCategoricalMultinomial extends
         // Construct the arguments.
         IRTreeReturn<ArrayVariable<DoubleVariable>> betaArg = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
         IRTreeReturn<ArrayVariable<DoubleVariable>> count = load(countNameLocal);
+        IRTreeReturn<IntVariable> betaLength = funcData.sourceRandom.beta.getLength(compilationCtx);
 
         // Construct a tree to construct the sample variable for a given element.
+
         return functionCall(FunctionType.CONJUGATE_SAMPLE, VariableType.Dirichlet, VariableType.Categorical,
                 "Calculate a new sample value and write it into " + funcData.targetLocal + ".", betaArg, count,
-                funcData.getTarget());
+                funcData.getTarget(), betaLength);
     }
 
     /**
@@ -224,18 +224,12 @@ public class DirichletToCategoricalMultinomial extends
         // allocation is a beneficial, for now this is serial.
         compilationCtx.pushIsSerial(true);
 
-        VariableDescription<IntVariable> maxName = VariableNames.calcVarName("max", VariableType.IntVariable, true);
-        // Set initial value for the array.
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(maxName, constant(0),
-                "Calculate the longest array this random variable could produce and allocate an array large enough to handle this."));
-        // Search for a larger value.
+        // Search for the largest possible array value.
         IRTreeReturn<IntVariable> arrayLength = ((ArrayVariable<DoubleVariable>) funcData.sampleDesc.output)
-                .scopedLength(null).getForwardIR(compilationCtx);
-        IRTreeVoid updateMax = store(maxName, max(load(maxName), arrayLength), Tree.NoComment);
-        compilationCtx.addTreeToScope(funcData.sampleDesc.getScope(), updateMax);
+                .getMaxLength(compilationCtx);
         // Allocate and store the largest value
         globalFieldAllocation(funcData.countNameGlobal,
-                newArray(load(maxName), VariableType.arrayType(VariableType.DoubleVariable)), funcData, compilationCtx);
+                newArray(arrayLength, VariableType.arrayType(VariableType.DoubleVariable)), funcData, compilationCtx);
         // Get the allocator
         IRTreeVoid allocator = compilationCtx.getOutermostScopeTree();
 

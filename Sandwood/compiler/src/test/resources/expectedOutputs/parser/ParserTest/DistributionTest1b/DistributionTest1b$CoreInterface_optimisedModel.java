@@ -2,29 +2,29 @@ package org.sandwood.compiler.tests.parser;
 
 interface DistributionTest1b$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 
-	// Getter for fixedFlag$sample10.
-	public boolean get$fixedFlag$sample10();
+	// Getter for fixedFlag$sample13.
+	public boolean get$fixedFlag$sample13();
 
-	// Setter for fixedFlag$sample10.
-	public void set$fixedFlag$sample10(boolean cv$value);
+	// Setter for fixedFlag$sample13.
+	public void set$fixedFlag$sample13(boolean cv$value);
 
-	// Getter for fixedFlag$sample16.
-	public boolean get$fixedFlag$sample16();
+	// Getter for fixedFlag$sample4.
+	public boolean get$fixedFlag$sample4();
 
-	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
+	// Setter for fixedFlag$sample4.
+	public void set$fixedFlag$sample4(boolean cv$value);
+
+	// Getter for fixedFlag$sample6.
+	public boolean get$fixedFlag$sample6();
+
+	// Setter for fixedFlag$sample6.
+	public void set$fixedFlag$sample6(boolean cv$value);
 
 	// Getter for fixedFlag$sample7.
 	public boolean get$fixedFlag$sample7();
 
 	// Setter for fixedFlag$sample7.
 	public void set$fixedFlag$sample7(boolean cv$value);
-
-	// Getter for fixedFlag$sample9.
-	public boolean get$fixedFlag$sample9();
-
-	// Setter for fixedFlag$sample9.
-	public void set$fixedFlag$sample9(boolean cv$value);
 
 	// Getter for logProbability$c.
 	public double get$logProbability$c();

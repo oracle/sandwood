@@ -190,7 +190,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void logProbabilityValue$sample28() {
 		if(!fixedProbFlag$sample28) {
-			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v) + DistributionSampling.logProbabilityDirichlet(m[1], v));
+			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
 			logProbability$var16 = cv$sampleAccumulator;
 			logProbability$var28 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
@@ -228,8 +228,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void logProbabilityValue$sample50() {
 		if(!fixedProbFlag$sample50) {
-			double[] var47 = m[0];
-			double cv$distributionAccumulator = (((0.0 <= st) && (st < var47.length))?Math.log(var47[st]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= st) && (st < 2))?Math.log(m[0][st]):Double.NEGATIVE_INFINITY);
 			logProbability$var48 = cv$distributionAccumulator;
 			logProbability$st = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -265,7 +264,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		cv$countLocal[1] = 0.0;
 		if((var27 == 0))
 			cv$countLocal[st] = (cv$countLocal[st] + 1.0);
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27]);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27], 2);
 	}
 
 	private final void sample45(int var43, int threadID$cv$var43, Rng RNG$) {
@@ -280,14 +279,10 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	private final void sample50() {
-		{
-			st = 0;
-			double[] cv$temp$0$var47 = m[0];
-			cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + ((0 < cv$temp$0$var47.length)?Math.log(cv$temp$0$var47[0]):Double.NEGATIVE_INFINITY));
-		}
+		st = 0;
+		cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + Math.log(m[0][0]));
 		st = 1;
-		double[] cv$temp$0$var47 = m[0];
-		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + ((1 < cv$temp$0$var47.length)?Math.log(cv$temp$0$var47[1]):Double.NEGATIVE_INFINITY));
+		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + Math.log(m[0][1]));
 		double cv$logSum;
 		double cv$lseMax = cv$var49$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var49$stateProbabilityGlobal[1];
@@ -306,7 +301,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		for(int cv$indexName = 2; cv$indexName < cv$var49$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$var49$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		st = DistributionSampling.sampleCategorical(RNG$, cv$var49$stateProbabilityGlobal);
+		st = DistributionSampling.sampleCategorical(RNG$, cv$var49$stateProbabilityGlobal, 2);
 	}
 
 	@Override
@@ -337,7 +332,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
 				}
 			);
 
@@ -350,7 +345,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			);
 
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 		if(!fixedFlag$sample53)
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
 	}
@@ -361,7 +356,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
 				}
 			);
 
@@ -374,7 +369,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			);
 
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 	}
 
 	@Override
@@ -383,7 +378,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
 				}
 			);
 
@@ -396,7 +391,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			);
 
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 	}
 
 	@Override
@@ -513,7 +508,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
 				}
 			);
 
@@ -526,7 +521,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			);
 
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 		logModelProbabilitiesVal();
 	}
 

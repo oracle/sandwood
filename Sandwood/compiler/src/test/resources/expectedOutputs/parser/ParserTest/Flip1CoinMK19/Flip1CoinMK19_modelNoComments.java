@@ -40,18 +40,18 @@ public class Flip1CoinMK19 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
-                system$c.set$fixedFlag$sample19(fixed);
+                system$c.set$fixedFlag$sample10(fixed);
+                system$c.set$fixedFlag$sample16(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample13 = system$c.get$fixedFlag$sample13();
-            boolean fixedFlag$sample19 = system$c.get$fixedFlag$sample19();
-            if(fixedFlag$sample13 && fixedFlag$sample19)
+            boolean fixedFlag$sample10 = system$c.get$fixedFlag$sample10();
+            boolean fixedFlag$sample16 = system$c.get$fixedFlag$sample16();
+            if(fixedFlag$sample10 && fixedFlag$sample16)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample13 || fixedFlag$sample19)
+            else if(fixedFlag$sample10 || fixedFlag$sample16)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -80,13 +80,13 @@ public class Flip1CoinMK19 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample51(fixed);
+                system$c.set$fixedFlag$sample48(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample51())
+            if(system$c.get$fixedFlag$sample48())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -115,13 +115,13 @@ public class Flip1CoinMK19 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample10(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample10())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -150,13 +150,13 @@ public class Flip1CoinMK19 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample19(fixed);
+                system$c.set$fixedFlag$sample16(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample19())
+            if(system$c.get$fixedFlag$sample16())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -348,11 +348,11 @@ public class Flip1CoinMK19 extends Model {
 
         //Set fixed flags
         if(flips.isSet())
-            newCore.set$fixedFlag$sample51(oldCore.get$fixedFlag$sample51());
+            newCore.set$fixedFlag$sample48(oldCore.get$fixedFlag$sample48());
         if(q.isSet())
-            newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
+            newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
         if(t.isSet())
-            newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
+            newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
     }
 
     /**

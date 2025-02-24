@@ -17,17 +17,17 @@ interface DiscreteChoiceAlt$CoreInterface extends org.sandwood.runtime.internal.
 	// Getter for exped.
 	public double[] get$exped();
 
-	// Getter for fixedFlag$sample27.
-	public boolean get$fixedFlag$sample27();
+	// Getter for fixedFlag$sample24.
+	public boolean get$fixedFlag$sample24();
 
-	// Setter for fixedFlag$sample27.
-	public void set$fixedFlag$sample27(boolean cv$value);
+	// Setter for fixedFlag$sample24.
+	public void set$fixedFlag$sample24(boolean cv$value);
 
-	// Getter for fixedFlag$sample81.
-	public boolean get$fixedFlag$sample81();
+	// Getter for fixedFlag$sample78.
+	public boolean get$fixedFlag$sample78();
 
-	// Setter for fixedFlag$sample81.
-	public void set$fixedFlag$sample81(boolean cv$value);
+	// Setter for fixedFlag$sample78.
+	public void set$fixedFlag$sample78(boolean cv$value);
 
 	// Getter for logProbability$choices.
 	public double get$logProbability$choices();

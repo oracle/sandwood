@@ -253,19 +253,21 @@ public class DistributionSampling {
     /**
      * Method to sample a value from a Categorical distribution.
      * 
-     * @param rng          A random number generator for the sampling.
-     * @param elementProbs The probability of returning each possible value from the categorical distribution.
+     * @param rng           A random number generator for the sampling.
+     * @param categoryProbs The probability of returning each possible value from the categorical distribution.
+     * @param numCategories The number of categories to be considered. The probabilities for these will be in the first
+     *                      numCategories elements of the array categoryProbs. All values in elementProbs after this
+     *                      will be ignored.
      * @return The sampled value.
      */
-    public static final int sampleCategorical(Rng rng, double[] elementProbs) {
+    public static final int sampleCategorical(Rng rng, double[] categoryProbs, int numCategories) {
         // Scale a uniform value to pick a category.
         double val = rng.uniform();
 
         // Loop through to find the category this value matches with.
-        int l = elementProbs.length;
         double sum = 0;
-        for(int i = 0; i < l; i++) {
-            sum += elementProbs[i];
+        for(int i = 0; i < numCategories; i++) {
+            sum += categoryProbs[i];
             if(sum >= val)
                 return i;
         }
@@ -275,15 +277,17 @@ public class DistributionSampling {
     /**
      * Method to add the Categorical distribution described by to an array holding the cumulative distributions so far.
      * 
-     * @param distribution The array holding the existing cumulative probabilities.
-     * @param scale        A positive scale value that the added distribution should be scaled by.
-     * @param elementProbs The probability of each test returning true.
+     * @param distribution  The array holding the existing cumulative probabilities.
+     * @param scale         A positive scale value that the added distribution should be scaled by.
+     * @param categoryProbs The probability of each category being returned.
+     * @param numCategories The number of categories to be considered. The probabilities for these will be in the first
+     *                      numCategories elements of the array categoryProbs. All values in elementProbs after this
+     *                      will be ignored.
      */
     public static final void addProbabilityDistributionCategorical(double[] distribution, double scale,
-            double[] elementProbs) {
-        int length = elementProbs.length;
-        for(int i = 0; i < length; i++)
-            distribution[i] += scale * elementProbs[i];
+            double[] categoryProbs, int numCategories) {
+        for(int i = 0; i < numCategories; i++)
+            distribution[i] += scale * categoryProbs[i];
     }
 
     // Cauchy
@@ -334,18 +338,19 @@ public class DistributionSampling {
      *
      * @param rng    A random number generator for the sampling.
      * @param beta   An array of values describing the Dirichlet distribution.
+     * @param length The length of the vector to construct in the target array. Any elements in the arrays after this
+     *               value will be ignored.
      * @param output The target output array.
      */
-    public static final void sampleDirichlet(Rng rng, double[] beta, double[] output) {
-        assert beta.length == output.length : "Arrays must be the same length";
+    public static final void sampleDirichlet(Rng rng, double[] beta, int length, double[] output) {
         double sum = 0;
-        for(int i = 0; i < output.length; i++) {
+        for(int i = 0; i < length; i++) {
             double v = sampleGamma(rng, beta[i]);
             output[i] = v;
             sum += v;
         }
 
-        for(int i = 0; i < output.length; i++)
+        for(int i = 0; i < length; i++)
             output[i] /= sum;
     }
 
@@ -354,15 +359,16 @@ public class DistributionSampling {
      * <a href="https://en.wikipedia.org/wiki/Dirichlet_distribution">
      * https://en.wikipedia.org/wiki/Dirichlet_distribution</a>
      *
-     * @param value The value to calculate the probability of drawing.
-     * @param beta  An array of values describing the Dirichlet distribution.
+     * @param value  The value to calculate the probability of drawing.
+     * @param beta   An array of values describing the Dirichlet distribution.
+     * @param length The length of the vectors. Any elements in the arrays after this value will be ignored.
      * @return The probability of drawing the value from the described distribution.
      */
-    public static final double probabilityDirichlet(double[] value, double[] beta) {
+    public static final double probabilityDirichlet(double[] value, int length, double[] beta) {
         double prod = 1.0;
         double prodGamma = 1.0;
         double sumParam = 0.0;
-        for(int i = 0; i < value.length; i++) {
+        for(int i = 0; i < length; i++) {
             if(value[i] < 0 || value[i] > 1) {
                 return 0.0;
             }
@@ -383,17 +389,18 @@ public class DistributionSampling {
      * <a href="https://en.wikipedia.org/wiki/Dirichlet_distribution">
      * https://en.wikipedia.org/wiki/Dirichlet_distribution</a>
      *
-     * @param value The value to calculate the probability of drawing.
-     * @param beta  An array of values describing the Dirichlet distribution.
+     * @param value  The value to calculate the probability of drawing.
+     * @param beta   An array of values describing the Dirichlet distribution.
+     * @param length The length of the vectors. Any elements in the arrays after this value will be ignored.
      * @return The log probability of drawing the value from the described distribution.
      */
-    public static final double logProbabilityDirichlet(double[] value, double[] beta) {
+    public static final double logProbabilityDirichlet(double[] value, double[] beta, int length) {
         double sum = 0.0;
         double sumParam = 0.0;
 
-        for(int i = 0; i < value.length; i++) {
+        for(int i = 0; i < length; i++) {
             if(value[i] < 0 || value[i] > 1) {
-                return Double.MIN_VALUE;
+                return Double.NEGATIVE_INFINITY;
             }
 
             // Collect data for the constant
@@ -674,15 +681,18 @@ public class DistributionSampling {
     /**
      * Method to sample a value from Multinomial distribution.
      * 
-     * @param rng          A random number generator for the sampling.
-     * @param elementProbs The probability of returning each possible value from the categorical distribution.
-     * @param n            The number of tests to include in the output
-     * @param output       The array to hold the results of the sampling.
+     * @param rng           A random number generator for the sampling.
+     * @param categoryProbs The probability of returning each possible value from the categorical distribution.
+     * @param numCategories The number of categories to sample from. The probabilities of these categories are stored in
+     *                      the first numCategories elements of the array categoryProbs. Any values after this are
+     *                      ignored.
+     * @param n             The number of tests to include in the output
+     * @param output        The array to hold the results of the sampling.
      */
-    public static final void sampleMultinomial(Rng rng, double[] elementProbs, int n, int[] output) {
+    public static final void sampleMultinomial(Rng rng, double[] categoryProbs, int numCategories, int n,
+            int[] output) {
         Arrays.fill(output, 0);
 
-        double l = elementProbs.length;
         for(int i = 0; i < n; i++) {
             // Scale a uniform value to pick a category.
             double val = rng.uniform();
@@ -690,14 +700,14 @@ public class DistributionSampling {
             // Loop through to find the category this value matches with.
             double sum = 0;
             int j;
-            for(j = 0; j < l; j++) {
-                sum += elementProbs[j];
+            for(j = 0; j < numCategories; j++) {
+                sum += categoryProbs[j];
                 if(sum >= val) {
                     output[j]++;
                     break;
                 }
             }
-            if(j == l)
+            if(j == numCategories)
                 // Of this point has been reached rounding errors in the summing mean that the sum did not quite reach
                 // 1. It is very unlikely this code will ever execute.
                 output[j - 1]++;
@@ -707,40 +717,41 @@ public class DistributionSampling {
     /**
      * Calculate the probability of a multinomial producing the sample x.
      * 
-     * @param xs           The value to generate the probability of sampling.
-     * @param elementProbs The probability of each category.
-     * @param n            The total number of values sampled in the distribution.
+     * @param xs            The value to generate the probability of sampling.
+     * @param categoryProbs The probability of each category.
+     * @param numCategories The number of categories to sample from. The probabilities of these categories are stored in
+     *                      the first numCategories elements of the array categoryProbs. Any values after this are
+     *                      ignored.
+     * @param n             The total number of values sampled in the distribution.
      * @return The probability of x being produced by this distribution.
      */
-    public static final double probabilityMultinomial(int[] xs, double[] elementProbs, int n) {
-        return Math.exp(logProbabilityMultinomial(xs, elementProbs, n));
+    public static final double probabilityMultinomial(int[] xs, double[] categoryProbs, int numElements, int n) {
+        return Math.exp(logProbabilityMultinomial(xs, categoryProbs, numElements, n));
     }
 
     /**
      * Calculate the log probability of a multinomial producing the sample x.
      * 
-     * @param xs           The value to generate the probability of sampling.
-     * @param elementProbs The probability of each category.
-     * @param n            The total number of values sampled in the distribution.
+     * @param xs            The value to generate the probability of sampling.
+     * @param categoryProbs The probability of each category.
+     * @param numCategories The number of categories to sample from. The probabilities of these categories are stored in
+     *                      the first numCategories elements of the array categoryProbs. Any values after this are
+     *                      ignored.
+     * @param n             The total number of values sampled in the distribution.
      * @return The probability of x being produced by this distribution.
      */
-    public static final double logProbabilityMultinomial(int[] xs, double[] elementProbs, int n) {
-        int l = xs.length;
-        // Test that the arrays are the correct lengths;
-        if(elementProbs.length != l)
-            return Double.NEGATIVE_INFINITY;
-
+    public static final double logProbabilityMultinomial(int[] xs, double[] categoryProbs, int numCategories, int n) {
         double p = 0;
         double count = 0;
-        for(int i = 0; i < l; i++) {
+        for(int i = 0; i < numCategories; i++) {
             int x = xs[i];
             if(x != 0) {
                 count += x;
-                p += x * Math.log(elementProbs[i]);
+                p += x * Math.log(categoryProbs[i]);
                 p -= ApproximateFactorial.approxLogFac(x);
             }
         }
-        // Check the correct number of events occured.
+        // Check the correct number of events occurred.
         if(count != n)
             return Double.NEGATIVE_INFINITY;
 

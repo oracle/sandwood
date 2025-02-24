@@ -49,17 +49,16 @@ public class Conjugates {
      * @param count A count of the number of times each possible output was sampled from the Categorical distributions.
      * @param p     An array that will be populated with a value sampled from the distribution described by the inputs.
      */
-    public static final void sampleConjugateDirichletCategorical(Rng rng, double[] hyper, double[] count, double[] p) {
+    public static final void sampleConjugateDirichletCategorical(Rng rng, double[] hyper, double[] count, double[] p,
+            int n) {
         double sum = 0.0;
-        int N = p.length;
-        for(int i = 0; i < N; i++) {
+        for(int i = 0; i < n; i++) {
             p[i] = DistributionSampling.sampleGamma(rng, hyper[i] + count[i]);
             sum += p[i];
         }
 
-        for(int i = 0; i < N; i++) {
+        for(int i = 0; i < n; i++)
             p[i] /= sum;
-        }
     }
 
     /*

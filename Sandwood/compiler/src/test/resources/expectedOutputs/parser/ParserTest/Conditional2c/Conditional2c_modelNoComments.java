@@ -34,13 +34,13 @@ public class Conditional2c extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample4(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample7())
+            if(system$c.get$fixedFlag$sample4())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class Conditional2c extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample10(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample10())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -105,13 +105,13 @@ public class Conditional2c extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
+                system$c.set$fixedFlag$sample10(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
+            if(system$c.get$fixedFlag$sample10())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -141,18 +141,18 @@ public class Conditional2c extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample10(fixed);
+                system$c.set$fixedFlag$sample4(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample13 = system$c.get$fixedFlag$sample13();
-            boolean fixedFlag$sample7 = system$c.get$fixedFlag$sample7();
-            if(fixedFlag$sample13 && fixedFlag$sample7)
+            boolean fixedFlag$sample10 = system$c.get$fixedFlag$sample10();
+            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
+            if(fixedFlag$sample10 && fixedFlag$sample4)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample13 || fixedFlag$sample7)
+            else if(fixedFlag$sample10 || fixedFlag$sample4)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -182,18 +182,18 @@ public class Conditional2c extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample10(fixed);
+                system$c.set$fixedFlag$sample4(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample13 = system$c.get$fixedFlag$sample13();
-            boolean fixedFlag$sample7 = system$c.get$fixedFlag$sample7();
-            if(fixedFlag$sample13 && fixedFlag$sample7)
+            boolean fixedFlag$sample10 = system$c.get$fixedFlag$sample10();
+            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
+            if(fixedFlag$sample10 && fixedFlag$sample4)
                 return Immutability.FIXED;
-            else if(fixedFlag$sample13 || fixedFlag$sample7)
+            else if(fixedFlag$sample10 || fixedFlag$sample4)
                 return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
@@ -300,9 +300,9 @@ public class Conditional2c extends Model {
 
         //Set fixed flags
         if(guard.isSet())
-            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
         if(u.isSet())
-            newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
+            newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
     }
 
     /**

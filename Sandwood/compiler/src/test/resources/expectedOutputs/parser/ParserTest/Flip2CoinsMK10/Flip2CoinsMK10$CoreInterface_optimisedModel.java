@@ -11,23 +11,23 @@ interface Flip2CoinsMK10$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Getter for coins.
 	public int get$coins();
 
-	// Getter for fixedFlag$sample19.
-	public boolean get$fixedFlag$sample19();
+	// Getter for fixedFlag$sample10.
+	public boolean get$fixedFlag$sample10();
 
-	// Setter for fixedFlag$sample19.
-	public void set$fixedFlag$sample19(boolean cv$value);
+	// Setter for fixedFlag$sample10.
+	public void set$fixedFlag$sample10(boolean cv$value);
 
-	// Getter for fixedFlag$sample32.
-	public boolean get$fixedFlag$sample32();
+	// Getter for fixedFlag$sample23.
+	public boolean get$fixedFlag$sample23();
 
-	// Setter for fixedFlag$sample32.
-	public void set$fixedFlag$sample32(boolean cv$value);
+	// Setter for fixedFlag$sample23.
+	public void set$fixedFlag$sample23(boolean cv$value);
 
-	// Getter for fixedFlag$sample57.
-	public boolean get$fixedFlag$sample57();
+	// Getter for fixedFlag$sample48.
+	public boolean get$fixedFlag$sample48();
 
-	// Setter for fixedFlag$sample57.
-	public void set$fixedFlag$sample57(boolean cv$value);
+	// Setter for fixedFlag$sample48.
+	public void set$fixedFlag$sample48(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[][] get$flips();

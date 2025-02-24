@@ -7,25 +7,25 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample105 = false;
-	private boolean fixedFlag$sample46 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedProbFlag$sample105 = false;
-	private boolean fixedProbFlag$sample46 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean[][] guard$sample46bernoulli104$global;
-	private boolean[][] guard$sample46put100$global;
+	private boolean fixedFlag$sample35 = false;
+	private boolean fixedFlag$sample42 = false;
+	private boolean fixedFlag$sample94 = false;
+	private boolean fixedProbFlag$sample35 = false;
+	private boolean fixedProbFlag$sample42 = false;
+	private boolean fixedProbFlag$sample94 = false;
+	private boolean[][] guard$sample35bernoulli93$global;
+	private boolean[][] guard$sample35put89$global;
 	private double[][] indicator;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
 	private double logProbability$indicator;
 	private double logProbability$p;
-	private double[] logProbability$sample46;
-	private double logProbability$var100;
-	private double logProbability$var101;
-	private double logProbability$var30;
-	private double logProbability$var48;
+	private double[] logProbability$sample35;
+	private double logProbability$var22;
+	private double logProbability$var40;
+	private double logProbability$var92;
+	private double logProbability$var93;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -55,83 +55,83 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// updated.
 		bias = cv$value;
 		
-		// Unset the fixed probability flag for sample 53 as it depends on bias.
-		fixedProbFlag$sample53 = false;
+		// Unset the fixed probability flag for sample 42 as it depends on bias.
+		fixedProbFlag$sample42 = false;
 		
-		// Unset the fixed probability flag for sample 105 as it depends on bias.
-		fixedProbFlag$sample105 = false;
+		// Unset the fixed probability flag for sample 94 as it depends on bias.
+		fixedProbFlag$sample94 = false;
 	}
 
-	// Getter for fixedFlag$sample105.
+	// Getter for fixedFlag$sample35.
 	@Override
-	public final boolean get$fixedFlag$sample105() {
-		return fixedFlag$sample105;
+	public final boolean get$fixedFlag$sample35() {
+		return fixedFlag$sample35;
 	}
 
-	// Setter for fixedFlag$sample105.
+	// Setter for fixedFlag$sample35.
 	@Override
-	public final void set$fixedFlag$sample105(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample105 including if probabilities
+	public final void set$fixedFlag$sample35(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
 		// need to be updated.
-		fixedFlag$sample105 = cv$value;
+		fixedFlag$sample35 = cv$value;
 		
-		// Should the probability of sample 105 be set to fixed. This will only every change
+		// Should the probability of sample 35 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample105" with its value "cv$value".
-		fixedProbFlag$sample105 = (cv$value && fixedProbFlag$sample105);
+		// Substituted "fixedFlag$sample35" with its value "cv$value".
+		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
+		
+		// Should the probability of sample 94 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample35" with its value "cv$value".
+		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
 
-	// Getter for fixedFlag$sample46.
+	// Getter for fixedFlag$sample42.
 	@Override
-	public final boolean get$fixedFlag$sample46() {
-		return fixedFlag$sample46;
+	public final boolean get$fixedFlag$sample42() {
+		return fixedFlag$sample42;
 	}
 
-	// Setter for fixedFlag$sample46.
+	// Setter for fixedFlag$sample42.
 	@Override
-	public final void set$fixedFlag$sample46(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample46 including if probabilities
+	public final void set$fixedFlag$sample42(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
 		// need to be updated.
-		fixedFlag$sample46 = cv$value;
+		fixedFlag$sample42 = cv$value;
 		
-		// Should the probability of sample 46 be set to fixed. This will only every change
+		// Should the probability of sample 42 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample46" with its value "cv$value".
-		fixedProbFlag$sample46 = (cv$value && fixedProbFlag$sample46);
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 		
-		// Should the probability of sample 105 be set to fixed. This will only every change
+		// Should the probability of sample 94 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample46" with its value "cv$value".
-		fixedProbFlag$sample105 = (cv$value && fixedProbFlag$sample105);
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
 
-	// Getter for fixedFlag$sample53.
+	// Getter for fixedFlag$sample94.
 	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
+	public final boolean get$fixedFlag$sample94() {
+		return fixedFlag$sample94;
 	}
 
-	// Setter for fixedFlag$sample53.
+	// Setter for fixedFlag$sample94.
 	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
+	public final void set$fixedFlag$sample94(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample94 including if probabilities
 		// need to be updated.
-		fixedFlag$sample53 = cv$value;
+		fixedFlag$sample94 = cv$value;
 		
-		// Should the probability of sample 53 be set to fixed. This will only every change
+		// Should the probability of sample 94 be set to fixed. This will only every change
 		// the flag to false.
 		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-		
-		// Should the probability of sample 105 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample105 = (cv$value && fixedProbFlag$sample105);
+		// Substituted "fixedFlag$sample94" with its value "cv$value".
+		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
 
 	// Getter for k.
@@ -192,11 +192,11 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		weights = cv$value;
 		setFlag$weights = true;
 		
-		// Unset the fixed probability flag for sample 46 as it depends on weights.
-		fixedProbFlag$sample46 = false;
+		// Unset the fixed probability flag for sample 35 as it depends on weights.
+		fixedProbFlag$sample35 = false;
 		
-		// Unset the fixed probability flag for sample 105 as it depends on weights.
-		fixedProbFlag$sample105 = false;
+		// Unset the fixed probability flag for sample 94 as it depends on weights.
+		fixedProbFlag$sample94 = false;
 	}
 
 	// Getter for x.
@@ -228,8 +228,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		y = cv$value;
 		setFlag$y = true;
 		
-		// Unset the fixed probability flag for sample 105 as it depends on y.
-		fixedProbFlag$sample105 = false;
+		// Unset the fixed probability flag for sample 94 as it depends on y.
+		fixedProbFlag$sample94 = false;
 	}
 
 	// Getter for yMeasured.
@@ -246,119 +246,12 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample105 using sampled
+	// Calculate the probability of the samples represented by sample35 using sampled
 	// values.
-	private final void logProbabilityValue$sample105() {
-		// Determine if we need to calculate the values for sample task 105 or if we should
+	private final void logProbabilityValue$sample35() {
+		// Determine if we need to calculate the values for sample task 35 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample105) {
-			// Generating probabilities for sample task
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				// Unrolled loop
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// Substituted "j$var93" with its value "0".
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(y[i][0], (p[i][0] + bias)));
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// Substituted "j$var93" with its value "1".
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(y[i][1], (p[i][1] + bias)));
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// Substituted "j$var93" with its value "2".
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(y[i][2], (p[i][2] + bias)));
-			}
-			logProbability$var100 = cv$sampleAccumulator;
-			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var101 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$y = (logProbability$y + cv$sampleAccumulator);
-			
-			// Add probability to model
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample105 = ((fixedFlag$sample105 && fixedFlag$sample46) && fixedFlag$sample53);
-		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			logProbability$var100 = logProbability$var101;
-			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$y = (logProbability$y + logProbability$var101);
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var101);
-			
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var101);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample46 using sampled
-	// values.
-	private final void logProbabilityValue$sample46() {
-		// Determine if we need to calculate the values for sample task 46 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample46) {
+		if(!fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
@@ -388,7 +281,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample46[0] = cv$weightedProbability;
+				logProbability$sample35[0] = cv$weightedProbability;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 < n)) {
@@ -435,7 +328,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample46[1] = cv$weightedProbability;
+				logProbability$sample35[1] = cv$weightedProbability;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 < n)) {
@@ -482,7 +375,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this distribution configuration to the accumulator.
 			// 
 			// An accumulator for the distributed probability space covered.
-			logProbability$sample46[2] = cv$weightedProbability;
+			logProbability$sample35[2] = cv$weightedProbability;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 < n)) {
@@ -506,7 +399,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// An accumulator for the distributed probability space covered.
 				logProbability$p = (logProbability$p + cv$weightedProbability);
 			}
-			logProbability$var30 = cv$sampleAccumulator;
+			logProbability$var22 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -526,7 +419,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample46)
+			if(fixedFlag$sample35)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
@@ -535,7 +428,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample46 = fixedFlag$sample46;
+			fixedProbFlag$sample35 = fixedFlag$sample35;
 		}
 		// Using cached values.
 		else {
@@ -544,7 +437,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// This value is not used before it is set again, so removing the value declaration.
 			double cv$rvAccumulator;
 			{
-				double cv$sampleValue = logProbability$sample46[0];
+				double cv$sampleValue = logProbability$sample35[0];
 				cv$rvAccumulator = cv$sampleValue;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -559,7 +452,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				}
 			}
 			{
-				double cv$sampleValue = logProbability$sample46[1];
+				double cv$sampleValue = logProbability$sample35[1];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -573,7 +466,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					logProbability$p = (logProbability$p + cv$sampleValue);
 				}
 			}
-			double cv$sampleValue = logProbability$sample46[2];
+			double cv$sampleValue = logProbability$sample35[2];
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -586,7 +479,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Update the variable probability
 				logProbability$p = (logProbability$p + cv$sampleValue);
 			}
-			logProbability$var30 = cv$rvAccumulator;
+			logProbability$var22 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
@@ -596,17 +489,17 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample46)
+			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample53 using sampled
+	// Calculate the probability of the samples represented by sample42 using sampled
 	// values.
-	private final void logProbabilityValue$sample53() {
-		// Determine if we need to calculate the values for sample task 53 or if we should
+	private final void logProbabilityValue$sample42() {
+		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample53) {
+		if(!fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -636,7 +529,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var48 = cv$distributionAccumulator;
+			logProbability$var40 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$distributionAccumulator;
@@ -659,7 +552,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample53)
+			if(fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -676,13 +569,13 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = fixedFlag$sample53;
+			fixedProbFlag$sample42 = fixedFlag$sample42;
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var48 = logProbability$bias;
+			logProbability$var40 = logProbability$bias;
 			
 			// Add probability to model
 			// 
@@ -691,17 +584,124 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample53)
+			if(fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
 		}
 	}
 
+	// Calculate the probability of the samples represented by sample94 using sampled
+	// values.
+	private final void logProbabilityValue$sample94() {
+		// Determine if we need to calculate the values for sample task 94 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample94) {
+			// Generating probabilities for sample task
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// Substituted "j$var85" with its value "0".
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(y[i][0], (p[i][0] + bias)));
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// Substituted "j$var85" with its value "1".
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(y[i][1], (p[i][1] + bias)));
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// Substituted "j$var85" with its value "2".
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(y[i][2], (p[i][2] + bias)));
+			}
+			logProbability$var92 = cv$sampleAccumulator;
+			
+			// Store the random variable instance probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$var93 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$y = (logProbability$y + cv$sampleAccumulator);
+			
+			// Add probability to model
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample94 = ((fixedFlag$sample94 && fixedFlag$sample35) && fixedFlag$sample42);
+		}
+		// Using cached values.
+		else {
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			logProbability$var92 = logProbability$var93;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$y = (logProbability$y + logProbability$var93);
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var93);
+			
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var93);
+		}
+	}
+
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 46 drawn from Gaussian 30. Inference was performed using Metropolis-Hastings.
-	private final void sample46(int var41) {
+	// by sample task 35 drawn from Gaussian 22. Inference was performed using Metropolis-Hastings.
+	private final void sample35(int var33) {
 		// The original value of the sample
-		double cv$originalValue = weights[var41];
+		double cv$originalValue = weights[var33];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -723,13 +723,13 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var29" with its value "10.0".
+			// Substituted "cv$temp$1$var21" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
@@ -737,23 +737,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = false;
+					guard$sample35bernoulli93$global[i][0] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = false;
+					guard$sample35bernoulli93$global[i][1] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = false;
+					guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
@@ -761,23 +761,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = false;
+					guard$sample35bernoulli93$global[i][0] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = false;
+					guard$sample35bernoulli93$global[i][1] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = false;
+					guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
@@ -785,409 +785,409 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = false;
+					guard$sample35bernoulli93$global[i][0] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = false;
+					guard$sample35bernoulli93$global[i][1] = false;
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = false;
+					guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Unrolled loop
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = false;
+					guard$sample35bernoulli93$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = false;
+					guard$sample35bernoulli93$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = false;
+					guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
-					// Substituted "j$var69" with its value "0".
+					// Substituted "j$var61" with its value "0".
 					// 
 					// Set the current value to the current state of the tree.
-					double traceTempVariable$var77$14_4 = Math.exp((cv$originalValue * x[i][0]));
+					double traceTempVariable$var69$14_4 = Math.exp((cv$originalValue * x[i][0]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][0]) {
+					if(!guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][0] = true;
+						guard$sample35bernoulli93$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$14_7" with its value "0".
 						// 
-						// cv$temp$2$var99's comment
+						// cv$temp$2$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "0".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var77$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "0".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][1]) {
+					if(!guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][1] = true;
+						guard$sample35bernoulli93$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$14_7" with its value "1".
 						// 
-						// cv$temp$2$var99's comment
+						// cv$temp$2$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "1".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var77$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "1".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][2]) {
+					if(!guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][2] = true;
+						guard$sample35bernoulli93$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$14_7" with its value "2".
 						// 
-						// cv$temp$2$var99's comment
+						// cv$temp$2$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "2".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var77$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "2".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
-					// Substituted "j$var69" with its value "1".
+					// Substituted "j$var61" with its value "1".
 					// 
 					// Set the current value to the current state of the tree.
-					double traceTempVariable$var79$15_4 = Math.exp((cv$originalValue * x[i][1]));
+					double traceTempVariable$var71$15_4 = Math.exp((cv$originalValue * x[i][1]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][0]) {
+					if(!guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][0] = true;
+						guard$sample35bernoulli93$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "0".
 						// 
-						// cv$temp$3$var99's comment
+						// cv$temp$3$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "0".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var79$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "0".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][1]) {
+					if(!guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][1] = true;
+						guard$sample35bernoulli93$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "1".
 						// 
-						// cv$temp$3$var99's comment
+						// cv$temp$3$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "1".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var79$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "1".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][2]) {
+					if(!guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][2] = true;
+						guard$sample35bernoulli93$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "2".
 						// 
-						// cv$temp$3$var99's comment
+						// cv$temp$3$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "2".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var79$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "2".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
-					// Substituted "j$var69" with its value "2".
+					// Substituted "j$var61" with its value "2".
 					// 
 					// Set the current value to the current state of the tree.
-					double traceTempVariable$var82$16_4 = Math.exp((cv$originalValue * x[i][2]));
+					double traceTempVariable$var74$16_4 = Math.exp((cv$originalValue * x[i][2]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][0]) {
+					if(!guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][0] = true;
+						guard$sample35bernoulli93$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "0".
 						// 
-						// cv$temp$4$var99's comment
+						// cv$temp$4$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "0".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var82$16_4)) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "0".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][1]) {
+					if(!guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][1] = true;
+						guard$sample35bernoulli93$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "1".
 						// 
-						// cv$temp$4$var99's comment
+						// cv$temp$4$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "1".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var82$16_4)) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "1".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][2]) {
+					if(!guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][2] = true;
+						guard$sample35bernoulli93$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "2".
 						// 
-						// cv$temp$4$var99's comment
+						// cv$temp$4$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var93" with its value "2".
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var82$16_4)) + bias)) + cv$accumulatedProbabilities);
+						// Substituted "j$var85" with its value "2".
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				for(int i = 0; i < n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][0]) {
+					if(!guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][0] = true;
+						guard$sample35bernoulli93$global[i][0] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "0".
 						// 
-						// cv$temp$5$var99's comment
+						// cv$temp$5$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var69" with its value "0".
+						// Substituted "j$var61" with its value "0".
 						// 
 						// Set the current value to the current state of the tree.
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((Math.exp((cv$originalValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
@@ -1196,37 +1196,37 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				for(int i = 0; i < n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][1]) {
+					if(!guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][1] = true;
+						guard$sample35bernoulli93$global[i][1] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "1".
 						// 
-						// cv$temp$5$var99's comment
+						// cv$temp$5$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var69" with its value "1".
+						// Substituted "j$var61" with its value "1".
 						// 
 						// Set the current value to the current state of the tree.
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((Math.exp((cv$originalValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
@@ -1235,37 +1235,37 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				for(int i = 0; i < n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46bernoulli104$global[i][2]) {
+					if(!guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46bernoulli104$global[i][2] = true;
+						guard$sample35bernoulli93$global[i][2] = true;
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
 						// 
-						// Recorded the probability of reaching sample task 105 with the current configuration.
+						// Recorded the probability of reaching sample task 94 with the current configuration.
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 105 of consumer random variable null.
+						// Processing sample task 94 of consumer random variable null.
 						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "2".
 						// 
-						// cv$temp$5$var99's comment
+						// cv$temp$5$var91's comment
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j$var69" with its value "2".
+						// Substituted "j$var61" with its value "2".
 						// 
 						// Set the current value to the current state of the tree.
 						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((Math.exp((cv$originalValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
@@ -1283,37 +1283,37 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		
 		// Update Sample and intermediate values
-		weights[var41] = cv$proposedValue;
+		weights[var33] = cv$proposedValue;
 		
 		// Guards to ensure that indicator is only updated when there is a valid path.
 		// 
-		// Looking for a path between Sample 46 and consumer double[] 75.
+		// Looking for a path between Sample 35 and consumer double[] 67.
 		// 
 		// Unrolled loop
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			for(int i = 0; i < n; i += 1)
-				// Substituted "j$var69" with its value "0".
+				// Substituted "j$var61" with its value "0".
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			for(int i = 0; i < n; i += 1)
-				// Substituted "j$var69" with its value "1".
+				// Substituted "j$var61" with its value "1".
 				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			for(int i = 0; i < n; i += 1)
-				// Substituted "j$var69" with its value "2".
+				// Substituted "j$var61" with its value "2".
 				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
@@ -1321,24 +1321,24 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][0] = false;
+				guard$sample35put89$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][1] = false;
+				guard$sample35put89$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][2] = false;
+				guard$sample35put89$global[i][2] = false;
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
@@ -1346,24 +1346,24 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][0] = false;
+				guard$sample35put89$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][1] = false;
+				guard$sample35put89$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][2] = false;
+				guard$sample35put89$global[i][2] = false;
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
@@ -1371,238 +1371,238 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][0] = false;
+				guard$sample35put89$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][1] = false;
+				guard$sample35put89$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][2] = false;
+				guard$sample35put89$global[i][2] = false;
 			}
 		}
 		
 		// Unrolled loop
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][0] = false;
+				guard$sample35put89$global[i][0] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][1] = false;
+				guard$sample35put89$global[i][1] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46put100$global[i][2] = false;
+				guard$sample35put89$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][0]) {
+				if(!guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = true;
+					guard$sample35put89$global[i][0] = true;
 					
-					// Substituted "j$var93" with its value "0".
+					// Substituted "j$var85" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][1]) {
+				if(!guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = true;
+					guard$sample35put89$global[i][1] = true;
 					
-					// Substituted "j$var93" with its value "1".
+					// Substituted "j$var85" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][2]) {
+				if(!guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = true;
+					guard$sample35put89$global[i][2] = true;
 					
-					// Substituted "j$var93" with its value "2".
+					// Substituted "j$var85" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][0]) {
+				if(!guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = true;
+					guard$sample35put89$global[i][0] = true;
 					
-					// Substituted "j$var93" with its value "0".
+					// Substituted "j$var85" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][1]) {
+				if(!guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = true;
+					guard$sample35put89$global[i][1] = true;
 					
-					// Substituted "j$var93" with its value "1".
+					// Substituted "j$var85" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][2]) {
+				if(!guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = true;
+					guard$sample35put89$global[i][2] = true;
 					
-					// Substituted "j$var93" with its value "2".
+					// Substituted "j$var85" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][0]) {
+				if(!guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = true;
+					guard$sample35put89$global[i][0] = true;
 					
-					// Substituted "j$var93" with its value "0".
+					// Substituted "j$var85" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][1]) {
+				if(!guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = true;
+					guard$sample35put89$global[i][1] = true;
 					
-					// Substituted "j$var93" with its value "1".
+					// Substituted "j$var85" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46put100$global[i][2]) {
+				if(!guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = true;
+					guard$sample35put89$global[i][2] = true;
 					
-					// Substituted "j$var93" with its value "2".
+					// Substituted "j$var85" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample46put100$global[i][0]) {
+				if(!guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = true;
+					guard$sample35put89$global[i][0] = true;
 					
-					// Substituted "j$var93" with its value "0".
+					// Substituted "j$var85" with its value "0".
 					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample46put100$global[i][1]) {
+				if(!guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = true;
+					guard$sample35put89$global[i][1] = true;
 					
-					// Substituted "j$var93" with its value "1".
+					// Substituted "j$var85" with its value "1".
 					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample46put100$global[i][2]) {
+				if(!guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = true;
+					guard$sample35put89$global[i][2] = true;
 					
-					// Substituted "j$var93" with its value "2".
+					// Substituted "j$var85" with its value "2".
 					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				}
 			}
@@ -1611,11 +1611,11 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var29" with its value "10.0".
+		// Substituted "cv$temp$1$var21" with its value "10.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
@@ -1623,23 +1623,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][0] = false;
+				guard$sample35bernoulli93$global[i][0] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][1] = false;
+				guard$sample35bernoulli93$global[i][1] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][2] = false;
+				guard$sample35bernoulli93$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
@@ -1647,23 +1647,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][0] = false;
+				guard$sample35bernoulli93$global[i][0] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][1] = false;
+				guard$sample35bernoulli93$global[i][1] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][2] = false;
+				guard$sample35bernoulli93$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
@@ -1671,477 +1671,477 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][0] = false;
+				guard$sample35bernoulli93$global[i][0] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][1] = false;
+				guard$sample35bernoulli93$global[i][1] = false;
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][2] = false;
+				guard$sample35bernoulli93$global[i][2] = false;
 		}
 		
 		// Unrolled loop
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][0] = false;
+				guard$sample35bernoulli93$global[i][0] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][1] = false;
+				guard$sample35bernoulli93$global[i][1] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample46bernoulli104$global[i][2] = false;
+				guard$sample35bernoulli93$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
-				// Substituted "j$var69" with its value "0".
-				double traceTempVariable$var77$14_4 = Math.exp((cv$proposedValue * x[i][0]));
+				// Substituted "j$var61" with its value "0".
+				double traceTempVariable$var69$14_4 = Math.exp((cv$proposedValue * x[i][0]));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][0]) {
+				if(!guard$sample35bernoulli93$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = true;
+					guard$sample35bernoulli93$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$14_7" with its value "0".
 					// 
-					// cv$temp$2$var99's comment
+					// cv$temp$2$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "0".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var77$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "0".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][1]) {
+				if(!guard$sample35bernoulli93$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = true;
+					guard$sample35bernoulli93$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$14_7" with its value "1".
 					// 
-					// cv$temp$2$var99's comment
+					// cv$temp$2$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "1".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var77$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "1".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][2]) {
+				if(!guard$sample35bernoulli93$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = true;
+					guard$sample35bernoulli93$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$14_7" with its value "2".
 					// 
-					// cv$temp$2$var99's comment
+					// cv$temp$2$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "2".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var77$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "2".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
-				// Substituted "j$var69" with its value "1".
-				double traceTempVariable$var79$15_4 = Math.exp((cv$proposedValue * x[i][1]));
+				// Substituted "j$var61" with its value "1".
+				double traceTempVariable$var71$15_4 = Math.exp((cv$proposedValue * x[i][1]));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][0]) {
+				if(!guard$sample35bernoulli93$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = true;
+					guard$sample35bernoulli93$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$15_7" with its value "0".
 					// 
-					// cv$temp$3$var99's comment
+					// cv$temp$3$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "0".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var79$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "0".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][1]) {
+				if(!guard$sample35bernoulli93$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = true;
+					guard$sample35bernoulli93$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$15_7" with its value "1".
 					// 
-					// cv$temp$3$var99's comment
+					// cv$temp$3$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "1".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var79$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "1".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][2]) {
+				if(!guard$sample35bernoulli93$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = true;
+					guard$sample35bernoulli93$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$15_7" with its value "2".
 					// 
-					// cv$temp$3$var99's comment
+					// cv$temp$3$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "2".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var79$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "2".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
-				// Substituted "j$var69" with its value "2".
-				double traceTempVariable$var82$16_4 = Math.exp((cv$proposedValue * x[i][2]));
+				// Substituted "j$var61" with its value "2".
+				double traceTempVariable$var74$16_4 = Math.exp((cv$proposedValue * x[i][2]));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][0]) {
+				if(!guard$sample35bernoulli93$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = true;
+					guard$sample35bernoulli93$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$16_7" with its value "0".
 					// 
-					// cv$temp$4$var99's comment
+					// cv$temp$4$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "0".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var82$16_4)) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "0".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][1]) {
+				if(!guard$sample35bernoulli93$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = true;
+					guard$sample35bernoulli93$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$16_7" with its value "1".
 					// 
-					// cv$temp$4$var99's comment
+					// cv$temp$4$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "1".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var82$16_4)) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "1".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][2]) {
+				if(!guard$sample35bernoulli93$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = true;
+					guard$sample35bernoulli93$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$16_7" with its value "2".
 					// 
-					// cv$temp$4$var99's comment
+					// cv$temp$4$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var93" with its value "2".
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var82$16_4)) + bias)) + cv$accumulatedProbabilities);
+					// Substituted "j$var85" with its value "2".
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 0)) {
+		if((var33 == 0)) {
 			for(int i = 0; i < n; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][0]) {
+				if(!guard$sample35bernoulli93$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][0] = true;
+					guard$sample35bernoulli93$global[i][0] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$17_7" with its value "0".
 					// 
-					// cv$temp$5$var99's comment
+					// cv$temp$5$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var69" with its value "0".
+					// Substituted "j$var61" with its value "0".
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((Math.exp((cv$proposedValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 1)) {
+		if((var33 == 1)) {
 			for(int i = 0; i < n; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][1]) {
+				if(!guard$sample35bernoulli93$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][1] = true;
+					guard$sample35bernoulli93$global[i][1] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$17_7" with its value "1".
 					// 
-					// cv$temp$5$var99's comment
+					// cv$temp$5$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var69" with its value "1".
+					// Substituted "j$var61" with its value "1".
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((Math.exp((cv$proposedValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var41 == 2)) {
+		if((var33 == 2)) {
 			for(int i = 0; i < n; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample46bernoulli104$global[i][2]) {
+				if(!guard$sample35bernoulli93$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46bernoulli104$global[i][2] = true;
+					guard$sample35bernoulli93$global[i][2] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
-					// Recorded the probability of reaching sample task 105 with the current configuration.
+					// Recorded the probability of reaching sample task 94 with the current configuration.
 					// 
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
 					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 					// Declaration comment was:
-					// Processing sample task 105 of consumer random variable null.
+					// Processing sample task 94 of consumer random variable null.
 					// 
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
 					// Substituted "index$j$17_7" with its value "2".
 					// 
-					// cv$temp$5$var99's comment
+					// cv$temp$5$var91's comment
 					// Constructing a random variable input for use later.
 					// 
-					// Substituted "j$var69" with its value "2".
+					// Substituted "j$var61" with its value "2".
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((Math.exp((cv$proposedValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -2165,37 +2165,37 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Set the sample value
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			weights[var41] = cv$originalValue;
+			weights[var33] = cv$originalValue;
 			
 			// Guards to ensure that indicator is only updated when there is a valid path.
 			// 
-			// Looking for a path between Sample 46 and consumer double[] 75.
+			// Looking for a path between Sample 35 and consumer double[] 67.
 			// 
 			// Unrolled loop
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				for(int i = 0; i < n; i += 1)
-					// Substituted "j$var69" with its value "0".
+					// Substituted "j$var61" with its value "0".
 					indicator[i][0] = Math.exp((weights[0] * x[i][0]));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				for(int i = 0; i < n; i += 1)
-					// Substituted "j$var69" with its value "1".
+					// Substituted "j$var61" with its value "1".
 					indicator[i][1] = Math.exp((weights[1] * x[i][1]));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				for(int i = 0; i < n; i += 1)
-					// Substituted "j$var69" with its value "2".
+					// Substituted "j$var61" with its value "2".
 					indicator[i][2] = Math.exp((weights[2] * x[i][2]));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
@@ -2203,24 +2203,24 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = false;
+					guard$sample35put89$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = false;
+					guard$sample35put89$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = false;
+					guard$sample35put89$global[i][2] = false;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
@@ -2228,24 +2228,24 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = false;
+					guard$sample35put89$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = false;
+					guard$sample35put89$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = false;
+					guard$sample35put89$global[i][2] = false;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
@@ -2253,238 +2253,238 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = false;
+					guard$sample35put89$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = false;
+					guard$sample35put89$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = false;
+					guard$sample35put89$global[i][2] = false;
 				}
 			}
 			
 			// Unrolled loop
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][0] = false;
+					guard$sample35put89$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][1] = false;
+					guard$sample35put89$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample46put100$global[i][2] = false;
+					guard$sample35put89$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][0]) {
+					if(!guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][0] = true;
+						guard$sample35put89$global[i][0] = true;
 						
-						// Substituted "j$var93" with its value "0".
+						// Substituted "j$var85" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][1]) {
+					if(!guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][1] = true;
+						guard$sample35put89$global[i][1] = true;
 						
-						// Substituted "j$var93" with its value "1".
+						// Substituted "j$var85" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][2]) {
+					if(!guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][2] = true;
+						guard$sample35put89$global[i][2] = true;
 						
-						// Substituted "j$var93" with its value "2".
+						// Substituted "j$var85" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][0]) {
+					if(!guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][0] = true;
+						guard$sample35put89$global[i][0] = true;
 						
-						// Substituted "j$var93" with its value "0".
+						// Substituted "j$var85" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][1]) {
+					if(!guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][1] = true;
+						guard$sample35put89$global[i][1] = true;
 						
-						// Substituted "j$var93" with its value "1".
+						// Substituted "j$var85" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][2]) {
+					if(!guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][2] = true;
+						guard$sample35put89$global[i][2] = true;
 						
-						// Substituted "j$var93" with its value "2".
+						// Substituted "j$var85" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][0]) {
+					if(!guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][0] = true;
+						guard$sample35put89$global[i][0] = true;
 						
-						// Substituted "j$var93" with its value "0".
+						// Substituted "j$var85" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][1]) {
+					if(!guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][1] = true;
+						guard$sample35put89$global[i][1] = true;
 						
-						// Substituted "j$var93" with its value "1".
+						// Substituted "j$var85" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample46put100$global[i][2]) {
+					if(!guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][2] = true;
+						guard$sample35put89$global[i][2] = true;
 						
-						// Substituted "j$var93" with its value "2".
+						// Substituted "j$var85" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 0)) {
+			if((var33 == 0)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample46put100$global[i][0]) {
+					if(!guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][0] = true;
+						guard$sample35put89$global[i][0] = true;
 						
-						// Substituted "j$var93" with its value "0".
+						// Substituted "j$var85" with its value "0".
 						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 1)) {
+			if((var33 == 1)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample46put100$global[i][1]) {
+					if(!guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][1] = true;
+						guard$sample35put89$global[i][1] = true;
 						
-						// Substituted "j$var93" with its value "1".
+						// Substituted "j$var85" with its value "1".
 						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((var41 == 2)) {
+			if((var33 == 2)) {
 				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample46put100$global[i][2]) {
+					if(!guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample46put100$global[i][2] = true;
+						guard$sample35put89$global[i][2] = true;
 						
-						// Substituted "j$var93" with its value "2".
+						// Substituted "j$var85" with its value "2".
 						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 					}
 				}
@@ -2493,8 +2493,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 53 drawn from Gaussian 48. Inference was performed using Metropolis-Hastings.
-	private final void sample53() {
+	// by sample task 42 drawn from Gaussian 40. Inference was performed using Metropolis-Hastings.
+	private final void sample42() {
 		// The original value of the sample
 		double cv$originalValue = bias;
 		
@@ -2520,39 +2520,39 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var47" with its value "10.0".
+			// Substituted "cv$temp$1$var39" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
 			
-			// Processing random variable 100.
+			// Processing random variable 92.
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 105 with the current configuration.
+				// Recorded the probability of reaching sample task 94 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 105 of consumer random variable null.
+				// Processing sample task 94 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "j$var93" with its value "0".
+				// Substituted "j$var85" with its value "0".
 				// 
-				// cv$temp$2$var99's comment
-				// Variable declaration of cv$temp$2$var99 moved.
+				// cv$temp$2$var91's comment
+				// Variable declaration of cv$temp$2$var91 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
-				// Substituted "j$var93" with its value "0".
+				// Substituted "j$var85" with its value "0".
 				// 
 				// Set the current value to the current state of the tree.
 				// 
@@ -2562,26 +2562,26 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 105 with the current configuration.
+				// Recorded the probability of reaching sample task 94 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 105 of consumer random variable null.
+				// Processing sample task 94 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "j$var93" with its value "1".
+				// Substituted "j$var85" with its value "1".
 				// 
-				// cv$temp$2$var99's comment
-				// Variable declaration of cv$temp$2$var99 moved.
+				// cv$temp$2$var91's comment
+				// Variable declaration of cv$temp$2$var91 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
-				// Substituted "j$var93" with its value "1".
+				// Substituted "j$var85" with its value "1".
 				// 
 				// Set the current value to the current state of the tree.
 				// 
@@ -2591,26 +2591,26 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
-				// Recorded the probability of reaching sample task 105 with the current configuration.
+				// Recorded the probability of reaching sample task 94 with the current configuration.
 				// 
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 105 of consumer random variable null.
+				// Processing sample task 94 of consumer random variable null.
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "j$var93" with its value "2".
+				// Substituted "j$var85" with its value "2".
 				// 
-				// cv$temp$2$var99's comment
-				// Variable declaration of cv$temp$2$var99 moved.
+				// cv$temp$2$var91's comment
+				// Variable declaration of cv$temp$2$var91 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
-				// Substituted "j$var93" with its value "2".
+				// Substituted "j$var85" with its value "2".
 				// 
 				// Set the current value to the current state of the tree.
 				// 
@@ -2635,85 +2635,85 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$var47" with its value "10.0".
+		// Substituted "cv$temp$1$var39" with its value "10.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
-		// Processing random variable 100.
+		// Processing random variable 92.
 		for(int i = 0; i < n; i += 1) {
 			// Unrolled loop
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 105 with the current configuration.
+			// Recorded the probability of reaching sample task 94 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 105 of consumer random variable null.
+			// Processing sample task 94 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "j$var93" with its value "0".
+			// Substituted "j$var85" with its value "0".
 			// 
-			// cv$temp$2$var99's comment
-			// Variable declaration of cv$temp$2$var99 moved.
+			// cv$temp$2$var91's comment
+			// Variable declaration of cv$temp$2$var91 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
-			// Substituted "j$var93" with its value "0".
+			// Substituted "j$var85" with its value "0".
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], (p[i][0] + cv$proposedValue)) + cv$accumulatedProbabilities);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 105 with the current configuration.
+			// Recorded the probability of reaching sample task 94 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 105 of consumer random variable null.
+			// Processing sample task 94 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "j$var93" with its value "1".
+			// Substituted "j$var85" with its value "1".
 			// 
-			// cv$temp$2$var99's comment
-			// Variable declaration of cv$temp$2$var99 moved.
+			// cv$temp$2$var91's comment
+			// Variable declaration of cv$temp$2$var91 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
-			// Substituted "j$var93" with its value "1".
+			// Substituted "j$var85" with its value "1".
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], (p[i][1] + cv$proposedValue)) + cv$accumulatedProbabilities);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
-			// Recorded the probability of reaching sample task 105 with the current configuration.
+			// Recorded the probability of reaching sample task 94 with the current configuration.
 			// 
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
-			// Processing sample task 105 of consumer random variable null.
+			// Processing sample task 94 of consumer random variable null.
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "j$var93" with its value "2".
+			// Substituted "j$var85" with its value "2".
 			// 
-			// cv$temp$2$var99's comment
-			// Variable declaration of cv$temp$2$var99 moved.
+			// cv$temp$2$var91's comment
+			// Variable declaration of cv$temp$2$var91 moved.
 			// 
 			// Constructing a random variable input for use later.
 			// 
-			// Substituted "j$var93" with its value "2".
+			// Substituted "j$var85" with its value "2".
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], (p[i][2] + cv$proposedValue)) + cv$accumulatedProbabilities);
 		}
 		
@@ -2744,28 +2744,28 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
-		// Constructor for guard$sample46put100$global
+		// Constructor for guard$sample35put89$global
 		{
 			// Calculate the largest index of j that is possible and allocate an array to hold
 			// the guard for each of these.
-			int cv$max_j$var93 = 0;
+			int cv$max_j$var85 = 0;
 			if((0 < x.length))
-				cv$max_j$var93 = 3;
+				cv$max_j$var85 = 3;
 			
-			// Allocation of guard$sample46put100$global for single threaded execution
-			guard$sample46put100$global = new boolean[x.length][cv$max_j$var93];
+			// Allocation of guard$sample35put89$global for single threaded execution
+			guard$sample35put89$global = new boolean[x.length][cv$max_j$var85];
 		}
 		
-		// Constructor for guard$sample46bernoulli104$global
+		// Constructor for guard$sample35bernoulli93$global
 		// 
 		// Calculate the largest index of j that is possible and allocate an array to hold
 		// the guard for each of these.
-		int cv$max_j$var93 = 0;
+		int cv$max_j$var85 = 0;
 		if((0 < x.length))
-			cv$max_j$var93 = 3;
+			cv$max_j$var85 = 3;
 		
-		// Allocation of guard$sample46bernoulli104$global for single threaded execution
-		guard$sample46bernoulli104$global = new boolean[x.length][cv$max_j$var93];
+		// Allocation of guard$sample35bernoulli93$global for single threaded execution
+		guard$sample35bernoulli93$global = new boolean[x.length][cv$max_j$var85];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -2775,8 +2775,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!setFlag$y) {
 			// Constructor for y
 			y = new boolean[x.length][];
-			for(int var23 = 0; var23 < x.length; var23 += 1)
-				y[var23] = new boolean[3];
+			for(int var15 = 0; var15 < x.length; var15 += 1)
+				y[var15] = new boolean[3];
 		}
 		
 		// If weights has not been set already allocate space.
@@ -2794,8 +2794,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		for(int i = 0; i < x.length; i += 1)
 			p[i] = new double[3];
 		
-		// Constructor for logProbability$sample46
-		logProbability$sample46 = new double[3];
+		// Constructor for logProbability$sample35
+		logProbability$sample35 = new double[3];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -2805,19 +2805,19 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, 3, 1,
-				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-							weights[var41] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -2829,33 +2829,33 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						boolean[] var97 = y[i];
+						boolean[] var89 = y[i];
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample46)
+						if(!fixedFlag$sample35)
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-											indicator[i][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
+										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 								}
 							);
 
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, 3, 1,
-							(int forStart$j$var93, int forEnd$j$var93, int threadID$j$var93, org.sandwood.random.internal.Rng RNG$2) -> { 
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
-									for(int j$var93 = forStart$j$var93; j$var93 < forEnd$j$var93; j$var93 += 1) {
-										if(!fixedFlag$sample46)
-											p[i][j$var93] = (indicator[i][j$var93] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-										if(!fixedFlag$sample105)
-											var97[j$var93] = DistributionSampling.sampleBernoulli(RNG$2, (p[i][j$var93] + bias));
+									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1) {
+										if(!fixedFlag$sample35)
+											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										if(!fixedFlag$sample94)
+											var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$2, (p[i][j$var85] + bias));
 									}
 							}
 						);
@@ -2869,23 +2869,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, 3, 1,
-				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-							weights[var41] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
 				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -2898,23 +2898,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-											indicator[i][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
+										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 								}
 							);
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var93, int forEnd$j$var93, int threadID$j$var93, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var93 = forStart$j$var93; j$var93 < forEnd$j$var93; j$var93 += 1)
-											p[i][j$var93] = (indicator[i][j$var93] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 								}
 							);
 						}
@@ -2928,23 +2928,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, 3, 1,
-				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-							weights[var41] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
 				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -2957,23 +2957,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-											indicator[i][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
+										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 								}
 							);
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var93, int forEnd$j$var93, int threadID$j$var93, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var93 = forStart$j$var93; j$var93 < forEnd$j$var93; j$var93 += 1)
-											p[i][j$var93] = (indicator[i][j$var93] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 								}
 							);
 						}
@@ -2988,24 +2988,24 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample46) {
-				sample46(0);
-				sample46(1);
-				sample46(2);
+			if(!fixedFlag$sample35) {
+				sample35(0);
+				sample35(1);
+				sample35(2);
 			}
-			if(!fixedFlag$sample53)
-				sample53();
+			if(!fixedFlag$sample42)
+				sample42();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample53)
-				sample53();
+			if(!fixedFlag$sample42)
+				sample42();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample46) {
-				sample46(2);
-				sample46(1);
-				sample46(0);
+			if(!fixedFlag$sample35) {
+				sample35(2);
+				sample35(1);
+				sample35(0);
 			}
 		}
 		
@@ -3030,23 +3030,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var22 = 0.0;
 		logProbability$weights = 0.0;
 		logProbability$indicator = 0.0;
 		logProbability$p = 0.0;
-		if(!fixedProbFlag$sample46) {
+		if(!fixedProbFlag$sample35) {
 			// Unrolled loop
-			logProbability$sample46[0] = 0.0;
-			logProbability$sample46[1] = 0.0;
-			logProbability$sample46[2] = 0.0;
+			logProbability$sample35[0] = 0.0;
+			logProbability$sample35[1] = 0.0;
+			logProbability$sample35[2] = 0.0;
 		}
-		logProbability$var48 = 0.0;
-		if(!fixedProbFlag$sample53)
+		logProbability$var40 = 0.0;
+		if(!fixedProbFlag$sample42)
 			logProbability$bias = 0.0;
-		logProbability$var100 = 0.0;
+		logProbability$var92 = 0.0;
 		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample105)
-			logProbability$var101 = 0.0;
+		if(!fixedProbFlag$sample94)
+			logProbability$var93 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -3066,11 +3066,11 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample46)
-			logProbabilityValue$sample46();
-		if(fixedFlag$sample53)
-			logProbabilityValue$sample53();
-		logProbabilityValue$sample105();
+		if(fixedFlag$sample35)
+			logProbabilityValue$sample35();
+		if(fixedFlag$sample42)
+			logProbabilityValue$sample42();
+		logProbabilityValue$sample94();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -3088,9 +3088,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample46();
-		logProbabilityValue$sample53();
-		logProbabilityValue$sample105();
+		logProbabilityValue$sample35();
+		logProbabilityValue$sample42();
+		logProbabilityValue$sample94();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -3107,9 +3107,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample46();
-		logProbabilityValue$sample53();
-		logProbabilityValue$sample105();
+		logProbabilityValue$sample35();
+		logProbabilityValue$sample42();
+		logProbabilityValue$sample94();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -3118,23 +3118,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, 3, 1,
-				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-							weights[var41] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
-		if(!fixedFlag$sample53)
+		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample46)
+		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, n, 1,
 				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -3147,23 +3147,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-											indicator[i][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
+										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 								}
 							);
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var93, int forEnd$j$var93, int threadID$j$var93, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var93 = forStart$j$var93; j$var93 < forEnd$j$var93; j$var93 += 1)
-											p[i][j$var93] = (indicator[i][j$var93] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 								}
 							);
 						}
@@ -3211,23 +3211,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-											indicator[i][j$var69] = Math.exp((weights[j$var69] * x[i][j$var69]));
+										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 								}
 							);
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var93, int forEnd$j$var93, int threadID$j$var93, org.sandwood.random.internal.Rng RNG$2) -> { 
+								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var93 = forStart$j$var93; j$var93 < forEnd$j$var93; j$var93 += 1)
-											p[i][j$var93] = (indicator[i][j$var93] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 								}
 							);
 						}

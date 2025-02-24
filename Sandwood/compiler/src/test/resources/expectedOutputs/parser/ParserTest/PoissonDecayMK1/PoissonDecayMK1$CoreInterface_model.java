@@ -26,17 +26,17 @@ interface PoissonDecayMK1$CoreInterface extends org.sandwood.runtime.internal.mo
 	// Setter for decayDetected.
 	public void set$decayDetected(int[] cv$value);
 
-	// Getter for fixedFlag$sample10.
-	public boolean get$fixedFlag$sample10();
+	// Getter for fixedFlag$sample19.
+	public boolean get$fixedFlag$sample19();
 
-	// Setter for fixedFlag$sample10.
-	public void set$fixedFlag$sample10(boolean cv$value);
+	// Setter for fixedFlag$sample19.
+	public void set$fixedFlag$sample19(boolean cv$value);
 
-	// Getter for fixedFlag$sample23.
-	public boolean get$fixedFlag$sample23();
+	// Getter for fixedFlag$sample6.
+	public boolean get$fixedFlag$sample6();
 
-	// Setter for fixedFlag$sample23.
-	public void set$fixedFlag$sample23(boolean cv$value);
+	// Setter for fixedFlag$sample6.
+	public void set$fixedFlag$sample6(boolean cv$value);
 
 	// Getter for length$decayDetected.
 	public int get$length$decayDetected();

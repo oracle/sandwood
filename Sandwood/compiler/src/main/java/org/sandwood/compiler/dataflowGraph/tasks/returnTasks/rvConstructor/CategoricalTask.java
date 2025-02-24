@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -17,7 +17,10 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 
 public class CategoricalTask extends RandomVariableConstructorTask<IntVariable, Categorical> {
+    public final ArrayVariable<DoubleVariable> elements;
+
     public CategoricalTask(ArrayVariable<DoubleVariable> elements, Location location) {
         super(DFType.CATEGORICAL, VariableType.Categorical, location, elements);
+        this.elements = elements.getCurrentInstance();
     }
 }

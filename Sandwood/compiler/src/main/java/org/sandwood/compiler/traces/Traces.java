@@ -25,6 +25,7 @@ import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
@@ -40,7 +41,7 @@ public abstract class Traces {
         // Map from branch points -> sink points -> traces to the sink.
         public final Map<ProducingDataflowTask<?>, Map<DataflowTaskArgDesc, Set<TraceHandle>>> sinkToConditional = new HashMap<>();
         // Map from branch points -> source -> set of traces.
-        public final Map<DataflowTaskArgDesc, Map<SampleTask<?,?>, Set<TraceHandle>>> conditionalToSource = new HashMap<>();
+        public final Map<DataflowTaskArgDesc, Map<SampleTask<?, ?>, Set<TraceHandle>>> conditionalToSource = new HashMap<>();
 
         public void addSinkToConditional(TraceHandle t) {
             ProducingDataflowTask<?> sink = t.peek().task;
@@ -52,8 +53,8 @@ public abstract class Traces {
             conditionalToSource.computeIfAbsent(d, k -> new LinkedHashMap<>());
         }
 
-        public void addConditionalToSource(DataflowTaskArgDesc d, SampleTask<?,?> source, TraceHandle t) {
-            Map<SampleTask<?,?>, Set<TraceHandle>> m = conditionalToSource.get(d);
+        public void addConditionalToSource(DataflowTaskArgDesc d, SampleTask<?, ?> source, TraceHandle t) {
+            Map<SampleTask<?, ?>, Set<TraceHandle>> m = conditionalToSource.get(d);
             m.computeIfAbsent(source, k -> new LinkedHashSet<>()).add(t);
         }
     }
@@ -85,12 +86,12 @@ public abstract class Traces {
 
         public void addVariables(Set<Variable<?>> vs, TraceHandle h, DataflowTaskArgDesc changePoint) {
             assert (h.get(0).task == task);
-            
+
             boolean observed = h.peek().task.getOutput().isObserved();
             int recordObserved = 0;
-            
+
             // Populate a map that will be used to work out how much of the trace to copy
-            // across and record the index where variables start being observed. 
+            // across and record the index where variables start being observed.
             Map<DataflowTask<?>, Integer> index = new HashMap<>();
             int size = h.size();
             for(int i = 0; i < size; i++) {
@@ -108,7 +109,7 @@ public abstract class Traces {
                 Trace trace = new Trace();
                 ProducingDataflowTask<?> t = v.getParent();
                 Integer pos = index.get(t);
-                
+
                 // Add any puts to array tasks before the passed trace is reached
                 while(pos == null) {
                     assert (t.getType() == DFType.PUT);
@@ -118,7 +119,7 @@ public abstract class Traces {
                     t = pt.value.getParent();
                     pos = index.get(t);
                 }
-                
+
                 if(observed && recordObserved <= pos)
                     observedVariables.add(v);
 
@@ -159,9 +160,19 @@ public abstract class Traces {
         public Set<ArrayVariable<?>> getRequiredArrays(Variable<?> v) {
             return requiredArrays.get(v);
         }
-        
+
         public boolean observedVariable(Variable<?> v) {
             return observedVariables.contains(v);
+        }
+    }
+
+    public static class LengthTraceDesc {
+        public final Map<PutTask<?>, Set<TraceHandle>> toPutTraces = new HashMap<>();
+
+        public void addTraceToPut(TraceHandle traceToPut) {
+            PutTask<?> pt = (PutTask<?>) traceToPut.get(0).task;
+            Set<TraceHandle> traces = toPutTraces.computeIfAbsent(pt, k -> new HashSet<>());
+            traces.add(traceToPut);
         }
     }
 
@@ -421,6 +432,15 @@ public abstract class Traces {
      * @return The set of values whose inputs need to be constructed.
      */
     public abstract Set<Variable<?>> getEvidenceVariables();
+
+    /**
+     * A method to get all the traces that lead from this array producing task to the put operation that inserted it
+     * into an outer array.
+     * 
+     * @param t The task that the trace ends at.
+     * @return The set of traces leading to this trace via an outer array.
+     */
+    public abstract LengthTraceDesc getLengthTraces(GetTask<?> t);
 
     // Recursive method to construct the cross product of the sets in each of the
     // argument positions.

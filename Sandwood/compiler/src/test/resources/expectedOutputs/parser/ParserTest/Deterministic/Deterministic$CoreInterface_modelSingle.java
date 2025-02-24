@@ -11,23 +11,23 @@ interface Deterministic$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Getter for b.
 	public int[] get$b();
 
-	// Getter for fixedFlag$sample32.
-	public boolean get$fixedFlag$sample32();
+	// Getter for fixedFlag$sample29.
+	public boolean get$fixedFlag$sample29();
 
-	// Setter for fixedFlag$sample32.
-	public void set$fixedFlag$sample32(boolean cv$value);
+	// Setter for fixedFlag$sample29.
+	public void set$fixedFlag$sample29(boolean cv$value);
 
-	// Getter for fixedFlag$sample58.
-	public boolean get$fixedFlag$sample58();
+	// Getter for fixedFlag$sample55.
+	public boolean get$fixedFlag$sample55();
 
-	// Setter for fixedFlag$sample58.
-	public void set$fixedFlag$sample58(boolean cv$value);
+	// Setter for fixedFlag$sample55.
+	public void set$fixedFlag$sample55(boolean cv$value);
 
-	// Getter for fixedFlag$sample78.
-	public boolean get$fixedFlag$sample78();
+	// Getter for fixedFlag$sample75.
+	public boolean get$fixedFlag$sample75();
 
-	// Setter for fixedFlag$sample78.
-	public void set$fixedFlag$sample78(boolean cv$value);
+	// Setter for fixedFlag$sample75.
+	public void set$fixedFlag$sample75(boolean cv$value);
 
 	// Getter for flips.
 	public boolean[] get$flips();

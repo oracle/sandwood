@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -31,6 +31,13 @@ public class NamedArrayVariable<A extends Variable<A>> extends NamedVariable<Arr
     @Override
     public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
         return new HashSet<>();
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        throw new CompilerException("Named variables are constructed out of context, so "
+                + "cannot have this operation performed on them. Attempts to call this are a bug in "
+                + "the compiler.");
     }
 
     @Override

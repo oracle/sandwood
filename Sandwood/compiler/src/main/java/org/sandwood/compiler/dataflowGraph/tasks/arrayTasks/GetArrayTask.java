@@ -24,11 +24,13 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
+import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionReturnTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -37,6 +39,12 @@ import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
+import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.Traces;
+import org.sandwood.compiler.traces.Traces.LengthTraceDesc;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
+import org.sandwood.compiler.traces.guards.ScopeConstructor.Guards;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -44,6 +52,8 @@ import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
 public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A>>
         implements ArrayProducingDataflowTask<A> {
+
+    private int lengthId = 0;
 
     public GetArrayTask(ArrayVariable<ArrayVariable<A>> array, IntVariable index, Location location) {
         super(array, index, false, location);
@@ -56,7 +66,7 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
 
     @Override
     public Set<VariableWrapper<IntVariable>> getPossibleLengths() {
-        return array.getPossibleChildLengths();
+        return array.getPossibleElementLengths(this);
     }
 
     private IRTreeReturn<IntVariable> getMinMaxLength(boolean findMax, CompilationContext compilationCtx) {
@@ -67,11 +77,11 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
         // multidimensional arrays being sampled it could be one of those.
         if(puts.isEmpty()) {
             // TODO convert this into a tail recursion
-            GetTask gt = this;
+            GetTask<?> gt = this;
             // Get a list of all the gets.
             Stack<GetTask<?>> gets = new Stack<>();
             gets.push(gt);
-            ProducingDataflowTask arrayParent = gt.array.getParent();
+            ProducingDataflowTask<?> arrayParent = gt.array.getParent();
             while(arrayParent.getType() == DFType.GET) {
                 GetTask<?> producingGt = (GetTask<?>) arrayParent;
                 gets.push(producingGt);
@@ -145,6 +155,79 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
         stmts.add(forStmt(body, IRTree.constant(0), load(length), IRTree.constant(1), index, true, Tree.NoComment));
         return sequential(stmts,
                 "Iterate through all arrays to find out the " + (findMax ? "max" : "min") + "imum size");
+    }
+
+    @Override
+    public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
+        LengthTraceDesc ld = compilationCtx.traces.getLengthTraces(this);
+        if(ld.toPutTraces.isEmpty()) {
+            // If there is no trace to a put then this array must have come from an input so read the value from there.
+            Stack<IntVariable> indexes = new Stack<>();
+            ArrayProducingDataflowTask<?> t = this;
+            DFType type = t.getType();
+            while(type != DFType.CONSTRUCT_INPUT) {
+                switch(type) {
+                    case GET: {
+                        GetTask<?> gt = (GetTask<?>) t;
+                        t = gt.array.getParent();
+                        indexes.push(gt.index);
+                        break;
+                    }
+                    case REDUCTION_RETURN: {
+                        ReductionReturnTask<?> r = (ReductionReturnTask<?>) t;
+                        t = (ArrayProducingDataflowTask<?>) r.leftInput.emptyValue.getParent();
+                        break;
+                    }
+                    default:
+                        throw new SandwoodException("Unexpected type " + t.getType());
+                }
+                type = t.getType();
+            }
+            Variable<?> shapeVar = ((ConstructArrayInput<?>) t).shapeVar();
+            // If this is a model input just calculate the value
+            if(shapeVar == null)
+                return getIntField(getOutput().getForwardIR(compilationCtx), "length");
+            // Otherwise read it out of the shape parameter
+            else {
+                compilationCtx.enterScope(scope());
+                IRTreeReturn<IntVariable> tree = dereferenceShapeVar(shapeVar.getForwardIR(compilationCtx), indexes,
+                        compilationCtx);
+                compilationCtx.leaveScope(scope());
+                return tree;
+            }
+        } else {
+            VariableDescription<IntVariable> lengthName = VariableNames.lengthCVName(array.getVarDesc().name, id(),
+                    lengthId++);
+            compilationCtx.enterScope(scope());
+            compilationCtx.addTreeToScope(scope(), IRTree.initializeVariable(lengthName, IRTree.constant(-1),
+                    "Allocate a local variable to hold the length of the array."));
+            ScopeConstructor sc = ScopeConstructor.construct(this, "calculate array length.", compilationCtx);
+
+            for(Set<TraceHandle> ts:ld.toPutTraces.values()) {
+                ScopeConstructor sci = sc.addBackConstraints(ts, Guards.NO_GUARDS, Traces.noDistributionTraces);
+                sci.addTree((TreeBuilderInfo t) -> {
+                    ArrayVariable<?> a = (ArrayVariable<?>) ((PutTask<?>) t.getTrace().get(0).task).value;
+                    compilationCtx.addTreeToScope(GlobalScope.scope,
+                            IRTree.store(lengthName, a.getLength(compilationCtx), Tree.NoComment));
+                });
+            }
+            compilationCtx.leaveScope(scope());
+            return load(lengthName);
+        }
+    }
+
+    private <B extends Variable<B>, C extends Variable<C>> IRTreeReturn<IntVariable> dereferenceShapeVar(
+            IRTreeReturn<B> shapeTree, Stack<IntVariable> indexes, CompilationContext compilationCtx) {
+        if(indexes.isEmpty()) {
+            if(shapeTree.getOutputType().isArray())
+                return getIntField(shapeTree, "length");
+            else
+                return (IRTreeReturn<IntVariable>) shapeTree;
+        } else {
+            IRTreeReturn<IntVariable> i = indexes.pop().getForwardIR(compilationCtx);
+            IRTreeReturn<ArrayVariable<C>> a = (IRTreeReturn<ArrayVariable<C>>) shapeTree;
+            return dereferenceShapeVar(arrayGet(a, i), indexes, compilationCtx);
+        }
     }
 
     @Override

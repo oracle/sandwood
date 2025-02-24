@@ -3,12 +3,12 @@ package org.sandwood.compiler.tests.parser;
 interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double get$bias();
 	public void set$bias(double cv$value);
-	public boolean get$fixedFlag$sample105();
-	public void set$fixedFlag$sample105(boolean cv$value);
-	public boolean get$fixedFlag$sample46();
-	public void set$fixedFlag$sample46(boolean cv$value);
-	public boolean get$fixedFlag$sample53();
-	public void set$fixedFlag$sample53(boolean cv$value);
+	public boolean get$fixedFlag$sample35();
+	public void set$fixedFlag$sample35(boolean cv$value);
+	public boolean get$fixedFlag$sample42();
+	public void set$fixedFlag$sample42(boolean cv$value);
+	public boolean get$fixedFlag$sample94();
+	public void set$fixedFlag$sample94(boolean cv$value);
 	public int get$k();
 	public double get$logProbability$bias();
 	public double get$logProbability$weights();

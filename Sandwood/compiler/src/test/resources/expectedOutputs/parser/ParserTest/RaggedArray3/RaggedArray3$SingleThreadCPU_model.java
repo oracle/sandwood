@@ -8,20 +8,20 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	
 	// Declare the variables for the model.
 	private double[][] a;
-	private double[] cv$var39$countGlobal;
+	private double[] cv$var37$countGlobal;
 	private double[] d;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample57 = false;
+	private boolean fixedFlag$sample39 = false;
+	private boolean fixedFlag$sample53 = false;
+	private boolean fixedProbFlag$sample39 = false;
+	private boolean fixedProbFlag$sample53 = false;
 	private int length$obs_measured;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
+	private double logProbability$var36;
 	private double logProbability$var38;
-	private double logProbability$var40;
-	private double logProbability$var53;
+	private double logProbability$var51;
 	private int[] obs;
 	private int[] obs_measured;
 	private boolean setFlag$d = false;
@@ -54,51 +54,51 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		d = cv$value;
 		setFlag$d = true;
 		
-		// Unset the fixed probability flag for sample 42 as it depends on d.
-		fixedProbFlag$sample42 = false;
+		// Unset the fixed probability flag for sample 39 as it depends on d.
+		fixedProbFlag$sample39 = false;
 		
-		// Unset the fixed probability flag for sample 57 as it depends on d.
-		fixedProbFlag$sample57 = false;
+		// Unset the fixed probability flag for sample 53 as it depends on d.
+		fixedProbFlag$sample53 = false;
 	}
 
-	// Getter for fixedFlag$sample42.
+	// Getter for fixedFlag$sample39.
 	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
+	public final boolean get$fixedFlag$sample39() {
+		return fixedFlag$sample39;
 	}
 
-	// Setter for fixedFlag$sample42.
+	// Setter for fixedFlag$sample39.
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
+	public final void set$fixedFlag$sample39(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
 		// need to be updated.
-		fixedFlag$sample42 = cv$value;
+		fixedFlag$sample39 = cv$value;
 		
-		// Should the probability of sample 42 be set to fixed. This will only every change
+		// Should the probability of sample 39 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
+		fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedProbFlag$sample39);
 		
-		// Should the probability of sample 57 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample42 && fixedProbFlag$sample57);
+		fixedProbFlag$sample53 = (fixedFlag$sample39 && fixedProbFlag$sample53);
 	}
 
-	// Getter for fixedFlag$sample57.
+	// Getter for fixedFlag$sample53.
 	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
+	public final boolean get$fixedFlag$sample53() {
+		return fixedFlag$sample53;
 	}
 
-	// Setter for fixedFlag$sample57.
+	// Setter for fixedFlag$sample53.
 	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample57 including if probabilities
+	public final void set$fixedFlag$sample53(boolean cv$value) {
+		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
 		// need to be updated.
-		fixedFlag$sample57 = cv$value;
+		fixedFlag$sample53 = cv$value;
 		
-		// Should the probability of sample 57 be set to fixed. This will only every change
+		// Should the probability of sample 53 be set to fixed. This will only every change
 		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedProbFlag$sample57);
+		fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedProbFlag$sample53);
 	}
 
 	// Getter for length$obs_measured.
@@ -153,8 +153,8 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		obs = cv$value;
 		setFlag$obs = true;
 		
-		// Unset the fixed probability flag for sample 57 as it depends on obs.
-		fixedProbFlag$sample57 = false;
+		// Unset the fixed probability flag for sample 53 as it depends on obs.
+		fixedProbFlag$sample53 = false;
 	}
 
 	// Getter for obs_measured.
@@ -183,12 +183,12 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		y = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample42 using sampled
+	// Calculate the probability of the samples represented by sample39 using sampled
 	// values.
-	private final void logProbabilityValue$sample42() {
-		// Determine if we need to calculate the values for sample task 42 or if we should
+	private final void logProbabilityValue$sample39() {
+		// Determine if we need to calculate the values for sample task 39 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample42) {
+		if(!fixedProbFlag$sample39) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -206,10 +206,27 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double[] cv$sampleValue = d;
 				{
 					{
-						double[] var37 = a[y];
+						double[] var35 = a[y];
+						
+						// Allocate a local variable to hold the length of the array.
+						int lengthCV$a$37_3 = -1;
+						
+						// calculate array length.
+						// 
+						// Looking for a path between Put 17 and consumer double[] 35.
+						{
+							if((0 == y))
+								lengthCV$a$37_3 = 2;
+						}
+						
+						// Looking for a path between Put 35 and consumer double[] 35.
+						{
+							if((1 == y))
+								lengthCV$a$37_3 = 3;
+						}
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var37));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_3));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -241,7 +258,7 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var38 = cv$sampleAccumulator;
+			logProbability$var36 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$d = cv$sampleProbability;
@@ -251,12 +268,12 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
+			if(fixedFlag$sample39)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample42 = fixedFlag$sample42;
+			fixedProbFlag$sample39 = fixedFlag$sample39;
 		}
 		// Using cached values.
 		else {
@@ -267,31 +284,31 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$d;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var38 = cv$rvAccumulator;
+			logProbability$var36 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
+			if(fixedFlag$sample39)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	// Calculate the probability of the samples represented by sample57 using sampled
+	// Calculate the probability of the samples represented by sample53 using sampled
 	// values.
-	private final void logProbabilityValue$sample57() {
-		// Determine if we need to calculate the values for sample task 57 or if we should
+	private final void logProbabilityValue$sample53() {
+		// Determine if we need to calculate the values for sample task 53 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var52 = 0; var52 < length$obs_measured; var52 += 1) {
+			for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -299,11 +316,28 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = obs[var52];
+					int cv$sampleValue = obs[var50];
 					{
 						{
+							// Allocate a local variable to hold the length of the array.
+							int lengthCV$a$37_4 = -1;
+							
+							// calculate array length.
+							// 
+							// Looking for a path between Put 17 and consumer double[] 35.
+							{
+								if((0 == y))
+									lengthCV$a$37_4 = 2;
+							}
+							
+							// Looking for a path between Put 35 and consumer double[] 35.
+							{
+								if((1 == y))
+									lengthCV$a$37_4 = 3;
+							}
+							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < d.length))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_4))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -336,10 +370,10 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var40 = cv$sampleAccumulator;
+			logProbability$var38 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var53 = cv$sampleAccumulator;
+			logProbability$var51 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -350,7 +384,7 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedFlag$sample42);
+			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample39);
 		}
 		// Using cached values.
 		else {
@@ -358,10 +392,10 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var53;
+			double cv$sampleValue = logProbability$var51;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var40 = cv$rvAccumulator;
+			logProbability$var38 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -373,40 +407,74 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 42 drawn from Dirichlet 38. Inference was performed using a Dirichlet
+	// by sample task 39 drawn from Dirichlet 36. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample42() {
+	private final void sample39() {
 		// A reference local to the function for the sample variable.
 		double[] cv$targetLocal = d;
 		
 		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var39$countGlobal;
+		double[] cv$countLocal = cv$var37$countGlobal;
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_1 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y))
+				lengthCV$a$37_1 = 2;
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y))
+				lengthCV$a$37_1 = 3;
+		}
 		
 		// Get the length of the array
-		int cv$arrayLength = a[y].length;
+		int cv$arrayLength = lengthCV$a$37_1;
 		
 		// Initialize the array values to 0.
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
 		{
-			// Processing random variable 40.
+			// Processing random variable 38.
 			{
 				{
-					// Processing sample task 57 of consumer random variable null.
+					// Processing sample task 53 of consumer random variable null.
 					{
-						for(int var52 = 0; var52 < length$obs_measured; var52 += 1)
-							// Increment the sample counter with the value sampled by sample task 57 of random
-							// variable var40
-							cv$countLocal[obs[var52]] = (cv$countLocal[obs[var52]] + 1.0);
+						for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+							// Increment the sample counter with the value sampled by sample task 53 of random
+							// variable var38
+							cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
 					}
 				}
 			}
 		}
 		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_2 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y))
+				lengthCV$a$37_2 = 2;
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y))
+				lengthCV$a$37_2 = 3;
+		}
+		
 		// Calculate the new sample value
 		// 
 		// Calculate a new sample value and write it into cv$targetLocal.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -414,13 +482,15 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Calculate the longest array this random variable could produce and allocate an
-		// array large enough to handle this.
-		int cv$max = 0;
-		cv$max = Math.max(cv$max, d.length);
+		// Variable to record the maximum value of Task Get 37. Initially set to the value
+		// of putTask 17.
+		int cv$var34$max = 2;
 		
-		// Allocation of cv$var39$countGlobal for single threaded execution
-		cv$var39$countGlobal = new double[cv$max];
+		// Test if the input to putTask 35 is larger than the current values.
+		cv$var34$max = Math.max(cv$var34$max, 3);
+		
+		// Allocation of cv$var37$countGlobal for single threaded execution
+		cv$var37$countGlobal = new double[cv$var34$max];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -437,7 +507,23 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!setFlag$d) {
 			// Constructor for d
 			{
-				d = new double[d.length];
+				// Allocate a local variable to hold the length of the array.
+				int lengthCV$a$37_0 = -1;
+				
+				// calculate array length.
+				// 
+				// Looking for a path between Put 17 and consumer double[] 35.
+				{
+					if((0 == y))
+						lengthCV$a$37_0 = 2;
+				}
+				
+				// Looking for a path between Put 35 and consumer double[] 35.
+				{
+					if((1 == y))
+						lengthCV$a$37_0 = 3;
+				}
+				d = new double[lengthCV$a$37_0];
 			}
 		}
 		
@@ -456,11 +542,52 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample42)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
-		for(int var52 = 0; var52 < length$obs_measured; var52 += 1) {
-			if(!fixedFlag$sample57)
-				obs[var52] = DistributionSampling.sampleCategorical(RNG$, d);
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_5 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_5 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_5 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_5, d);
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_6 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample53)
+					lengthCV$a$37_6 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample53)
+					lengthCV$a$37_6 = 3;
+			}
+		}
+		for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+			if(!fixedFlag$sample53)
+				obs[var50] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$37_6);
 		}
 	}
 
@@ -468,16 +595,56 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are calculated and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample42)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_8 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_8 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_8 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_8, d);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample42)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_7 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_7 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_7 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_7, d);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -485,13 +652,13 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample42)
-				sample42();
+			if(!fixedFlag$sample39)
+				sample39();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample42)
-				sample42();
+			if(!fixedFlag$sample39)
+				sample39();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -502,13 +669,13 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// etc.
 	@Override
 	public final void initializeConstants() {
-		double[] var8 = a[0];
-		var8[0] = 0.4;
-		var8[1] = 0.6;
-		double[] var21 = a[1];
-		var21[0] = 0.2;
-		var21[1] = 0.3;
-		var21[2] = 0.5;
+		double[] var6 = a[0];
+		var6[0] = 0.4;
+		var6[1] = 0.6;
+		double[] var19 = a[1];
+		var19[0] = 0.2;
+		var19[1] = 0.3;
+		var19[2] = 0.5;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -521,13 +688,13 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var38 = 0.0;
-		if(!fixedProbFlag$sample42)
+		logProbability$var36 = 0.0;
+		if(!fixedProbFlag$sample39)
 			logProbability$d = 0.0;
-		logProbability$var40 = 0.0;
+		logProbability$var38 = 0.0;
 		logProbability$obs = 0.0;
-		if(!fixedProbFlag$sample57)
-			logProbability$var53 = 0.0;
+		if(!fixedProbFlag$sample53)
+			logProbability$var51 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -547,9 +714,9 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample42)
-			logProbabilityValue$sample42();
-		logProbabilityValue$sample57();
+		if(fixedFlag$sample39)
+			logProbabilityValue$sample39();
+		logProbabilityValue$sample53();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -567,8 +734,8 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample57();
+		logProbabilityValue$sample39();
+		logProbabilityValue$sample53();
 	}
 
 	// Method to calculate the probabilities of all the samples in the model including
@@ -585,8 +752,8 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Calculate the probabilities for each sample task in the model, generating probabilities
 		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample42();
-		logProbabilityValue$sample57();
+		logProbabilityValue$sample39();
+		logProbabilityValue$sample53();
 	}
 
 	// Method to generate a random state of the model including random outputs, and then
@@ -594,8 +761,28 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void logProbabilityGeneration() {
 		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample42)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], d);
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_9 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_9 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_9 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_9, d);
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

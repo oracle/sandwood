@@ -118,7 +118,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
         public final IRTreeReturn<IntVariable> valuePos = load(valuePosName);
 
-        // TODO remove this can make all argument creation in array tracing scoped.
+        // TODO remove this and make all argument creation in array tracing scoped.
         List<IRTreeReturn<?>> consumerRVArgs;
 
         protected ScalarProbFunctionData(SampleTask<A, B> sample, IntVariable noStates,
@@ -134,7 +134,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     private final static VariableDescription<IntVariable> valuePosName = VariableNames.calcVarName("valuePos",
             VariableType.IntVariable, false);
 
-    protected final static VariableDescription<IntVariable> noStatesName = VariableNames.calcVarName("noStates",
+    protected final static VariableDescription<IntVariable> numStatesName = VariableNames.calcVarName("numNumStates",
             VariableType.IntVariable, false);
 
     // Flags for the different variables that we will need to construct for this
@@ -186,8 +186,9 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
     @Override
     protected void constructFunctionVariables(CompilationContext compilationCtx, FuncData funcData) {
+        // TODO update this so that it just recovers the maximum number of states from the random variable.
         compilationCtx.addTreeToScope(GlobalScope.scope,
-                initializeVariable(noStatesName, constant(0), "Calculate the number of states to evaluate."));
+                initializeVariable(numStatesName, constant(0), "Calculate the number of states to evaluate."));
 
         ScopeConstructor a = ScopeConstructor
                 .construct(funcData.sampleDesc.sample, funcData.distributionTraces,
@@ -196,8 +197,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                         Tree.NoComment, compilationCtx);
         a = a.applyAllDistributedArguments();
         a.addTree((TreeBuilderInfo info) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope, store(noStatesName,
-                    max(load(noStatesName), funcData.noStates.getForwardIR(compilationCtx)), getInferenceType()));
+            compilationCtx.addTreeToScope(GlobalScope.scope, store(numStatesName,
+                    max(load(numStatesName), funcData.noStates.getForwardIR(compilationCtx)), getInferenceType()));
         });
 
         constructFunctionVariablesProb(compilationCtx, funcData);
@@ -232,7 +233,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         VariableDescription<IntVariable> indexName = VariableNames.calcVarName("i", VariableType.IntVariable, true);
         IRTreeVoid body = arrayPut(load(consumerSampleDistributionAccumulator), load(indexName), constant(0.0),
                 Tree.NoComment);
-        IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNoStates().getForwardIR(compilationCtx),
+        IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNumStates().getForwardIR(compilationCtx),
                 constant(1), indexName, true, "Zero all the elements in the distribution accumulator");
         compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
@@ -283,7 +284,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // Place the body statements in a loop that will iterate for all the elements in
         // the distribution.
         IRTreeVoid body = sequential(bodyStmts, Tree.NoComment);
-        IRTreeVoid loop = IRTree.forStmt(body, constant(0), s.randomVariable.getNoStates().getForwardIR(compilationCtx),
+        IRTreeVoid loop = IRTree.forStmt(body, constant(0), s.randomVariable.getNumStates().getForwardIR(compilationCtx),
                 constant(1), indexName, true, "Calculate the overlap for each element in the distribution");
         compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
@@ -422,8 +423,12 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         for(int i = 0; i < noValues; i++)
             args.add(values[i]);
 
-        for(int i = 0; i < noInputs; i++)
-            args.add(constructScopedArg(randomInputs.get(i), compilationCtx));
+        for(int i = 0; i < noInputs; i++) {
+            Variable<?> v = randomInputs.get(i);
+            args.add(constructScopedArg(v, compilationCtx));
+            if(v.getType().isArray())
+                args.add(constructScopedArg(((ArrayVariable<?>)v).length(), compilationCtx));
+        }
         return args;
     }
 
@@ -468,7 +473,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // Push the scope onto the stack.
         ScopeStack.pushScope(GlobalScope.scope);
 
-        ForTask loop = Sandwood.forLoop(Variable.intVariable(0), Variable.namedVariable(noStatesName),
+        ForTask loop = Sandwood.forLoop(Variable.intVariable(0), Variable.namedVariable(numStatesName),
                 Variable.intVariable(1), true, (i) -> {
                     i.setAlias(valuePosName);
                     i.setUniqueVarDesc(valuePosName);

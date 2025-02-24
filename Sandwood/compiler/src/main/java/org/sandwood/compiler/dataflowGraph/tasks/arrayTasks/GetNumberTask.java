@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -77,8 +77,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
             } else {
                 // If the index is drawn from a random variable check all possible values.
                 IRTreeReturn<IntVariable> start = IRTree.max(IRTree.constant(0), index.getMin(compilationCtx));
-                IRTreeReturn<IntVariable> end = IRTree.min(
-                        IRTree.getIntField(array.getForwardIR(compilationCtx), "length"),
+                IRTreeReturn<IntVariable> end = IRTree.min(array.getLength(compilationCtx),
                         IRTree.addII(index.getMax(compilationCtx), IRTree.constant(1)));
                 VariableDescription<IntVariable> indexDesc = VariableNames.calcVarName(output, "maxIndex",
                         VariableType.IntVariable);

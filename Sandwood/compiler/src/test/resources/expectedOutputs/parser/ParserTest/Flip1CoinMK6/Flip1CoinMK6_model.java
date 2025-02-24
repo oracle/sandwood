@@ -34,13 +34,13 @@ public class Flip1CoinMK6 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed);
+                system$c.set$fixedFlag$sample9(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample17())
+            if(system$c.get$fixedFlag$sample9())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class Flip1CoinMK6 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample30(fixed);
+                system$c.set$fixedFlag$sample22(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample30())
+            if(system$c.get$fixedFlag$sample22())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -104,13 +104,13 @@ public class Flip1CoinMK6 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample43(fixed);
+                system$c.set$fixedFlag$sample35(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample43())
+            if(system$c.get$fixedFlag$sample35())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -287,11 +287,11 @@ public class Flip1CoinMK6 extends Model {
 
         //Set fixed flags
         if(bias.isSet())
-            newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
+            newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
         if(flips1.isSet())
-            newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30());
+            newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
         if(flips2.isSet())
-            newCore.set$fixedFlag$sample43(oldCore.get$fixedFlag$sample43());
+            newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
     }
 
     /**

@@ -41,9 +41,11 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
+import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Traces;
+import org.sandwood.compiler.traces.guards.DistSampleDesc;
 import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tree;
@@ -430,11 +432,6 @@ public class CompilationContext {
 
     private final Stack<Set<Variable<?>>> initialized = new Stack<>();
 
-    /**
-     * Recording of the distributed random variables that have had their values set.
-     */
-    private final Set<DistributionSampleTask<?, ?>> initializedSamples = new HashSet<>();
-
     private boolean fullInferenceRequired = true;
 
     private final Stack<IRTreeReturn<BooleanVariable>> codeGuard = new Stack<>();
@@ -446,8 +443,19 @@ public class CompilationContext {
 
     public final Traces traces;
 
-    // A set to record which sub arrays are required in locations where only some sub arrays are required.
+    /** A set to record which sub arrays are required in locations where only some sub arrays are required. */
     private Set<ArrayVariable<?>> requiredArrays = null;
+
+    /**
+     * A set to track which array lengths are being calculated so that infinite loops can be trapped without waiting for
+     * a stack overflow exception.
+     */
+    private final Set<ArrayVariable<?>> arrayLengths = new HashSet<>();
+
+    /**
+     * A stack to track the distribution samples that have already been explored by outer scope constructors.
+     */
+    private final Stack<Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>>> exploredDistSamples = new Stack<>();
 
     public CompilationContext(CompilationOptions options, Traces traces, ExecutionType target) {
         this.traces = traces;
@@ -536,7 +544,8 @@ public class CompilationContext {
         substitutions.removeAllSubstitutes();
         initialized.clear();
         initialized.push(new HashSet<>());
-        initializedSamples.clear();
+        exploredDistSamples.clear();
+        exploredDistSamples.push(new HashMap<>());
     }
 
     /**
@@ -674,15 +683,6 @@ public class CompilationContext {
 
     public void popInitializedArrays() {
         initialized.pop();
-    }
-
-    // Track initialized distribution Samples
-    public void addInitialized(DistributionSampleTask<?, ?> s) {
-        initializedSamples.add(s);
-    }
-
-    public boolean initialized(DistributionSampleTask<?, ?> s) {
-        return initializedSamples.contains(s);
     }
 
     /**
@@ -865,7 +865,7 @@ public class CompilationContext {
     public void setInInference(boolean inInference) {
         inferenceRanges.setInInference(inInference);
     }
-    
+
     public boolean inInference() {
         return inferenceRanges.inInference;
     }
@@ -945,5 +945,29 @@ public class CompilationContext {
             return true;
         else
             return requiredArrays.contains(array);
+    }
+
+    public void addLengthArray(ArrayVariable<?> a) {
+        if(arrayLengths.contains(a))
+            throw new CompilerException("Entered an infinite loop calculating the length of array "
+                    + (a.aliasSet() ? a.getAlias() : a.getUniqueVarDesc()) + " at " + a.getLocation()
+                    + ". This is either an error in the model that should have been detected earlier, or an error in the compiler.");
+        arrayLengths.add(a);
+    }
+
+    public void removeLengthArray(ArrayVariable<?> a) {
+        arrayLengths.remove(a);
+    }
+
+    public void pushExploredDistSamples(Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> m) {
+        exploredDistSamples.push(m);
+    }
+
+    public Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> peekExploredDistSamples() {
+        return exploredDistSamples.peek();
+    }
+
+    public void popExploredDistSamples() {
+        exploredDistSamples.pop();
     }
 }

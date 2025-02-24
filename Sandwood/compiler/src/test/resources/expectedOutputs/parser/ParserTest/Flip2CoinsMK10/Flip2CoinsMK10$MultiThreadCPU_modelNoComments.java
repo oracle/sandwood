@@ -8,12 +8,12 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK10$CoreInterface {
 	private double[] bias;
 	private int coins;
-	private boolean fixedFlag$sample19 = false;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample32 = false;
-	private boolean fixedProbFlag$sample57 = false;
+	private boolean fixedFlag$sample10 = false;
+	private boolean fixedFlag$sample23 = false;
+	private boolean fixedFlag$sample48 = false;
+	private boolean fixedProbFlag$sample10 = false;
+	private boolean fixedProbFlag$sample23 = false;
+	private boolean fixedProbFlag$sample48 = false;
 	private boolean[][] flips;
 	private boolean[][] flipsMeasured;
 	private double logProbability$$evidence;
@@ -22,9 +22,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$beta;
 	private double logProbability$bias;
 	private double logProbability$flips;
-	private double[] logProbability$sample57;
-	private double logProbability$var16;
-	private double logProbability$var29;
+	private double[] logProbability$sample48;
+	private double logProbability$var10;
+	private double logProbability$var23;
 	private boolean setFlag$bias = false;
 	private boolean setFlag$flips = false;
 	private int[] shape;
@@ -43,9 +43,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
 		setFlag$bias = true;
-		fixedProbFlag$sample19 = false;
-		fixedProbFlag$sample32 = false;
-		fixedProbFlag$sample57 = false;
+		fixedProbFlag$sample10 = false;
+		fixedProbFlag$sample23 = false;
+		fixedProbFlag$sample48 = false;
 	}
 
 	@Override
@@ -54,38 +54,38 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
+	public final boolean get$fixedFlag$sample10() {
+		return fixedFlag$sample10;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
-		fixedProbFlag$sample57 = (fixedFlag$sample19 && fixedProbFlag$sample57);
+	public final void set$fixedFlag$sample10(boolean cv$value) {
+		fixedFlag$sample10 = cv$value;
+		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
+		fixedProbFlag$sample48 = (fixedFlag$sample10 && fixedProbFlag$sample48);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample32() {
-		return fixedFlag$sample32;
+	public final boolean get$fixedFlag$sample23() {
+		return fixedFlag$sample23;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample32(boolean cv$value) {
-		fixedFlag$sample32 = cv$value;
-		fixedProbFlag$sample32 = (fixedFlag$sample32 && fixedProbFlag$sample32);
-		fixedProbFlag$sample57 = (fixedFlag$sample32 && fixedProbFlag$sample57);
+	public final void set$fixedFlag$sample23(boolean cv$value) {
+		fixedFlag$sample23 = cv$value;
+		fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedProbFlag$sample23);
+		fixedProbFlag$sample48 = (fixedFlag$sample23 && fixedProbFlag$sample48);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
+	public final boolean get$fixedFlag$sample48() {
+		return fixedFlag$sample48;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value) {
-		fixedFlag$sample57 = cv$value;
-		fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedProbFlag$sample57);
+	public final void set$fixedFlag$sample48(boolean cv$value) {
+		fixedFlag$sample48 = cv$value;
+		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$flips(boolean[][] cv$value) {
 		flips = cv$value;
 		setFlag$flips = true;
-		fixedProbFlag$sample57 = false;
+		fixedProbFlag$sample48 = false;
 	}
 
 	@Override
@@ -150,8 +150,8 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		shape = cv$value;
 	}
 
-	private final void logProbabilityValue$sample19() {
-		if(!fixedProbFlag$sample19) {
+	private final void logProbabilityValue$sample10() {
+		if(!fixedProbFlag$sample10) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -160,9 +160,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				double cv$sampleValue = bias[0];
 				{
 					{
-						double var12 = 1.0;
-						double var13 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var12, var13));
+						double var6 = 1.0;
+						double var7 = 1.0;
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var6, var7));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -183,28 +183,28 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$beta = (logProbability$beta + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleProbability;
+			logProbability$var10 = cv$sampleProbability;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample19)
+			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample19 = fixedFlag$sample19;
+			fixedProbFlag$sample10 = fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var16;
+			double cv$sampleValue = logProbability$var10;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$beta = (logProbability$beta + cv$rvAccumulator);
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample19)
+			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample32() {
-		if(!fixedProbFlag$sample32) {
+	private final void logProbabilityValue$sample23() {
+		if(!fixedProbFlag$sample23) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			for(int i = 1; i < coins; i += 1) {
@@ -214,9 +214,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					double cv$sampleValue = bias[i];
 					{
 						{
-							double var12 = 1.0;
-							double var13 = 1.0;
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var12, var13));
+							double var6 = 1.0;
+							double var7 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var6, var7));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -238,40 +238,40 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$beta = (logProbability$beta + cv$sampleAccumulator);
-			logProbability$var29 = cv$sampleAccumulator;
+			logProbability$var23 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample32)
+			if(fixedFlag$sample23)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample32 = fixedFlag$sample32;
+			fixedProbFlag$sample23 = fixedFlag$sample23;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var29;
+			double cv$sampleValue = logProbability$var23;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$beta = (logProbability$beta + cv$rvAccumulator);
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample32)
+			if(fixedFlag$sample23)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample57() {
-		if(!fixedProbFlag$sample57) {
+	private final void logProbabilityValue$sample48() {
+		if(!fixedProbFlag$sample48) {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
 				double cv$sampleAccumulator = 0.0;
-				for(int var53 = 0; var53 < shape[j]; var53 += 1) {
+				for(int var47 = 0; var47 < shape[j]; var47 += 1) {
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					double cv$probabilityReached = 0.0;
 					{
-						boolean cv$sampleValue = flips[j][var53];
+						boolean cv$sampleValue = flips[j][var47];
 						{
 							{
-								double var42 = bias[j];
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var42));
+								double var36 = bias[j];
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var36));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -293,17 +293,17 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli[((j - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample57[((j - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$sample48[((j - 0) / 1)] = cv$sampleAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample57 = ((fixedFlag$sample57 && fixedFlag$sample19) && fixedFlag$sample32);
+			fixedProbFlag$sample48 = ((fixedFlag$sample48 && fixedFlag$sample10) && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample57[((j - 0) / 1)];
+				double cv$sampleValue = logProbability$sample48[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$bernoulli[((j - 0) / 1)] = cv$rvAccumulator;
@@ -314,7 +314,7 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 	}
 
-	private final void sample19() {
+	private final void sample10() {
 		int cv$sum = 0;
 		int cv$count = 0;
 		{
@@ -323,9 +323,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					for(int j = 0; j < coins; j += 1) {
 						if((0 == j)) {
 							{
-								for(int var53 = 0; var53 < shape[j]; var53 += 1) {
+								for(int var47 = 0; var47 < shape[j]; var47 += 1) {
 									cv$count = (cv$count + 1);
-									if(flips[j][var53])
+									if(flips[j][var47])
 										cv$sum = (cv$sum + 1);
 								}
 							}
@@ -334,11 +334,11 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			}
 		}
-		double var16 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[0] = var16;
+		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		bias[0] = var10;
 	}
 
-	private final void sample32(int i, int threadID$cv$i, Rng RNG$) {
+	private final void sample23(int i, int threadID$cv$i, Rng RNG$) {
 		int cv$sum = 0;
 		int cv$count = 0;
 		{
@@ -347,9 +347,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					for(int j = 0; j < coins; j += 1) {
 						if((i == j)) {
 							{
-								for(int var53 = 0; var53 < shape[j]; var53 += 1) {
+								for(int var47 = 0; var47 < shape[j]; var47 += 1) {
 									cv$count = (cv$count + 1);
-									if(flips[j][var53])
+									if(flips[j][var47])
 										cv$sum = (cv$sum + 1);
 								}
 							}
@@ -358,8 +358,8 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			}
 		}
-		double var29 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[i] = var29;
+		double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		bias[i] = var23;
 	}
 
 	@Override
@@ -383,18 +383,18 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$bernoulli = new double[((((shape.length - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample57 = new double[((((shape.length - 1) - 0) / 1) + 1)];
+			logProbability$sample48 = new double[((((shape.length - 1) - 0) / 1) + 1)];
 		}
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample19)
+		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		parallelFor(RNG$, 1, coins, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample32)
+						if(!fixedFlag$sample23)
 							bias[i] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 					}
 			}
@@ -404,12 +404,12 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				for(int index$j = forStart$index$j; index$j < forEnd$index$j; index$j += 1) {
 						int j = index$j;
 						int threadID$j = threadID$index$j;
-						boolean[] var44 = flips[j];
+						boolean[] var38 = flips[j];
 						parallelFor(RNG$1, 0, shape[j], 1,
-							(int forStart$var53, int forEnd$var53, int threadID$var53, org.sandwood.random.internal.Rng RNG$2) -> { 
-								for(int var53 = forStart$var53; var53 < forEnd$var53; var53 += 1) {
-										if(!fixedFlag$sample57)
-											var44[var53] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
+							(int forStart$var47, int forEnd$var47, int threadID$var47, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int var47 = forStart$var47; var47 < forEnd$var47; var47 += 1) {
+										if(!fixedFlag$sample48)
+											var38[var47] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
 									}
 							}
 						);
@@ -420,12 +420,12 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample19)
+		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		parallelFor(RNG$, 1, coins, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample32)
+						if(!fixedFlag$sample23)
 							bias[i] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 					}
 			}
@@ -434,12 +434,12 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample19)
+		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		parallelFor(RNG$, 1, coins, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample32)
+						if(!fixedFlag$sample23)
 							bias[i] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 					}
 			}
@@ -449,13 +449,13 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample19)
-				sample19();
+			if(!fixedFlag$sample10)
+				sample10();
 			parallelFor(RNG$, 1, coins, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-							if(!fixedFlag$sample32)
-								sample32(i, threadID$i, RNG$1);
+							if(!fixedFlag$sample23)
+								sample23(i, threadID$i, RNG$1);
 						}
 				}
 			);
@@ -463,13 +463,13 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			parallelFor(RNG$, 1, coins, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-							if(!fixedFlag$sample32)
-								sample32(i, threadID$i, RNG$1);
+							if(!fixedFlag$sample23)
+								sample23(i, threadID$i, RNG$1);
 						}
 				}
 			);
-			if(!fixedFlag$sample19)
-				sample19();
+			if(!fixedFlag$sample10)
+				sample10();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -484,16 +484,16 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$evidence = 0.0;
 		logProbability$beta = 0.0;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample19)
-			logProbability$var16 = 0.0;
-		if(!fixedProbFlag$sample32)
-			logProbability$var29 = 0.0;
+		if(!fixedProbFlag$sample10)
+			logProbability$var10 = 0.0;
+		if(!fixedProbFlag$sample23)
+			logProbability$var23 = 0.0;
 		for(int j = 0; j < coins; j += 1)
 			logProbability$bernoulli[((j - 0) / 1)] = 0.0;
 		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample57) {
+		if(!fixedProbFlag$sample48) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample57[((j - 0) / 1)] = 0.0;
+				logProbability$sample48[((j - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -505,37 +505,37 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample19)
-			logProbabilityValue$sample19();
-		if(fixedFlag$sample32)
-			logProbabilityValue$sample32();
-		logProbabilityValue$sample57();
+		if(fixedFlag$sample10)
+			logProbabilityValue$sample10();
+		if(fixedFlag$sample23)
+			logProbabilityValue$sample23();
+		logProbabilityValue$sample48();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample19();
-		logProbabilityValue$sample32();
-		logProbabilityValue$sample57();
+		logProbabilityValue$sample10();
+		logProbabilityValue$sample23();
+		logProbabilityValue$sample48();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample19();
-		logProbabilityValue$sample32();
-		logProbabilityValue$sample57();
+		logProbabilityValue$sample10();
+		logProbabilityValue$sample23();
+		logProbabilityValue$sample48();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample19)
+		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		parallelFor(RNG$, 1, coins, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample32)
+						if(!fixedFlag$sample23)
 							bias[i] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 					}
 			}

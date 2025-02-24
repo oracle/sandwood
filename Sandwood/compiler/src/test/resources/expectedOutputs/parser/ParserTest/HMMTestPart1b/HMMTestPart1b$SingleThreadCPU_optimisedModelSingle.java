@@ -337,7 +337,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v) + DistributionSampling.logProbabilityDirichlet(m[1], v));
+			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
 			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -516,8 +516,6 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// just use cached values.
 		if(!fixedProbFlag$sample50) {
 			// Generating probabilities for sample task
-			double[] var47 = m[0];
-			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -541,7 +539,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= st) && (st < var47.length))?Math.log(var47[st]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= st) && (st < 2))?Math.log(m[0][st]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -726,7 +724,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Calculate a new sample value and write it into cv$targetLocal.
 		// 
 		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, m[var27]);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, m[var27], 2);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -768,55 +766,12 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// by sample task 50 drawn from Categorical 48. Inference was performed using variable
 	// marginalization.
 	private final void sample50() {
-		{
-			// Write out the new value of the sample.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			st = 0;
-			
-			// Variable declaration of cv$temp$0$var47 moved.
-			// 
-			// Constructing a random variable input for use later.
-			double[] cv$temp$0$var47 = m[0];
-			
-			// Save the calculated index value into the array of index value probabilities
-			// 
-			// Get a local reference to the scratch space.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			// 
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 53 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + ((0 < cv$temp$0$var47.length)?Math.log(cv$temp$0$var47[0]):Double.NEGATIVE_INFINITY));
-		}
-		
 		// Write out the new value of the sample.
 		// 
 		// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		st = 1;
-		
-		// Variable declaration of cv$temp$0$var47 moved.
-		// 
-		// Constructing a random variable input for use later.
-		double[] cv$temp$0$var47 = m[0];
+		// Substituted "cv$valuePos" with its value "0".
+		st = 0;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -839,8 +794,41 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// Value of the variable at this index
 		// 
+		// cv$temp$0$var47's comment
+		// Constructing a random variable input for use later.
+		cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + Math.log(m[0][0]));
+		
+		// Write out the new value of the sample.
+		// 
+		// Value of the variable at this index
+		// 
 		// Substituted "cv$valuePos" with its value "1".
-		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + ((1 < cv$temp$0$var47.length)?Math.log(cv$temp$0$var47[1]):Double.NEGATIVE_INFINITY));
+		st = 1;
+		
+		// Save the calculated index value into the array of index value probabilities
+		// 
+		// Get a local reference to the scratch space.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 53 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Value of the variable at this index
+		// 
+		// cv$temp$0$var47's comment
+		// Constructing a random variable input for use later.
+		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + Math.log(m[0][1]));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -904,8 +892,9 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// Write out the new value of the sample.
 		// 
-		// Get a local reference to the scratch space.
-		st = DistributionSampling.sampleCategorical(RNG$, cv$var49$stateProbabilityGlobal);
+		// cv$numNumStates's comment
+		// variable marginalization
+		st = DistributionSampling.sampleCategorical(RNG$, cv$var49$stateProbabilityGlobal, 2);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -914,6 +903,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocateScratch() {
 		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		// 
 		// Allocation of cv$var28$countGlobal for single threaded execution
 		cv$var28$countGlobal = new double[2];
 		
@@ -952,8 +943,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -964,7 +955,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 		if(!fixedFlag$sample53)
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
 	}
@@ -975,8 +966,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationDistributionsNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -987,7 +978,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -996,8 +987,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1008,7 +999,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1164,8 +1155,8 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Generate sample values for every call to sample in the model.
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, m[1]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1176,7 +1167,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0]);
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a

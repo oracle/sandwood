@@ -34,13 +34,13 @@ public class PoissonDecayMK1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample23(fixed);
+                system$c.set$fixedFlag$sample19(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample23())
+            if(system$c.get$fixedFlag$sample19())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -69,13 +69,13 @@ public class PoissonDecayMK1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample10(fixed);
+                system$c.set$fixedFlag$sample6(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample10())
+            if(system$c.get$fixedFlag$sample6())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -259,9 +259,9 @@ public class PoissonDecayMK1 extends Model {
 
         //Set fixed flags
         if(decay.isSet())
-            newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
+            newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
         if(rate.isSet())
-            newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+            newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }
 
     /**

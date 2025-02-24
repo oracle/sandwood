@@ -4,12 +4,12 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK3$CoreInterface {
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample44 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean fixedProbFlag$sample44 = false;
+	private boolean fixedFlag$sample21 = false;
+	private boolean fixedFlag$sample38 = false;
+	private boolean fixedProbFlag$sample21 = false;
+	private boolean fixedProbFlag$sample38 = false;
 	private double[] generated;
-	private boolean[] guard$sample26gaussian43$global;
+	private boolean[] guard$sample21gaussian37$global;
 	private double[] indirection;
 	private int length$observed;
 	private double logProbability$$evidence;
@@ -17,9 +17,9 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$generated;
 	private double logProbability$indirection;
 	private double logProbability$sample;
-	private double[] logProbability$sample44;
-	private double logProbability$var22;
-	private double[] logProbability$var39;
+	private double[] logProbability$sample38;
+	private double logProbability$var20;
+	private double[] logProbability$var37;
 	private double[] observed;
 	private double[] sample;
 	private boolean setFlag$generated = false;
@@ -32,26 +32,26 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample26() {
-		return fixedFlag$sample26;
+	public final boolean get$fixedFlag$sample21() {
+		return fixedFlag$sample21;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value) {
-		fixedFlag$sample26 = cv$value;
-		fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
-		fixedProbFlag$sample44 = (fixedFlag$sample26 && fixedProbFlag$sample44);
+	public final void set$fixedFlag$sample21(boolean cv$value) {
+		fixedFlag$sample21 = cv$value;
+		fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
+		fixedProbFlag$sample38 = (fixedFlag$sample21 && fixedProbFlag$sample38);
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample44() {
-		return fixedFlag$sample44;
+	public final boolean get$fixedFlag$sample38() {
+		return fixedFlag$sample38;
 	}
 
 	@Override
-	public final void set$fixedFlag$sample44(boolean cv$value) {
-		fixedFlag$sample44 = cv$value;
-		fixedProbFlag$sample44 = (fixedFlag$sample44 && fixedProbFlag$sample44);
+	public final void set$fixedFlag$sample38(boolean cv$value) {
+		fixedFlag$sample38 = cv$value;
+		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$generated(double[] cv$value) {
 		generated = cv$value;
 		setFlag$generated = true;
-		fixedProbFlag$sample44 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -125,8 +125,8 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
 		setFlag$sample = true;
-		fixedProbFlag$sample26 = false;
-		fixedProbFlag$sample44 = false;
+		fixedProbFlag$sample21 = false;
+		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -134,8 +134,8 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		return v;
 	}
 
-	private final void logProbabilityValue$sample26() {
-		if(!fixedProbFlag$sample26) {
+	private final void logProbabilityValue$sample21() {
+		if(!fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -144,7 +144,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				double[] cv$sampleValue = sample;
 				{
 					{
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, 10));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -164,7 +164,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var22 = cv$sampleAccumulator;
+			logProbability$var20 = cv$sampleAccumulator;
 			logProbability$sample = cv$sampleProbability;
 			boolean cv$guard$indirection = false;
 			{
@@ -176,16 +176,16 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				}
 			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample26)
+			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample26 = fixedFlag$sample26;
+			fixedProbFlag$sample21 = fixedFlag$sample21;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			double cv$sampleValue = logProbability$sample;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var22 = cv$rvAccumulator;
+			logProbability$var20 = cv$rvAccumulator;
 			boolean cv$guard$indirection = false;
 			{
 				for(int i = 0; i < length$observed; i += 1) {
@@ -196,13 +196,13 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				}
 			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample26)
+			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample44() {
-		if(!fixedProbFlag$sample44) {
+	private final void logProbabilityValue$sample38() {
+		if(!fixedProbFlag$sample38) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				double cv$sampleAccumulator = 0.0;
@@ -212,9 +212,9 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					double cv$sampleValue = generated[i];
 					{
 						{
-							double var37 = sample[i];
-							double var38 = indirection[i];
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var37) / Math.sqrt(var38))) - (0.5 * Math.log(var38))));
+							double var35 = sample[i];
+							double var36 = indirection[i];
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -234,21 +234,21 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				double cv$sampleProbability = cv$distributionAccumulator;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var39[((i - 0) / 1)] = cv$sampleAccumulator;
-				logProbability$sample44[((i - 0) / 1)] = cv$sampleProbability;
+				logProbability$var37[((i - 0) / 1)] = cv$sampleAccumulator;
+				logProbability$sample38[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample44 = (fixedFlag$sample44 && fixedFlag$sample26);
+			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample21);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample44[((i - 0) / 1)];
+				double cv$sampleValue = logProbability$sample38[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var39[((i - 0) / 1)] = cv$rvAccumulator;
+				logProbability$var37[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -256,11 +256,11 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	private final void sample26() {
+	private final void sample21() {
 		double[] cv$targetLocal = sample;
 		double cv$originalProbability = 0.0;
 		double cv$proposedProbability = 0.0;
-		int cv$arrayLength = cv$targetLocal.length;
+		int cv$arrayLength = 10;
 		int cv$indexToChange = (int)(0.0 + ((cv$arrayLength - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
 		double cv$proposedDifference;
@@ -304,21 +304,25 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				{
 					cv$temp$0$v = v;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v));
+				int cv$temp$1$$var263;
+				{
+					cv$temp$1$$var263 = 10;
+				}
+				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var263));
 				{
 					{
-						boolean[] guard$sample26gaussian43 = guard$sample26gaussian43$global;
+						boolean[] guard$sample21gaussian37 = guard$sample21gaussian37$global;
 						for(int i = 0; i < length$observed; i += 1)
-							guard$sample26gaussian43[((i - 0) / 1)] = false;
+							guard$sample21gaussian37[((i - 0) / 1)] = false;
 						for(int i = 0; i < length$observed; i += 1) {
 							for(int index$i$3_2 = 0; index$i$3_2 < length$observed; index$i$3_2 += 1) {
 								if((i == index$i$3_2))
-									guard$sample26gaussian43[((i - 0) / 1)] = false;
+									guard$sample21gaussian37[((i - 0) / 1)] = false;
 							}
 						}
 						for(int i = 0; i < length$observed; i += 1) {
-							if(!guard$sample26gaussian43[((i - 0) / 1)]) {
-								guard$sample26gaussian43[((i - 0) / 1)] = true;
+							if(!guard$sample21gaussian37[((i - 0) / 1)]) {
+								guard$sample21gaussian37[((i - 0) / 1)] = true;
 								{
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -326,23 +330,23 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										{
 											{
 												{
-													double cv$temp$1$var37;
+													double cv$temp$2$var35;
 													{
-														double var37 = sample[i];
-														cv$temp$1$var37 = var37;
+														double var35 = sample[i];
+														cv$temp$2$var35 = var35;
 													}
-													double cv$temp$2$var38;
+													double cv$temp$3$var36;
 													{
-														double var38 = indirection[i];
-														cv$temp$2$var38 = var38;
+														double var36 = indirection[i];
+														cv$temp$3$var36 = var36;
 													}
-													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var37) / Math.sqrt(cv$temp$2$var38))) - (0.5 * Math.log(cv$temp$2$var38)))) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var37) / Math.sqrt(cv$temp$2$var38))) - (0.5 * Math.log(cv$temp$2$var38)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$2$var35) / Math.sqrt(cv$temp$3$var36))) - (0.5 * Math.log(cv$temp$3$var36)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$2$var35) / Math.sqrt(cv$temp$3$var36))) - (0.5 * Math.log(cv$temp$3$var36)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var37) / Math.sqrt(cv$temp$2$var38))) - (0.5 * Math.log(cv$temp$2$var38))));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$2$var35) / Math.sqrt(cv$temp$3$var36))) - (0.5 * Math.log(cv$temp$3$var36))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var37) / Math.sqrt(cv$temp$2$var38))) - (0.5 * Math.log(cv$temp$2$var38)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$1$var37) / Math.sqrt(cv$temp$2$var38))) - (0.5 * Math.log(cv$temp$2$var38)))));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$2$var35) / Math.sqrt(cv$temp$3$var36))) - (0.5 * Math.log(cv$temp$3$var36)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - cv$temp$2$var35) / Math.sqrt(cv$temp$3$var36))) - (0.5 * Math.log(cv$temp$3$var36)))));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
@@ -362,11 +366,11 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							}
 						}
 						for(int i = 0; i < length$observed; i += 1) {
-							double traceTempVariable$var38$5_2 = sample[i];
+							double traceTempVariable$var36$5_2 = sample[i];
 							for(int index$i$5_3 = 0; index$i$5_3 < length$observed; index$i$5_3 += 1) {
 								if((i == index$i$5_3)) {
-									if(!guard$sample26gaussian43[((i - 0) / 1)]) {
-										guard$sample26gaussian43[((i - 0) / 1)] = true;
+									if(!guard$sample21gaussian37[((i - 0) / 1)]) {
+										guard$sample21gaussian37[((i - 0) / 1)] = true;
 										{
 											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 											double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -374,23 +378,23 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												{
 													{
 														{
-															double cv$temp$3$var37;
+															double cv$temp$4$var35;
 															{
-																double var37 = sample[index$i$5_3];
-																cv$temp$3$var37 = var37;
+																double var35 = sample[index$i$5_3];
+																cv$temp$4$var35 = var35;
 															}
-															double cv$temp$4$var38;
+															double cv$temp$5$var36;
 															{
-																double var38 = traceTempVariable$var38$5_2;
-																cv$temp$4$var38 = var38;
+																double var36 = traceTempVariable$var36$5_2;
+																cv$temp$5$var36 = var36;
 															}
-															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var37) / Math.sqrt(cv$temp$4$var38))) - (0.5 * Math.log(cv$temp$4$var38)))) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var37) / Math.sqrt(cv$temp$4$var38))) - (0.5 * Math.log(cv$temp$4$var38)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$4$var35) / Math.sqrt(cv$temp$5$var36))) - (0.5 * Math.log(cv$temp$5$var36)))) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$4$var35) / Math.sqrt(cv$temp$5$var36))) - (0.5 * Math.log(cv$temp$5$var36)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var37) / Math.sqrt(cv$temp$4$var38))) - (0.5 * Math.log(cv$temp$4$var38))));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$4$var35) / Math.sqrt(cv$temp$5$var36))) - (0.5 * Math.log(cv$temp$5$var36))));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var37) / Math.sqrt(cv$temp$4$var38))) - (0.5 * Math.log(cv$temp$4$var38)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$3$var37) / Math.sqrt(cv$temp$4$var38))) - (0.5 * Math.log(cv$temp$4$var38)))));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$4$var35) / Math.sqrt(cv$temp$5$var36))) - (0.5 * Math.log(cv$temp$5$var36)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - cv$temp$4$var35) / Math.sqrt(cv$temp$5$var36))) - (0.5 * Math.log(cv$temp$5$var36)))));
 															}
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
@@ -445,7 +449,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void allocateScratch() {
 		int cv$max_i = 0;
 		cv$max_i = Math.max(cv$max_i, ((length$observed - 0) / 1));
-		guard$sample26gaussian43$global = new boolean[cv$max_i];
+		guard$sample21gaussian37$global = new boolean[cv$max_i];
 	}
 
 	@Override
@@ -467,24 +471,24 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 		}
 		{
-			logProbability$var39 = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			logProbability$var37 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$sample44 = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			logProbability$sample38 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample26)
-			DistributionSampling.sampleDirichlet(RNG$, v, sample);
+		if(!fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample26)
+						if(!fixedFlag$sample21)
 							indirection[i] = sample[i];
-						if(!fixedFlag$sample44)
+						if(!fixedFlag$sample38)
 							generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$1)) + sample[i]);
 					}
 			}
@@ -493,12 +497,12 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample26)
-			DistributionSampling.sampleDirichlet(RNG$, v, sample);
+		if(!fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample26)
+						if(!fixedFlag$sample21)
 							indirection[i] = sample[i];
 					}
 			}
@@ -507,12 +511,12 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample26)
-			DistributionSampling.sampleDirichlet(RNG$, v, sample);
+		if(!fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample26)
+						if(!fixedFlag$sample21)
 							indirection[i] = sample[i];
 					}
 			}
@@ -522,11 +526,11 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(!fixedFlag$sample26)
-				sample26();
+			if(!fixedFlag$sample21)
+				sample21();
 		} else {
-			if(!fixedFlag$sample26)
-				sample26();
+			if(!fixedFlag$sample21)
+				sample21();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -534,9 +538,9 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void initializeConstants() {
 		parallelFor(RNG$, 0, 10, 1,
-			(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-						v[var19] = 0.1;
+			(int forStart$var17, int forEnd$var17, int threadID$var17, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var17 = forStart$var17; var17 < forEnd$var17; var17 += 1)
+						v[var17] = 0.1;
 			}
 		);
 	}
@@ -544,16 +548,16 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = 0.0;
+		logProbability$var20 = 0.0;
 		logProbability$indirection = 0.0;
-		if(!fixedProbFlag$sample26)
+		if(!fixedProbFlag$sample21)
 			logProbability$sample = 0.0;
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var39[((i - 0) / 1)] = 0.0;
+			logProbability$var37[((i - 0) / 1)] = 0.0;
 		logProbability$generated = 0.0;
-		if(!fixedProbFlag$sample44) {
+		if(!fixedProbFlag$sample38) {
 			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample44[((i - 0) / 1)] = 0.0;
+				logProbability$sample38[((i - 0) / 1)] = 0.0;
 		}
 	}
 
@@ -565,33 +569,33 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	private final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample26)
-			logProbabilityValue$sample26();
-		logProbabilityValue$sample44();
+		if(fixedFlag$sample21)
+			logProbabilityValue$sample21();
+		logProbabilityValue$sample38();
 	}
 
 	@Override
 	public final void logModelProbabilitiesDist() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample26();
-		logProbabilityValue$sample44();
+		logProbabilityValue$sample21();
+		logProbabilityValue$sample38();
 	}
 
 	@Override
 	public final void logModelProbabilitiesVal() {
 		initializeLogProbabilityFields();
-		logProbabilityValue$sample26();
-		logProbabilityValue$sample44();
+		logProbabilityValue$sample21();
+		logProbabilityValue$sample38();
 	}
 
 	@Override
 	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample26)
-			DistributionSampling.sampleDirichlet(RNG$, v, sample);
+		if(!fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample26)
+						if(!fixedFlag$sample21)
 							indirection[i] = sample[i];
 					}
 			}

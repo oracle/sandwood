@@ -8,23 +8,23 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	// Setter for bias.
 	public void set$bias(double cv$value);
 
-	// Getter for fixedFlag$sample105.
-	public boolean get$fixedFlag$sample105();
+	// Getter for fixedFlag$sample35.
+	public boolean get$fixedFlag$sample35();
 
-	// Setter for fixedFlag$sample105.
-	public void set$fixedFlag$sample105(boolean cv$value);
+	// Setter for fixedFlag$sample35.
+	public void set$fixedFlag$sample35(boolean cv$value);
 
-	// Getter for fixedFlag$sample46.
-	public boolean get$fixedFlag$sample46();
+	// Getter for fixedFlag$sample42.
+	public boolean get$fixedFlag$sample42();
 
-	// Setter for fixedFlag$sample46.
-	public void set$fixedFlag$sample46(boolean cv$value);
+	// Setter for fixedFlag$sample42.
+	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample53.
-	public boolean get$fixedFlag$sample53();
+	// Getter for fixedFlag$sample94.
+	public boolean get$fixedFlag$sample94();
 
-	// Setter for fixedFlag$sample53.
-	public void set$fixedFlag$sample53(boolean cv$value);
+	// Setter for fixedFlag$sample94.
+	public void set$fixedFlag$sample94(boolean cv$value);
 
 	// Getter for k.
 	public int get$k();

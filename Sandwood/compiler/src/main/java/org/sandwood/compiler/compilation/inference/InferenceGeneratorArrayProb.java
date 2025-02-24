@@ -18,7 +18,6 @@ import static org.sandwood.compiler.trees.irTree.IRTree.eq;
 import static org.sandwood.compiler.trees.irTree.IRTree.forStmt;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCall;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCallReturn;
-import static org.sandwood.compiler.trees.irTree.IRTree.getIntField;
 import static org.sandwood.compiler.trees.irTree.IRTree.ifElse;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeUnsetVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
@@ -202,7 +201,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         VariableDescription<IntVariable> indexName = VariableNames.calcVarName("i", VariableType.IntVariable, true);
         IRTreeVoid body = arrayPut(load(consumerSampleDistributionAccumulator), load(indexName), constant(0.0),
                 Tree.NoComment);
-        IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNoStates().getForwardIR(compilationCtx),
+        IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNumStates().getForwardIR(compilationCtx),
                 constant(1), indexName, true, "Zero all the elements in the distribution accumulator");
         compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
@@ -253,8 +252,9 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         // Place the body statements in a loop that will iterate for all the elements in
         // the distribution.
         IRTreeVoid body = sequential(bodyStmts, Tree.NoComment);
-        IRTreeVoid loop = IRTree.forStmt(body, constant(0), s.randomVariable.getNoStates().getForwardIR(compilationCtx),
-                constant(1), indexName, true, "Calculate the overlap for each element in the distribution");
+        IRTreeVoid loop = IRTree.forStmt(body, constant(0),
+                s.randomVariable.getNumStates().getForwardIR(compilationCtx), constant(1), indexName, true,
+                "Calculate the overlap for each element in the distribution");
         compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
         // Compute the ratio of the overlap that should be added with 1 being used
@@ -332,8 +332,8 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         // Bound for loops.
         VariableDescription<IntVariable> endBound = VariableNames.calcVarName("endOfLoop", VariableType.IntVariable,
                 true);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
-                initializeVariable(endBound, getIntField(arrayValue, "length"), "End bound for loops."));
+        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(endBound,
+                ((ArrayVariable<?>) funcData.sampleDesc.output).getMaxLength(compilationCtx), "End bound for loops."));
 
         VariableDescription<IntVariable> indexName = VariableNames.calcVarName("index", VariableType.IntVariable, true);
 
@@ -446,12 +446,16 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         List<Variable<?>> randomInputs = random.getParent().getInputs();
         int noInputs = randomInputs.size();
         int noValues = values.length;
-        List<IRTreeReturn<?>> args = new ArrayList<>(noInputs + noValues);
+        List<IRTreeReturn<?>> args = new ArrayList<>();
         for(int i = 0; i < noValues; i++)
             args.add(values[i]);
 
-        for(int i = 0; i < noInputs; i++)
-            args.add(constructScopedArg(randomInputs.get(i), compilationCtx));
+        for(int i = 0; i < noInputs; i++) {
+            Variable<?> v = randomInputs.get(i);
+            args.add(constructScopedArg(v, compilationCtx));
+            if(v.getType().isArray())
+                args.add(constructScopedArg(((ArrayVariable<?>) v).length(), compilationCtx));
+        }
         return args;
     }
 
@@ -464,8 +468,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         // A hack so that the variable name of the constructed value is saved to keep the optimised code cleaner. Just
         // the else branch will also generate correct code.
         VariableDescription<C> pName = v.getUniqueVarDesc();
-        if(!v.isIntermediate() && !v.isSample() && !v.isDeterministic()
-                && !compilationCtx.initialized(v)) {
+        if(!v.isIntermediate() && !v.isSample() && !v.isDeterministic() && !compilationCtx.initialized(v)) {
             compilationCtx.addTreeToScope(v.getParent().scope(),
                     initializeVariable(pName, value, "Constructing a random variable input for use later."));
             compilationCtx.addInitialized(v);
@@ -596,9 +599,8 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
             CompilationContext compilationCtx) {
         IRTreeReturn<D> inputValue = input.getForwardIR(compilationCtx);
         IRTreeReturn<BooleanVariable> guard = IRTree.eq(current, inputValue);
-        IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
-                log(info.probability), consumerSampleProbabilitiesAccumulator,
-                "Record if the conditional is valid.");
+        IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator), log(info.probability),
+                consumerSampleProbabilitiesAccumulator, "Record if the conditional is valid.");
         IRTreeVoid condition = IRTree.ifElse(guard, recordValid, "Check observed variable is possible");
         compilationCtx.addTreeToScope(GlobalScope.scope, condition);
 
