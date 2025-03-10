@@ -11,7 +11,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[][] cv$distributionAccumulator$var120;
 	private double[][] cv$var102$stateProbabilityGlobal;
 	private double[][] cv$var121$stateProbabilityGlobal;
-	private double[][] cv$var141$stateProbabilityGlobal;
 	private double[] cv$var19$countGlobal;
 	private double[][] cv$var32$countGlobal;
 	private double[][] distribution$sample104;
@@ -1045,9 +1044,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					
 					// Update the variable probability
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-					
-					// Update the variable probability
-					logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 				}
 			}
 			logProbability$var140 = cv$sampleAccumulator;
@@ -1090,9 +1086,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					
 					// Update the variable probability
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-					
-					// Update the variable probability
-					logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 				}
 			}
 			logProbability$var140 = cv$rvAccumulator;
@@ -1544,9 +1537,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					
 					// Update the variable probability
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-					
-					// Update the variable probability
-					logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 				}
 			}
 			logProbability$var140 = cv$sampleAccumulator;
@@ -1589,9 +1579,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					
 					// Update the variable probability
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-					
-					// Update the variable probability
-					logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 				}
 			}
 			logProbability$var140 = cv$rvAccumulator;
@@ -2170,9 +2157,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var2605's comment
+			// cv$temp$1$$var2481's comment
 			// 
-			// $var2605's comment
+			// $var2481's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -2194,9 +2181,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				if(((0 <= var31) && (var31 < noStates))) {
 					// Substituted "index$sample$3_2" with its value "sample".
 					// 
-					// cv$temp$3$$var2618's comment
+					// cv$temp$3$$var2494's comment
 					// 
-					// $var2618's comment
+					// $var2494's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var119's comment
@@ -2465,9 +2452,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$22$$var2753's comment
+					// cv$temp$22$$var2629's comment
 					// 
-					// $var2753's comment
+					// $var2629's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$21$var119's comment
@@ -2677,9 +2664,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var2839's comment
+						// cv$temp$1$$var2715's comment
 						// 
-						// $var2839's comment
+						// $var2715's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var119's comment
@@ -2929,9 +2916,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var2840's comment
+							// cv$temp$3$$var2716's comment
 							// 
-							// $var2840's comment
+							// $var2716's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var119's comment
@@ -3211,9 +3198,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var2842's comment
+						// cv$temp$7$$var2718's comment
 						// 
-						// $var2842's comment
+						// $var2718's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var119's comment
@@ -3520,9 +3507,9 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$77$$var3228's comment
+					// cv$temp$77$$var3104's comment
 					// 
-					// $var3228's comment
+					// $var3104's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$76$var119's comment
@@ -3632,11 +3619,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 145 drawn from Bernoulli 140. Inference was performed using variable
-	// marginalization.
-	private final void sample145(int sample, int timeStep$var136, int threadID$cv$timeStep$var136, Rng RNG$) {}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 19 drawn from Dirichlet 18. Inference was performed using a Dirichlet
@@ -5062,45 +5044,30 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		
 		// Constructor for guard$sample123gaussian156$global
-		{
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var136 = 0;
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
-			
-			// Variable declaration of cv$max_sample moved.
-			// Declaration comment was:
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample = length$metric.length;
-			
-			// Allocation of guard$sample123gaussian156$global for multithreaded execution
-			// 
-			// Get the thread count.
-			int cv$threadCount = threadCount();
-			
-			// Allocate an array to hold a copy per thread
-			guard$sample123gaussian156$global = new boolean[cv$threadCount][][];
-			
-			// Populate the array with a copy per thread
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				guard$sample123gaussian156$global[cv$index] = new boolean[cv$max_sample][cv$max_timeStep$var136];
-		}
-		
-		// Constructor for cv$var141$stateProbabilityGlobal
 		// 
-		// Allocation of cv$var141$stateProbabilityGlobal for multithreaded execution
+		// Calculate the largest index of timeStep that is possible and allocate an array
+		// to hold the guard for each of these.
+		int cv$max_timeStep$var136 = 0;
+		for(int sample = 0; sample < length$metric.length; sample += 1)
+			cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
+		
+		// Variable declaration of cv$max_sample moved.
+		// Declaration comment was:
+		// Calculate the largest index of sample that is possible and allocate an array to
+		// hold the guard for each of these.
+		int cv$max_sample = length$metric.length;
+		
+		// Allocation of guard$sample123gaussian156$global for multithreaded execution
 		// 
 		// Get the thread count.
 		int cv$threadCount = threadCount();
 		
 		// Allocate an array to hold a copy per thread
-		cv$var141$stateProbabilityGlobal = new double[cv$threadCount][];
+		guard$sample123gaussian156$global = new boolean[cv$threadCount][][];
 		
 		// Populate the array with a copy per thread
 		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var141$stateProbabilityGlobal[cv$index] = new double[2];
+			guard$sample123gaussian156$global[cv$index] = new boolean[cv$max_sample][cv$max_timeStep$var136];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -5281,7 +5248,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										if(!fixedFlag$sample145)
 											metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && (!fixedFlag$sample145 || !fixedFlag$sample157)))
+										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 									}
 							}
@@ -5466,7 +5433,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										if(!fixedFlag$sample145)
 											metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && (!fixedFlag$sample145 || !fixedFlag$sample157)))
+										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 									}
 							}
@@ -5569,7 +5536,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										if(!fixedFlag$sample145)
 											metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && (!fixedFlag$sample145 || !fixedFlag$sample157)))
+										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 									}
 							}
@@ -5645,13 +5612,11 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
-							int sample = index$sample;
-							int threadID$sample = threadID$index$sample;
+						for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
 							if(!fixedFlag$sample104)
 								sample104(sample, threadID$sample, RNG$1);
 							
@@ -5660,20 +5625,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
 									sample123(sample, timeStep$var113, threadID$sample, RNG$1);
 							}
-							
-							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if(!fixedFlag$sample145)
-								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, length$metric[sample], 1,
-									(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
-										
-											// Inner loop for running batches of iterations, each batch has its own random number
-											// generator.
-											for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1)
-												sample145(sample, timeStep$var136, threadID$timeStep$var136, RNG$2);
-									}
-								);
-
 						}
 				}
 			);
@@ -5682,28 +5633,11 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		else {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+				(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
-							int sample = index$sample;
-							int threadID$sample = threadID$index$sample;
-							
-							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if(!fixedFlag$sample145)
-								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, length$metric[sample], 1,
-									(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
-										
-											// Inner loop for running batches of iterations, each batch has its own random number
-											// generator.
-											for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1)
-												sample145(sample, timeStep$var136, threadID$timeStep$var136, RNG$2);
-									}
-								);
-
-							
+						for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							if(!fixedFlag$sample123) {
 								for(int timeStep$var113 = (length$metric[sample] - 1); timeStep$var113 >= 1; timeStep$var113 -= 1)
@@ -5833,7 +5767,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		if(!fixedProbFlag$sample123)
 			logProbability$var121 = 0.0;
 		logProbability$var140 = 0.0;
-		logProbability$metric_g = 0.0;
 		logProbability$metric_valid_1d = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample145) {
@@ -5844,6 +5777,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		logProbability$var150 = 0.0;
 		logProbability$metric_1d = 0.0;
+		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample157) {
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1)

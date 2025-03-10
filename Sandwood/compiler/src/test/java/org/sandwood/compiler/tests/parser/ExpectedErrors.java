@@ -37,6 +37,15 @@ public class ExpectedErrors {
     static {
         {
             String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
+                    + File.separator + "parser" + File.separator + "AlternativeModelMK4Fail.sandwood";
+            String message = "Sample task 13 and sample task 14 may be combining to generate a single value of observed variable positiveCount";
+            String annotatedMessage = "Error on line: 20 between columns 35 and 42\n"
+                    + "Sample task 13 and sample task 14 may be combining to generate a single value of observed variable\n"
+                    + "positiveCount\n" + "\n" + "\"    int positiveCount = binomial1.sample() + binomial2.sample();\"";
+            errors.put(file, new ErrorDesc(message, file + "\n" + annotatedMessage + "\n"));
+        }
+        {
+            String file = "org" + File.separator + "sandwood" + File.separator + "compiler" + File.separator + "tests"
                     + File.separator + "parser" + File.separator + "Flip1CoinArrayCopyFail.sandwood";
             String message = "Unable to perform array access on array \"bias\" as the index \"i\" is used to write to this array in a "
                     + "trace after it is used for this read. This means that the compiler cannot statically determine how "

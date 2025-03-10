@@ -838,12 +838,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// A method to set array values that depend on the output of a sample task, but are
 	// not directly set by the sample task.
 	@Override
-	public final void setIntermediates() {
-		if(guard)
-			value[0] = 1.0;
-		if(setFlag$value)
-			value2[0] = value[0];
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

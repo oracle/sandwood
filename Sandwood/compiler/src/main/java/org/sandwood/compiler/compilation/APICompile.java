@@ -148,14 +148,17 @@ public class APICompile {
             ClassName modelInterface = className.interfaceName();
 
             // Start the compilation of the model.
-            Traces traces = TracesImplementation.getTraces(vs);
+            Traces traces = TracesImplementation.getTraces(compDesc, vs);
 
             // Test the graph for errors.
             for(DataflowTask<?> d:traces.getAllTasks())
                 d.testTask(compDesc.errors);
 
             // Test the required inversions for errors.
-            compDesc.errors.addAll(inversionCheck(traces));
+            inversionCheck(traces, compDesc);
+
+            // Test for observed values that are dependent on more than one sample task
+            sharedObservationCheck(traces, compDesc);
 
             // Test if any observed variables are also read by random variables.
             readObservedCheck(traces, compDesc);
@@ -351,7 +354,8 @@ public class APICompile {
             if(o == this)
                 return 0;
             if(variable == o.variable)
-                throw new SandwoodException("Multiple dependency descriptions have been created for variable: " + variable);
+                throw new SandwoodException(
+                        "Multiple dependency descriptions have been created for variable: " + variable);
             boolean contains = o.dependencies.contains(variable);
             if(dependencies.contains(o.variable)) {
                 if(contains)
@@ -451,7 +455,7 @@ public class APICompile {
             for(SampleTask<?, ?> sTask:compilationCtx.traces.getAllSampleTasks()) {
                 if(compilationCtx.traces.isObserved(sTask)) {
                     // Test that the traces are valid
-                    Map<Variable<?>, Set<TraceHandle>> t = compilationCtx.traces.getObservedTraces(sTask);
+                    Map<Variable<?>, Set<TraceHandle>> t = compilationCtx.traces.getUnconditionalObservedTraces(sTask);
                     if(t == null)
                         throw new CompilerException("No observed trace provided.");
 
@@ -925,7 +929,7 @@ public class APICompile {
         }
     }
 
-    private static Set<SandwoodModelException> inversionCheck(Traces traces) {
+    private static void inversionCheck(Traces traces, CompilationDesc compDesc) {
         Set<SandwoodModelException> errors = new HashSet<>();
         for(SampleTask<?, ?> s:traces.getAllIntermediateSamples()) {
             for(RandomVariable<?, ?> consumingRV:traces.getTracesRVToSampleTask(s).keySet()) {
@@ -949,7 +953,63 @@ public class APICompile {
                 }
             }
         }
-        return errors;
+        compDesc.errors.addAll(errors);
+    }
+
+    private static void sharedObservationCheck(Traces traces, CompilationDesc compDesc) {
+        Set<SandwoodModelException> errors = new HashSet<>();
+
+        PriorityQueue<SampleTask<?, ?>> p1 = new PriorityQueue<>(traces.getObservedSampleTasks());
+        PriorityQueue<SampleTask<?, ?>> p2 = new PriorityQueue<>();
+        while(!p1.isEmpty()) {
+            SampleTask<?, ?> s1 = p1.poll();
+            Map<Variable<?>, Set<TraceHandle>> m1 = traces.getAllObservedTraces(s1);
+            // Examine all possible later sample tasks
+            p2.addAll(p1);
+            while(!p2.isEmpty()) {
+                SampleTask<?, ?> s2 = p2.poll();
+                Map<Variable<?>, Set<TraceHandle>> m2 = traces.getAllObservedTraces(s2);
+                for(Variable<?> v:m1.keySet()) {
+                    // If 2 sets of traces from different sample tasks lead to the same observed variable see if they
+                    // are dependent
+                    if(m2.containsKey(v)) {
+                        // Get traces that do not go via a conditional
+                        Set<TraceHandle> h1 = new HashSet<>(m1.get(v));
+                        Set<TraceHandle> h2 = new HashSet<>(m2.get(v));
+                        boolean linkFound = false;
+                        for(TraceHandle t1:h1) {
+                            if(!linkFound && t1.invertable()) {
+                                for(TraceHandle t2:h2) {
+                                    if(t2.invertable() && Traces.observedDependentTraces(t1, t2)) {
+                                        // There is an error
+                                        String name;
+                                        // Calculate the named variable
+                                        if(v.aliasSet())
+                                            name = v.getAlias();
+                                        else {
+                                            int i = t2.size() - 1;
+                                            DataflowTaskArgDesc d = t2.get(i);
+                                            while(d.task.getType() == DFType.GET && (d.argPos == 0 || d.argPos == 1))
+                                                d = t2.get(--i);
+                                            name = d.task.getOutput().getAlias();
+                                        }
+
+                                        // Construct the error
+                                        errors.add(new SandwoodModelException("Sample task " + s1.id()
+                                                + " and sample task " + s2.id()
+                                                + " may be combining to generate a single value of observed variable "
+                                                + name, s1.getLocation()));
+                                        linkFound = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        compDesc.errors.addAll(errors);
     }
 
     private static void constructSetIntermediates(CompilationContext compilationCtx) {
@@ -958,7 +1018,7 @@ public class APICompile {
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(compilationCtx.traces.getIntermediates());
         while(!p.isEmpty()) {
             Variable<?> v = p.poll();
-            if(!v.isDeterministic() && !setBySampleValue(v))
+            if(!v.isDeterministic() && !v.isFixed() && !setBySampleValue(v))
                 constructIntermediate(v, compilationCtx);
         }
 

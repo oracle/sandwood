@@ -730,6 +730,24 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                 + " value types can be assigned to multiple variables.", location);
     }
 
+    public ArrayVariable<?> getSourceInstance() {
+        ArrayVariable<?> a = this;
+        while(a.outerArrayDesc.array != null)
+            a = a.outerArrayDesc.array;
+        return a.instanceHandle;
+    }
+
+    public OuterArrayDesc<A> getOuterArrayDesc() {
+        return outerArrayDesc;
+    }
+
+    @Override
+    public void setAlias(VariableDescription<ArrayVariable<A>> alias) {
+        super.setAlias(alias);
+        if(childInstance != null)
+            childInstance.setAlias(alias);
+    }
+
     /* parent */
     public static <A extends Variable<A>> ArrayVariable<A> getArrayVariable(ArrayProducingDataflowTask<A> parent) {
         return new ArrayVariable<>(parent);
@@ -802,16 +820,5 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         v.setIntermediate();
         ScopeStack.popScope(scope);
         return v;
-    }
-
-    public ArrayVariable<?> getSourceInstance() {
-        ArrayVariable<?> a = this;
-        while(a.outerArrayDesc.array != null)
-            a = a.outerArrayDesc.array;
-        return a.instanceHandle;
-    }
-
-    public OuterArrayDesc<A> getOuterArrayDesc() {
-        return outerArrayDesc;
     }
 }

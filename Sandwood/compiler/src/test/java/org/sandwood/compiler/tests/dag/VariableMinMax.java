@@ -25,6 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.CompilationOptions;
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -208,7 +209,7 @@ public class VariableMinMax {
         CompilerState.reset();
         NumberVariable<?> v = variableConstructor.get(i).getVariable();
 
-        Traces traces = TracesImplementation.getTraces(v);
+        Traces traces = TracesImplementation.getTraces(new CompilationDesc(), v);
         CompilationContext compilationCtx = new CompilationContext(new CompilationOptions(), traces,
                 ExecutionType.SingleThreadCPU);
         IRTreeReturn<?> value = testMin ? v.getMin(compilationCtx) : v.getMax(compilationCtx);

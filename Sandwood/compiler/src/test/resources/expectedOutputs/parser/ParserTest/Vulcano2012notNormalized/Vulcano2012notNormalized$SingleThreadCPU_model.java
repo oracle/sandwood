@@ -2471,11 +2471,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 				if(setFlag$ut)
 					weekly_rates[((t$var81 - 0) / 1)][j$var124] = (weekly_ut[((t$var81 - 0) / 1)][j$var124] / reduceVar$denom$9);
 			}
-			if(setFlag$weekly_sales) {
-				int[] observed_weekly_sales = Sales[t$var81];
-				for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
-					observed_weekly_sales[j$var140] = weekly_sales[((t$var81 - 0) / 1)][j$var140];
-			}
 		}
 	}
 

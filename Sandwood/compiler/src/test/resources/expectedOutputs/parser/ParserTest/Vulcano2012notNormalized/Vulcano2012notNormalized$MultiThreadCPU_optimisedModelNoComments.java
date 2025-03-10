@@ -965,15 +965,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 								}
 							);
 						}
-						if(setFlag$weekly_sales) {
-							int[] observed_weekly_sales = Sales[t$var81];
-							parallelFor(RNG$1, 0, noProducts, 1,
-								(int forStart$j$var140, int forEnd$j$var140, int threadID$j$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var140 = forStart$j$var140; j$var140 < forEnd$j$var140; j$var140 += 1)
-											observed_weekly_sales[j$var140] = weekly_sales[t$var81][j$var140];
-								}
-							);
-						}
 					}
 			}
 		);

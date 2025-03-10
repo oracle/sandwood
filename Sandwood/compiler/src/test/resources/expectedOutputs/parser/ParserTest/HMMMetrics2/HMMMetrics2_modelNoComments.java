@@ -114,19 +114,14 @@ public class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample145(fixed);
                 system$c.set$fixedFlag$sample157(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample145 = system$c.get$fixedFlag$sample145();
-            boolean fixedFlag$sample157 = system$c.get$fixedFlag$sample157();
-            if(fixedFlag$sample145 && fixedFlag$sample157)
+            if(system$c.get$fixedFlag$sample157())
                 return Immutability.FIXED;
-            else if(fixedFlag$sample145 || fixedFlag$sample157)
-                return Immutability.PARTIALLY_FIXED;
             else
                 return Immutability.FREE;
         }

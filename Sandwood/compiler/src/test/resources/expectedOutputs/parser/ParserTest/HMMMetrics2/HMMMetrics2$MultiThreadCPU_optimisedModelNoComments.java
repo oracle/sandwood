@@ -9,7 +9,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[][] cv$distributionAccumulator$var120;
 	private double[][] cv$var102$stateProbabilityGlobal;
 	private double[][] cv$var121$stateProbabilityGlobal;
-	private double[][] cv$var141$stateProbabilityGlobal;
 	private double[] cv$var19$countGlobal;
 	private double[][] cv$var32$countGlobal;
 	private double[][] distribution$sample104;
@@ -590,7 +589,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$var140[sample][timeStep$var136] = cv$distributionAccumulator;
 					logProbability$sample145[sample][timeStep$var136] = cv$distributionAccumulator;
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-					logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 				}
 			}
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
@@ -605,7 +603,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
 					logProbability$var140[sample][timeStep$var136] = cv$sampleValue;
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-					logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 				}
 			}
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
@@ -792,7 +789,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$var140[sample][timeStep$var136] = cv$distributionAccumulator;
 					logProbability$sample145[sample][timeStep$var136] = cv$distributionAccumulator;
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-					logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 				}
 			}
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
@@ -807,7 +803,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
 					logProbability$var140[sample][timeStep$var136] = cv$sampleValue;
 					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-					logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 				}
 			}
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
@@ -1457,8 +1452,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
-	private final void sample145(int sample, int timeStep$var136, int threadID$cv$timeStep$var136, Rng RNG$) {}
-
 	private final void sample19() {
 		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
 			cv$var19$countGlobal[cv$loopIndex] = 0.0;
@@ -1991,20 +1984,14 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
 				cv$var121$stateProbabilityGlobal[cv$index] = new double[noStates];
 		}
-		{
-			int cv$max_timeStep$var136 = 0;
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
-			int cv$max_sample = length$metric.length;
-			int cv$threadCount = threadCount();
-			guard$sample123gaussian156$global = new boolean[cv$threadCount][][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				guard$sample123gaussian156$global[cv$index] = new boolean[cv$max_sample][cv$max_timeStep$var136];
-		}
+		int cv$max_timeStep$var136 = 0;
+		for(int sample = 0; sample < length$metric.length; sample += 1)
+			cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
+		int cv$max_sample = length$metric.length;
 		int cv$threadCount = threadCount();
-		cv$var141$stateProbabilityGlobal = new double[cv$threadCount][];
+		guard$sample123gaussian156$global = new boolean[cv$threadCount][][];
 		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var141$stateProbabilityGlobal[cv$index] = new double[2];
+			guard$sample123gaussian156$global[cv$index] = new boolean[cv$max_sample][cv$max_timeStep$var136];
 	}
 
 	@Override
@@ -2126,7 +2113,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										if(!fixedFlag$sample145)
 											metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && (!fixedFlag$sample145 || !fixedFlag$sample157)))
+										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 									}
 							}
@@ -2233,7 +2220,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										if(!fixedFlag$sample145)
 											metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && (!fixedFlag$sample145 || !fixedFlag$sample157)))
+										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 									}
 							}
@@ -2298,7 +2285,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										if(!fixedFlag$sample145)
 											metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && (!fixedFlag$sample145 || !fixedFlag$sample157)))
+										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 									}
 							}
@@ -2346,41 +2333,21 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				);
 
 			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
-							int sample = index$sample;
-							int threadID$sample = threadID$index$sample;
+				(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
 							if(!fixedFlag$sample104)
 								sample104(sample, threadID$sample, RNG$1);
 							if(!fixedFlag$sample123) {
 								for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
 									sample123(sample, timeStep$var113, threadID$sample, RNG$1);
 							}
-							if(!fixedFlag$sample145)
-								parallelFor(RNG$1, 0, length$metric[sample], 1,
-									(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1)
-												sample145(sample, timeStep$var136, threadID$timeStep$var136, RNG$2);
-									}
-								);
-
 						}
 				}
 			);
 		} else {
 			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
-							int sample = index$sample;
-							int threadID$sample = threadID$index$sample;
-							if(!fixedFlag$sample145)
-								parallelFor(RNG$1, 0, length$metric[sample], 1,
-									(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1)
-												sample145(sample, timeStep$var136, threadID$timeStep$var136, RNG$2);
-									}
-								);
-
+				(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
 							if(!fixedFlag$sample123) {
 								for(int timeStep$var113 = (length$metric[sample] - 1); timeStep$var113 >= 1; timeStep$var113 -= 1)
 									sample123(sample, timeStep$var113, threadID$sample, RNG$1);
@@ -2482,7 +2449,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1)
 				logProbability$var140[sample][timeStep$var136] = 0.0;
 		}
-		logProbability$metric_g = 0.0;
 		logProbability$metric_valid_1d = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample145) {
@@ -2496,6 +2462,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				logProbability$var150[sample][timeStep$var136] = 0.0;
 		}
 		logProbability$metric_1d = 0.0;
+		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample157) {
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1)

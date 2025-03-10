@@ -1238,9 +1238,9 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Substituted "t$var81" with its value "t$var66".
 		// 
-		// cv$temp$2$$var1230's comment
+		// cv$temp$2$$var1222's comment
 		// 
-		// $var1230's comment
+		// $var1222's comment
 		// Constructing a random variable input for use later.
 		// 
 		// cv$temp$3$var128's comment
@@ -1285,9 +1285,9 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Substituted "t$var81" with its value "t$var66".
 		// 
-		// cv$temp$2$$var1230's comment
+		// cv$temp$2$$var1222's comment
 		// 
-		// $var1230's comment
+		// $var1222's comment
 		// Constructing a random variable input for use later.
 		// 
 		// cv$temp$3$var128's comment
@@ -2174,20 +2174,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 										// generator.
 										for(int j$var124 = forStart$j$var124; j$var124 < forEnd$j$var124; j$var124 += 1)
 											weekly_rates[t$var81][j$var124] = (weekly_ut[t$var81][j$var124] / reduceVar$denom$19$1);
-								}
-							);
-						}
-						if(setFlag$weekly_sales) {
-							int[] observed_weekly_sales = Sales[t$var81];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noProducts, 1,
-								(int forStart$j$var140, int forEnd$j$var140, int threadID$j$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var140 = forStart$j$var140; j$var140 < forEnd$j$var140; j$var140 += 1)
-											observed_weekly_sales[j$var140] = weekly_sales[t$var81][j$var140];
 								}
 							);
 						}

@@ -821,14 +821,14 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 												{
 													if((0 < (noProducts + 1))) {
 														double reduceVar$denom$12 = 0.0;
-														for(int cv$reduction1408Index = 0; cv$reduction1408Index < j$var96; cv$reduction1408Index += 1) {
+														for(int cv$reduction1398Index = 0; cv$reduction1398Index < j$var96; cv$reduction1398Index += 1) {
 															double k = reduceVar$denom$12;
-															double l = weekly_ut[((t$var81 - 0) / 1)][cv$reduction1408Index];
+															double l = weekly_ut[((t$var81 - 0) / 1)][cv$reduction1398Index];
 															reduceVar$denom$12 = (k + l);
 														}
-														for(int cv$reduction1408Index = (j$var96 + 1); cv$reduction1408Index < (noProducts + 1); cv$reduction1408Index += 1) {
+														for(int cv$reduction1398Index = (j$var96 + 1); cv$reduction1398Index < (noProducts + 1); cv$reduction1398Index += 1) {
 															double k = reduceVar$denom$12;
-															double l = weekly_ut[((t$var81 - 0) / 1)][cv$reduction1408Index];
+															double l = weekly_ut[((t$var81 - 0) / 1)][cv$reduction1398Index];
 															reduceVar$denom$12 = (k + l);
 														}
 														double cv$reduced108 = reduceVar$denom$12;
@@ -847,23 +847,23 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 																				{
 																					cv$temp$2$weekly_rates = weekly_rates[((t$var81 - 0) / 1)];
 																				}
-																				int cv$temp$3$$var1108;
+																				int cv$temp$3$$var1100;
 																				{
-																					int $var1108 = (noProducts + 1);
-																					cv$temp$3$$var1108 = $var1108;
+																					int $var1100 = (noProducts + 1);
+																					cv$temp$3$$var1100 = $var1100;
 																				}
 																				int cv$temp$4$var128;
 																				{
 																					int var128 = arrivals[t$var81];
 																					cv$temp$4$var128 = var128;
 																				}
-																				if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1108, cv$temp$4$var128)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1108, cv$temp$4$var128)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1100, cv$temp$4$var128)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1100, cv$temp$4$var128)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1108, cv$temp$4$var128));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1100, cv$temp$4$var128));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1108, cv$temp$4$var128)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1108, cv$temp$4$var128)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1100, cv$temp$4$var128)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$2$weekly_rates, cv$temp$3$$var1100, cv$temp$4$var128)));
 																				}
 																				cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																			}
@@ -912,23 +912,23 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 																			{
 																				cv$temp$5$weekly_rates = weekly_rates[((t$var81 - 0) / 1)];
 																			}
-																			int cv$temp$6$$var1113;
+																			int cv$temp$6$$var1105;
 																			{
-																				int $var1113 = (noProducts + 1);
-																				cv$temp$6$$var1113 = $var1113;
+																				int $var1105 = (noProducts + 1);
+																				cv$temp$6$$var1105 = $var1105;
 																			}
 																			int cv$temp$7$var128;
 																			{
 																				int var128 = arrivals[t$var81];
 																				cv$temp$7$var128 = var128;
 																			}
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1113, cv$temp$7$var128)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1113, cv$temp$7$var128)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1105, cv$temp$7$var128)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1105, cv$temp$7$var128)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1113, cv$temp$7$var128));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1105, cv$temp$7$var128));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1113, cv$temp$7$var128)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1113, cv$temp$7$var128)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1105, cv$temp$7$var128)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$5$weekly_rates, cv$temp$6$$var1105, cv$temp$7$var128)));
 																			}
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
@@ -1165,23 +1165,23 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 													{
 														cv$temp$1$weekly_rates = weekly_rates[((t$var81 - 0) / 1)];
 													}
-													int cv$temp$2$$var1249;
+													int cv$temp$2$$var1241;
 													{
-														int $var1249 = (noProducts + 1);
-														cv$temp$2$$var1249 = $var1249;
+														int $var1241 = (noProducts + 1);
+														cv$temp$2$$var1241 = $var1241;
 													}
 													int cv$temp$3$var128;
 													{
 														int var128 = traceTempVariable$var128$1_1;
 														cv$temp$3$var128 = var128;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1249, cv$temp$3$var128)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1249, cv$temp$3$var128)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1241, cv$temp$3$var128)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1241, cv$temp$3$var128)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1249, cv$temp$3$var128));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1241, cv$temp$3$var128));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1249, cv$temp$3$var128)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1249, cv$temp$3$var128)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1241, cv$temp$3$var128)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t$var81 - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var1241, cv$temp$3$var128)));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
@@ -1768,15 +1768,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 									}
 							}
 						);
-						if(setFlag$weekly_sales) {
-							int[] observed_weekly_sales = Sales[t$var81];
-							parallelFor(RNG$1, 0, noProducts, 1,
-								(int forStart$j$var140, int forEnd$j$var140, int threadID$j$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var140 = forStart$j$var140; j$var140 < forEnd$j$var140; j$var140 += 1)
-											observed_weekly_sales[j$var140] = weekly_sales[((t$var81 - 0) / 1)][j$var140];
-								}
-							);
-						}
 					}
 			}
 		);

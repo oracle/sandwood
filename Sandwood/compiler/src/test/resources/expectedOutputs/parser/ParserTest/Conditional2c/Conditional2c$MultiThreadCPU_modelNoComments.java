@@ -641,15 +641,6 @@ class Conditional2c$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void setIntermediates() {
 		if(true)
 			v = (u + 1);
-		if(guard) {
-			if(true)
-				value[0] = 1.0;
-		} else {
-			if(true)
-				value[0] = v;
-		}
-		if(true)
-			value2[0] = value[0];
 	}
 
 	@Override

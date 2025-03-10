@@ -1,0 +1,24 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model AlternativeModelMK4Fail(int observedSampleCount, int observedPositiveCount)  {	
+	double bias1 = new Beta(1.0, 1.0).sample();	
+	double bias2 = new Beta(1.0, 1.0).sample();
+		
+	//Construct a binomial
+	Binomial binomial1 = new Binomial(bias1, observedSampleCount);
+	Binomial binomial2 = new Binomial(bias2, observedSampleCount);
+				
+	//Sample from it
+	int positiveCount = binomial1.sample() + binomial2.sample();
+		
+	//Link the sampled values to the observed values
+	positiveCount.observe(observedPositiveCount);
+}

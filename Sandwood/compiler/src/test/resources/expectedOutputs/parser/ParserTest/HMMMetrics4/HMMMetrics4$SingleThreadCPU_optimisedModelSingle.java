@@ -12,7 +12,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[][] current_metric_var;
 	private double[] cv$distributionAccumulator$var73;
 	private double[] cv$var20$countGlobal;
-	private double[] cv$var232$stateProbabilityGlobal;
 	private double[] cv$var33$countGlobal;
 	private double[] cv$var55$stateProbabilityGlobal;
 	private double[] cv$var74$stateProbabilityGlobal;
@@ -794,9 +793,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Update the variable probability
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
@@ -841,9 +837,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Update the variable probability
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 					}
 				}
 			}
@@ -1739,9 +1732,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Update the variable probability
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
@@ -1786,9 +1776,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Update the variable probability
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 					}
 				}
 			}
@@ -3398,11 +3385,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// A reference local to the function for the sample variable.
 		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var20$countGlobal, initialStateDistribution, noStates);
 	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 241 drawn from Bernoulli 231. Inference was performed using variable
-	// marginalization.
-	private final void sample241(int sample$var196, int server, int timeStep$var226) {}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 33 drawn from Dirichlet 21. Inference was performed using a Dirichlet
@@ -5152,11 +5134,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		
 		// Allocation of guard$sample76gaussian255$global for single threaded execution
 		guard$sample76gaussian255$global = new boolean[length$metric.length][cv$max_server][cv$max_timeStep$var226];
-		
-		// Constructor for cv$var232$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var232$stateProbabilityGlobal for single threaded execution
-		cv$var232$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to allocate space for model inputs and outputs.
@@ -5319,7 +5296,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					if(!fixedFlag$sample241)
 						metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-					if((var215[server][timeStep$var226] && (!fixedFlag$sample241 || !fixedFlag$sample256)))
+					if((var215[server][timeStep$var226] && !fixedFlag$sample256))
 						metric_inner[timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
 				}
 			}
@@ -5580,29 +5557,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						sample190(var173, var183);
 				}
 			}
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample241) {
-				for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-					for(int server = 0; server < noServers; server += 1) {
-						for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-							sample241(sample$var196, server, timeStep$var226);
-					}
-				}
-			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample241) {
-				for(int sample$var196 = (noSamples - 1); sample$var196 >= 0; sample$var196 -= 1) {
-					for(int server = (noServers - 1); server >= 0; server -= 1) {
-						for(int timeStep$var226 = (length$metric[sample$var196][0] - 1); timeStep$var226 >= 0; timeStep$var226 -= 1)
-							sample241(sample$var196, server, timeStep$var226);
-					}
-				}
-			}
-			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample190) {
 				for(int var173 = (noServers - 1); var173 >= 0; var173 -= 1) {
@@ -5696,7 +5653,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample190)
 			logProbability$var184 = 0.0;
 		logProbability$var231 = 0.0;
-		logProbability$metric_g = 0.0;
 		logProbability$metric_valid_inner = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample241) {
@@ -5708,6 +5664,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 		}
 		logProbability$var244 = 0.0;
+		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample256)
 			logProbability$var245 = 0.0;
 	}
