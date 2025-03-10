@@ -463,7 +463,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
     private Scope observationGuard(Scope targetScope, FuncData funcData, CompilationContext compilationCtx) {
         // Get the traces from this sample to observed variables
         SampleTask<?, ?> s = funcData.sampleDesc.sample;
-        Map<Variable<?>, Set<TraceHandle>> observationTraces = compilationCtx.traces.getObservedTraces(s);
+        Map<Variable<?>, Set<TraceHandle>> observationTraces = compilationCtx.traces.getUnconditionalObservedTraces(s);
 
         // If there are no traces return the current target scope
         if(observationTraces == null)

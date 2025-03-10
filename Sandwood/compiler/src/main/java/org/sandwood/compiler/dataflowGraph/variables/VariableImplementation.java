@@ -8,6 +8,7 @@
 
 package org.sandwood.compiler.dataflowGraph.variables;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,8 +61,6 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     /**
      * If this variable has been set to the same value as another variable this is the task that made that binding
      */
-    // TODO this gets set in the instance handle, sort some wrapper to ensure that
-    // when this happens it also happens to all instances.
     private ObserveVariableTask<A> constraint;
     /**
      * The task that constructed the variable. TODO replace the type declaration with a generic type.
@@ -98,6 +97,14 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     private boolean distribution;
 
     private VariableDescription<A> uniqueName;
+
+    /**
+     * A flag to record if this variable can be determined from observed data. If this set is not empty the value of the
+     * variable can be determined. However, not all the tasks that are seen here will be required to set its value as
+     * they represent the union of all possible sets of constraints that could set the value. Until runtime it may not
+     * be known which is the actual set of conditional tasks setting the value of this variable.
+     */
+    private final Set<ObserveVariableTask<?>> fixedByObservations = new HashSet<>();
 
     /**
      * Constructor for Variable. This gives variable a unique id, sets the dataflow task that constructed it and sets
@@ -471,7 +478,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
      * @return
      */
     @Override
-    public Variable<A> instanceHandle() {
+    public VariableImplementation<A> instanceHandle() {
         return this;
     }
 
@@ -506,6 +513,8 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
      * @throws ConstraintAlreadySetException Only one constraint can currently be applied per variable.
      */
     protected void addConstraint(ObserveVariableTask<A> observation) throws ConstraintAlreadySetException {
+        if(this != instanceHandle())
+            instanceHandle().addConstraint(observation);
         if(constraint == null)
             constraint = observation;
         else
@@ -589,8 +598,8 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         sb.append(", alias: " + alias);
         sb.append(", comment: " + comment);
         sb.append(", scope: task" + enclosingScope.id());
-        if(constraint != null)
-            sb.append(", constraint: var" + constraint.id());
+        if(isObserved())
+            sb.append(", constraint: var" + getObservation().id());
         sb.append(" ]");
     }
 
@@ -662,7 +671,6 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         if(isObserved()) {
             // Extra call as if no RV is reached, this variable will never be added with a
             // trace.
-            dagInfo.addObservedVariable(this);
             ObserveVariableTask<A> o = instanceHandle().getObservation();
             if(this == o.target) { // Ensure the trace is only constructed once from the variable that observation
                 // was applied to.
@@ -672,13 +680,6 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         } else if(consumers.isEmpty() && !isPrivate()) { // Terminal
             // variables.
             constructTrace(dagInfo::addTerminalChild);
-        }
-
-        // constructed inputs.
-        if(getParent().getType() == DFType.CONSTRUCT_INPUT) {
-            // Extra call as if no RV is reached, this variable will never be added with a
-            // trace.
-            dagInfo.addObservedVariable(this);
         }
     }
 
@@ -692,14 +693,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     public void constructTrace(TraceConstructionDesc desc) {
         if(!desc.seenVar.contains(this)) {
             desc.seenVar.add(this);
-            // If this is the start of the trace or this is not an observed value build the trace.
-            if(desc.trace.isEmpty() || !isObserved())
-                parent.constructTrace(desc);
-            else {
-                // Otherwise record the trace here.
-                desc.c.callback(desc.trace, desc.sink);
-            }
-
+            parent.constructTrace(desc);
             desc.seenVar.remove(this);
         }
     }
@@ -749,6 +743,48 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
             return instanceHandle().isObserved();
     }
 
+    /**
+     * A method to determine if the value of this variable has been fixed by an observation task even if this variable
+     * is not the observed variable.
+     * 
+     * @return
+     */
+    @Override
+    public boolean isFixedByObservation(ObserveVariableTask<?> observation) {
+        return fixedByObservations.contains(observation);
+    }
+
+    /**
+     * Set that this variable is fixed by an observation task.
+     */
+    @Override
+    public void setFixedByObservation(ObserveVariableTask<?> observation) {
+        fixedByObservations.add(observation);
+    }
+
+    /**
+     * Set that this variable is fixed by a collection of observation tasks.
+     */
+    @Override
+    public void setFixedByObservations(Collection<ObserveVariableTask<?>> observations) {
+        fixedByObservations.addAll(observations);
+    }
+
+    /**
+     * Method to get the set of observation tasks fixing this variable.
+     * 
+     * @return
+     */
+    @Override
+    public Set<ObserveVariableTask<?>> getFixingObservations() {
+        return fixedByObservations;
+    }
+
+    @Override
+    public boolean isFixed() {
+        return !fixedByObservations.isEmpty();
+    }
+
     @Override
     public Set<Variable<?>> collectInputVariables(DFType... stopTypes) {
         Set<Variable<?>> var = new HashSet<>();
@@ -758,6 +794,8 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
 
     @Override
     public int hashCode() {
+        // TODO simplifiy this method, and track down the locations that cause changing the hash function to change the
+        // output of the compiler.
         final int prime = 31;
         int result = 1;
         result = prime * result + id;
@@ -788,11 +826,11 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         }
 
         // If they are not the same variable start comparing the generating dags.
-        if(constraint != null) {
+        if(isObserved()) {
             if(other.isObserved())
                 return false;
             else
-                return constraint.equivalent(other.getObservation());
+                return getObservation().equivalent(other.getObservation());
         } else
             return parent.equivalent(other.getParent());
     }

@@ -365,7 +365,9 @@ public abstract class Traces {
 
     public abstract boolean isObserved(SampleTask<?, ?> sTask);
 
-    public abstract Map<Variable<?>, Set<TraceHandle>> getObservedTraces(SampleTask<?, ?> source);
+    public abstract Map<Variable<?>, Set<TraceHandle>> getUnconditionalObservedTraces(SampleTask<?, ?> source);
+
+    public abstract Map<Variable<?>, Set<TraceHandle>> getAllObservedTraces(SampleTask<?, ?> source);
 
     /**
      * Method to get all the distribution sample tasks.
@@ -523,9 +525,10 @@ public abstract class Traces {
      * to be grouped together for the construction of distributed scopes. This is achieved by following the traces from
      * the consuming variable constructor to the point that the traces diverge.
      * <p>
-     * If the trace is anything other than a put into an array at the point they diverge then they are dependent. If it
-     * is a put into an array they are dependent if and only if both traces are acting on the same element in the array.
-     * This can be tested by ensuring neither trace proceeds via the array input as to do so would mean that trace is
+     * If the trace is anything other than a put into an array or a conditional at the point they diverge then they are
+     * dependent. If it is a put into an array they are dependent if and only if both traces are acting on the same
+     * element in the array. If it is a conditional one of the traces must be the guard for them to be independent. This
+     * can be tested by ensuring neither trace proceeds via the array input as to do so would mean that trace is
      * updating a different element in an earlier state of the array.
      *
      * @param a The first trace to analyse.
@@ -579,6 +582,49 @@ public abstract class Traces {
                     default:
                         break;
 
+                }
+            }
+        }
+        throw new CompilerException("This point should be unreachable as the traces should not be identical.");
+    }
+
+    /**
+     * Method to determine if two traces are combined to generate part of an observed value. This differs from the
+     * dependency test for traces of arguments to an array as this will only return true if the traces effect the same
+     * cell in a consumed array, rather than just if they effect the array. The reason for this change is observed
+     * variables do not read the values that are observed, so they are independent, while a consuming random variables
+     * behaviour will be dependent on all the data it consumes.
+     * <p>
+     * If the trace is anything other than a put into an array or a conditional at the point they diverge then they are
+     * dependent. If it is a put into an array they are dependent if and only if both traces are acting on the same
+     * element in the array. If it is a conditional one of the traces must be the guard for them to be independent. This
+     * can be tested by ensuring neither trace proceeds via the array input as to do so would mean that trace is
+     * updating a different element in an earlier state of the array.
+     *
+     * @param a The first trace to analyse.
+     * @param b The second trace to analyse.
+     * @return Returns true if the traces are dependent, and false otherwise.
+     */
+    public static boolean observedDependentTraces(TraceHandle a, TraceHandle b) {
+        int aPos = a.size() - 1;
+        int bPos = b.size() - 1;
+        while(aPos >= 0 && bPos >= 0) {
+            DataflowTaskArgDesc aElement = a.get(aPos--);
+            DataflowTaskArgDesc bElement = b.get(bPos--);
+            if(!aElement.equals(bElement)) {
+                // Test if the tasks are different in which case the traces independent,
+                // otherwise we have different arguments at the divergence, but it is into the
+                // same task so they are dependent.
+                int aId = aElement.task.id();
+                int bId = bElement.task.id();
+                // This is the same task with different arguments, and the arguments are not the if and else branches of
+                // a conditional assignment
+                if(aId == bId)
+                    return aElement.task.getType() != DFType.IF_ASSIGNMENT || aElement.argPos == 0
+                            || bElement.argPos == 0;
+                else {
+                    // The traces are diverging by setting multiple elements in an array.
+                    return false;
                 }
             }
         }

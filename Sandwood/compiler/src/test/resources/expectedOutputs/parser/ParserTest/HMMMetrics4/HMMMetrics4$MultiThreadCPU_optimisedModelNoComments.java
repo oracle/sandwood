@@ -11,7 +11,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[][] current_metric_var;
 	private double[][] cv$distributionAccumulator$var73;
 	private double[] cv$var20$countGlobal;
-	private double[][] cv$var232$stateProbabilityGlobal;
 	private double[][] cv$var33$countGlobal;
 	private double[][] cv$var55$stateProbabilityGlobal;
 	private double[][] cv$var74$stateProbabilityGlobal;
@@ -496,7 +495,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						logProbability$var231[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
@@ -513,7 +511,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						cv$accumulator = (cv$accumulator + cv$sampleValue);
 						logProbability$var231[sample$var196][server][timeStep$var226] = cv$sampleValue;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 					}
 				}
 			}
@@ -842,7 +839,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						logProbability$var231[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
-						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
@@ -859,7 +855,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						cv$accumulator = (cv$accumulator + cv$sampleValue);
 						logProbability$var231[sample$var196][server][timeStep$var226] = cv$sampleValue;
 						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
 					}
 				}
 			}
@@ -1431,8 +1426,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var20$countGlobal, initialStateDistribution, noStates);
 	}
-
-	private final void sample241(int sample$var196, int server, int timeStep$var226, int threadID$cv$timeStep$var226, Rng RNG$) {}
 
 	private final void sample33(int var32, int threadID$cv$var32, Rng RNG$) {
 		double[] cv$countLocal = cv$var33$countGlobal[threadID$cv$var32];
@@ -2066,24 +2059,18 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
 				cv$var74$stateProbabilityGlobal[cv$index] = new double[noStates];
 		}
-		{
-			int cv$max_server = 0;
-			int cv$max_timeStep$var226 = 0;
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				if((0 < length$metric[0].length))
-					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, length$metric[sample$var196][0]);
-				cv$max_server = Math.max(cv$max_server, length$metric[0].length);
-			}
-			int cv$max_sample$var196 = length$metric.length;
-			int cv$threadCount = threadCount();
-			guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
+		int cv$max_server = 0;
+		int cv$max_timeStep$var226 = 0;
+		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+			if((0 < length$metric[0].length))
+				cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, length$metric[sample$var196][0]);
+			cv$max_server = Math.max(cv$max_server, length$metric[0].length);
 		}
+		int cv$max_sample$var196 = length$metric.length;
 		int cv$threadCount = threadCount();
-		cv$var232$stateProbabilityGlobal = new double[cv$threadCount][];
+		guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
 		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var232$stateProbabilityGlobal[cv$index] = new double[2];
+			guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
 	}
 
 	@Override
@@ -2272,7 +2259,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
 														if(!fixedFlag$sample241)
 															metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-														if((var215[server][timeStep$var226] && (!fixedFlag$sample241 || !fixedFlag$sample256)))
+														if((var215[server][timeStep$var226] && !fixedFlag$sample256))
 															metric_inner[timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
 													}
 											}
@@ -2594,55 +2581,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					}
 				);
 
-			if(!fixedFlag$sample241)
-				parallelFor(RNG$, 0, noSamples, 1,
-					(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
-								int sample$var196 = index$sample$var196;
-								int threadID$sample$var196 = threadID$index$sample$var196;
-								parallelFor(RNG$1, 0, noServers, 1,
-									(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
-												int server = index$server;
-												int threadID$server = threadID$index$server;
-												parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
-													(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
-														for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1)
-																sample241(sample$var196, server, timeStep$var226, threadID$timeStep$var226, RNG$3);
-													}
-												);
-											}
-									}
-								);
-							}
-					}
-				);
-
 		} else {
-			if(!fixedFlag$sample241)
-				parallelFor(RNG$, 0, noSamples, 1,
-					(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
-						for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
-								int sample$var196 = index$sample$var196;
-								int threadID$sample$var196 = threadID$index$sample$var196;
-								parallelFor(RNG$1, 0, noServers, 1,
-									(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
-										for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
-												int server = index$server;
-												int threadID$server = threadID$index$server;
-												parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
-													(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
-														for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1)
-																sample241(sample$var196, server, timeStep$var226, threadID$timeStep$var226, RNG$3);
-													}
-												);
-											}
-									}
-								);
-							}
-					}
-				);
-
 			if(!fixedFlag$sample190)
 				parallelFor(RNG$, 0, noServers, 1,
 					(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -2774,7 +2713,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$var231[sample$var196][server][timeStep$var226] = 0.0;
 			}
 		}
-		logProbability$metric_g = 0.0;
 		logProbability$metric_valid_inner = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample241) {
@@ -2791,6 +2729,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$var244[sample$var196][server][timeStep$var226] = 0.0;
 			}
 		}
+		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample256) {
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {

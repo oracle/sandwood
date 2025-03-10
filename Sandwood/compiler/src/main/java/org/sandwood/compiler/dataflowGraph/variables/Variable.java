@@ -323,6 +323,36 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      */
     boolean isObserved();
 
+    /**
+     * A method to determine if the value of this variable has been fixed by an observation task even if this variable
+     * is not the observed variable.
+     * 
+     * @return
+     */
+    boolean isFixedByObservation(ObserveVariableTask<?> observation);
+
+    /**
+     * Set that this variable is fixed by an observation task.
+     */
+    void setFixedByObservation(ObserveVariableTask<?> observation);
+
+    /**
+     * Set that this variable is fixed by a collection of observation tasks.
+     */
+    void setFixedByObservations(Collection<ObserveVariableTask<?>> observations);
+
+    /**
+     * Method to get the set of observation tasks fixing this variable.
+     * 
+     * @return
+     */
+    Set<ObserveVariableTask<?>> getFixingObservations();
+
+    /**
+     * Method to test if the variable is fixed by observations.
+     */
+    boolean isFixed();
+
     Set<Variable<?>> collectInputVariables(DFType... stopTypes);
 
     boolean equivalent(Variable<?> other);

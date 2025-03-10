@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -21,7 +21,7 @@ import org.sandwood.compiler.exceptions.CompilerException;
 /**
  * Handle class to ensure that traces are always copied when they are accessed. *
  */
-public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTaskArgDesc> {    
+public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTaskArgDesc> {
     private final Trace t;
 
     private TraceHandle(Trace t, boolean reverse) {
@@ -101,7 +101,7 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
                 switch(d.task.getType()) {
                     case GET:
                         return -Integer.compare(d.argPos, od.argPos); // As the index is after the array value, but
-                    // needs computing first we reverse the order for gets.
+                        // needs computing first we reverse the order for gets.
                     case IF_ASSIGNMENT:
                         // Code is required here to ensure that indexes are generated ahead of other
                         // code.
@@ -138,7 +138,9 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
     }
 
     /**
-     * A method to remove the prefix of a trace. This is useful if traces between two points hold a common prefix and only the suffixes are required.
+     * A method to remove the prefix of a trace. This is useful if traces between two points hold a common prefix and
+     * only the suffixes are required.
+     * 
      * @param prefix The prefix to remove.
      * @return A TraceHandle with the prefix removed.
      */
@@ -147,36 +149,47 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
         int prefixSize = prefix.size();
         if(traceSize < prefixSize)
             throw new CompilerException("Prefixed trace is not a subtrace of this trace.");
-        for(int i=0; i<prefixSize; i++) {
+        for(int i = 0; i < prefixSize; i++) {
             if(!t.get(i).equals(prefix.get(i)))
                 throw new CompilerException("Prefixed trace is not a subtrace of this trace.");
         }
-            
+
         Trace subTrace = new Trace();
-        for(int i = prefixSize-1; i<traceSize; i++)
+        for(int i = prefixSize - 1; i < traceSize; i++)
             subTrace.add(t.get(i));
-        
+
         return getTraceHandle(subTrace);
     }
 
     /**
      * A method for removing all elements from a trace before the value of i.
+     * 
      * @param i The point in the trace to start from.
      * @return The resultant sub trace.
      */
     public TraceHandle subTrace(int i) {
         Trace nt = new Trace();
         int size = t.size();
-        while(i<size)
+        while(i < size)
             nt.add(t.get(i++));
         return TraceHandle.getTraceHandle(nt);
+    }
+
+    public boolean invertable() {
+        boolean b = true;
+        for(int i = 1; i < t.size(); i++) {
+            DataflowTaskArgDesc d = t.get(i);
+            b = b && (d.task.checkInversionError(d.argPos) == null);
+        }
+
+        return b;
     }
 
     /**
      * As traces inside a trace handle are immutable a singleton instance is created for the empty trace.
      */
     private static final TraceHandle emptyTrace = new TraceHandle(new Trace(), false);
-    
+
     public static TraceHandle emptyTrace() {
         return emptyTrace;
     }

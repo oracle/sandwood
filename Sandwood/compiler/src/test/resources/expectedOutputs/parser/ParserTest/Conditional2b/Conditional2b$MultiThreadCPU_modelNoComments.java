@@ -601,17 +601,7 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void setIntermediates() {
-		if(guard) {
-			if(true)
-				value[0] = 1.0;
-		} else {
-			if(true)
-				value[0] = u;
-		}
-		if(true)
-			value2[0] = value[0];
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

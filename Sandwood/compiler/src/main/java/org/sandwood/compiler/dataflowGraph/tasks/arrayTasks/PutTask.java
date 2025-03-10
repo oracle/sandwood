@@ -75,6 +75,10 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
         if((value.isDistribution() || scopeCondition.isDistribution()) && !array.isDistribution()) {
             setDistributions();
         }
+
+        if(array.isObserved())
+            loggedErrors
+                    .add(new SandwoodModelException("Attempting to modify an array that has been observed.", location));
     }
 
     private void setDistributions() {
@@ -136,6 +140,7 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
 
     @Override
     public void testTask(List<SandwoodModelException> errors) {
+        super.testTask(errors);
         errors.addAll(loggedErrors);
         testIndex(errors);
         testArray(errors);

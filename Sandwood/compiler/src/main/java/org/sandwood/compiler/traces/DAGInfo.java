@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -10,11 +10,13 @@ package org.sandwood.compiler.traces;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
@@ -32,6 +34,33 @@ public class DAGInfo {
              */
             this.sink = sink;
         }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((handle == null) ? 0 : handle.hashCode());
+            result = prime * result + ((sink == null) ? 0 : sink.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(this == obj)
+                return true;
+            if(obj == null)
+                return false;
+            if(getClass() != obj.getClass())
+                return false;
+            TraceSinkPair other = (TraceSinkPair) obj;
+            if(handle == null && other.handle != null)
+                return false;
+            if(!handle.equals(other.handle))
+                return false;
+            if(sink == null && other.sink != null)
+                return false;
+            return sink.equals(other.sink);
+        }
     }
 
     private final List<TraceSinkPair> observedVarTraces = new ArrayList<>();
@@ -41,7 +70,6 @@ public class DAGInfo {
     private final List<TraceSinkPair> allTraces = new ArrayList<>();
 
     private final Set<RandomVariable<?, ?>> randomVariables = new HashSet<>();
-    private final Set<Variable<?>> observedVariables = new HashSet<>();
 
     /**
      * Add an observed variable as an end point, with a random variable, constant, or input as the source, and a trace
@@ -135,20 +163,6 @@ public class DAGInfo {
     }
 
     /**
-     * Adds an encountered observed variable to be kept track of.
-     *
-     * @param v The observed variable to be recorded.
-     */
-    public void addObservedVariable(Variable<?> v) {
-        v = v.getCurrentInstance();
-        observedVariables.add(v);
-    }
-
-    public Set<Variable<?>> getObservedVariables() {
-        return observedVariables;
-    }
-
-    /**
      * Add an encountered random variable.
      *
      * @param v The random variable to be recorded.
@@ -159,5 +173,54 @@ public class DAGInfo {
 
     public Set<RandomVariable<?, ?>> getRandomVariables() {
         return randomVariables;
+    }
+
+    public void filterTraces() {
+        filterTraces(observedVarTraces);
+        filterTraces(observedSourceTraces);
+        filterTraces(randomVarTraces);
+        filterTraces(terminalVarTraces);
+    }
+
+    private void filterTraces(List<TraceSinkPair> traces) {
+        Set<ObserveVariableTask<?>> s = new LinkedHashSet<>();
+        Set<TraceSinkPair> toAdd = new LinkedHashSet<>();
+        Set<TraceSinkPair> toRemove = new LinkedHashSet<>();
+
+        for(TraceSinkPair p:traces) {
+            Set<ObserveVariableTask<?>> os = p.sink.getFixingObservations();
+            TraceHandle h = p.handle;
+            int i = h.size() - 1;
+            boolean fixed = false;
+            while(i >= 0 && !fixed) {
+                Variable<?> v = h.get(i--).task.getOutput();
+                if(v.isFixed()) {
+                    fixed = true;
+                    // Test if there is overlap between the initial constraining set and the constraining set for this
+                    // variable
+                    for(ObserveVariableTask<?> o:v.getFixingObservations()) {
+                        if(os.contains(o)) {
+                            fixed = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(fixed) {
+                TraceHandle subTrace = h.subTrace(i + 2);
+                toRemove.add(p);
+                if(!subTrace.isEmpty())
+                    toAdd.add(new TraceSinkPair(subTrace, p.sink));
+            }
+        }
+
+        if(!toRemove.isEmpty()) {
+            traces.removeAll(toRemove);
+            traces.addAll(toAdd);
+
+            allTraces.removeAll(toRemove);
+            allTraces.addAll(toAdd);
+        }
     }
 }

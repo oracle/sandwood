@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -19,6 +19,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.tests.util.CompilerState;
@@ -55,7 +56,7 @@ public abstract class ModelTestSkeleton {
             buildGraph();
             for(Variable<?> v:variables) {
                 Variable<?>[] vs = { v };
-                Traces t = TracesImplementation.getTraces(vs);
+                Traces t = TracesImplementation.getTraces(new CompilationDesc(), vs);
                 List<RandomVariable<?, ?>> results = t.getAllRandomVariables();
                 boolean sameSets = randoms.containsAll(results) && results.size() == randoms.size();
                 if(sameSets)

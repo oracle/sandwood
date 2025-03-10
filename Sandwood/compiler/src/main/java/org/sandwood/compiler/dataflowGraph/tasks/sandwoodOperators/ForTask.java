@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -63,13 +63,13 @@ public class ForTask extends ScopedNumberProducingDataflowTask<IntVariable> {
         if(scopeCondition == null)
             this.scopeCondition = scopeCondition;
         else
-            this.scopeCondition = start.lessThan(end)
-                .and(step.eq(Variable.intVariable(0)).negate())
-                .and(scopeCondition);
+            this.scopeCondition = start.lessThan(end).and(step.eq(Variable.intVariable(0)).negate())
+                    .and(scopeCondition);
     }
 
     @Override
     public void testTask(List<SandwoodModelException> errors) {
+        super.testTask(errors);
         if(start.isDistribution())
             errors.add(new SandwoodModelException("Initial value of for loop cannot be a distribution.", this));
         else if(!start.isDeterministic())

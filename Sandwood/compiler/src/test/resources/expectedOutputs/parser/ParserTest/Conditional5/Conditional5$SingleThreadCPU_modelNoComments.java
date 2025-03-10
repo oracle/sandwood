@@ -448,14 +448,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void setIntermediates() {
-		if(true) {
-			if(guard)
-				value = a;
-			else
-				value = b;
-		}
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {
