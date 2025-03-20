@@ -873,9 +873,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var9 = 0.0;
-		logProbability$prob = 0.0;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
+		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
 				logProbability$sample21[var20] = 0.0;

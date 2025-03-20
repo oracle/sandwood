@@ -15,11 +15,13 @@ import static org.sandwood.compiler.trees.irTree.IRTree.negateBoolean;
 import static org.sandwood.compiler.trees.irTree.IRTree.voidFunction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
@@ -93,6 +95,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
          */
         public final boolean sampleUpdated;
 
+        public final List<RandomVariable<?, ?>> consumingRVs;
+
         /**
          *
          * @param sampleDesc
@@ -115,6 +119,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
             toConsumingRV = compilationCtx.traces.getTracesRVToSampleTask(sampleDesc.sample);
 
+            consumingRVs = new ArrayList<>(toConsumingRV.keySet());
+            Collections.sort(consumingRVs);
+
             /*
              * TODO if we change to having traces between random variables and the samples they generate that go via
              * arrays this will need to change as we no longer have a just the one possible random variable for the
@@ -123,10 +130,6 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             distributionTraces = Traces.findDistributionTraces(sampleDesc.sample.randomVariable, compilationCtx);
 
             this.sampleUpdated = sampleUpdated;
-        }
-
-        protected Set<RandomVariable<?, ?>> getConsumingRVs() {
-            return toConsumingRV.keySet();
         }
 
         /**
@@ -190,7 +193,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                     (TreeBuilderInfo info) -> getPerSourceConfigStartIR(funcData, info, compilationCtx));
 
             // For each random variable that consumes the results of this sample.
-            for(RandomVariable<?, ?> consumingRV:funcData.getConsumingRVs()) {
+            for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
                 ScopeConstructor b = sourceDisArgs.resetProbabilities();
                 b = b.addIsolation("Processing random variable " + consumingRV.getId() + ".");
 
@@ -359,7 +362,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
         { // Handle all the distributed samples
           // For each random variable that consumes the results of this sample.
-            for(RandomVariable<?, ?> consumingRV:funcData.getConsumingRVs()) {
+            for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
 
                 // Find any distribution sample tasks for this random variable.
                 Set<DistributionSampleTask<?, ?>> tasks = new HashSet<>();

@@ -2050,10 +2050,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var10 = 0.0;
-		logProbability$denom = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
+		logProbability$denom = 0.0;
 		if(!fixedProbFlag$sample22) {
 			for(int var21 = 0; var21 < noProducts; var21 += 1)
 				logProbability$sample22[((var21 - 0) / 1)] = 0.0;

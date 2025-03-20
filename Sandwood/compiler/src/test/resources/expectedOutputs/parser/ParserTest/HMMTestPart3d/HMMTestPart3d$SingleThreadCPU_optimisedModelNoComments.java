@@ -722,8 +722,8 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = 0.0;
 		logProbability$var52 = 0.0;
-		logProbability$st2 = 0.0;
 		logProbability$st = 0.0;
+		logProbability$st2 = 0.0;
 		if(!fixedProbFlag$sample54)
 			logProbability$var53 = 0.0;
 		for(int i$var71 = 1; i$var71 < samples; i$var71 += 1)

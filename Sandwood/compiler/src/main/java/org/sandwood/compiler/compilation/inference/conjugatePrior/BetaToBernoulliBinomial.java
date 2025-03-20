@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -80,7 +80,7 @@ public class BetaToBernoulliBinomial
             noTrialsNameDis = VariableNames.calcVarName("count", VariableType.DoubleVariable, true);
 
             boolean distributed = false;
-            for(RandomVariable<?, ?> consumingRV:getConsumingRVs())
+            for(RandomVariable<?, ?> consumingRV:consumingRVs)
                 distributed = distributed || consumingRV.isDistribution() || consumingRV.distributionSampled();
             distributedConsumers = distributed;
         }
@@ -332,8 +332,7 @@ public class BetaToBernoulliBinomial
     @Override
     protected void addDistributionProbabilities(BetaToBernoulliBinomialData funcData,
             CompilationContext compilationCtx) {
-        throw new CompilerException(
-                "Unable to merge distributions in this inference method.");
+        throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
@@ -353,9 +352,9 @@ public class BetaToBernoulliBinomial
             TreeBuilderInfo info, CompilationContext compilationCtx) {}
 
     @Override
-    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> 
-    void getDeterministicObservationToConditionalIR(IRTreeReturn<C> current,
-        ScalarVariable<D> input, BetaToBernoulliBinomialData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+    protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
+            IRTreeReturn<C> current, ScalarVariable<D> input, BetaToBernoulliBinomialData funcData,
+            TreeBuilderInfo info, CompilationContext compilationCtx) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }

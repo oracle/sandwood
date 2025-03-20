@@ -1432,9 +1432,9 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var23 = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
+		logProbability$sum = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)

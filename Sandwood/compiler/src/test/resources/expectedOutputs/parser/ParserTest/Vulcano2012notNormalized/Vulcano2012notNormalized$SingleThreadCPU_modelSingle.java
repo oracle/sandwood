@@ -2235,9 +2235,9 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var10 = 0.0;
-		logProbability$weekly_ut = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
+		logProbability$weekly_ut = 0.0;
 		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample22) {
 			for(int var21 = 0; var21 < noProducts; var21 += 1)
