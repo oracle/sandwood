@@ -150,7 +150,7 @@ public class ProbabilityFunction {
 
         }
 
-        public Set<Variable<?>> getVariables() {
+        private Set<Variable<?>> getVariables() {
             Set<Variable<?>> s = new HashSet<>();
             if(sampleVariable != null)
                 s.add(sampleVariable);
@@ -161,7 +161,9 @@ public class ProbabilityFunction {
 
         @Override
         public Iterator<Variable<?>> iterator() {
-            return getVariables().iterator();
+            List<Variable<?>> l = new ArrayList<>(getVariables());
+            Collections.sort(l);
+            return l.iterator();
         }
     }
 

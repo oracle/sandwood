@@ -906,9 +906,9 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
 			logProbability$var23[((i$var18 - 1) / 1)] = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
+		logProbability$sum = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)

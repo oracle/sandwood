@@ -2855,11 +2855,11 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var19 = 0.0;
-		logProbability$expedNorm = 0.0;
-		logProbability$weekly_rates = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
+		logProbability$expedNorm = 0.0;
 		logProbability$weekly_ut = 0.0;
+		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample32) {
 			if((0 < numTimeSteps)) {
 				for(int var29 = 0; var29 < avail[0].length; var29 += 1)
@@ -2892,8 +2892,8 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int t = 0; t < numTimeSteps; t += 1)
 				logProbability$var157[((t - 0) / 1)] = 0.0;
 		}
-		logProbability$sales = 0.0;
 		logProbability$weekly_sales = 0.0;
+		logProbability$sales = 0.0;
 		if(!fixedProbFlag$sample166) {
 			if((0 < numTimeSteps)) {
 				for(int t = 0; t < numTimeSteps; t += 1)

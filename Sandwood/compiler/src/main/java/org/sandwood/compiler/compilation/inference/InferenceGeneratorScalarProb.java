@@ -284,8 +284,9 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // Place the body statements in a loop that will iterate for all the elements in
         // the distribution.
         IRTreeVoid body = sequential(bodyStmts, Tree.NoComment);
-        IRTreeVoid loop = IRTree.forStmt(body, constant(0), s.randomVariable.getNumStates().getForwardIR(compilationCtx),
-                constant(1), indexName, true, "Calculate the overlap for each element in the distribution");
+        IRTreeVoid loop = IRTree.forStmt(body, constant(0),
+                s.randomVariable.getNumStates().getForwardIR(compilationCtx), constant(1), indexName, true,
+                "Calculate the overlap for each element in the distribution");
         compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
         // Compute the ratio of the overlap that should be added with 1 being used
@@ -427,7 +428,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             Variable<?> v = randomInputs.get(i);
             args.add(constructScopedArg(v, compilationCtx));
             if(v.getType().isArray())
-                args.add(constructScopedArg(((ArrayVariable<?>)v).length(), compilationCtx));
+                args.add(constructScopedArg(((ArrayVariable<?>) v).length(), compilationCtx));
         }
         return args;
     }
@@ -487,7 +488,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     // No global state is required.
     @Override
     protected void allocateGlobalState(CompilationContext compilationCtx, FuncData funcData) {
-        for(RandomVariable<?, ?> rv:funcData.getConsumingRVs()) {
+        for(RandomVariable<?, ?> rv:funcData.consumingRVs) {
             for(DataflowTask<?> d:rv.getConsumers()) {
                 if(((SampleTask<?, ?>) d).isDistribution()) {
                     // TODO shrink the size of this by constructing a set of sizes, not an array for
@@ -568,9 +569,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             CompilationContext compilationCtx) {
         IRTreeReturn<D> inputValue = input.getForwardIR(compilationCtx);
         IRTreeReturn<BooleanVariable> guard = IRTree.eq(current, inputValue);
-        IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
-                log(info.probability), consumerSampleProbabilitiesAccumulator,
-                "Record if the conditional is valid.");
+        IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator), log(info.probability),
+                consumerSampleProbabilitiesAccumulator, "Record if the conditional is valid.");
         IRTreeVoid condition = IRTree.ifElse(guard, recordValid, "Check observed variable is possible");
         compilationCtx.addTreeToScope(GlobalScope.scope, condition);
 

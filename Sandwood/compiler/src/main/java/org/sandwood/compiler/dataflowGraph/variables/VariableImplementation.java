@@ -794,12 +794,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
 
     @Override
     public int hashCode() {
-        // TODO simplifiy this method, and track down the locations that cause changing the hash function to change the
-        // output of the compiler.
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
+        return 31 * id;
     }
 
     @Override

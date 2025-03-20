@@ -610,8 +610,8 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var58 = 0.0;
-		logProbability$indirection2 = 0.0;
 		logProbability$indirection1 = 0.0;
+		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
 			for(int i = 0; i < 10; i += 1) {
 				for(int j = 0; j < length$observed; j += 1)

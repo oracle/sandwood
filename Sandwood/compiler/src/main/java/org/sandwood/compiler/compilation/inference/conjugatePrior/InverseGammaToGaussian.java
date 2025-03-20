@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -72,7 +72,7 @@ public class InverseGammaToGaussian extends
             countNameDis = VariableNames.calcVarName("count", VariableType.DoubleVariable, true);
 
             boolean distributed = false;
-            for(RandomVariable<?, ?> consumingRV:getConsumingRVs())
+            for(RandomVariable<?, ?> consumingRV:consumingRVs)
                 distributed = distributed || consumingRV.isDistribution();
             distributedConsumers = distributed;
         }

@@ -512,7 +512,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
     // No global state is required.
     @Override
     protected void allocateGlobalState(CompilationContext compilationCtx, FuncData funcData) {
-        for(RandomVariable<?, ?> rv:funcData.getConsumingRVs()) {
+        for(RandomVariable<?, ?> rv:funcData.consumingRVs) {
             for(DataflowTask<?> d:rv.getConsumers()) {
                 if(((SampleTask<?, ?>) d).isDistribution()) {
                     // TODO shrink the size of this by constructing a set of sizes, not an array for
