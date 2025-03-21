@@ -7,7 +7,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] bias;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample27 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample27 = false;
@@ -54,17 +53,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		fixedFlag$sample21 = cv$value;
 		fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
 		fixedProbFlag$sample27 = (fixedFlag$sample21 && fixedProbFlag$sample27);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample27() {
-		return fixedFlag$sample27;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample27(boolean cv$value) {
-		fixedFlag$sample27 = cv$value;
-		fixedProbFlag$sample27 = (fixedFlag$sample27 && fixedProbFlag$sample27);
 	}
 
 	@Override
@@ -134,12 +122,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final double get$value() {
 		return value;
-	}
-
-	@Override
-	public final void set$value(double cv$value) {
-		value = cv$value;
-		fixedProbFlag$sample27 = false;
 	}
 
 	private final void logProbabilityValue$sample21() {
@@ -237,7 +219,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$value = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample4) && fixedFlag$sample21);
+			fixedProbFlag$sample27 = (fixedFlag$sample4 && fixedFlag$sample21);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -709,8 +691,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if(!(fixedFlag$sample4 && fixedFlag$sample21))
 				bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
-		if(!fixedFlag$sample27)
-			value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
+		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
 
 	@Override

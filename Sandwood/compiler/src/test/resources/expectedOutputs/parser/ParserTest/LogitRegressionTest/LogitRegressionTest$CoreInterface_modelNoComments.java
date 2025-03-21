@@ -7,8 +7,6 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	public void set$fixedFlag$sample35(boolean cv$value);
 	public boolean get$fixedFlag$sample42();
 	public void set$fixedFlag$sample42(boolean cv$value);
-	public boolean get$fixedFlag$sample94();
-	public void set$fixedFlag$sample94(boolean cv$value);
 	public int get$k();
 	public double get$logProbability$bias();
 	public double get$logProbability$weights();
@@ -19,7 +17,6 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	public double[][] get$x();
 	public void set$x(double[][] cv$value);
 	public boolean[][] get$y();
-	public void set$y(boolean[][] cv$value);
 	public boolean[][] get$yMeasured();
 	public void set$yMeasured(boolean[][] cv$value);
 	public void logEvidenceGeneration();

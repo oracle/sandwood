@@ -10,7 +10,6 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] cv$var6$stateProbabilityGlobal;
 	private double[] distribution$sample4;
 	private double[] distribution$sample6;
-	private boolean fixedFlag$sample12 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample12 = false;
@@ -33,24 +32,6 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	public DistributionTest3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
-	}
-
-	// Getter for fixedFlag$sample12.
-	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
-	}
-
-	// Setter for fixedFlag$sample12.
-	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample12 including if probabilities
-		// need to be updated.
-		fixedFlag$sample12 = cv$value;
-		
-		// Should the probability of sample 12 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedProbFlag$sample12);
 	}
 
 	// Getter for fixedFlag$sample4.
@@ -131,16 +112,6 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final boolean get$v() {
 		return v;
-	}
-
-	// Setter for v.
-	@Override
-	public final void set$v(boolean cv$value) {
-		// Set flags for all the side effects of v including if probabilities need to be updated.
-		v = cv$value;
-		
-		// Unset the fixed probability flag for sample 12 as it depends on v.
-		fixedProbFlag$sample12 = false;
 	}
 
 	// Getter for v1.
@@ -438,7 +409,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample12 = ((fixedFlag$sample12 && fixedFlag$sample4) && fixedFlag$sample6);
+			fixedProbFlag$sample12 = (fixedFlag$sample4 && fixedFlag$sample6);
 		}
 		// Using cached values.
 		else {
@@ -722,7 +693,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample12 = ((fixedFlag$sample12 && fixedFlag$sample4) && fixedFlag$sample6);
+			fixedProbFlag$sample12 = (fixedFlag$sample4 && fixedFlag$sample6);
 		}
 		// Using cached values.
 		else {
@@ -1431,8 +1402,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 		if(!fixedFlag$sample6)
 			v2 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample12)
-			v = DistributionSampling.sampleBernoulli(RNG$, (((1.0 * v1) + v1) / v2));
+		v = DistributionSampling.sampleBernoulli(RNG$, (((1.0 * v1) + v1) / v2));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

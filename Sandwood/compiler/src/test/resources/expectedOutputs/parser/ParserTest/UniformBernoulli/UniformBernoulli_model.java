@@ -22,10 +22,11 @@ public class UniformBernoulli extends Model {
         public boolean[] getValue() { return system$c.get$output(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$output(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable output because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,17 +34,12 @@ public class UniformBernoulli extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample19(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample19())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -201,14 +197,10 @@ public class UniformBernoulli extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(output.isSet())
-            newCore.set$output(oldCore.get$output());
         if(prior.isSet())
             newCore.set$prior(oldCore.get$prior());
 
         //Set fixed flags
-        if(output.isSet())
-            newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
         if(prior.isSet())
             newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
     }

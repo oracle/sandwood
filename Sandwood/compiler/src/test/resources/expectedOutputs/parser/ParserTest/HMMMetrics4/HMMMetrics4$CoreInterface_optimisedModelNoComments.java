@@ -15,8 +15,6 @@ interface HMMMetrics4$CoreInterface extends org.sandwood.runtime.internal.model.
 	public void set$fixedFlag$sample190(boolean cv$value);
 	public boolean get$fixedFlag$sample20();
 	public void set$fixedFlag$sample20(boolean cv$value);
-	public boolean get$fixedFlag$sample241();
-	public void set$fixedFlag$sample241(boolean cv$value);
 	public boolean get$fixedFlag$sample256();
 	public void set$fixedFlag$sample256(boolean cv$value);
 	public boolean get$fixedFlag$sample33();
@@ -44,11 +42,9 @@ interface HMMMetrics4$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[][][] get$metric();
 	public void set$metric(double[][][] cv$value);
 	public double[][][] get$metric_g();
-	public void set$metric_g(double[][][] cv$value);
 	public boolean[][][] get$metric_valid();
 	public void set$metric_valid(boolean[][][] cv$value);
 	public boolean[][][] get$metric_valid_g();
-	public void set$metric_valid_g(boolean[][][] cv$value);
 	public int get$noSamples();
 	public int get$noServers();
 	public int get$noStates();

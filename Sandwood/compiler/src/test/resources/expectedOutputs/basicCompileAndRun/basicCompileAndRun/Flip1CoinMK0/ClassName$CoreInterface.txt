@@ -18,17 +18,8 @@ interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	// Setter for fixedFlag$sample4.
 	public void set$fixedFlag$sample4(boolean cv$value);
 
-	// Getter for fixedFlag$sample6.
-	public boolean get$fixedFlag$sample6();
-
-	// Setter for fixedFlag$sample6.
-	public void set$fixedFlag$sample6(boolean cv$value);
-
 	// Getter for flip.
 	public boolean get$flip();
-
-	// Setter for flip.
-	public void set$flip(boolean cv$value);
 
 	// Getter for flipMeasured.
 	public boolean get$flipMeasured();

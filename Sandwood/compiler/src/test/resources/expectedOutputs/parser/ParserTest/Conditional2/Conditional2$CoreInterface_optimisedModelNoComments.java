@@ -14,7 +14,6 @@ interface Conditional2$CoreInterface extends org.sandwood.runtime.internal.model
 	public double[] get$observedValue();
 	public void set$observedValue(double[] cv$value);
 	public double[] get$value();
-	public void set$value(double[] cv$value);
 	public double[] get$value2();
 	public void logEvidenceGeneration();
 }

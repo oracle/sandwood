@@ -4,8 +4,6 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	public double[][] get$a();
 	public double[][] get$b();
 	public double[] get$c();
-	public boolean get$fixedFlag$sample100();
-	public void set$fixedFlag$sample100(boolean cv$value);
 	public boolean get$fixedFlag$sample81();
 	public void set$fixedFlag$sample81(boolean cv$value);
 	public boolean get$fixedFlag$sample84();
@@ -19,7 +17,6 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$logProbability$p();
 	public double get$logProbability$y();
 	public boolean[] get$obs();
-	public void set$obs(boolean[] cv$value);
 	public boolean[] get$obs_measured();
 	public void set$obs_measured(boolean[] cv$value);
 	public double get$p();

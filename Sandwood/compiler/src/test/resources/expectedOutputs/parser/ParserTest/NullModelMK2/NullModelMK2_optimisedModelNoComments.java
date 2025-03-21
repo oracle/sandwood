@@ -57,10 +57,11 @@ public class NullModelMK2 extends Model {
         public int getValue() { return system$c.get$positiveCount(); }
 
         @Override
-        protected void setValueInternal(int value) {
-            system$c.set$positiveCount(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable positiveCount because it is fixed by observing a variable.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class NullModelMK2 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample12(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample12())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -234,14 +230,10 @@ public class NullModelMK2 extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(positiveCount.isSet())
-            newCore.set$positiveCount(oldCore.get$positiveCount());
 
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
-        if(positiveCount.isSet())
-            newCore.set$fixedFlag$sample12(oldCore.get$fixedFlag$sample12());
     }
 
     /**

@@ -11,7 +11,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedFlag$sample31 = false;
 	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample74 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private boolean fixedProbFlag$sample31 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -131,24 +130,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		fixedProbFlag$sample74 = (fixedFlag$sample35 && fixedProbFlag$sample74);
 	}
 
-	// Getter for fixedFlag$sample74.
-	@Override
-	public final boolean get$fixedFlag$sample74() {
-		return fixedFlag$sample74;
-	}
-
-	// Setter for fixedFlag$sample74.
-	@Override
-	public final void set$fixedFlag$sample74(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample74 including if probabilities
-		// need to be updated.
-		fixedFlag$sample74 = cv$value;
-		
-		// Should the probability of sample 74 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample74 = (fixedFlag$sample74 && fixedProbFlag$sample74);
-	}
-
 	// Getter for k.
 	@Override
 	public final int get$k() {
@@ -258,19 +239,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(double[] cv$value) {
-		// Set flags for all the side effects of y including if probabilities need to be updated.
-		// Set y with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		y = cv$value;
-		setFlag$y = true;
-		
-		// Unset the fixed probability flag for sample 74 as it depends on y.
-		fixedProbFlag$sample74 = false;
 	}
 
 	// Getter for yMeasured.
@@ -728,7 +696,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample74 = (((fixedFlag$sample74 && fixedFlag$sample24) && fixedFlag$sample31) && fixedFlag$sample35);
+			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
 		}
 		// Using cached values.
 		else {
@@ -1014,12 +982,9 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If y has not been set already allocate space.
-		if(!setFlag$y) {
-			// Constructor for y
-			{
-				y = new double[x.length];
-			}
+		// Constructor for y
+		{
+			y = new double[x.length];
 		}
 		
 		// If weights has not been set already allocate space.
@@ -1076,12 +1041,11 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample74)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var70$4 = (i$var67 + j$var68);
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$var70$4 = (i$var67 + j$var68);
 			}
-			if(!fixedFlag$sample74)
-				y[i$var45] = ((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + (reduceVar$var70$4 + bias));
+			y[i$var45] = ((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + (reduceVar$var70$4 + bias));
 		}
 	}
 

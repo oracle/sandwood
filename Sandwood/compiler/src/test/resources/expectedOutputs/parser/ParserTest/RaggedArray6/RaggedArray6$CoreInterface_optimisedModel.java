@@ -26,12 +26,6 @@ interface RaggedArray6$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for fixedFlag$sample50.
 	public void set$fixedFlag$sample50(boolean cv$value);
 
-	// Getter for fixedFlag$sample65.
-	public boolean get$fixedFlag$sample65();
-
-	// Setter for fixedFlag$sample65.
-	public void set$fixedFlag$sample65(boolean cv$value);
-
 	// Getter for length$obs_measured.
 	public int get$length$obs_measured();
 
@@ -49,9 +43,6 @@ interface RaggedArray6$CoreInterface extends org.sandwood.runtime.internal.model
 
 	// Getter for obs.
 	public boolean[] get$obs();
-
-	// Setter for obs.
-	public void set$obs(boolean[] cv$value);
 
 	// Getter for obs_measured.
 	public boolean[] get$obs_measured();

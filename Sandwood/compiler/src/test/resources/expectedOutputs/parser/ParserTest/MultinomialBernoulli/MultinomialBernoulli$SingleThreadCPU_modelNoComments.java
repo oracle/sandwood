@@ -9,9 +9,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double[] cv$var17$countGlobal;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample48 = false;
-	private boolean fixedFlag$sample60 = false;
-	private boolean fixedFlag$sample72 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample48 = false;
@@ -75,39 +72,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		fixedProbFlag$sample48 = (fixedFlag$sample20 && fixedProbFlag$sample48);
 		fixedProbFlag$sample60 = (fixedFlag$sample20 && fixedProbFlag$sample60);
 		fixedProbFlag$sample72 = (fixedFlag$sample20 && fixedProbFlag$sample72);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		fixedFlag$sample48 = cv$value;
-		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample60() {
-		return fixedFlag$sample60;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample60(boolean cv$value) {
-		fixedFlag$sample60 = cv$value;
-		fixedProbFlag$sample60 = (fixedFlag$sample60 && fixedProbFlag$sample60);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value) {
-		fixedFlag$sample72 = cv$value;
-		fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedProbFlag$sample72);
 	}
 
 	@Override
@@ -183,15 +147,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final boolean[] get$output() {
 		return output;
-	}
-
-	@Override
-	public final void set$output(boolean[] cv$value) {
-		output = cv$value;
-		setFlag$output = true;
-		fixedProbFlag$sample48 = false;
-		fixedProbFlag$sample60 = false;
-		fixedProbFlag$sample72 = false;
 	}
 
 	@Override
@@ -358,7 +313,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedFlag$sample20);
+			fixedProbFlag$sample48 = fixedFlag$sample20;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -410,7 +365,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample60 = (fixedFlag$sample60 && fixedFlag$sample20);
+			fixedProbFlag$sample60 = fixedFlag$sample20;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -462,7 +417,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedFlag$sample20);
+			fixedProbFlag$sample72 = fixedFlag$sample20;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -713,10 +668,8 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				prior = new int[3];
 			}
 		}
-		if(!setFlag$output) {
-			{
-				output = new boolean[length$observed];
-			}
+		{
+			output = new boolean[length$observed];
 		}
 		allocateScratch();
 	}
@@ -727,18 +680,12 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleMultinomial(RNG$, p, 3, n, prior);
-		for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-			if(!fixedFlag$sample48)
-				output[i$var47] = DistributionSampling.sampleBernoulli(RNG$, (prior[0] / n));
-		}
-		for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-			if(!fixedFlag$sample60)
-				output[i$var59] = DistributionSampling.sampleBernoulli(RNG$, (prior[1] / n));
-		}
-		for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-			if(!fixedFlag$sample72)
-				output[i$var71] = DistributionSampling.sampleBernoulli(RNG$, (prior[2] / n));
-		}
+		for(int i$var47 = 0; i$var47 < length; i$var47 += 3)
+			output[i$var47] = DistributionSampling.sampleBernoulli(RNG$, (prior[0] / n));
+		for(int i$var59 = 1; i$var59 < length; i$var59 += 3)
+			output[i$var59] = DistributionSampling.sampleBernoulli(RNG$, (prior[1] / n));
+		for(int i$var71 = 2; i$var71 < length; i$var71 += 3)
+			output[i$var71] = DistributionSampling.sampleBernoulli(RNG$, (prior[2] / n));
 	}
 
 	@Override

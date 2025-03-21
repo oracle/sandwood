@@ -5,8 +5,6 @@ interface Conditional4$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$bias(double[] cv$value);
 	public boolean get$fixedFlag$sample21();
 	public void set$fixedFlag$sample21(boolean cv$value);
-	public boolean get$fixedFlag$sample27();
-	public void set$fixedFlag$sample27(boolean cv$value);
 	public boolean get$fixedFlag$sample4();
 	public void set$fixedFlag$sample4(boolean cv$value);
 	public boolean get$guard();
@@ -18,6 +16,5 @@ interface Conditional4$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$observedValue();
 	public void set$observedValue(double cv$value);
 	public double get$value();
-	public void set$value(double cv$value);
 	public void logEvidenceGeneration();
 }

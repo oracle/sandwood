@@ -93,10 +93,11 @@ public class Flip1CoinMK15 extends Model {
         public boolean[] getValue() { return system$c.get$flips(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$flips(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flips because its value is fixed by observed values.");
         }
 
         @Override
@@ -104,17 +105,12 @@ public class Flip1CoinMK15 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample50(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample50())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -267,14 +263,10 @@ public class Flip1CoinMK15 extends Model {
         //ComputedVariables
         if(b.isSet())
             newCore.set$b(oldCore.get$b());
-        if(flips.isSet())
-            newCore.set$flips(oldCore.get$flips());
 
         //Set fixed flags
         if(b.isSet())
             newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
-        if(flips.isSet())
-            newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
     }
 
     /**
@@ -399,13 +391,10 @@ public class Flip1CoinMK15 extends Model {
         public final double[] b;
         /** Field holding the MAP or Sample value of bias after an infer model call. */
         public final double[] bias;
-        /** Field holding the MAP or Sample value of flips after an infer model call. */
-        public final boolean[][] flips;
 
         InferredModelOutputs(Flip1CoinMK15 system$model) {
             this.b = system$model.getInferredValue(system$model.$b);
             this.bias = system$model.getInferredValue(system$model.$bias);
-            this.flips = system$model.getInferredValue(system$model.$flips);
         }
     }
 

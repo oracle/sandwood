@@ -12,7 +12,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private int[] arrivals;
 	private double denom;
 	private double[] exped;
-	private boolean fixedFlag$sample127 = false;
 	private boolean fixedFlag$sample22 = false;
 	private boolean fixedFlag$sample67 = false;
 	private boolean fixedFlag$sample82 = false;
@@ -79,13 +78,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$Sales(double[][] cv$value) {
-		Sales = cv$value;
-		setFlag$Sales = true;
-		fixedProbFlag$sample127 = false;
-	}
-
-	@Override
 	public final int get$T() {
 		return T;
 	}
@@ -116,17 +108,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample127() {
-		return fixedFlag$sample127;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample127(boolean cv$value) {
-		fixedFlag$sample127 = cv$value;
-		fixedProbFlag$sample127 = (fixedFlag$sample127 && fixedProbFlag$sample127);
 	}
 
 	@Override
@@ -302,7 +283,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample127 = ((fixedFlag$sample127 && fixedFlag$sample22) && fixedFlag$sample82);
+			fixedProbFlag$sample127 = (fixedFlag$sample22 && fixedFlag$sample82);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
@@ -1028,14 +1009,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				arrivals = new int[T];
 			}
 		}
-		if(!setFlag$Sales) {
-			{
-				Sales = new double[T][];
-				for(int var93 = 0; var93 < T; var93 += 1)
-					Sales[var93] = new double[noProducts];
-				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-					Sales[t$var105] = new double[noProducts];
-			}
+		{
+			Sales = new double[T][];
+			for(int var93 = 0; var93 < T; var93 += 1)
+				Sales[var93] = new double[noProducts];
+			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+				Sales[t$var105] = new double[noProducts];
 		}
 		{
 			logProbability$sample22 = new double[((((noProducts - 1) - 0) / 1) + 1)];
@@ -1090,10 +1069,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			double[] weekly_sales = Sales[t$var105];
-			for(int j$var115 = 0; j$var115 < noProducts; j$var115 += 1) {
-				if(!fixedFlag$sample127)
-					weekly_sales[j$var115] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$)) + (((exped[j$var115] * Avail[t$var105][j$var115]) / denom) * arrivals[t$var105]));
-			}
+			for(int j$var115 = 0; j$var115 < noProducts; j$var115 += 1)
+				weekly_sales[j$var115] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$)) + (((exped[j$var115] * Avail[t$var105][j$var115]) / denom) * arrivals[t$var105]));
 		}
 	}
 

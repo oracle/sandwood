@@ -26,7 +26,7 @@ public class Vulcano2012notNormalized extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable Sales because its value depends on variable \"weekly_sales\".");
+            throw new SandwoodException("Set is not available for variable Sales because it is fixed by observing a variable.");
         }
 
         @Override
@@ -39,17 +39,12 @@ public class Vulcano2012notNormalized extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample131(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample131())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 

@@ -9,7 +9,6 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	private double b;
 	private double[] bias;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample31 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample31 = false;
 	private boolean[] flips;
@@ -67,26 +66,8 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample31() {
-		return fixedFlag$sample31;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
-		fixedFlag$sample31 = cv$value;
-		fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedProbFlag$sample31);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample31 = false;
 	}
 
 	@Override
@@ -223,7 +204,7 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedFlag$sample10);
+			fixedProbFlag$sample31 = fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < samples; i += 1) {
@@ -306,10 +287,8 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 				bias = new double[(samples + 1)];
 			}
 		}
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[samples];
-			}
+		{
+			flips = new boolean[samples];
 		}
 		{
 			logProbability$bernoulli = new double[((((samples - 1) - 0) / 1) + 1)];
@@ -326,8 +305,7 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		for(int i = 0; i < samples; i += 1) {
 			if(!fixedFlag$sample10)
 				bias[(i + 1)] = bias[0];
-			if(!fixedFlag$sample31)
-				flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias[i]);
+			flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias[i]);
 		}
 	}
 

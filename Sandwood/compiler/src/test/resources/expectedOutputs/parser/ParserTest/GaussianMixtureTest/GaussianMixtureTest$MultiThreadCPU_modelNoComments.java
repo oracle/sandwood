@@ -13,7 +13,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private boolean fixedFlag$sample34 = false;
 	private boolean fixedFlag$sample52 = false;
 	private boolean fixedFlag$sample68 = false;
-	private boolean fixedFlag$sample72 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample34 = false;
 	private boolean fixedProbFlag$sample52 = false;
@@ -108,17 +107,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value) {
-		fixedFlag$sample72 = cv$value;
-		fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedProbFlag$sample72);
-	}
-
-	@Override
 	public final int get$k() {
 		return k;
 	}
@@ -210,13 +198,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double[] get$x() {
 		return x;
-	}
-
-	@Override
-	public final void set$x(double[] cv$value) {
-		x = cv$value;
-		setFlag$x = true;
-		fixedProbFlag$sample72 = false;
 	}
 
 	@Override
@@ -493,7 +474,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$x = (logProbability$x + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample72 = (((fixedFlag$sample72 && fixedFlag$sample34) && fixedFlag$sample52) && fixedFlag$sample68);
+			fixedProbFlag$sample72 = ((fixedFlag$sample34 && fixedFlag$sample52) && fixedFlag$sample68);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
@@ -785,10 +766,8 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				sigma = new double[5];
 			}
 		}
-		if(!setFlag$x) {
-			{
-				x = new double[length$xMeasured];
-			}
+		{
+			x = new double[length$xMeasured];
 		}
 		if(!setFlag$z) {
 			{
@@ -835,8 +814,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1) {
 						if(!fixedFlag$sample68)
 							z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, phi, k);
-						if(!fixedFlag$sample72)
-							x[i$var66] = ((Math.sqrt(sigma[z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[((i$var66 - 0) / 1)]]);
+						x[i$var66] = ((Math.sqrt(sigma[z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[((i$var66 - 0) / 1)]]);
 					}
 			}
 		);

@@ -12,7 +12,6 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample45 = false;
 	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample53 = false;
 	private boolean fixedProbFlag$sample28 = false;
 	private boolean fixedProbFlag$sample45 = false;
 	private boolean fixedProbFlag$sample50 = false;
@@ -92,25 +91,8 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		fixedFlag$sample53 = cv$value;
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-	}
-
-	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	@Override
-	public final void set$flip(boolean cv$value) {
-		flip = cv$value;
-		fixedProbFlag$sample53 = false;
 	}
 
 	@Override
@@ -250,7 +232,7 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample53 = ((fixedFlag$sample53 && fixedFlag$sample45) && fixedFlag$sample50);
+			fixedProbFlag$sample53 = (fixedFlag$sample45 && fixedFlag$sample50);
 		} else {
 			logProbability$var51 = logProbability$flip;
 			logProbability$$model = (logProbability$$model + logProbability$flip);
@@ -346,8 +328,7 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 		if(!fixedFlag$sample50)
 			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
-		if(!fixedFlag$sample53)
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
 	}
 
 	@Override

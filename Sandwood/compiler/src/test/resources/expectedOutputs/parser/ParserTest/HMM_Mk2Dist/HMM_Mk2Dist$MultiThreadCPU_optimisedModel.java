@@ -22,7 +22,6 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private int[][] events;
 	private int[][] eventsMeasured;
 	private boolean fixedFlag$sample126 = false;
-	private boolean fixedFlag$sample159 = false;
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedFlag$sample57 = false;
 	private boolean fixedFlag$sample78 = false;
@@ -105,20 +104,6 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		return events;
 	}
 
-	// Setter for events.
-	@Override
-	public final void set$events(int[][] cv$value) {
-		// Set flags for all the side effects of events including if probabilities need to
-		// be updated.
-		// Set events with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		events = cv$value;
-		setFlag$events = true;
-		
-		// Unset the fixed probability flag for sample 159 as it depends on events.
-		fixedProbFlag$sample159 = false;
-	}
-
 	// Getter for eventsMeasured.
 	@Override
 	public final int[][] get$eventsMeasured() {
@@ -156,26 +141,6 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample126" with its value "cv$value".
-		fixedProbFlag$sample159 = (cv$value && fixedProbFlag$sample159);
-	}
-
-	// Getter for fixedFlag$sample159.
-	@Override
-	public final boolean get$fixedFlag$sample159() {
-		return fixedFlag$sample159;
-	}
-
-	// Setter for fixedFlag$sample159.
-	@Override
-	public final void set$fixedFlag$sample159(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample159 including if probabilities
-		// need to be updated.
-		fixedFlag$sample159 = cv$value;
-		
-		// Should the probability of sample 159 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample159" with its value "cv$value".
 		fixedProbFlag$sample159 = (cv$value && fixedProbFlag$sample159);
 	}
 
@@ -783,7 +748,7 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample159 = (((fixedFlag$sample159 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample126);
+			fixedProbFlag$sample159 = ((fixedFlag$sample57 && fixedFlag$sample95) && fixedFlag$sample126);
 		}
 		// Using cached values.
 		else {
@@ -1060,7 +1025,7 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample159 = (((fixedFlag$sample159 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample126);
+			fixedProbFlag$sample159 = ((fixedFlag$sample57 && fixedFlag$sample95) && fixedFlag$sample126);
 		}
 		// Using cached values.
 		else {
@@ -2955,13 +2920,10 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Constructor for weights
 			weights = new double[noStates];
 		
-		// If events has not been set already allocate space.
-		if(!setFlag$events) {
-			// Constructor for events
-			events = new int[length$eventsMeasured.length][];
-			for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
-				events[i$var136] = new int[length$eventsMeasured[i$var136]];
-		}
+		// Constructor for events
+		events = new int[length$eventsMeasured.length][];
+		for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
+			events[i$var136] = new int[length$eventsMeasured[i$var136]];
 		
 		// Constructor for distribution$sample126
 		distribution$sample126 = new double[length$eventsMeasured.length][][];
@@ -3073,33 +3035,30 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			);
 
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample159)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$index$i$var136, int forEnd$index$i$var136, int threadID$index$i$var136, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int index$i$var136 = forStart$index$i$var136; index$i$var136 < forEnd$index$i$var136; index$i$var136 += 1) {
-							int i$var136 = index$i$var136;
-							int threadID$i$var136 = threadID$index$i$var136;
-							int[] var150 = events[i$var136];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 1, length$eventsMeasured[i$var136], 1,
-								(int forStart$j$var149, int forEnd$j$var149, int threadID$j$var149, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var149 = forStart$j$var149; j$var149 < forEnd$j$var149; j$var149 += 1)
-											var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$2, bias[st[i$var136][j$var149]], noEvents) + 1);
-								}
-							);
-						}
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$index$i$var136, int forEnd$index$i$var136, int threadID$index$i$var136, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$i$var136 = forStart$index$i$var136; index$i$var136 < forEnd$index$i$var136; index$i$var136 += 1) {
+						int i$var136 = index$i$var136;
+						int threadID$i$var136 = threadID$index$i$var136;
+						int[] var150 = events[i$var136];
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 1, length$eventsMeasured[i$var136], 1,
+							(int forStart$j$var149, int forEnd$j$var149, int threadID$j$var149, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var149 = forStart$j$var149; j$var149 < forEnd$j$var149; j$var149 += 1)
+										var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$2, bias[st[i$var136][j$var149]], noEvents) + 1);
+							}
+						);
+					}
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

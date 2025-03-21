@@ -15,7 +15,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private int[] arrivals;
 	private double denom;
 	private double[] exped;
-	private boolean fixedFlag$sample127 = false;
 	private boolean fixedFlag$sample22 = false;
 	private boolean fixedFlag$sample67 = false;
 	private boolean fixedFlag$sample82 = false;
@@ -90,20 +89,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		return Sales;
 	}
 
-	// Setter for Sales.
-	@Override
-	public final void set$Sales(double[][] cv$value) {
-		// Set flags for all the side effects of Sales including if probabilities need to
-		// be updated.
-		// Set Sales with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		Sales = cv$value;
-		setFlag$Sales = true;
-		
-		// Unset the fixed probability flag for sample 127 as it depends on Sales.
-		fixedProbFlag$sample127 = false;
-	}
-
 	// Getter for T.
 	@Override
 	public final int get$T() {
@@ -149,26 +134,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	// Getter for fixedFlag$sample127.
-	@Override
-	public final boolean get$fixedFlag$sample127() {
-		return fixedFlag$sample127;
-	}
-
-	// Setter for fixedFlag$sample127.
-	@Override
-	public final void set$fixedFlag$sample127(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample127 including if probabilities
-		// need to be updated.
-		fixedFlag$sample127 = cv$value;
-		
-		// Should the probability of sample 127 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample127" with its value "cv$value".
-		fixedProbFlag$sample127 = (cv$value && fixedProbFlag$sample127);
 	}
 
 	// Getter for fixedFlag$sample22.
@@ -442,7 +407,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample127 = ((fixedFlag$sample127 && fixedFlag$sample22) && fixedFlag$sample82);
+			fixedProbFlag$sample127 = (fixedFlag$sample22 && fixedFlag$sample82);
 		}
 		// Using cached values.
 		else {
@@ -1361,15 +1326,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			// Constructor for arrivals
 			arrivals = new int[T];
 		
-		// If Sales has not been set already allocate space.
-		if(!setFlag$Sales) {
-			// Constructor for Sales
-			Sales = new double[T][];
-			for(int var93 = 0; var93 < T; var93 += 1)
-				Sales[var93] = new double[noProducts];
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				Sales[t$var105] = new double[noProducts];
-		}
+		// Constructor for Sales
+		Sales = new double[T][];
+		for(int var93 = 0; var93 < T; var93 += 1)
+			Sales[var93] = new double[noProducts];
+		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+			Sales[t$var105] = new double[noProducts];
 		
 		// Constructor for logProbability$sample22
 		logProbability$sample22 = new double[noProducts];
@@ -1469,33 +1431,30 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			);
 
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample127)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, T, 1,
-				(int forStart$index$t$var105, int forEnd$index$t$var105, int threadID$index$t$var105, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int index$t$var105 = forStart$index$t$var105; index$t$var105 < forEnd$index$t$var105; index$t$var105 += 1) {
-							int t$var105 = index$t$var105;
-							int threadID$t$var105 = threadID$index$t$var105;
-							double[] weekly_sales = Sales[t$var105];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noProducts, 1,
-								(int forStart$j$var115, int forEnd$j$var115, int threadID$j$var115, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var115 = forStart$j$var115; j$var115 < forEnd$j$var115; j$var115 += 1)
-											weekly_sales[j$var115] = ((DistributionSampling.sampleGaussian(RNG$2) * 0.4472135954999579) + (((exped[j$var115] * Avail[t$var105][j$var115]) / denom) * arrivals[t$var105]));
-								}
-							);
-						}
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var105, int forEnd$index$t$var105, int threadID$index$t$var105, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var105 = forStart$index$t$var105; index$t$var105 < forEnd$index$t$var105; index$t$var105 += 1) {
+						int t$var105 = index$t$var105;
+						int threadID$t$var105 = threadID$index$t$var105;
+						double[] weekly_sales = Sales[t$var105];
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var115, int forEnd$j$var115, int threadID$j$var115, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var115 = forStart$j$var115; j$var115 < forEnd$j$var115; j$var115 += 1)
+										weekly_sales[j$var115] = ((DistributionSampling.sampleGaussian(RNG$2) * 0.4472135954999579) + (((exped[j$var115] * Avail[t$var105][j$var115]) / denom) * arrivals[t$var105]));
+							}
+						);
+					}
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

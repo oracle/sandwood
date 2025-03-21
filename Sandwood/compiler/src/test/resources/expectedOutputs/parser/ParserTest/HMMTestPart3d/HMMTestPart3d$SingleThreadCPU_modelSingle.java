@@ -11,7 +11,6 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] cv$var28$countGlobal;
 	private double[] cv$var53$stateProbabilityGlobal;
 	private double[] cv$var78$stateProbabilityGlobal;
-	private boolean fixedFlag$sample119 = false;
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample45 = false;
 	private boolean fixedFlag$sample54 = false;
@@ -79,24 +78,6 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// Unset the fixed probability flag for sample 119 as it depends on bias.
 		fixedProbFlag$sample119 = false;
-	}
-
-	// Getter for fixedFlag$sample119.
-	@Override
-	public final boolean get$fixedFlag$sample119() {
-		return fixedFlag$sample119;
-	}
-
-	// Setter for fixedFlag$sample119.
-	@Override
-	public final void set$fixedFlag$sample119(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample119 including if probabilities
-		// need to be updated.
-		fixedFlag$sample119 = cv$value;
-		
-		// Should the probability of sample 119 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample119 = (fixedFlag$sample119 && fixedProbFlag$sample119);
 	}
 
 	// Getter for fixedFlag$sample28.
@@ -199,20 +180,6 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 119 as it depends on flips.
-		fixedProbFlag$sample119 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -431,7 +398,7 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample119 = (((fixedFlag$sample119 && fixedFlag$sample45) && fixedFlag$sample54) && fixedFlag$sample79);
+			fixedProbFlag$sample119 = ((fixedFlag$sample45 && fixedFlag$sample54) && fixedFlag$sample79);
 		}
 		// Using cached values.
 		else {
@@ -1926,12 +1893,9 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				indirection[((i$var71 - 1) / 1)] = new int[(i$var71 + 1)];
 		}
 		
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips) {
-			// Constructor for flips
-			{
-				flips = new boolean[length$flipsMeasured];
-			}
+		// Constructor for flips
+		{
+			flips = new boolean[length$flipsMeasured];
 		}
 		
 		// Constructor for logProbability$sample79
@@ -1965,10 +1929,8 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			if(!(fixedFlag$sample54 && fixedFlag$sample79))
 				st2[(indirection[((i$var71 - 1) / 1)][i$var71] / i$var71)] = (samples - st[(indirection[((i$var71 - 1) / 1)][i$var71] / i$var71)]);
 		}
-		for(int j = 0; j < samples; j += 1) {
-			if(!fixedFlag$sample119)
-				flips[j] = DistributionSampling.sampleBernoulli(RNG$, bias[(samples - st2[j])]);
-		}
+		for(int j = 0; j < samples; j += 1)
+			flips[j] = DistributionSampling.sampleBernoulli(RNG$, bias[(samples - st2[j])]);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

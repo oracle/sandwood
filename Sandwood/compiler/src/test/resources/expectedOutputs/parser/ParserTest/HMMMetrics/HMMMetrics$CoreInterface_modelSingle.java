@@ -5,9 +5,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	// Getter for cpu.
 	public double[] get$cpu();
 
-	// Setter for cpu.
-	public void set$cpu(double[] cv$value);
-
 	// Getter for cpuMean.
 	public double[] get$cpuMean();
 
@@ -49,24 +46,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 
 	// Setter for fixedFlag$sample164.
 	public void set$fixedFlag$sample164(boolean cv$value);
-
-	// Getter for fixedFlag$sample180.
-	public boolean get$fixedFlag$sample180();
-
-	// Setter for fixedFlag$sample180.
-	public void set$fixedFlag$sample180(boolean cv$value);
-
-	// Getter for fixedFlag$sample185.
-	public boolean get$fixedFlag$sample185();
-
-	// Setter for fixedFlag$sample185.
-	public void set$fixedFlag$sample185(boolean cv$value);
-
-	// Getter for fixedFlag$sample190.
-	public boolean get$fixedFlag$sample190();
-
-	// Setter for fixedFlag$sample190.
-	public void set$fixedFlag$sample190(boolean cv$value);
 
 	// Getter for fixedFlag$sample30.
 	public boolean get$fixedFlag$sample30();
@@ -161,9 +140,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	// Getter for mem.
 	public double[] get$mem();
 
-	// Setter for mem.
-	public void set$mem(double[] cv$value);
-
 	// Getter for memMean.
 	public double[] get$memMean();
 
@@ -190,9 +166,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 
 	// Getter for pageFaults.
 	public double[] get$pageFaults();
-
-	// Setter for pageFaults.
-	public void set$pageFaults(double[] cv$value);
 
 	// Getter for pageFaultsMean.
 	public double[] get$pageFaultsMean();

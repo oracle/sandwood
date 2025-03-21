@@ -22,10 +22,11 @@ public class DirichletBernoulli extends Model {
         public boolean[] getValue() { return system$c.get$output(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$output(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable output because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,22 +34,12 @@ public class DirichletBernoulli extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample38(fixed);
-                system$c.set$fixedFlag$sample51(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample38 = system$c.get$fixedFlag$sample38();
-            boolean fixedFlag$sample51 = system$c.get$fixedFlag$sample51();
-            if(fixedFlag$sample38 && fixedFlag$sample51)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample38 || fixedFlag$sample51)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -218,16 +209,10 @@ public class DirichletBernoulli extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(output.isSet())
-            newCore.set$output(oldCore.get$output());
         if(prior.isSet())
             newCore.set$prior(oldCore.get$prior());
 
         //Set fixed flags
-        if(output.isSet()){
-            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
-            newCore.set$fixedFlag$sample51(oldCore.get$fixedFlag$sample51());
-        }
         if(prior.isSet())
             newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
     }

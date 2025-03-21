@@ -3,8 +3,6 @@ package org.sandwood.compiler.tests.parser;
 interface HMMTestPart3d$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[] get$bias();
 	public void set$bias(double[] cv$value);
-	public boolean get$fixedFlag$sample119();
-	public void set$fixedFlag$sample119(boolean cv$value);
 	public boolean get$fixedFlag$sample28();
 	public void set$fixedFlag$sample28(boolean cv$value);
 	public boolean get$fixedFlag$sample45();
@@ -14,7 +12,6 @@ interface HMMTestPart3d$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean get$fixedFlag$sample79();
 	public void set$fixedFlag$sample79(boolean cv$value);
 	public boolean[] get$flips();
-	public void set$flips(boolean[] cv$value);
 	public boolean[] get$flipsMeasured();
 	public void set$flipsMeasured(boolean[] cv$value);
 	public int get$length$flipsMeasured();

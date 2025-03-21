@@ -11,8 +11,6 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 	public int[] get$arrivals();
 	public void set$arrivals(int[] cv$value);
 	public double[] get$exped();
-	public boolean get$fixedFlag$sample131();
-	public void set$fixedFlag$sample131(boolean cv$value);
 	public boolean get$fixedFlag$sample22();
 	public void set$fixedFlag$sample22(boolean cv$value);
 	public boolean get$fixedFlag$sample54();
@@ -34,6 +32,5 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 	public double[] get$ut();
 	public void set$ut(double[] cv$value);
 	public int[][] get$weekly_sales();
-	public void set$weekly_sales(int[][] cv$value);
 	public void logEvidenceGeneration();
 }

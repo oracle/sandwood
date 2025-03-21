@@ -11,7 +11,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double[] beta;
 	private int[] choices;
 	private double[][] exped;
-	private boolean fixedFlag$sample103 = false;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample34 = false;
@@ -104,24 +103,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final int[] get$choices() {
 		return choices;
-	}
-
-	@Override
-	public final void set$choices(int[] cv$value) {
-		choices = cv$value;
-		setFlag$choices = true;
-		fixedProbFlag$sample103 = false;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample103() {
-		return fixedFlag$sample103;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample103(boolean cv$value) {
-		fixedFlag$sample103 = cv$value;
-		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
 	}
 
 	@Override
@@ -275,7 +256,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			logProbability$choices = (logProbability$choices + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample103 = ((fixedFlag$sample103 && fixedFlag$sample21) && fixedFlag$sample47);
+			fixedProbFlag$sample103 = (fixedFlag$sample21 && fixedFlag$sample47);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noObs; i += 1) {
@@ -640,8 +621,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			ut = new double[noProducts];
 		if(!setFlag$beta)
 			beta = new double[noObs];
-		if(!setFlag$choices)
-			choices = new int[noObs];
+		choices = new int[noObs];
 		exped = new double[noObs][];
 		for(int i = 0; i < noObs; i += 1)
 			exped[i] = new double[noProducts];
@@ -679,8 +659,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
 					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$10);
 			}
-			if(!fixedFlag$sample103)
-				choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[i], noProducts);
+			choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[i], noProducts);
 		}
 	}
 

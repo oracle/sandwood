@@ -6,9 +6,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional5$CoreInterface {
 	private double a;
 	private double b;
-	private boolean fixedFlag$sample13 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample13 = false;
 	private boolean fixedProbFlag$sample5 = false;
 	private boolean fixedProbFlag$sample9 = false;
@@ -37,64 +34,13 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$a(double cv$value) {
-		a = cv$value;
-		fixedProbFlag$sample9 = false;
-	}
-
-	@Override
 	public final double get$b() {
 		return b;
 	}
 
 	@Override
-	public final void set$b(double cv$value) {
-		b = cv$value;
-		fixedProbFlag$sample13 = false;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample13() {
-		return fixedFlag$sample13;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample13(boolean cv$value) {
-		fixedFlag$sample13 = cv$value;
-		fixedProbFlag$sample13 = (cv$value && fixedProbFlag$sample13);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample5() {
-		return fixedFlag$sample5;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value) {
-		fixedFlag$sample5 = cv$value;
-		fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
-		fixedFlag$sample9 = cv$value;
-		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
-	}
-
-	@Override
 	public final boolean get$guard() {
 		return guard;
-	}
-
-	@Override
-	public final void set$guard(boolean cv$value) {
-		guard = cv$value;
-		fixedProbFlag$sample5 = false;
 	}
 
 	@Override
@@ -166,7 +112,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample13 = fixedFlag$sample13;
+			fixedProbFlag$sample13 = true;
 		} else {
 			logProbability$var12 = logProbability$b;
 			if(!guard)
@@ -183,7 +129,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$guard = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample5 = fixedFlag$sample5;
+			fixedProbFlag$sample5 = true;
 		} else {
 			logProbability$bernoulli = logProbability$guard;
 			logProbability$$model = (logProbability$$model + logProbability$guard);
@@ -200,7 +146,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample9 = fixedFlag$sample9;
+			fixedProbFlag$sample9 = true;
 		} else {
 			logProbability$var8 = logProbability$a;
 			if(guard)
@@ -218,19 +164,13 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample5)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(!fixedFlag$sample9)
-			a = DistributionSampling.sampleUniform(RNG$);
-		if(!fixedFlag$sample13)
-			b = DistributionSampling.sampleUniform(RNG$);
-		if(guard) {
-			if(!fixedFlag$sample9)
-				value = a;
-		} else {
-			if(!fixedFlag$sample13)
-				value = b;
-		}
+		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		a = DistributionSampling.sampleUniform(RNG$);
+		b = DistributionSampling.sampleUniform(RNG$);
+		if(guard)
+			value = a;
+		else
+			value = b;
 	}
 
 	@Override

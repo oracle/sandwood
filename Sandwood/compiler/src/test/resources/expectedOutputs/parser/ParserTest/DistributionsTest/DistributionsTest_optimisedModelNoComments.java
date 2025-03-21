@@ -92,10 +92,11 @@ public class DistributionsTest extends Model {
         public double[] getValue() { return system$c.get$y(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$y(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable y because it is fixed by observing a variable.");
         }
 
         @Override
@@ -103,17 +104,12 @@ public class DistributionsTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -236,16 +232,12 @@ public class DistributionsTest extends Model {
             newCore.set$b0(oldCore.get$b0());
         if(b1.isSet())
             newCore.set$b1(oldCore.get$b1());
-        if(y.isSet())
-            newCore.set$y(oldCore.get$y());
 
         //Set fixed flags
         if(b0.isSet())
             newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
         if(b1.isSet())
             newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
-        if(y.isSet())
-            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
     }
 
     /**

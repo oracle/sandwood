@@ -10,8 +10,6 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double[] bias;
 	private int coins;
 	private boolean fixedFlag$sample22 = false;
-	private boolean fixedFlag$sample49 = false;
-	private boolean fixedFlag$sample77 = false;
 	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample22 = false;
 	private boolean fixedProbFlag$sample49 = false;
@@ -106,46 +104,6 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
 	}
 
-	// Getter for fixedFlag$sample49.
-	@Override
-	public final boolean get$fixedFlag$sample49() {
-		return fixedFlag$sample49;
-	}
-
-	// Setter for fixedFlag$sample49.
-	@Override
-	public final void set$fixedFlag$sample49(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample49 including if probabilities
-		// need to be updated.
-		fixedFlag$sample49 = cv$value;
-		
-		// Should the probability of sample 49 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample49" with its value "cv$value".
-		fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
-	}
-
-	// Getter for fixedFlag$sample77.
-	@Override
-	public final boolean get$fixedFlag$sample77() {
-		return fixedFlag$sample77;
-	}
-
-	// Setter for fixedFlag$sample77.
-	@Override
-	public final void set$fixedFlag$sample77(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample77 including if probabilities
-		// need to be updated.
-		fixedFlag$sample77 = cv$value;
-		
-		// Should the probability of sample 77 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample77" with its value "cv$value".
-		fixedProbFlag$sample77 = (cv$value && fixedProbFlag$sample77);
-	}
-
 	// Getter for fixedFlag$sample9.
 	@Override
 	public final boolean get$fixedFlag$sample9() {
@@ -182,23 +140,6 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final boolean[][] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[][] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 49 as it depends on flips.
-		fixedProbFlag$sample49 = false;
-		
-		// Unset the fixed probability flag for sample 77 as it depends on flips.
-		fixedProbFlag$sample77 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -412,7 +353,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample49 = ((fixedFlag$sample49 && fixedFlag$sample9) && fixedFlag$sample22);
+			fixedProbFlag$sample49 = (fixedFlag$sample9 && fixedFlag$sample22);
 		}
 		// Using cached values.
 		else {
@@ -483,7 +424,7 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample77 = ((fixedFlag$sample77 && fixedFlag$sample9) && fixedFlag$sample22);
+			fixedProbFlag$sample77 = (fixedFlag$sample9 && fixedFlag$sample22);
 		}
 		// Using cached values.
 		else {
@@ -691,16 +632,13 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips) {
-			// Constructor for flips
-			flips = new boolean[length$flipsMeasured.length][];
-			
-			// Substituted "j" with its value "0".
-			flips[0] = new boolean[length$flipsMeasured[0]];
-			for(int k = 1; k < length$flipsMeasured.length; k += 1)
-				flips[k] = new boolean[length$flipsMeasured[k]];
-		}
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured.length][];
+		
+		// Substituted "j" with its value "0".
+		flips[0] = new boolean[length$flipsMeasured[0]];
+		for(int k = 1; k < length$flipsMeasured.length; k += 1)
+			flips[k] = new boolean[length$flipsMeasured[k]];
 		
 		// If bias has not been set already allocate space.
 		if(!setFlag$bias)
@@ -732,25 +670,17 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				bias[i$var21] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample49) {
-			// Unrolled loop
-			// Substituted "j" with its value "0".
-			boolean[] var39 = flips[0];
-			
-			// Substituted "j" with its value "0".
-			for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1)
-				// Substituted "j" with its value "0".
-				var39[var48] = DistributionSampling.sampleBernoulli(RNG$, bias[0]);
-		}
+		// Substituted "j" with its value "0".
+		boolean[] var39 = flips[0];
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample77) {
-			for(int k = 1; k < coins; k += 1) {
-				boolean[] var66 = flips[k];
-				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1)
-					var66[var75] = DistributionSampling.sampleBernoulli(RNG$, bias[k]);
-			}
+		// Substituted "j" with its value "0".
+		for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1)
+			// Substituted "j" with its value "0".
+			var39[var48] = DistributionSampling.sampleBernoulli(RNG$, bias[0]);
+		for(int k = 1; k < coins; k += 1) {
+			boolean[] var66 = flips[k];
+			for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1)
+				var66[var75] = DistributionSampling.sampleBernoulli(RNG$, bias[k]);
 		}
 	}
 

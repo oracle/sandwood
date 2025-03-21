@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AlternativeModelMK2$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
 	private double logProbability$$evidence;
@@ -46,17 +45,6 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void set$fixedFlag$sample6(boolean cv$value) {
 		fixedFlag$sample6 = cv$value;
 		fixedProbFlag$sample6 = (cv$value && fixedProbFlag$sample6);
-		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample8() {
-		return fixedFlag$sample8;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value) {
-		fixedFlag$sample8 = cv$value;
 		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
 	}
 
@@ -110,12 +98,6 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		return positiveCount;
 	}
 
-	@Override
-	public final void set$positiveCount(int cv$value) {
-		positiveCount = cv$value;
-		fixedProbFlag$sample8 = false;
-	}
-
 	private final void logProbabilityValue$sample6() {
 		if(!fixedProbFlag$sample6) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
@@ -140,7 +122,7 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$positiveCount = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedFlag$sample6);
+			fixedProbFlag$sample8 = fixedFlag$sample6;
 		} else {
 			logProbability$binomial = logProbability$positiveCount;
 			logProbability$$model = (logProbability$$model + logProbability$positiveCount);
@@ -162,8 +144,7 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample6)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample8)
-			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	@Override

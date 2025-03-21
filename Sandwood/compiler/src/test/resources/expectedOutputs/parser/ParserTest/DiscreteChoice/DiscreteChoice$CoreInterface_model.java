@@ -11,9 +11,6 @@ interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Getter for choices.
 	public int[] get$choices();
 
-	// Setter for choices.
-	public void set$choices(int[] cv$value);
-
 	// Getter for exped.
 	public double[] get$exped();
 
@@ -22,12 +19,6 @@ interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.mod
 
 	// Setter for fixedFlag$sample24.
 	public void set$fixedFlag$sample24(boolean cv$value);
-
-	// Getter for fixedFlag$sample78.
-	public boolean get$fixedFlag$sample78();
-
-	// Setter for fixedFlag$sample78.
-	public void set$fixedFlag$sample78(boolean cv$value);
 
 	// Getter for logProbability$choices.
 	public double get$logProbability$choices();

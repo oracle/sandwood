@@ -11,7 +11,6 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private boolean fixedFlag$sample30 = false;
 	private boolean fixedFlag$sample47 = false;
 	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample87 = false;
 	private boolean fixedProbFlag$sample30 = false;
 	private boolean fixedProbFlag$sample47 = false;
 	private boolean fixedProbFlag$sample62 = false;
@@ -99,26 +98,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample87() {
-		return fixedFlag$sample87;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample87(boolean cv$value) {
-		fixedFlag$sample87 = cv$value;
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample87 = false;
 	}
 
 	@Override
@@ -308,7 +289,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample87 = ((fixedFlag$sample87 && fixedFlag$sample47) && fixedFlag$sample62);
+			fixedProbFlag$sample87 = (fixedFlag$sample47 && fixedFlag$sample62);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
@@ -405,8 +386,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			bias = new double[length$flipsMeasured];
 		if(!setFlag$st)
 			st = new int[noCats];
-		if(!setFlag$flips)
-			flips = new boolean[length$flipsMeasured];
+		flips = new boolean[length$flipsMeasured];
 		logProbability$var60 = new double[noCats];
 		logProbability$sample62 = new double[noCats];
 		logProbability$var84 = new double[length$flipsMeasured];
@@ -428,13 +408,11 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
 				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
 		}
-		if(!fixedFlag$sample87) {
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				int reduceVar$var82$3 = 0;
-				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-					reduceVar$var82$3 = (reduceVar$var82$3 + st[cv$reduction78Index]);
-				flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$3]);
-			}
+		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+			int reduceVar$var82$3 = 0;
+			for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+				reduceVar$var82$3 = (reduceVar$var82$3 + st[cv$reduction78Index]);
+			flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$3]);
 		}
 	}
 

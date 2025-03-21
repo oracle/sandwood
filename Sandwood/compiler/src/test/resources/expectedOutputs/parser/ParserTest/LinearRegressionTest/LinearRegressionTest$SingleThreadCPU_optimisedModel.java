@@ -11,7 +11,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedFlag$sample31 = false;
 	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample74 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private boolean fixedProbFlag$sample31 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -143,26 +142,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
 	}
 
-	// Getter for fixedFlag$sample74.
-	@Override
-	public final boolean get$fixedFlag$sample74() {
-		return fixedFlag$sample74;
-	}
-
-	// Setter for fixedFlag$sample74.
-	@Override
-	public final void set$fixedFlag$sample74(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample74 including if probabilities
-		// need to be updated.
-		fixedFlag$sample74 = cv$value;
-		
-		// Should the probability of sample 74 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample74" with its value "cv$value".
-		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
-	}
-
 	// Getter for k.
 	@Override
 	public final int get$k() {
@@ -272,19 +251,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(double[] cv$value) {
-		// Set flags for all the side effects of y including if probabilities need to be updated.
-		// Set y with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		y = cv$value;
-		setFlag$y = true;
-		
-		// Unset the fixed probability flag for sample 74 as it depends on y.
-		fixedProbFlag$sample74 = false;
 	}
 
 	// Getter for yMeasured.
@@ -673,7 +639,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample74 = (((fixedFlag$sample74 && fixedFlag$sample24) && fixedFlag$sample31) && fixedFlag$sample35);
+			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
 		}
 		// Using cached values.
 		else {
@@ -917,10 +883,8 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If y has not been set already allocate space.
-		if(!setFlag$y)
-			// Constructor for y
-			y = new double[x.length];
+		// Constructor for y
+		y = new double[x.length];
 		
 		// If weights has not been set already allocate space.
 		if(!setFlag$weights)
@@ -961,24 +925,23 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 					phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample74) {
-				// Reduction of array phi
+			// Reduction of array phi
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$var70$4 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
+				// Execute the reduction function, saving the result into the return value.
 				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				double reduceVar$var70$4 = 0.0;
-				
-				// For each index in the array to be reduced
-				for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					// 
-					// j$var68's comment
-					// Set the right hand term to a value from the array phi
-					reduceVar$var70$4 = (reduceVar$var70$4 + phi[i$var45][cv$reduction65Index]);
-				y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + reduceVar$var70$4) + bias);
-			}
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j$var68's comment
+				// Set the right hand term to a value from the array phi
+				reduceVar$var70$4 = (reduceVar$var70$4 + phi[i$var45][cv$reduction65Index]);
+			y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + reduceVar$var70$4) + bias);
 		}
 	}
 

@@ -22,7 +22,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private boolean fixedFlag$sample162 = false;
 	private boolean fixedFlag$sample190 = false;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample241 = false;
 	private boolean fixedFlag$sample256 = false;
 	private boolean fixedFlag$sample33 = false;
 	private boolean fixedFlag$sample57 = false;
@@ -248,24 +247,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// Should the probability of sample 57 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample57 = (fixedFlag$sample20 && fixedProbFlag$sample57);
-	}
-
-	// Getter for fixedFlag$sample241.
-	@Override
-	public final boolean get$fixedFlag$sample241() {
-		return fixedFlag$sample241;
-	}
-
-	// Setter for fixedFlag$sample241.
-	@Override
-	public final void set$fixedFlag$sample241(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample241 including if probabilities
-		// need to be updated.
-		fixedFlag$sample241 = cv$value;
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample241 = (fixedFlag$sample241 && fixedProbFlag$sample241);
 	}
 
 	// Getter for fixedFlag$sample256.
@@ -515,20 +496,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		return metric_g;
 	}
 
-	// Setter for metric_g.
-	@Override
-	public final void set$metric_g(double[][][] cv$value) {
-		// Set flags for all the side effects of metric_g including if probabilities need
-		// to be updated.
-		// Set metric_g with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		metric_g = cv$value;
-		setFlag$metric_g = true;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on metric_g.
-		fixedProbFlag$sample256 = false;
-	}
-
 	// Getter for metric_valid.
 	@Override
 	public final boolean[][][] get$metric_valid() {
@@ -547,15 +514,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final boolean[][][] get$metric_valid_g() {
 		return metric_valid_g;
-	}
-
-	// Setter for metric_valid_g.
-	@Override
-	public final void set$metric_valid_g(boolean[][][] cv$value) {
-		// Set metric_valid_g with flag to mark that it has been set so another array doesn't
-		// need to be constructed
-		metric_valid_g = cv$value;
-		setFlag$metric_valid_g = true;
 	}
 
 	// Getter for noSamples.
@@ -859,7 +817,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample241 = (((fixedFlag$sample241 && fixedFlag$sample57) && fixedFlag$sample76) && fixedFlag$sample190);
+			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
 		}
 		// Using cached values.
 		else {
@@ -2724,7 +2682,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample241 = (((fixedFlag$sample241 && fixedFlag$sample57) && fixedFlag$sample76) && fixedFlag$sample190);
+			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
 		}
 		// Using cached values.
 		else {
@@ -10624,38 +10582,32 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 		}
 		
-		// If metric_g has not been set already allocate space.
-		if(!setFlag$metric_g) {
-			// Constructor for metric_g
-			{
-				metric_g = new double[length$metric.length][][];
-				for(int var90 = 0; var90 < length$metric.length; var90 += 1) {
-					double[][] subarray$0 = new double[length$metric[0].length][];
-					metric_g[var90] = subarray$0;
-				}
-				for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-					for(int server = 0; server < length$metric[0].length; server += 1) {
-						double[][] subarray$1 = metric_g[sample$var196];
-						subarray$1[server] = new double[length$metric[sample$var196][0]];
-					}
+		// Constructor for metric_g
+		{
+			metric_g = new double[length$metric.length][][];
+			for(int var90 = 0; var90 < length$metric.length; var90 += 1) {
+				double[][] subarray$0 = new double[length$metric[0].length][];
+				metric_g[var90] = subarray$0;
+			}
+			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+				for(int server = 0; server < length$metric[0].length; server += 1) {
+					double[][] subarray$1 = metric_g[sample$var196];
+					subarray$1[server] = new double[length$metric[sample$var196][0]];
 				}
 			}
 		}
 		
-		// If metric_valid_g has not been set already allocate space.
-		if(!setFlag$metric_valid_g) {
-			// Constructor for metric_valid_g
-			{
-				metric_valid_g = new boolean[length$metric.length][][];
-				for(int var103 = 0; var103 < length$metric.length; var103 += 1) {
-					boolean[][] subarray$0 = new boolean[length$metric[0].length][];
-					metric_valid_g[var103] = subarray$0;
-				}
-				for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-					for(int server = 0; server < length$metric[0].length; server += 1) {
-						boolean[][] subarray$1 = metric_valid_g[sample$var196];
-						subarray$1[server] = new boolean[length$metric[sample$var196][0]];
-					}
+		// Constructor for metric_valid_g
+		{
+			metric_valid_g = new boolean[length$metric.length][][];
+			for(int var103 = 0; var103 < length$metric.length; var103 += 1) {
+				boolean[][] subarray$0 = new boolean[length$metric[0].length][];
+				metric_valid_g[var103] = subarray$0;
+			}
+			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+				for(int server = 0; server < length$metric[0].length; server += 1) {
+					boolean[][] subarray$1 = metric_valid_g[sample$var196];
+					subarray$1[server] = new boolean[length$metric[sample$var196][0]];
 				}
 			}
 		}
@@ -10925,8 +10877,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														if(!fixedFlag$sample241)
-															metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
 														if(var215[server][timeStep$var226]) {
 															if(!fixedFlag$sample256)
 																metric_inner[timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
@@ -11213,10 +11164,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
-													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														if(!fixedFlag$sample241)
-															metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-													}
+													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1)
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
 											}
 										);
 									}
@@ -11369,10 +11318,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
-													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														if(!fixedFlag$sample241)
-															metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-													}
+													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1)
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
 											}
 										);
 									}

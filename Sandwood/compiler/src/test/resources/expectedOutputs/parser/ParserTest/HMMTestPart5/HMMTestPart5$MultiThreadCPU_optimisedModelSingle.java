@@ -16,7 +16,6 @@ class HMMTestPart5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private boolean fixedFlag$sample45 = false;
 	private boolean fixedFlag$sample53 = false;
 	private boolean fixedFlag$sample72 = false;
-	private boolean fixedFlag$sample89 = false;
 	private boolean fixedProbFlag$sample28 = false;
 	private boolean fixedProbFlag$sample45 = false;
 	private boolean fixedProbFlag$sample53 = false;
@@ -194,44 +193,10 @@ class HMMTestPart5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
 	}
 
-	// Getter for fixedFlag$sample89.
-	@Override
-	public final boolean get$fixedFlag$sample89() {
-		return fixedFlag$sample89;
-	}
-
-	// Setter for fixedFlag$sample89.
-	@Override
-	public final void set$fixedFlag$sample89(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample89 including if probabilities
-		// need to be updated.
-		fixedFlag$sample89 = cv$value;
-		
-		// Should the probability of sample 89 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample89" with its value "cv$value".
-		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
-	}
-
 	// Getter for flips.
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 89 as it depends on flips.
-		fixedProbFlag$sample89 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -858,7 +823,7 @@ class HMMTestPart5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample89 = (((fixedFlag$sample89 && fixedFlag$sample45) && fixedFlag$sample53) && fixedFlag$sample72);
+			fixedProbFlag$sample89 = ((fixedFlag$sample45 && fixedFlag$sample53) && fixedFlag$sample72);
 		}
 		// Using cached values.
 		else {
@@ -1481,10 +1446,8 @@ class HMMTestPart5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Constructor for st
 			st = new int[length$flipsMeasured];
 		
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips)
-			// Constructor for flips
-			flips = new boolean[length$flipsMeasured];
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -1529,19 +1492,16 @@ class HMMTestPart5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				st[i$var65] = (DistributionSampling.sampleCategorical(RNG$, m[st[(i$var65 - 1)]], 2) * 2);
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample89)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int j = forStart$j; j < forEnd$j; j += 1)
-							flips[j] = DistributionSampling.sampleBernoulli(RNG$1, bias[st[j]]);
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, bias[st[j]]);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

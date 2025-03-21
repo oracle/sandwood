@@ -57,10 +57,11 @@ public class RaggedArray6 extends Model {
         public boolean[] getValue() { return system$c.get$obs(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$obs(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable obs because it is fixed by observing a variable.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class RaggedArray6 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample65(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample65())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -227,16 +223,12 @@ public class RaggedArray6 extends Model {
         //ComputedVariables
         if(d.isSet())
             newCore.set$d(oldCore.get$d());
-        if(obs.isSet())
-            newCore.set$obs(oldCore.get$obs());
         if(y.isSet())
             newCore.set$y(oldCore.get$y());
 
         //Set fixed flags
         if(d.isSet())
             newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
-        if(obs.isSet())
-            newCore.set$fixedFlag$sample65(oldCore.get$fixedFlag$sample65());
         if(y.isSet())
             newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
     }

@@ -20,12 +20,6 @@ interface NullModelMK2$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for fixedFlag$sample10.
 	public void set$fixedFlag$sample10(boolean cv$value);
 
-	// Getter for fixedFlag$sample12.
-	public boolean get$fixedFlag$sample12();
-
-	// Setter for fixedFlag$sample12.
-	public void set$fixedFlag$sample12(boolean cv$value);
-
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
 
@@ -52,9 +46,6 @@ interface NullModelMK2$CoreInterface extends org.sandwood.runtime.internal.model
 
 	// Getter for positiveCount.
 	public int get$positiveCount();
-
-	// Setter for positiveCount.
-	public void set$positiveCount(int cv$value);
 
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.

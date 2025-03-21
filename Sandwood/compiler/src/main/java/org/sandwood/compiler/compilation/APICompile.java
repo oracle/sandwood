@@ -904,15 +904,18 @@ public class APICompile {
                 // TODO decide if the setflag and the fixed flag should be merged into a single flag.
                 if(setter && (v.getType().isArray() || v.scope() != GlobalScope.scope)) {
                     compilationCtx.addConstructedClassField(VariableNames.setFlagName(v.getVarDesc()), null, null,
-                            false, false, true, false, false, false, IRTree.constant(false), Tree.NoComment);
+                            false, false, true, v.getObservationStatus(), false, false, IRTree.constant(false),
+                            Tree.NoComment);
                 }
             }
         }
 
         // Fixed sample flags
         for(SampleTask<?, ?> s:compilationCtx.traces.getAllSampleTasks()) {
-            VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
-            compilationCtx.addConstructedClassField(flagName, true, true, null, constant(false));
+            if(!s.getOutput().isFixed()) {
+                VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
+                compilationCtx.addConstructedClassField(flagName, true, true, null, constant(false));
+            }
         }
 
         // Inputs
@@ -1427,7 +1430,12 @@ public class APICompile {
     private static IRTreeReturn<BooleanVariable> constructGuard(Set<SampleTask<?, ?>> sTasks) {
         IRTreeReturn<BooleanVariable> guard = null;
 
-        PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(sTasks);
+        PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>();
+        for(SampleTask<?, ?> s:sTasks) {
+            if(!s.getOutput().isFixed())
+                p.add(s);
+        }
+
         if(!p.isEmpty()) {
             VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(p.poll());
             guard = load(flagName);

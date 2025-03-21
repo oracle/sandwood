@@ -3,8 +3,6 @@ package org.sandwood.compiler.tests.parser;
 interface DistributionTest2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public boolean get$fixedFlag$sample23();
 	public void set$fixedFlag$sample23(boolean cv$value);
-	public boolean get$fixedFlag$sample41();
-	public void set$fixedFlag$sample41(boolean cv$value);
 	public boolean get$fixedFlag$sample5();
 	public void set$fixedFlag$sample5(boolean cv$value);
 	public boolean get$fixedFlag$sample9();
@@ -16,7 +14,6 @@ interface DistributionTest2$CoreInterface extends org.sandwood.runtime.internal.
 	public double get$logProbability$v2();
 	public int get$size();
 	public boolean[] get$v();
-	public void set$v(boolean[] cv$value);
 	public int get$v1();
 	public void set$v1(int cv$value);
 	public int[] get$v2();

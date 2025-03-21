@@ -10,7 +10,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[][] b;
 	private double[] cv$var69$stateProbabilityGlobal;
 	private boolean fixedFlag$sample73 = false;
-	private boolean fixedFlag$sample89 = false;
 	private boolean fixedProbFlag$sample73 = false;
 	private boolean fixedProbFlag$sample89 = false;
 	private int i;
@@ -69,26 +68,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample73" with its value "cv$value".
-		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
-	}
-
-	// Getter for fixedFlag$sample89.
-	@Override
-	public final boolean get$fixedFlag$sample89() {
-		return fixedFlag$sample89;
-	}
-
-	// Setter for fixedFlag$sample89.
-	@Override
-	public final void set$fixedFlag$sample89(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample89 including if probabilities
-		// need to be updated.
-		fixedFlag$sample89 = cv$value;
-		
-		// Should the probability of sample 89 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample89" with its value "cv$value".
 		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
 	}
 
@@ -157,20 +136,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final boolean[] get$obs() {
 		return obs;
-	}
-
-	// Setter for obs.
-	@Override
-	public final void set$obs(boolean[] cv$value) {
-		// Set flags for all the side effects of obs including if probabilities need to be
-		// updated.
-		// Set obs with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		obs = cv$value;
-		setFlag$obs = true;
-		
-		// Unset the fixed probability flag for sample 89 as it depends on obs.
-		fixedProbFlag$sample89 = false;
 	}
 
 	// Getter for obs_measured.
@@ -388,7 +353,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample89 = (fixedFlag$sample89 && fixedFlag$sample73);
+			fixedProbFlag$sample89 = fixedFlag$sample73;
 		}
 		// Using cached values.
 		else {
@@ -594,10 +559,8 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		b[0] = new double[2];
 		b[1] = new double[3];
 		
-		// If obs has not been set already allocate space.
-		if(!setFlag$obs)
-			// Constructor for obs
-			obs = new boolean[length$obs_measured];
+		// Constructor for obs
+		obs = new boolean[length$obs_measured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -622,19 +585,16 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			p = b[y][i];
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample89)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$obs_measured, 1,
-				(int forStart$var84, int forEnd$var84, int threadID$var84, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var84 = forStart$var84; var84 < forEnd$var84; var84 += 1)
-							obs[var84] = DistributionSampling.sampleBernoulli(RNG$1, p);
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var84, int forEnd$var84, int threadID$var84, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var84 = forStart$var84; var84 < forEnd$var84; var84 += 1)
+						obs[var84] = DistributionSampling.sampleBernoulli(RNG$1, p);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

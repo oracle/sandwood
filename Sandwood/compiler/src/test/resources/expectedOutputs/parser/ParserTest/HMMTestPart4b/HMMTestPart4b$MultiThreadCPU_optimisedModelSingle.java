@@ -13,7 +13,6 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[][] cv$var28$countGlobal;
 	private double[] cv$var79$stateProbabilityGlobal;
 	private boolean fixedFlag$sample122 = false;
-	private boolean fixedFlag$sample189 = false;
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample45 = false;
 	private boolean fixedFlag$sample82 = false;
@@ -101,26 +100,6 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample122" with its value "cv$value".
-		fixedProbFlag$sample189 = (cv$value && fixedProbFlag$sample189);
-	}
-
-	// Getter for fixedFlag$sample189.
-	@Override
-	public final boolean get$fixedFlag$sample189() {
-		return fixedFlag$sample189;
-	}
-
-	// Setter for fixedFlag$sample189.
-	@Override
-	public final void set$fixedFlag$sample189(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample189 including if probabilities
-		// need to be updated.
-		fixedFlag$sample189 = cv$value;
-		
-		// Should the probability of sample 189 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample189" with its value "cv$value".
 		fixedProbFlag$sample189 = (cv$value && fixedProbFlag$sample189);
 	}
 
@@ -212,20 +191,6 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final boolean[][][] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[][][] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 189 as it depends on flips.
-		fixedProbFlag$sample189 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -520,7 +485,7 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample189 = (((fixedFlag$sample189 && fixedFlag$sample45) && fixedFlag$sample82) && fixedFlag$sample122);
+			fixedProbFlag$sample189 = ((fixedFlag$sample45 && fixedFlag$sample82) && fixedFlag$sample122);
 		}
 		// Using cached values.
 		else {
@@ -1332,16 +1297,13 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips) {
-			// Constructor for flips
-			flips = new boolean[length$flipsMeasured.length][][];
-			for(int i$var133 = 0; i$var133 < length$flipsMeasured.length; i$var133 += 1) {
-				boolean[][] subarray$0 = new boolean[length$flipsMeasured.length][];
-				flips[i$var133] = subarray$0;
-				for(int j$var144 = 0; j$var144 < length$flipsMeasured.length; j$var144 += 1)
-					subarray$0[j$var144] = new boolean[length$flipsMeasured.length];
-			}
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured.length][][];
+		for(int i$var133 = 0; i$var133 < length$flipsMeasured.length; i$var133 += 1) {
+			boolean[][] subarray$0 = new boolean[length$flipsMeasured.length][];
+			flips[i$var133] = subarray$0;
+			for(int j$var144 = 0; j$var144 < length$flipsMeasured.length; j$var144 += 1)
+				subarray$0[j$var144] = new boolean[length$flipsMeasured.length];
 		}
 		
 		// Allocate scratch space
@@ -1422,46 +1384,43 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			);
 
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample189)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$index$l, int forEnd$index$l, int threadID$index$l, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int index$l = forStart$index$l; index$l < forEnd$index$l; index$l += 1) {
-							int l = index$l;
-							int threadID$l = threadID$index$l;
-							boolean[][] var177 = flips[l];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, samples, 1,
-								(int forStart$index$p, int forEnd$index$p, int threadID$index$p, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int index$p = forStart$index$p; index$p < forEnd$index$p; index$p += 1) {
-											int p = index$p;
-											int threadID$p = threadID$index$p;
-											
-											//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-											parallelFor(RNG$2, 0, samples, 1,
-												(int forStart$n, int forEnd$n, int threadID$n, org.sandwood.random.internal.Rng RNG$3) -> { 
-													
-														// Inner loop for running batches of iterations, each batch has its own random number
-														// generator.
-														for(int n = forStart$n; n < forEnd$n; n += 1)
-															var177[n][p] = DistributionSampling.sampleBernoulli(RNG$3, bias[st[p][l][n]]);
-												}
-											);
-										}
-								}
-							);
-						}
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$index$l, int forEnd$index$l, int threadID$index$l, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$l = forStart$index$l; index$l < forEnd$index$l; index$l += 1) {
+						int l = index$l;
+						int threadID$l = threadID$index$l;
+						boolean[][] var177 = flips[l];
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, samples, 1,
+							(int forStart$index$p, int forEnd$index$p, int threadID$index$p, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int index$p = forStart$index$p; index$p < forEnd$index$p; index$p += 1) {
+										int p = index$p;
+										int threadID$p = threadID$index$p;
+										
+										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+										parallelFor(RNG$2, 0, samples, 1,
+											(int forStart$n, int forEnd$n, int threadID$n, org.sandwood.random.internal.Rng RNG$3) -> { 
+												
+													// Inner loop for running batches of iterations, each batch has its own random number
+													// generator.
+													for(int n = forStart$n; n < forEnd$n; n += 1)
+														var177[n][p] = DistributionSampling.sampleBernoulli(RNG$3, bias[st[p][l][n]]);
+											}
+										);
+									}
+							}
+						);
+					}
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

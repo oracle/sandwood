@@ -6,7 +6,6 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample18 = false;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -58,26 +57,6 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		fixedProbFlag$sample18 = false;
 	}
 
-	// Getter for fixedFlag$sample18.
-	@Override
-	public final boolean get$fixedFlag$sample18() {
-		return fixedFlag$sample18;
-	}
-
-	// Setter for fixedFlag$sample18.
-	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
-		// need to be updated.
-		fixedFlag$sample18 = cv$value;
-		
-		// Should the probability of sample 18 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample18" with its value "cv$value".
-		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
-	}
-
 	// Getter for fixedFlag$sample5.
 	@Override
 	public final boolean get$fixedFlag$sample5() {
@@ -108,20 +87,6 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 18 as it depends on flips.
-		fixedProbFlag$sample18 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -235,7 +200,7 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedFlag$sample5);
+			fixedProbFlag$sample18 = fixedFlag$sample5;
 		}
 		// Using cached values.
 		else {
@@ -389,10 +354,8 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips)
-			// Constructor for flips
-			flips = new boolean[100000];
+		// Constructor for flips
+		flips = new boolean[100000];
 		
 		// Constructor for logProbability$bernoulli
 		logProbability$bernoulli = new double[100000];
@@ -407,19 +370,16 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		if(!fixedFlag$sample5)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample18)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, 100000, 1,
-				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i = forStart$i; i < forEnd$i; i += 1)
-							flips[i] = DistributionSampling.sampleBernoulli(RNG$1, bias);
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, 100000, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+						flips[i] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

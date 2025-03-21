@@ -22,10 +22,11 @@ public class DiscreteChoiceAlt extends Model {
         public int[] getValue() { return system$c.get$choices(); }
 
         @Override
-        protected void setValueInternal(int[] value) {
-            system$c.set$choices(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable choices because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,17 +34,12 @@ public class DiscreteChoiceAlt extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample78(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample78())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -331,14 +327,10 @@ public class DiscreteChoiceAlt extends Model {
             newCore.set$ObsChoices(oldCore.get$ObsChoices());
 
         //ComputedVariables
-        if(choices.isSet())
-            newCore.set$choices(oldCore.get$choices());
         if(ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(choices.isSet())
-            newCore.set$fixedFlag$sample78(oldCore.get$fixedFlag$sample78());
         if(ut.isSet())
             newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
     }

@@ -4,13 +4,10 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[][] get$bias();
 	public void set$bias(double[][] cv$value);
 	public int[][] get$events();
-	public void set$events(int[][] cv$value);
 	public int[][] get$eventsMeasured();
 	public void set$eventsMeasured(int[][] cv$value);
 	public boolean get$fixedFlag$sample126();
 	public void set$fixedFlag$sample126(boolean cv$value);
-	public boolean get$fixedFlag$sample159();
-	public void set$fixedFlag$sample159(boolean cv$value);
 	public boolean get$fixedFlag$sample42();
 	public void set$fixedFlag$sample42(boolean cv$value);
 	public boolean get$fixedFlag$sample57();

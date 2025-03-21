@@ -107,13 +107,6 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$value(double[] cv$value) {
-		value = cv$value;
-		setFlag$value = true;
-		fixedProbFlag$sample21 = false;
-	}
-
-	@Override
 	public final double[] get$value2() {
 		return value2;
 	}
@@ -231,8 +224,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$value)
-			value = new double[1];
+		value = new double[1];
 		value2 = new double[1];
 		allocateScratch();
 	}

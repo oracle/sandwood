@@ -11,7 +11,6 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] cv$var37$countGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample53 = false;
 	private boolean fixedProbFlag$sample39 = false;
 	private boolean fixedProbFlag$sample53 = false;
 	private int length$obs_measured;
@@ -87,26 +86,6 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
-	// Getter for fixedFlag$sample53.
-	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
-	}
-
-	// Setter for fixedFlag$sample53.
-	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
-		// need to be updated.
-		fixedFlag$sample53 = cv$value;
-		
-		// Should the probability of sample 53 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-	}
-
 	// Getter for length$obs_measured.
 	@Override
 	public final int get$length$obs_measured() {
@@ -147,20 +126,6 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final int[] get$obs() {
 		return obs;
-	}
-
-	// Setter for obs.
-	@Override
-	public final void set$obs(int[] cv$value) {
-		// Set flags for all the side effects of obs including if probabilities need to be
-		// updated.
-		// Set obs with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		obs = cv$value;
-		setFlag$obs = true;
-		
-		// Unset the fixed probability flag for sample 53 as it depends on obs.
-		fixedProbFlag$sample53 = false;
 	}
 
 	// Getter for obs_measured.
@@ -364,7 +329,7 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample39);
+			fixedProbFlag$sample53 = fixedFlag$sample39;
 		}
 		// Using cached values.
 		else {
@@ -477,10 +442,8 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			d = new double[lengthCV$a$37_10];
 		}
 		
-		// If obs has not been set already allocate space.
-		if(!setFlag$obs)
-			// Constructor for obs
-			obs = new int[length$obs_measured];
+		// Constructor for obs
+		obs = new int[length$obs_measured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -504,33 +467,30 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_15, d);
 		}
 		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_16 = -1;
+		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample53) {
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_16 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$37_16 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$37_16 = 3;
-			
-			// Alternative name for lengthCV$a$37_16 to make it effectively final.
-			int lengthCV$a$37_16$1 = lengthCV$a$37_16;
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$obs_measured, 1,
-				(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
-							obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_16$1);
-				}
-			);
-		}
+		if((0 == y))
+			lengthCV$a$37_16 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$37_16 = 3;
+		
+		// Alternative name for lengthCV$a$37_16 to make it effectively final.
+		int lengthCV$a$37_16$1 = lengthCV$a$37_16;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
+						obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_16$1);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

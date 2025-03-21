@@ -9,7 +9,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double bias;
 	private boolean fixedFlag$sample35 = false;
 	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample94 = false;
 	private boolean fixedProbFlag$sample35 = false;
 	private boolean fixedProbFlag$sample42 = false;
 	private boolean fixedProbFlag$sample94 = false;
@@ -114,26 +113,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
 
-	// Getter for fixedFlag$sample94.
-	@Override
-	public final boolean get$fixedFlag$sample94() {
-		return fixedFlag$sample94;
-	}
-
-	// Setter for fixedFlag$sample94.
-	@Override
-	public final void set$fixedFlag$sample94(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample94 including if probabilities
-		// need to be updated.
-		fixedFlag$sample94 = cv$value;
-		
-		// Should the probability of sample 94 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample94" with its value "cv$value".
-		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
-	}
-
 	// Getter for k.
 	@Override
 	public final int get$k() {
@@ -217,19 +196,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final boolean[][] get$y() {
 		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(boolean[][] cv$value) {
-		// Set flags for all the side effects of y including if probabilities need to be updated.
-		// Set y with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		y = cv$value;
-		setFlag$y = true;
-		
-		// Unset the fixed probability flag for sample 94 as it depends on y.
-		fixedProbFlag$sample94 = false;
 	}
 
 	// Getter for yMeasured.
@@ -674,7 +640,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample94 = ((fixedFlag$sample94 && fixedFlag$sample35) && fixedFlag$sample42);
+			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
 		}
 		// Using cached values.
 		else {
@@ -2771,13 +2737,10 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If y has not been set already allocate space.
-		if(!setFlag$y) {
-			// Constructor for y
-			y = new boolean[x.length][];
-			for(int var15 = 0; var15 < x.length; var15 += 1)
-				y[var15] = new boolean[3];
-		}
+		// Constructor for y
+		y = new boolean[x.length][];
+		for(int var15 = 0; var15 < x.length; var15 += 1)
+			y[var15] = new boolean[3];
 		
 		// If weights has not been set already allocate space.
 		if(!setFlag$weights)
@@ -2829,21 +2792,21 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "j$var85" with its value "0".
 				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 			}
-			if(!fixedFlag$sample94)
-				// Substituted "j$var85" with its value "0".
-				var89[0] = DistributionSampling.sampleBernoulli(RNG$, (p[i][0] + bias));
+			
+			// Substituted "j$var85" with its value "0".
+			var89[0] = DistributionSampling.sampleBernoulli(RNG$, (p[i][0] + bias));
 			if(!fixedFlag$sample35)
 				// Substituted "j$var85" with its value "1".
 				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			if(!fixedFlag$sample94)
-				// Substituted "j$var85" with its value "1".
-				var89[1] = DistributionSampling.sampleBernoulli(RNG$, (p[i][1] + bias));
+			
+			// Substituted "j$var85" with its value "1".
+			var89[1] = DistributionSampling.sampleBernoulli(RNG$, (p[i][1] + bias));
 			if(!fixedFlag$sample35)
 				// Substituted "j$var85" with its value "2".
 				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			if(!fixedFlag$sample94)
-				// Substituted "j$var85" with its value "2".
-				var89[2] = DistributionSampling.sampleBernoulli(RNG$, (p[i][2] + bias));
+			
+			// Substituted "j$var85" with its value "2".
+			var89[2] = DistributionSampling.sampleBernoulli(RNG$, (p[i][2] + bias));
 		}
 	}
 

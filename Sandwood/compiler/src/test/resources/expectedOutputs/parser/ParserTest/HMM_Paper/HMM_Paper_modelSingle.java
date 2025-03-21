@@ -57,10 +57,11 @@ public class HMM_Paper extends Model {
         public boolean[] getValue() { return system$c.get$flips(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$flips(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flips because it is fixed by observing a variable.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class HMM_Paper extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample87(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample87())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -336,8 +332,6 @@ public class HMM_Paper extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(flips.isSet())
-            newCore.set$flips(oldCore.get$flips());
         if(initialCoin.isSet())
             newCore.set$initialCoin(oldCore.get$initialCoin());
         if(m.isSet())
@@ -348,8 +342,6 @@ public class HMM_Paper extends Model {
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
-        if(flips.isSet())
-            newCore.set$fixedFlag$sample87(oldCore.get$fixedFlag$sample87());
         if(initialCoin.isSet())
             newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
         if(m.isSet())

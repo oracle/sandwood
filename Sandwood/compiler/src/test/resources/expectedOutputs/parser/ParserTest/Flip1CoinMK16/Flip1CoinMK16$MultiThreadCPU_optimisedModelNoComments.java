@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample14 = false;
-	private boolean fixedFlag$sample16 = false;
 	private boolean fixedProbFlag$sample14 = false;
 	private boolean fixedProbFlag$sample16 = false;
 	private boolean flip;
@@ -54,25 +53,8 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		fixedFlag$sample16 = cv$value;
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
-	}
-
-	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	@Override
-	public final void set$flip(boolean cv$value) {
-		flip = cv$value;
-		fixedProbFlag$sample16 = false;
 	}
 
 	@Override
@@ -159,7 +141,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flip = (logProbability$flip + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample14);
+			fixedProbFlag$sample16 = fixedFlag$sample14;
 		} else {
 			double cv$accumulator = 0.0;
 			if(Double.isNaN(guard)) {
@@ -190,8 +172,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(Double.isNaN(guard)) {
 			if(!fixedFlag$sample14)
 				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!fixedFlag$sample16)
-				flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
 

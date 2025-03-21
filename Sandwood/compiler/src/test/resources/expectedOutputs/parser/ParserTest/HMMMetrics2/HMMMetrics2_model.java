@@ -97,10 +97,11 @@ public class HMMMetrics2 extends Model {
         public double[][] getValue() { return system$c.get$metric_g(); }
 
         @Override
-        protected void setValueInternal(double[][] value) {
-            system$c.set$metric_g(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable metric_g because its value is fixed by observed values.");
         }
 
         @Override
@@ -113,17 +114,12 @@ public class HMMMetrics2 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample157(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample157())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -207,10 +203,11 @@ public class HMMMetrics2 extends Model {
         public boolean[][] getValue() { return system$c.get$metric_valid_g(); }
 
         @Override
-        protected void setValueInternal(boolean[][] value) {
-            system$c.set$metric_valid_g(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable metric_valid_g because it is fixed by observing a variable.");
         }
 
         @Override
@@ -223,17 +220,12 @@ public class HMMMetrics2 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample145(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample145())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -494,14 +486,10 @@ public class HMMMetrics2 extends Model {
             newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
         if(m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(metric_g.isSet())
-            newCore.set$metric_g(oldCore.get$metric_g());
         if(metric_mean.isSet())
             newCore.set$metric_mean(oldCore.get$metric_mean());
         if(metric_valid_bias.isSet())
             newCore.set$metric_valid_bias(oldCore.get$metric_valid_bias());
-        if(metric_valid_g.isSet())
-            newCore.set$metric_valid_g(oldCore.get$metric_valid_g());
         if(metric_var.isSet())
             newCore.set$metric_var(oldCore.get$metric_var());
         if(st.isSet())
@@ -689,8 +677,6 @@ public class HMMMetrics2 extends Model {
         public final double[][] initialStateDistribution;
         /** Field holding the MAP or Sample value of m after an infer model call. */
         public final double[][][] m;
-        /** Field holding the MAP or Sample value of metric_g after an infer model call. */
-        public final double[][][] metric_g;
         /** Field holding the MAP or Sample value of metric_mean after an infer model call. */
         public final double[][] metric_mean;
         /** Field holding the MAP or Sample value of metric_valid_bias after an infer model call. */
@@ -703,7 +689,6 @@ public class HMMMetrics2 extends Model {
         InferredModelOutputs(HMMMetrics2 system$model) {
             this.initialStateDistribution = system$model.getInferredValue(system$model.$initialStateDistribution);
             this.m = system$model.getInferredValue(system$model.$m);
-            this.metric_g = system$model.getInferredValue(system$model.$metric_g);
             this.metric_mean = system$model.getInferredValue(system$model.$metric_mean);
             this.metric_valid_bias = system$model.getInferredValue(system$model.$metric_valid_bias);
             this.metric_var = system$model.getInferredValue(system$model.$metric_var);

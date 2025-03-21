@@ -36,12 +36,12 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
-import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Traces;
@@ -157,12 +157,12 @@ public class CompilationContext {
         public final boolean setter;
         public final boolean sample;
         public final String comment;
-        public final boolean observed;
+        public final Observed observed;
         public final boolean input;
         public final IRTreeReturn<A> initialValue;
         private final static Map<VariableDescription<?>, Set<WrappedTree<IRTree, IRTreeVoid>>> setSideEffects = new HashMap<>();
 
-        public FieldDesc(VariableDescription<A> varDesc, boolean getter, boolean setter, boolean observed,
+        public FieldDesc(VariableDescription<A> varDesc, boolean getter, boolean setter, Observed observed,
                 boolean input, boolean sample, IRTreeReturn<A> initialValue, String comment) {
             this.varDesc = varDesc;
             this.getter = getter;
@@ -560,7 +560,8 @@ public class CompilationContext {
 
     public <A extends Variable<A>> void addClassInputField(VariableDescription<A> varDesc, String comment) {
         if(!classFields.containsKey(varDesc.name)) {
-            classFields.put(varDesc.name, new FieldDesc<>(varDesc, true, true, false, true, false, null, comment));
+            classFields.put(varDesc.name,
+                    new FieldDesc<>(varDesc, true, true, Observed.FREE, true, false, null, comment));
 
         } else {
             @SuppressWarnings("unchecked")
@@ -575,24 +576,25 @@ public class CompilationContext {
     // here to ensure no unexpected results.
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
             IRTreeVoid constructor, IRTreeReturn<A> initialValue) {
-        addConstructedClassField(fieldname, constructor, null, false, false, true, false, false, false, initialValue,
-                null);
+        addConstructedClassField(fieldname, constructor, null, false, false, true, Observed.FREE, false, false,
+                initialValue, null);
     }
 
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname, boolean getter,
             boolean setter, IRTreeVoid constructor, IRTreeReturn<A> initialValue) {
-        addConstructedClassField(fieldname, constructor, null, getter, setter, false, false, false, false, initialValue,
-                null);
+        addConstructedClassField(fieldname, constructor, null, getter, setter, false, Observed.FREE, false, false,
+                initialValue, null);
     }
 
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
             IRTreeVoid constructor, boolean isPrivate, String comment) {
-        addConstructedClassField(fieldname, constructor, null, true, false, isPrivate, false, false, false, null,
-                comment);
+        addConstructedClassField(fieldname, constructor, null, true, false, isPrivate, Observed.FREE, false, false,
+                null, comment);
     }
 
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname, boolean isPrivate) {
-        addConstructedClassField(fieldname, null, null, true, false, isPrivate, false, false, false, null, null);
+        addConstructedClassField(fieldname, null, null, true, false, isPrivate, Observed.FREE, false, false, null,
+                null);
     }
 
     public <A extends Variable<A>> void addConstructedClassField(Variable<A> v, boolean getter, boolean setter,
@@ -624,17 +626,17 @@ public class CompilationContext {
 
     private <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
             IRTreeVoid constructor, Variable<?> v, boolean getter, boolean setter) {
-        addConstructedClassField(fieldname, constructor, v, getter, setter, v.isPrivate(), v.isObserved(),
+        addConstructedClassField(fieldname, constructor, v, getter, setter, v.isPrivate(), v.getObservationStatus(),
                 v.getParent().getType() == DFType.NAMED_VARIABLE, v.isSample(), null, v.getComment());
     }
 
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> varDesc,
             IRTreeVoid constructorTree, Variable<?> v, boolean getter, boolean setter, boolean isPrivate,
-            boolean observed, boolean input, boolean sample, IRTreeReturn<A> initialValue, String comment) {
+            Observed observed, boolean input, boolean sample, IRTreeReturn<A> initialValue, String comment) {
         // Ensure variables that did not appear in the model, and variables that have
         // been marked private don't have getters and setters constructed.
         getter = getter && !isPrivate;
-        setter = setter && !isPrivate;
+        setter = setter && !isPrivate && observed == Observed.FREE;
         if(!classFields.containsKey(varDesc.name)) {
             classFields.put(varDesc.name,
                     new FieldDesc<>(varDesc, getter, setter, observed, input, sample, initialValue, comment));
@@ -649,7 +651,8 @@ public class CompilationContext {
                 assert f.initialValue == null || (f.initialValue.equivalent(initialValue));
             // It is important that f.varDesc is used here as only the first variable description is checked to see if
             // it need to be converted to an array type.
-            f = new FieldDesc<>(f.varDesc, getter || f.getter, setter || f.setter, observed || f.observed, f.input,
+            assert observed == f.observed;
+            f = new FieldDesc<>(f.varDesc, getter || f.getter, setter || f.setter, observed, f.input,
                     sample || f.sample, initialValue, f.comment);
             classFields.put(varDesc.name, f);
         }

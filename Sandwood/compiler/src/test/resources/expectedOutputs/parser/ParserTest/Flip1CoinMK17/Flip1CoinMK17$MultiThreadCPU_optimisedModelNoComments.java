@@ -6,7 +6,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK17$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample7 = false;
-	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean fixedProbFlag$sample9 = false;
 	private boolean flip;
@@ -48,25 +47,8 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
-		fixedFlag$sample9 = cv$value;
-		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
-	}
-
-	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	@Override
-	public final void set$flip(boolean cv$value) {
-		flip = cv$value;
-		fixedProbFlag$sample9 = false;
 	}
 
 	@Override
@@ -128,7 +110,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedFlag$sample7);
+			fixedProbFlag$sample9 = fixedFlag$sample7;
 		} else {
 			logProbability$bernoulli = logProbability$flip;
 			logProbability$$model = (logProbability$$model + logProbability$flip);
@@ -159,8 +141,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample7)
 			bias = (DistributionSampling.sampleTruncatedGaussian(RNG$, -0.5, 0.3085375387259869, 0.5, 0.6914624612740131) + 0.5);
-		if(!fixedFlag$sample9)
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	@Override

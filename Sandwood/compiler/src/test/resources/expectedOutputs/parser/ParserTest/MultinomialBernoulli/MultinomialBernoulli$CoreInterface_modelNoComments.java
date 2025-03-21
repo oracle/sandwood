@@ -6,12 +6,6 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public void set$fixedFlag$sample17(boolean cv$value);
 	public boolean get$fixedFlag$sample20();
 	public void set$fixedFlag$sample20(boolean cv$value);
-	public boolean get$fixedFlag$sample48();
-	public void set$fixedFlag$sample48(boolean cv$value);
-	public boolean get$fixedFlag$sample60();
-	public void set$fixedFlag$sample60(boolean cv$value);
-	public boolean get$fixedFlag$sample72();
-	public void set$fixedFlag$sample72(boolean cv$value);
 	public int get$length();
 	public int get$length$observed();
 	public void set$length$observed(int cv$value);
@@ -25,7 +19,6 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public boolean[] get$observed();
 	public void set$observed(boolean[] cv$value);
 	public boolean[] get$output();
-	public void set$output(boolean[] cv$value);
 	public double[] get$p();
 	public void set$p(double[] cv$value);
 	public int[] get$prior();

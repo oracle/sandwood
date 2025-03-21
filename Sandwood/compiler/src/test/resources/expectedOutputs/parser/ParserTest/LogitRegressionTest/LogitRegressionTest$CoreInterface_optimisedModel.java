@@ -20,12 +20,6 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	// Setter for fixedFlag$sample42.
 	public void set$fixedFlag$sample42(boolean cv$value);
 
-	// Getter for fixedFlag$sample94.
-	public boolean get$fixedFlag$sample94();
-
-	// Setter for fixedFlag$sample94.
-	public void set$fixedFlag$sample94(boolean cv$value);
-
 	// Getter for k.
 	public int get$k();
 
@@ -55,9 +49,6 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 
 	// Getter for y.
 	public boolean[][] get$y();
-
-	// Setter for y.
-	public void set$y(boolean[][] cv$value);
 
 	// Getter for yMeasured.
 	public boolean[][] get$yMeasured();

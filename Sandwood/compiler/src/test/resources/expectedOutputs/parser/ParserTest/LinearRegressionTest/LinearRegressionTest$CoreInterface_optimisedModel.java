@@ -26,12 +26,6 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	// Setter for fixedFlag$sample35.
 	public void set$fixedFlag$sample35(boolean cv$value);
 
-	// Getter for fixedFlag$sample74.
-	public boolean get$fixedFlag$sample74();
-
-	// Setter for fixedFlag$sample74.
-	public void set$fixedFlag$sample74(boolean cv$value);
-
 	// Getter for k.
 	public int get$k();
 
@@ -70,9 +64,6 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 
 	// Getter for y.
 	public double[] get$y();
-
-	// Setter for y.
-	public void set$y(double[] cv$value);
 
 	// Getter for yMeasured.
 	public double[] get$yMeasured();

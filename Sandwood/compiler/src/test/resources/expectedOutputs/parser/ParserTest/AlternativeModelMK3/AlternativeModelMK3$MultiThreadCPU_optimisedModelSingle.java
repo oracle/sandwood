@@ -9,7 +9,6 @@ class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Declare the variables for the model.
 	private double bias;
 	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
 	private double logProbability$$evidence;
@@ -73,26 +72,6 @@ class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
 	}
 
-	// Getter for fixedFlag$sample8.
-	@Override
-	public final boolean get$fixedFlag$sample8() {
-		return fixedFlag$sample8;
-	}
-
-	// Setter for fixedFlag$sample8.
-	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample8 including if probabilities
-		// need to be updated.
-		fixedFlag$sample8 = cv$value;
-		
-		// Should the probability of sample 8 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample8" with its value "cv$value".
-		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
-	}
-
 	// Getter for logProbability$$evidence.
 	@Override
 	public final double get$logProbability$$evidence() {
@@ -151,17 +130,6 @@ class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
-	}
-
-	// Setter for positiveCount.
-	@Override
-	public final void set$positiveCount(int cv$value) {
-		// Set flags for all the side effects of positiveCount including if probabilities
-		// need to be updated.
-		positiveCount = cv$value;
-		
-		// Unset the fixed probability flag for sample 8 as it depends on positiveCount.
-		fixedProbFlag$sample8 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample6 using sampled values.
@@ -330,7 +298,7 @@ class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedFlag$sample6);
+			fixedProbFlag$sample8 = fixedFlag$sample6;
 		}
 		// Using cached values.
 		else {
@@ -381,8 +349,7 @@ class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample6)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample8)
-			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

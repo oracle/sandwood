@@ -21,9 +21,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private boolean fixedFlag$sample130 = false;
 	private boolean fixedFlag$sample147 = false;
 	private boolean fixedFlag$sample164 = false;
-	private boolean fixedFlag$sample180 = false;
-	private boolean fixedFlag$sample185 = false;
-	private boolean fixedFlag$sample190 = false;
 	private boolean fixedFlag$sample30 = false;
 	private boolean fixedFlag$sample36 = false;
 	private boolean fixedFlag$sample39 = false;
@@ -127,13 +124,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	}
 
 	@Override
-	public final void set$cpu(double[] cv$value) {
-		cpu = cv$value;
-		setFlag$cpu = true;
-		fixedProbFlag$sample180 = false;
-	}
-
-	@Override
 	public final double[] get$cpuMean() {
 		return cpuMean;
 	}
@@ -214,39 +204,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	public final void set$fixedFlag$sample164(boolean cv$value) {
 		fixedFlag$sample164 = cv$value;
 		fixedProbFlag$sample164 = (cv$value && fixedProbFlag$sample164);
-		fixedProbFlag$sample190 = (cv$value && fixedProbFlag$sample190);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample180() {
-		return fixedFlag$sample180;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample180(boolean cv$value) {
-		fixedFlag$sample180 = cv$value;
-		fixedProbFlag$sample180 = (cv$value && fixedProbFlag$sample180);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample185() {
-		return fixedFlag$sample185;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample185(boolean cv$value) {
-		fixedFlag$sample185 = cv$value;
-		fixedProbFlag$sample185 = (cv$value && fixedProbFlag$sample185);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample190() {
-		return fixedFlag$sample190;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample190(boolean cv$value) {
-		fixedFlag$sample190 = cv$value;
 		fixedProbFlag$sample190 = (cv$value && fixedProbFlag$sample190);
 	}
 
@@ -439,13 +396,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	}
 
 	@Override
-	public final void set$mem(double[] cv$value) {
-		mem = cv$value;
-		setFlag$mem = true;
-		fixedProbFlag$sample185 = false;
-	}
-
-	@Override
 	public final double[] get$memMean() {
 		return memMean;
 	}
@@ -494,13 +444,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final double[] get$pageFaults() {
 		return pageFaults;
-	}
-
-	@Override
-	public final void set$pageFaults(double[] cv$value) {
-		pageFaults = cv$value;
-		setFlag$pageFaults = true;
-		fixedProbFlag$sample190 = false;
 	}
 
 	@Override
@@ -647,7 +590,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			logProbability$cpu = (logProbability$cpu + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample180 = ((((fixedFlag$sample180 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
+			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
@@ -743,7 +686,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			logProbability$mem = (logProbability$mem + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample185 = ((((fixedFlag$sample185 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
+			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
@@ -839,7 +782,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample190 = ((((fixedFlag$sample190 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
+			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
@@ -1049,7 +992,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			logProbability$cpu = (logProbability$cpu + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample180 = ((((fixedFlag$sample180 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
+			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
@@ -1076,7 +1019,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			logProbability$mem = (logProbability$mem + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample185 = ((((fixedFlag$sample185 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
+			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
@@ -1103,7 +1046,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample190 = ((((fixedFlag$sample190 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
+			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
@@ -3212,12 +3155,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			st = new int[length$cpu_measured];
 		if(!setFlag$initialStateDistribution)
 			initialStateDistribution = new double[noStates];
-		if(!setFlag$cpu)
-			cpu = new double[length$cpu_measured];
-		if(!setFlag$mem)
-			mem = new double[length$cpu_measured];
-		if(!setFlag$pageFaults)
-			pageFaults = new double[length$cpu_measured];
+		cpu = new double[length$cpu_measured];
+		mem = new double[length$cpu_measured];
+		pageFaults = new double[length$cpu_measured];
 		if(!setFlag$cpuMean)
 			cpuMean = new double[noStates];
 		if(!setFlag$memMean)
@@ -3314,12 +3254,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$i$var174, int forEnd$i$var174, int threadID$i$var174, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i$var174 = forStart$i$var174; i$var174 < forEnd$i$var174; i$var174 += 1) {
-						if(!fixedFlag$sample180)
-							cpu[i$var174] = ((Math.sqrt(cpuVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + cpuMean[st[i$var174]]);
-						if(!fixedFlag$sample185)
-							mem[i$var174] = ((Math.sqrt(memVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + memMean[st[i$var174]]);
-						if(!fixedFlag$sample190)
-							pageFaults[i$var174] = ((Math.sqrt(pageFaultsVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + pageFaultsMean[st[i$var174]]);
+						cpu[i$var174] = ((Math.sqrt(cpuVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + cpuMean[st[i$var174]]);
+						mem[i$var174] = ((Math.sqrt(memVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + memMean[st[i$var174]]);
+						pageFaults[i$var174] = ((Math.sqrt(pageFaultsVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + pageFaultsMean[st[i$var174]]);
 					}
 			}
 		);

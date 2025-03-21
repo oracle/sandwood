@@ -11,10 +11,7 @@ interface HMMTestPart5b$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$fixedFlag$sample53(boolean cv$value);
 	public boolean get$fixedFlag$sample76();
 	public void set$fixedFlag$sample76(boolean cv$value);
-	public boolean get$fixedFlag$sample99();
-	public void set$fixedFlag$sample99(boolean cv$value);
 	public boolean[] get$flips();
-	public void set$flips(boolean[] cv$value);
 	public boolean[] get$flipsMeasured();
 	public void set$flipsMeasured(boolean[] cv$value);
 	public int get$length$flipsMeasured();

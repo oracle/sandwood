@@ -22,10 +22,11 @@ public class MultinomialBernoulli extends Model {
         public boolean[] getValue() { return system$c.get$output(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$output(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable output because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,24 +34,12 @@ public class MultinomialBernoulli extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample48(fixed);
-                system$c.set$fixedFlag$sample60(fixed);
-                system$c.set$fixedFlag$sample72(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample48 = system$c.get$fixedFlag$sample48();
-            boolean fixedFlag$sample60 = system$c.get$fixedFlag$sample60();
-            boolean fixedFlag$sample72 = system$c.get$fixedFlag$sample72();
-            if(fixedFlag$sample48 && fixedFlag$sample60 && fixedFlag$sample72)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample48 || fixedFlag$sample60 || fixedFlag$sample72)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -268,19 +257,12 @@ public class MultinomialBernoulli extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(output.isSet())
-            newCore.set$output(oldCore.get$output());
         if(p.isSet())
             newCore.set$p(oldCore.get$p());
         if(prior.isSet())
             newCore.set$prior(oldCore.get$prior());
 
         //Set fixed flags
-        if(output.isSet()){
-            newCore.set$fixedFlag$sample48(oldCore.get$fixedFlag$sample48());
-            newCore.set$fixedFlag$sample60(oldCore.get$fixedFlag$sample60());
-            newCore.set$fixedFlag$sample72(oldCore.get$fixedFlag$sample72());
-        }
         if(p.isSet())
             newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
         if(prior.isSet())

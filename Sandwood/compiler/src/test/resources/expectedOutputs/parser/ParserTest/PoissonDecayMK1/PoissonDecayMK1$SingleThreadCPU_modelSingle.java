@@ -11,7 +11,6 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private double b;
 	private int[] decay;
 	private int[] decayDetected;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -62,20 +61,6 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		return decay;
 	}
 
-	// Setter for decay.
-	@Override
-	public final void set$decay(int[] cv$value) {
-		// Set flags for all the side effects of decay including if probabilities need to
-		// be updated.
-		// Set decay with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		decay = cv$value;
-		setFlag$decay = true;
-		
-		// Unset the fixed probability flag for sample 19 as it depends on decay.
-		fixedProbFlag$sample19 = false;
-	}
-
 	// Getter for decayDetected.
 	@Override
 	public final int[] get$decayDetected() {
@@ -88,24 +73,6 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// Set decayDetected with flag to mark that it has been set so another array doesn't
 		// need to be constructed
 		decayDetected = cv$value;
-	}
-
-	// Getter for fixedFlag$sample19.
-	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	// Setter for fixedFlag$sample19.
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
-		// need to be updated.
-		fixedFlag$sample19 = cv$value;
-		
-		// Should the probability of sample 19 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
 	}
 
 	// Getter for fixedFlag$sample6.
@@ -269,7 +236,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+			fixedProbFlag$sample19 = fixedFlag$sample6;
 		}
 		// Using cached values.
 		else {
@@ -423,13 +390,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If decay has not been set already allocate space.
-		if(!setFlag$decay) {
-			// Constructor for decay
-			{
-				decay = new int[length$decayDetected];
-			}
-		}
+		decay = new int[length$decayDetected];
 	}
 
 	// Method to execute the model code conventionally.
@@ -437,10 +398,8 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		for(int var18 = 0; var18 < samples; var18 += 1) {
-			if(!fixedFlag$sample19)
-				decay[var18] = DistributionSampling.samplePoisson(RNG$, rate);
-		}
+		for(int var18 = 0; var18 < samples; var18 += 1)
+			decay[var18] = DistributionSampling.samplePoisson(RNG$, rate);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

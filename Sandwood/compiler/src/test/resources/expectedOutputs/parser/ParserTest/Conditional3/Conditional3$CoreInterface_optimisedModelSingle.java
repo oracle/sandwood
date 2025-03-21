@@ -11,12 +11,6 @@ interface Conditional3$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for fixedFlag$sample16.
 	public void set$fixedFlag$sample16(boolean cv$value);
 
-	// Getter for fixedFlag$sample20.
-	public boolean get$fixedFlag$sample20();
-
-	// Setter for fixedFlag$sample20.
-	public void set$fixedFlag$sample20(boolean cv$value);
-
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 
@@ -49,9 +43,6 @@ interface Conditional3$CoreInterface extends org.sandwood.runtime.internal.model
 
 	// Getter for value.
 	public double get$value();
-
-	// Setter for value.
-	public void set$value(double cv$value);
 
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.

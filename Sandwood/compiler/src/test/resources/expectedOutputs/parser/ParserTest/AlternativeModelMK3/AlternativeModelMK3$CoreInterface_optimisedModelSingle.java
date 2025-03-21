@@ -14,12 +14,6 @@ interface AlternativeModelMK3$CoreInterface extends org.sandwood.runtime.interna
 	// Setter for fixedFlag$sample6.
 	public void set$fixedFlag$sample6(boolean cv$value);
 
-	// Getter for fixedFlag$sample8.
-	public boolean get$fixedFlag$sample8();
-
-	// Setter for fixedFlag$sample8.
-	public void set$fixedFlag$sample8(boolean cv$value);
-
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
 
@@ -43,9 +37,6 @@ interface AlternativeModelMK3$CoreInterface extends org.sandwood.runtime.interna
 
 	// Getter for positiveCount.
 	public int get$positiveCount();
-
-	// Setter for positiveCount.
-	public void set$positiveCount(int cv$value);
 
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.

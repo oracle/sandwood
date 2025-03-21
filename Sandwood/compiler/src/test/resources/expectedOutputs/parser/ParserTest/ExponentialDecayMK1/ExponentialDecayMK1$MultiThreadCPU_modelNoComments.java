@@ -9,7 +9,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double b;
 	private double[] decay;
 	private double[] decayDetected;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -56,13 +55,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$decay(double[] cv$value) {
-		decay = cv$value;
-		setFlag$decay = true;
-		fixedProbFlag$sample19 = false;
-	}
-
-	@Override
 	public final double[] get$decayDetected() {
 		return decayDetected;
 	}
@@ -70,17 +62,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$decayDetected(double[] cv$value) {
 		decayDetected = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
 	}
 
 	@Override
@@ -184,7 +165,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$decay = (logProbability$decay + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+			fixedProbFlag$sample19 = fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -270,11 +251,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$decay) {
-			{
-				decay = new double[length$decayDetected];
-			}
-		}
+		decay = new double[length$decayDetected];
 	}
 
 	@Override
@@ -283,10 +260,8 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$var18, int forEnd$var18, int threadID$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var18 = forStart$var18; var18 < forEnd$var18; var18 += 1) {
-						if(!fixedFlag$sample19)
-							decay[var18] = (DistributionSampling.sampleExponential(RNG$1) / rate);
-					}
+				for(int var18 = forStart$var18; var18 < forEnd$var18; var18 += 1)
+						decay[var18] = (DistributionSampling.sampleExponential(RNG$1) / rate);
 			}
 		);
 	}

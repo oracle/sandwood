@@ -9,7 +9,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedFlag$sample31 = false;
 	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample74 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private boolean fixedProbFlag$sample31 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -92,17 +91,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample74() {
-		return fixedFlag$sample74;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample74(boolean cv$value) {
-		fixedFlag$sample74 = cv$value;
-		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
-	}
-
-	@Override
 	public final int get$k() {
 		return k;
 	}
@@ -180,13 +168,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	@Override
-	public final void set$y(double[] cv$value) {
-		y = cv$value;
-		setFlag$y = true;
-		fixedProbFlag$sample74 = false;
 	}
 
 	@Override
@@ -280,7 +261,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample74 = (((fixedFlag$sample74 && fixedFlag$sample24) && fixedFlag$sample31) && fixedFlag$sample35);
+			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
@@ -356,8 +337,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$y)
-			y = new double[x.length];
+		y = new double[x.length];
 		if(!setFlag$weights)
 			weights = new double[x[0].length];
 		phi = new double[x.length][];
@@ -383,12 +363,10 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 				for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
 					phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
 			}
-			if(!fixedFlag$sample74) {
-				double reduceVar$var70$4 = 0.0;
-				for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-					reduceVar$var70$4 = (reduceVar$var70$4 + phi[i$var45][cv$reduction65Index]);
-				y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + reduceVar$var70$4) + bias);
-			}
+			double reduceVar$var70$4 = 0.0;
+			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
+				reduceVar$var70$4 = (reduceVar$var70$4 + phi[i$var45][cv$reduction65Index]);
+			y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + reduceVar$var70$4) + bias);
 		}
 	}
 

@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinArrayCopyPass$CoreInterface {
 	private double[] bias;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample26 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample26 = false;
 	private boolean[] flips;
@@ -65,26 +64,8 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample26() {
-		return fixedFlag$sample26;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value) {
-		fixedFlag$sample26 = cv$value;
-		fixedProbFlag$sample26 = (cv$value && fixedProbFlag$sample26);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample26 = false;
 	}
 
 	@Override
@@ -163,7 +144,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedFlag$sample10);
+			fixedProbFlag$sample26 = fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < samples; i += 1) {
@@ -205,8 +186,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void allocator() {
 		if(!setFlag$bias)
 			bias = new double[(samples + 1)];
-		if(!setFlag$flips)
-			flips = new boolean[samples];
+		flips = new boolean[samples];
 		logProbability$bernoulli = new double[samples];
 		logProbability$sample26 = new double[samples];
 	}
@@ -216,8 +196,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		for(int i = 0; i < samples; i += 1) {
-			if(!fixedFlag$sample26)
-				flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias[i]);
+			flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias[i]);
 			if(!fixedFlag$sample10)
 				bias[(i + 1)] = bias[0];
 		}

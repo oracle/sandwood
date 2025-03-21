@@ -8,7 +8,6 @@ class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double a;
 	private double b;
 	private double bias;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -53,17 +52,6 @@ class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample5() {
 		return fixedFlag$sample5;
 	}
@@ -78,13 +66,6 @@ class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample19 = false;
 	}
 
 	@Override
@@ -174,7 +155,7 @@ class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample5);
+			fixedProbFlag$sample19 = fixedFlag$sample5;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -261,21 +242,15 @@ class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[length$flipsMeasured];
-			}
-		}
+		flips = new boolean[length$flipsMeasured];
 	}
 
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample5)
 			bias = DistributionSampling.sampleBeta(RNG$, a, b);
-		for(int i = 0; i < samples; i += 1) {
-			if(!fixedFlag$sample19)
-				flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias);
-		}
+		for(int i = 0; i < samples; i += 1)
+			flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	@Override

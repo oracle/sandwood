@@ -17,7 +17,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private int[][] events;
 	private int[][] eventsMeasured;
 	private boolean fixedFlag$sample126 = false;
-	private boolean fixedFlag$sample159 = false;
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedFlag$sample57 = false;
 	private boolean fixedFlag$sample78 = false;
@@ -100,20 +99,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		return events;
 	}
 
-	// Setter for events.
-	@Override
-	public final void set$events(int[][] cv$value) {
-		// Set flags for all the side effects of events including if probabilities need to
-		// be updated.
-		// Set events with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		events = cv$value;
-		setFlag$events = true;
-		
-		// Unset the fixed probability flag for sample 159 as it depends on events.
-		fixedProbFlag$sample159 = false;
-	}
-
 	// Getter for eventsMeasured.
 	@Override
 	public final int[][] get$eventsMeasured() {
@@ -148,24 +133,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// Should the probability of sample 159 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample159 = (fixedFlag$sample126 && fixedProbFlag$sample159);
-	}
-
-	// Getter for fixedFlag$sample159.
-	@Override
-	public final boolean get$fixedFlag$sample159() {
-		return fixedFlag$sample159;
-	}
-
-	// Setter for fixedFlag$sample159.
-	@Override
-	public final void set$fixedFlag$sample159(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample159 including if probabilities
-		// need to be updated.
-		fixedFlag$sample159 = cv$value;
-		
-		// Should the probability of sample 159 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample159 = (fixedFlag$sample159 && fixedProbFlag$sample159);
 	}
 
 	// Getter for fixedFlag$sample42.
@@ -664,7 +631,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample159 = (((fixedFlag$sample159 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample126);
+			fixedProbFlag$sample159 = ((fixedFlag$sample57 && fixedFlag$sample95) && fixedFlag$sample126);
 		}
 		// Using cached values.
 		else {
@@ -2187,14 +2154,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			}
 		}
 		
-		// If events has not been set already allocate space.
-		if(!setFlag$events) {
-			// Constructor for events
-			{
-				events = new int[length$eventsMeasured.length][];
-				for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
-					events[i$var136] = new int[length$eventsMeasured[i$var136]];
-			}
+		// Constructor for events
+		{
+			events = new int[length$eventsMeasured.length][];
+			for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
+				events[i$var136] = new int[length$eventsMeasured[i$var136]];
 		}
 		
 		// Allocate scratch space
@@ -2232,10 +2196,8 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 			int[] var150 = events[i$var136];
-			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1) {
-				if(!fixedFlag$sample159)
-					var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$, bias[st[i$var136][j$var149]], noEvents) + 1);
-			}
+			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
+				var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$, bias[st[i$var136][j$var149]], noEvents) + 1);
 		}
 	}
 

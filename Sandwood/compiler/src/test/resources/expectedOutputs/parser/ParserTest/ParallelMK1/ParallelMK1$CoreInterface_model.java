@@ -8,17 +8,8 @@ interface ParallelMK1$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Setter for fixedFlag$sample20.
 	public void set$fixedFlag$sample20(boolean cv$value);
 
-	// Getter for fixedFlag$sample24.
-	public boolean get$fixedFlag$sample24();
-
-	// Setter for fixedFlag$sample24.
-	public void set$fixedFlag$sample24(boolean cv$value);
-
 	// Getter for generated.
 	public double[] get$generated();
-
-	// Setter for generated.
-	public void set$generated(double[] cv$value);
 
 	// Getter for indirection.
 	public double[] get$indirection();

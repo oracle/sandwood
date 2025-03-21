@@ -6,8 +6,6 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample35 = false;
 	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -73,46 +71,6 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		fixedProbFlag$sample35 = false;
 	}
 
-	// Getter for fixedFlag$sample21.
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
-
-	// Setter for fixedFlag$sample21.
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
-		// need to be updated.
-		fixedFlag$sample21 = cv$value;
-		
-		// Should the probability of sample 21 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample21" with its value "cv$value".
-		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
-	}
-
-	// Getter for fixedFlag$sample35.
-	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
-	}
-
-	// Setter for fixedFlag$sample35.
-	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
-		// need to be updated.
-		fixedFlag$sample35 = cv$value;
-		
-		// Should the probability of sample 35 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample35" with its value "cv$value".
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
-	}
-
 	// Getter for fixedFlag$sample8.
 	@Override
 	public final boolean get$fixedFlag$sample8() {
@@ -151,38 +109,10 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		return flips1;
 	}
 
-	// Setter for flips1.
-	@Override
-	public final void set$flips1(boolean[] cv$value) {
-		// Set flags for all the side effects of flips1 including if probabilities need to
-		// be updated.
-		// Set flips1 with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips1 = cv$value;
-		setFlag$flips1 = true;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on flips1.
-		fixedProbFlag$sample21 = false;
-	}
-
 	// Getter for flips2.
 	@Override
 	public final boolean[] get$flips2() {
 		return flips2;
-	}
-
-	// Setter for flips2.
-	@Override
-	public final void set$flips2(boolean[] cv$value) {
-		// Set flags for all the side effects of flips2 including if probabilities need to
-		// be updated.
-		// Set flips2 with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips2 = cv$value;
-		setFlag$flips2 = true;
-		
-		// Unset the fixed probability flag for sample 35 as it depends on flips2.
-		fixedProbFlag$sample35 = false;
 	}
 
 	// Getter for flipsMeasured1.
@@ -346,7 +276,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedFlag$sample8);
+			fixedProbFlag$sample21 = fixedFlag$sample8;
 		}
 		// Using cached values.
 		else {
@@ -424,7 +354,7 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedFlag$sample8);
+			fixedProbFlag$sample35 = fixedFlag$sample8;
 		}
 		// Using cached values.
 		else {
@@ -591,15 +521,11 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If flips1 has not been set already allocate space.
-		if(!setFlag$flips1)
-			// Constructor for flips1
-			flips1 = new boolean[length$flipsMeasured1];
+		// Constructor for flips1
+		flips1 = new boolean[length$flipsMeasured1];
 		
-		// If flips2 has not been set already allocate space.
-		if(!setFlag$flips2)
-			// Constructor for flips2
-			flips2 = new boolean[length$flipsMeasured2];
+		// Constructor for flips2
+		flips2 = new boolean[length$flipsMeasured2];
 	}
 
 	// Method to execute the model code conventionally.
@@ -607,18 +533,10 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample8)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < samples1; var20 += 1)
-				flips1[var20] = DistributionSampling.sampleBernoulli(RNG$, bias);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			for(int var34 = 0; var34 < samples2; var34 += 1)
-				flips2[var34] = DistributionSampling.sampleBernoulli(RNG$, bias);
-		}
+		for(int var20 = 0; var20 < samples1; var20 += 1)
+			flips1[var20] = DistributionSampling.sampleBernoulli(RNG$, bias);
+		for(int var34 = 0; var34 < samples2; var34 += 1)
+			flips2[var34] = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

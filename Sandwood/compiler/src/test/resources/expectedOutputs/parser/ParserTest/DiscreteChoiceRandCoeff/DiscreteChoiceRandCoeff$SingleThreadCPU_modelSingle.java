@@ -13,7 +13,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double[] beta;
 	private int[] choices;
 	private double[][] exped;
-	private boolean fixedFlag$sample103 = false;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample34 = false;
@@ -132,38 +131,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final int[] get$choices() {
 		return choices;
-	}
-
-	// Setter for choices.
-	@Override
-	public final void set$choices(int[] cv$value) {
-		// Set flags for all the side effects of choices including if probabilities need to
-		// be updated.
-		// Set choices with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		choices = cv$value;
-		setFlag$choices = true;
-		
-		// Unset the fixed probability flag for sample 103 as it depends on choices.
-		fixedProbFlag$sample103 = false;
-	}
-
-	// Getter for fixedFlag$sample103.
-	@Override
-	public final boolean get$fixedFlag$sample103() {
-		return fixedFlag$sample103;
-	}
-
-	// Setter for fixedFlag$sample103.
-	@Override
-	public final void set$fixedFlag$sample103(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample103 including if probabilities
-		// need to be updated.
-		fixedFlag$sample103 = cv$value;
-		
-		// Should the probability of sample 103 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample103 = (fixedFlag$sample103 && fixedProbFlag$sample103);
 	}
 
 	// Getter for fixedFlag$sample21.
@@ -446,7 +413,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample103 = ((fixedFlag$sample103 && fixedFlag$sample21) && fixedFlag$sample47);
+			fixedProbFlag$sample103 = (fixedFlag$sample21 && fixedFlag$sample47);
 		}
 		// Using cached values.
 		else {
@@ -2474,12 +2441,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 		}
 		
-		// If choices has not been set already allocate space.
-		if(!setFlag$choices) {
-			// Constructor for choices
-			{
-				choices = new int[noObs];
-			}
+		// Constructor for choices
+		{
+			choices = new int[noObs];
 		}
 		
 		// Constructor for exped
@@ -2555,8 +2519,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				if(!(fixedFlag$sample21 && fixedFlag$sample47))
 					prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$10);
 			}
-			if(!fixedFlag$sample103)
-				choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[((i - 0) / 1)], noProducts);
+			choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[((i - 0) / 1)], noProducts);
 		}
 	}
 

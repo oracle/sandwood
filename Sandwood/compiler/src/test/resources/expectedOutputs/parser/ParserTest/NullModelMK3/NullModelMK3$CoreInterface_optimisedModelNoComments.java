@@ -7,8 +7,6 @@ interface NullModelMK3$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$eta(double cv$value);
 	public boolean get$fixedFlag$sample10();
 	public void set$fixedFlag$sample10(boolean cv$value);
-	public boolean get$fixedFlag$sample12();
-	public void set$fixedFlag$sample12(boolean cv$value);
 	public double get$logProbability$bias();
 	public double get$logProbability$binomial();
 	public double get$logProbability$positiveCount();
@@ -18,6 +16,5 @@ interface NullModelMK3$CoreInterface extends org.sandwood.runtime.internal.model
 	public int get$observedSampleCount();
 	public void set$observedSampleCount(int cv$value);
 	public int get$positiveCount();
-	public void set$positiveCount(int cv$value);
 	public void logEvidenceGeneration();
 }

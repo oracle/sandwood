@@ -10,7 +10,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private int[] choices;
 	private double[] exped;
 	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample78 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private boolean fixedProbFlag$sample78 = false;
 	private boolean[] guard$sample24put65$global;
@@ -58,20 +57,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		return choices;
 	}
 
-	// Setter for choices.
-	@Override
-	public final void set$choices(int[] cv$value) {
-		// Set flags for all the side effects of choices including if probabilities need to
-		// be updated.
-		// Set choices with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		choices = cv$value;
-		setFlag$choices = true;
-		
-		// Unset the fixed probability flag for sample 78 as it depends on choices.
-		fixedProbFlag$sample78 = false;
-	}
-
 	// Getter for exped.
 	@Override
 	public final double[] get$exped() {
@@ -101,26 +86,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample24" with its value "cv$value".
-		fixedProbFlag$sample78 = (cv$value && fixedProbFlag$sample78);
-	}
-
-	// Getter for fixedFlag$sample78.
-	@Override
-	public final boolean get$fixedFlag$sample78() {
-		return fixedFlag$sample78;
-	}
-
-	// Setter for fixedFlag$sample78.
-	@Override
-	public final void set$fixedFlag$sample78(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample78 including if probabilities
-		// need to be updated.
-		fixedFlag$sample78 = cv$value;
-		
-		// Should the probability of sample 78 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample78" with its value "cv$value".
 		fixedProbFlag$sample78 = (cv$value && fixedProbFlag$sample78);
 	}
 
@@ -410,7 +375,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample78 = (fixedFlag$sample78 && fixedFlag$sample24);
+			fixedProbFlag$sample78 = fixedFlag$sample24;
 		}
 		// Using cached values.
 		else {
@@ -738,10 +703,8 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// Constructor for prob
 		prob = new double[noProducts];
 		
-		// If choices has not been set already allocate space.
-		if(!setFlag$choices)
-			// Constructor for choices
-			choices = new int[noObs];
+		// Constructor for choices
+		choices = new int[noObs];
 		
 		// Constructor for logProbability$sample24
 		logProbability$sample24 = new double[(noProducts - 1)];
@@ -779,12 +742,8 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Substituted "sum" with its value "reduceVar$sum$3".
 				prob[i$var61] = (exped[i$var61] / reduceVar$sum$3);
 		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample78) {
-			for(int var76 = 0; var76 < noObs; var76 += 1)
-				choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
-		}
+		for(int var76 = 0; var76 < noObs; var76 += 1)
+			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

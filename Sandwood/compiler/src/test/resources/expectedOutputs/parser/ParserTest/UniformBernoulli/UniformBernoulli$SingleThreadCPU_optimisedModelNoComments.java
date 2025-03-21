@@ -4,7 +4,6 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -34,17 +33,6 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double get$b() {
 		return 1.0;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
 
 	@Override
@@ -110,13 +98,6 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$output(boolean[] cv$value) {
-		output = cv$value;
-		setFlag$output = true;
-		fixedProbFlag$sample19 = false;
-	}
-
-	@Override
 	public final double get$prior() {
 		return prior;
 	}
@@ -138,7 +119,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample5);
+			fixedProbFlag$sample19 = fixedFlag$sample5;
 		} else {
 			logProbability$bernoulli = logProbability$var19;
 			logProbability$output = (logProbability$output + logProbability$var19);
@@ -190,18 +171,15 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$output)
-			output = new boolean[length$observed];
+		output = new boolean[length$observed];
 	}
 
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample5)
 			prior = DistributionSampling.sampleUniform(RNG$);
-		if(!fixedFlag$sample19) {
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
-				output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
-		}
+		for(int var18 = 0; var18 < length$observed; var18 += 1)
+			output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
 	}
 
 	@Override

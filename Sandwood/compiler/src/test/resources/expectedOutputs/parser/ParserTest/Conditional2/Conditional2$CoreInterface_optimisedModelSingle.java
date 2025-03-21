@@ -41,9 +41,6 @@ interface Conditional2$CoreInterface extends org.sandwood.runtime.internal.model
 	// Getter for value.
 	public double[] get$value();
 
-	// Setter for value.
-	public void set$value(double[] cv$value);
-
 	// Getter for value2.
 	public double[] get$value2();
 

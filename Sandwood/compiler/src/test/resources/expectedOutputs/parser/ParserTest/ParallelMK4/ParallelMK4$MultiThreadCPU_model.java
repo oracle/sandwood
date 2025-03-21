@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK4$CoreInterface {
 	
 	// Declare the variables for the model.
-	private boolean fixedFlag$sample103 = false;
 	private boolean fixedFlag$sample61 = false;
 	private boolean fixedProbFlag$sample103 = false;
 	private boolean fixedProbFlag$sample61 = false;
@@ -31,24 +30,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	public ParallelMK4$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
-	}
-
-	// Getter for fixedFlag$sample103.
-	@Override
-	public final boolean get$fixedFlag$sample103() {
-		return fixedFlag$sample103;
-	}
-
-	// Setter for fixedFlag$sample103.
-	@Override
-	public final void set$fixedFlag$sample103(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample103 including if probabilities
-		// need to be updated.
-		fixedFlag$sample103 = cv$value;
-		
-		// Should the probability of sample 103 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample103 = (fixedFlag$sample103 && fixedProbFlag$sample103);
 	}
 
 	// Getter for fixedFlag$sample61.
@@ -77,20 +58,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final int[] get$generated() {
 		return generated;
-	}
-
-	// Setter for generated.
-	@Override
-	public final void set$generated(int[] cv$value) {
-		// Set flags for all the side effects of generated including if probabilities need
-		// to be updated.
-		// Set generated with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		generated = cv$value;
-		setFlag$generated = true;
-		
-		// Unset the fixed probability flag for sample 103 as it depends on generated.
-		fixedProbFlag$sample103 = false;
 	}
 
 	// Getter for indirection1.
@@ -251,7 +218,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample103 = (fixedFlag$sample103 && fixedFlag$sample61);
+			fixedProbFlag$sample103 = fixedFlag$sample61;
 		}
 		// Using cached values.
 		else {
@@ -674,12 +641,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If generated has not been set already allocate space.
-		if(!setFlag$generated) {
-			// Constructor for generated
-			{
-				generated = new int[length$observed];
-			}
+		// Constructor for generated
+		{
+			generated = new int[length$observed];
 		}
 		
 		// If indirection1 has not been set already allocate space.
@@ -785,10 +749,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int m = forStart$m; m < forEnd$m; m += 1) {
-						if(!fixedFlag$sample103)
-							generated[m] = DistributionSampling.sampleCategorical(RNG$1, indirection2[m], 10);
-					}
+					for(int m = forStart$m; m < forEnd$m; m += 1)
+						generated[m] = DistributionSampling.sampleCategorical(RNG$1, indirection2[m], 10);
 			}
 		);
 	}

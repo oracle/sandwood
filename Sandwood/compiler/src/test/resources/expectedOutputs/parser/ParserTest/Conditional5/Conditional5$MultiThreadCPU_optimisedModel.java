@@ -8,9 +8,6 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Declare the variables for the model.
 	private double a;
 	private double b;
-	private boolean fixedFlag$sample13 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample13 = false;
 	private boolean fixedProbFlag$sample5 = false;
 	private boolean fixedProbFlag$sample9 = false;
@@ -39,107 +36,16 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return a;
 	}
 
-	// Setter for a.
-	@Override
-	public final void set$a(double cv$value) {
-		// Set flags for all the side effects of a including if probabilities need to be updated.
-		a = cv$value;
-		
-		// Unset the fixed probability flag for sample 9 as it depends on a.
-		fixedProbFlag$sample9 = false;
-	}
-
 	// Getter for b.
 	@Override
 	public final double get$b() {
 		return b;
 	}
 
-	// Setter for b.
-	@Override
-	public final void set$b(double cv$value) {
-		// Set flags for all the side effects of b including if probabilities need to be updated.
-		b = cv$value;
-		
-		// Unset the fixed probability flag for sample 13 as it depends on b.
-		fixedProbFlag$sample13 = false;
-	}
-
-	// Getter for fixedFlag$sample13.
-	@Override
-	public final boolean get$fixedFlag$sample13() {
-		return fixedFlag$sample13;
-	}
-
-	// Setter for fixedFlag$sample13.
-	@Override
-	public final void set$fixedFlag$sample13(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample13 including if probabilities
-		// need to be updated.
-		fixedFlag$sample13 = cv$value;
-		
-		// Should the probability of sample 13 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample13" with its value "cv$value".
-		fixedProbFlag$sample13 = (cv$value && fixedProbFlag$sample13);
-	}
-
-	// Getter for fixedFlag$sample5.
-	@Override
-	public final boolean get$fixedFlag$sample5() {
-		return fixedFlag$sample5;
-	}
-
-	// Setter for fixedFlag$sample5.
-	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
-		// need to be updated.
-		fixedFlag$sample5 = cv$value;
-		
-		// Should the probability of sample 5 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample5" with its value "cv$value".
-		fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
-	}
-
-	// Getter for fixedFlag$sample9.
-	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	// Setter for fixedFlag$sample9.
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
-		// need to be updated.
-		fixedFlag$sample9 = cv$value;
-		
-		// Should the probability of sample 9 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample9" with its value "cv$value".
-		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
-	}
-
 	// Getter for guard.
 	@Override
 	public final boolean get$guard() {
 		return guard;
-	}
-
-	// Setter for guard.
-	@Override
-	public final void set$guard(boolean cv$value) {
-		// Set flags for all the side effects of guard including if probabilities need to
-		// be updated.
-		guard = cv$value;
-		
-		// Unset the fixed probability flag for sample 5 as it depends on guard.
-		fixedProbFlag$sample5 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -304,7 +210,7 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample13 = fixedFlag$sample13;
+			fixedProbFlag$sample13 = true;
 		}
 		// Using cached values.
 		else {
@@ -400,7 +306,7 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample5 = fixedFlag$sample5;
+			fixedProbFlag$sample5 = true;
 		}
 		// Using cached values.
 		else {
@@ -507,7 +413,7 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = fixedFlag$sample9;
+			fixedProbFlag$sample9 = true;
 		}
 		// Using cached values.
 		else {
@@ -545,19 +451,13 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample5)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(!fixedFlag$sample9)
-			a = DistributionSampling.sampleUniform(RNG$);
-		if(!fixedFlag$sample13)
-			b = DistributionSampling.sampleUniform(RNG$);
-		if(guard) {
-			if(!fixedFlag$sample9)
-				value = a;
-		} else {
-			if(!fixedFlag$sample13)
-				value = b;
-		}
+		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		a = DistributionSampling.sampleUniform(RNG$);
+		b = DistributionSampling.sampleUniform(RNG$);
+		if(guard)
+			value = a;
+		else
+			value = b;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

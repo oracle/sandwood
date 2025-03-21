@@ -5,8 +5,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DirichletBernoulli$CoreInterface {
 	private boolean fixedFlag$sample17 = false;
-	private boolean fixedFlag$sample38 = false;
-	private boolean fixedFlag$sample51 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample38 = false;
 	private boolean fixedProbFlag$sample51 = false;
@@ -44,28 +42,6 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
 		fixedProbFlag$sample38 = (fixedFlag$sample17 && fixedProbFlag$sample38);
 		fixedProbFlag$sample51 = (fixedFlag$sample17 && fixedProbFlag$sample51);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		fixedFlag$sample38 = cv$value;
-		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample51() {
-		return fixedFlag$sample51;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample51(boolean cv$value) {
-		fixedFlag$sample51 = cv$value;
-		fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedProbFlag$sample51);
 	}
 
 	@Override
@@ -126,14 +102,6 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final boolean[] get$output() {
 		return output;
-	}
-
-	@Override
-	public final void set$output(boolean[] cv$value) {
-		output = cv$value;
-		setFlag$output = true;
-		fixedProbFlag$sample38 = false;
-		fixedProbFlag$sample51 = false;
 	}
 
 	@Override
@@ -242,7 +210,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample17);
+			fixedProbFlag$sample38 = fixedFlag$sample17;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -294,7 +262,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$output = (logProbability$output + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedFlag$sample17);
+			fixedProbFlag$sample51 = fixedFlag$sample17;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -476,10 +444,8 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				prior = new double[2];
 			}
 		}
-		if(!setFlag$output) {
-			{
-				output = new boolean[length$observed];
-			}
+		{
+			output = new boolean[length$observed];
 		}
 	}
 
@@ -489,18 +455,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 		parallelFor(RNG$, 0, (length / 2), 1,
 			(int forStart$i$var37, int forEnd$i$var37, int threadID$i$var37, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i$var37 = forStart$i$var37; i$var37 < forEnd$i$var37; i$var37 += 1) {
-						if(!fixedFlag$sample38)
-							output[i$var37] = DistributionSampling.sampleBernoulli(RNG$1, prior[0]);
-					}
+				for(int i$var37 = forStart$i$var37; i$var37 < forEnd$i$var37; i$var37 += 1)
+						output[i$var37] = DistributionSampling.sampleBernoulli(RNG$1, prior[0]);
 			}
 		);
 		parallelFor(RNG$, (length / 2), length, 1,
 			(int forStart$i$var50, int forEnd$i$var50, int threadID$i$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i$var50 = forStart$i$var50; i$var50 < forEnd$i$var50; i$var50 += 1) {
-						if(!fixedFlag$sample51)
-							output[i$var50] = DistributionSampling.sampleBernoulli(RNG$1, prior[1]);
-					}
+				for(int i$var50 = forStart$i$var50; i$var50 < forEnd$i$var50; i$var50 += 1)
+						output[i$var50] = DistributionSampling.sampleBernoulli(RNG$1, prior[1]);
 			}
 		);
 	}

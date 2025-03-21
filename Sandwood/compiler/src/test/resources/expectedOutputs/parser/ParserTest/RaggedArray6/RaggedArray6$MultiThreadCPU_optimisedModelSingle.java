@@ -12,7 +12,6 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] d;
 	private boolean fixedFlag$sample47 = false;
 	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample65 = false;
 	private boolean fixedProbFlag$sample47 = false;
 	private boolean fixedProbFlag$sample50 = false;
 	private boolean fixedProbFlag$sample65 = false;
@@ -129,26 +128,6 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
 	}
 
-	// Getter for fixedFlag$sample65.
-	@Override
-	public final boolean get$fixedFlag$sample65() {
-		return fixedFlag$sample65;
-	}
-
-	// Setter for fixedFlag$sample65.
-	@Override
-	public final void set$fixedFlag$sample65(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample65 including if probabilities
-		// need to be updated.
-		fixedFlag$sample65 = cv$value;
-		
-		// Should the probability of sample 65 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample65" with its value "cv$value".
-		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
-	}
-
 	// Getter for length$obs_measured.
 	@Override
 	public final int get$length$obs_measured() {
@@ -195,20 +174,6 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final boolean[] get$obs() {
 		return obs;
-	}
-
-	// Setter for obs.
-	@Override
-	public final void set$obs(boolean[] cv$value) {
-		// Set flags for all the side effects of obs including if probabilities need to be
-		// updated.
-		// Set obs with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		obs = cv$value;
-		setFlag$obs = true;
-		
-		// Unset the fixed probability flag for sample 65 as it depends on obs.
-		fixedProbFlag$sample65 = false;
 	}
 
 	// Getter for obs_measured.
@@ -505,7 +470,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample65 = ((fixedFlag$sample65 && fixedFlag$sample47) && fixedFlag$sample50);
+			fixedProbFlag$sample65 = (fixedFlag$sample47 && fixedFlag$sample50);
 		}
 		// Using cached values.
 		else {
@@ -1050,10 +1015,8 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			d = new double[lengthCV$a$48_9];
 		}
 		
-		// If obs has not been set already allocate space.
-		if(!setFlag$obs)
-			// Constructor for obs
-			obs = new boolean[length$obs_measured];
+		// Constructor for obs
+		obs = new boolean[length$obs_measured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -1080,19 +1043,16 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_14, d);
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample65)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$obs_measured, 1,
-				(int forStart$var62, int forEnd$var62, int threadID$var62, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var62 = forStart$var62; var62 < forEnd$var62; var62 += 1)
-							obs[var62] = DistributionSampling.sampleBernoulli(RNG$1, d[y]);
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var62, int forEnd$var62, int threadID$var62, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var62 = forStart$var62; var62 < forEnd$var62; var62 += 1)
+						obs[var62] = DistributionSampling.sampleBernoulli(RNG$1, d[y]);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

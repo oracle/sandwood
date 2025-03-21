@@ -23,9 +23,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private boolean fixedFlag$sample130 = false;
 	private boolean fixedFlag$sample147 = false;
 	private boolean fixedFlag$sample164 = false;
-	private boolean fixedFlag$sample180 = false;
-	private boolean fixedFlag$sample185 = false;
-	private boolean fixedFlag$sample190 = false;
 	private boolean fixedFlag$sample30 = false;
 	private boolean fixedFlag$sample36 = false;
 	private boolean fixedFlag$sample39 = false;
@@ -127,20 +124,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final double[] get$cpu() {
 		return cpu;
-	}
-
-	// Setter for cpu.
-	@Override
-	public final void set$cpu(double[] cv$value) {
-		// Set flags for all the side effects of cpu including if probabilities need to be
-		// updated.
-		// Set cpu with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		cpu = cv$value;
-		setFlag$cpu = true;
-		
-		// Unset the fixed probability flag for sample 180 as it depends on cpu.
-		fixedProbFlag$sample180 = false;
 	}
 
 	// Getter for cpuMean.
@@ -304,66 +287,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// the flag to false.
 		// 
 		// Substituted "fixedFlag$sample164" with its value "cv$value".
-		fixedProbFlag$sample190 = (cv$value && fixedProbFlag$sample190);
-	}
-
-	// Getter for fixedFlag$sample180.
-	@Override
-	public final boolean get$fixedFlag$sample180() {
-		return fixedFlag$sample180;
-	}
-
-	// Setter for fixedFlag$sample180.
-	@Override
-	public final void set$fixedFlag$sample180(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample180 including if probabilities
-		// need to be updated.
-		fixedFlag$sample180 = cv$value;
-		
-		// Should the probability of sample 180 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample180" with its value "cv$value".
-		fixedProbFlag$sample180 = (cv$value && fixedProbFlag$sample180);
-	}
-
-	// Getter for fixedFlag$sample185.
-	@Override
-	public final boolean get$fixedFlag$sample185() {
-		return fixedFlag$sample185;
-	}
-
-	// Setter for fixedFlag$sample185.
-	@Override
-	public final void set$fixedFlag$sample185(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample185 including if probabilities
-		// need to be updated.
-		fixedFlag$sample185 = cv$value;
-		
-		// Should the probability of sample 185 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample185" with its value "cv$value".
-		fixedProbFlag$sample185 = (cv$value && fixedProbFlag$sample185);
-	}
-
-	// Getter for fixedFlag$sample190.
-	@Override
-	public final boolean get$fixedFlag$sample190() {
-		return fixedFlag$sample190;
-	}
-
-	// Setter for fixedFlag$sample190.
-	@Override
-	public final void set$fixedFlag$sample190(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample190 including if probabilities
-		// need to be updated.
-		fixedFlag$sample190 = cv$value;
-		
-		// Should the probability of sample 190 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample190" with its value "cv$value".
 		fixedProbFlag$sample190 = (cv$value && fixedProbFlag$sample190);
 	}
 
@@ -700,20 +623,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		return mem;
 	}
 
-	// Setter for mem.
-	@Override
-	public final void set$mem(double[] cv$value) {
-		// Set flags for all the side effects of mem including if probabilities need to be
-		// updated.
-		// Set mem with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		mem = cv$value;
-		setFlag$mem = true;
-		
-		// Unset the fixed probability flag for sample 185 as it depends on mem.
-		fixedProbFlag$sample185 = false;
-	}
-
 	// Getter for memMean.
 	@Override
 	public final double[] get$memMean() {
@@ -790,20 +699,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final double[] get$pageFaults() {
 		return pageFaults;
-	}
-
-	// Setter for pageFaults.
-	@Override
-	public final void set$pageFaults(double[] cv$value) {
-		// Set flags for all the side effects of pageFaults including if probabilities need
-		// to be updated.
-		// Set pageFaults with flag to mark that it has been set so another array doesn't
-		// need to be constructed
-		pageFaults = cv$value;
-		setFlag$pageFaults = true;
-		
-		// Unset the fixed probability flag for sample 190 as it depends on pageFaults.
-		fixedProbFlag$sample190 = false;
 	}
 
 	// Getter for pageFaultsMean.
@@ -1088,7 +983,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample180 = ((((fixedFlag$sample180 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
+			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
 		}
 		// Using cached values.
 		else {
@@ -1289,7 +1184,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample185 = ((((fixedFlag$sample185 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
+			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
 		}
 		// Using cached values.
 		else {
@@ -1490,7 +1385,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample190 = ((((fixedFlag$sample190 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
+			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
 		}
 		// Using cached values.
 		else {
@@ -2202,7 +2097,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample180 = ((((fixedFlag$sample180 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
+			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
 		}
 		// Using cached values.
 		else {
@@ -2288,7 +2183,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample185 = ((((fixedFlag$sample185 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
+			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
 		}
 		// Using cached values.
 		else {
@@ -2374,7 +2269,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample190 = ((((fixedFlag$sample190 && fixedFlag$sample39) && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
+			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
 		}
 		// Using cached values.
 		else {
@@ -8822,20 +8717,14 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Constructor for initialStateDistribution
 			initialStateDistribution = new double[noStates];
 		
-		// If cpu has not been set already allocate space.
-		if(!setFlag$cpu)
-			// Constructor for cpu
-			cpu = new double[length$cpu_measured];
+		// Constructor for cpu
+		cpu = new double[length$cpu_measured];
 		
-		// If mem has not been set already allocate space.
-		if(!setFlag$mem)
-			// Constructor for mem
-			mem = new double[length$cpu_measured];
+		// Constructor for mem
+		mem = new double[length$cpu_measured];
 		
-		// If pageFaults has not been set already allocate space.
-		if(!setFlag$pageFaults)
-			// Constructor for pageFaults
-			pageFaults = new double[length$cpu_measured];
+		// Constructor for pageFaults
+		pageFaults = new double[length$cpu_measured];
 		
 		// If cpuMean has not been set already allocate space.
 		if(!setFlag$cpuMean)
@@ -8997,12 +8886,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var174 = forStart$i$var174; i$var174 < forEnd$i$var174; i$var174 += 1) {
-						if(!fixedFlag$sample180)
-							cpu[i$var174] = ((Math.sqrt(cpuVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + cpuMean[st[i$var174]]);
-						if(!fixedFlag$sample185)
-							mem[i$var174] = ((Math.sqrt(memVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + memMean[st[i$var174]]);
-						if(!fixedFlag$sample190)
-							pageFaults[i$var174] = ((Math.sqrt(pageFaultsVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + pageFaultsMean[st[i$var174]]);
+						cpu[i$var174] = ((Math.sqrt(cpuVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + cpuMean[st[i$var174]]);
+						mem[i$var174] = ((Math.sqrt(memVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + memMean[st[i$var174]]);
+						pageFaults[i$var174] = ((Math.sqrt(pageFaultsVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + pageFaultsMean[st[i$var174]]);
 					}
 			}
 		);

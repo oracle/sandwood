@@ -57,10 +57,11 @@ public class HMMTestFromStan extends Model {
         public boolean[] getValue() { return system$c.get$flips(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$flips(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flips because it is fixed by observing a variable.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class HMMTestFromStan extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample87(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample87())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -273,8 +269,6 @@ public class HMMTestFromStan extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(flips.isSet())
-            newCore.set$flips(oldCore.get$flips());
         if(m.isSet())
             newCore.set$m(oldCore.get$m());
         if(st.isSet())
@@ -283,8 +277,6 @@ public class HMMTestFromStan extends Model {
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
-        if(flips.isSet())
-            newCore.set$fixedFlag$sample87(oldCore.get$fixedFlag$sample87());
         if(m.isSet())
             newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
         if(st.isSet()){

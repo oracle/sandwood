@@ -791,6 +791,21 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         var.add(this);
         return Variable.collectInputVariable(var, stopTypes);
     }
+    
+    /**
+     * Method to get the observation status of a variable.
+     * 
+     * @return Returns if the variable is observed, fixed by other observed variables, or free.
+     */
+    @Override
+    public Observed getObservationStatus() {
+        if(isObserved())
+            return Observed.OBSERVED;
+        else if(isFixed())
+            return Observed.FIXED;
+        else
+            return Observed.FREE;
+    }
 
     @Override
     public int hashCode() {

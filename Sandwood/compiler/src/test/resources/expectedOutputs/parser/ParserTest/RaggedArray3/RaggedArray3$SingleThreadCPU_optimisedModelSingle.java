@@ -11,7 +11,6 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] cv$var37$countGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample53 = false;
 	private boolean fixedProbFlag$sample39 = false;
 	private boolean fixedProbFlag$sample53 = false;
 	private int length$obs_measured;
@@ -87,26 +86,6 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
-	// Getter for fixedFlag$sample53.
-	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
-	}
-
-	// Setter for fixedFlag$sample53.
-	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
-		// need to be updated.
-		fixedFlag$sample53 = cv$value;
-		
-		// Should the probability of sample 53 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-	}
-
 	// Getter for length$obs_measured.
 	@Override
 	public final int get$length$obs_measured() {
@@ -147,20 +126,6 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final int[] get$obs() {
 		return obs;
-	}
-
-	// Setter for obs.
-	@Override
-	public final void set$obs(int[] cv$value) {
-		// Set flags for all the side effects of obs including if probabilities need to be
-		// updated.
-		// Set obs with flag to mark that it has been set so another array doesn't need to
-		// be constructed
-		obs = cv$value;
-		setFlag$obs = true;
-		
-		// Unset the fixed probability flag for sample 53 as it depends on obs.
-		fixedProbFlag$sample53 = false;
 	}
 
 	// Getter for obs_measured.
@@ -364,7 +329,7 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample39);
+			fixedProbFlag$sample53 = fixedFlag$sample39;
 		}
 		// Using cached values.
 		else {
@@ -477,10 +442,8 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			d = new double[lengthCV$a$37_0];
 		}
 		
-		// If obs has not been set already allocate space.
-		if(!setFlag$obs)
-			// Constructor for obs
-			obs = new int[length$obs_measured];
+		// Constructor for obs
+		obs = new int[length$obs_measured];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -504,21 +467,18 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_5, d);
 		}
 		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_6 = -1;
+		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample53) {
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_6 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$37_6 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$37_6 = 3;
-			for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-				obs[var50] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$37_6);
-		}
+		if((0 == y))
+			lengthCV$a$37_6 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$37_6 = 3;
+		for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+			obs[var50] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$37_6);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

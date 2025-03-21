@@ -13,7 +13,6 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample45 = false;
 	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample53 = false;
 	private boolean fixedProbFlag$sample28 = false;
 	private boolean fixedProbFlag$sample45 = false;
 	private boolean fixedProbFlag$sample50 = false;
@@ -144,41 +143,10 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
 	}
 
-	// Getter for fixedFlag$sample53.
-	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
-	}
-
-	// Setter for fixedFlag$sample53.
-	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
-		// need to be updated.
-		fixedFlag$sample53 = cv$value;
-		
-		// Should the probability of sample 53 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-	}
-
 	// Getter for flip.
 	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	// Setter for flip.
-	@Override
-	public final void set$flip(boolean cv$value) {
-		// Set flags for all the side effects of flip including if probabilities need to be
-		// updated.
-		flip = cv$value;
-		
-		// Unset the fixed probability flag for sample 53 as it depends on flip.
-		fixedProbFlag$sample53 = false;
 	}
 
 	// Getter for flipMeasured.
@@ -677,7 +645,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = ((fixedFlag$sample53 && fixedFlag$sample45) && fixedFlag$sample50);
+			fixedProbFlag$sample53 = (fixedFlag$sample45 && fixedFlag$sample50);
 		}
 		// Using cached values.
 		else {
@@ -956,8 +924,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		if(!fixedFlag$sample50)
 			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
-		if(!fixedFlag$sample53)
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

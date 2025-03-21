@@ -14,17 +14,8 @@ interface Flip1CoinMK0$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for fixedFlag$sample5.
 	public void set$fixedFlag$sample5(boolean cv$value);
 
-	// Getter for fixedFlag$sample7.
-	public boolean get$fixedFlag$sample7();
-
-	// Setter for fixedFlag$sample7.
-	public void set$fixedFlag$sample7(boolean cv$value);
-
 	// Getter for flip.
 	public boolean get$flip();
-
-	// Setter for flip.
-	public void set$flip(boolean cv$value);
 
 	// Getter for flipMeasured.
 	public boolean get$flipMeasured();

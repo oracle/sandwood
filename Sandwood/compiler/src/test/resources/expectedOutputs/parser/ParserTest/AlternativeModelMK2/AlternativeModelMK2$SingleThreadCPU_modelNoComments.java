@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AlternativeModelMK2$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
 	private double logProbability$$evidence;
@@ -47,17 +46,6 @@ class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample6 = cv$value;
 		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
 		fixedProbFlag$sample8 = (fixedFlag$sample6 && fixedProbFlag$sample8);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample8() {
-		return fixedFlag$sample8;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value) {
-		fixedFlag$sample8 = cv$value;
-		fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedProbFlag$sample8);
 	}
 
 	@Override
@@ -108,12 +96,6 @@ class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
-	}
-
-	@Override
-	public final void set$positiveCount(int cv$value) {
-		positiveCount = cv$value;
-		fixedProbFlag$sample8 = false;
 	}
 
 	private final void logProbabilityValue$sample6() {
@@ -201,7 +183,7 @@ class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$positiveCount = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedFlag$sample6);
+			fixedProbFlag$sample8 = fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -248,8 +230,7 @@ class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample6)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample8)
-			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	@Override

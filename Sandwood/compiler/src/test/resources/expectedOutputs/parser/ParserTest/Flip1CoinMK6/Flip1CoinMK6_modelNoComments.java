@@ -57,10 +57,11 @@ public class Flip1CoinMK6 extends Model {
         public boolean[] getValue() { return system$c.get$flips1(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$flips1(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flips1 because its value is fixed by observed values.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class Flip1CoinMK6 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample22(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample22())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -92,10 +88,11 @@ public class Flip1CoinMK6 extends Model {
         public boolean[] getValue() { return system$c.get$flips2(); }
 
         @Override
-        protected void setValueInternal(boolean[] value) {
-            system$c.set$flips2(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flips2 because its value is fixed by observed values.");
         }
 
         @Override
@@ -103,17 +100,12 @@ public class Flip1CoinMK6 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample35(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample35())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -280,18 +272,10 @@ public class Flip1CoinMK6 extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(flips1.isSet())
-            newCore.set$flips1(oldCore.get$flips1());
-        if(flips2.isSet())
-            newCore.set$flips2(oldCore.get$flips2());
 
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
-        if(flips1.isSet())
-            newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
-        if(flips2.isSet())
-            newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
     }
 
     /**
@@ -414,15 +398,9 @@ public class Flip1CoinMK6 extends Model {
     public static class InferredModelOutputs {
         /** Field holding the MAP or Sample value of bias after an infer model call. */
         public final double[] bias;
-        /** Field holding the MAP or Sample value of flips1 after an infer model call. */
-        public final boolean[][] flips1;
-        /** Field holding the MAP or Sample value of flips2 after an infer model call. */
-        public final boolean[][] flips2;
 
         InferredModelOutputs(Flip1CoinMK6 system$model) {
             this.bias = system$model.getInferredValue(system$model.$bias);
-            this.flips1 = system$model.getInferredValue(system$model.$flips1);
-            this.flips2 = system$model.getInferredValue(system$model.$flips2);
         }
     }
 

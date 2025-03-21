@@ -11,7 +11,6 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double b1;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample33 = false;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample11 = false;
 	private boolean fixedProbFlag$sample16 = false;
@@ -133,26 +132,6 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
 	}
 
-	// Getter for fixedFlag$sample33.
-	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
-	}
-
-	// Setter for fixedFlag$sample33.
-	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample33 including if probabilities
-		// need to be updated.
-		fixedFlag$sample33 = cv$value;
-		
-		// Should the probability of sample 33 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample33" with its value "cv$value".
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
-	}
-
 	// Getter for fixedFlag$sample7.
 	@Override
 	public final boolean get$fixedFlag$sample7() {
@@ -259,19 +238,6 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(double[] cv$value) {
-		// Set flags for all the side effects of y including if probabilities need to be updated.
-		// Set y with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		y = cv$value;
-		setFlag$y = true;
-		
-		// Unset the fixed probability flag for sample 33 as it depends on y.
-		fixedProbFlag$sample33 = false;
 	}
 
 	// Getter for yMeasured.
@@ -561,7 +527,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample33 = (((fixedFlag$sample33 && fixedFlag$sample7) && fixedFlag$sample11) && fixedFlag$sample16);
+			fixedProbFlag$sample33 = ((fixedFlag$sample7 && fixedFlag$sample11) && fixedFlag$sample16);
 		}
 		// Using cached values.
 		else {
@@ -831,10 +797,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If y has not been set already allocate space.
-		if(!setFlag$y)
-			// Constructor for y
-			y = new double[x.length];
+		// Constructor for y
+		y = new double[x.length];
 	}
 
 	// Method to execute the model code conventionally.
@@ -846,12 +810,8 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
 		if(!fixedFlag$sample16)
 			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33) {
-			for(int i = 0; i < noSamples; i += 1)
-				y[i] = (((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + b0) + (b1 * x[i]));
-		}
+		for(int i = 0; i < noSamples; i += 1)
+			y[i] = (((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + b0) + (b1 * x[i]));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

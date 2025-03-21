@@ -57,10 +57,11 @@ public class Flip1CoinMK0 extends Model {
         public boolean getValue() { return system$c.get$flip(); }
 
         @Override
-        protected void setValueInternal(boolean value) {
-            system$c.set$flip(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flip because it is fixed by observing a variable.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class Flip1CoinMK0 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample7(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample7())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -174,14 +170,10 @@ public class Flip1CoinMK0 extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(flip.isSet())
-            newCore.set$flip(oldCore.get$flip());
 
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
-        if(flip.isSet())
-            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
     }
 
     /**

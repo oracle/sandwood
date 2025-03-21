@@ -13,7 +13,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	private int T;
 	private int[] arrivals;
 	private double[] exped;
-	private boolean fixedFlag$sample131 = false;
 	private boolean fixedFlag$sample22 = false;
 	private boolean fixedFlag$sample54 = false;
 	private boolean fixedFlag$sample69 = false;
@@ -131,26 +130,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	// Getter for fixedFlag$sample131.
-	@Override
-	public final boolean get$fixedFlag$sample131() {
-		return fixedFlag$sample131;
-	}
-
-	// Setter for fixedFlag$sample131.
-	@Override
-	public final void set$fixedFlag$sample131(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample131 including if probabilities
-		// need to be updated.
-		fixedFlag$sample131 = cv$value;
-		
-		// Should the probability of sample 131 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample131" with its value "cv$value".
-		fixedProbFlag$sample131 = (cv$value && fixedProbFlag$sample131);
 	}
 
 	// Getter for fixedFlag$sample22.
@@ -355,15 +334,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		return weekly_sales;
 	}
 
-	// Setter for weekly_sales.
-	@Override
-	public final void set$weekly_sales(int[][] cv$value) {
-		// Set weekly_sales with flag to mark that it has been set so another array doesn't
-		// need to be constructed
-		weekly_sales = cv$value;
-		setFlag$weekly_sales = true;
-	}
-
 	// Calculate the probability of the samples represented by sample131 using sampled
 	// values.
 	private final void logProbabilityValue$sample131() {
@@ -431,7 +401,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample131 = ((fixedFlag$sample131 && fixedFlag$sample22) && fixedFlag$sample69);
+			fixedProbFlag$sample131 = (fixedFlag$sample22 && fixedFlag$sample69);
 		}
 		// Using cached values.
 		else {
@@ -1379,13 +1349,10 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 		for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
 			weekly_ut[t$var81] = new double[(noProducts + 1)];
 		
-		// If weekly_sales has not been set already allocate space.
-		if(!setFlag$weekly_sales) {
-			// Constructor for weekly_sales
-			weekly_sales = new int[T][];
-			for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
-				weekly_sales[t$var81] = new int[(noProducts + 1)];
-		}
+		// Constructor for weekly_sales
+		weekly_sales = new int[T][];
+		for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
+			weekly_sales[t$var81] = new int[(noProducts + 1)];
 		
 		// Constructor for logProbability$sample22
 		logProbability$sample22 = new double[noProducts];
@@ -1455,14 +1422,10 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 				for(int j$var124 = 0; j$var124 <= noProducts; j$var124 += 1)
 					weekly_rates[t$var81][j$var124] = (weekly_ut[t$var81][j$var124] / reduceVar$denom$5);
 			}
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample131) {
-				DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var81], (noProducts + 1), arrivals[t$var81], weekly_sales[t$var81]);
-				int[] observed_weekly_sales = Sales[t$var81];
-				for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
-					observed_weekly_sales[j$var140] = weekly_sales[t$var81][j$var140];
-			}
+			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var81], (noProducts + 1), arrivals[t$var81], weekly_sales[t$var81]);
+			int[] observed_weekly_sales = Sales[t$var81];
+			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+				observed_weekly_sales[j$var140] = weekly_sales[t$var81][j$var140];
 		}
 	}
 

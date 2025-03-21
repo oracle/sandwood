@@ -7,7 +7,6 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double bias;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample20 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample16 = false;
 	private boolean fixedProbFlag$sample20 = false;
@@ -46,17 +45,6 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$fixedFlag$sample16(boolean cv$value) {
 		fixedFlag$sample16 = cv$value;
 		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample20() {
-		return fixedFlag$sample20;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value) {
-		fixedFlag$sample20 = cv$value;
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 	}
 
@@ -129,12 +117,6 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
-	@Override
-	public final void set$value(double cv$value) {
-		value = cv$value;
-		fixedProbFlag$sample20 = false;
-	}
-
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
@@ -173,7 +155,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$value = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample20 = ((fixedFlag$sample20 && fixedFlag$sample4) && fixedFlag$sample16);
+			fixedProbFlag$sample20 = (fixedFlag$sample4 && fixedFlag$sample16);
 		} else {
 			logProbability$var17 = logProbability$value;
 			logProbability$$model = (logProbability$$model + logProbability$value);
@@ -270,8 +252,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				bias = var14;
 			}
 		}
-		if(!fixedFlag$sample20)
-			value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
+		value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
 	}
 
 	@Override
