@@ -127,10 +127,11 @@ public class LinearRegressionTest extends Model {
         public double[] getValue() { return system$c.get$y(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$y(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable y because it is fixed by observing a variable.");
         }
 
         @Override
@@ -138,17 +139,12 @@ public class LinearRegressionTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample74(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample74())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -274,8 +270,6 @@ public class LinearRegressionTest extends Model {
             newCore.set$tau(oldCore.get$tau());
         if(weights.isSet())
             newCore.set$weights(oldCore.get$weights());
-        if(y.isSet())
-            newCore.set$y(oldCore.get$y());
 
         //Set fixed flags
         if(bias.isSet())
@@ -284,8 +278,6 @@ public class LinearRegressionTest extends Model {
             newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
         if(weights.isSet())
             newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
-        if(y.isSet())
-            newCore.set$fixedFlag$sample74(oldCore.get$fixedFlag$sample74());
     }
 
     /**

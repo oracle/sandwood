@@ -22,10 +22,11 @@ public class PoissonDecayMK1 extends Model {
         public int[] getValue() { return system$c.get$decay(); }
 
         @Override
-        protected void setValueInternal(int[] value) {
-            system$c.set$decay(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable decay because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,17 +34,12 @@ public class PoissonDecayMK1 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample19(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample19())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -252,14 +248,10 @@ public class PoissonDecayMK1 extends Model {
             newCore.set$length$decayDetected(oldCore.get$length$decayDetected());
 
         //ComputedVariables
-        if(decay.isSet())
-            newCore.set$decay(oldCore.get$decay());
         if(rate.isSet())
             newCore.set$rate(oldCore.get$rate());
 
         //Set fixed flags
-        if(decay.isSet())
-            newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
         if(rate.isSet())
             newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }

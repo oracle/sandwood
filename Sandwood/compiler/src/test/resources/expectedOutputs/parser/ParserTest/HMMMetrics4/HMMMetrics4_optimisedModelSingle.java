@@ -217,10 +217,11 @@ public class HMMMetrics4 extends Model {
         public double[][][] getValue() { return system$c.get$metric_g(); }
 
         @Override
-        protected void setValueInternal(double[][][] value) {
-            system$c.set$metric_g(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[][][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable metric_g because it is fixed by observing a variable.");
         }
 
         @Override
@@ -233,17 +234,12 @@ public class HMMMetrics4 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample256(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample256())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -257,10 +253,11 @@ public class HMMMetrics4 extends Model {
         public boolean[][][] getValue() { return system$c.get$metric_valid_g(); }
 
         @Override
-        protected void setValueInternal(boolean[][][] value) {
-            system$c.set$metric_valid_g(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[][][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable metric_valid_g because it is fixed by observing a variable.");
         }
 
         @Override
@@ -273,17 +270,12 @@ public class HMMMetrics4 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample241(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample241())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -544,10 +536,6 @@ public class HMMMetrics4 extends Model {
             newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
         if(m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(metric_g.isSet())
-            newCore.set$metric_g(oldCore.get$metric_g());
-        if(metric_valid_g.isSet())
-            newCore.set$metric_valid_g(oldCore.get$metric_valid_g());
         if(st.isSet())
             newCore.set$st(oldCore.get$st());
 
@@ -562,8 +550,6 @@ public class HMMMetrics4 extends Model {
             newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
         if(m.isSet())
             newCore.set$fixedFlag$sample33(oldCore.get$fixedFlag$sample33());
-        if(metric_g.isSet())
-            newCore.set$fixedFlag$sample256(oldCore.get$fixedFlag$sample256());
         if(st.isSet()){
             newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
             newCore.set$fixedFlag$sample76(oldCore.get$fixedFlag$sample76());

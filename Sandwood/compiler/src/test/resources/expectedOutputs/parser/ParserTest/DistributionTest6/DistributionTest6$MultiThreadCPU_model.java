@@ -15,7 +15,6 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double[] distribution$sample5;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample27 = false;
-	private boolean fixedFlag$sample49 = false;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample11 = false;
 	private boolean fixedProbFlag$sample27 = false;
@@ -94,24 +93,6 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		fixedProbFlag$sample49 = (fixedFlag$sample27 && fixedProbFlag$sample49);
 	}
 
-	// Getter for fixedFlag$sample49.
-	@Override
-	public final boolean get$fixedFlag$sample49() {
-		return fixedFlag$sample49;
-	}
-
-	// Setter for fixedFlag$sample49.
-	@Override
-	public final void set$fixedFlag$sample49(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample49 including if probabilities
-		// need to be updated.
-		fixedFlag$sample49 = cv$value;
-		
-		// Should the probability of sample 49 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample49 = (fixedFlag$sample49 && fixedProbFlag$sample49);
-	}
-
 	// Getter for fixedFlag$sample5.
 	@Override
 	public final boolean get$fixedFlag$sample5() {
@@ -186,19 +167,6 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final boolean[] get$v() {
 		return v;
-	}
-
-	// Setter for v.
-	@Override
-	public final void set$v(boolean[] cv$value) {
-		// Set flags for all the side effects of v including if probabilities need to be updated.
-		// Set v with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		v = cv$value;
-		setFlag$v = true;
-		
-		// Unset the fixed probability flag for sample 49 as it depends on v.
-		fixedProbFlag$sample49 = false;
 	}
 
 	// Getter for v1.
@@ -3915,7 +3883,7 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample49 = (((fixedFlag$sample49 && fixedFlag$sample5) && fixedFlag$sample11) && fixedFlag$sample27);
+			fixedProbFlag$sample49 = ((fixedFlag$sample5 && fixedFlag$sample11) && fixedFlag$sample27);
 		}
 		// Using cached values.
 		else {
@@ -4316,7 +4284,7 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample49 = (((fixedFlag$sample49 && fixedFlag$sample5) && fixedFlag$sample11) && fixedFlag$sample27);
+			fixedProbFlag$sample49 = ((fixedFlag$sample5 && fixedFlag$sample11) && fixedFlag$sample27);
 		}
 		// Using cached values.
 		else {
@@ -14240,12 +14208,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			}
 		}
 		
-		// If v has not been set already allocate space.
-		if(!setFlag$v) {
-			// Constructor for v
-			{
-				v = new boolean[length$value];
-			}
+		// Constructor for v
+		{
+			v = new boolean[length$value];
 		}
 		
 		// Constructor for distribution$sample5
@@ -14316,10 +14281,8 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int j = forStart$j; j < forEnd$j; j += 1) {
-						if(!fixedFlag$sample49)
-							v[j] = DistributionSampling.sampleBernoulli(RNG$1, ((((1.0 * v1) + v2[j]) + v2[j]) / v2[j]));
-					}
+					for(int j = forStart$j; j < forEnd$j; j += 1)
+						v[j] = DistributionSampling.sampleBernoulli(RNG$1, ((((1.0 * v1) + v2[j]) + v2[j]) / v2[j]));
 			}
 		);
 	}

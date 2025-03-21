@@ -15,7 +15,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] expedNorm;
 	private boolean fixedFlag$sample112 = false;
 	private boolean fixedFlag$sample114 = false;
-	private boolean fixedFlag$sample166 = false;
 	private boolean fixedFlag$sample32 = false;
 	private boolean fixedProbFlag$sample112 = false;
 	private boolean fixedProbFlag$sample114 = false;
@@ -147,24 +146,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		fixedProbFlag$sample166 = (fixedFlag$sample114 && fixedProbFlag$sample166);
 	}
 
-	// Getter for fixedFlag$sample166.
-	@Override
-	public final boolean get$fixedFlag$sample166() {
-		return fixedFlag$sample166;
-	}
-
-	// Setter for fixedFlag$sample166.
-	@Override
-	public final void set$fixedFlag$sample166(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample166 including if probabilities
-		// need to be updated.
-		fixedFlag$sample166 = cv$value;
-		
-		// Should the probability of sample 166 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample166 = (fixedFlag$sample166 && fixedProbFlag$sample166);
-	}
-
 	// Getter for fixedFlag$sample32.
 	@Override
 	public final boolean get$fixedFlag$sample32() {
@@ -248,15 +229,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final int[][] get$weekly_sales() {
 		return weekly_sales;
-	}
-
-	// Setter for weekly_sales.
-	@Override
-	public final void set$weekly_sales(int[][] cv$value) {
-		// Set weekly_sales with flag to mark that it has been set so another array doesn't
-		// need to be constructed
-		weekly_sales = cv$value;
-		setFlag$weekly_sales = true;
 	}
 
 	// Calculate the probability of the samples represented by sample112 using sampled
@@ -582,7 +554,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample166 = ((fixedFlag$sample166 && fixedFlag$sample32) && fixedFlag$sample114);
+			fixedProbFlag$sample166 = (fixedFlag$sample32 && fixedFlag$sample114);
 		}
 		// Using cached values.
 		else {
@@ -3611,16 +3583,13 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			weekly_ut = new double[((((avail.length - 1) - 0) / 1) + 1)][];
 		}
 		
-		// If weekly_sales has not been set already allocate space.
-		if(!setFlag$weekly_sales) {
-			// Constructor for weekly_sales
-			{
-				if((0 < avail.length)) {
-					for(int t = 0; t < avail.length; t += 1)
-						weekly_sales[((t - 0) / 1)] = new int[(avail[0].length + 1)];
-				}
-				weekly_sales = new int[((((avail.length - 1) - 0) / 1) + 1)][];
+		// Constructor for weekly_sales
+		{
+			if((0 < avail.length)) {
+				for(int t = 0; t < avail.length; t += 1)
+					weekly_sales[((t - 0) / 1)] = new int[(avail[0].length + 1)];
 			}
+			weekly_sales = new int[((((avail.length - 1) - 0) / 1) + 1)][];
 		}
 		
 		// Constructor for logProbability$sample32
@@ -3792,8 +3761,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 										}
 								}
 							);
-							if(!fixedFlag$sample166)
-								DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t - 0) / 1)], (avail[0].length + 1), arrivals[((t - 0) / 1)], weekly_sales[((t - 0) / 1)]);
+							DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t - 0) / 1)], (avail[0].length + 1), arrivals[((t - 0) / 1)], weekly_sales[((t - 0) / 1)]);
 							int[] observed_weekly_sales = sales[t];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -3802,10 +3770,8 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
-										for(int j$var168 = forStart$j$var168; j$var168 < forEnd$j$var168; j$var168 += 1) {
-											if(!fixedFlag$sample166)
-												observed_weekly_sales[j$var168] = weekly_sales[((t - 0) / 1)][j$var168];
-										}
+										for(int j$var168 = forStart$j$var168; j$var168 < forEnd$j$var168; j$var168 += 1)
+											observed_weekly_sales[j$var168] = weekly_sales[((t - 0) / 1)][j$var168];
 								}
 							);
 						}

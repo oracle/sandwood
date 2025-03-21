@@ -7,7 +7,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double bias;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample20 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample16 = false;
 	private boolean fixedProbFlag$sample20 = false;
@@ -47,17 +46,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample16 = cv$value;
 		fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedProbFlag$sample16);
 		fixedProbFlag$sample20 = (fixedFlag$sample16 && fixedProbFlag$sample20);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample20() {
-		return fixedFlag$sample20;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value) {
-		fixedFlag$sample20 = cv$value;
-		fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
 	}
 
 	@Override
@@ -127,12 +115,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final double get$value() {
 		return value;
-	}
-
-	@Override
-	public final void set$value(double cv$value) {
-		value = cv$value;
-		fixedProbFlag$sample20 = false;
 	}
 
 	private final void logProbabilityValue$sample16() {
@@ -247,7 +229,7 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$value = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample20 = ((fixedFlag$sample20 && fixedFlag$sample4) && fixedFlag$sample16);
+			fixedProbFlag$sample20 = (fixedFlag$sample4 && fixedFlag$sample16);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -681,8 +663,7 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(!fixedFlag$sample16)
 				bias = var14;
 		}
-		if(!fixedFlag$sample20)
-			value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
+		value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
 	}
 
 	@Override

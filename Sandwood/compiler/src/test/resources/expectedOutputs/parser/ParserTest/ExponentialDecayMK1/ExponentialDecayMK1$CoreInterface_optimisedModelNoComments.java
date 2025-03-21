@@ -6,11 +6,8 @@ interface ExponentialDecayMK1$CoreInterface extends org.sandwood.runtime.interna
 	public double get$b();
 	public void set$b(double cv$value);
 	public double[] get$decay();
-	public void set$decay(double[] cv$value);
 	public double[] get$decayDetected();
 	public void set$decayDetected(double[] cv$value);
-	public boolean get$fixedFlag$sample19();
-	public void set$fixedFlag$sample19(boolean cv$value);
 	public boolean get$fixedFlag$sample6();
 	public void set$fixedFlag$sample6(boolean cv$value);
 	public int get$length$decayDetected();

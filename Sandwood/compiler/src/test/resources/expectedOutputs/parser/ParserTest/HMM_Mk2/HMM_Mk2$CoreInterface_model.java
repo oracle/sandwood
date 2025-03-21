@@ -11,9 +11,6 @@ interface HMM_Mk2$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	// Getter for events.
 	public int[][] get$events();
 
-	// Setter for events.
-	public void set$events(int[][] cv$value);
-
 	// Getter for eventsMeasured.
 	public int[][] get$eventsMeasured();
 
@@ -25,12 +22,6 @@ interface HMM_Mk2$CoreInterface extends org.sandwood.runtime.internal.model.Core
 
 	// Setter for fixedFlag$sample126.
 	public void set$fixedFlag$sample126(boolean cv$value);
-
-	// Getter for fixedFlag$sample159.
-	public boolean get$fixedFlag$sample159();
-
-	// Setter for fixedFlag$sample159.
-	public void set$fixedFlag$sample159(boolean cv$value);
 
 	// Getter for fixedFlag$sample42.
 	public boolean get$fixedFlag$sample42();

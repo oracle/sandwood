@@ -17,18 +17,6 @@ interface Flip2CoinsMK11$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Setter for fixedFlag$sample22.
 	public void set$fixedFlag$sample22(boolean cv$value);
 
-	// Getter for fixedFlag$sample49.
-	public boolean get$fixedFlag$sample49();
-
-	// Setter for fixedFlag$sample49.
-	public void set$fixedFlag$sample49(boolean cv$value);
-
-	// Getter for fixedFlag$sample77.
-	public boolean get$fixedFlag$sample77();
-
-	// Setter for fixedFlag$sample77.
-	public void set$fixedFlag$sample77(boolean cv$value);
-
 	// Getter for fixedFlag$sample9.
 	public boolean get$fixedFlag$sample9();
 
@@ -37,9 +25,6 @@ interface Flip2CoinsMK11$CoreInterface extends org.sandwood.runtime.internal.mod
 
 	// Getter for flips.
 	public boolean[][] get$flips();
-
-	// Setter for flips.
-	public void set$flips(boolean[][] cv$value);
 
 	// Getter for flipsMeasured.
 	public boolean[][] get$flipsMeasured();

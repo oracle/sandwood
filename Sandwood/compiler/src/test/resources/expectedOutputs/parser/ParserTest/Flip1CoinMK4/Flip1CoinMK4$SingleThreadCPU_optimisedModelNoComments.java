@@ -6,7 +6,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class Flip1CoinMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK4$CoreInterface {
 	private double bias;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -41,17 +40,6 @@ class Flip1CoinMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample6() {
 		return fixedFlag$sample6;
 	}
@@ -66,13 +54,6 @@ class Flip1CoinMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample19 = false;
 	}
 
 	@Override
@@ -130,7 +111,7 @@ class Flip1CoinMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+			fixedProbFlag$sample19 = fixedFlag$sample6;
 		} else {
 			logProbability$bernoulli = logProbability$var19;
 			logProbability$flips = (logProbability$flips + logProbability$var19);
@@ -172,18 +153,15 @@ class Flip1CoinMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$flips)
-			flips = new boolean[length$flipsMeasured];
+		flips = new boolean[length$flipsMeasured];
 	}
 
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample6)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample19) {
-			for(int var18 = 0; var18 < samples; var18 += 1)
-				flips[var18] = DistributionSampling.sampleBernoulli(RNG$, bias);
-		}
+		for(int var18 = 0; var18 < samples; var18 += 1)
+			flips[var18] = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	@Override

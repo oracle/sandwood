@@ -32,17 +32,8 @@ interface HMMTestPart3b$CoreInterface extends org.sandwood.runtime.internal.mode
 	// Setter for fixedFlag$sample75.
 	public void set$fixedFlag$sample75(boolean cv$value);
 
-	// Getter for fixedFlag$sample97.
-	public boolean get$fixedFlag$sample97();
-
-	// Setter for fixedFlag$sample97.
-	public void set$fixedFlag$sample97(boolean cv$value);
-
 	// Getter for flips.
 	public boolean[] get$flips();
-
-	// Setter for flips.
-	public void set$flips(boolean[] cv$value);
 
 	// Getter for flipsMeasured.
 	public boolean[] get$flipsMeasured();

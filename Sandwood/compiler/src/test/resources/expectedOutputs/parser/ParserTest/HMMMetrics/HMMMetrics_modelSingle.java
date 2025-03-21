@@ -22,10 +22,11 @@ public class HMMMetrics extends Model {
         public double[] getValue() { return system$c.get$cpu(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$cpu(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable cpu because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,17 +34,12 @@ public class HMMMetrics extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample180(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample180())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -202,10 +198,11 @@ public class HMMMetrics extends Model {
         public double[] getValue() { return system$c.get$mem(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$mem(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable mem because it is fixed by observing a variable.");
         }
 
         @Override
@@ -213,17 +210,12 @@ public class HMMMetrics extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample185(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample185())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -307,10 +299,11 @@ public class HMMMetrics extends Model {
         public double[] getValue() { return system$c.get$pageFaults(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$pageFaults(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable pageFaults because it is fixed by observing a variable.");
         }
 
         @Override
@@ -318,17 +311,12 @@ public class HMMMetrics extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample190(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample190())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -633,8 +621,6 @@ public class HMMMetrics extends Model {
             newCore.set$length$cpu_measured(oldCore.get$length$cpu_measured());
 
         //ComputedVariables
-        if(cpu.isSet())
-            newCore.set$cpu(oldCore.get$cpu());
         if(cpuMean.isSet())
             newCore.set$cpuMean(oldCore.get$cpuMean());
         if(cpuVar.isSet())
@@ -643,14 +629,10 @@ public class HMMMetrics extends Model {
             newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
         if(m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(mem.isSet())
-            newCore.set$mem(oldCore.get$mem());
         if(memMean.isSet())
             newCore.set$memMean(oldCore.get$memMean());
         if(memVar.isSet())
             newCore.set$memVar(oldCore.get$memVar());
-        if(pageFaults.isSet())
-            newCore.set$pageFaults(oldCore.get$pageFaults());
         if(pageFaultsMean.isSet())
             newCore.set$pageFaultsMean(oldCore.get$pageFaultsMean());
         if(pageFaultsVar.isSet())
@@ -659,8 +641,6 @@ public class HMMMetrics extends Model {
             newCore.set$st(oldCore.get$st());
 
         //Set fixed flags
-        if(cpu.isSet())
-            newCore.set$fixedFlag$sample180(oldCore.get$fixedFlag$sample180());
         if(cpuMean.isSet())
             newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
         if(cpuVar.isSet())
@@ -669,14 +649,10 @@ public class HMMMetrics extends Model {
             newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
         if(m.isSet())
             newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30());
-        if(mem.isSet())
-            newCore.set$fixedFlag$sample185(oldCore.get$fixedFlag$sample185());
         if(memMean.isSet())
             newCore.set$fixedFlag$sample95(oldCore.get$fixedFlag$sample95());
         if(memVar.isSet())
             newCore.set$fixedFlag$sample147(oldCore.get$fixedFlag$sample147());
-        if(pageFaults.isSet())
-            newCore.set$fixedFlag$sample190(oldCore.get$fixedFlag$sample190());
         if(pageFaultsMean.isSet())
             newCore.set$fixedFlag$sample113(oldCore.get$fixedFlag$sample113());
         if(pageFaultsVar.isSet())

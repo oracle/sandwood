@@ -29,15 +29,6 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	// Getter for choices.
 	public int[] get$choices();
 
-	// Setter for choices.
-	public void set$choices(int[] cv$value);
-
-	// Getter for fixedFlag$sample103.
-	public boolean get$fixedFlag$sample103();
-
-	// Setter for fixedFlag$sample103.
-	public void set$fixedFlag$sample103(boolean cv$value);
-
 	// Getter for fixedFlag$sample21.
 	public boolean get$fixedFlag$sample21();
 

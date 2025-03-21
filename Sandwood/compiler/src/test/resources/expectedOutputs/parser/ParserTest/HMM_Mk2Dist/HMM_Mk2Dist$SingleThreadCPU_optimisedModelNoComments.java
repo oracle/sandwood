@@ -19,7 +19,6 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private int[][] events;
 	private int[][] eventsMeasured;
 	private boolean fixedFlag$sample126 = false;
-	private boolean fixedFlag$sample159 = false;
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedFlag$sample57 = false;
 	private boolean fixedFlag$sample78 = false;
@@ -92,13 +91,6 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void set$events(int[][] cv$value) {
-		events = cv$value;
-		setFlag$events = true;
-		fixedProbFlag$sample159 = false;
-	}
-
-	@Override
 	public final int[][] get$eventsMeasured() {
 		return eventsMeasured;
 	}
@@ -117,17 +109,6 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$fixedFlag$sample126(boolean cv$value) {
 		fixedFlag$sample126 = cv$value;
 		fixedProbFlag$sample126 = (cv$value && fixedProbFlag$sample126);
-		fixedProbFlag$sample159 = (cv$value && fixedProbFlag$sample159);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample159() {
-		return fixedFlag$sample159;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample159(boolean cv$value) {
-		fixedFlag$sample159 = cv$value;
 		fixedProbFlag$sample159 = (cv$value && fixedProbFlag$sample159);
 	}
 
@@ -456,7 +437,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$events = (logProbability$events + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample159 = (((fixedFlag$sample159 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample126);
+			fixedProbFlag$sample159 = ((fixedFlag$sample57 && fixedFlag$sample95) && fixedFlag$sample126);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
@@ -551,7 +532,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$events = (logProbability$events + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample159 = (((fixedFlag$sample159 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample126);
+			fixedProbFlag$sample159 = ((fixedFlag$sample57 && fixedFlag$sample95) && fixedFlag$sample126);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
@@ -1130,11 +1111,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		if(!setFlag$weights)
 			weights = new double[noStates];
-		if(!setFlag$events) {
-			events = new int[length$eventsMeasured.length][];
-			for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
-				events[i$var136] = new int[length$eventsMeasured[i$var136]];
-		}
+		events = new int[length$eventsMeasured.length][];
+		for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
+			events[i$var136] = new int[length$eventsMeasured[i$var136]];
 		distribution$sample126 = new double[length$eventsMeasured.length][][];
 		for(int i$var104 = 0; i$var104 < length$eventsMeasured.length; i$var104 += 1) {
 			double[][] subarray$0 = new double[(length$eventsMeasured[i$var104] - 1)][];
@@ -1187,12 +1166,10 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					var116[j$var115] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var104][(j$var115 - 1)]], noStates);
 			}
 		}
-		if(!fixedFlag$sample159) {
-			for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
-				int[] var150 = events[i$var136];
-				for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-					var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$, bias[st[i$var136][j$var149]], noEvents) + 1);
-			}
+		for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
+			int[] var150 = events[i$var136];
+			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
+				var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$, bias[st[i$var136][j$var149]], noEvents) + 1);
 		}
 	}
 

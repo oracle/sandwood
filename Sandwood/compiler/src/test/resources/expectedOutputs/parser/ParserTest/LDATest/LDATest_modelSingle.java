@@ -102,10 +102,11 @@ public class LDATest extends Model {
         public int[][] getValue() { return system$c.get$w(); }
 
         @Override
-        protected void setValueInternal(int[][] value) {
-            system$c.set$w(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable w because it is fixed by observing a variable.");
         }
 
         @Override
@@ -118,17 +119,12 @@ public class LDATest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample93(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample93())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -303,16 +299,12 @@ public class LDATest extends Model {
             newCore.set$phi(oldCore.get$phi());
         if(theta.isSet())
             newCore.set$theta(oldCore.get$theta());
-        if(w.isSet())
-            newCore.set$w(oldCore.get$w());
 
         //Set fixed flags
         if(phi.isSet())
             newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
         if(theta.isSet())
             newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
-        if(w.isSet())
-            newCore.set$fixedFlag$sample93(oldCore.get$fixedFlag$sample93());
     }
 
     /**

@@ -17,7 +17,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedFlag$sample58 = false;
 	private boolean fixedFlag$sample90 = false;
-	private boolean fixedFlag$sample93 = false;
 	private boolean fixedProbFlag$sample42 = false;
 	private boolean fixedProbFlag$sample58 = false;
 	private boolean fixedProbFlag$sample90 = false;
@@ -156,26 +155,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		fixedProbFlag$sample93 = (cv$value && fixedProbFlag$sample93);
 	}
 
-	// Getter for fixedFlag$sample93.
-	@Override
-	public final boolean get$fixedFlag$sample93() {
-		return fixedFlag$sample93;
-	}
-
-	// Setter for fixedFlag$sample93.
-	@Override
-	public final void set$fixedFlag$sample93(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample93 including if probabilities
-		// need to be updated.
-		fixedFlag$sample93 = cv$value;
-		
-		// Should the probability of sample 93 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample93" with its value "cv$value".
-		fixedProbFlag$sample93 = (cv$value && fixedProbFlag$sample93);
-	}
-
 	// Getter for length$documents.
 	@Override
 	public final int[] get$length$documents() {
@@ -300,19 +279,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final int[][] get$w() {
 		return w;
-	}
-
-	// Setter for w.
-	@Override
-	public final void set$w(int[][] cv$value) {
-		// Set flags for all the side effects of w including if probabilities need to be updated.
-		// Set w with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		w = cv$value;
-		setFlag$w = true;
-		
-		// Unset the fixed probability flag for sample 93 as it depends on w.
-		fixedProbFlag$sample93 = false;
 	}
 
 	// Getter for z.
@@ -642,7 +608,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample93 = ((fixedFlag$sample93 && fixedFlag$sample42) && fixedFlag$sample90);
+			fixedProbFlag$sample93 = (fixedFlag$sample42 && fixedFlag$sample90);
 		}
 		// Using cached values.
 		else {
@@ -909,13 +875,10 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				theta[var56] = new double[noTopics];
 		}
 		
-		// If w has not been set already allocate space.
-		if(!setFlag$w) {
-			// Constructor for w
-			w = new int[length$documents.length][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				w[i$var71] = new int[length$documents[i$var71]];
-		}
+		// Constructor for w
+		w = new int[length$documents.length][];
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+			w[i$var71] = new int[length$documents[i$var71]];
 		
 		// If z has not been set already allocate space.
 		if(!setFlag$z) {
@@ -980,8 +943,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
 										if(!fixedFlag$sample90)
 											z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
-										if(!fixedFlag$sample93)
-											t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[i$var71][j]], vocabSize);
+										t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[i$var71][j]], vocabSize);
 									}
 							}
 						);

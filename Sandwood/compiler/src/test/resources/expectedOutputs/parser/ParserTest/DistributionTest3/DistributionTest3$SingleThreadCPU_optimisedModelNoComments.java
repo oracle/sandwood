@@ -8,7 +8,6 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] cv$var6$stateProbabilityGlobal;
 	private double[] distribution$sample4;
 	private double[] distribution$sample6;
-	private boolean fixedFlag$sample12 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample12 = false;
@@ -31,17 +30,6 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	public DistributionTest3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
-		fixedFlag$sample12 = cv$value;
-		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
 	}
 
 	@Override
@@ -96,12 +84,6 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final boolean get$v() {
 		return v;
-	}
-
-	@Override
-	public final void set$v(boolean cv$value) {
-		v = cv$value;
-		fixedProbFlag$sample12 = false;
 	}
 
 	@Override
@@ -210,7 +192,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$v = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample12 = ((fixedFlag$sample12 && fixedFlag$sample4) && fixedFlag$sample6);
+			fixedProbFlag$sample12 = (fixedFlag$sample4 && fixedFlag$sample6);
 		} else {
 			logProbability$var11 = logProbability$v;
 			logProbability$$model = (logProbability$$model + logProbability$v);
@@ -261,7 +243,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$v = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample12 = ((fixedFlag$sample12 && fixedFlag$sample4) && fixedFlag$sample6);
+			fixedProbFlag$sample12 = (fixedFlag$sample4 && fixedFlag$sample6);
 		} else {
 			logProbability$var11 = logProbability$v;
 			logProbability$$model = (logProbability$$model + logProbability$v);
@@ -444,8 +426,7 @@ class DistributionTest3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 		if(!fixedFlag$sample6)
 			v2 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample12)
-			v = DistributionSampling.sampleBernoulli(RNG$, ((double)(v1 + v1) / v2));
+		v = DistributionSampling.sampleBernoulli(RNG$, ((double)(v1 + v1) / v2));
 	}
 
 	@Override

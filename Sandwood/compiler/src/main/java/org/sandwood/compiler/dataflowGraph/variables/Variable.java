@@ -64,6 +64,12 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>> {
 
+    public static enum Observed {
+        FREE,
+        FIXED,
+        OBSERVED;
+    }
+
     /**
      * Method to get the expression that represents the value of this variable. If inline is true and there is an
      * inlineable variable (this will only be true if the value is used only once) it will return the expression
@@ -352,6 +358,13 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      * Method to test if the variable is fixed by observations.
      */
     boolean isFixed();
+    
+    /**
+     * Method to get the observation status of a variable.
+     * 
+     * @return Returns if the variable is observed, fixed by other observed variables, or free.
+     */
+    Observed getObservationStatus();
 
     Set<Variable<?>> collectInputVariables(DFType... stopTypes);
 

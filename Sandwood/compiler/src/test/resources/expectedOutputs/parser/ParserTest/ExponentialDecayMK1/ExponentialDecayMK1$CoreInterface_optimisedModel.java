@@ -17,20 +17,11 @@ interface ExponentialDecayMK1$CoreInterface extends org.sandwood.runtime.interna
 	// Getter for decay.
 	public double[] get$decay();
 
-	// Setter for decay.
-	public void set$decay(double[] cv$value);
-
 	// Getter for decayDetected.
 	public double[] get$decayDetected();
 
 	// Setter for decayDetected.
 	public void set$decayDetected(double[] cv$value);
-
-	// Getter for fixedFlag$sample19.
-	public boolean get$fixedFlag$sample19();
-
-	// Setter for fixedFlag$sample19.
-	public void set$fixedFlag$sample19(boolean cv$value);
 
 	// Getter for fixedFlag$sample6.
 	public boolean get$fixedFlag$sample6();

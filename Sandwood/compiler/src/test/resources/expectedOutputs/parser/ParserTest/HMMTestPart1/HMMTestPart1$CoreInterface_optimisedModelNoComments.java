@@ -9,10 +9,7 @@ interface HMMTestPart1$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$fixedFlag$sample45(boolean cv$value);
 	public boolean get$fixedFlag$sample50();
 	public void set$fixedFlag$sample50(boolean cv$value);
-	public boolean get$fixedFlag$sample53();
-	public void set$fixedFlag$sample53(boolean cv$value);
 	public boolean get$flip();
-	public void set$flip(boolean cv$value);
 	public boolean get$flipMeasured();
 	public void set$flipMeasured(boolean cv$value);
 	public double get$logProbability$bias();

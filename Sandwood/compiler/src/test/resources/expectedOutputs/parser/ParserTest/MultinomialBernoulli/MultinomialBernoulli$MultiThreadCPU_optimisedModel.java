@@ -11,9 +11,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double[] cv$var17$countGlobal;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample48 = false;
-	private boolean fixedFlag$sample60 = false;
-	private boolean fixedFlag$sample72 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample48 = false;
@@ -117,66 +114,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
 	}
 
-	// Getter for fixedFlag$sample48.
-	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
-	}
-
-	// Setter for fixedFlag$sample48.
-	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample48 including if probabilities
-		// need to be updated.
-		fixedFlag$sample48 = cv$value;
-		
-		// Should the probability of sample 48 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample48" with its value "cv$value".
-		fixedProbFlag$sample48 = (cv$value && fixedProbFlag$sample48);
-	}
-
-	// Getter for fixedFlag$sample60.
-	@Override
-	public final boolean get$fixedFlag$sample60() {
-		return fixedFlag$sample60;
-	}
-
-	// Setter for fixedFlag$sample60.
-	@Override
-	public final void set$fixedFlag$sample60(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample60 including if probabilities
-		// need to be updated.
-		fixedFlag$sample60 = cv$value;
-		
-		// Should the probability of sample 60 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample60" with its value "cv$value".
-		fixedProbFlag$sample60 = (cv$value && fixedProbFlag$sample60);
-	}
-
-	// Getter for fixedFlag$sample72.
-	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
-	}
-
-	// Setter for fixedFlag$sample72.
-	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
-		// need to be updated.
-		fixedFlag$sample72 = cv$value;
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample72" with its value "cv$value".
-		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
-	}
-
 	// Getter for length.
 	@Override
 	public final int get$length() {
@@ -267,26 +204,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final boolean[] get$output() {
 		return output;
-	}
-
-	// Setter for output.
-	@Override
-	public final void set$output(boolean[] cv$value) {
-		// Set flags for all the side effects of output including if probabilities need to
-		// be updated.
-		// Set output with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		output = cv$value;
-		setFlag$output = true;
-		
-		// Unset the fixed probability flag for sample 48 as it depends on output.
-		fixedProbFlag$sample48 = false;
-		
-		// Unset the fixed probability flag for sample 60 as it depends on output.
-		fixedProbFlag$sample60 = false;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on output.
-		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for p.
@@ -587,7 +504,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedFlag$sample20);
+			fixedProbFlag$sample48 = fixedFlag$sample20;
 		}
 		// Using cached values.
 		else {
@@ -665,7 +582,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample60 = (fixedFlag$sample60 && fixedFlag$sample20);
+			fixedProbFlag$sample60 = fixedFlag$sample20;
 		}
 		// Using cached values.
 		else {
@@ -743,7 +660,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedFlag$sample20);
+			fixedProbFlag$sample72 = fixedFlag$sample20;
 		}
 		// Using cached values.
 		else {
@@ -1071,10 +988,8 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Constructor for prior
 			prior = new int[3];
 		
-		// If output has not been set already allocate space.
-		if(!setFlag$output)
-			// Constructor for output
-			output = new boolean[length$observed];
+		// Constructor for output
+		output = new boolean[length$observed];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -1088,47 +1003,38 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample48)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length, 3,
-				(int forStart$i$var47, int forEnd$i$var47, int threadID$i$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var47 = forStart$i$var47; i$var47 < forEnd$i$var47; i$var47 += 3)
-							output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length, 3,
+			(int forStart$i$var47, int forEnd$i$var47, int threadID$i$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var47 = forStart$i$var47; i$var47 < forEnd$i$var47; i$var47 += 3)
+						output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
+			}
+		);
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample60)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, length, 3,
-				(int forStart$i$var59, int forEnd$i$var59, int threadID$i$var59, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var59 = forStart$i$var59; i$var59 < forEnd$i$var59; i$var59 += 3)
-							output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, length, 3,
+			(int forStart$i$var59, int forEnd$i$var59, int threadID$i$var59, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var59 = forStart$i$var59; i$var59 < forEnd$i$var59; i$var59 += 3)
+						output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
+			}
+		);
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample72)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 2, length, 3,
-				(int forStart$i$var71, int forEnd$i$var71, int threadID$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var71 = forStart$i$var71; i$var71 < forEnd$i$var71; i$var71 += 3)
-							output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 2, length, 3,
+			(int forStart$i$var71, int forEnd$i$var71, int threadID$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var71 = forStart$i$var71; i$var71 < forEnd$i$var71; i$var71 += 3)
+						output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

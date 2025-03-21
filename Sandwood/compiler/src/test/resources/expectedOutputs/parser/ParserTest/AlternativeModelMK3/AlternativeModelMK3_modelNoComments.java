@@ -57,10 +57,11 @@ public class AlternativeModelMK3 extends Model {
         public int getValue() { return system$c.get$positiveCount(); }
 
         @Override
-        protected void setValueInternal(int value) {
-            system$c.set$positiveCount(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable positiveCount because it is fixed by observing a variable.");
         }
 
         @Override
@@ -68,17 +69,12 @@ public class AlternativeModelMK3 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample8(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample8())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -210,14 +206,10 @@ public class AlternativeModelMK3 extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(positiveCount.isSet())
-            newCore.set$positiveCount(oldCore.get$positiveCount());
 
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
-        if(positiveCount.isSet())
-            newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
     }
 
     /**

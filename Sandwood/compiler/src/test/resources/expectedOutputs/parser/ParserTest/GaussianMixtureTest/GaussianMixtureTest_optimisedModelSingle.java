@@ -127,10 +127,11 @@ public class GaussianMixtureTest extends Model {
         public double[] getValue() { return system$c.get$x(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$x(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable x because it is fixed by observing a variable.");
         }
 
         @Override
@@ -138,17 +139,12 @@ public class GaussianMixtureTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample72(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample72())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -267,8 +263,6 @@ public class GaussianMixtureTest extends Model {
             newCore.set$phi(oldCore.get$phi());
         if(sigma.isSet())
             newCore.set$sigma(oldCore.get$sigma());
-        if(x.isSet())
-            newCore.set$x(oldCore.get$x());
 
         //Set fixed flags
         if(mu.isSet())
@@ -277,8 +271,6 @@ public class GaussianMixtureTest extends Model {
             newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
         if(sigma.isSet())
             newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
-        if(x.isSet())
-            newCore.set$fixedFlag$sample72(oldCore.get$fixedFlag$sample72());
     }
 
     /**

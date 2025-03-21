@@ -9,7 +9,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] bias;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample27 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample27 = false;
@@ -76,24 +75,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Should the probability of sample 27 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample27 = (fixedFlag$sample21 && fixedProbFlag$sample27);
-	}
-
-	// Getter for fixedFlag$sample27.
-	@Override
-	public final boolean get$fixedFlag$sample27() {
-		return fixedFlag$sample27;
-	}
-
-	// Setter for fixedFlag$sample27.
-	@Override
-	public final void set$fixedFlag$sample27(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
-		// need to be updated.
-		fixedFlag$sample27 = cv$value;
-		
-		// Should the probability of sample 27 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample27 = (fixedFlag$sample27 && fixedProbFlag$sample27);
 	}
 
 	// Getter for fixedFlag$sample4.
@@ -190,17 +171,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final double get$value() {
 		return value;
-	}
-
-	// Setter for value.
-	@Override
-	public final void set$value(double cv$value) {
-		// Set flags for all the side effects of value including if probabilities need to
-		// be updated.
-		value = cv$value;
-		
-		// Unset the fixed probability flag for sample 27 as it depends on value.
-		fixedProbFlag$sample27 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample21 using sampled
@@ -381,7 +351,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample4) && fixedFlag$sample21);
+			fixedProbFlag$sample27 = (fixedFlag$sample4 && fixedFlag$sample21);
 		}
 		// Using cached values.
 		else {
@@ -1134,8 +1104,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(!(fixedFlag$sample4 && fixedFlag$sample21))
 				bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
-		if(!fixedFlag$sample27)
-			value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
+		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

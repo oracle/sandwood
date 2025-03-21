@@ -9,7 +9,6 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private int coins;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample48 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample23 = false;
 	private boolean fixedProbFlag$sample48 = false;
@@ -77,26 +76,8 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample48() {
-		return fixedFlag$sample48;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample48(boolean cv$value) {
-		fixedFlag$sample48 = cv$value;
-		fixedProbFlag$sample48 = (fixedFlag$sample48 && fixedProbFlag$sample48);
-	}
-
-	@Override
 	public final boolean[][] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[][] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample48 = false;
 	}
 
 	@Override
@@ -297,7 +278,7 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample48 = ((fixedFlag$sample48 && fixedFlag$sample10) && fixedFlag$sample23);
+			fixedProbFlag$sample48 = (fixedFlag$sample10 && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
@@ -366,12 +347,10 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[shape.length][];
-				for(int j = 0; j < shape.length; j += 1)
-					flips[j] = new boolean[shape[j]];
-			}
+		{
+			flips = new boolean[shape.length][];
+			for(int j = 0; j < shape.length; j += 1)
+				flips[j] = new boolean[shape[j]];
 		}
 		if(!setFlag$bias) {
 			{
@@ -396,10 +375,8 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		}
 		for(int j = 0; j < coins; j += 1) {
 			boolean[] var38 = flips[j];
-			for(int var47 = 0; var47 < shape[j]; var47 += 1) {
-				if(!fixedFlag$sample48)
-					var38[var47] = DistributionSampling.sampleBernoulli(RNG$, bias[j]);
-			}
+			for(int var47 = 0; var47 < shape[j]; var47 += 1)
+				var38[var47] = DistributionSampling.sampleBernoulli(RNG$, bias[j]);
 		}
 	}
 

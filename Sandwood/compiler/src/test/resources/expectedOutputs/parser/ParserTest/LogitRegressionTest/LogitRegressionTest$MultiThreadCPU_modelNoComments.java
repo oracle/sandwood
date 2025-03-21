@@ -7,7 +7,6 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double bias;
 	private boolean fixedFlag$sample35 = false;
 	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample94 = false;
 	private boolean fixedProbFlag$sample35 = false;
 	private boolean fixedProbFlag$sample42 = false;
 	private boolean fixedProbFlag$sample94 = false;
@@ -78,17 +77,6 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample94() {
-		return fixedFlag$sample94;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample94(boolean cv$value) {
-		fixedFlag$sample94 = cv$value;
-		fixedProbFlag$sample94 = (fixedFlag$sample94 && fixedProbFlag$sample94);
-	}
-
-	@Override
 	public final int get$k() {
 		return k;
 	}
@@ -149,13 +137,6 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final boolean[][] get$y() {
 		return y;
-	}
-
-	@Override
-	public final void set$y(boolean[][] cv$value) {
-		y = cv$value;
-		setFlag$y = true;
-		fixedProbFlag$sample94 = false;
 	}
 
 	@Override
@@ -460,7 +441,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample94 = ((fixedFlag$sample94 && fixedFlag$sample35) && fixedFlag$sample42);
+			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
@@ -1168,12 +1149,10 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$y) {
-			{
-				y = new boolean[x.length][];
-				for(int var15 = 0; var15 < x.length; var15 += 1)
-					y[var15] = new boolean[3];
-			}
+		{
+			y = new boolean[x.length][];
+			for(int var15 = 0; var15 < x.length; var15 += 1)
+				y[var15] = new boolean[3];
 		}
 		if(!setFlag$weights) {
 			{
@@ -1237,8 +1216,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 								for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1) {
 										if(!fixedFlag$sample35)
 											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-										if(!fixedFlag$sample94)
-											var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$2, (p[((i - 0) / 1)][j$var85] + bias));
+										var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$2, (p[((i - 0) / 1)][j$var85] + bias));
 									}
 							}
 						);

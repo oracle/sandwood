@@ -5,7 +5,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK1$CoreInterface {
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample24 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private double[] generated;
@@ -45,26 +44,8 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample24() {
-		return fixedFlag$sample24;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
-		fixedFlag$sample24 = cv$value;
-		fixedProbFlag$sample24 = (fixedFlag$sample24 && fixedProbFlag$sample24);
-	}
-
-	@Override
 	public final double[] get$generated() {
 		return generated;
-	}
-
-	@Override
-	public final void set$generated(double[] cv$value) {
-		generated = cv$value;
-		setFlag$generated = true;
-		fixedProbFlag$sample24 = false;
 	}
 
 	@Override
@@ -243,7 +224,7 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample24 = (fixedFlag$sample24 && fixedFlag$sample20);
+			fixedProbFlag$sample24 = fixedFlag$sample20;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
@@ -433,10 +414,8 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$generated) {
-			{
-				generated = new double[length$observed];
-			}
+		{
+			generated = new double[length$observed];
 		}
 		if(!setFlag$indirection) {
 			{
@@ -470,8 +449,7 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				sample[((i - 0) / 1)] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 			if(!fixedFlag$sample20)
 				indirection[i] = sample[((i - 0) / 1)];
-			if(!fixedFlag$sample24)
-				generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[((i - 0) / 1)]);
+			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[((i - 0) / 1)]);
 		}
 	}
 

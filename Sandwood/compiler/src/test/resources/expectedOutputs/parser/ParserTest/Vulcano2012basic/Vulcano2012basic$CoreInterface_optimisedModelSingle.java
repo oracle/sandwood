@@ -17,9 +17,6 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	// Getter for Sales.
 	public double[][] get$Sales();
 
-	// Setter for Sales.
-	public void set$Sales(double[][] cv$value);
-
 	// Getter for T.
 	public int get$T();
 
@@ -37,12 +34,6 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 
 	// Getter for exped.
 	public double[] get$exped();
-
-	// Getter for fixedFlag$sample127.
-	public boolean get$fixedFlag$sample127();
-
-	// Setter for fixedFlag$sample127.
-	public void set$fixedFlag$sample127(boolean cv$value);
 
 	// Getter for fixedFlag$sample22.
 	public boolean get$fixedFlag$sample22();

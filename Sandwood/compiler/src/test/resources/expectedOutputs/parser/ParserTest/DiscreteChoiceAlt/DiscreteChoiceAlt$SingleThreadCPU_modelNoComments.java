@@ -8,7 +8,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private int[] choices;
 	private double[] exped;
 	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample78 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private boolean fixedProbFlag$sample78 = false;
 	private boolean[] guard$sample24put65$global;
@@ -52,13 +51,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$choices(int[] cv$value) {
-		choices = cv$value;
-		setFlag$choices = true;
-		fixedProbFlag$sample78 = false;
-	}
-
-	@Override
 	public final double[] get$exped() {
 		return exped;
 	}
@@ -73,17 +65,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		fixedFlag$sample24 = cv$value;
 		fixedProbFlag$sample24 = (fixedFlag$sample24 && fixedProbFlag$sample24);
 		fixedProbFlag$sample78 = (fixedFlag$sample24 && fixedProbFlag$sample78);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample78() {
-		return fixedFlag$sample78;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample78(boolean cv$value) {
-		fixedFlag$sample78 = cv$value;
-		fixedProbFlag$sample78 = (fixedFlag$sample78 && fixedProbFlag$sample78);
 	}
 
 	@Override
@@ -368,7 +349,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$choices = (logProbability$choices + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample78 = (fixedFlag$sample78 && fixedFlag$sample24);
+			fixedProbFlag$sample78 = fixedFlag$sample24;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -747,10 +728,8 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		{
 			prob = new double[noProducts];
 		}
-		if(!setFlag$choices) {
-			{
-				choices = new int[noObs];
-			}
+		{
+			choices = new int[noObs];
 		}
 		{
 			logProbability$var23 = new double[((((noProducts - 1) - 1) / 1) + 1)];
@@ -784,10 +763,8 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			if(!fixedFlag$sample24)
 				prob[i$var61] = (exped[i$var61] / sum);
 		}
-		for(int var76 = 0; var76 < noObs; var76 += 1) {
-			if(!fixedFlag$sample78)
-				choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
-		}
+		for(int var76 = 0; var76 < noObs; var76 += 1)
+			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
 	}
 
 	@Override

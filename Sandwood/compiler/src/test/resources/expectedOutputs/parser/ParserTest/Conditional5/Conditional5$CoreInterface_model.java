@@ -5,38 +5,11 @@ interface Conditional5$CoreInterface extends org.sandwood.runtime.internal.model
 	// Getter for a.
 	public double get$a();
 
-	// Setter for a.
-	public void set$a(double cv$value);
-
 	// Getter for b.
 	public double get$b();
 
-	// Setter for b.
-	public void set$b(double cv$value);
-
-	// Getter for fixedFlag$sample13.
-	public boolean get$fixedFlag$sample13();
-
-	// Setter for fixedFlag$sample13.
-	public void set$fixedFlag$sample13(boolean cv$value);
-
-	// Getter for fixedFlag$sample5.
-	public boolean get$fixedFlag$sample5();
-
-	// Setter for fixedFlag$sample5.
-	public void set$fixedFlag$sample5(boolean cv$value);
-
-	// Getter for fixedFlag$sample9.
-	public boolean get$fixedFlag$sample9();
-
-	// Setter for fixedFlag$sample9.
-	public void set$fixedFlag$sample9(boolean cv$value);
-
 	// Getter for guard.
 	public boolean get$guard();
-
-	// Setter for guard.
-	public void set$guard(boolean cv$value);
 
 	// Getter for logProbability$a.
 	public double get$logProbability$a();

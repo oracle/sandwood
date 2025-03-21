@@ -2,7 +2,6 @@ package org.sandwood.compiler.tests.parser;
 
 interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[] get$cpu();
-	public void set$cpu(double[] cv$value);
 	public double[] get$cpuMean();
 	public void set$cpuMean(double[] cv$value);
 	public double[] get$cpuVar();
@@ -17,12 +16,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public void set$fixedFlag$sample147(boolean cv$value);
 	public boolean get$fixedFlag$sample164();
 	public void set$fixedFlag$sample164(boolean cv$value);
-	public boolean get$fixedFlag$sample180();
-	public void set$fixedFlag$sample180(boolean cv$value);
-	public boolean get$fixedFlag$sample185();
-	public void set$fixedFlag$sample185(boolean cv$value);
-	public boolean get$fixedFlag$sample190();
-	public void set$fixedFlag$sample190(boolean cv$value);
 	public boolean get$fixedFlag$sample30();
 	public void set$fixedFlag$sample30(boolean cv$value);
 	public boolean get$fixedFlag$sample36();
@@ -54,7 +47,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public double[][] get$m();
 	public void set$m(double[][] cv$value);
 	public double[] get$mem();
-	public void set$mem(double[] cv$value);
 	public double[] get$memMean();
 	public void set$memMean(double[] cv$value);
 	public double[] get$memVar();
@@ -64,7 +56,6 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public int get$noStates();
 	public void set$noStates(int cv$value);
 	public double[] get$pageFaults();
-	public void set$pageFaults(double[] cv$value);
 	public double[] get$pageFaultsMean();
 	public void set$pageFaultsMean(double[] cv$value);
 	public double[] get$pageFaultsVar();

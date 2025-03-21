@@ -9,7 +9,6 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Declare the variables for the model.
 	private double bias;
 	private boolean fixedFlag$sample14 = false;
-	private boolean fixedFlag$sample16 = false;
 	private boolean fixedProbFlag$sample14 = false;
 	private boolean fixedProbFlag$sample16 = false;
 	private boolean flip;
@@ -73,39 +72,10 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedProbFlag$sample16 = (fixedFlag$sample14 && fixedProbFlag$sample16);
 	}
 
-	// Getter for fixedFlag$sample16.
-	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
-	}
-
-	// Setter for fixedFlag$sample16.
-	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
-		// need to be updated.
-		fixedFlag$sample16 = cv$value;
-		
-		// Should the probability of sample 16 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedProbFlag$sample16);
-	}
-
 	// Getter for flip.
 	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	// Setter for flip.
-	@Override
-	public final void set$flip(boolean cv$value) {
-		// Set flags for all the side effects of flip including if probabilities need to be
-		// updated.
-		flip = cv$value;
-		
-		// Unset the fixed probability flag for sample 16 as it depends on flip.
-		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for flipMeasured.
@@ -343,7 +313,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample14);
+			fixedProbFlag$sample16 = fixedFlag$sample14;
 		}
 		// Using cached values.
 		else {
@@ -428,8 +398,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(Double.isNaN(guard)) {
 			if(!fixedFlag$sample14)
 				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(!fixedFlag$sample16)
-				flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
 

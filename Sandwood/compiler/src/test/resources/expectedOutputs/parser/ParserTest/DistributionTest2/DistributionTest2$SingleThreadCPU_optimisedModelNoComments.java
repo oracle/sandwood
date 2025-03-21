@@ -11,7 +11,6 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] distribution$sample5;
 	private double[] distribution$sample9;
 	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample41 = false;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample23 = false;
@@ -54,17 +53,6 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$fixedFlag$sample23(boolean cv$value) {
 		fixedFlag$sample23 = cv$value;
 		fixedProbFlag$sample23 = (cv$value && fixedProbFlag$sample23);
-		fixedProbFlag$sample41 = (cv$value && fixedProbFlag$sample41);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample41() {
-		return fixedFlag$sample41;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample41(boolean cv$value) {
-		fixedFlag$sample41 = cv$value;
 		fixedProbFlag$sample41 = (cv$value && fixedProbFlag$sample41);
 	}
 
@@ -135,13 +123,6 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final boolean[] get$v() {
 		return v;
-	}
-
-	@Override
-	public final void set$v(boolean[] cv$value) {
-		v = cv$value;
-		setFlag$v = true;
-		fixedProbFlag$sample41 = false;
 	}
 
 	@Override
@@ -351,7 +332,7 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$v = (logProbability$v + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample41 = (((fixedFlag$sample41 && fixedFlag$sample5) && fixedFlag$sample9) && fixedFlag$sample23);
+			fixedProbFlag$sample41 = ((fixedFlag$sample5 && fixedFlag$sample9) && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < size; j += 1) {
@@ -446,7 +427,7 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$v = (logProbability$v + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample41 = (((fixedFlag$sample41 && fixedFlag$sample5) && fixedFlag$sample9) && fixedFlag$sample23);
+			fixedProbFlag$sample41 = ((fixedFlag$sample5 && fixedFlag$sample9) && fixedFlag$sample23);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < size; j += 1) {
@@ -726,8 +707,7 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void allocator() {
 		if(!setFlag$v2)
 			v2 = new int[length$value];
-		if(!setFlag$v)
-			v = new boolean[length$value];
+		v = new boolean[length$value];
 		distribution$sample5 = new double[weightings.length];
 		distribution$sample23 = new double[(length$value - 1)][];
 		for(int i = 1; i < length$value; i += 1)
@@ -750,10 +730,8 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int i = 1; i < size; i += 1)
 				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 		}
-		if(!fixedFlag$sample41) {
-			for(int j = 0; j < size; j += 1)
-				v[j] = DistributionSampling.sampleBernoulli(RNG$, ((double)v1 / v2[j]));
-		}
+		for(int j = 0; j < size; j += 1)
+			v[j] = DistributionSampling.sampleBernoulli(RNG$, ((double)v1 / v2[j]));
 	}
 
 	@Override

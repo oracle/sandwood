@@ -22,10 +22,11 @@ public class ParallelMK3 extends Model {
         public double[] getValue() { return system$c.get$generated(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$generated(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable generated because it is fixed by observing a variable.");
         }
 
         @Override
@@ -33,17 +34,12 @@ public class ParallelMK3 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample38(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample38())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -226,14 +222,10 @@ public class ParallelMK3 extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(generated.isSet())
-            newCore.set$generated(oldCore.get$generated());
         if(sample.isSet())
             newCore.set$sample(oldCore.get$sample());
 
         //Set fixed flags
-        if(generated.isSet())
-            newCore.set$fixedFlag$sample38(oldCore.get$fixedFlag$sample38());
         if(sample.isSet())
             newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
     }

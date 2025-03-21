@@ -9,7 +9,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double b0;
 	private double b1;
 	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample27 = false;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample11 = false;
 	private boolean fixedProbFlag$sample27 = false;
@@ -96,24 +95,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		fixedProbFlag$sample27 = (fixedFlag$sample11 && fixedProbFlag$sample27);
 	}
 
-	// Getter for fixedFlag$sample27.
-	@Override
-	public final boolean get$fixedFlag$sample27() {
-		return fixedFlag$sample27;
-	}
-
-	// Setter for fixedFlag$sample27.
-	@Override
-	public final void set$fixedFlag$sample27(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
-		// need to be updated.
-		fixedFlag$sample27 = cv$value;
-		
-		// Should the probability of sample 27 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample27 = (fixedFlag$sample27 && fixedProbFlag$sample27);
-	}
-
 	// Getter for fixedFlag$sample7.
 	@Override
 	public final boolean get$fixedFlag$sample7() {
@@ -190,19 +171,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(double[] cv$value) {
-		// Set flags for all the side effects of y including if probabilities need to be updated.
-		// Set y with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		y = cv$value;
-		setFlag$y = true;
-		
-		// Unset the fixed probability flag for sample 27 as it depends on y.
-		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for yMeasured.
@@ -389,7 +357,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample7) && fixedFlag$sample11);
+			fixedProbFlag$sample27 = (fixedFlag$sample7 && fixedFlag$sample11);
 		}
 		// Using cached values.
 		else {
@@ -858,12 +826,9 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If y has not been set already allocate space.
-		if(!setFlag$y) {
-			// Constructor for y
-			{
-				y = new double[x.length];
-			}
+		// Constructor for y
+		{
+			y = new double[x.length];
 		}
 		
 		// Constructor for logProbability$var26
@@ -884,10 +849,8 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
 		if(!fixedFlag$sample11)
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
-		for(int i = 0; i < noSamples; i += 1) {
-			if(!fixedFlag$sample27)
-				y[i] = DistributionSampling.sampleStudentT(RNG$, (b0 + (b1 * x[i])));
-		}
+		for(int i = 0; i < noSamples; i += 1)
+			y[i] = DistributionSampling.sampleStudentT(RNG$, (b0 + (b1 * x[i])));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

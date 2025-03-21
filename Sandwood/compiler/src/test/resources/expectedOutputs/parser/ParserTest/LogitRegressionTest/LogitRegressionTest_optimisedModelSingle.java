@@ -92,10 +92,11 @@ public class LogitRegressionTest extends Model {
         public boolean[][] getValue() { return system$c.get$y(); }
 
         @Override
-        protected void setValueInternal(boolean[][] value) {
-            system$c.set$y(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable y because it is fixed by observing a variable.");
         }
 
         @Override
@@ -108,17 +109,12 @@ public class LogitRegressionTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample94(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample94())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -241,16 +237,12 @@ public class LogitRegressionTest extends Model {
             newCore.set$bias(oldCore.get$bias());
         if(weights.isSet())
             newCore.set$weights(oldCore.get$weights());
-        if(y.isSet())
-            newCore.set$y(oldCore.get$y());
 
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
         if(weights.isSet())
             newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
-        if(y.isSet())
-            newCore.set$fixedFlag$sample94(oldCore.get$fixedFlag$sample94());
     }
 
     /**

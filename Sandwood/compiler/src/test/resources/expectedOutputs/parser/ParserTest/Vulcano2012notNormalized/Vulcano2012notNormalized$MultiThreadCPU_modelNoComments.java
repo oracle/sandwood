@@ -12,7 +12,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	private int T;
 	private int[] arrivals;
 	private double[] exped;
-	private boolean fixedFlag$sample131 = false;
 	private boolean fixedFlag$sample22 = false;
 	private boolean fixedFlag$sample54 = false;
 	private boolean fixedFlag$sample69 = false;
@@ -108,17 +107,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample131() {
-		return fixedFlag$sample131;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample131(boolean cv$value) {
-		fixedFlag$sample131 = cv$value;
-		fixedProbFlag$sample131 = (fixedFlag$sample131 && fixedProbFlag$sample131);
 	}
 
 	@Override
@@ -248,12 +236,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		return weekly_sales;
 	}
 
-	@Override
-	public final void set$weekly_sales(int[][] cv$value) {
-		weekly_sales = cv$value;
-		setFlag$weekly_sales = true;
-	}
-
 	private final void logProbabilityValue$sample131() {
 		if(!fixedProbFlag$sample131) {
 			double cv$accumulator = 0.0;
@@ -301,7 +283,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 			logProbability$weekly_sales = (logProbability$weekly_sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample131 = ((fixedFlag$sample131 && fixedFlag$sample22) && fixedFlag$sample69);
+			fixedProbFlag$sample131 = (fixedFlag$sample22 && fixedFlag$sample69);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int t$var81 = 0; t$var81 < T; t$var81 += 1) {
@@ -1275,12 +1257,10 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 			for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
 				weekly_ut[((t$var81 - 0) / 1)] = new double[(noProducts + 1)];
 		}
-		if(!setFlag$weekly_sales) {
-			{
-				weekly_sales = new int[((((T - 1) - 0) / 1) + 1)][];
-				for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
-					weekly_sales[((t$var81 - 0) / 1)] = new int[(noProducts + 1)];
-			}
+		{
+			weekly_sales = new int[((((T - 1) - 0) / 1) + 1)][];
+			for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
+				weekly_sales[((t$var81 - 0) / 1)] = new int[(noProducts + 1)];
 		}
 		{
 			logProbability$sample22 = new double[((((noProducts - 1) - 0) / 1) + 1)];
@@ -1364,15 +1344,12 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 									}
 							}
 						);
-						if(!fixedFlag$sample131)
-							DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var81 - 0) / 1)], (noProducts + 1), arrivals[t$var81], weekly_sales[((t$var81 - 0) / 1)]);
+						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var81 - 0) / 1)], (noProducts + 1), arrivals[t$var81], weekly_sales[((t$var81 - 0) / 1)]);
 						int[] observed_weekly_sales = Sales[t$var81];
 						parallelFor(RNG$1, 0, noProducts, 1,
 							(int forStart$j$var140, int forEnd$j$var140, int threadID$j$var140, org.sandwood.random.internal.Rng RNG$2) -> { 
-								for(int j$var140 = forStart$j$var140; j$var140 < forEnd$j$var140; j$var140 += 1) {
-										if(!fixedFlag$sample131)
-											observed_weekly_sales[j$var140] = weekly_sales[((t$var81 - 0) / 1)][j$var140];
-									}
+								for(int j$var140 = forStart$j$var140; j$var140 < forEnd$j$var140; j$var140 += 1)
+										observed_weekly_sales[j$var140] = weekly_sales[((t$var81 - 0) / 1)][j$var140];
 							}
 						);
 					}

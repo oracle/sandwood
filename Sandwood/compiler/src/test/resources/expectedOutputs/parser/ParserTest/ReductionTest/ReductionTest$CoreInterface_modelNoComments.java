@@ -9,10 +9,7 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$fixedFlag$sample47(boolean cv$value);
 	public boolean get$fixedFlag$sample62();
 	public void set$fixedFlag$sample62(boolean cv$value);
-	public boolean get$fixedFlag$sample87();
-	public void set$fixedFlag$sample87(boolean cv$value);
 	public boolean[] get$flips();
-	public void set$flips(boolean[] cv$value);
 	public boolean[] get$flipsMeasured();
 	public void set$flipsMeasured(boolean[] cv$value);
 	public int get$length$flipsMeasured();

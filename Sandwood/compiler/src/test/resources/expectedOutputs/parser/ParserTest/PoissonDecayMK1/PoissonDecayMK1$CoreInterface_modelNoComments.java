@@ -6,11 +6,8 @@ interface PoissonDecayMK1$CoreInterface extends org.sandwood.runtime.internal.mo
 	public double get$b();
 	public void set$b(double cv$value);
 	public int[] get$decay();
-	public void set$decay(int[] cv$value);
 	public int[] get$decayDetected();
 	public void set$decayDetected(int[] cv$value);
-	public boolean get$fixedFlag$sample19();
-	public void set$fixedFlag$sample19(boolean cv$value);
 	public boolean get$fixedFlag$sample6();
 	public void set$fixedFlag$sample6(boolean cv$value);
 	public int get$length$decayDetected();

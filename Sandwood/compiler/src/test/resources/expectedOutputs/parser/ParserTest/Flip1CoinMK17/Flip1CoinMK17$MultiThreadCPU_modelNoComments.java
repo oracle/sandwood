@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK17$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample7 = false;
-	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean fixedProbFlag$sample9 = false;
 	private boolean flip;
@@ -49,25 +48,8 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
-		fixedFlag$sample9 = cv$value;
-		fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
-	}
-
-	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	@Override
-	public final void set$flip(boolean cv$value) {
-		flip = cv$value;
-		fixedProbFlag$sample9 = false;
 	}
 
 	@Override
@@ -192,7 +174,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flip = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedFlag$sample7);
+			fixedProbFlag$sample9 = fixedFlag$sample7;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -317,8 +299,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample7)
 			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
-		if(!fixedFlag$sample9)
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	@Override

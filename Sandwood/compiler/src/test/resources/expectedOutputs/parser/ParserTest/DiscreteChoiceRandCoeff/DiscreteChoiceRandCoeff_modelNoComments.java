@@ -92,10 +92,11 @@ public class DiscreteChoiceRandCoeff extends Model {
         public int[] getValue() { return system$c.get$choices(); }
 
         @Override
-        protected void setValueInternal(int[] value) {
-            system$c.set$choices(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable choices because it is fixed by observing a variable.");
         }
 
         @Override
@@ -103,17 +104,12 @@ public class DiscreteChoiceRandCoeff extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample103(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample103())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -403,8 +399,6 @@ public class DiscreteChoiceRandCoeff extends Model {
             newCore.set$b(oldCore.get$b());
         if(beta.isSet())
             newCore.set$beta(oldCore.get$beta());
-        if(choices.isSet())
-            newCore.set$choices(oldCore.get$choices());
         if(sigma.isSet())
             newCore.set$sigma(oldCore.get$sigma());
         if(ut.isSet())
@@ -415,8 +409,6 @@ public class DiscreteChoiceRandCoeff extends Model {
             newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
         if(beta.isSet())
             newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
-        if(choices.isSet())
-            newCore.set$fixedFlag$sample103(oldCore.get$fixedFlag$sample103());
         if(sigma.isSet())
             newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
         if(ut.isSet())

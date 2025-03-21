@@ -14,7 +14,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[][] distribution$sample55;
 	private boolean fixedFlag$sample29 = false;
 	private boolean fixedFlag$sample55 = false;
-	private boolean fixedFlag$sample75 = false;
 	private boolean fixedProbFlag$sample29 = false;
 	private boolean fixedProbFlag$sample55 = false;
 	private boolean fixedProbFlag$sample75 = false;
@@ -88,26 +87,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample75() {
-		return fixedFlag$sample75;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample75(boolean cv$value) {
-		fixedFlag$sample75 = cv$value;
-		fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedProbFlag$sample75);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample75 = false;
 	}
 
 	@Override
@@ -449,7 +430,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedFlag$sample55);
+			fixedProbFlag$sample75 = fixedFlag$sample55;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
@@ -637,7 +618,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedFlag$sample55);
+			fixedProbFlag$sample75 = fixedFlag$sample55;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < n; j += 1) {
@@ -1354,10 +1335,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		{
 			b = new int[n];
 		}
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[n];
-			}
+		{
+			flips = new boolean[n];
 		}
 		{
 			distribution$sample55 = new double[((((n - 1) - 1) / 1) + 1)][];
@@ -1398,10 +1377,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		parallelFor(RNG$, 0, n, 1,
 			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int j = forStart$j; j < forEnd$j; j += 1) {
-						if(!fixedFlag$sample75)
-							flips[j] = DistributionSampling.sampleBernoulli(RNG$1, (1 / a[(j + 1)]));
-					}
+				for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, (1 / a[(j + 1)]));
 			}
 		);
 	}

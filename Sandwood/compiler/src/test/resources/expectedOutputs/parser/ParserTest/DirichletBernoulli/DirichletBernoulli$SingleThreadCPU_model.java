@@ -7,8 +7,6 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private boolean fixedFlag$sample17 = false;
-	private boolean fixedFlag$sample38 = false;
-	private boolean fixedFlag$sample51 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample38 = false;
 	private boolean fixedProbFlag$sample51 = false;
@@ -59,42 +57,6 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Should the probability of sample 51 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample51 = (fixedFlag$sample17 && fixedProbFlag$sample51);
-	}
-
-	// Getter for fixedFlag$sample38.
-	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
-	}
-
-	// Setter for fixedFlag$sample38.
-	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample38 including if probabilities
-		// need to be updated.
-		fixedFlag$sample38 = cv$value;
-		
-		// Should the probability of sample 38 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedProbFlag$sample38);
-	}
-
-	// Getter for fixedFlag$sample51.
-	@Override
-	public final boolean get$fixedFlag$sample51() {
-		return fixedFlag$sample51;
-	}
-
-	// Setter for fixedFlag$sample51.
-	@Override
-	public final void set$fixedFlag$sample51(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample51 including if probabilities
-		// need to be updated.
-		fixedFlag$sample51 = cv$value;
-		
-		// Should the probability of sample 51 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedProbFlag$sample51);
 	}
 
 	// Getter for length.
@@ -169,23 +131,6 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final boolean[] get$output() {
 		return output;
-	}
-
-	// Setter for output.
-	@Override
-	public final void set$output(boolean[] cv$value) {
-		// Set flags for all the side effects of output including if probabilities need to
-		// be updated.
-		// Set output with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		output = cv$value;
-		setFlag$output = true;
-		
-		// Unset the fixed probability flag for sample 38 as it depends on output.
-		fixedProbFlag$sample38 = false;
-		
-		// Unset the fixed probability flag for sample 51 as it depends on output.
-		fixedProbFlag$sample51 = false;
 	}
 
 	// Getter for prior.
@@ -387,7 +332,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample17);
+			fixedProbFlag$sample38 = fixedFlag$sample17;
 		}
 		// Using cached values.
 		else {
@@ -482,7 +427,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedFlag$sample17);
+			fixedProbFlag$sample51 = fixedFlag$sample17;
 		}
 		// Using cached values.
 		else {
@@ -814,12 +759,9 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			}
 		}
 		
-		// If output has not been set already allocate space.
-		if(!setFlag$output) {
-			// Constructor for output
-			{
-				output = new boolean[length$observed];
-			}
+		// Constructor for output
+		{
+			output = new boolean[length$observed];
 		}
 	}
 
@@ -828,14 +770,10 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
-		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
-			if(!fixedFlag$sample38)
-				output[i$var37] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
-		}
-		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
-			if(!fixedFlag$sample51)
-				output[i$var50] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
-		}
+		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
+			output[i$var37] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
+		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
+			output[i$var50] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

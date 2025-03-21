@@ -14,12 +14,6 @@ interface HMMTestPart4$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for fixedFlag$sample124.
 	public void set$fixedFlag$sample124(boolean cv$value);
 
-	// Getter for fixedFlag$sample191.
-	public boolean get$fixedFlag$sample191();
-
-	// Setter for fixedFlag$sample191.
-	public void set$fixedFlag$sample191(boolean cv$value);
-
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 
@@ -40,9 +34,6 @@ interface HMMTestPart4$CoreInterface extends org.sandwood.runtime.internal.model
 
 	// Getter for flips.
 	public boolean[][][] get$flips();
-
-	// Setter for flips.
-	public void set$flips(boolean[][][] cv$value);
 
 	// Getter for flipsMeasured.
 	public boolean[][][] get$flipsMeasured();

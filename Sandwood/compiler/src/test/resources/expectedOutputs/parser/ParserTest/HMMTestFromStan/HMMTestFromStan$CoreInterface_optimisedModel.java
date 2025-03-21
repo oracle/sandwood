@@ -32,17 +32,8 @@ interface HMMTestFromStan$CoreInterface extends org.sandwood.runtime.internal.mo
 	// Setter for fixedFlag$sample72.
 	public void set$fixedFlag$sample72(boolean cv$value);
 
-	// Getter for fixedFlag$sample87.
-	public boolean get$fixedFlag$sample87();
-
-	// Setter for fixedFlag$sample87.
-	public void set$fixedFlag$sample87(boolean cv$value);
-
 	// Getter for flips.
 	public boolean[] get$flips();
-
-	// Setter for flips.
-	public void set$flips(boolean[] cv$value);
 
 	// Getter for flipsMeasured.
 	public boolean[] get$flipsMeasured();

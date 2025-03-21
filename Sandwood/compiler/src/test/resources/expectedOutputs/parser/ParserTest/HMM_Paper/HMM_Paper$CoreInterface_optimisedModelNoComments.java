@@ -13,10 +13,7 @@ interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public void set$fixedFlag$sample53(boolean cv$value);
 	public boolean get$fixedFlag$sample71();
 	public void set$fixedFlag$sample71(boolean cv$value);
-	public boolean get$fixedFlag$sample87();
-	public void set$fixedFlag$sample87(boolean cv$value);
 	public boolean[] get$flips();
-	public void set$flips(boolean[] cv$value);
 	public double[] get$initialCoin();
 	public void set$initialCoin(double[] cv$value);
 	public int get$length$measured();

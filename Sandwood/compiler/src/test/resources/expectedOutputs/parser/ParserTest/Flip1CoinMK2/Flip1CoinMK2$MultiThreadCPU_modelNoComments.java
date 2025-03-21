@@ -8,7 +8,6 @@ class Flip1CoinMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double a;
 	private double b;
 	private double bias;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -52,17 +51,6 @@ class Flip1CoinMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample6() {
 		return fixedFlag$sample6;
 	}
@@ -77,13 +65,6 @@ class Flip1CoinMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample19 = false;
 	}
 
 	@Override
@@ -168,7 +149,7 @@ class Flip1CoinMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+			fixedProbFlag$sample19 = fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -255,11 +236,7 @@ class Flip1CoinMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[samples];
-			}
-		}
+		flips = new boolean[samples];
 	}
 
 	@Override
@@ -268,10 +245,8 @@ class Flip1CoinMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			bias = DistributionSampling.sampleBeta(RNG$, a, b);
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample19)
-							flips[i] = DistributionSampling.sampleBernoulli(RNG$1, bias);
-					}
+				for(int i = forStart$i; i < forEnd$i; i += 1)
+						flips[i] = DistributionSampling.sampleBernoulli(RNG$1, bias);
 			}
 		);
 	}

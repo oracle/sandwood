@@ -14,7 +14,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean fixedFlag$sample30 = false;
 	private boolean fixedFlag$sample47 = false;
 	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample87 = false;
 	private boolean fixedProbFlag$sample30 = false;
 	private boolean fixedProbFlag$sample47 = false;
 	private boolean fixedProbFlag$sample62 = false;
@@ -153,44 +152,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
 	}
 
-	// Getter for fixedFlag$sample87.
-	@Override
-	public final boolean get$fixedFlag$sample87() {
-		return fixedFlag$sample87;
-	}
-
-	// Setter for fixedFlag$sample87.
-	@Override
-	public final void set$fixedFlag$sample87(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample87 including if probabilities
-		// need to be updated.
-		fixedFlag$sample87 = cv$value;
-		
-		// Should the probability of sample 87 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample87" with its value "cv$value".
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
-	}
-
 	// Getter for flips.
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 87 as it depends on flips.
-		fixedProbFlag$sample87 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -667,7 +632,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample87 = ((fixedFlag$sample87 && fixedFlag$sample47) && fixedFlag$sample62);
+			fixedProbFlag$sample87 = (fixedFlag$sample47 && fixedFlag$sample62);
 		}
 		// Using cached values.
 		else {
@@ -977,10 +942,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constructor for st
 			st = new int[noCats];
 		
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips)
-			// Constructor for flips
-			flips = new boolean[length$flipsMeasured];
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured];
 		
 		// Constructor for logProbability$var60
 		logProbability$var60 = new double[noCats];
@@ -1043,34 +1006,33 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			);
 
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample87)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noFlips, 1,
-				(int forStart$j$var73, int forEnd$j$var73, int threadID$j$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int j$var73 = forStart$j$var73; j$var73 < forEnd$j$var73; j$var73 += 1) {
-							// Reduction of array st
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noFlips, 1,
+			(int forStart$j$var73, int forEnd$j$var73, int threadID$j$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var73 = forStart$j$var73; j$var73 < forEnd$j$var73; j$var73 += 1) {
+						// Reduction of array st
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						int reduceVar$var82$7 = 0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+							// Execute the reduction function, saving the result into the return value.
 							// 
-							// A generated name to prevent name collisions if the reduction is implemented more
-							// than once in inference and probability code. Initialize the variable to the unit
-							// value
-							int reduceVar$var82$7 = 0;
-							
-							// For each index in the array to be reduced
-							for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-								// Copy the result of the reduction into the variable returned by the reduction.
-								// 
-								// j$var80's comment
-								// Set the right hand term to a value from the array st
-								reduceVar$var82$7 = (reduceVar$var82$7 + st[cv$reduction78Index]);
-							flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$7]);
-						}
-				}
-			);
-
+							// Copy the result of the reduction into the variable returned by the reduction.
+							// 
+							// j$var80's comment
+							// Set the right hand term to a value from the array st
+							reduceVar$var82$7 = (reduceVar$var82$7 + st[cv$reduction78Index]);
+						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$7]);
+					}
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

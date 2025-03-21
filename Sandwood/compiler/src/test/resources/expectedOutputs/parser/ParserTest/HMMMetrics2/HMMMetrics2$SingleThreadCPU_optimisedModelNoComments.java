@@ -14,7 +14,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[][][] distribution$sample123;
 	private boolean fixedFlag$sample104 = false;
 	private boolean fixedFlag$sample123 = false;
-	private boolean fixedFlag$sample145 = false;
 	private boolean fixedFlag$sample157 = false;
 	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample32 = false;
@@ -114,17 +113,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		fixedProbFlag$sample123 = (cv$value && fixedProbFlag$sample123);
 		fixedProbFlag$sample145 = (cv$value && fixedProbFlag$sample145);
 		fixedProbFlag$sample157 = (cv$value && fixedProbFlag$sample157);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample145() {
-		return fixedFlag$sample145;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample145(boolean cv$value) {
-		fixedFlag$sample145 = cv$value;
-		fixedProbFlag$sample145 = (cv$value && fixedProbFlag$sample145);
 	}
 
 	@Override
@@ -300,12 +288,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void set$metric_g(double[][] cv$value) {
-		metric_g = cv$value;
-		setFlag$metric_g = true;
-	}
-
-	@Override
 	public final double[] get$metric_mean() {
 		return metric_mean;
 	}
@@ -344,12 +326,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final boolean[][] get$metric_valid_g() {
 		return metric_valid_g;
-	}
-
-	@Override
-	public final void set$metric_valid_g(boolean[][] cv$value) {
-		metric_valid_g = cv$value;
-		setFlag$metric_valid_g = true;
 	}
 
 	@Override
@@ -593,7 +569,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample145 = (((fixedFlag$sample145 && fixedFlag$sample84) && fixedFlag$sample104) && fixedFlag$sample123);
+			fixedProbFlag$sample145 = ((fixedFlag$sample84 && fixedFlag$sample104) && fixedFlag$sample123);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int sample = 0; sample < noSamples; sample += 1) {
@@ -793,7 +769,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample145 = (((fixedFlag$sample145 && fixedFlag$sample84) && fixedFlag$sample104) && fixedFlag$sample123);
+			fixedProbFlag$sample145 = ((fixedFlag$sample84 && fixedFlag$sample104) && fixedFlag$sample123);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int sample = 0; sample < noSamples; sample += 1) {
@@ -1971,16 +1947,12 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample = 0; sample < length$metric.length; sample += 1)
 				st[sample] = new int[length$metric[sample]];
 		}
-		if(!setFlag$metric_g) {
-			metric_g = new double[length$metric.length][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				metric_g[sample] = new double[length$metric[sample]];
-		}
-		if(!setFlag$metric_valid_g) {
-			metric_valid_g = new boolean[length$metric.length][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				metric_valid_g[sample] = new boolean[length$metric[sample]];
-		}
+		metric_g = new double[length$metric.length][];
+		for(int sample = 0; sample < length$metric.length; sample += 1)
+			metric_g[sample] = new double[length$metric[sample]];
+		metric_valid_g = new boolean[length$metric.length][];
+		for(int sample = 0; sample < length$metric.length; sample += 1)
+			metric_valid_g[sample] = new boolean[length$metric[sample]];
 		if(!setFlag$metric_mean)
 			metric_mean = new double[noStates];
 		if(!setFlag$metric_var)
@@ -2051,8 +2023,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			boolean[] metric_valid_1d = metric_valid_g[sample];
 			double[] metric_1d = metric_g[sample];
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-				if(!fixedFlag$sample145)
-					metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
+				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 					metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 			}
@@ -2132,8 +2103,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			boolean[] metric_valid_1d = metric_valid_g[sample];
 			double[] metric_1d = metric_g[sample];
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-				if(!fixedFlag$sample145)
-					metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
+				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 					metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 			}
@@ -2171,8 +2141,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			boolean[] metric_valid_1d = metric_valid_g[sample];
 			double[] metric_1d = metric_g[sample];
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-				if(!fixedFlag$sample145)
-					metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
+				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
 					metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 			}

@@ -22,10 +22,11 @@ public class Conditional5 extends Model {
         public double getValue() { return system$c.get$a(); }
 
         @Override
-        protected void setValueInternal(double value) {
-            system$c.set$a(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable a because its value is fixed by observed values.");
         }
 
         @Override
@@ -33,17 +34,12 @@ public class Conditional5 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample9())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -57,10 +53,11 @@ public class Conditional5 extends Model {
         public double getValue() { return system$c.get$b(); }
 
         @Override
-        protected void setValueInternal(double value) {
-            system$c.set$b(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable b because its value is fixed by observed values.");
         }
 
         @Override
@@ -68,17 +65,12 @@ public class Conditional5 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample13())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -92,10 +84,11 @@ public class Conditional5 extends Model {
         public boolean getValue() { return system$c.get$guard(); }
 
         @Override
-        protected void setValueInternal(boolean value) {
-            system$c.set$guard(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable guard because it is fixed by observing a variable.");
         }
 
         @Override
@@ -103,17 +96,12 @@ public class Conditional5 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample5(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample5())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -131,7 +119,7 @@ public class Conditional5 extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable value because its value depends on variables \"a\", and \"b\".");
+            throw new SandwoodException("Set is not available for variable value because it is fixed by observing a variable.");
         }
 
         @Override
@@ -139,22 +127,12 @@ public class Conditional5 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample13(fixed);
-                system$c.set$fixedFlag$sample9(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample13 = system$c.get$fixedFlag$sample13();
-            boolean fixedFlag$sample9 = system$c.get$fixedFlag$sample9();
-            if(fixedFlag$sample13 && fixedFlag$sample9)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample13 || fixedFlag$sample9)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -272,20 +250,8 @@ public class Conditional5 extends Model {
             newCore.set$observedValue(oldCore.get$observedValue());
 
         //ComputedVariables
-        if(a.isSet())
-            newCore.set$a(oldCore.get$a());
-        if(b.isSet())
-            newCore.set$b(oldCore.get$b());
-        if(guard.isSet())
-            newCore.set$guard(oldCore.get$guard());
 
         //Set fixed flags
-        if(a.isSet())
-            newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
-        if(b.isSet())
-            newCore.set$fixedFlag$sample13(oldCore.get$fixedFlag$sample13());
-        if(guard.isSet())
-            newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
     }
 
     /**
@@ -407,14 +373,8 @@ public class Conditional5 extends Model {
      * A class to hold all the outputs from the model after an infer model call.
      */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of a after an infer model call. */
-        public final double[] a;
-        /** Field holding the MAP or Sample value of b after an infer model call. */
-        public final double[] b;
 
         InferredModelOutputs(Conditional5 system$model) {
-            this.a = system$model.getInferredValue(system$model.$a);
-            this.b = system$model.getInferredValue(system$model.$b);
         }
     }
 

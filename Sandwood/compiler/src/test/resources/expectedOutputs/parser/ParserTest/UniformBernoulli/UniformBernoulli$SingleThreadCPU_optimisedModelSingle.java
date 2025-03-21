@@ -6,7 +6,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -38,26 +37,6 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double get$b() {
 		return 1.0;
-	}
-
-	// Getter for fixedFlag$sample19.
-	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	// Setter for fixedFlag$sample19.
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
-		// need to be updated.
-		fixedFlag$sample19 = cv$value;
-		
-		// Should the probability of sample 19 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample19" with its value "cv$value".
-		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
 
 	// Getter for fixedFlag$sample5.
@@ -148,20 +127,6 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		return output;
 	}
 
-	// Setter for output.
-	@Override
-	public final void set$output(boolean[] cv$value) {
-		// Set flags for all the side effects of output including if probabilities need to
-		// be updated.
-		// Set output with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		output = cv$value;
-		setFlag$output = true;
-		
-		// Unset the fixed probability flag for sample 19 as it depends on output.
-		fixedProbFlag$sample19 = false;
-	}
-
 	// Getter for prior.
 	@Override
 	public final double get$prior() {
@@ -237,7 +202,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample5);
+			fixedProbFlag$sample19 = fixedFlag$sample5;
 		}
 		// Using cached values.
 		else {
@@ -480,10 +445,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If output has not been set already allocate space.
-		if(!setFlag$output)
-			// Constructor for output
-			output = new boolean[length$observed];
+		// Constructor for output
+		output = new boolean[length$observed];
 	}
 
 	// Method to execute the model code conventionally.
@@ -491,12 +454,8 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample5)
 			prior = DistributionSampling.sampleUniform(RNG$);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample19) {
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
-				output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
-		}
+		for(int var18 = 0; var18 < length$observed; var18 += 1)
+			output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

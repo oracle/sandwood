@@ -16,7 +16,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[][] distribution$sample55;
 	private boolean fixedFlag$sample29 = false;
 	private boolean fixedFlag$sample55 = false;
-	private boolean fixedFlag$sample75 = false;
 	private boolean fixedProbFlag$sample29 = false;
 	private boolean fixedProbFlag$sample55 = false;
 	private boolean fixedProbFlag$sample75 = false;
@@ -126,44 +125,10 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		fixedProbFlag$sample75 = (cv$value && fixedProbFlag$sample75);
 	}
 
-	// Getter for fixedFlag$sample75.
-	@Override
-	public final boolean get$fixedFlag$sample75() {
-		return fixedFlag$sample75;
-	}
-
-	// Setter for fixedFlag$sample75.
-	@Override
-	public final void set$fixedFlag$sample75(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample75 including if probabilities
-		// need to be updated.
-		fixedFlag$sample75 = cv$value;
-		
-		// Should the probability of sample 75 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample75" with its value "cv$value".
-		fixedProbFlag$sample75 = (cv$value && fixedProbFlag$sample75);
-	}
-
 	// Getter for flips.
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 75 as it depends on flips.
-		fixedProbFlag$sample75 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -514,7 +479,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedFlag$sample55);
+			fixedProbFlag$sample75 = fixedFlag$sample55;
 		}
 		// Using cached values.
 		else {
@@ -786,7 +751,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedFlag$sample55);
+			fixedProbFlag$sample75 = fixedFlag$sample55;
 		}
 		// Using cached values.
 		else {
@@ -1334,10 +1299,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constructor for b
 		b = new int[n];
 		
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips)
-			// Constructor for flips
-			flips = new boolean[n];
+		// Constructor for flips
+		flips = new boolean[n];
 		
 		// Constructor for distribution$sample55
 		distribution$sample55 = new double[(n - 1)][];
@@ -1376,19 +1339,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample75)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int j = forStart$j; j < forEnd$j; j += 1)
-							flips[j] = DistributionSampling.sampleBernoulli(RNG$1, (1 / a[(j + 1)]));
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, (1 / a[(j + 1)]));
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

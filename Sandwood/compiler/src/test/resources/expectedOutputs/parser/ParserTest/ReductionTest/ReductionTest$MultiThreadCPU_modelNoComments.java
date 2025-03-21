@@ -12,7 +12,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean fixedFlag$sample30 = false;
 	private boolean fixedFlag$sample47 = false;
 	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample87 = false;
 	private boolean fixedProbFlag$sample30 = false;
 	private boolean fixedProbFlag$sample47 = false;
 	private boolean fixedProbFlag$sample62 = false;
@@ -100,26 +99,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample87() {
-		return fixedFlag$sample87;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample87(boolean cv$value) {
-		fixedFlag$sample87 = cv$value;
-		fixedProbFlag$sample87 = (fixedFlag$sample87 && fixedProbFlag$sample87);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample87 = false;
 	}
 
 	@Override
@@ -431,7 +412,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample87 = ((fixedFlag$sample87 && fixedFlag$sample47) && fixedFlag$sample62);
+			fixedProbFlag$sample87 = (fixedFlag$sample47 && fixedFlag$sample62);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
@@ -669,10 +650,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				st = new int[noCats];
 			}
 		}
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[length$flipsMeasured];
-			}
+		{
+			flips = new boolean[length$flipsMeasured];
 		}
 		{
 			logProbability$var60 = new double[((((noCats - 1) - 0) / 1) + 1)];
@@ -723,11 +702,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
 							int i$var79 = reduceVar$var82$7;
 							int j$var80 = st[cv$reduction78Index];
-							if(!fixedFlag$sample87)
-								reduceVar$var82$7 = (i$var79 + j$var80);
+							reduceVar$var82$7 = (i$var79 + j$var80);
 						}
-						if(!fixedFlag$sample87)
-							flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$7]);
+						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$7]);
 					}
 			}
 		);

@@ -9,7 +9,6 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double b;
 	private double[] decay;
 	private double[] decayDetected;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -56,13 +55,6 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$decay(double[] cv$value) {
-		decay = cv$value;
-		setFlag$decay = true;
-		fixedProbFlag$sample19 = false;
-	}
-
-	@Override
 	public final double[] get$decayDetected() {
 		return decayDetected;
 	}
@@ -70,17 +62,6 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$decayDetected(double[] cv$value) {
 		decayDetected = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		fixedFlag$sample19 = cv$value;
-		fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedProbFlag$sample19);
 	}
 
 	@Override
@@ -184,7 +165,7 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$decay = (logProbability$decay + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+			fixedProbFlag$sample19 = fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -270,21 +251,15 @@ class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$decay) {
-			{
-				decay = new double[length$decayDetected];
-			}
-		}
+		decay = new double[length$decayDetected];
 	}
 
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		for(int var18 = 0; var18 < samples; var18 += 1) {
-			if(!fixedFlag$sample19)
-				decay[var18] = (DistributionSampling.sampleExponential(RNG$) / rate);
-		}
+		for(int var18 = 0; var18 < samples; var18 += 1)
+			decay[var18] = (DistributionSampling.sampleExponential(RNG$) / rate);
 	}
 
 	@Override

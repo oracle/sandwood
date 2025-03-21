@@ -132,7 +132,7 @@ public class Conditional2c extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable value because its value depends on variables \"guard\", \"u\", and \"v\".");
+            throw new SandwoodException("Set is not available for variable value because its value is fixed by observed values.");
         }
 
         @Override
@@ -140,22 +140,12 @@ public class Conditional2c extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample10(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample10 = system$c.get$fixedFlag$sample10();
-            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
-            if(fixedFlag$sample10 && fixedFlag$sample4)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample10 || fixedFlag$sample4)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -173,7 +163,7 @@ public class Conditional2c extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable value2 because its value depends on variables \"guard\", \"u\", \"v\", and \"value\".");
+            throw new SandwoodException("Set is not available for variable value2 because it is fixed by observing a variable.");
         }
 
         @Override
@@ -181,22 +171,12 @@ public class Conditional2c extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample10(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample10 = system$c.get$fixedFlag$sample10();
-            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
-            if(fixedFlag$sample10 && fixedFlag$sample4)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample10 || fixedFlag$sample4)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -435,14 +415,11 @@ public class Conditional2c extends Model {
         public final double[] u;
         /** Field holding the MAP or Sample value of v after an infer model call. */
         public final double[] v;
-        /** Field holding the MAP or Sample value of value after an infer model call. */
-        public final double[][] value;
 
         InferredModelOutputs(Conditional2c system$model) {
             this.guard = system$model.getInferredValue(system$model.$guard);
             this.u = system$model.getInferredValue(system$model.$u);
             this.v = system$model.getInferredValue(system$model.$v);
-            this.value = system$model.getInferredValue(system$model.$value);
         }
     }
 

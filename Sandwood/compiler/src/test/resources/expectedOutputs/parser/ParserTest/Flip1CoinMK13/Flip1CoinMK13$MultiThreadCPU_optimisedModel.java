@@ -8,7 +8,6 @@ class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Declare the variables for the model.
 	private double b;
 	private double bias;
-	private boolean fixedFlag$sample40 = false;
 	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample40 = false;
 	private boolean fixedProbFlag$sample9 = false;
@@ -58,26 +57,6 @@ class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		return bias;
 	}
 
-	// Getter for fixedFlag$sample40.
-	@Override
-	public final boolean get$fixedFlag$sample40() {
-		return fixedFlag$sample40;
-	}
-
-	// Setter for fixedFlag$sample40.
-	@Override
-	public final void set$fixedFlag$sample40(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample40 including if probabilities
-		// need to be updated.
-		fixedFlag$sample40 = cv$value;
-		
-		// Should the probability of sample 40 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample40" with its value "cv$value".
-		fixedProbFlag$sample40 = (cv$value && fixedProbFlag$sample40);
-	}
-
 	// Getter for fixedFlag$sample9.
 	@Override
 	public final boolean get$fixedFlag$sample9() {
@@ -108,20 +87,6 @@ class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 40 as it depends on flips.
-		fixedProbFlag$sample40 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -271,7 +236,7 @@ class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample40 = (fixedFlag$sample40 && fixedFlag$sample9);
+			fixedProbFlag$sample40 = fixedFlag$sample9;
 		}
 		// Using cached values.
 		else {
@@ -737,10 +702,8 @@ class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips)
-			// Constructor for flips
-			flips = new boolean[length$flipsMeasured];
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured];
 	}
 
 	// Method to execute the model code conventionally.
@@ -759,19 +722,16 @@ class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample40)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$var35, int forEnd$var35, int threadID$var35, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var35 = forStart$var35; var35 < forEnd$var35; var35 += 1)
-							flips[var35] = DistributionSampling.sampleBernoulli(RNG$1, bias);
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$var35, int forEnd$var35, int threadID$var35, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var35 = forStart$var35; var35 < forEnd$var35; var35 += 1)
+						flips[var35] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

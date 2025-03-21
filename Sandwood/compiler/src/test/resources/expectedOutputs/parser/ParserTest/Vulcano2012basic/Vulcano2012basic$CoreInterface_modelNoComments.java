@@ -6,15 +6,12 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	public double[][] get$ObsSales();
 	public void set$ObsSales(double[][] cv$value);
 	public double[][] get$Sales();
-	public void set$Sales(double[][] cv$value);
 	public int get$T();
 	public void set$T(int cv$value);
 	public int[] get$arrivals();
 	public void set$arrivals(int[] cv$value);
 	public double get$denom();
 	public double[] get$exped();
-	public boolean get$fixedFlag$sample127();
-	public void set$fixedFlag$sample127(boolean cv$value);
 	public boolean get$fixedFlag$sample22();
 	public void set$fixedFlag$sample22(boolean cv$value);
 	public boolean get$fixedFlag$sample67();

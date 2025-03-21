@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -35,7 +35,11 @@ public interface ComputedVariable extends HasProbability, Variable {
         /**
          * This value is always the same in the model. For example the sum of two constants.
          */
-        DETERMINISTIC
+        DETERMINISTIC,
+        /**
+         * This value is always the same in inference code as it is observed.
+         */
+        OBSERVED
     }
 
     /**

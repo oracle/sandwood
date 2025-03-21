@@ -2,12 +2,6 @@ package org.sandwood.compiler.tests.parser;
 
 interface DistributionTest1$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 
-	// Getter for fixedFlag$sample11.
-	public boolean get$fixedFlag$sample11();
-
-	// Setter for fixedFlag$sample11.
-	public void set$fixedFlag$sample11(boolean cv$value);
-
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 
@@ -31,9 +25,6 @@ interface DistributionTest1$CoreInterface extends org.sandwood.runtime.internal.
 
 	// Getter for v.
 	public boolean get$v();
-
-	// Setter for v.
-	public void set$v(boolean cv$value);
 
 	// Getter for v1.
 	public int get$v1();

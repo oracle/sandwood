@@ -7,7 +7,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double bias;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample12 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample12 = false;
 	private double logProbability$$evidence;
@@ -57,17 +56,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$fixedFlag$sample10(boolean cv$value) {
 		fixedFlag$sample10 = cv$value;
 		fixedProbFlag$sample10 = (cv$value && fixedProbFlag$sample10);
-		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
-		fixedFlag$sample12 = cv$value;
 		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
 	}
 
@@ -126,12 +114,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return positiveCount;
 	}
 
-	@Override
-	public final void set$positiveCount(int cv$value) {
-		positiveCount = cv$value;
-		fixedProbFlag$sample12 = false;
-	}
-
 	private final void logProbabilityValue$sample10() {
 		if(!fixedProbFlag$sample10) {
 			double cv$distributionAccumulator = (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
@@ -156,7 +138,7 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$positiveCount = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedFlag$sample10);
+			fixedProbFlag$sample12 = fixedFlag$sample10;
 		} else {
 			logProbability$binomial = logProbability$positiveCount;
 			logProbability$$model = (logProbability$$model + logProbability$positiveCount);
@@ -187,8 +169,7 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample10)
 			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
-		if(!fixedFlag$sample12)
-			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	@Override

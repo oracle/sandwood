@@ -32,12 +32,6 @@ interface Vulcano2012basicDG$CoreInterface extends org.sandwood.runtime.internal
 	// Setter for fixedFlag$sample114.
 	public void set$fixedFlag$sample114(boolean cv$value);
 
-	// Getter for fixedFlag$sample166.
-	public boolean get$fixedFlag$sample166();
-
-	// Setter for fixedFlag$sample166.
-	public void set$fixedFlag$sample166(boolean cv$value);
-
 	// Getter for fixedFlag$sample32.
 	public boolean get$fixedFlag$sample32();
 
@@ -67,9 +61,6 @@ interface Vulcano2012basicDG$CoreInterface extends org.sandwood.runtime.internal
 
 	// Getter for weekly_sales.
 	public int[][] get$weekly_sales();
-
-	// Setter for weekly_sales.
-	public void set$weekly_sales(int[][] cv$value);
 
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.

@@ -32,12 +32,6 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 	// Getter for exped.
 	public double[] get$exped();
 
-	// Getter for fixedFlag$sample131.
-	public boolean get$fixedFlag$sample131();
-
-	// Setter for fixedFlag$sample131.
-	public void set$fixedFlag$sample131(boolean cv$value);
-
 	// Getter for fixedFlag$sample22.
 	public boolean get$fixedFlag$sample22();
 
@@ -100,9 +94,6 @@ interface Vulcano2012notNormalized$CoreInterface extends org.sandwood.runtime.in
 
 	// Getter for weekly_sales.
 	public int[][] get$weekly_sales();
-
-	// Setter for weekly_sales.
-	public void set$weekly_sales(int[][] cv$value);
 
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.

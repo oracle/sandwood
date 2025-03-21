@@ -26,12 +26,6 @@ interface LinearRegressionWrongNameFail$CoreInterface extends org.sandwood.runti
 	// Setter for fixedFlag$sample15.
 	public void set$fixedFlag$sample15(boolean cv$value);
 
-	// Getter for fixedFlag$sample31.
-	public boolean get$fixedFlag$sample31();
-
-	// Setter for fixedFlag$sample31.
-	public void set$fixedFlag$sample31(boolean cv$value);
-
 	// Getter for fixedFlag$sample7.
 	public boolean get$fixedFlag$sample7();
 
@@ -67,9 +61,6 @@ interface LinearRegressionWrongNameFail$CoreInterface extends org.sandwood.runti
 
 	// Getter for y.
 	public double[] get$y();
-
-	// Setter for y.
-	public void set$y(double[] cv$value);
 
 	// Getter for yMeasured.
 	public double[] get$yMeasured();

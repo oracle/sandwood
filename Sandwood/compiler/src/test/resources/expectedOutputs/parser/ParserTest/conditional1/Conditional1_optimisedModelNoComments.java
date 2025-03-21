@@ -61,7 +61,7 @@ public class Conditional1 extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable value because its value depends on variable \"guard\".");
+            throw new SandwoodException("Set is not available for variable value because it is fixed by observing a variable.");
         }
 
         @Override
@@ -69,22 +69,12 @@ public class Conditional1 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample16(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample16 = system$c.get$fixedFlag$sample16();
-            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
-            if(fixedFlag$sample16 && fixedFlag$sample4)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample16 || fixedFlag$sample4)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 

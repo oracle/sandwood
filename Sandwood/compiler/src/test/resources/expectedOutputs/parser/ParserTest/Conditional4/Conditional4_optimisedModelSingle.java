@@ -98,10 +98,11 @@ public class Conditional4 extends Model {
         public double getValue() { return system$c.get$value(); }
 
         @Override
-        protected void setValueInternal(double value) {
-            system$c.set$value(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable value because it is fixed by observing a variable.");
         }
 
         @Override
@@ -109,17 +110,12 @@ public class Conditional4 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample27(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample27())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -218,8 +214,6 @@ public class Conditional4 extends Model {
             newCore.set$bias(oldCore.get$bias());
         if(guard.isSet())
             newCore.set$guard(oldCore.get$guard());
-        if(value.isSet())
-            newCore.set$value(oldCore.get$value());
 
         //Set fixed flags
         if(bias.isSet()){
@@ -228,8 +222,6 @@ public class Conditional4 extends Model {
         }
         if(guard.isSet())
             newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        if(value.isSet())
-            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
     }
 
     /**

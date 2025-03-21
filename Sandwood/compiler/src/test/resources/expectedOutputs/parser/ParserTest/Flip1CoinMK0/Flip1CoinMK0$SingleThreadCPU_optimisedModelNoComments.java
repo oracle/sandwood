@@ -7,7 +7,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK0$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample5 = false;
-	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample5 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean flip;
@@ -49,25 +48,8 @@ class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
-		fixedFlag$sample7 = cv$value;
-		fixedProbFlag$sample7 = (cv$value && fixedProbFlag$sample7);
-	}
-
-	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	@Override
-	public final void set$flip(boolean cv$value) {
-		flip = cv$value;
-		fixedProbFlag$sample7 = false;
 	}
 
 	@Override
@@ -129,7 +111,7 @@ class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedFlag$sample5);
+			fixedProbFlag$sample7 = fixedFlag$sample5;
 		} else {
 			logProbability$bernoulli = logProbability$flip;
 			logProbability$$model = (logProbability$$model + logProbability$flip);
@@ -154,8 +136,7 @@ class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample5)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample7)
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	@Override

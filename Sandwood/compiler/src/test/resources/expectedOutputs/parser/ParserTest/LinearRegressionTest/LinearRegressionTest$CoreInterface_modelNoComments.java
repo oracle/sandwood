@@ -9,8 +9,6 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	public void set$fixedFlag$sample31(boolean cv$value);
 	public boolean get$fixedFlag$sample35();
 	public void set$fixedFlag$sample35(boolean cv$value);
-	public boolean get$fixedFlag$sample74();
-	public void set$fixedFlag$sample74(boolean cv$value);
 	public int get$k();
 	public double get$logProbability$bias();
 	public double get$logProbability$tau();
@@ -24,7 +22,6 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	public double[][] get$x();
 	public void set$x(double[][] cv$value);
 	public double[] get$y();
-	public void set$y(double[] cv$value);
 	public double[] get$yMeasured();
 	public void set$yMeasured(double[] cv$value);
 	public void logEvidenceGeneration();

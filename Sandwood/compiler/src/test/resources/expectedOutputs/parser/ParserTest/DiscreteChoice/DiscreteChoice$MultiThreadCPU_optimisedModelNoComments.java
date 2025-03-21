@@ -8,7 +8,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private int[] choices;
 	private double[] exped;
 	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample78 = false;
 	private boolean fixedProbFlag$sample24 = false;
 	private boolean fixedProbFlag$sample78 = false;
 	private boolean[] guard$sample24put65$global;
@@ -52,13 +51,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void set$choices(int[] cv$value) {
-		choices = cv$value;
-		setFlag$choices = true;
-		fixedProbFlag$sample78 = false;
-	}
-
-	@Override
 	public final double[] get$exped() {
 		return exped;
 	}
@@ -72,17 +64,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$fixedFlag$sample24(boolean cv$value) {
 		fixedFlag$sample24 = cv$value;
 		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
-		fixedProbFlag$sample78 = (cv$value && fixedProbFlag$sample78);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample78() {
-		return fixedFlag$sample78;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample78(boolean cv$value) {
-		fixedFlag$sample78 = cv$value;
 		fixedProbFlag$sample78 = (cv$value && fixedProbFlag$sample78);
 	}
 
@@ -210,7 +191,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$choices = (logProbability$choices + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample78 = (fixedFlag$sample78 && fixedFlag$sample24);
+			fixedProbFlag$sample78 = fixedFlag$sample24;
 		} else {
 			logProbability$var65 = logProbability$var77;
 			logProbability$choices = (logProbability$choices + logProbability$var77);
@@ -288,8 +269,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			ut = new double[noProducts];
 		exped = new double[noProducts];
 		prob = new double[noProducts];
-		if(!setFlag$choices)
-			choices = new int[noObs];
+		choices = new int[noObs];
 		logProbability$var23 = new double[(noProducts - 1)];
 		logProbability$sample24 = new double[(noProducts - 1)];
 		allocateScratch();
@@ -322,14 +302,12 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			);
 		}
-		if(!fixedFlag$sample78)
-			parallelFor(RNG$, 0, noObs, 1,
-				(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
-							choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
-				}
-			);
-
+		parallelFor(RNG$, 0, noObs, 1,
+			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
+						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
+			}
+		);
 	}
 
 	@Override

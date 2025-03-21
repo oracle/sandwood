@@ -15,7 +15,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedFlag$sample58 = false;
 	private boolean fixedFlag$sample90 = false;
-	private boolean fixedFlag$sample93 = false;
 	private boolean fixedProbFlag$sample42 = false;
 	private boolean fixedProbFlag$sample58 = false;
 	private boolean fixedProbFlag$sample90 = false;
@@ -108,17 +107,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample93() {
-		return fixedFlag$sample93;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample93(boolean cv$value) {
-		fixedFlag$sample93 = cv$value;
-		fixedProbFlag$sample93 = (fixedFlag$sample93 && fixedProbFlag$sample93);
-	}
-
-	@Override
 	public final int[] get$length$documents() {
 		return length$documents;
 	}
@@ -207,13 +195,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final int[][] get$w() {
 		return w;
-	}
-
-	@Override
-	public final void set$w(int[][] cv$value) {
-		w = cv$value;
-		setFlag$w = true;
-		fixedProbFlag$sample93 = false;
 	}
 
 	@Override
@@ -433,7 +414,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			logProbability$w = (logProbability$w + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample93 = ((fixedFlag$sample93 && fixedFlag$sample42) && fixedFlag$sample90);
+			fixedProbFlag$sample93 = (fixedFlag$sample42 && fixedFlag$sample90);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
@@ -665,12 +646,10 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 					theta[var56] = new double[noTopics];
 			}
 		}
-		if(!setFlag$w) {
-			{
-				w = new int[length$documents.length][];
-				for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-					w[i$var71] = new int[length$documents[i$var71]];
-			}
+		{
+			w = new int[length$documents.length][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				w[i$var71] = new int[length$documents[i$var71]];
 		}
 		if(!setFlag$z) {
 			{
@@ -733,8 +712,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 								for(int j = forStart$j; j < forEnd$j; j += 1) {
 										if(!fixedFlag$sample90)
 											z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
-										if(!fixedFlag$sample93)
-											t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]], vocabSize);
+										t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]], vocabSize);
 									}
 							}
 						);

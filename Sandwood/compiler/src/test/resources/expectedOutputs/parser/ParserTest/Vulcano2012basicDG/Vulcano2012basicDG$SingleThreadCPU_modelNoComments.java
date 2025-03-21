@@ -12,7 +12,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double[] expedNorm;
 	private boolean fixedFlag$sample112 = false;
 	private boolean fixedFlag$sample114 = false;
-	private boolean fixedFlag$sample166 = false;
 	private boolean fixedFlag$sample32 = false;
 	private boolean fixedProbFlag$sample112 = false;
 	private boolean fixedProbFlag$sample114 = false;
@@ -114,17 +113,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample166() {
-		return fixedFlag$sample166;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample166(boolean cv$value) {
-		fixedFlag$sample166 = cv$value;
-		fixedProbFlag$sample166 = (fixedFlag$sample166 && fixedProbFlag$sample166);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample32() {
 		return fixedFlag$sample32;
 	}
@@ -185,12 +173,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final int[][] get$weekly_sales() {
 		return weekly_sales;
-	}
-
-	@Override
-	public final void set$weekly_sales(int[][] cv$value) {
-		weekly_sales = cv$value;
-		setFlag$weekly_sales = true;
 	}
 
 	private final void logProbabilityValue$sample112() {
@@ -375,7 +357,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$weekly_sales = (logProbability$weekly_sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample166 = ((fixedFlag$sample166 && fixedFlag$sample32) && fixedFlag$sample114);
+			fixedProbFlag$sample166 = (fixedFlag$sample32 && fixedFlag$sample114);
 		} else {
 			double cv$accumulator = 0.0;
 			if((0 < numTimeSteps)) {
@@ -2505,14 +2487,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			}
 			weekly_ut = new double[((((avail.length - 1) - 0) / 1) + 1)][];
 		}
-		if(!setFlag$weekly_sales) {
-			{
-				if((0 < avail.length)) {
-					for(int t = 0; t < avail.length; t += 1)
-						weekly_sales[((t - 0) / 1)] = new int[(avail[0].length + 1)];
-				}
-				weekly_sales = new int[((((avail.length - 1) - 0) / 1) + 1)][];
+		{
+			if((0 < avail.length)) {
+				for(int t = 0; t < avail.length; t += 1)
+					weekly_sales[((t - 0) / 1)] = new int[(avail[0].length + 1)];
 			}
+			weekly_sales = new int[((((avail.length - 1) - 0) / 1) + 1)][];
 		}
 		{
 			logProbability$sample32 = new double[((((avail[0].length - 1) - 0) / 1) + 1)];
@@ -2591,13 +2571,10 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					if(!fixedFlag$sample32)
 						weekly_rates[((t - 0) / 1)][j$var153] = (weekly_ut[((t - 0) / 1)][j$var153] / reduceVar$denom$10);
 				}
-				if(!fixedFlag$sample166)
-					DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t - 0) / 1)], (avail[0].length + 1), arrivals[((t - 0) / 1)], weekly_sales[((t - 0) / 1)]);
+				DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t - 0) / 1)], (avail[0].length + 1), arrivals[((t - 0) / 1)], weekly_sales[((t - 0) / 1)]);
 				int[] observed_weekly_sales = sales[t];
-				for(int j$var168 = 0; j$var168 < avail[0].length; j$var168 += 1) {
-					if(!fixedFlag$sample166)
-						observed_weekly_sales[j$var168] = weekly_sales[((t - 0) / 1)][j$var168];
-				}
+				for(int j$var168 = 0; j$var168 < avail[0].length; j$var168 += 1)
+					observed_weekly_sales[j$var168] = weekly_sales[((t - 0) / 1)][j$var168];
 			}
 		}
 	}

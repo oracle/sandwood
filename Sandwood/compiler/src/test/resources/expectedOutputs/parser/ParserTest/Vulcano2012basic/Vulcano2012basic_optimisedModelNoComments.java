@@ -22,10 +22,11 @@ public class Vulcano2012basic extends Model {
         public double[][] getValue() { return system$c.get$Sales(); }
 
         @Override
-        protected void setValueInternal(double[][] value) {
-            system$c.set$Sales(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(double[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable Sales because it is fixed by observing a variable.");
         }
 
         @Override
@@ -38,17 +39,12 @@ public class Vulcano2012basic extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample127(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample127())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -456,8 +452,6 @@ public class Vulcano2012basic extends Model {
             newCore.set$ObsSales(oldCore.get$ObsSales());
 
         //ComputedVariables
-        if(Sales.isSet())
-            newCore.set$Sales(oldCore.get$Sales());
         if(arrivals.isSet())
             newCore.set$arrivals(oldCore.get$arrivals());
         if(lambda.isSet())
@@ -466,8 +460,6 @@ public class Vulcano2012basic extends Model {
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(Sales.isSet())
-            newCore.set$fixedFlag$sample127(oldCore.get$fixedFlag$sample127());
         if(arrivals.isSet())
             newCore.set$fixedFlag$sample82(oldCore.get$fixedFlag$sample82());
         if(lambda.isSet())

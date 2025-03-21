@@ -61,7 +61,7 @@ public class Conditional2 extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable value because its value depends on variable \"guard\".");
+            throw new SandwoodException("Set is not available for variable value because its value is fixed by observed values.");
         }
 
         @Override
@@ -69,22 +69,12 @@ public class Conditional2 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample21 = system$c.get$fixedFlag$sample21();
-            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
-            if(fixedFlag$sample21 && fixedFlag$sample4)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample21 || fixedFlag$sample4)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -102,7 +92,7 @@ public class Conditional2 extends Model {
 
         @Override
         protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable value2 because its value depends on variables \"guard\", and \"value\".");
+            throw new SandwoodException("Set is not available for variable value2 because it is fixed by observing a variable.");
         }
 
         @Override
@@ -110,22 +100,12 @@ public class Conditional2 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample21 = system$c.get$fixedFlag$sample21();
-            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
-            if(fixedFlag$sample21 && fixedFlag$sample4)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample21 || fixedFlag$sample4)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -222,16 +202,10 @@ public class Conditional2 extends Model {
         //ComputedVariables
         if(guard.isSet())
             newCore.set$guard(oldCore.get$guard());
-        if(value.isSet())
-            newCore.set$value(oldCore.get$value());
 
         //Set fixed flags
         if(guard.isSet())
             newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        if(value.isSet()){
-            newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        }
     }
 
     /**
@@ -342,12 +316,9 @@ public class Conditional2 extends Model {
     public static class InferredModelOutputs {
         /** Field holding the MAP or Sample value of guard after an infer model call. */
         public final boolean[] guard;
-        /** Field holding the MAP or Sample value of value after an infer model call. */
-        public final double[][] value;
 
         InferredModelOutputs(Conditional2 system$model) {
             this.guard = system$model.getInferredValue(system$model.$guard);
-            this.value = system$model.getInferredValue(system$model.$value);
         }
     }
 

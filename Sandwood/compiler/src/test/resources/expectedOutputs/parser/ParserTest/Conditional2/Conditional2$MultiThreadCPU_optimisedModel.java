@@ -143,20 +143,6 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
-	// Setter for value.
-	@Override
-	public final void set$value(double[] cv$value) {
-		// Set flags for all the side effects of value including if probabilities need to
-		// be updated.
-		// Set value with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		value = cv$value;
-		setFlag$value = true;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on value.
-		fixedProbFlag$sample21 = false;
-	}
-
 	// Getter for value2.
 	@Override
 	public final double[] get$value2() {
@@ -674,10 +660,8 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If value has not been set already allocate space.
-		if(!setFlag$value)
-			// Constructor for value
-			value = new double[1];
+		// Constructor for value
+		value = new double[1];
 		
 		// Constructor for value2
 		value2 = new double[1];

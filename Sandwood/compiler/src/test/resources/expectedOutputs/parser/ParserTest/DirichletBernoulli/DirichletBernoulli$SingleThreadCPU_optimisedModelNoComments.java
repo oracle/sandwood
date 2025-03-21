@@ -5,8 +5,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DirichletBernoulli$CoreInterface {
 	private boolean fixedFlag$sample17 = false;
-	private boolean fixedFlag$sample38 = false;
-	private boolean fixedFlag$sample51 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample38 = false;
 	private boolean fixedProbFlag$sample51 = false;
@@ -43,28 +41,6 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		fixedFlag$sample17 = cv$value;
 		fixedProbFlag$sample17 = (cv$value && fixedProbFlag$sample17);
 		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
-		fixedProbFlag$sample51 = (cv$value && fixedProbFlag$sample51);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		fixedFlag$sample38 = cv$value;
-		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample51() {
-		return fixedFlag$sample51;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample51(boolean cv$value) {
-		fixedFlag$sample51 = cv$value;
 		fixedProbFlag$sample51 = (cv$value && fixedProbFlag$sample51);
 	}
 
@@ -129,14 +105,6 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$output(boolean[] cv$value) {
-		output = cv$value;
-		setFlag$output = true;
-		fixedProbFlag$sample38 = false;
-		fixedProbFlag$sample51 = false;
-	}
-
-	@Override
 	public final double[] get$prior() {
 		return prior;
 	}
@@ -182,7 +150,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample17);
+			fixedProbFlag$sample38 = fixedFlag$sample17;
 		} else {
 			logProbability$b1 = logProbability$var38;
 			logProbability$output = (logProbability$output + logProbability$var38);
@@ -201,7 +169,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample51 = (fixedFlag$sample51 && fixedFlag$sample17);
+			fixedProbFlag$sample51 = fixedFlag$sample17;
 		} else {
 			logProbability$b2 = logProbability$var51;
 			logProbability$output = (logProbability$output + logProbability$var51);
@@ -266,22 +234,17 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		v = new double[2];
 		if(!setFlag$prior)
 			prior = new double[2];
-		if(!setFlag$output)
-			output = new boolean[length$observed];
+		output = new boolean[length$observed];
 	}
 
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
-		if(!fixedFlag$sample38) {
-			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
-				output[i$var37] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
-		}
-		if(!fixedFlag$sample51) {
-			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
-				output[i$var50] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
-		}
+		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
+			output[i$var37] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
+		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
+			output[i$var50] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
 	}
 
 	@Override

@@ -14,7 +14,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private int[] arrivals;
 	private double denom;
 	private double[] exped;
-	private boolean fixedFlag$sample127 = false;
 	private boolean fixedFlag$sample22 = false;
 	private boolean fixedFlag$sample67 = false;
 	private boolean fixedFlag$sample82 = false;
@@ -89,20 +88,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		return Sales;
 	}
 
-	// Setter for Sales.
-	@Override
-	public final void set$Sales(double[][] cv$value) {
-		// Set flags for all the side effects of Sales including if probabilities need to
-		// be updated.
-		// Set Sales with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		Sales = cv$value;
-		setFlag$Sales = true;
-		
-		// Unset the fixed probability flag for sample 127 as it depends on Sales.
-		fixedProbFlag$sample127 = false;
-	}
-
 	// Getter for T.
 	@Override
 	public final int get$T() {
@@ -148,24 +133,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double[] get$exped() {
 		return exped;
-	}
-
-	// Getter for fixedFlag$sample127.
-	@Override
-	public final boolean get$fixedFlag$sample127() {
-		return fixedFlag$sample127;
-	}
-
-	// Setter for fixedFlag$sample127.
-	@Override
-	public final void set$fixedFlag$sample127(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample127 including if probabilities
-		// need to be updated.
-		fixedFlag$sample127 = cv$value;
-		
-		// Should the probability of sample 127 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample127 = (fixedFlag$sample127 && fixedProbFlag$sample127);
 	}
 
 	// Getter for fixedFlag$sample22.
@@ -440,7 +407,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample127 = ((fixedFlag$sample127 && fixedFlag$sample22) && fixedFlag$sample82);
+			fixedProbFlag$sample127 = (fixedFlag$sample22 && fixedFlag$sample82);
 		}
 		// Using cached values.
 		else {
@@ -1667,16 +1634,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			}
 		}
 		
-		// If Sales has not been set already allocate space.
-		if(!setFlag$Sales) {
-			// Constructor for Sales
-			{
-				Sales = new double[T][];
-				for(int var93 = 0; var93 < T; var93 += 1)
-					Sales[var93] = new double[noProducts];
-				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-					Sales[t$var105] = new double[noProducts];
-			}
+		// Constructor for Sales
+		{
+			Sales = new double[T][];
+			for(int var93 = 0; var93 < T; var93 += 1)
+				Sales[var93] = new double[noProducts];
+			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+				Sales[t$var105] = new double[noProducts];
 		}
 		
 		// Constructor for logProbability$sample22
@@ -1734,10 +1698,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			double[] weekly_sales = Sales[t$var105];
-			for(int j$var115 = 0; j$var115 < noProducts; j$var115 += 1) {
-				if(!fixedFlag$sample127)
-					weekly_sales[j$var115] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$)) + (((exped[j$var115] * Avail[t$var105][j$var115]) / denom) * arrivals[t$var105]));
-			}
+			for(int j$var115 = 0; j$var115 < noProducts; j$var115 += 1)
+				weekly_sales[j$var115] = ((Math.sqrt(0.2) * DistributionSampling.sampleGaussian(RNG$)) + (((exped[j$var115] * Avail[t$var105][j$var115]) / denom) * arrivals[t$var105]));
 		}
 	}
 

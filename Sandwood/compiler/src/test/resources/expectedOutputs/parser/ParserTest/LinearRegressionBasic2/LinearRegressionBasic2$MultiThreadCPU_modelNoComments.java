@@ -9,7 +9,6 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 	private double b1;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample33 = false;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample11 = false;
 	private boolean fixedProbFlag$sample16 = false;
@@ -88,17 +87,6 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value) {
-		fixedFlag$sample33 = cv$value;
-		fixedProbFlag$sample33 = (fixedFlag$sample33 && fixedProbFlag$sample33);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample7() {
 		return fixedFlag$sample7;
 	}
@@ -170,13 +158,6 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	@Override
-	public final void set$y(double[] cv$value) {
-		y = cv$value;
-		setFlag$y = true;
-		fixedProbFlag$sample33 = false;
 	}
 
 	@Override
@@ -331,7 +312,7 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample33 = (((fixedFlag$sample33 && fixedFlag$sample7) && fixedFlag$sample11) && fixedFlag$sample16);
+			fixedProbFlag$sample33 = ((fixedFlag$sample7 && fixedFlag$sample11) && fixedFlag$sample16);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
@@ -474,10 +455,8 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$y) {
-			{
-				y = new double[x.length];
-			}
+		{
+			y = new double[x.length];
 		}
 		{
 			logProbability$var32 = new double[((((x.length - 1) - 0) / 1) + 1)];
@@ -497,10 +476,8 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
 		parallelFor(RNG$, 0, noSamples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample33)
-							y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$1)) + (b0 + (b1 * x[i])));
-					}
+				for(int i = forStart$i; i < forEnd$i; i += 1)
+						y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$1)) + (b0 + (b1 * x[i])));
 			}
 		);
 	}

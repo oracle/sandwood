@@ -11,7 +11,6 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] bias;
 	private int coins;
 	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample31 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample31 = false;
 	private boolean[][] flips;
@@ -79,44 +78,10 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
 	}
 
-	// Getter for fixedFlag$sample31.
-	@Override
-	public final boolean get$fixedFlag$sample31() {
-		return fixedFlag$sample31;
-	}
-
-	// Setter for fixedFlag$sample31.
-	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
-		// need to be updated.
-		fixedFlag$sample31 = cv$value;
-		
-		// Should the probability of sample 31 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample31" with its value "cv$value".
-		fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
-	}
-
 	// Getter for flips.
 	@Override
 	public final boolean[][] get$flips() {
 		return flips;
-	}
-
-	// Setter for flips.
-	@Override
-	public final void set$flips(boolean[][] cv$value) {
-		// Set flags for all the side effects of flips including if probabilities need to
-		// be updated.
-		// Set flips with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		flips = cv$value;
-		setFlag$flips = true;
-		
-		// Unset the fixed probability flag for sample 31 as it depends on flips.
-		fixedProbFlag$sample31 = false;
 	}
 
 	// Getter for flipsMeasured.
@@ -302,7 +267,7 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedFlag$sample18);
+			fixedProbFlag$sample31 = fixedFlag$sample18;
 		}
 		// Using cached values.
 		else {
@@ -361,13 +326,10 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If flips has not been set already allocate space.
-		if(!setFlag$flips) {
-			// Constructor for flips
-			flips = new boolean[shape.length][];
-			for(int j = 0; j < shape.length; j += 1)
-				flips[j] = new boolean[shape[j]];
-		}
+		// Constructor for flips
+		flips = new boolean[shape.length][];
+		for(int j = 0; j < shape.length; j += 1)
+			flips[j] = new boolean[shape[j]];
 		
 		// If bias has not been set already allocate space.
 		if(!setFlag$bias)
@@ -395,22 +357,18 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						int threadID$j = threadID$index$j;
 						if(!fixedFlag$sample18)
 							bias[j] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+						boolean[] var21 = flips[j];
 						
-						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample31) {
-							boolean[] var21 = flips[j];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, shape[j], 1,
-								(int forStart$var30, int forEnd$var30, int threadID$var30, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int var30 = forStart$var30; var30 < forEnd$var30; var30 += 1)
-											var21[var30] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
-								}
-							);
-						}
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, shape[j], 1,
+							(int forStart$var30, int forEnd$var30, int threadID$var30, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int var30 = forStart$var30; var30 < forEnd$var30; var30 += 1)
+										var21[var30] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
+							}
+						);
 					}
 			}
 		);

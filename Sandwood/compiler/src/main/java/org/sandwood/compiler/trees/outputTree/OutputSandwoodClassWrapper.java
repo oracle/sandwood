@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -22,6 +22,7 @@ import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.CompilationContext.FieldDesc;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
@@ -360,7 +361,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         sb.append("\n        //Set fixed flags\n");
         for(VariableName name:computedVariables) {
             FieldDesc<?> f = fieldDescs.get(name);
-            if(f.sample) {
+            if(f.sample && f.observed == Observed.FREE) {
                 List<VariableDescription<BooleanVariable>> flags = getFlags(traces, name);
                 sb.append("        if(" + name + ".isSet())" + ((flags.size() > 1) ? "{" : "") + "\n");
                 for(VariableDescription<BooleanVariable> flag:flags)
@@ -508,9 +509,11 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 sb.append("        this." + arg + ".setValue(" + objectName + "." + arg + ");\n");
         }
         for(VariableName arg:observedShapeableInputs)
-            sb.append("        this." + VariableNames.internalName(arg) + ".setValue(" + objectName + "." + arg + ");\n");
+            sb.append(
+                    "        this." + VariableNames.internalName(arg) + ".setValue(" + objectName + "." + arg + ");\n");
         for(VariableName arg:observedOnlyInputs)
-            sb.append("        this." + VariableNames.internalName(arg) + ".setValue(" + objectName + "." + arg + ");\n");
+            sb.append(
+                    "        this." + VariableNames.internalName(arg) + ".setValue(" + objectName + "." + arg + ");\n");
     }
 
     private void constructInfer1Value(StringBuilder sb) {
@@ -562,7 +565,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         for(VariableName arg:computedVariables) {
             VariableDescription<?> uniqueName = traces.getVariable(arg).getUniqueVarDesc();
             FieldDesc<?> argDesc = fieldDescs.get(uniqueName.name);
-            if(!argDesc.observed) {
+            if(argDesc.observed == Observed.FREE) {
                 fields.append("        /** Field holding the MAP or Sample value of " + arg
                         + " after an infer model call. */\n");
                 fields.append("        public final " + argDesc.varDesc.type.getJavaType() + "[] " + arg + ";\n");
@@ -1014,7 +1017,19 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             sb.append("        @Override\n");
             sb.append("        protected void setValueInternal(" + javaType + " value) {}\n\n");
 
-            if(requirements.isEmpty()) {
+            if(fieldDesc.observed == Observed.OBSERVED) {
+                sb.append("        @Override\n");
+                sb.append("        protected void testSettable() {\n");
+                sb.append("            throw new SandwoodException(\"Set is not available for variable " + fieldName
+                        + " because it is fixed by observing a variable.\");\n");
+                sb.append("        }\n\n");
+            } else if(fieldDesc.observed == Observed.FIXED) {
+                sb.append("        @Override\n");
+                sb.append("        protected void testSettable() {\n");
+                sb.append("            throw new SandwoodException(\"Set is not available for variable " + fieldName
+                        + " because its value is fixed by observed values.\");\n");
+                sb.append("        }\n\n");
+            } else if(requirements.isEmpty()) {
                 sb.append("        @Override\n");
                 sb.append("        protected void testSettable() {\n");
                 sb.append("            throw new SandwoodException(\"Set is not available for variable " + fieldName
@@ -1062,17 +1077,26 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         // Construct set and query methods.
         sb.append("        @Override\n");
-        sb.append("        public void setFixed(boolean fixed) {\n" + "            synchronized(model) {\n");
-        for(VariableDescription<BooleanVariable> flag:flags)
-            sb.append("                " + coreName + setMethod(flag.name) + "(fixed);\n");
-        sb.append("            }\n");
+        sb.append("        public void setFixed(boolean fixed) {\n");
+        if(flags.isEmpty()) {
+            sb.append(
+                    "            throw new SandwoodException(\"Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.\");\n");
+        } else {
+            sb.append("            synchronized(model) {\n");
+            for(VariableDescription<BooleanVariable> flag:flags)
+                sb.append("                " + coreName + setMethod(flag.name) + "(fixed);\n");
+            sb.append("            }\n");
+        }
         sb.append("        }\n\n");
 
         sb.append("        @Override\n");
         sb.append("        public Immutability isFixed() {\n");
-        if(flags.isEmpty())
-            sb.append("            return Immutability.DETERMINISTIC;\n");
-        else if(flags.size() == 1) {
+        if(flags.isEmpty()) {
+            if(fieldDesc.observed == Observed.FREE)
+                sb.append("            return Immutability.DETERMINISTIC;\n");
+            else
+                sb.append("            return Immutability.OBSERVED;\n");
+        } else if(flags.size() == 1) {
             VariableDescription<BooleanVariable> flag = flags.iterator().next();
             // construct the outputs.
             sb.append("            if(" + coreName + getMethod(flag.name) + "())\n");
@@ -1139,21 +1163,25 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
     private List<VariableDescription<BooleanVariable>> getFlags(Traces traces, VariableName uniqueName) {
         Variable<?> v = traces.getVariable(uniqueName);
-        Set<SampleTask<?, ?>> s = new HashSet<>(traces.getSourceSampleTasks(v));
-        if(v.getType().isArray()) {
-            ArrayVariable<?> vec = (ArrayVariable<?>) v;
-            vec = vec.getChildInstance();
-            while(vec != null) {
-                s.addAll(traces.getSourceSampleTasks(vec));
+        if(v.isFixed()) {
+            return Collections.emptyList();
+        } else {
+            Set<SampleTask<?, ?>> s = new HashSet<>(traces.getSourceSampleTasks(v));
+            if(v.getType().isArray()) {
+                ArrayVariable<?> vec = (ArrayVariable<?>) v;
                 vec = vec.getChildInstance();
+                while(vec != null) {
+                    s.addAll(traces.getSourceSampleTasks(vec));
+                    vec = vec.getChildInstance();
+                }
             }
-        }
 
-        List<VariableDescription<BooleanVariable>> l = new ArrayList<>();
-        for(SampleTask<?, ?> task:s)
-            l.add(VariableNames.fixedFlagName(task));
-        Collections.sort(l);
-        return l;
+            List<VariableDescription<BooleanVariable>> l = new ArrayList<>();
+            for(SampleTask<?, ?> task:s)
+                l.add(VariableNames.fixedFlagName(task));
+            Collections.sort(l);
+            return l;
+        }
     }
 
     private void computedJavaDoc(StringBuilder sb, String javaType, VariableName name, String comment) {
@@ -1231,8 +1259,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 + "        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        protected void setValueInternal(" + javaType + " value) { " + coreName + setMethod(uniqueName)
-                + "(value); }\n");
+        sb.append("        protected void setValueInternal(" + javaType + " value) { " + coreName
+                + setMethod(uniqueName) + "(value); }\n");
 
         sb.append("    };\n\n");
 

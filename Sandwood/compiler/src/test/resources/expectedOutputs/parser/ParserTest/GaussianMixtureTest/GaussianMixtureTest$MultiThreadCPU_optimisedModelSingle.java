@@ -15,7 +15,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private boolean fixedFlag$sample34 = false;
 	private boolean fixedFlag$sample52 = false;
 	private boolean fixedFlag$sample68 = false;
-	private boolean fixedFlag$sample72 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample34 = false;
 	private boolean fixedProbFlag$sample52 = false;
@@ -164,26 +163,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
 	}
 
-	// Getter for fixedFlag$sample72.
-	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
-	}
-
-	// Setter for fixedFlag$sample72.
-	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
-		// need to be updated.
-		fixedFlag$sample72 = cv$value;
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample72" with its value "cv$value".
-		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
-	}
-
 	// Getter for k.
 	@Override
 	public final int get$k() {
@@ -317,19 +296,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double[] get$x() {
 		return x;
-	}
-
-	// Setter for x.
-	@Override
-	public final void set$x(double[] cv$value) {
-		// Set flags for all the side effects of x including if probabilities need to be updated.
-		// Set x with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		x = cv$value;
-		setFlag$x = true;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on x.
-		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for xMeasured.
@@ -766,7 +732,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = (((fixedFlag$sample72 && fixedFlag$sample34) && fixedFlag$sample52) && fixedFlag$sample68);
+			fixedProbFlag$sample72 = ((fixedFlag$sample34 && fixedFlag$sample52) && fixedFlag$sample68);
 		}
 		// Using cached values.
 		else {
@@ -1085,10 +1051,8 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Constructor for sigma
 			sigma = new double[5];
 		
-		// If x has not been set already allocate space.
-		if(!setFlag$x)
-			// Constructor for x
-			x = new double[length$xMeasured];
+		// Constructor for x
+		x = new double[length$xMeasured];
 		
 		// If z has not been set already allocate space.
 		if(!setFlag$z)
@@ -1142,8 +1106,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1) {
 						if(!fixedFlag$sample68)
 							z[i$var66] = DistributionSampling.sampleCategorical(RNG$1, phi, 5);
-						if(!fixedFlag$sample72)
-							x[i$var66] = ((Math.sqrt(sigma[z[i$var66]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[i$var66]]);
+						x[i$var66] = ((Math.sqrt(sigma[z[i$var66]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[i$var66]]);
 					}
 			}
 		);

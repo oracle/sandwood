@@ -11,7 +11,6 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample45 = false;
 	private boolean fixedFlag$sample69 = false;
-	private boolean fixedFlag$sample84 = false;
 	private boolean fixedProbFlag$sample28 = false;
 	private boolean fixedProbFlag$sample45 = false;
 	private boolean fixedProbFlag$sample69 = false;
@@ -98,26 +97,8 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample84() {
-		return fixedFlag$sample84;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample84(boolean cv$value) {
-		fixedFlag$sample84 = cv$value;
-		fixedProbFlag$sample84 = (fixedFlag$sample84 && fixedProbFlag$sample84);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample84 = false;
 	}
 
 	@Override
@@ -413,7 +394,7 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample84 = ((fixedFlag$sample84 && fixedFlag$sample45) && fixedFlag$sample69);
+			fixedProbFlag$sample84 = (fixedFlag$sample45 && fixedFlag$sample69);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int j = 1; j < samples; j += 1) {
@@ -683,10 +664,8 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				st = new int[length$flipsMeasured];
 			}
 		}
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[length$flipsMeasured];
-			}
+		{
+			flips = new boolean[length$flipsMeasured];
 		}
 		{
 			logProbability$var67 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)];
@@ -718,10 +697,8 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(!fixedFlag$sample69)
 				st[i$var62] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var62 - 1)]], states);
 		}
-		for(int j = 1; j < samples; j += 1) {
-			if(!fixedFlag$sample84)
-				flips[j] = DistributionSampling.sampleBernoulli(RNG$, bias[st[j]]);
-		}
+		for(int j = 1; j < samples; j += 1)
+			flips[j] = DistributionSampling.sampleBernoulli(RNG$, bias[st[j]]);
 	}
 
 	@Override

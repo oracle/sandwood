@@ -9,7 +9,6 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Declare the variables for the model.
 	private double bias;
 	private boolean fixedFlag$sample7 = false;
-	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean fixedProbFlag$sample9 = false;
 	private boolean flip;
@@ -68,39 +67,10 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedProbFlag$sample9 = (fixedFlag$sample7 && fixedProbFlag$sample9);
 	}
 
-	// Getter for fixedFlag$sample9.
-	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	// Setter for fixedFlag$sample9.
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
-		// need to be updated.
-		fixedFlag$sample9 = cv$value;
-		
-		// Should the probability of sample 9 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
-	}
-
 	// Getter for flip.
 	@Override
 	public final boolean get$flip() {
 		return flip;
-	}
-
-	// Setter for flip.
-	@Override
-	public final void set$flip(boolean cv$value) {
-		// Set flags for all the side effects of flip including if probabilities need to be
-		// updated.
-		flip = cv$value;
-		
-		// Unset the fixed probability flag for sample 9 as it depends on flip.
-		fixedProbFlag$sample9 = false;
 	}
 
 	// Getter for flipMeasured.
@@ -309,7 +279,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedFlag$sample7);
+			fixedProbFlag$sample9 = fixedFlag$sample7;
 		}
 		// Using cached values.
 		else {
@@ -518,8 +488,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample7)
 			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
-		if(!fixedFlag$sample9)
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

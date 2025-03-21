@@ -9,7 +9,6 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double b0;
 	private double b1;
 	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample27 = false;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample11 = false;
 	private boolean fixedProbFlag$sample27 = false;
@@ -100,26 +99,6 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
 
-	// Getter for fixedFlag$sample27.
-	@Override
-	public final boolean get$fixedFlag$sample27() {
-		return fixedFlag$sample27;
-	}
-
-	// Setter for fixedFlag$sample27.
-	@Override
-	public final void set$fixedFlag$sample27(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
-		// need to be updated.
-		fixedFlag$sample27 = cv$value;
-		
-		// Should the probability of sample 27 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample27" with its value "cv$value".
-		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
-	}
-
 	// Getter for fixedFlag$sample7.
 	@Override
 	public final boolean get$fixedFlag$sample7() {
@@ -200,19 +179,6 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final double[] get$y() {
 		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(double[] cv$value) {
-		// Set flags for all the side effects of y including if probabilities need to be updated.
-		// Set y with flag to mark that it has been set so another array doesn't need to be
-		// constructed
-		y = cv$value;
-		setFlag$y = true;
-		
-		// Unset the fixed probability flag for sample 27 as it depends on y.
-		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for yMeasured.
@@ -386,7 +352,7 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample7) && fixedFlag$sample11);
+			fixedProbFlag$sample27 = (fixedFlag$sample7 && fixedFlag$sample11);
 		}
 		// Using cached values.
 		else {
@@ -765,10 +731,8 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If y has not been set already allocate space.
-		if(!setFlag$y)
-			// Constructor for y
-			y = new double[x.length];
+		// Constructor for y
+		y = new double[x.length];
 		
 		// Constructor for logProbability$var26
 		logProbability$var26 = new double[x.length];
@@ -785,19 +749,16 @@ class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(!fixedFlag$sample11)
 			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample27)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noSamples, 1,
-				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i = forStart$i; i < forEnd$i; i += 1)
-							y[i] = DistributionSampling.sampleStudentT(RNG$1, (b0 + (b1 * x[i])));
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+						y[i] = DistributionSampling.sampleStudentT(RNG$1, (b0 + (b1 * x[i])));
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

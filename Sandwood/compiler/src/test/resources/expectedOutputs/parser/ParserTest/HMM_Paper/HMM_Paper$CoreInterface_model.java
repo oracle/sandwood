@@ -38,17 +38,8 @@ interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	// Setter for fixedFlag$sample71.
 	public void set$fixedFlag$sample71(boolean cv$value);
 
-	// Getter for fixedFlag$sample87.
-	public boolean get$fixedFlag$sample87();
-
-	// Setter for fixedFlag$sample87.
-	public void set$fixedFlag$sample87(boolean cv$value);
-
 	// Getter for flips.
 	public boolean[] get$flips();
-
-	// Setter for flips.
-	public void set$flips(boolean[] cv$value);
 
 	// Getter for initialCoin.
 	public double[] get$initialCoin();

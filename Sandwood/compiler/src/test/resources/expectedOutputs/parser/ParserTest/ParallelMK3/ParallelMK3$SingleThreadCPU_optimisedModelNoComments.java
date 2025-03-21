@@ -5,7 +5,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK3$CoreInterface {
 	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample38 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample38 = false;
 	private double[] generated;
@@ -44,26 +43,8 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample38() {
-		return fixedFlag$sample38;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample38(boolean cv$value) {
-		fixedFlag$sample38 = cv$value;
-		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
-	}
-
-	@Override
 	public final double[] get$generated() {
 		return generated;
-	}
-
-	@Override
-	public final void set$generated(double[] cv$value) {
-		generated = cv$value;
-		setFlag$generated = true;
-		fixedProbFlag$sample38 = false;
 	}
 
 	@Override
@@ -168,7 +149,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample38 = (fixedFlag$sample38 && fixedFlag$sample21);
+			fixedProbFlag$sample38 = fixedFlag$sample21;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
@@ -265,8 +246,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$generated)
-			generated = new double[length$observed];
+		generated = new double[length$observed];
 		indirection = new double[length$observed];
 		v = new double[10];
 		if(!setFlag$sample)
@@ -283,8 +263,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		for(int i = 0; i < length$observed; i += 1) {
 			if(!fixedFlag$sample21)
 				indirection[i] = sample[i];
-			if(!fixedFlag$sample38)
-				generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
+			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
 		}
 	}
 

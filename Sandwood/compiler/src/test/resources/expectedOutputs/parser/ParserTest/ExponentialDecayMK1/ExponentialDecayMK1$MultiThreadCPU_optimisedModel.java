@@ -11,7 +11,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double b;
 	private double[] decay;
 	private double[] decayDetected;
-	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -62,20 +61,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		return decay;
 	}
 
-	// Setter for decay.
-	@Override
-	public final void set$decay(double[] cv$value) {
-		// Set flags for all the side effects of decay including if probabilities need to
-		// be updated.
-		// Set decay with flag to mark that it has been set so another array doesn't need
-		// to be constructed
-		decay = cv$value;
-		setFlag$decay = true;
-		
-		// Unset the fixed probability flag for sample 19 as it depends on decay.
-		fixedProbFlag$sample19 = false;
-	}
-
 	// Getter for decayDetected.
 	@Override
 	public final double[] get$decayDetected() {
@@ -88,26 +73,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Set decayDetected with flag to mark that it has been set so another array doesn't
 		// need to be constructed
 		decayDetected = cv$value;
-	}
-
-	// Getter for fixedFlag$sample19.
-	@Override
-	public final boolean get$fixedFlag$sample19() {
-		return fixedFlag$sample19;
-	}
-
-	// Setter for fixedFlag$sample19.
-	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
-		// need to be updated.
-		fixedFlag$sample19 = cv$value;
-		
-		// Should the probability of sample 19 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample19" with its value "cv$value".
-		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
 
 	// Getter for fixedFlag$sample6.
@@ -255,7 +220,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample19 = (fixedFlag$sample19 && fixedFlag$sample6);
+			fixedProbFlag$sample19 = fixedFlag$sample6;
 		}
 		// Using cached values.
 		else {
@@ -408,10 +373,8 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If decay has not been set already allocate space.
-		if(!setFlag$decay)
-			// Constructor for decay
-			decay = new double[length$decayDetected];
+		// Constructor for decay
+		decay = new double[length$decayDetected];
 	}
 
 	// Method to execute the model code conventionally.
@@ -420,19 +383,16 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample19)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, samples, 1,
-				(int forStart$var18, int forEnd$var18, int threadID$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var18 = forStart$var18; var18 < forEnd$var18; var18 += 1)
-							decay[var18] = (DistributionSampling.sampleExponential(RNG$1) / rate);
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$var18, int forEnd$var18, int threadID$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var18 = forStart$var18; var18 < forEnd$var18; var18 += 1)
+						decay[var18] = (DistributionSampling.sampleExponential(RNG$1) / rate);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate

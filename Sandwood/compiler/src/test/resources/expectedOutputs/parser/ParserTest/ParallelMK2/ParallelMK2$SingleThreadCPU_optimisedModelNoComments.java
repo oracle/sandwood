@@ -5,7 +5,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK2$CoreInterface {
 	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample32 = false;
 	private boolean fixedProbFlag$sample26 = false;
 	private boolean fixedProbFlag$sample32 = false;
 	private double[] generated;
@@ -45,26 +44,8 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample32() {
-		return fixedFlag$sample32;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample32(boolean cv$value) {
-		fixedFlag$sample32 = cv$value;
-		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
-	}
-
-	@Override
 	public final double[] get$generated() {
 		return generated;
-	}
-
-	@Override
-	public final void set$generated(double[] cv$value) {
-		generated = cv$value;
-		setFlag$generated = true;
-		fixedProbFlag$sample32 = false;
 	}
 
 	@Override
@@ -178,7 +159,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample32 = (fixedFlag$sample32 && fixedFlag$sample26);
+			fixedProbFlag$sample32 = fixedFlag$sample26;
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
@@ -241,8 +222,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$generated)
-			generated = new double[length$observed];
+		generated = new double[length$observed];
 		if(!setFlag$indirection)
 			indirection = new double[(length$observed + 1)];
 		if(!setFlag$sample)
@@ -261,8 +241,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				sample[i] = DistributionSampling.sampleUniform(RNG$);
 				indirection[(i + 1)] = sample[i];
 			}
-			if(!fixedFlag$sample32)
-				generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
+			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
 		}
 	}
 

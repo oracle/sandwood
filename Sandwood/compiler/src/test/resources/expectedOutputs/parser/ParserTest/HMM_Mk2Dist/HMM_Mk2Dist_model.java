@@ -62,10 +62,11 @@ public class HMM_Mk2Dist extends Model {
         public int[][] getValue() { return system$c.get$events(); }
 
         @Override
-        protected void setValueInternal(int[][] value) {
-            system$c.set$events(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(int[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable events because it is fixed by observing a variable.");
         }
 
         @Override
@@ -78,17 +79,12 @@ public class HMM_Mk2Dist extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample159(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample159())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -419,8 +415,6 @@ public class HMM_Mk2Dist extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(events.isSet())
-            newCore.set$events(oldCore.get$events());
         if(initialState.isSet())
             newCore.set$initialState(oldCore.get$initialState());
         if(m.isSet())
@@ -433,8 +427,6 @@ public class HMM_Mk2Dist extends Model {
         //Set fixed flags
         if(bias.isSet())
             newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
-        if(events.isSet())
-            newCore.set$fixedFlag$sample159(oldCore.get$fixedFlag$sample159());
         if(initialState.isSet())
             newCore.set$fixedFlag$sample80(oldCore.get$fixedFlag$sample80());
         if(m.isSet())

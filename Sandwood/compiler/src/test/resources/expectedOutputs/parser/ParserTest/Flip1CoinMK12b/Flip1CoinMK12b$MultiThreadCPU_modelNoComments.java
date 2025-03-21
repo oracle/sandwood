@@ -9,7 +9,6 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample52 = false;
 	private boolean fixedProbFlag$sample16 = false;
 	private boolean fixedProbFlag$sample28 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -87,26 +86,8 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample52() {
-		return fixedFlag$sample52;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value) {
-		fixedFlag$sample52 = cv$value;
-		fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedProbFlag$sample52);
-	}
-
-	@Override
 	public final boolean[] get$flips() {
 		return flips;
-	}
-
-	@Override
-	public final void set$flips(boolean[] cv$value) {
-		flips = cv$value;
-		setFlag$flips = true;
-		fixedProbFlag$sample52 = false;
 	}
 
 	@Override
@@ -475,7 +456,7 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample52 = (((fixedFlag$sample52 && fixedFlag$sample16) && fixedFlag$sample28) && fixedFlag$sample35);
+			fixedProbFlag$sample52 = ((fixedFlag$sample16 && fixedFlag$sample28) && fixedFlag$sample35);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -810,11 +791,7 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$flips) {
-			{
-				flips = new boolean[length$flipsMeasured];
-			}
-		}
+		flips = new boolean[length$flipsMeasured];
 	}
 
 	@Override
@@ -839,10 +816,8 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$var47, int forEnd$var47, int threadID$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var47 = forStart$var47; var47 < forEnd$var47; var47 += 1) {
-						if(!fixedFlag$sample52)
-							flips[var47] = DistributionSampling.sampleBernoulli(RNG$1, bias);
-					}
+				for(int var47 = forStart$var47; var47 < forEnd$var47; var47 += 1)
+						flips[var47] = DistributionSampling.sampleBernoulli(RNG$1, bias);
 			}
 		);
 	}

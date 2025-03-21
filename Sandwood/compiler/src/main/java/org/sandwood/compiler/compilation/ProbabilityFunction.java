@@ -50,6 +50,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -178,14 +179,14 @@ public class ProbabilityFunction {
 
         // Construct a field for the overall model. This field needs to be public as it
         // is directly accessed by the runtime.
-        compilationCtx.addConstructedClassField(logModelProbName, null, null, true, false, false, false, false, false,
-                null, null);
+        compilationCtx.addConstructedClassField(logModelProbName, null, null, true, false, false, Observed.FREE, false,
+                false, null, Tree.NoComment);
         toInitialize.add(new WrappedTree<>(store(logModelProbName, constant(0.0), Tree.NoComment)));
 
         // Construct a field for the model evidence. This field needs to be public as it
         // is directly accessed by the runtime.
-        compilationCtx.addConstructedClassField(evidenceProbName, null, null, true, false, false, false, false, false,
-                null, null);
+        compilationCtx.addConstructedClassField(evidenceProbName, null, null, true, false, false, Observed.FREE, false,
+                false, null, Tree.NoComment);
         toInitialize.add(new WrappedTree<>(store(evidenceProbName, constant(0.0), Tree.NoComment)));
 
         PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(compilationCtx.traces.getAllSampleTasks());
@@ -333,8 +334,8 @@ public class ProbabilityFunction {
 
         // Construct a flag to determine if this probability is already calculated.
         VariableDescription<BooleanVariable> fixedFlagName = VariableNames.getProbabilityFixedFlag(sampleTask);
-        compilationCtx.addConstructedClassField(fixedFlagName, null, null, false, false, false, false, false, false,
-                constant(false), null);
+        compilationCtx.addConstructedClassField(fixedFlagName, null, null, false, false, false, Observed.FREE, false,
+                false, constant(false), Tree.NoComment);
 
         // Set the initialisation
         IRTreeReturn<BooleanVariable> guard = negateBoolean(load(fixedFlagName));
@@ -351,41 +352,47 @@ public class ProbabilityFunction {
 
         // Test if we should set a fixed flag.
         VariableDescription<BooleanVariable> sampleFixedName = VariableNames.fixedFlagName(sampleTask);
-        IRTreeReturn<BooleanVariable> fixed = load(sampleFixedName);
-        // Add side effect to clear the flag if a dependency given the ability to changed
-        IRTreeVoid restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
-                "Should the probability of sample " + sampleTask.id()
-                        + " be set to fixed. This will only every change the flag to false.");
-        compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
+        IRTreeReturn<BooleanVariable> fixed;
+        if(sampleTask.getOutput().isFixed()) {
+            fixed = IRTree.constant(true);
+        } else {
+            fixed = load(sampleFixedName);
+            // Add side effect to clear the flag if a dependency given the ability to changed
+            IRTreeVoid restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
+                    "Should the probability of sample " + sampleTask.id()
+                            + " be set to fixed. This will only every change the flag to false.");
+            compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
-        // Add side effect to clear the flag if a dependency is changed.
-        SampleTraceDesc sampleDesc = compilationCtx.traces.getSampleTrace(sampleTask);
-        VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
-        restFixed = store(fixedFlagName, constant(false), "Unset the fixed probability flag for sample "
-                + sampleTask.id() + " as it depends on " + sampleName.name + ".");
-        compilationCtx.addSetSideEffect(sampleName, restFixed);
+            // Add side effect to clear the flag if a dependency is changed.
+            SampleTraceDesc sampleDesc = compilationCtx.traces.getSampleTrace(sampleTask);
+            VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
+            restFixed = store(fixedFlagName, constant(false), "Unset the fixed probability flag for sample "
+                    + sampleTask.id() + " as it depends on " + sampleName.name + ".");
+            compilationCtx.addSetSideEffect(sampleName, restFixed);
+        }
 
         // Priority queue for fixed ordering of assignments.
-        PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>();
+
+        PriorityQueue<SampleTask<?, ?>> inputSamples = new PriorityQueue<>();
         for(Variable<?> v:random.getParent().getInputs())
-            p.addAll(compilationCtx.traces.getSourceSampleTasks(v));
+            inputSamples.addAll(compilationCtx.traces.getSourceSampleTasks(v));
 
         // Construct an expression to determine if the flag should be set.
-        if(!p.isEmpty()) {
-            while(!p.isEmpty()) {
-                SampleTask<?, ?> s = p.poll();
+        if(!inputSamples.isEmpty()) {
+            while(!inputSamples.isEmpty()) {
+                SampleTask<?, ?> s = inputSamples.poll();
                 sampleFixedName = VariableNames.fixedFlagName(s);
                 fixed = IRTree.and(fixed, load(sampleFixedName));
 
                 // Add side effect to clear the flag if a dependency given the ability to changed
-                restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
+                IRTreeVoid restFixed = store(fixedFlagName, and(load(sampleFixedName), load(fixedFlagName)),
                         "Should the probability of sample " + sampleTask.id()
                                 + " be set to fixed. This will only every change the flag to false.");
                 compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
                 // Add side effect to clear the flag if a dependency is changed.
-                sampleDesc = compilationCtx.traces.getSampleTrace(s);
-                sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
+                SampleTraceDesc sampleDesc = compilationCtx.traces.getSampleTrace(s);
+                VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
                 restFixed = store(fixedFlagName, constant(false), "Unset the fixed probability flag for sample "
                         + sampleTask.id() + " as it depends on " + sampleName.name + ".");
                 compilationCtx.addSetSideEffect(sampleName, restFixed);

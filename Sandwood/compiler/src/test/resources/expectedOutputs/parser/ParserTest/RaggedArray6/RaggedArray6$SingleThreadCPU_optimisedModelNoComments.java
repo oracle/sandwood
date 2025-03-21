@@ -10,7 +10,6 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] d;
 	private boolean fixedFlag$sample47 = false;
 	private boolean fixedFlag$sample50 = false;
-	private boolean fixedFlag$sample65 = false;
 	private boolean fixedProbFlag$sample47 = false;
 	private boolean fixedProbFlag$sample50 = false;
 	private boolean fixedProbFlag$sample65 = false;
@@ -84,17 +83,6 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample65() {
-		return fixedFlag$sample65;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample65(boolean cv$value) {
-		fixedFlag$sample65 = cv$value;
-		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
-	}
-
-	@Override
 	public final int get$length$obs_measured() {
 		return length$obs_measured;
 	}
@@ -132,13 +120,6 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final boolean[] get$obs() {
 		return obs;
-	}
-
-	@Override
-	public final void set$obs(boolean[] cv$value) {
-		obs = cv$value;
-		setFlag$obs = true;
-		fixedProbFlag$sample65 = false;
 	}
 
 	@Override
@@ -213,7 +194,7 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample65 = ((fixedFlag$sample65 && fixedFlag$sample47) && fixedFlag$sample50);
+			fixedProbFlag$sample65 = (fixedFlag$sample47 && fixedFlag$sample50);
 		} else {
 			logProbability$var50 = logProbability$var63;
 			logProbability$obs = (logProbability$obs + logProbability$var63);
@@ -335,8 +316,7 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				lengthCV$a$48_0 = 2;
 			d = new double[lengthCV$a$48_0];
 		}
-		if(!setFlag$obs)
-			obs = new boolean[length$obs_measured];
+		obs = new boolean[length$obs_measured];
 		allocateScratch();
 	}
 
@@ -352,10 +332,8 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				lengthCV$a$48_5 = 2;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_5, d);
 		}
-		if(!fixedFlag$sample65) {
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
-				obs[var62] = DistributionSampling.sampleBernoulli(RNG$, d[y]);
-		}
+		for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
+			obs[var62] = DistributionSampling.sampleBernoulli(RNG$, d[y]);
 	}
 
 	@Override

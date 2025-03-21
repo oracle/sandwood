@@ -7,7 +7,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] bias;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample27 = false;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample27 = false;
@@ -53,17 +52,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$fixedFlag$sample21(boolean cv$value) {
 		fixedFlag$sample21 = cv$value;
 		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
-		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample27() {
-		return fixedFlag$sample27;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample27(boolean cv$value) {
-		fixedFlag$sample27 = cv$value;
 		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
 
@@ -136,12 +124,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
-	@Override
-	public final void set$value(double cv$value) {
-		value = cv$value;
-		fixedProbFlag$sample27 = false;
-	}
-
 	private final void logProbabilityValue$sample21() {
 		if(!fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
@@ -177,7 +159,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$value = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample27 = ((fixedFlag$sample27 && fixedFlag$sample4) && fixedFlag$sample21);
+			fixedProbFlag$sample27 = (fixedFlag$sample4 && fixedFlag$sample21);
 		} else {
 			logProbability$var24 = logProbability$value;
 			logProbability$$model = (logProbability$$model + logProbability$value);
@@ -282,8 +264,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if((!fixedFlag$sample4 || !fixedFlag$sample21))
 				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
 		}
-		if(!fixedFlag$sample27)
-			value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
+		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
 
 	@Override

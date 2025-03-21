@@ -62,10 +62,11 @@ public class Flip2CoinsMK11 extends Model {
         public boolean[][] getValue() { return system$c.get$flips(); }
 
         @Override
-        protected void setValueInternal(boolean[][] value) {
-            system$c.set$flips(value);
-            valueSet = true;
-            setFixed(true);
+        protected void setValueInternal(boolean[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flips because its value is fixed by observed values.");
         }
 
         @Override
@@ -78,22 +79,12 @@ public class Flip2CoinsMK11 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample49(fixed);
-                system$c.set$fixedFlag$sample77(fixed);
-            }
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample49 = system$c.get$fixedFlag$sample49();
-            boolean fixedFlag$sample77 = system$c.get$fixedFlag$sample77();
-            if(fixedFlag$sample49 && fixedFlag$sample77)
-                return Immutability.FIXED;
-            else if(fixedFlag$sample49 || fixedFlag$sample77)
-                return Immutability.PARTIALLY_FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.OBSERVED;
         }
     };
 
@@ -250,17 +241,11 @@ public class Flip2CoinsMK11 extends Model {
         //ComputedVariables
         if(bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(flips.isSet())
-            newCore.set$flips(oldCore.get$flips());
 
         //Set fixed flags
         if(bias.isSet()){
             newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
             newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
-        }
-        if(flips.isSet()){
-            newCore.set$fixedFlag$sample49(oldCore.get$fixedFlag$sample49());
-            newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
         }
     }
 
@@ -379,12 +364,9 @@ public class Flip2CoinsMK11 extends Model {
     public static class InferredModelOutputs {
         /** Field holding the MAP or Sample value of bias after an infer model call. */
         public final double[][] bias;
-        /** Field holding the MAP or Sample value of flips after an infer model call. */
-        public final boolean[][][] flips;
 
         InferredModelOutputs(Flip2CoinsMK11 system$model) {
             this.bias = system$model.getInferredValue(system$model.$bias);
-            this.flips = system$model.getInferredValue(system$model.$flips);
         }
     }
 

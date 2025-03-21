@@ -7,7 +7,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double bias;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample12 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample12 = false;
 	private double logProbability$$evidence;
@@ -58,17 +57,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample10 = cv$value;
 		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
 		fixedProbFlag$sample12 = (fixedFlag$sample10 && fixedProbFlag$sample12);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
-		fixedFlag$sample12 = cv$value;
-		fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedProbFlag$sample12);
 	}
 
 	@Override
@@ -124,12 +112,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
-	}
-
-	@Override
-	public final void set$positiveCount(int cv$value) {
-		positiveCount = cv$value;
-		fixedProbFlag$sample12 = false;
 	}
 
 	private final void logProbabilityValue$sample10() {
@@ -216,7 +198,7 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$positiveCount = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedFlag$sample10);
+			fixedProbFlag$sample12 = fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
@@ -337,8 +319,7 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample10)
 			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
-		if(!fixedFlag$sample12)
-			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	@Override

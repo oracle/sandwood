@@ -9,7 +9,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double bias;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample12 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample12 = false;
 	private double logProbability$$evidence;
@@ -86,26 +85,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
 	}
 
-	// Getter for fixedFlag$sample12.
-	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
-	}
-
-	// Setter for fixedFlag$sample12.
-	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample12 including if probabilities
-		// need to be updated.
-		fixedFlag$sample12 = cv$value;
-		
-		// Should the probability of sample 12 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample12" with its value "cv$value".
-		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
-	}
-
 	// Getter for logProbability$$evidence.
 	@Override
 	public final double get$logProbability$$evidence() {
@@ -170,17 +149,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
-	}
-
-	// Setter for positiveCount.
-	@Override
-	public final void set$positiveCount(int cv$value) {
-		// Set flags for all the side effects of positiveCount including if probabilities
-		// need to be updated.
-		positiveCount = cv$value;
-		
-		// Unset the fixed probability flag for sample 12 as it depends on positiveCount.
-		fixedProbFlag$sample12 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample10 using sampled
@@ -351,7 +319,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedFlag$sample10);
+			fixedProbFlag$sample12 = fixedFlag$sample10;
 		}
 		// Using cached values.
 		else {
@@ -482,8 +450,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample10)
 			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
-		if(!fixedFlag$sample12)
-			positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
