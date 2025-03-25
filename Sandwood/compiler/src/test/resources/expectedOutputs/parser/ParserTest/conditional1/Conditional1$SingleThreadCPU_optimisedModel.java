@@ -134,6 +134,23 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return value;
 	}
 
+	// Getter for var14.
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	// Setter for var14.
+	@Override
+	public final void set$var14(double cv$value) {
+		// Set flags for all the side effects of var14 including if probabilities need to
+		// be updated.
+		var14 = cv$value;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on var14.
+		fixedProbFlag$sample16 = false;
+	}
+
 	// Calculate the probability of the samples represented by sample16 using sampled
 	// values.
 	private final void logProbabilityValue$sample16() {
@@ -554,8 +571,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if((!guard && !fixedFlag$sample16))
-			var14 = DistributionSampling.sampleUniform(RNG$);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -564,8 +579,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if((!guard && !fixedFlag$sample16))
-			var14 = DistributionSampling.sampleUniform(RNG$);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -683,7 +696,9 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

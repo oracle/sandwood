@@ -28,8 +28,6 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var8;
 	private int samples1;
 	private int samples2;
-	private boolean setFlag$flips1 = false;
-	private boolean setFlag$flips2 = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK5$MultiThreadCPU(ExecutionTarget target) {
@@ -334,7 +332,7 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i$var50 = 0; i$var50 < samples1; i$var50 += 1)
 			flips1[i$var50] = flipsMeasured1[i$var50];
 		for(int i$var68 = 0; i$var68 < ((samples2 * 2) - 1); i$var68 += 2)

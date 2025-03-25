@@ -22,8 +22,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var100;
 	private double[][] logProbability$var58;
 	private int[] observed;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection1 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK4$MultiThreadCPU(ExecutionTarget target) {
@@ -55,7 +53,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$indirection1(double[][] cv$value) {
 		indirection1 = cv$value;
-		setFlag$indirection1 = true;
 		fixedProbFlag$sample61 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -194,7 +191,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void allocator() {
 		generated = new int[length$observed];
-		if(!setFlag$indirection1) {
+		if(!fixedFlag$sample61) {
 			indirection1 = new double[length$observed][];
 			for(int var16 = 0; var16 < length$observed; var16 += 1)
 				indirection1[var16] = new double[10];
@@ -435,7 +432,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			generated[cv$index1] = observed[cv$index1];
@@ -443,7 +440,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$indirection1)
+		if(fixedFlag$sample61)
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$index$k, int forEnd$index$k, int threadID$index$k, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {

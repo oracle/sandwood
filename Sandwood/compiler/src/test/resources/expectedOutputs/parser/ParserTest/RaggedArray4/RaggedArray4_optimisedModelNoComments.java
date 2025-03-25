@@ -17,15 +17,14 @@ public class RaggedArray4 extends Model {
 
     private RaggedArray4$CoreInterface system$c = new RaggedArray4$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true) {
+    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$d(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$d(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class RaggedArray4 extends Model {
      */
     public final ComputedDoubleArray d = $d;
 
-    private final ComputedIntegerArrayInternal $obs = new ComputedIntegerArrayInternal(this, "obs", true) {
+    private final ComputedIntegerArrayInternal $obs = new ComputedIntegerArrayInternal(this, "obs", false, true, false) {
         @Override
         public int[] getValue() { return system$c.get$obs(); }
 
@@ -83,15 +82,14 @@ public class RaggedArray4 extends Model {
      */
     public final ComputedIntegerArray obs = $obs;
 
-    private final ComputedIntegerInternal $y = new ComputedIntegerInternal(this, "y", true) {
+    private final ComputedIntegerInternal $y = new ComputedIntegerInternal(this, "y", true, true, false) {
         @Override
         public int getValue() { return system$c.get$y(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$y(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -210,6 +208,7 @@ public class RaggedArray4 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(RaggedArray4$CoreInterface oldCore, RaggedArray4$CoreInterface newCore) {
 
         //Observed arrays
@@ -221,16 +220,14 @@ public class RaggedArray4 extends Model {
             newCore.set$length$obs_measured(oldCore.get$length$obs_measured());
 
         //ComputedVariables
-        if(d.isSet())
+        if($d.isSet())
             newCore.set$d(oldCore.get$d());
-        if(y.isSet())
+        if($y.isSet())
             newCore.set$y(oldCore.get$y());
 
         //Set fixed flags
-        if(d.isSet())
-            newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
-        if(y.isSet())
-            newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
+        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
+        newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
     }
 
     /**

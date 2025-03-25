@@ -242,7 +242,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		positiveCount = observedPositiveCount;
 	}
 

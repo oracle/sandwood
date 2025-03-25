@@ -32,8 +32,6 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var48;
 	private double logProbability$var51;
 	private double[][] m;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$m = false;
 	private int st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -53,10 +51,8 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 45 as it depends on bias.
 		fixedProbFlag$sample45 = false;
@@ -207,10 +203,8 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 28 as it depends on m.
 		fixedProbFlag$sample28 = false;
@@ -725,6 +719,8 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$sum = 1;
 		}
 		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
@@ -890,7 +886,7 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		v = new double[2];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			// Constructor for m
 			m = new double[2][];
 			m[0] = new double[2];
@@ -898,7 +894,7 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias)
+		if(!fixedFlag$sample45)
 			// Constructor for bias
 			bias = new double[2];
 		
@@ -1147,13 +1143,15 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		flip = flipMeasured;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

@@ -22,7 +22,6 @@ class Flip1CoinMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$sample23;
 	private double logProbability$var5;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK3$SingleThreadCPU(ExecutionTarget target) {
@@ -90,8 +89,7 @@ class Flip1CoinMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -508,14 +506,16 @@ class Flip1CoinMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		for(int i$var36 = ((samples * 2) - ((((samples * 2) - 1) % 2) + 1)); i$var36 >= 0; i$var36 -= 2)
 			flips[(i$var36 / 2)] = flipsMeasured[(i$var36 / 2)];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

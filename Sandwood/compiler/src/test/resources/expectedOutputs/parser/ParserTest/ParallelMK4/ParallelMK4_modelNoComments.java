@@ -17,7 +17,7 @@ public class ParallelMK4 extends Model {
 
     private ParallelMK4$CoreInterface system$c = new ParallelMK4$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $generated = new ComputedIntegerArrayInternal(this, "generated", true) {
+    private final ComputedIntegerArrayInternal $generated = new ComputedIntegerArrayInternal(this, "generated", false, true, false) {
         @Override
         public int[] getValue() { return system$c.get$generated(); }
 
@@ -48,15 +48,14 @@ public class ParallelMK4 extends Model {
      */
     public final ComputedIntegerArray generated = $generated;
 
-    private final ComputedObjectArrayInternal<double[]> $indirection1 = new ComputedObjectArrayInternal<double[]>(this, "indirection1", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $indirection1 = new ComputedObjectArrayInternal<double[]>(this, "indirection1", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$indirection1(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$indirection1(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -88,7 +87,7 @@ public class ParallelMK4 extends Model {
      */
     public final ComputedObjectArray<double[]> indirection1 = $indirection1;
 
-    private final ComputedObjectArrayInternal<double[]> $indirection2 = new ComputedObjectArrayInternal<double[]>(this, "indirection2", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $indirection2 = new ComputedObjectArrayInternal<double[]>(this, "indirection2", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$indirection2(); }
 
@@ -221,6 +220,7 @@ public class ParallelMK4 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(ParallelMK4$CoreInterface oldCore, ParallelMK4$CoreInterface newCore) {
 
         //Observed arrays
@@ -232,12 +232,11 @@ public class ParallelMK4 extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(indirection1.isSet())
+        if($indirection1.isSet())
             newCore.set$indirection1(oldCore.get$indirection1());
 
         //Set fixed flags
-        if(indirection1.isSet())
-            newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61());
+        newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61());
     }
 
     /**

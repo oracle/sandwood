@@ -17,15 +17,14 @@ public class Flip1CoinArrayCopyPassMK2 extends Model {
 
     private Flip1CoinArrayCopyPassMK2$CoreInterface system$c = new Flip1CoinArrayCopyPassMK2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class Flip1CoinArrayCopyPassMK2 extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -197,6 +196,7 @@ public class Flip1CoinArrayCopyPassMK2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinArrayCopyPassMK2$CoreInterface oldCore, Flip1CoinArrayCopyPassMK2$CoreInterface newCore) {
         //Model inputs
         if(samples.isSet())
@@ -206,12 +206,11 @@ public class Flip1CoinArrayCopyPassMK2 extends Model {
             newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
     }
 
     /**

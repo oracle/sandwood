@@ -17,7 +17,7 @@ public class DistributionTest6 extends Model {
 
     private DistributionTest6$CoreInterface system$c = new DistributionTest6$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", true) {
+    private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$v(); }
 
@@ -48,15 +48,14 @@ public class DistributionTest6 extends Model {
      */
     public final ComputedBooleanArray v = $v;
 
-    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true) {
+    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false) {
         @Override
         public int getValue() { return system$c.get$v1(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$v1(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -83,15 +82,14 @@ public class DistributionTest6 extends Model {
      */
     public final ComputedInteger v1 = $v1;
 
-    private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true) {
+    private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$v2(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$v2(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -239,6 +237,7 @@ public class DistributionTest6 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(DistributionTest6$CoreInterface oldCore, DistributionTest6$CoreInterface newCore) {
         //Model inputs
         if(weightings.isSet())
@@ -253,18 +252,15 @@ public class DistributionTest6 extends Model {
             newCore.set$length$value(oldCore.get$length$value());
 
         //ComputedVariables
-        if(v1.isSet())
+        if($v1.isSet())
             newCore.set$v1(oldCore.get$v1());
-        if(v2.isSet())
+        if($v2.isSet())
             newCore.set$v2(oldCore.get$v2());
 
         //Set fixed flags
-        if(v1.isSet())
-            newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
-        if(v2.isSet()){
-            newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
-            newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
-        }
+        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
+        newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27());
+        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
     }
 
     /**

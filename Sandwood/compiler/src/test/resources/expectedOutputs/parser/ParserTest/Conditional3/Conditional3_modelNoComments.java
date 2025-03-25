@@ -17,7 +17,7 @@ public class Conditional3 extends Model {
 
     private Conditional3$CoreInterface system$c = new Conditional3$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", false) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", false, false, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
@@ -58,15 +58,14 @@ public class Conditional3 extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {
             system$c.set$guard(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -93,7 +92,7 @@ public class Conditional3 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", true) {
+    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, true, false) {
         @Override
         public double getValue() { return system$c.get$value(); }
 
@@ -123,6 +122,35 @@ public class Conditional3 extends Model {
      * Computed variable representing value of type double from the Sandwood model 
      */
     public final ComputedDouble value = $value;
+
+    private final ComputedDoubleInternal $var14 = new ComputedDoubleInternal(this, "var14", true, true, true) {
+        @Override
+        public double getValue() { return system$c.get$var14(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$var14(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample16(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample16())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -171,6 +199,7 @@ public class Conditional3 extends Model {
         $computedVariables.put("bias", $bias);
         $computedVariables.put("guard", $guard);
         $computedVariables.put("value", $value);
+        $computedVariables.put("var14", $var14);
 
         //Observed scalar fields
         $regularObservedValues.put("observedValue", $observedValue);
@@ -204,18 +233,21 @@ public class Conditional3 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Conditional3$CoreInterface oldCore, Conditional3$CoreInterface newCore) {
         //Observed scalars
         if(observedValue.isSet())
             newCore.set$observedValue(oldCore.get$observedValue());
 
         //ComputedVariables
-        if(guard.isSet())
+        if($guard.isSet())
             newCore.set$guard(oldCore.get$guard());
+        if($var14.isSet())
+            newCore.set$var14(oldCore.get$var14());
 
         //Set fixed flags
-        if(guard.isSet())
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
     }
 
     /**

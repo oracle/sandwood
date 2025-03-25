@@ -29,7 +29,6 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var97;
 	private double q;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double t;
 
@@ -138,8 +137,7 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -1675,25 +1673,25 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1718,25 +1716,25 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 	}
 
@@ -1750,25 +1748,25 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 	}
 
@@ -1896,25 +1894,25 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 		
 		// Calculate the probabilities for every sample task in the model. These values are
@@ -1925,7 +1923,7 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -1935,27 +1933,33 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(true) {
-			double[][] var21 = bias[0];
-			double[] var23 = var21[0];
+		double[][] var21 = bias[0];
+		double[] var23 = var21[0];
+		if(fixedFlag$sample17)
 			var23[0] = t;
+		if(fixedFlag$sample17)
 			var23[1] = (1 - t);
-			double[] var36 = var21[1];
+		double[] var36 = var21[1];
+		if(fixedFlag$sample17)
 			var36[0] = (1 - q);
+		if(fixedFlag$sample17)
 			var36[1] = t;
-		}
-		if(true) {
-			double[][] var52 = bias[1];
-			double[] var54 = var52[0];
+		double[][] var52 = bias[1];
+		double[] var54 = var52[0];
+		if(fixedFlag$sample11)
 			var54[0] = t;
+		if(fixedFlag$sample11)
 			var54[1] = (1 - q);
-			double[] var67 = var52[1];
+		double[] var67 = var52[1];
+		if(fixedFlag$sample11)
 			var67[0] = (1 - q);
+		if(fixedFlag$sample11)
 			var67[1] = q;
-		}
 	}
 
 	@Override

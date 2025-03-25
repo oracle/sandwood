@@ -25,8 +25,6 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$sample18;
 	private double[] logProbability$sample46;
 	private double[] logProbability$var17;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK7$MultiThreadCPU(ExecutionTarget target) {
@@ -68,10 +66,8 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 18 as it depends on bias.
 		fixedProbFlag$sample18 = false;
@@ -127,8 +123,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[][] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -141,8 +136,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for length$flipsMeasured.
 	@Override
 	public final void set$length$flipsMeasured(int[] cv$value) {
-		// Set length$flipsMeasured with flag to mark that it has been set so another array
-		// doesn't need to be constructed
+		// Set length$flipsMeasured
 		length$flipsMeasured = cv$value;
 	}
 
@@ -373,7 +367,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Looking for a path between Sample 18 and consumer Bernoulli 35.
 			// 
 			// Set the current value to the current state of the tree.
-			double traceTempVariable$var34$1_1 = (1 - cv$originalValue);
+			double traceTempVariable$var34$2_1 = (1 - cv$originalValue);
 			
 			// Processing sample task 46 of consumer random variable bernoulli.
 			// 
@@ -396,7 +390,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// cv$temp$2$var34's comment
 				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$1_1) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$2_1) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -408,6 +402,8 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[i] = (1 - cv$proposedValue);
 		
 		// An accumulator to allow the value for each distribution to be constructed before
@@ -419,7 +415,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Processing random variable 35.
 		// 
 		// Looking for a path between Sample 18 and consumer Bernoulli 35.
-		double traceTempVariable$var34$1_1 = (1 - cv$proposedValue);
+		double traceTempVariable$var34$2_1 = (1 - cv$proposedValue);
 		
 		// Processing sample task 46 of consumer random variable bernoulli.
 		// 
@@ -442,7 +438,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// cv$temp$2$var34's comment
 			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$1_1) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$2_1) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -461,6 +457,8 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Set the sample value
 			// 
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			bias[i] = (1 - cv$originalValue);
@@ -476,7 +474,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void allocator() {
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias)
+		if(!fixedFlag$sample18)
 			// Constructor for bias
 			bias = new double[length$flipsMeasured.length];
 		
@@ -733,7 +731,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -748,7 +746,9 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

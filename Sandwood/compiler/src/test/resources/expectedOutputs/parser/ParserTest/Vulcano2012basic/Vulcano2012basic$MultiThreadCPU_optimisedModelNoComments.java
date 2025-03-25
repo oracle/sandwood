@@ -41,10 +41,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private double[] logProbability$var80;
 	private int noProducts;
 	private int s;
-	private boolean setFlag$Sales = false;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -96,7 +92,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 		fixedProbFlag$sample82 = false;
 		fixedProbFlag$sample127 = false;
 	}
@@ -155,7 +150,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
-		setFlag$lambda = true;
 		fixedProbFlag$sample67 = false;
 		fixedProbFlag$sample82 = false;
 	}
@@ -238,7 +232,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample22 = false;
 		fixedProbFlag$sample127 = false;
 	}
@@ -372,10 +365,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 				guard$sample22gaussian126$global[t$var105][var21] = false;
 			double reduceVar$sum$9 = 0.0;
-			for(int cv$reduction815Index = 0; cv$reduction815Index < var21; cv$reduction815Index += 1)
-				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction815Index]);
-			for(int cv$reduction815Index = (var21 + 1); cv$reduction815Index < noProducts; cv$reduction815Index += 1)
-				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction815Index]);
+			for(int cv$reduction805Index = 0; cv$reduction805Index < var21; cv$reduction805Index += 1)
+				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction805Index]);
+			for(int cv$reduction805Index = (var21 + 1); cv$reduction805Index < noProducts; cv$reduction805Index += 1)
+				reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction805Index]);
 			reduceVar$sum$9 = (Math.exp(cv$originalValue) + reduceVar$sum$9);
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 				for(int j$var115 = 0; j$var115 < noProducts; j$var115 += 1) {
@@ -385,10 +378,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 					}
 				}
 			}
-			double traceTempVariable$var116$7_3 = Math.exp(cv$originalValue);
+			double traceTempVariable$var116$8_3 = Math.exp(cv$originalValue);
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 				if(!guard$sample22gaussian126$global[t$var105][var21])
-					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$7_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$8_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -407,10 +400,10 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 			guard$sample22gaussian126$global[t$var105][var21] = false;
 		double reduceVar$sum$9 = 0.0;
-		for(int cv$reduction815Index = 0; cv$reduction815Index < var21; cv$reduction815Index += 1)
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction815Index]);
-		for(int cv$reduction815Index = (var21 + 1); cv$reduction815Index < noProducts; cv$reduction815Index += 1)
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction815Index]);
+		for(int cv$reduction805Index = 0; cv$reduction805Index < var21; cv$reduction805Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction805Index]);
+		for(int cv$reduction805Index = (var21 + 1); cv$reduction805Index < noProducts; cv$reduction805Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction805Index]);
 		reduceVar$sum$9 = (Math.exp(cv$proposedValue) + reduceVar$sum$9);
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			for(int j$var115 = 0; j$var115 < noProducts; j$var115 += 1) {
@@ -420,11 +413,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				}
 			}
 		}
-		double traceTempVariable$var116$7_3 = Math.exp(cv$proposedValue);
+		double traceTempVariable$var116$8_3 = Math.exp(cv$proposedValue);
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			if(!guard$sample22gaussian126$global[t$var105][var21]) {
 				guard$sample22gaussian126$global[t$var105][var21] = true;
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$7_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$8_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 		}
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
@@ -475,12 +468,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut)
+		if(!fixedFlag$sample22)
 			ut = new double[noProducts];
 		exped = new double[noProducts];
-		if(!setFlag$lambda)
+		if(!fixedFlag$sample67)
 			lambda = new double[T];
-		if(!setFlag$arrivals)
+		if(!fixedFlag$sample82)
 			arrivals = new int[T];
 		Sales = new double[T][];
 		for(int var93 = 0; var93 < T; var93 += 1)
@@ -794,7 +787,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = Sales.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			double[] cv$source2 = ObsSales[cv$index1];
@@ -807,7 +800,7 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$ut) {
+		if(fixedFlag$sample22) {
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$j$var34, int forEnd$j$var34, int threadID$j$var34, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int j$var34 = forStart$j$var34; j$var34 < forEnd$j$var34; j$var34 += 1)

@@ -302,10 +302,8 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			value2[cv$index1] = observedValue[cv$index1];
 		value = value2[0];
-		if(!guard) {
+		if(!guard)
 			value = value2[0];
-			u = value;
-		}
 	}
 
 	@Override

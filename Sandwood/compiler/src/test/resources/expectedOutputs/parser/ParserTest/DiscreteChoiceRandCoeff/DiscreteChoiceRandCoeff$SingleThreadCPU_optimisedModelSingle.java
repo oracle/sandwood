@@ -46,9 +46,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
-	private boolean setFlag$beta = false;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -66,8 +63,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Setter for ObsChoices.
 	@Override
 	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set ObsChoices
 		ObsChoices = cv$value;
 	}
 
@@ -80,8 +76,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Setter for Prices.
 	@Override
 	public final void set$Prices(int[][] cv$value) {
-		// Set Prices with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set Prices
 		Prices = cv$value;
 	}
 
@@ -115,10 +110,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	public final void set$beta(double[] cv$value) {
 		// Set flags for all the side effects of beta including if probabilities need to be
 		// updated.
-		// Set beta with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set beta
 		beta = cv$value;
-		setFlag$beta = true;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on beta.
 		fixedProbFlag$sample47 = false;
@@ -346,10 +339,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 21 as it depends on ut.
 		fixedProbFlag$sample21 = false;
@@ -969,6 +960,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[var20] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
@@ -1144,6 +1137,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that ut is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			ut[var20] = cv$originalValue;
@@ -1424,6 +1419,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that beta is only updated when there is a valid path.
 		beta[var46] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
@@ -1610,6 +1607,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that beta is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			beta[var46] = cv$originalValue;
@@ -1771,12 +1770,12 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut)
+		if(!fixedFlag$sample21)
 			// Constructor for ut
 			ut = new double[noProducts];
 		
 		// If beta has not been set already allocate space.
-		if(!setFlag$beta)
+		if(!fixedFlag$sample47)
 			// Constructor for beta
 			beta = new double[noObs];
 		
@@ -2150,7 +2149,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -2160,35 +2159,31 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < noObs; i += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((setFlag$ut && setFlag$beta)) {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((fixedFlag$sample21 && fixedFlag$sample47)) {
+			for(int i = 0; i < noObs; i += 1) {
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
 					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-			}
-			
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$14 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
-				// Execute the reduction function, saving the result into the return value.
+				
+				// Reduction of array exped
 				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((setFlag$ut && setFlag$beta)) {
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$sum$14 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// l's comment
+					// Set the right hand term to a value from the array exped
+					reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
 				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
 					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$14);
 			}

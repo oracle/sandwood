@@ -39,7 +39,7 @@ public interface CoreModel extends CurrentProbability, AutoCloseable {
 
     void initializeConstants();
 
-    void propogateObservedValues();
+    void propagateObservedValues();
 
     void allocator();
 

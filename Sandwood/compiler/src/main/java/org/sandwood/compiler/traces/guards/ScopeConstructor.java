@@ -1608,15 +1608,15 @@ public class ScopeConstructor {
             boolean isSerial) {
         switch(compilationCtx.target) {
             case SingleThreadCPU:
-                compilationCtx.addConstructedClassField(fieldName, allocator, null);
+                compilationCtx.addConstructedClassField(fieldName, allocator);
                 break;
             case MultiThreadCPU: {
                 if(isSerial)
-                    compilationCtx.addConstructedClassField(fieldName, allocator, null);
+                    compilationCtx.addConstructedClassField(fieldName, allocator);
                 else {
                     VariableDescription<ArrayVariable<A>> arrayName = VariableNames.altTypeName(fieldName,
                             VariableType.arrayType(fieldName.type));
-                    compilationCtx.addConstructedClassField(arrayName, allocator, null);
+                    compilationCtx.addConstructedClassField(arrayName, allocator);
                 }
                 break;
             }

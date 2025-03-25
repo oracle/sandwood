@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.compilation.util.TreeUtils;
+import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -35,6 +37,10 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
+import org.sandwood.compiler.traces.util.VariableDependencyTracker;
+import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 public abstract class Traces {
     public static class SplitConditionalTraces {
@@ -75,12 +81,12 @@ public abstract class Traces {
     }
 
     public static class IntermediateDesc {
-        private final SampleTask<?, ?> task;
+        private final ProducingDataflowTask<?> task;
         private final Map<Variable<?>, Set<TraceHandle>> traces = new HashMap<>();
         private final Map<Variable<?>, Set<ArrayVariable<?>>> requiredArrays = new HashMap<>();
         private final Set<Variable<?>> observedVariables = new HashSet<>();
 
-        public IntermediateDesc(SampleTask<?, ?> task) {
+        public IntermediateDesc(ProducingDataflowTask<?> task) {
             this.task = task;
         }
 
@@ -163,6 +169,67 @@ public abstract class Traces {
 
         public boolean observedVariable(Variable<?> v) {
             return observedVariables.contains(v);
+        }
+
+        /**
+         * Method to set each of the intermediate values dependent on the output of this sample task.
+         * 
+         * @param compilationCtx The compilation context.
+         */
+        public void setIntermediateValues(Variable<?> source, CompilationContext compilationCtx) {
+            Variable<?> output = task.getOutput();
+
+            // Mark a stop point so that the constructed trees do not go beyond this point
+            output.markStopPoint();
+
+            /*
+             * TODO work out if this can be simplified. To do this we will need to work out exactly which variables are
+             * in intermediates. I think some of the guards on populate can be removed and possibly this first call to
+             * populateValue.
+             */
+
+            for(Variable<?> v:new VariableDependencyTracker(traces)) {
+                // Test if the value has already been set.
+                if(!v.isFixed() && v != output && !(v == source && output.getType().isArray())) {
+                    /*
+                     * Add a guard so that the values are only updated if the configuration of the model would allow it.
+                     * Without this array out of bounds errors are possible as well as serious inefficiency.
+                     */
+                    ScopeConstructor a = ScopeConstructor.construct(task, GlobalScope.scope, "Guards to ensure that "
+                            + v.getUniqueVarDesc() + " is only updated when there is a valid path.", compilationCtx);
+                    a = a.addConstraints(getTraces(v)); // TODO make this use variable passing to simplify the
+                    // setting of intermediates. This will probably also
+                    // require the output of the sample to be substituted.
+                    // Isolate the scopes ready to apply the tree in case the constraints do not
+                    // separate out the code. If the isolation is not required the optimisation
+                    // phase will remove it.
+                    a = a.addIsolation();
+                    a.addTree((TreeBuilderInfo info) -> {
+                        compilationCtx.setRequiredArrays(getRequiredArrays(v));
+                        populateValue(v, compilationCtx);
+                        compilationCtx.clearRequiredArrays();
+                    });
+                }
+            }
+            output.unmarkStopPoint();
+        }
+
+        /**
+         * A method to generate code to recalculate the value of a variable.
+         * 
+         * @param v              The variable to recalculate the value of.
+         * @param compilationCtx The compilation context.
+         */
+        private <X extends Variable<X>> void populateValue(Variable<X> v, CompilationContext compilationCtx) {
+            // If it has not, construct a tree to set it.
+            Variable<X> vSub = compilationCtx.getSubstitute(v);
+            ProducingDataflowTask<X> task = vSub.getParent();
+            IRTreeReturn<X> t = task.getForwardIR(compilationCtx);
+            if(!compilationCtx.initialized(v)) {
+                compilationCtx.addTreeToScope(v.scope(),
+                        TreeUtils.putIndirectValue(v, t, "Write out the new sample value.", compilationCtx));
+                compilationCtx.addInitialized(v);
+            }
         }
     }
 
@@ -443,6 +510,15 @@ public abstract class Traces {
      * @return The set of traces leading to this trace via an outer array.
      */
     public abstract LengthTraceDesc getLengthTraces(GetTask<?> t);
+
+    /**
+     * Method to get the sets of traces that lead variables to the first fixed variable they depend on. I.E. if any of
+     * the traces are valid the value of the variable is observed.
+     * 
+     * @param v
+     * @return
+     */
+    public abstract Set<TraceHandle> getVariableObservationsTraces(Variable<?> v);
 
     // Recursive method to construct the cross product of the sets in each of the
     // argument positions.

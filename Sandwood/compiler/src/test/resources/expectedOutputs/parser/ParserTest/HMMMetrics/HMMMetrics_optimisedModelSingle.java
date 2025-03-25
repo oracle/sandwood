@@ -17,7 +17,7 @@ public class HMMMetrics extends Model {
 
     private HMMMetrics$CoreInterface system$c = new HMMMetrics$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $cpu = new ComputedDoubleArrayInternal(this, "cpu", true) {
+    private final ComputedDoubleArrayInternal $cpu = new ComputedDoubleArrayInternal(this, "cpu", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$cpu(); }
 
@@ -48,15 +48,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray cpu = $cpu;
 
-    private final ComputedDoubleArrayInternal $cpuMean = new ComputedDoubleArrayInternal(this, "cpuMean", true) {
+    private final ComputedDoubleArrayInternal $cpuMean = new ComputedDoubleArrayInternal(this, "cpuMean", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$cpuMean(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$cpuMean(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -83,15 +82,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray cpuMean = $cpuMean;
 
-    private final ComputedDoubleArrayInternal $cpuVar = new ComputedDoubleArrayInternal(this, "cpuVar", true) {
+    private final ComputedDoubleArrayInternal $cpuVar = new ComputedDoubleArrayInternal(this, "cpuVar", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$cpuVar(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$cpuVar(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -118,15 +116,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray cpuVar = $cpuVar;
 
-    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true) {
+    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$initialStateDistribution(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$initialStateDistribution(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -153,15 +150,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray initialStateDistribution = $initialStateDistribution;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -193,7 +189,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedDoubleArrayInternal $mem = new ComputedDoubleArrayInternal(this, "mem", true) {
+    private final ComputedDoubleArrayInternal $mem = new ComputedDoubleArrayInternal(this, "mem", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$mem(); }
 
@@ -224,15 +220,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray mem = $mem;
 
-    private final ComputedDoubleArrayInternal $memMean = new ComputedDoubleArrayInternal(this, "memMean", true) {
+    private final ComputedDoubleArrayInternal $memMean = new ComputedDoubleArrayInternal(this, "memMean", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$memMean(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$memMean(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -259,15 +254,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray memMean = $memMean;
 
-    private final ComputedDoubleArrayInternal $memVar = new ComputedDoubleArrayInternal(this, "memVar", true) {
+    private final ComputedDoubleArrayInternal $memVar = new ComputedDoubleArrayInternal(this, "memVar", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$memVar(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$memVar(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -294,7 +288,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray memVar = $memVar;
 
-    private final ComputedDoubleArrayInternal $pageFaults = new ComputedDoubleArrayInternal(this, "pageFaults", true) {
+    private final ComputedDoubleArrayInternal $pageFaults = new ComputedDoubleArrayInternal(this, "pageFaults", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$pageFaults(); }
 
@@ -325,15 +319,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray pageFaults = $pageFaults;
 
-    private final ComputedDoubleArrayInternal $pageFaultsMean = new ComputedDoubleArrayInternal(this, "pageFaultsMean", true) {
+    private final ComputedDoubleArrayInternal $pageFaultsMean = new ComputedDoubleArrayInternal(this, "pageFaultsMean", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$pageFaultsMean(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$pageFaultsMean(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -360,15 +353,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray pageFaultsMean = $pageFaultsMean;
 
-    private final ComputedDoubleArrayInternal $pageFaultsVar = new ComputedDoubleArrayInternal(this, "pageFaultsVar", true) {
+    private final ComputedDoubleArrayInternal $pageFaultsVar = new ComputedDoubleArrayInternal(this, "pageFaultsVar", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$pageFaultsVar(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$pageFaultsVar(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -395,15 +387,14 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray pageFaultsVar = $pageFaultsVar;
 
-    private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true) {
+    private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$st(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -602,6 +593,7 @@ public class HMMMetrics extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(HMMMetrics$CoreInterface oldCore, HMMMetrics$CoreInterface newCore) {
         //Model inputs
         if(noStates.isSet())
@@ -621,46 +613,36 @@ public class HMMMetrics extends Model {
             newCore.set$length$cpu_measured(oldCore.get$length$cpu_measured());
 
         //ComputedVariables
-        if(cpuMean.isSet())
+        if($cpuMean.isSet())
             newCore.set$cpuMean(oldCore.get$cpuMean());
-        if(cpuVar.isSet())
+        if($cpuVar.isSet())
             newCore.set$cpuVar(oldCore.get$cpuVar());
-        if(initialStateDistribution.isSet())
+        if($initialStateDistribution.isSet())
             newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
-        if(m.isSet())
+        if($m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(memMean.isSet())
+        if($memMean.isSet())
             newCore.set$memMean(oldCore.get$memMean());
-        if(memVar.isSet())
+        if($memVar.isSet())
             newCore.set$memVar(oldCore.get$memVar());
-        if(pageFaultsMean.isSet())
+        if($pageFaultsMean.isSet())
             newCore.set$pageFaultsMean(oldCore.get$pageFaultsMean());
-        if(pageFaultsVar.isSet())
+        if($pageFaultsVar.isSet())
             newCore.set$pageFaultsVar(oldCore.get$pageFaultsVar());
-        if(st.isSet())
+        if($st.isSet())
             newCore.set$st(oldCore.get$st());
 
         //Set fixed flags
-        if(cpuMean.isSet())
-            newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
-        if(cpuVar.isSet())
-            newCore.set$fixedFlag$sample130(oldCore.get$fixedFlag$sample130());
-        if(initialStateDistribution.isSet())
-            newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
-        if(m.isSet())
-            newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30());
-        if(memMean.isSet())
-            newCore.set$fixedFlag$sample95(oldCore.get$fixedFlag$sample95());
-        if(memVar.isSet())
-            newCore.set$fixedFlag$sample147(oldCore.get$fixedFlag$sample147());
-        if(pageFaultsMean.isSet())
-            newCore.set$fixedFlag$sample113(oldCore.get$fixedFlag$sample113());
-        if(pageFaultsVar.isSet())
-            newCore.set$fixedFlag$sample164(oldCore.get$fixedFlag$sample164());
-        if(st.isSet()){
-            newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
-            newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
-        }
+        newCore.set$fixedFlag$sample113(oldCore.get$fixedFlag$sample113());
+        newCore.set$fixedFlag$sample130(oldCore.get$fixedFlag$sample130());
+        newCore.set$fixedFlag$sample147(oldCore.get$fixedFlag$sample147());
+        newCore.set$fixedFlag$sample164(oldCore.get$fixedFlag$sample164());
+        newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30());
+        newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
+        newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
+        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
+        newCore.set$fixedFlag$sample77(oldCore.get$fixedFlag$sample77());
+        newCore.set$fixedFlag$sample95(oldCore.get$fixedFlag$sample95());
     }
 
     /**

@@ -21,8 +21,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var37;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -105,7 +103,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
-		setFlag$sample = true;
 		fixedProbFlag$sample21 = false;
 		fixedProbFlag$sample38 = false;
 	}
@@ -249,7 +246,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		generated = new double[length$observed];
 		indirection = new double[length$observed];
 		v = new double[10];
-		if(!setFlag$sample)
+		if(!fixedFlag$sample21)
 			sample = new double[10];
 		logProbability$var37 = new double[length$observed];
 		logProbability$sample38 = new double[length$observed];
@@ -372,7 +369,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			generated[cv$index1] = observed[cv$index1];
@@ -380,7 +377,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$sample)
+		if(fixedFlag$sample21)
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i = forStart$i; i < forEnd$i; i += 1)

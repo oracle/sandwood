@@ -17,7 +17,7 @@ public class DirichletBernoulli extends Model {
 
     private DirichletBernoulli$CoreInterface system$c = new DirichletBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", true) {
+    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$output(); }
 
@@ -48,15 +48,14 @@ public class DirichletBernoulli extends Model {
      */
     public final ComputedBooleanArray output = $output;
 
-    private final ComputedDoubleArrayInternal $prior = new ComputedDoubleArrayInternal(this, "prior", true) {
+    private final ComputedDoubleArrayInternal $prior = new ComputedDoubleArrayInternal(this, "prior", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$prior(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$prior(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -198,6 +197,7 @@ public class DirichletBernoulli extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(DirichletBernoulli$CoreInterface oldCore, DirichletBernoulli$CoreInterface newCore) {
 
         //Observed arrays
@@ -209,12 +209,11 @@ public class DirichletBernoulli extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(prior.isSet())
+        if($prior.isSet())
             newCore.set$prior(oldCore.get$prior());
 
         //Set fixed flags
-        if(prior.isSet())
-            newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
+        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
     }
 
     /**

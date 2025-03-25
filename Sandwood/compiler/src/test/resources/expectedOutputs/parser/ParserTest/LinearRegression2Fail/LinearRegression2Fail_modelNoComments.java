@@ -15,15 +15,14 @@ public class LinearRegression2Fail extends Model {
 
     private LinearRegression2Fail$CoreInterface system$c = new LinearRegression2Fail$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $b0 = new ComputedDoubleInternal(this, "b0", true) {
+    private final ComputedDoubleInternal $b0 = new ComputedDoubleInternal(this, "b0", true, true, false) {
         @Override
         public double getValue() { return system$c.get$b0(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b0(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -50,15 +49,14 @@ public class LinearRegression2Fail extends Model {
      */
     public final ComputedDouble b0 = $b0;
 
-    private final ComputedDoubleInternal $b1 = new ComputedDoubleInternal(this, "b1", true) {
+    private final ComputedDoubleInternal $b1 = new ComputedDoubleInternal(this, "b1", true, true, false) {
         @Override
         public double getValue() { return system$c.get$b1(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b1(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -85,15 +83,14 @@ public class LinearRegression2Fail extends Model {
      */
     public final ComputedDouble b1 = $b1;
 
-    private final ComputedDoubleInternal $variance = new ComputedDoubleInternal(this, "variance", true) {
+    private final ComputedDoubleInternal $variance = new ComputedDoubleInternal(this, "variance", true, true, false) {
         @Override
         public double getValue() { return system$c.get$variance(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$variance(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -120,7 +117,7 @@ public class LinearRegression2Fail extends Model {
      */
     public final ComputedDouble variance = $variance;
 
-    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", true) {
+    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$y(); }
 
@@ -253,6 +250,7 @@ public class LinearRegression2Fail extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(LinearRegression2Fail$CoreInterface oldCore, LinearRegression2Fail$CoreInterface newCore) {
         //Model inputs
         if(x.isSet())
@@ -262,20 +260,17 @@ public class LinearRegression2Fail extends Model {
             newCore.set$yMeasured(oldCore.get$yMeasured());
 
         //ComputedVariables
-        if(b0.isSet())
+        if($b0.isSet())
             newCore.set$b0(oldCore.get$b0());
-        if(b1.isSet())
+        if($b1.isSet())
             newCore.set$b1(oldCore.get$b1());
-        if(variance.isSet())
+        if($variance.isSet())
             newCore.set$variance(oldCore.get$variance());
 
         //Set fixed flags
-        if(b0.isSet())
-            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
-        if(b1.isSet())
-            newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
-        if(variance.isSet())
-            newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15());
+        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
+        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15());
+        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
     }
 
     /**

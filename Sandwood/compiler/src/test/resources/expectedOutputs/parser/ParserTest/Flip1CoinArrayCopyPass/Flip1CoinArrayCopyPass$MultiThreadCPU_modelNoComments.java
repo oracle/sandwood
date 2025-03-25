@@ -22,8 +22,6 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 	private double logProbability$var10;
 	private double logProbability$var9;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinArrayCopyPass$MultiThreadCPU(ExecutionTarget target) {
@@ -48,7 +46,6 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample26 = false;
 	}
@@ -268,7 +265,11 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 			}
 		}
 		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-		bias[0] = var10;
+		{
+			{
+				bias[0] = var10;
+			}
+		}
 		{
 			if((0 == 0)) {
 				for(int i = 0; i < samples; i += 1)
@@ -282,7 +283,7 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample10) {
 			{
 				bias = new double[(samples + 1)];
 			}
@@ -394,7 +395,7 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;
@@ -403,16 +404,7 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void setIntermediates() {
-		parallelFor(RNG$, 0, samples, 1,
-			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(setFlag$bias)
-							bias[(i + 1)] = bias[0];
-					}
-			}
-		);
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

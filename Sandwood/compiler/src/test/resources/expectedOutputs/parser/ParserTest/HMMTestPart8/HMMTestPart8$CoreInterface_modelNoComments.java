@@ -3,6 +3,8 @@ package org.sandwood.compiler.tests.parser;
 interface HMMTestPart8$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[] get$bias();
 	public void set$bias(double[] cv$value);
+	public double[][] get$distribution$sample71();
+	public void set$distribution$sample71(double[][] cv$value);
 	public boolean get$fixedFlag$sample28();
 	public void set$fixedFlag$sample28(boolean cv$value);
 	public boolean get$fixedFlag$sample45();

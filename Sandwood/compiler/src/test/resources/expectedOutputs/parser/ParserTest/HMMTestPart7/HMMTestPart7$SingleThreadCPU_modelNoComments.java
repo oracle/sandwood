@@ -42,10 +42,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$var85;
 	private double[][] m;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private int states;
 	private boolean system$gibbsForward = true;
@@ -63,9 +59,28 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample45 = false;
 		fixedProbFlag$sample87 = false;
+	}
+
+	@Override
+	public final double[] get$distribution$sample53() {
+		return distribution$sample53;
+	}
+
+	@Override
+	public final void set$distribution$sample53(double[] cv$value) {
+		distribution$sample53 = cv$value;
+	}
+
+	@Override
+	public final double[][] get$distribution$sample71() {
+		return distribution$sample71;
+	}
+
+	@Override
+	public final void set$distribution$sample71(double[][] cv$value) {
+		distribution$sample71 = cv$value;
 	}
 
 	@Override
@@ -181,7 +196,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample28 = false;
 		fixedProbFlag$sample53 = false;
 		fixedProbFlag$sample71 = false;
@@ -200,7 +214,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample53 = false;
 		fixedProbFlag$sample71 = false;
 		fixedProbFlag$sample87 = false;
@@ -1210,7 +1223,11 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		double var44 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var43] = var44;
+		{
+			{
+				bias[var43] = var44;
+			}
+		}
 	}
 
 	private final void sample53() {
@@ -1965,19 +1982,19 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		{
 			v = new double[5];
 		}
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			{
 				m = new double[5][];
 				for(int var27 = 0; var27 < 5; var27 += 1)
 					m[var27] = new double[5];
 			}
 		}
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample45) {
 			{
 				bias = new double[5];
 			}
 		}
-		if(!setFlag$st) {
+		if((!fixedFlag$sample53 || !fixedFlag$sample71)) {
 			{
 				st = new int[length$flipsMeasured];
 			}
@@ -2288,7 +2305,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;

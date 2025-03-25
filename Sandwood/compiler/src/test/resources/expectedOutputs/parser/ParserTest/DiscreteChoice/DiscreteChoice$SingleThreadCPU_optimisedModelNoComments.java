@@ -25,8 +25,6 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private int noObs;
 	private int noProducts;
 	private double[] prob;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -140,7 +138,6 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample24 = false;
 		fixedProbFlag$sample78 = false;
 	}
@@ -265,7 +262,7 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut)
+		if(!fixedFlag$sample24)
 			ut = new double[noProducts];
 		exped = new double[noProducts];
 		prob = new double[noProducts];
@@ -408,7 +405,7 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = choices.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			choices[cv$index1] = ObsChoices[cv$index1];
@@ -416,7 +413,7 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$ut) {
+		if(fixedFlag$sample24) {
 			for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
 				exped[i$var36] = Math.exp(ut[i$var36]);
 			double reduceVar$sum$7 = 0.0;

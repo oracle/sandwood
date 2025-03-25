@@ -64,7 +64,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>> {
 
-    public static enum Observed {
+    public enum Observed {
         FREE,
         FIXED,
         OBSERVED;

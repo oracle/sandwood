@@ -59,6 +59,12 @@ interface Vulcano2012basicDG$CoreInterface extends org.sandwood.runtime.internal
 	// Getter for r.
 	public double get$r();
 
+	// Getter for ut.
+	public double[] get$ut();
+
+	// Setter for ut.
+	public void set$ut(double[] cv$value);
+
 	// Getter for weekly_sales.
 	public int[][] get$weekly_sales();
 

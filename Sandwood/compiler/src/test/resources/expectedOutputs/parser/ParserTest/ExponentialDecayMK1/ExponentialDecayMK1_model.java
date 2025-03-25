@@ -17,7 +17,7 @@ public class ExponentialDecayMK1 extends Model {
 
     private ExponentialDecayMK1$CoreInterface system$c = new ExponentialDecayMK1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $decay = new ComputedDoubleArrayInternal(this, "decay", true) {
+    private final ComputedDoubleArrayInternal $decay = new ComputedDoubleArrayInternal(this, "decay", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$decay(); }
 
@@ -48,15 +48,14 @@ public class ExponentialDecayMK1 extends Model {
      */
     public final ComputedDoubleArray decay = $decay;
 
-    private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true) {
+    private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true, true, false) {
         @Override
         public double getValue() { return system$c.get$rate(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$rate(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -232,6 +231,7 @@ public class ExponentialDecayMK1 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(ExponentialDecayMK1$CoreInterface oldCore, ExponentialDecayMK1$CoreInterface newCore) {
         //Model inputs
         if(a.isSet())
@@ -248,12 +248,11 @@ public class ExponentialDecayMK1 extends Model {
             newCore.set$length$decayDetected(oldCore.get$length$decayDetected());
 
         //ComputedVariables
-        if(rate.isSet())
+        if($rate.isSet())
             newCore.set$rate(oldCore.get$rate());
 
         //Set fixed flags
-        if(rate.isSet())
-            newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }
 
     /**

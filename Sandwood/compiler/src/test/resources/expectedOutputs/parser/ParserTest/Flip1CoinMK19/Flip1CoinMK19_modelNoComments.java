@@ -17,7 +17,7 @@ public class Flip1CoinMK19 extends Model {
 
     private Flip1CoinMK19$CoreInterface system$c = new Flip1CoinMK19$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<double[]> $bias = new ComputedObjectArrayInternal<double[]>(this, "bias", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $bias = new ComputedObjectArrayInternal<double[]>(this, "bias", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$bias(); }
 
@@ -63,7 +63,7 @@ public class Flip1CoinMK19 extends Model {
      */
     public final ComputedObjectArray<double[]> bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -94,15 +94,14 @@ public class Flip1CoinMK19 extends Model {
      */
     public final ComputedBooleanArray flips = $flips;
 
-    private final ComputedDoubleInternal $q = new ComputedDoubleInternal(this, "q", true) {
+    private final ComputedDoubleInternal $q = new ComputedDoubleInternal(this, "q", true, true, false) {
         @Override
         public double getValue() { return system$c.get$q(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$q(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -129,15 +128,14 @@ public class Flip1CoinMK19 extends Model {
      */
     public final ComputedDouble q = $q;
 
-    private final ComputedDoubleInternal $t = new ComputedDoubleInternal(this, "t", true) {
+    private final ComputedDoubleInternal $t = new ComputedDoubleInternal(this, "t", true, true, false) {
         @Override
         public double getValue() { return system$c.get$t(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$t(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -322,6 +320,7 @@ public class Flip1CoinMK19 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK19$CoreInterface oldCore, Flip1CoinMK19$CoreInterface newCore) {
         //Model inputs
         if(a.isSet())
@@ -335,16 +334,14 @@ public class Flip1CoinMK19 extends Model {
             newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
 
         //ComputedVariables
-        if(q.isSet())
+        if($q.isSet())
             newCore.set$q(oldCore.get$q());
-        if(t.isSet())
+        if($t.isSet())
             newCore.set$t(oldCore.get$t());
 
         //Set fixed flags
-        if(q.isSet())
-            newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
-        if(t.isSet())
-            newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
+        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+        newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
     }
 
     /**

@@ -17,7 +17,7 @@ public class DistributionTest2b extends Model {
 
     private DistributionTest2b$CoreInterface system$c = new DistributionTest2b$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", true) {
+    private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$v(); }
 
@@ -48,15 +48,14 @@ public class DistributionTest2b extends Model {
      */
     public final ComputedBooleanArray v = $v;
 
-    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true) {
+    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false) {
         @Override
         public int getValue() { return system$c.get$v1(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$v1(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -83,15 +82,14 @@ public class DistributionTest2b extends Model {
      */
     public final ComputedInteger v1 = $v1;
 
-    private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true) {
+    private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$v2(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$v2(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -122,6 +120,40 @@ public class DistributionTest2b extends Model {
      * Computed variable representing v2 of type int[] from the Sandwood model 
      */
     public final ComputedIntegerArray v2 = $v2;
+
+    private final ComputedIntegerArrayInternal $v3 = new ComputedIntegerArrayInternal(this, "v3", true, true, false) {
+        @Override
+        public int[] getValue() { return system$c.get$v3(); }
+
+        @Override
+        protected void setValueInternal(int[] value) {
+            system$c.set$v3(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$v3(); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample36(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample36())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    /**
+     * Computed variable representing v3 of type int[] from the Sandwood model 
+     */
+    public final ComputedIntegerArray v3 = $v3;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -188,7 +220,7 @@ public class DistributionTest2b extends Model {
      */
     public final RandomVariable c = $c;
 
-    private HasProbabilityInternal[] $probabilityVariables = {$v, $v1, $v2, $c};
+    private HasProbabilityInternal[] $probabilityVariables = {$v, $v1, $v2, $v3, $c};
 
     //Constructors
     /**
@@ -200,6 +232,7 @@ public class DistributionTest2b extends Model {
         $computedVariables.put("v", $v);
         $computedVariables.put("v1", $v1);
         $computedVariables.put("v2", $v2);
+        $computedVariables.put("v3", $v3);
 
         //ModelInputs
         $modelInputs.put("weightings", $weightings);
@@ -251,6 +284,7 @@ public class DistributionTest2b extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(DistributionTest2b$CoreInterface oldCore, DistributionTest2b$CoreInterface newCore) {
         //Model inputs
         if(weightings.isSet())
@@ -265,18 +299,18 @@ public class DistributionTest2b extends Model {
             newCore.set$length$value(oldCore.get$length$value());
 
         //ComputedVariables
-        if(v1.isSet())
+        if($v1.isSet())
             newCore.set$v1(oldCore.get$v1());
-        if(v2.isSet())
+        if($v2.isSet())
             newCore.set$v2(oldCore.get$v2());
+        if($v3.isSet())
+            newCore.set$v3(oldCore.get$v3());
 
         //Set fixed flags
-        if(v1.isSet())
-            newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
-        if(v2.isSet()){
-            newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
-            newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
-        }
+        newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
+        newCore.set$fixedFlag$sample36(oldCore.get$fixedFlag$sample36());
+        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
+        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
     }
 
     /**
@@ -331,11 +365,14 @@ public class DistributionTest2b extends Model {
         public final int v1;
         /** Field holding the value of v2 after a convention execution step.*/
         public final int[] v2;
+        /** Field holding the value of v3 after a convention execution step.*/
+        public final int[] v3;
 
         InferredValueOutputs(DistributionTest2b system$model) {
             this.v = system$model.v.getSamples()[0];
             this.v1 = system$model.v1.getSamples()[0];
             this.v2 = system$model.v2.getSamples()[0];
+            this.v3 = system$model.v3.getSamples()[0];
         }
     }
 
@@ -352,6 +389,8 @@ public class DistributionTest2b extends Model {
         public final double v1;
         /** Field holding the log probability of computed variable v2 */
         public final double v2;
+        /** Field holding the log probability of computed variable v3 */
+        public final double v3;
 
         LogProbabilities(DistributionTest2b system$model) {
             this.$logModelProbability = system$model.getLogProbability();
@@ -359,6 +398,7 @@ public class DistributionTest2b extends Model {
             this.v = system$model.v.getLogProbability();
             this.v1 = system$model.v1.getLogProbability();
             this.v2 = system$model.v2.getLogProbability();
+            this.v3 = system$model.v3.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -379,6 +419,8 @@ public class DistributionTest2b extends Model {
         public final double v1;
         /** Field holding the probability of computed variable v2 */
         public final double v2;
+        /** Field holding the probability of computed variable v3 */
+        public final double v3;
 
         Probabilities(DistributionTest2b system$model) {
             this.$modelProbability = system$model.getProbability();
@@ -386,6 +428,7 @@ public class DistributionTest2b extends Model {
             this.v = system$model.v.getProbability();
             this.v1 = system$model.v1.getProbability();
             this.v2 = system$model.v2.getProbability();
+            this.v3 = system$model.v3.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -401,10 +444,13 @@ public class DistributionTest2b extends Model {
         public final int[] v1;
         /** Field holding the MAP or Sample value of v2 after an infer model call. */
         public final int[][] v2;
+        /** Field holding the MAP or Sample value of v3 after an infer model call. */
+        public final int[][] v3;
 
         InferredModelOutputs(DistributionTest2b system$model) {
             this.v1 = system$model.getInferredValue(system$model.$v1);
             this.v2 = system$model.getInferredValue(system$model.$v2);
+            this.v3 = system$model.getInferredValue(system$model.$v3);
         }
     }
 

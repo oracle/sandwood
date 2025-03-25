@@ -17,15 +17,14 @@ public class HMM extends Model {
 
     private HMM$CoreInterface system$c = new HMM$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class HMM extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -83,15 +82,14 @@ public class HMM extends Model {
      */
     public final ComputedBooleanArray flips = $flips;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -123,15 +121,14 @@ public class HMM extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true) {
+    private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$st(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -280,6 +277,7 @@ public class HMM extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(HMM$CoreInterface oldCore, HMM$CoreInterface newCore) {
         //Model inputs
         if(states.isSet())
@@ -294,22 +292,18 @@ public class HMM extends Model {
             newCore.set$length$measured(oldCore.get$length$measured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(m.isSet())
+        if($m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(st.isSet())
+        if($st.isSet())
             newCore.set$st(oldCore.get$st());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
-        if(m.isSet())
-            newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        if(st.isSet()){
-            newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
-            newCore.set$fixedFlag$sample71(oldCore.get$fixedFlag$sample71());
-        }
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
+        newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
+        newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53());
+        newCore.set$fixedFlag$sample71(oldCore.get$fixedFlag$sample71());
     }
 
     /**

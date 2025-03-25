@@ -33,6 +33,26 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
+	public final double[] get$distribution$sample4() {
+		return distribution$sample4;
+	}
+
+	@Override
+	public final void set$distribution$sample4(double[] cv$value) {
+		distribution$sample4 = cv$value;
+	}
+
+	@Override
+	public final double[] get$distribution$sample6() {
+		return distribution$sample6;
+	}
+
+	@Override
+	public final void set$distribution$sample6(double[] cv$value) {
+		distribution$sample6 = cv$value;
+	}
+
+	@Override
 	public final boolean get$fixedFlag$sample4() {
 		return fixedFlag$sample4;
 	}
@@ -870,7 +890,7 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		v = value;
 	}
 

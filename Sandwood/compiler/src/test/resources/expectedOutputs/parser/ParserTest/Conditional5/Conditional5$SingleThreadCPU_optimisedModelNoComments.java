@@ -237,7 +237,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		guard = observedGuard;
 		value = observedValue;
 		if(observedGuard)

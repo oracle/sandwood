@@ -40,6 +40,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
+import org.sandwood.compiler.compilation.CompilationContext.FieldType;
 import org.sandwood.compiler.compilation.CompilationContext.SampleFunctionClass;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.compilation.util.TreeUtils.ScopeDesc;
@@ -50,7 +51,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -179,14 +179,12 @@ public class ProbabilityFunction {
 
         // Construct a field for the overall model. This field needs to be public as it
         // is directly accessed by the runtime.
-        compilationCtx.addConstructedClassField(logModelProbName, null, null, true, false, false, Observed.FREE, false,
-                false, null, Tree.NoComment);
+        compilationCtx.addConstructedClassField(logModelProbName, FieldType.PUBLIC_PROBABILITY);
         toInitialize.add(new WrappedTree<>(store(logModelProbName, constant(0.0), Tree.NoComment)));
 
         // Construct a field for the model evidence. This field needs to be public as it
         // is directly accessed by the runtime.
-        compilationCtx.addConstructedClassField(evidenceProbName, null, null, true, false, false, Observed.FREE, false,
-                false, null, Tree.NoComment);
+        compilationCtx.addConstructedClassField(evidenceProbName, FieldType.PUBLIC_PROBABILITY);
         toInitialize.add(new WrappedTree<>(store(evidenceProbName, constant(0.0), Tree.NoComment)));
 
         PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(compilationCtx.traces.getAllSampleTasks());
@@ -301,7 +299,7 @@ public class ProbabilityFunction {
         // random is allocated inside these scopes, so can only exist in this number of
         // dimensions.
         toInitialize.add(new WrappedTree<>(TreeUtils.constructVariable(randomName, constant(0.0), randomScopes,
-                random.isPrivate(), compilationCtx)));
+                random.isPrivate() ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY, compilationCtx)));
 
         List<ScopeDesc> outputScopes = new ArrayList<>();
         outputScopes.add(new ScopeDesc(GlobalScope.scope, null, false));
@@ -320,7 +318,8 @@ public class ProbabilityFunction {
             VariableDescription<DoubleVariable> outputName = VariableNames
                     .logProbabilityName(intermediate.getUniqueVarDesc());
             IRTreeVoid initializeIntermediate = TreeUtils.constructVariable(outputName, constant(0.0), outputScopes,
-                    intermediate.isPrivate(), intermediate.getComment(), compilationCtx);
+                    intermediate.isPrivate() ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY,
+                    intermediate.getComment(), compilationCtx);
             toInitialize.add(new WrappedTree<>(initializeIntermediate));
         }
 
@@ -329,13 +328,12 @@ public class ProbabilityFunction {
         // TODO fix this as it is not correct.
 
         // Construct a space to store the probability.
-        IRTreeVoid sampleAllocation = TreeUtils.constructVariable(storedName, constant(0.0), storeScopes, isPrivate,
-                compilationCtx);
+        IRTreeVoid sampleAllocation = TreeUtils.constructVariable(storedName, constant(0.0), storeScopes,
+                isPrivate ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY, compilationCtx);
 
         // Construct a flag to determine if this probability is already calculated.
         VariableDescription<BooleanVariable> fixedFlagName = VariableNames.getProbabilityFixedFlag(sampleTask);
-        compilationCtx.addConstructedClassField(fixedFlagName, null, null, false, false, false, Observed.FREE, false,
-                false, constant(false), Tree.NoComment);
+        compilationCtx.addConstructedClassField(fixedFlagName, constant(false));
 
         // Set the initialisation
         IRTreeReturn<BooleanVariable> guard = negateBoolean(load(fixedFlagName));

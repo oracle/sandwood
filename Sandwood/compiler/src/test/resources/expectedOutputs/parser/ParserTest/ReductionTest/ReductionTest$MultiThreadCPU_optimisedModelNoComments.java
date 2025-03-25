@@ -37,10 +37,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private int noCats;
 	private int noFlips;
 	private int noStates;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -57,7 +53,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample87 = false;
 	}
@@ -161,7 +156,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample30 = false;
 		fixedProbFlag$sample62 = false;
 	}
@@ -194,7 +188,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample62 = false;
 		fixedProbFlag$sample87 = false;
 	}
@@ -334,10 +327,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			st[i$var58] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int reduceVar$var82$5 = 0;
-			for(int cv$reduction379Index = 0; cv$reduction379Index < i$var58; cv$reduction379Index += 1)
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction379Index]);
-			for(int cv$reduction379Index = (i$var58 + 1); cv$reduction379Index < noCats; cv$reduction379Index += 1)
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction379Index]);
+			for(int cv$reduction394Index = 0; cv$reduction394Index < i$var58; cv$reduction394Index += 1)
+				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction394Index]);
+			for(int cv$reduction394Index = (i$var58 + 1); cv$reduction394Index < noCats; cv$reduction394Index += 1)
+				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction394Index]);
 			reduceVar$var82$5 = (cv$valuePos + reduceVar$var82$5);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$5]) + cv$accumulatedProbabilities);
@@ -382,14 +375,14 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void allocator() {
 		v = new double[(length$flipsMeasured / noCats)];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample30) {
 			m = new double[noCats][];
 			for(int var29 = 0; var29 < noCats; var29 += 1)
 				m[var29] = new double[(length$flipsMeasured / noCats)];
 		}
-		if(!setFlag$bias)
+		if(!fixedFlag$sample47)
 			bias = new double[length$flipsMeasured];
-		if(!setFlag$st)
+		if(!fixedFlag$sample62)
 			st = new int[noCats];
 		flips = new boolean[length$flipsMeasured];
 		logProbability$var60 = new double[noCats];
@@ -645,7 +638,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];

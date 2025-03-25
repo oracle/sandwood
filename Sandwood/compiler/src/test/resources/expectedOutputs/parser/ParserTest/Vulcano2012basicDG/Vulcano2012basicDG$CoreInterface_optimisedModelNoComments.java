@@ -20,6 +20,8 @@ interface Vulcano2012basicDG$CoreInterface extends org.sandwood.runtime.internal
 	public double get$logProbability$weekly_sales();
 	public int get$numTimeSteps();
 	public double get$r();
+	public double[] get$ut();
+	public void set$ut(double[] cv$value);
 	public int[][] get$weekly_sales();
 	public void logEvidenceGeneration();
 }

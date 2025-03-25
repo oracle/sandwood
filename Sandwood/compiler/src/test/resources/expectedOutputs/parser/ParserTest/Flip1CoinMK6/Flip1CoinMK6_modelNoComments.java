@@ -17,15 +17,14 @@ public class Flip1CoinMK6 extends Model {
 
     private Flip1CoinMK6$CoreInterface system$c = new Flip1CoinMK6$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class Flip1CoinMK6 extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips1 = new ComputedBooleanArrayInternal(this, "flips1", true) {
+    private final ComputedBooleanArrayInternal $flips1 = new ComputedBooleanArrayInternal(this, "flips1", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips1(); }
 
@@ -83,7 +82,7 @@ public class Flip1CoinMK6 extends Model {
      */
     public final ComputedBooleanArray flips1 = $flips1;
 
-    private final ComputedBooleanArrayInternal $flips2 = new ComputedBooleanArrayInternal(this, "flips2", true) {
+    private final ComputedBooleanArrayInternal $flips2 = new ComputedBooleanArrayInternal(this, "flips2", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips2(); }
 
@@ -253,6 +252,7 @@ public class Flip1CoinMK6 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK6$CoreInterface oldCore, Flip1CoinMK6$CoreInterface newCore) {
 
         //Observed arrays
@@ -270,12 +270,11 @@ public class Flip1CoinMK6 extends Model {
             newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
+        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
     }
 
     /**

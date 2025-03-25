@@ -7,6 +7,10 @@ interface HMMMetrics4$CoreInterface extends org.sandwood.runtime.internal.model.
 	public void set$current_metric_valid_bias(double[][] cv$value);
 	public double[][] get$current_metric_var();
 	public void set$current_metric_var(double[][] cv$value);
+	public double[][] get$distribution$sample57();
+	public void set$distribution$sample57(double[][] cv$value);
+	public double[][][] get$distribution$sample76();
+	public void set$distribution$sample76(double[][][] cv$value);
 	public boolean get$fixedFlag$sample134();
 	public void set$fixedFlag$sample134(boolean cv$value);
 	public boolean get$fixedFlag$sample162();

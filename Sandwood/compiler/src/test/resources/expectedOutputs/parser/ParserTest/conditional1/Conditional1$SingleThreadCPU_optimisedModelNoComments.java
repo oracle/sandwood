@@ -100,6 +100,17 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return value;
 	}
 
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	@Override
+	public final void set$var14(double cv$value) {
+		var14 = cv$value;
+		fixedProbFlag$sample16 = false;
+	}
+
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
@@ -207,16 +218,12 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if((!guard && !fixedFlag$sample16))
-			var14 = DistributionSampling.sampleUniform(RNG$);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if((!guard && !fixedFlag$sample16))
-			var14 = DistributionSampling.sampleUniform(RNG$);
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class Flip1CoinMK12b extends Model {
 
     private Flip1CoinMK12b$CoreInterface system$c = new Flip1CoinMK12b$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", false) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", false, false, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
@@ -60,7 +60,7 @@ public class Flip1CoinMK12b extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -90,6 +90,93 @@ public class Flip1CoinMK12b extends Model {
      * Computed variable representing flips of type boolean[] from the Sandwood model 
      */
     public final ComputedBooleanArray flips = $flips;
+
+    private final ComputedDoubleInternal $var14 = new ComputedDoubleInternal(this, "var14", true, true, true) {
+        @Override
+        public double getValue() { return system$c.get$var14(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$var14(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample16(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample16())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    private final ComputedDoubleInternal $var26 = new ComputedDoubleInternal(this, "var26", true, true, true) {
+        @Override
+        public double getValue() { return system$c.get$var26(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$var26(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample28(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample28())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    private final ComputedDoubleInternal $var33 = new ComputedDoubleInternal(this, "var33", true, true, true) {
+        @Override
+        public double getValue() { return system$c.get$var33(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$var33(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample35(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample35())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -184,6 +271,9 @@ public class Flip1CoinMK12b extends Model {
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips", $flips);
+        $computedVariables.put("var14", $var14);
+        $computedVariables.put("var26", $var26);
+        $computedVariables.put("var33", $var33);
 
         //ModelInputs
         $modelInputs.put("guard1", $guard1);
@@ -240,6 +330,7 @@ public class Flip1CoinMK12b extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK12b$CoreInterface oldCore, Flip1CoinMK12b$CoreInterface newCore) {
         //Model inputs
         if(guard1.isSet())
@@ -256,8 +347,17 @@ public class Flip1CoinMK12b extends Model {
             newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
 
         //ComputedVariables
+        if($var14.isSet())
+            newCore.set$var14(oldCore.get$var14());
+        if($var26.isSet())
+            newCore.set$var26(oldCore.get$var26());
+        if($var33.isSet())
+            newCore.set$var33(oldCore.get$var33());
 
         //Set fixed flags
+        newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
+        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
     }
 
     /**

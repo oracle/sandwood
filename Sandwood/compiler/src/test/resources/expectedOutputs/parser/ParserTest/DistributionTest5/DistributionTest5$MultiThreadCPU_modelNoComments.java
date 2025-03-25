@@ -33,8 +33,6 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double[] logProbability$var26;
 	private double logProbability$var4;
 	private double[] logProbability$var69;
-	private boolean setFlag$v = false;
-	private boolean setFlag$v2 = false;
 	private int size;
 	private boolean system$gibbsForward = true;
 	private boolean[] v;
@@ -46,6 +44,36 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	public DistributionTest5$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
+	}
+
+	@Override
+	public final double[] get$distribution$sample11() {
+		return distribution$sample11;
+	}
+
+	@Override
+	public final void set$distribution$sample11(double[] cv$value) {
+		distribution$sample11 = cv$value;
+	}
+
+	@Override
+	public final double[][] get$distribution$sample27() {
+		return distribution$sample27;
+	}
+
+	@Override
+	public final void set$distribution$sample27(double[][] cv$value) {
+		distribution$sample27 = cv$value;
+	}
+
+	@Override
+	public final double[] get$distribution$sample5() {
+		return distribution$sample5;
+	}
+
+	@Override
+	public final void set$distribution$sample5(double[] cv$value) {
+		distribution$sample5 = cv$value;
 	}
 
 	@Override
@@ -154,7 +182,6 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void set$v2(int[] cv$value) {
 		v2 = cv$value;
-		setFlag$v2 = true;
 		fixedProbFlag$sample11 = false;
 		fixedProbFlag$sample27 = false;
 		fixedProbFlag$sample70 = false;
@@ -3422,11 +3449,11 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					cv$temp$0$weightings = weightings;
 				}
-				int cv$temp$1$$var3281;
+				int cv$temp$1$$var3275;
 				{
-					cv$temp$1$$var3281 = weightings.length;
+					cv$temp$1$$var3275 = weightings.length;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var3281))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var3275))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						boolean[] guard$sample11bernoulli69 = guard$sample11bernoulli69$global;
@@ -6612,11 +6639,11 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					cv$temp$0$weightings = weightings;
 				}
-				int cv$temp$1$$var4043;
+				int cv$temp$1$$var4037;
 				{
-					cv$temp$1$$var4043 = weightings.length;
+					cv$temp$1$$var4037 = weightings.length;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var4043))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var4037))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						boolean[] guard$sample27bernoulli69 = guard$sample27bernoulli69$global;
@@ -9752,11 +9779,11 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				{
 					cv$temp$0$weightings = weightings;
 				}
-				int cv$temp$1$$var2938;
+				int cv$temp$1$$var2932;
 				{
-					cv$temp$1$$var2938 = weightings.length;
+					cv$temp$1$$var2932 = weightings.length;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2938))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2932))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						for(int j = 0; j < size; j += 1) {
@@ -11400,7 +11427,7 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$v2) {
+		if((!fixedFlag$sample11 || !fixedFlag$sample27)) {
 			{
 				v2 = new int[(length$value + 1)];
 			}
@@ -11629,7 +11656,7 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = value;
 		boolean[] cv$target1 = v;
 		int cv$length1 = cv$target1.length;
@@ -11642,7 +11669,7 @@ class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		parallelFor(RNG$, 0, (size + 1), 1,
 			(int forStart$k, int forEnd$k, int threadID$k, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int k = forStart$k; k < forEnd$k; k += 1) {
-						if(setFlag$v2)
+						if((fixedFlag$sample11 && fixedFlag$sample27))
 							v3[k] = v2[k];
 					}
 			}

@@ -17,7 +17,7 @@ public class MultinomialBernoulli extends Model {
 
     private MultinomialBernoulli$CoreInterface system$c = new MultinomialBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", true) {
+    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$output(); }
 
@@ -48,15 +48,14 @@ public class MultinomialBernoulli extends Model {
      */
     public final ComputedBooleanArray output = $output;
 
-    private final ComputedDoubleArrayInternal $p = new ComputedDoubleArrayInternal(this, "p", true) {
+    private final ComputedDoubleArrayInternal $p = new ComputedDoubleArrayInternal(this, "p", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$p(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$p(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -83,15 +82,14 @@ public class MultinomialBernoulli extends Model {
      */
     public final ComputedDoubleArray p = $p;
 
-    private final ComputedIntegerArrayInternal $prior = new ComputedIntegerArrayInternal(this, "prior", true) {
+    private final ComputedIntegerArrayInternal $prior = new ComputedIntegerArrayInternal(this, "prior", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$prior(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$prior(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -246,6 +244,7 @@ public class MultinomialBernoulli extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(MultinomialBernoulli$CoreInterface oldCore, MultinomialBernoulli$CoreInterface newCore) {
 
         //Observed arrays
@@ -257,16 +256,14 @@ public class MultinomialBernoulli extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(p.isSet())
+        if($p.isSet())
             newCore.set$p(oldCore.get$p());
-        if(prior.isSet())
+        if($prior.isSet())
             newCore.set$prior(oldCore.get$prior());
 
         //Set fixed flags
-        if(p.isSet())
-            newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
-        if(prior.isSet())
-            newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
+        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
+        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
     }
 
     /**

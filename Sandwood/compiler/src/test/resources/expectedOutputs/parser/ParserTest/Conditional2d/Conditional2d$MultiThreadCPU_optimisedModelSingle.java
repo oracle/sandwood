@@ -138,8 +138,7 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for observedValue.
 	@Override
 	public final void set$observedValue(double[] cv$value) {
-		// Set observedValue with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set observedValue
 		observedValue = cv$value;
 	}
 
@@ -800,14 +799,14 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		value = value2[0];
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!guard) {
+		if(!guard)
 			value = value2[0];
-			u = value;
-		}
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

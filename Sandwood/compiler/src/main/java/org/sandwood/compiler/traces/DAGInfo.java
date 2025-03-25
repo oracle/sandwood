@@ -61,6 +61,11 @@ public class DAGInfo {
                 return false;
             return sink.equals(other.sink);
         }
+
+        @Override
+        public String toString() {
+            return "Sink: " + sink + " Trace: " + handle;
+        }
     }
 
     private final List<TraceSinkPair> observedVarTraces = new ArrayList<>();

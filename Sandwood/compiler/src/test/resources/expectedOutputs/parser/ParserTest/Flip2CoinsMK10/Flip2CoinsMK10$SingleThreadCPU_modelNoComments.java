@@ -23,8 +23,6 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double[] logProbability$sample48;
 	private double logProbability$var10;
 	private double logProbability$var23;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private int[] shape;
 	private boolean system$gibbsForward = true;
 
@@ -40,7 +38,6 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample23 = false;
 		fixedProbFlag$sample48 = false;
@@ -315,7 +312,11 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			}
 		}
 		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[0] = var10;
+		{
+			{
+				bias[0] = var10;
+			}
+		}
 	}
 
 	private final void sample23(int i) {
@@ -339,7 +340,11 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			}
 		}
 		double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[i] = var23;
+		{
+			{
+				bias[i] = var23;
+			}
+		}
 	}
 
 	@Override
@@ -352,7 +357,7 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			for(int j = 0; j < shape.length; j += 1)
 				flips[j] = new boolean[shape[j]];
 		}
-		if(!setFlag$bias) {
+		if((!fixedFlag$sample10 || !fixedFlag$sample23)) {
 			{
 				bias = new double[shape.length];
 			}
@@ -486,7 +491,7 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[][] cv$source1 = flipsMeasured;
 		boolean[][] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;

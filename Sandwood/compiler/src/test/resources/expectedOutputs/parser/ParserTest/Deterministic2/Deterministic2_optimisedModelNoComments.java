@@ -16,15 +16,14 @@ public class Deterministic2 extends Model {
 
     private Deterministic2$CoreInterface system$c = new Deterministic2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $a = new ComputedIntegerArrayInternal(this, "a", true) {
+    private final ComputedIntegerArrayInternal $a = new ComputedIntegerArrayInternal(this, "a", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$a(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$a(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -51,7 +50,7 @@ public class Deterministic2 extends Model {
      */
     public final ComputedIntegerArray a = $a;
 
-    private final ComputedIntegerArrayInternal $b = new ComputedIntegerArrayInternal(this, "b", false) {
+    private final ComputedIntegerArrayInternal $b = new ComputedIntegerArrayInternal(this, "b", false, false, false) {
         @Override
         public int[] getValue() { return system$c.get$b(); }
 
@@ -87,7 +86,7 @@ public class Deterministic2 extends Model {
      */
     public final ComputedIntegerArray b = $b;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -118,15 +117,14 @@ public class Deterministic2 extends Model {
      */
     public final ComputedBooleanArray flips = $flips;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -260,6 +258,7 @@ public class Deterministic2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Deterministic2$CoreInterface oldCore, Deterministic2$CoreInterface newCore) {
         //Model inputs
         if(n.isSet())
@@ -269,16 +268,14 @@ public class Deterministic2 extends Model {
             newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
 
         //ComputedVariables
-        if(a.isSet())
+        if($a.isSet())
             newCore.set$a(oldCore.get$a());
-        if(m.isSet())
+        if($m.isSet())
             newCore.set$m(oldCore.get$m());
 
         //Set fixed flags
-        if(a.isSet())
-            newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
-        if(m.isSet())
-            newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29());
+        newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29());
+        newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
     }
 
     /**

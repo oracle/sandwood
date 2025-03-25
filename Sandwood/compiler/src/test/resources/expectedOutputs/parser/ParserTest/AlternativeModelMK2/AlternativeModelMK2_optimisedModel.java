@@ -16,15 +16,14 @@ public class AlternativeModelMK2 extends Model {
 
     private AlternativeModelMK2$CoreInterface system$c = new AlternativeModelMK2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -49,7 +48,7 @@ public class AlternativeModelMK2 extends Model {
 /** a bias to see how like values are to be collected. */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", true) {
+    private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", false, true, false) {
         @Override
         public int getValue() { return system$c.get$positiveCount(); }
 
@@ -188,6 +187,7 @@ public class AlternativeModelMK2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(AlternativeModelMK2$CoreInterface oldCore, AlternativeModelMK2$CoreInterface newCore) {
         //Model inputs
         if(observedSampleCount.isSet())
@@ -197,12 +197,11 @@ public class AlternativeModelMK2 extends Model {
             newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }
 
     /**

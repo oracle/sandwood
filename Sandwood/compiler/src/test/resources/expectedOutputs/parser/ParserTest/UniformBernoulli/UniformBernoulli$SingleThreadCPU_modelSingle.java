@@ -22,7 +22,6 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private boolean[] observed;
 	private boolean[] output;
 	private double prior;
-	private boolean setFlag$output = false;
 	private boolean system$gibbsForward = true;
 
 	public UniformBernoulli$SingleThreadCPU(ExecutionTarget target) {
@@ -114,8 +113,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for observed.
 	@Override
 	public final void set$observed(boolean[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -656,7 +654,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = observed;
 		boolean[] cv$target1 = output;
@@ -666,7 +664,9 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

@@ -17,7 +17,7 @@ public class Conditional5 extends Model {
 
     private Conditional5$CoreInterface system$c = new Conditional5$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $a = new ComputedDoubleInternal(this, "a", true) {
+    private final ComputedDoubleInternal $a = new ComputedDoubleInternal(this, "a", false, true, false) {
         @Override
         public double getValue() { return system$c.get$a(); }
 
@@ -48,7 +48,7 @@ public class Conditional5 extends Model {
      */
     public final ComputedDouble a = $a;
 
-    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true) {
+    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", false, true, false) {
         @Override
         public double getValue() { return system$c.get$b(); }
 
@@ -79,7 +79,7 @@ public class Conditional5 extends Model {
      */
     public final ComputedDouble b = $b;
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", false, true, false) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
@@ -110,7 +110,7 @@ public class Conditional5 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false) {
+    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, false, false) {
         @Override
         public double getValue() { return system$c.get$value(); }
 
@@ -242,6 +242,7 @@ public class Conditional5 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Conditional5$CoreInterface oldCore, Conditional5$CoreInterface newCore) {
         //Observed scalars
         if(observedGuard.isSet())

@@ -22,8 +22,6 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private boolean[] observed;
 	private boolean[] output;
 	private double[] prior;
-	private boolean setFlag$output = false;
-	private boolean setFlag$prior = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -112,7 +110,6 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$prior(double[] cv$value) {
 		prior = cv$value;
-		setFlag$prior = true;
 		fixedProbFlag$sample17 = false;
 		fixedProbFlag$sample38 = false;
 		fixedProbFlag$sample51 = false;
@@ -232,7 +229,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void allocator() {
 		v = new double[2];
-		if(!setFlag$prior)
+		if(!fixedFlag$sample17)
 			prior = new double[2];
 		output = new boolean[length$observed];
 	}
@@ -338,7 +335,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = output.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			output[cv$index1] = observed[cv$index1];

@@ -33,9 +33,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private int states;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -52,7 +49,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$a(int[] cv$value) {
 		a = cv$value;
-		setFlag$a = true;
 		fixedProbFlag$sample55 = false;
 		fixedProbFlag$sample75 = false;
 	}
@@ -60,6 +56,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int[] get$b() {
 		return b;
+	}
+
+	@Override
+	public final double[][] get$distribution$sample55() {
+		return distribution$sample55;
+	}
+
+	@Override
+	public final void set$distribution$sample55(double[][] cv$value) {
+		distribution$sample55 = cv$value;
 	}
 
 	@Override
@@ -139,7 +145,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample29 = false;
 		fixedProbFlag$sample55 = false;
 	}
@@ -915,12 +920,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 									double[] var52 = m[traceTempVariable$var51$15_3];
 									cv$temp$0$var52 = var52;
 								}
-								int cv$temp$1$$var835;
+								int cv$temp$1$$var829;
 								{
-									int $var835 = states;
-									cv$temp$1$$var835 = $var835;
+									int $var829 = states;
+									cv$temp$1$$var829 = $var829;
 								}
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var835))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var829))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								{
 									{
 										int traceTempVariable$var49$25_1 = cv$currentValue;
@@ -1001,12 +1006,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 									double[] var52 = m[traceTempVariable$var51$17_3];
 									cv$temp$2$var52 = var52;
 								}
-								int cv$temp$3$$var836;
+								int cv$temp$3$$var830;
 								{
-									int $var836 = states;
-									cv$temp$3$$var836 = $var836;
+									int $var830 = states;
+									cv$temp$3$$var830 = $var830;
 								}
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var836))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var830))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								{
 									{
 										int traceTempVariable$var49$26_1 = cv$currentValue;
@@ -1092,12 +1097,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double[] var52 = m[traceTempVariable$var51$22_3];
 												cv$temp$4$var52 = var52;
 											}
-											int cv$temp$5$$var837;
+											int cv$temp$5$$var831;
 											{
-												int $var837 = states;
-												cv$temp$5$$var837 = $var837;
+												int $var831 = states;
+												cv$temp$5$$var831 = $var831;
 											}
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var837))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var831))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											{
 												{
 													int traceTempVariable$var49$27_1 = distributionTempVariable$var54$21;
@@ -1235,14 +1240,14 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 														double[] var52 = m[traceTempVariable$var51$37_3];
 														cv$temp$9$var52 = var52;
 													}
-													int cv$temp$10$$var887;
+													int cv$temp$10$$var881;
 													{
-														int $var887 = states;
-														cv$temp$10$$var887 = $var887;
+														int $var881 = states;
+														cv$temp$10$$var881 = $var881;
 													}
 													double cv$distributionProbability = (scopeVariable$reachedSourceProbability * 1.0);
 													cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
-													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var887);
+													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var881);
 												}
 											}
 										}
@@ -1320,14 +1325,14 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		{
 			v = new double[5];
 		}
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			{
 				m = new double[5][];
 				for(int var28 = 0; var28 < 5; var28 += 1)
 					m[var28] = new double[5];
 			}
 		}
-		if(!setFlag$a) {
+		if(!fixedFlag$sample55) {
 			{
 				a = new int[n];
 			}
@@ -1617,7 +1622,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;
@@ -1628,7 +1633,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void setIntermediates() {
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(setFlag$a)
+			if(fixedFlag$sample55)
 				b[i$var46] = a[(i$var46 - 1)];
 		}
 	}

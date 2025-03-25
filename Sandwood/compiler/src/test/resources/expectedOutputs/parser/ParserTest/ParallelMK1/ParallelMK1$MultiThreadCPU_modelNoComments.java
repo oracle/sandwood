@@ -23,9 +23,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var23;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK1$MultiThreadCPU(ExecutionTarget target) {
@@ -57,7 +54,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$indirection(double[] cv$value) {
 		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	@Override
@@ -113,7 +109,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
-		setFlag$sample = true;
 	}
 
 	private final void logProbabilityValue$sample20() {
@@ -423,12 +418,10 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		{
 			generated = new double[length$observed];
 		}
-		if(!setFlag$indirection) {
-			{
-				indirection = new double[length$observed];
-			}
+		{
+			indirection = new double[length$observed];
 		}
-		if(!setFlag$sample) {
+		if(!fixedFlag$sample20) {
 			{
 				sample = new double[((((length$observed - 1) - 0) / 1) + 1)];
 			}
@@ -580,7 +573,7 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = observed;
 		double[] cv$target1 = generated;
 		int cv$length1 = cv$target1.length;
@@ -589,7 +582,16 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		parallelFor(RNG$, 0, length$observed, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1) {
+						if(fixedFlag$sample20)
+							indirection[i] = sample[((i - 0) / 1)];
+					}
+			}
+		);
+	}
 
 	@Override
 	public String modelCode() {

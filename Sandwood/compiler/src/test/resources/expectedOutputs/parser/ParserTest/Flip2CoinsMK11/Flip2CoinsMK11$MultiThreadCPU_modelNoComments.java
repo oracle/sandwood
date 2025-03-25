@@ -28,8 +28,6 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample77;
 	private double logProbability$var22;
 	private double logProbability$var9;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK11$MultiThreadCPU(ExecutionTarget target) {
@@ -44,7 +42,6 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample9 = false;
 		fixedProbFlag$sample22 = false;
 		fixedProbFlag$sample49 = false;
@@ -398,7 +395,11 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		double var22 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[i$var21] = var22;
+		{
+			{
+				bias[i$var21] = var22;
+			}
+		}
 	}
 
 	private final void sample9() {
@@ -437,7 +438,11 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		double var9 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[0] = var9;
+		{
+			{
+				bias[0] = var9;
+			}
+		}
 	}
 
 	@Override
@@ -452,7 +457,7 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int k = 1; k < length$flipsMeasured.length; k += 1)
 				flips[k] = new boolean[length$flipsMeasured[k]];
 		}
-		if(!setFlag$bias) {
+		if((!fixedFlag$sample9 || !fixedFlag$sample22)) {
 			{
 				bias = new double[length$flipsMeasured.length];
 			}
@@ -650,7 +655,7 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i$var88 = (coins - ((((coins - 1) - 0) % 1) + 1)); i$var88 >= ((0 - 1) + 1); i$var88 -= 1) {
 			boolean[] cv$source1 = flipsMeasured[(coins - (i$var88 + 1))];
 			boolean[] cv$target1 = flips[i$var88];

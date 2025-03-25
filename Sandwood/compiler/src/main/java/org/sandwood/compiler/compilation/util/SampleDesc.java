@@ -9,13 +9,10 @@
 package org.sandwood.compiler.compilation.util;
 
 import java.util.List;
-import java.util.PriorityQueue;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
-import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -26,9 +23,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.traces.Traces;
 import org.sandwood.compiler.traces.Traces.IntermediateDesc;
 import org.sandwood.compiler.traces.Traces.SampleTraceDesc;
-import org.sandwood.compiler.traces.guards.ScopeConstructor;
-import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
-import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 /**
  * Class to describe a sample task during variable inference.
@@ -93,6 +87,15 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
     }
 
     /**
+     * Method to set each of the intermediate values dependent on the output of this sample task.
+     * 
+     * @param compilationCtx The compilation context.
+     */
+    protected void setIntermediateValues(CompilationContext compilationCtx) {
+        intermediates.setIntermediateValues(sampleVarDesc.sampleVariable, compilationCtx);
+    }
+
+    /**
      * Method to get the innermost scope holding the sample task.
      * 
      * @return The scope directly holding the sample task.
@@ -108,72 +111,5 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
      */
     protected List<Scope> getScopes() {
         return scopes;
-    }
-
-    /**
-     * Method to set each of the intermediate values dependent on the output of this sample task.
-     * 
-     * @param compilationCtx The compilation context.
-     */
-    protected void setIntermediateValues(CompilationContext compilationCtx) {
-        // Check if the compiler is doing inference, if it is observed variables should not be updated.
-        boolean inferring = compilationCtx.inInference();
-
-        // Mark a stop point so that the constructed trees do not go beyond this point
-        output.markStopPoint();
-
-        /*
-         * TODO work out if this can be simplified. To do this we will need to work out exactly which variables are in
-         * intermediates. I think some of the guards on populate can be removed and possibly this first call to
-         * populateValue.
-         */
-        populateValue(sampleVarDesc.sampleVariable, compilationCtx);
-
-        PriorityQueue<Variable<?>> p = new PriorityQueue<>(intermediates.getVariables());
-        while(!p.isEmpty()) {
-            Variable<?> v = p.poll();
-            if(v != sampleVarDesc.sampleVariable && (!inferring || !intermediates.observedVariable(v))) {
-                /*
-                 * Add a guard so that the values are only updated if the configuration of the model would allow it.
-                 * Without this array out of bounds errors are possible as well as serious inefficiency.
-                 */
-                ScopeConstructor a = ScopeConstructor.construct(sample, GlobalScope.scope, "Guards to ensure that "
-                        + v.getUniqueVarDesc() + " is only updated when there is a valid path.", compilationCtx);
-                a = a.addConstraints(intermediates.getTraces(v)); // TODO make this use variable passing to simplify the
-                                                                  // setting of intermediates. This will probably also
-                                                                  // require the output of the sample to be substituted.
-                // Isolate the scopes ready to apply the tree in case the constraints do not
-                // separate out the code. If the isolation is not required the optimisation
-                // phase will remove it.
-                a = a.addIsolation();
-                a.addTree((TreeBuilderInfo info) -> {
-                    compilationCtx.setRequiredArrays(intermediates.getRequiredArrays(v));
-                    populateValue(v, compilationCtx);
-                    compilationCtx.clearRequiredArrays();
-                });
-            }
-        }
-        output.unmarkStopPoint();
-    }
-
-    /**
-     * A method to generate code to recalculate the value of a variable.
-     * 
-     * @param v              The variable to recalculate the value of.
-     * @param compilationCtx The compilation context.
-     */
-    protected <X extends Variable<X>> void populateValue(Variable<X> v, CompilationContext compilationCtx) {
-        // Test if the value has already been set.
-        if(v != output) {
-            // If it has not, construct a tree to set it.
-            Variable<X> vSub = compilationCtx.getSubstitute(v);
-            ProducingDataflowTask<X> task = vSub.getParent();
-            IRTreeReturn<X> t = task.getForwardIR(compilationCtx);
-            if(!compilationCtx.initialized(v)) {
-                compilationCtx.addTreeToScope(v.scope(),
-                        TreeUtils.putIndirectValue(v, t, "Write out the new sample value.", compilationCtx));
-                compilationCtx.addInitialized(v);
-            }
-        }
     }
 }

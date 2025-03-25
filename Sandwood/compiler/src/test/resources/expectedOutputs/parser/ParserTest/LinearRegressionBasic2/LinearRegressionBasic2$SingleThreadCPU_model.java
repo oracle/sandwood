@@ -29,7 +29,6 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double variance;
 	private double[] x;
@@ -217,8 +216,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	// Setter for x.
 	@Override
 	public final void set$x(double[] cv$value) {
-		// Set x with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set x
 		x = cv$value;
 	}
 
@@ -237,8 +235,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	// Setter for yMeasured.
 	@Override
 	public final void set$yMeasured(double[] cv$value) {
-		// Set yMeasured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set yMeasured
 		yMeasured = cv$value;
 	}
 
@@ -725,8 +722,13 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		// intermediate variables.
 		double var16 = Conjugates.sampleConjugateGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		
-		// Write out the new sample value.
-		variance = (1 / var16);
+		// Guards to ensure that variance is only updated when there is a valid path.
+		{
+			{
+				// Write out the new sample value.
+				variance = (1 / var16);
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -991,7 +993,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
@@ -1001,7 +1003,9 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

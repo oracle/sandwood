@@ -1,6 +1,12 @@
 package org.sandwood.compiler.tests.parser;
 
 interface DistributionTest6$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+	public double[] get$distribution$sample11();
+	public void set$distribution$sample11(double[] cv$value);
+	public double[][] get$distribution$sample27();
+	public void set$distribution$sample27(double[][] cv$value);
+	public double[] get$distribution$sample5();
+	public void set$distribution$sample5(double[] cv$value);
 	public boolean get$fixedFlag$sample11();
 	public void set$fixedFlag$sample11(boolean cv$value);
 	public boolean get$fixedFlag$sample27();

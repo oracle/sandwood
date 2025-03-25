@@ -162,16 +162,27 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
     }
 
     /**
-     * A method for removing all elements from a trace before the value of i.
+     * A method for removing all elements from a trace before the value of start.
      * 
-     * @param i The point in the trace to start from.
+     * @param start The point in the trace to start from.
      * @return The resultant sub trace.
      */
-    public TraceHandle subTrace(int i) {
+    public TraceHandle subTrace(int start) {
+        return subTrace(start, t.size());
+    }
+
+    /**
+     * A method for removing all elements from a trace before the value of start and after including end. The resulting
+     * trace will be [start .. end)
+     * 
+     * @param start The point in the trace to start from.
+     * @param end   The point to remove all values from the trace from
+     * @return The resultant sub trace.
+     */
+    public TraceHandle subTrace(int start, int end) {
         Trace nt = new Trace();
-        int size = t.size();
-        while(i < size)
-            nt.add(t.get(i++));
+        while(start < end)
+            nt.add(t.get(start++));
         return TraceHandle.getTraceHandle(nt);
     }
 

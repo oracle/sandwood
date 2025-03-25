@@ -17,15 +17,14 @@ public class HMMTestPart1 extends Model {
 
     private HMMTestPart1$CoreInterface system$c = new HMMTestPart1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class HMMTestPart1 extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedBooleanInternal $flip = new ComputedBooleanInternal(this, "flip", true) {
+    private final ComputedBooleanInternal $flip = new ComputedBooleanInternal(this, "flip", false, true, false) {
         @Override
         public boolean getValue() { return system$c.get$flip(); }
 
@@ -83,15 +82,14 @@ public class HMMTestPart1 extends Model {
      */
     public final ComputedBoolean flip = $flip;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -123,15 +121,14 @@ public class HMMTestPart1 extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedIntegerInternal $st = new ComputedIntegerInternal(this, "st", true) {
+    private final ComputedIntegerInternal $st = new ComputedIntegerInternal(this, "st", true, true, false) {
         @Override
         public int getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$st(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -227,26 +224,24 @@ public class HMMTestPart1 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(HMMTestPart1$CoreInterface oldCore, HMMTestPart1$CoreInterface newCore) {
         //Observed scalars
         if(flipMeasured.isSet())
             newCore.set$flipMeasured(oldCore.get$flipMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(m.isSet())
+        if($m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(st.isSet())
+        if($st.isSet())
             newCore.set$st(oldCore.get$st());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
-        if(m.isSet())
-            newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        if(st.isSet())
-            newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
+        newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
+        newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
     }
 
     /**

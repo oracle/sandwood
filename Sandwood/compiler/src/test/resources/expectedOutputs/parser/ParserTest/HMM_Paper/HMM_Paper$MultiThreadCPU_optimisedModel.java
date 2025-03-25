@@ -49,11 +49,6 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private boolean[] measured;
 	private int nCoins;
 	private int nFlips;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$initialCoin = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -73,10 +68,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on bias.
 		fixedProbFlag$sample47 = false;
@@ -238,10 +231,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$initialCoin(double[] cv$value) {
 		// Set flags for all the side effects of initialCoin including if probabilities need
 		// to be updated.
-		// Set initialCoin with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set initialCoin
 		initialCoin = cv$value;
-		setFlag$initialCoin = true;
 		
 		// Unset the fixed probability flag for sample 32 as it depends on initialCoin.
 		fixedProbFlag$sample32 = false;
@@ -314,10 +305,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 28 as it depends on m.
 		fixedProbFlag$sample28 = false;
@@ -335,8 +324,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	// Setter for measured.
 	@Override
 	public final void set$measured(boolean[] cv$value) {
-		// Set measured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set measured
 		measured = cv$value;
 	}
 
@@ -369,10 +357,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$st(int[] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 53 as it depends on st.
 		fixedProbFlag$sample53 = false;
@@ -1034,6 +1020,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			}
 		}
 		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
@@ -1053,6 +1041,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Calculate the number of states to evaluate.
 		int cv$numNumStates = Math.max(0, nCoins);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
 			// Value of the variable at this index
 			st[0] = cv$valuePos;
 			
@@ -1204,6 +1194,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Get a local reference to the scratch space.
 			cv$var52$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
+		// Guards to ensure that st is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
@@ -1225,6 +1217,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Calculate the number of states to evaluate.
 		int cv$numNumStates = Math.max(0, nCoins);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
 			// Value of the variable at this index
 			st[i] = cv$valuePos;
 			
@@ -1236,8 +1230,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// cv$temp$0$var68's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < nCoins)?Math.log(m[st[(i - 1)]][cv$valuePos]):Double.NEGATIVE_INFINITY);
-			int index$i$1_2 = (i + 1);
-			if((index$i$1_2 < nFlips))
+			int index$i$2_2 = (i + 1);
+			if((index$i$2_2 < nFlips))
 				// Processing sample task 71 of consumer random variable null.
 				// 
 				// A check to ensure rounding of floating point values can never result in a negative
@@ -1268,7 +1262,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Looking for a path between Sample 71 and consumer Categorical 69.
 				// 
 				// Value of the variable at this index
-				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < nCoins))?Math.log(m[cv$valuePos][st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < nCoins))?Math.log(m[cv$valuePos][st[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1369,6 +1363,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Get a local reference to the scratch space.
 			cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
+		// Guards to ensure that st is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
@@ -1420,7 +1416,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		v = new double[nCoins];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			// Constructor for m
 			m = new double[nCoins][];
 			for(int var27 = 0; var27 < nCoins; var27 += 1)
@@ -1428,17 +1424,17 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		}
 		
 		// If initialCoin has not been set already allocate space.
-		if(!setFlag$initialCoin)
+		if(!fixedFlag$sample32)
 			// Constructor for initialCoin
 			initialCoin = new double[nCoins];
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias)
+		if(!fixedFlag$sample47)
 			// Constructor for bias
 			bias = new double[nCoins];
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st)
+		if((!fixedFlag$sample53 || !fixedFlag$sample71))
 			// Constructor for st
 			st = new int[length$measured];
 		
@@ -1871,7 +1867,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1881,7 +1877,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

@@ -35,9 +35,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] logProbability$var42;
 	private double logProbability$var8;
 	private double logProbability$var9;
-	private boolean setFlag$v = false;
-	private boolean setFlag$v2 = false;
-	private boolean setFlag$v3 = false;
 	private int size;
 	private boolean system$gibbsForward = true;
 	private boolean[] v;
@@ -49,6 +46,36 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	public DistributionTest2b$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
+	}
+
+	@Override
+	public final double[][] get$distribution$sample23() {
+		return distribution$sample23;
+	}
+
+	@Override
+	public final void set$distribution$sample23(double[][] cv$value) {
+		distribution$sample23 = cv$value;
+	}
+
+	@Override
+	public final double[] get$distribution$sample5() {
+		return distribution$sample5;
+	}
+
+	@Override
+	public final void set$distribution$sample5(double[] cv$value) {
+		distribution$sample5 = cv$value;
+	}
+
+	@Override
+	public final double[] get$distribution$sample9() {
+		return distribution$sample9;
+	}
+
+	@Override
+	public final void set$distribution$sample9(double[] cv$value) {
+		distribution$sample9 = cv$value;
 	}
 
 	@Override
@@ -174,7 +201,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$v2(int[] cv$value) {
 		v2 = cv$value;
-		setFlag$v2 = true;
 		fixedProbFlag$sample9 = false;
 		fixedProbFlag$sample23 = false;
 		fixedProbFlag$sample43 = false;
@@ -188,7 +214,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$v3(int[] cv$value) {
 		v3 = cv$value;
-		setFlag$v3 = true;
 	}
 
 	@Override
@@ -1640,7 +1665,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$v2) {
+		if((!fixedFlag$sample9 || !fixedFlag$sample23)) {
 			{
 				v2 = new int[length$value];
 			}
@@ -1648,7 +1673,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		{
 			v = new boolean[length$value];
 		}
-		if(!setFlag$v3) {
+		if(!fixedFlag$sample36) {
 			{
 				v3 = new int[((((length$value - 1) - 0) / 1) + 1)];
 			}
@@ -1879,7 +1904,7 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = value;
 		boolean[] cv$target1 = v;
 		int cv$length1 = cv$target1.length;

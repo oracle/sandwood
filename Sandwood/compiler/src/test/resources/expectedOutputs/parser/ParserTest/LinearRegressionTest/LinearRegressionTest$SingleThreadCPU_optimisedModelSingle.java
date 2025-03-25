@@ -31,8 +31,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$y;
 	private int n;
 	private double[][] phi;
-	private boolean setFlag$weights = false;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double tau;
 	private double[] weights;
@@ -221,10 +219,8 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$weights(double[] cv$value) {
 		// Set flags for all the side effects of weights including if probabilities need to
 		// be updated.
-		// Set weights with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set weights
 		weights = cv$value;
-		setFlag$weights = true;
 		
 		// Unset the fixed probability flag for sample 24 as it depends on weights.
 		fixedProbFlag$sample24 = false;
@@ -242,8 +238,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for x.
 	@Override
 	public final void set$x(double[][] cv$value) {
-		// Set x with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set x
 		x = cv$value;
 	}
 
@@ -262,8 +257,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for yMeasured.
 	@Override
 	public final void set$yMeasured(double[] cv$value) {
-		// Set yMeasured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set yMeasured
 		yMeasured = cv$value;
 	}
 
@@ -748,6 +742,8 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 			}
 		}
 		
+		// Guards to ensure that weights is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		weights[var23] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
@@ -887,7 +883,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		y = new double[x.length];
 		
 		// If weights has not been set already allocate space.
-		if(!setFlag$weights)
+		if(!fixedFlag$sample24)
 			// Constructor for weights
 			weights = new double[x[0].length];
 		
@@ -1153,7 +1149,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1163,11 +1159,13 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$weights) {
+		if(fixedFlag$sample24) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 				for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
 					phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);

@@ -44,6 +44,12 @@ interface Conditional3$CoreInterface extends org.sandwood.runtime.internal.model
 	// Getter for value.
 	public double get$value();
 
+	// Getter for var14.
+	public double get$var14();
+
+	// Setter for var14.
+	public void set$var14(double cv$value);
+
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.
 	public void logEvidenceGeneration();

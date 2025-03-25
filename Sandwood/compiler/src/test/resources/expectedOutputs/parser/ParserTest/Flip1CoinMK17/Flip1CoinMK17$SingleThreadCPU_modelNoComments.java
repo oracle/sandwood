@@ -375,7 +375,7 @@ class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		flip = flipMeasured;
 	}
 

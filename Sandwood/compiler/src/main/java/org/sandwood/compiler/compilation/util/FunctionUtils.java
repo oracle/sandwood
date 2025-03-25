@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -90,11 +90,11 @@ public class FunctionUtils {
             case SingleThreadCPU:
             case MultiThreadCPU: {
                 if(isSerial) {
-                    compilationCtx.addConstructedClassField(fieldName, allocator, null);
+                    compilationCtx.addConstructedClassField(fieldName, allocator);
                 } else {
                     VariableDescription<ArrayVariable<V>> arrayVariable = VariableNames.altTypeName(fieldName,
                             VariableType.arrayType(fieldName.type));
-                    compilationCtx.addConstructedClassField(arrayVariable, allocator, null);
+                    compilationCtx.addConstructedClassField(arrayVariable, allocator);
                 }
                 break;
             }

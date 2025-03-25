@@ -56,6 +56,10 @@ public abstract class Model implements HasProbability, AutoCloseable {
     // Are the observed values propagated into the model. TODO can we merge this into existing flags.
     private boolean observationsPropagated = false;
 
+    protected boolean intermediatesPrimed = false;
+
+    private boolean distributionsPrimed = false;
+
     private CoreModel core;
     // Inputs that parameterize the model, for example the bias we wish to use.
     private Map<String, ObservedVariableInternal> modelInputs;
@@ -71,7 +75,6 @@ public abstract class Model implements HasProbability, AutoCloseable {
     private double logModelProbability = Double.NEGATIVE_INFINITY;
     // TODO Ensure that these flags get set and reset at the correct times.
     private boolean probabilityComputed = false;
-    private boolean modelPrimed = false;
 
     private ExecutionTarget executionTarget = ExecutionTarget.singleThread;
 
@@ -108,11 +111,9 @@ public abstract class Model implements HasProbability, AutoCloseable {
         core.setRngType(oldCore.getRngType());
         executionTarget = target;
 
-        if(allocated) {
-            allocated = false;
-            allocate();
-            core.setIntermediates();
-        }
+        allocated = false;
+        intermediatesPrimed = false;
+        observationsPropagated = false;
 
         oldCore.shutdown();
     }
@@ -346,8 +347,9 @@ public abstract class Model implements HasProbability, AutoCloseable {
         if(iterations > 0) {
             ForwardPass.forward(iterations, computedVariables.values(), core);
             lastForward = true;
-            modelPrimed = false;
+            distributionsPrimed = false;
             observationsPropagated = false;
+            intermediatesPrimed = true;
         }
     }
 
@@ -397,14 +399,12 @@ public abstract class Model implements HasProbability, AutoCloseable {
             }
 
             allocate();
-            if(!modelPrimed) {
+            propagateObservations();
+
+            if(!distributionsPrimed) {
                 core.forwardGenerationDistributionsNoOutputs();
-                modelPrimed = true;
+                distributionsPrimed = true;
                 lastForward = false;
-            }
-            if(!observationsPropagated) {
-                core.propogateObservedValues();
-                observationsPropagated = true;
             }
             GibbsCalculation.infer(iterations, burnin, thinning, computedVariables.values(), core, p);
         }
@@ -420,14 +420,12 @@ public abstract class Model implements HasProbability, AutoCloseable {
             throw new SandwoodException("Unable to execute: The input values and output shapes have not been set.\n"
                     + missingInferProbabilities());
         allocate();
-        if(!observationsPropagated) {
-            core.propogateObservedValues();
-            observationsPropagated = true;
-        }
+        propagateObservations();
+
         logModelProbability = ProbabilityCalculation.generateLogProbabilities(iterations, core, probabilityVariables);
         probabilityComputed = true;
         lastForward = true;
-        modelPrimed = false;
+        distributionsPrimed = false;
     }
 
     /**
@@ -447,15 +445,13 @@ public abstract class Model implements HasProbability, AutoCloseable {
             throw new SandwoodException("Unable to execute: The input values and output shapes have not been set.\n"
                     + missingInferProbabilities());
         allocate();
-        if(!observationsPropagated) {
-            core.propogateObservedValues();
-            observationsPropagated = true;
-        }
+        propagateObservations();
+
         logModelProbability = ProbabilityCalculation.generateLogProbabilities(variance, initialIterations,
                 maxIterations, core, probabilityVariables);
         probabilityComputed = true;
         lastForward = true;
-        modelPrimed = false;
+        distributionsPrimed = false;
     }
 
     /**
@@ -472,15 +468,13 @@ public abstract class Model implements HasProbability, AutoCloseable {
             throw new SandwoodException("Unable to execute: The input values and output shapes have not been set.\n"
                     + missingInferProbabilities());
         allocate();
-        if(!observationsPropagated) {
-            core.propogateObservedValues();
-            observationsPropagated = true;
-        }
+        propagateObservations();
+
         logModelProbability = ProbabilityCalculation.generateLogProbabilities(variance, initialIterations,
                 Integer.MAX_VALUE, core, probabilityVariables);
         probabilityComputed = true;
         lastForward = true;
-        modelPrimed = false;
+        distributionsPrimed = false;
     }
 
     /**
@@ -544,6 +538,40 @@ public abstract class Model implements HasProbability, AutoCloseable {
             core.allocator();
             core.initializeConstants();
             allocated = true;
+        }
+    }
+
+    private void propagateObservations() {
+        if(!observationsPropagated) {
+            core.propagateObservedValues();
+            observationsPropagated = true;
+            ingestPropagatedValues();
+        }
+
+        if(!intermediatesPrimed) {
+            core.setIntermediates();
+            intermediatesPrimed = true;
+            distributionsPrimed = false;
+            ingestIntermediateValues();
+        }
+    }
+
+    private void ingestPropagatedValues() {
+        for(ComputedVariableInternal c:computedVariables.values()) {
+            if(c.getRetentionPolicy() != RetentionPolicy.NONE && c.isFixed() == Immutability.OBSERVED) {
+                c.ingestMap();
+                c.computeComplete();
+            }
+        }
+    }
+
+    private void ingestIntermediateValues() {
+        for(ComputedVariableInternal c:computedVariables.values()) {
+            Immutability i = c.isFixed();
+            if(!c.isSettable() && c.getRetentionPolicy() != RetentionPolicy.NONE && i == Immutability.FIXED) {
+                c.ingestMap();
+                c.computeComplete();
+            }
         }
     }
 
@@ -760,20 +788,42 @@ public abstract class Model implements HasProbability, AutoCloseable {
     /**
      * Saves all the computed values in a model as a JSON file.
      * 
+     * @param filename  name of the file to save to.
+     * @param allValues should non-sample value be included in the output?
+     * @throws IOException Thrown if there is a problem with the filename.
+     */
+
+    public synchronized void exportToJson(String filename, boolean allValues) throws IOException {
+        exportToJson(new File(filename), allValues);
+    }
+
+    /**
+     * Saves all the computed values in a model as a JSON file.
+     * 
      * @param file Object representing the file to save to.
      * @throws IOException Thrown if there is a problem with the filename.
      */
     public synchronized void exportToJson(File file) throws IOException {
+        exportToJson(file, false);
+    }
+
+    /**
+     * Saves all the computed values in a model as a JSON file.
+     * 
+     * @param file      Object representing the file to save to.
+     * @param allValues should non-sample value be included in the output?
+     * @throws IOException Thrown if there is a problem with the filename.
+     */
+    public synchronized void exportToJson(File file, boolean allValues) throws IOException {
         JsonModelEncoder e = new JsonModelEncoder(file, this);
         // This can return all sampled variables, but when assigning to variables we
         // will only want to assign to sampled variables.
-        // TODO construct a dependency graph of these variables, so when one is pinned
-        // we know which others to set and pin.
         PriorityQueue<String> p = new PriorityQueue<>(computedVariables.keySet());
         while(!p.isEmpty()) {
             String name = p.poll();
             ComputedVariableInternal v = computedVariables.get(name);
-            e.addVariable(v);
+            if(allValues || v.isSettable() || (lastForward && v.isSample()))
+                e.addVariable(v);
         }
 
         p = new PriorityQueue<>(modelInputs.keySet());
@@ -795,68 +845,6 @@ public abstract class Model implements HasProbability, AutoCloseable {
             String name = p.poll();
             ObservedVariableShapeableInternal<?> v = shapeableObservedVariables.get(name);
             e.addShapedVariable(v);
-        }
-
-        e.close();
-    }
-
-    /**
-     * Saves the samples of the model.
-     * 
-     * @param filename name of the file to save to.
-     * @throws IOException Thrown if there is a problem with the filename.
-     */
-    public synchronized void saveModel(String filename) throws IOException {
-        saveModel(new File(filename));
-    }
-
-    /**
-     * Saves the samples of the model.
-     * 
-     * @param file Object representing the file to save to.
-     * @throws IOException Thrown if there is a problem with the filename.
-     */
-    public synchronized void saveModel(File file) throws IOException {
-        JsonModelEncoder e = new JsonModelEncoder(file, this);
-
-        // This can return all sampled variables, but when assigning to variables we
-        // will only want to assign to sampled variables.
-        // TODO construct a dependency graph of these variables, so when one is pinned
-        // we know which others to set and pin.
-        PriorityQueue<String> p = new PriorityQueue<>(computedVariables.keySet());
-        while(!p.isEmpty()) {
-            String name = p.poll();
-            ComputedVariableInternal v = computedVariables.get(name);
-            if(v.isSample) {
-                if(v.isFixed() == Immutability.FIXED || v.getRetentionPolicy() == RetentionPolicy.MAP
-                        || v.getRetentionPolicy() == RetentionPolicy.MAP_AND_SAMPLE)
-                    e.addVariable(v);
-                else // TODO work out what we should do here, as we may want to just average sampled
-                     // values etc.
-                    throw new SandwoodException(
-                            "Variable " + name + " needs a retention policy of map to store value.");
-            }
-        }
-
-        p = new PriorityQueue<>(modelInputs.keySet());
-        while(!p.isEmpty()) {
-            String name = p.poll();
-            ObservedVariableInternal v = modelInputs.get(name);
-            e.addVariable(v);
-        }
-
-        p = new PriorityQueue<>(regularObservedVariables.keySet());
-        while(!p.isEmpty()) {
-            String name = p.poll();
-            ObservedVariableInternal v = regularObservedVariables.get(name);
-            e.addVariable(v);
-        }
-
-        p = new PriorityQueue<>(shapeableObservedVariables.keySet());
-        while(!p.isEmpty()) {
-            String name = p.poll();
-            ObservedVariableInternal v = shapeableObservedVariables.get(name);
-            e.addVariable(v);
         }
 
         e.close();
@@ -888,9 +876,9 @@ public abstract class Model implements HasProbability, AutoCloseable {
             throw new SandwoodException(
                     "Unable to allocate model space: The input values and output shapes have not been set.\n"
                             + missingExecute());
-        allocate();
-
-        core.setIntermediates();
+        allocated = false;
+        intermediatesPrimed = false;
+        observationsPropagated = false;
     }
 
     /**

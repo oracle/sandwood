@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -18,7 +18,6 @@ import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorArray.ArrayFunctionData;
 import org.sandwood.compiler.compilation.util.SampleDescArray;
 import org.sandwood.compiler.compilation.util.TreeUtils;
-import org.sandwood.compiler.compilation.util.TreeUtils.ArrayDesc;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -27,7 +26,6 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
-import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
@@ -90,15 +88,6 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
 
     @Override
     protected void allocateGlobalStateInternal(CompilationContext compilationCtx, FuncData funcData) {
-        if(!funcData.sampleDesc.output.isSample()) {
-            if(!funcData.sampleDesc.selectTarget()) {
-                // Allocate space for storing the .
-                ArrayDesc<A> arrayDesc = (ArrayDesc<A>) TreeUtils.getArrayDescription(funcData.sampleDesc.output);
-                VariableDescription<ArrayVariable<A>> intermediateName = funcData.sampleDesc.output.getUniqueVarDesc();
-                IRTreeVoid allocator = TreeUtils.allocate(intermediateName, arrayDesc, compilationCtx);
-                compilationCtx.addConstructedClassField(intermediateName, allocator, true, Tree.NoComment);
-            }
-        }
         CompilationPhase phase = compilationCtx.phase;
         compilationCtx.phase = CompilationPhase.ALLOCATION;
         allocateGlobalState(compilationCtx, funcData);

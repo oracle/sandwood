@@ -36,9 +36,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	private boolean[] output;
 	private double[] p;
 	private int[] prior;
-	private boolean setFlag$output = false;
-	private boolean setFlag$p = false;
-	private boolean setFlag$prior = false;
 	private boolean system$gibbsForward = true;
 
 	public MultinomialBernoulli$SingleThreadCPU(ExecutionTarget target) {
@@ -184,8 +181,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Setter for observed.
 	@Override
 	public final void set$observed(boolean[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -205,10 +201,8 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$p(double[] cv$value) {
 		// Set flags for all the side effects of p including if probabilities need to be updated.
-		// Set p with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set p
 		p = cv$value;
-		setFlag$p = true;
 		
 		// Unset the fixed probability flag for sample 17 as it depends on p.
 		fixedProbFlag$sample17 = false;
@@ -228,10 +222,8 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void set$prior(int[] cv$value) {
 		// Set flags for all the side effects of prior including if probabilities need to
 		// be updated.
-		// Set prior with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set prior
 		prior = cv$value;
-		setFlag$prior = true;
 		
 		// Unset the fixed probability flag for sample 20 as it depends on prior.
 		fixedProbFlag$sample20 = false;
@@ -1087,7 +1079,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 		
 		// If p has not been set already allocate space.
-		if(!setFlag$p) {
+		if(!fixedFlag$sample17) {
 			// Constructor for p
 			{
 				p = new double[3];
@@ -1095,7 +1087,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 		
 		// If prior has not been set already allocate space.
-		if(!setFlag$prior) {
+		if(!fixedFlag$sample20) {
 			// Constructor for prior
 			{
 				prior = new int[3];
@@ -1294,7 +1286,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = observed;
 		boolean[] cv$target1 = output;
@@ -1304,7 +1296,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

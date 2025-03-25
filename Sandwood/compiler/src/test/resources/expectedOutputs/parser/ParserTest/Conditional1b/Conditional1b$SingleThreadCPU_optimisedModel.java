@@ -715,14 +715,12 @@ class Conditional1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void propogateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		value = observedValue;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!guard)
-			u = observedValue;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

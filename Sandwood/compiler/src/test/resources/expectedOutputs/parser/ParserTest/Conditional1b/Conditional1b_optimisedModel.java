@@ -17,15 +17,14 @@ public class Conditional1b extends Model {
 
     private Conditional1b$CoreInterface system$c = new Conditional1b$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {
             system$c.set$guard(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class Conditional1b extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $u = new ComputedDoubleInternal(this, "u", true) {
+    private final ComputedDoubleInternal $u = new ComputedDoubleInternal(this, "u", true, true, false) {
         @Override
         public double getValue() { return system$c.get$u(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$u(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -87,7 +85,7 @@ public class Conditional1b extends Model {
      */
     public final ComputedDouble u = $u;
 
-    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false) {
+    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, false, false) {
         @Override
         public double getValue() { return system$c.get$value(); }
 
@@ -198,22 +196,21 @@ public class Conditional1b extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Conditional1b$CoreInterface oldCore, Conditional1b$CoreInterface newCore) {
         //Observed scalars
         if(observedValue.isSet())
             newCore.set$observedValue(oldCore.get$observedValue());
 
         //ComputedVariables
-        if(guard.isSet())
+        if($guard.isSet())
             newCore.set$guard(oldCore.get$guard());
-        if(u.isSet())
+        if($u.isSet())
             newCore.set$u(oldCore.get$u());
 
         //Set fixed flags
-        if(guard.isSet())
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        if(u.isSet())
-            newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
     }
 
     /**

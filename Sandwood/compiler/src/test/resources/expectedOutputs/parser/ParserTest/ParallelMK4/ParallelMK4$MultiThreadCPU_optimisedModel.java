@@ -24,8 +24,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var100;
 	private double[][] logProbability$var58;
 	private int[] observed;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection1 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK4$MultiThreadCPU(ExecutionTarget target) {
@@ -75,10 +73,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$indirection1(double[][] cv$value) {
 		// Set flags for all the side effects of indirection1 including if probabilities need
 		// to be updated.
-		// Set indirection1 with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set indirection1
 		indirection1 = cv$value;
-		setFlag$indirection1 = true;
 		
 		// Unset the fixed probability flag for sample 61 as it depends on indirection1.
 		fixedProbFlag$sample61 = false;
@@ -144,8 +140,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for observed.
 	@Override
 	public final void set$observed(int[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -446,7 +441,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		generated = new int[length$observed];
 		
 		// If indirection1 has not been set already allocate space.
-		if(!setFlag$indirection1) {
+		if(!fixedFlag$sample61) {
 			// Constructor for indirection1
 			indirection1 = new double[length$observed][];
 			for(int var16 = 0; var16 < length$observed; var16 += 1)
@@ -851,7 +846,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -861,11 +856,13 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$indirection1)
+		if(fixedFlag$sample61)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, length$observed, 1,
 				(int forStart$index$k, int forEnd$index$k, int threadID$index$k, org.sandwood.random.internal.Rng RNG$1) -> { 

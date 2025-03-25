@@ -17,7 +17,7 @@ public class ParallelMK2 extends Model {
 
     private ParallelMK2$CoreInterface system$c = new ParallelMK2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", true) {
+    private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$generated(); }
 
@@ -48,15 +48,14 @@ public class ParallelMK2 extends Model {
      */
     public final ComputedDoubleArray generated = $generated;
 
-    private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", false) {
+    private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$indirection(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$indirection(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -82,6 +81,40 @@ public class ParallelMK2 extends Model {
      * Computed variable representing indirection of type double[] from the Sandwood model 
      */
     public final ComputedDoubleArray indirection = $indirection;
+
+    private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true, true, false) {
+        @Override
+        public double[] getValue() { return system$c.get$sample(); }
+
+        @Override
+        protected void setValueInternal(double[] value) {
+            system$c.set$sample(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$sample(); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample26(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample26())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    /**
+     * Computed variable representing sample of type double[] from the Sandwood model 
+     */
+    public final ComputedDoubleArray sample = $sample;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -119,7 +152,7 @@ public class ParallelMK2 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$generated, $indirection};
+    private HasProbabilityInternal[] $probabilityVariables = {$generated, $indirection, $sample};
 
     //Constructors
     /**
@@ -130,6 +163,7 @@ public class ParallelMK2 extends Model {
         //ComputedVariable
         $computedVariables.put("generated", $generated);
         $computedVariables.put("indirection", $indirection);
+        $computedVariables.put("sample", $sample);
 
         //Observed array fields
         $shapedObservedValues.put("observed", $observed);
@@ -174,6 +208,7 @@ public class ParallelMK2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(ParallelMK2$CoreInterface oldCore, ParallelMK2$CoreInterface newCore) {
 
         //Observed arrays
@@ -185,10 +220,13 @@ public class ParallelMK2 extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(indirection.isSet())
+        if($indirection.isSet())
             newCore.set$indirection(oldCore.get$indirection());
+        if($sample.isSet())
+            newCore.set$sample(oldCore.get$sample());
 
         //Set fixed flags
+        newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
     }
 
     /**
@@ -233,10 +271,13 @@ public class ParallelMK2 extends Model {
         public final double[] generated;
         /** Field holding the value of indirection after a convention execution step.*/
         public final double[] indirection;
+        /** Field holding the value of sample after a convention execution step.*/
+        public final double[] sample;
 
         InferredValueOutputs(ParallelMK2 system$model) {
             this.generated = system$model.generated.getSamples()[0];
             this.indirection = system$model.indirection.getSamples()[0];
+            this.sample = system$model.sample.getSamples()[0];
         }
     }
 
@@ -249,11 +290,14 @@ public class ParallelMK2 extends Model {
         public final double generated;
         /** Field holding the log probability of computed variable indirection */
         public final double indirection;
+        /** Field holding the log probability of computed variable sample */
+        public final double sample;
 
         LogProbabilities(ParallelMK2 system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.generated = system$model.generated.getLogProbability();
             this.indirection = system$model.indirection.getLogProbability();
+            this.sample = system$model.sample.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -270,11 +314,14 @@ public class ParallelMK2 extends Model {
         public final double generated;
         /** Field holding the probability of computed variable indirection */
         public final double indirection;
+        /** Field holding the probability of computed variable sample */
+        public final double sample;
 
         Probabilities(ParallelMK2 system$model) {
             this.$modelProbability = system$model.getProbability();
             this.generated = system$model.generated.getProbability();
             this.indirection = system$model.indirection.getProbability();
+            this.sample = system$model.sample.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -288,9 +335,12 @@ public class ParallelMK2 extends Model {
     public static class InferredModelOutputs {
         /** Field holding the MAP or Sample value of indirection after an infer model call. */
         public final double[][] indirection;
+        /** Field holding the MAP or Sample value of sample after an infer model call. */
+        public final double[][] sample;
 
         InferredModelOutputs(ParallelMK2 system$model) {
             this.indirection = system$model.getInferredValue(system$model.$indirection);
+            this.sample = system$model.getInferredValue(system$model.$sample);
         }
     }
 

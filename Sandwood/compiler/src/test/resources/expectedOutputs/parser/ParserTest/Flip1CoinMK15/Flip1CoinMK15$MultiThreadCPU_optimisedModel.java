@@ -26,7 +26,6 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var47;
 	private double logProbability$var7;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK15$MultiThreadCPU(ExecutionTarget target) {
@@ -99,8 +98,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -497,7 +495,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction421Index" with its value "1".
+				// Substituted "cv$reduction401Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -518,7 +516,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction421Index" with its value "1".
+				// Substituted "cv$reduction401Index" with its value "1".
 				double reduceVar$var33$16 = ((b / 2) + c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
@@ -635,7 +633,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction421Index" with its value "1".
+			// Substituted "cv$reduction401Index" with its value "1".
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -656,7 +654,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction421Index" with its value "1".
+			// Substituted "cv$reduction401Index" with its value "1".
 			double reduceVar$var33$16 = ((cv$proposedValue / 2) + c[1]);
 			
 			// Processing sample task 50 of consumer random variable bernoulli.
@@ -1011,43 +1009,43 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		for(int i$var58 = (samples - 1); i$var58 >= 0; i$var58 -= 1)
 			flips[i$var58] = flipsMeasured[i$var58];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(guard1)
-			bias = b;
-		else {
-			c[0] = (b / 2);
-			c[1] = (b / 2);
-			
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// i$var30's comment
-			// Set the left hand term of the reduction function to the return variable value.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction30Index" with its value "1".
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
+		if(fixedFlag$sample8) {
+			if(guard1)
+				bias = b;
+			else {
+				c[0] = (b / 2);
+				c[1] = (b / 2);
+				
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// i$var30's comment
+				// Set the left hand term of the reduction function to the return variable value.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction30Index" with its value "1".
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction30Index" with its value "0".
+				bias = (c[0] + c[1]);
+			}
 		}
 	}
 

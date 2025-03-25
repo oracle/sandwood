@@ -17,15 +17,14 @@ public class Conditional2c extends Model {
 
     private Conditional2c$CoreInterface system$c = new Conditional2c$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {
             system$c.set$guard(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class Conditional2c extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $u = new ComputedDoubleInternal(this, "u", true) {
+    private final ComputedDoubleInternal $u = new ComputedDoubleInternal(this, "u", true, true, false) {
         @Override
         public double getValue() { return system$c.get$u(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$u(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -87,7 +85,7 @@ public class Conditional2c extends Model {
      */
     public final ComputedDouble u = $u;
 
-    private final ComputedDoubleInternal $v = new ComputedDoubleInternal(this, "v", false) {
+    private final ComputedDoubleInternal $v = new ComputedDoubleInternal(this, "v", false, false, false) {
         @Override
         public double getValue() { return system$c.get$v(); }
 
@@ -123,7 +121,7 @@ public class Conditional2c extends Model {
      */
     public final ComputedDouble v = $v;
 
-    private final ComputedDoubleArrayInternal $value = new ComputedDoubleArrayInternal(this, "value", false) {
+    private final ComputedDoubleArrayInternal $value = new ComputedDoubleArrayInternal(this, "value", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$value(); }
 
@@ -154,7 +152,7 @@ public class Conditional2c extends Model {
      */
     public final ComputedDoubleArray value = $value;
 
-    private final ComputedDoubleArrayInternal $value2 = new ComputedDoubleArrayInternal(this, "value2", false) {
+    private final ComputedDoubleArrayInternal $value2 = new ComputedDoubleArrayInternal(this, "value2", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$value2(); }
 
@@ -267,22 +265,21 @@ public class Conditional2c extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Conditional2c$CoreInterface oldCore, Conditional2c$CoreInterface newCore) {
         //Observed scalars
         if(observedValue.isSet())
             newCore.set$observedValue(oldCore.get$observedValue());
 
         //ComputedVariables
-        if(guard.isSet())
+        if($guard.isSet())
             newCore.set$guard(oldCore.get$guard());
-        if(u.isSet())
+        if($u.isSet())
             newCore.set$u(oldCore.get$u());
 
         //Set fixed flags
-        if(guard.isSet())
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        if(u.isSet())
-            newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
     }
 
     /**

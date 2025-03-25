@@ -21,7 +21,6 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var5;
 	private double logProbability$var6;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double var6;
 
@@ -109,6 +108,18 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	@Override
+	public final double get$var6() {
+		return var6;
+	}
+
+	@Override
+	public final void set$var6(double cv$value) {
+		var6 = cv$value;
+		fixedProbFlag$sample6 = false;
+		fixedProbFlag$sample19 = false;
 	}
 
 	private final void logProbabilityValue$sample19() {
@@ -245,7 +256,7 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];

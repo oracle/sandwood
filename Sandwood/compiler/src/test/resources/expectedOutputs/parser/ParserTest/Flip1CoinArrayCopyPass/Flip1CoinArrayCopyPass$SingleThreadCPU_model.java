@@ -24,8 +24,6 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$var10;
 	private double logProbability$var9;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinArrayCopyPass$SingleThreadCPU(ExecutionTarget target) {
@@ -55,10 +53,8 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 10 as it depends on bias.
 		fixedProbFlag$sample10 = false;
@@ -104,8 +100,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -417,7 +412,13 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-		bias[0] = var10;
+		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		{
+			{
+				bias[0] = var10;
+			}
+		}
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
 		// 
@@ -440,7 +441,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void allocator() {
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample10) {
 			// Constructor for bias
 			{
 				bias = new double[(samples + 1)];
@@ -615,7 +616,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -625,14 +626,11 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
-	public final void setIntermediates() {
-		for(int i = 0; i < samples; i += 1) {
-			if(setFlag$bias)
-				bias[(i + 1)] = bias[0];
-		}
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

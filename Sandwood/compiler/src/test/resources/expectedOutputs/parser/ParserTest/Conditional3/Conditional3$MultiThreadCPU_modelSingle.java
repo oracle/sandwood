@@ -156,6 +156,26 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
+	// Getter for var14.
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	// Setter for var14.
+	@Override
+	public final void set$var14(double cv$value) {
+		// Set flags for all the side effects of var14 including if probabilities need to
+		// be updated.
+		var14 = cv$value;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on var14.
+		fixedProbFlag$sample16 = false;
+		
+		// Unset the fixed probability flag for sample 20 as it depends on var14.
+		fixedProbFlag$sample20 = false;
+	}
+
 	// Calculate the probability of the samples represented by sample16 using sampled
 	// values.
 	private final void logProbabilityValue$sample16() {
@@ -1231,18 +1251,20 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		value = observedValue;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(true) {
-			if(guard)
-				bias = 0.5;
-			else
+		if(guard)
+			bias = 0.5;
+		else {
+			if(fixedFlag$sample16)
 				bias = var14;
 		}
 	}

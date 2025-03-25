@@ -29,8 +29,6 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample78;
 	private double logProbability$var10;
 	private double logProbability$var23;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK12$MultiThreadCPU(ExecutionTarget target) {
@@ -45,7 +43,6 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample23 = false;
 		fixedProbFlag$sample50 = false;
@@ -404,7 +401,11 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[0] = var10;
+		{
+			{
+				bias[0] = var10;
+			}
+		}
 	}
 
 	private final void sample23(int i$var22, int threadID$cv$i$var22, Rng RNG$) {
@@ -443,7 +444,11 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[i$var22] = var23;
+		{
+			{
+				bias[i$var22] = var23;
+			}
+		}
 	}
 
 	@Override
@@ -463,7 +468,7 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int l = 0; l < length$flipsMeasured.length; l += 1)
 				intermediateFlips[l] = new boolean[length$flipsMeasured[l]];
 		}
-		if(!setFlag$bias) {
+		if((!fixedFlag$sample10 || !fixedFlag$sample23)) {
 			{
 				bias = new double[length$flipsMeasured.length];
 			}
@@ -661,7 +666,7 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		{
 			parallelFor(RNG$, 0, length$flipsMeasured.length, 1,
 				(int forStart$index$l, int forEnd$index$l, int threadID$index$l, org.sandwood.random.internal.Rng RNG$1) -> { 

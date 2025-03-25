@@ -17,15 +17,14 @@ public class LogitRegressionTest extends Model {
 
     private LogitRegressionTest$CoreInterface system$c = new LogitRegressionTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class LogitRegressionTest extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true) {
+    private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$weights(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$weights(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -87,7 +85,7 @@ public class LogitRegressionTest extends Model {
      */
     public final ComputedDoubleArray weights = $weights;
 
-    private final ComputedObjectArrayInternal<boolean[]> $y = new ComputedObjectArrayInternal<boolean[]>(this, "y", true, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
+    private final ComputedObjectArrayInternal<boolean[]> $y = new ComputedObjectArrayInternal<boolean[]>(this, "y", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
         public boolean[][] getValue() { return system$c.get$y(); }
 
@@ -224,6 +222,7 @@ public class LogitRegressionTest extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(LogitRegressionTest$CoreInterface oldCore, LogitRegressionTest$CoreInterface newCore) {
         //Model inputs
         if(x.isSet())
@@ -233,16 +232,14 @@ public class LogitRegressionTest extends Model {
             newCore.set$yMeasured(oldCore.get$yMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(weights.isSet())
+        if($weights.isSet())
             newCore.set$weights(oldCore.get$weights());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
-        if(weights.isSet())
-            newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
+        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
+        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
     }
 
     /**

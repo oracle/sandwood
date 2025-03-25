@@ -41,10 +41,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$weekly_ut;
 	private int noProducts;
 	private int s;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$ut = false;
-	private boolean setFlag$weekly_sales = false;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
 	private double[][] weekly_rates;
@@ -98,7 +94,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 		fixedProbFlag$sample69 = false;
 		fixedProbFlag$sample131 = false;
 	}
@@ -152,7 +147,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
-		setFlag$lambda = true;
 		fixedProbFlag$sample54 = false;
 		fixedProbFlag$sample69 = false;
 	}
@@ -225,7 +219,6 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample22 = false;
 		fixedProbFlag$sample131 = false;
 	}
@@ -484,12 +477,12 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut)
+		if(!fixedFlag$sample22)
 			ut = new double[noProducts];
 		exped = new double[noProducts];
-		if(!setFlag$lambda)
+		if(!fixedFlag$sample54)
 			lambda = new double[T];
-		if(!setFlag$arrivals)
+		if(!fixedFlag$sample69)
 			arrivals = new int[T];
 		Sales = new int[T][];
 		for(int t$var81 = 0; t$var81 < T; t$var81 += 1)
@@ -748,7 +741,7 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = Sales.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = ObsSales[cv$index1];
@@ -765,19 +758,20 @@ class Vulcano2012notNormalized$SingleThreadCPU extends org.sandwood.runtime.inte
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$ut) {
+		if(fixedFlag$sample22) {
 			for(int j$var34 = 0; j$var34 < noProducts; j$var34 += 1)
 				exped[j$var34] = Math.exp(ut[j$var34]);
 		}
 		for(int t$var81 = 0; t$var81 < T; t$var81 += 1) {
-			if(setFlag$ut) {
+			if(fixedFlag$sample22) {
 				for(int j$var96 = 0; j$var96 < noProducts; j$var96 += 1)
 					weekly_ut[t$var81][j$var96] = (exped[j$var96] * Avail[t$var81][j$var96]);
 			}
-			double reduceVar$denom$9 = 0.0;
-			for(int cv$reduction108Index = 0; cv$reduction108Index <= noProducts; cv$reduction108Index += 1)
-				reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t$var81][cv$reduction108Index]);
-			if(setFlag$ut) {
+			weekly_ut[t$var81][noProducts] = 1.0;
+			if(fixedFlag$sample22) {
+				double reduceVar$denom$9 = 0.0;
+				for(int cv$reduction108Index = 0; cv$reduction108Index <= noProducts; cv$reduction108Index += 1)
+					reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t$var81][cv$reduction108Index]);
 				for(int j$var124 = 0; j$var124 <= noProducts; j$var124 += 1)
 					weekly_rates[t$var81][j$var124] = (weekly_ut[t$var81][j$var124] / reduceVar$denom$9);
 			}

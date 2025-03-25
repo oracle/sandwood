@@ -17,15 +17,14 @@ public class LDATest extends Model {
 
     private LDATest$CoreInterface system$c = new LDATest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$phi(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$phi(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -57,15 +56,14 @@ public class LDATest extends Model {
      */
     public final ComputedObjectArray<double[]> phi = $phi;
 
-    private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$theta(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$theta(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -97,7 +95,7 @@ public class LDATest extends Model {
      */
     public final ComputedObjectArray<double[]> theta = $theta;
 
-    private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$w(); }
 
@@ -132,6 +130,45 @@ public class LDATest extends Model {
      * Computed variable representing w of type int[][] from the Sandwood model 
      */
     public final ComputedObjectArray<int[]> w = $w;
+
+    private final ComputedObjectArrayInternal<int[]> $z = new ComputedObjectArrayInternal<int[]>(this, "z", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+        @Override
+        public int[][] getValue() { return system$c.get$z(); }
+
+        @Override
+        protected void setValueInternal(int[][] value) {
+            system$c.set$z(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$z(); }
+
+        @Override
+        public int[][][] constructArray(int iterations) {
+            return new int[iterations][][];
+        }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample90(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample90())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    /**
+     * Computed variable representing z of type int[][] from the Sandwood model 
+     */
+    public final ComputedObjectArray<int[]> z = $z;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -211,7 +248,7 @@ public class LDATest extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$phi, $theta, $w};
+    private HasProbabilityInternal[] $probabilityVariables = {$phi, $theta, $w, $z};
 
     //Constructors
     /**
@@ -223,6 +260,7 @@ public class LDATest extends Model {
         $computedVariables.put("phi", $phi);
         $computedVariables.put("theta", $theta);
         $computedVariables.put("w", $w);
+        $computedVariables.put("z", $z);
 
         //ModelInputs
         $modelInputs.put("noTopics", $noTopics);
@@ -279,6 +317,7 @@ public class LDATest extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(LDATest$CoreInterface oldCore, LDATest$CoreInterface newCore) {
         //Model inputs
         if(noTopics.isSet())
@@ -295,16 +334,17 @@ public class LDATest extends Model {
             newCore.set$length$documents(oldCore.get$length$documents());
 
         //ComputedVariables
-        if(phi.isSet())
+        if($phi.isSet())
             newCore.set$phi(oldCore.get$phi());
-        if(theta.isSet())
+        if($theta.isSet())
             newCore.set$theta(oldCore.get$theta());
+        if($z.isSet())
+            newCore.set$z(oldCore.get$z());
 
         //Set fixed flags
-        if(phi.isSet())
-            newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
-        if(theta.isSet())
-            newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
+        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
+        newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
+        newCore.set$fixedFlag$sample90(oldCore.get$fixedFlag$sample90());
     }
 
     /**
@@ -367,11 +407,14 @@ public class LDATest extends Model {
         public final double[][] theta;
         /** Field holding the value of w after a convention execution step.*/
         public final int[][] w;
+        /** Field holding the value of z after a convention execution step.*/
+        public final int[][] z;
 
         InferredValueOutputs(LDATest system$model) {
             this.phi = system$model.phi.getSamples()[0];
             this.theta = system$model.theta.getSamples()[0];
             this.w = system$model.w.getSamples()[0];
+            this.z = system$model.z.getSamples()[0];
         }
     }
 
@@ -386,12 +429,15 @@ public class LDATest extends Model {
         public final double theta;
         /** Field holding the log probability of computed variable w */
         public final double w;
+        /** Field holding the log probability of computed variable z */
+        public final double z;
 
         LogProbabilities(LDATest system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.phi = system$model.phi.getLogProbability();
             this.theta = system$model.theta.getLogProbability();
             this.w = system$model.w.getLogProbability();
+            this.z = system$model.z.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -410,12 +456,15 @@ public class LDATest extends Model {
         public final double theta;
         /** Field holding the probability of computed variable w */
         public final double w;
+        /** Field holding the probability of computed variable z */
+        public final double z;
 
         Probabilities(LDATest system$model) {
             this.$modelProbability = system$model.getProbability();
             this.phi = system$model.phi.getProbability();
             this.theta = system$model.theta.getProbability();
             this.w = system$model.w.getProbability();
+            this.z = system$model.z.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -431,10 +480,13 @@ public class LDATest extends Model {
         public final double[][][] phi;
         /** Field holding the MAP or Sample value of theta after an infer model call. */
         public final double[][][] theta;
+        /** Field holding the MAP or Sample value of z after an infer model call. */
+        public final int[][][] z;
 
         InferredModelOutputs(LDATest system$model) {
             this.phi = system$model.getInferredValue(system$model.$phi);
             this.theta = system$model.getInferredValue(system$model.$theta);
+            this.z = system$model.getInferredValue(system$model.$z);
         }
     }
 

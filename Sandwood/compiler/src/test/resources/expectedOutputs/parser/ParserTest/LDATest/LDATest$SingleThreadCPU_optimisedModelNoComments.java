@@ -35,10 +35,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private double logProbability$z;
 	private int noTopics;
 	private double[][] phi;
-	private boolean setFlag$phi = false;
-	private boolean setFlag$theta = false;
-	private boolean setFlag$w = false;
-	private boolean setFlag$z = false;
 	private boolean system$gibbsForward = true;
 	private double[][] theta;
 	private int vocabSize;
@@ -163,7 +159,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$phi(double[][] cv$value) {
 		phi = cv$value;
-		setFlag$phi = true;
 		fixedProbFlag$sample42 = false;
 		fixedProbFlag$sample93 = false;
 	}
@@ -176,7 +171,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$theta(double[][] cv$value) {
 		theta = cv$value;
-		setFlag$theta = true;
 		fixedProbFlag$sample58 = false;
 		fixedProbFlag$sample90 = false;
 	}
@@ -204,7 +198,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$z(int[][] cv$value) {
 		z = cv$value;
-		setFlag$z = true;
 	}
 
 	private final void logProbabilityValue$sample42() {
@@ -377,12 +370,12 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	public final void allocator() {
 		alpha = new double[noTopics];
 		beta = new double[vocabSize];
-		if(!setFlag$phi) {
+		if(!fixedFlag$sample42) {
 			phi = new double[noTopics][];
 			for(int var41 = 0; var41 < noTopics; var41 += 1)
 				phi[var41] = new double[vocabSize];
 		}
-		if(!setFlag$theta) {
+		if(!fixedFlag$sample58) {
 			theta = new double[length$documents.length][];
 			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
 				theta[var56] = new double[noTopics];
@@ -390,7 +383,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		w = new int[length$documents.length][];
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 			w[i$var71] = new int[length$documents[i$var71]];
-		if(!setFlag$z) {
+		if(!fixedFlag$sample90) {
 			z = new int[length$documents.length][];
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 				z[i$var71] = new int[length$documents[i$var71]];
@@ -600,7 +593,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = w.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = documents[cv$index1];

@@ -22,7 +22,6 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$var5;
 	private double rate;
 	private int samples;
-	private boolean setFlag$decay = false;
 	private boolean system$gibbsForward = true;
 
 	public PoissonDecayMK1$MultiThreadCPU(ExecutionTarget target) {
@@ -342,7 +341,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int[] cv$source1 = decayDetected;
 		int[] cv$target1 = decay;
 		int cv$length1 = cv$target1.length;

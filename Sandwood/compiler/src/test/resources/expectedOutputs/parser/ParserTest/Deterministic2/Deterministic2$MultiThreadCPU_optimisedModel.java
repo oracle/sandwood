@@ -35,9 +35,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -55,10 +52,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$a(int[] cv$value) {
 		// Set flags for all the side effects of a including if probabilities need to be updated.
-		// Set a with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set a
 		a = cv$value;
-		setFlag$a = true;
 		
 		// Unset the fixed probability flag for sample 55 as it depends on a.
 		fixedProbFlag$sample55 = false;
@@ -71,6 +66,19 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int[] get$b() {
 		return b;
+	}
+
+	// Getter for distribution$sample55.
+	@Override
+	public final double[][] get$distribution$sample55() {
+		return distribution$sample55;
+	}
+
+	// Setter for distribution$sample55.
+	@Override
+	public final void set$distribution$sample55(double[][] cv$value) {
+		// Set distribution$sample55
+		distribution$sample55 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample29.
@@ -140,8 +148,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -191,10 +198,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 29 as it depends on m.
 		fixedProbFlag$sample29 = false;
@@ -926,9 +931,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					// 
 					// Value of the variable at this index
 					// 
-					// cv$temp$1$$var835's comment
+					// cv$temp$1$$var829's comment
 					// 
-					// $var835's comment
+					// $var829's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$0$var52's comment
@@ -1099,9 +1104,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$10$$var887's comment
+					// cv$temp$10$$var881's comment
 					// 
-					// $var887's comment
+					// $var881's comment
 					// Constructing a random variable input for use later.
 					// 
 					// Constructing a random variable input for use later.
@@ -1263,7 +1268,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		v = new double[5];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			// Constructor for m
 			m = new double[5][];
 			for(int var28 = 0; var28 < 5; var28 += 1)
@@ -1271,7 +1276,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If a has not been set already allocate space.
-		if(!setFlag$a)
+		if(!fixedFlag$sample55)
 			// Constructor for a
 			a = new int[n];
 		
@@ -1634,7 +1639,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1644,11 +1649,13 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$a) {
+		if(fixedFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				b[i$var46] = a[(i$var46 - 1)];
 		}

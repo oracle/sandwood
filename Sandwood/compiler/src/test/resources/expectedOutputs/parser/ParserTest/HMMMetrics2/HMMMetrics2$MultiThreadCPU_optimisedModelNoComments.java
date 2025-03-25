@@ -73,20 +73,32 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] metric_var;
 	private int noSamples;
 	private int noStates;
-	private boolean setFlag$initialStateDistribution = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$metric_g = false;
-	private boolean setFlag$metric_mean = false;
-	private boolean setFlag$metric_valid_bias = false;
-	private boolean setFlag$metric_valid_g = false;
-	private boolean setFlag$metric_var = false;
-	private boolean setFlag$st = false;
 	private int[][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
 	public HMMMetrics2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
+	}
+
+	@Override
+	public final double[][] get$distribution$sample104() {
+		return distribution$sample104;
+	}
+
+	@Override
+	public final void set$distribution$sample104(double[][] cv$value) {
+		distribution$sample104 = cv$value;
+	}
+
+	@Override
+	public final double[][][] get$distribution$sample123() {
+		return distribution$sample123;
+	}
+
+	@Override
+	public final void set$distribution$sample123(double[][][] cv$value) {
+		distribution$sample123 = cv$value;
 	}
 
 	@Override
@@ -195,7 +207,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$initialStateDistribution(double[] cv$value) {
 		initialStateDistribution = cv$value;
-		setFlag$initialStateDistribution = true;
 		fixedProbFlag$sample19 = false;
 		fixedProbFlag$sample104 = false;
 	}
@@ -268,7 +279,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample32 = false;
 		fixedProbFlag$sample123 = false;
 	}
@@ -296,7 +306,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$metric_mean(double[] cv$value) {
 		metric_mean = cv$value;
-		setFlag$metric_mean = true;
 		fixedProbFlag$sample52 = false;
 		fixedProbFlag$sample157 = false;
 	}
@@ -319,7 +328,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$metric_valid_bias(double[] cv$value) {
 		metric_valid_bias = cv$value;
-		setFlag$metric_valid_bias = true;
 		fixedProbFlag$sample84 = false;
 		fixedProbFlag$sample145 = false;
 	}
@@ -337,7 +345,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$metric_var(double[] cv$value) {
 		metric_var = cv$value;
-		setFlag$metric_var = true;
 		fixedProbFlag$sample68 = false;
 		fixedProbFlag$sample157 = false;
 	}
@@ -365,7 +372,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample104 = false;
 		fixedProbFlag$sample123 = false;
 		fixedProbFlag$sample145 = false;
@@ -1527,15 +1533,15 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 						}
 					} else {
-						for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
-							double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+						for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+							double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var66 = st[sample][0];
 							if(((0 <= var66) && (var66 < noStates))) {
 								double cv$temp$9$var149 = metric_var[st[sample][0]];
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$originalValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$originalValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1572,15 +1578,15 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 							}
 						} else {
-							for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
-								double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+							for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
+								double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								int var66 = st[sample][timeStep$var136];
 								if(((0 <= var66) && (var66 < noStates))) {
 									double cv$temp$27$var149 = metric_var[st[sample][timeStep$var136]];
-									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$originalValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
-									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$originalValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
+									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 								}
 								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 								if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1621,15 +1627,15 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 					}
 				} else {
-					for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
-						double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+					for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+						double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						int var66 = st[sample][0];
 						if(((0 <= var66) && (var66 < noStates))) {
 							double cv$temp$9$var149 = metric_var[st[sample][0]];
-							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$proposedValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
-							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$proposedValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
+							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1666,15 +1672,15 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 						}
 					} else {
-						for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
-							double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+						for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
+							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var66 = st[sample][timeStep$var136];
 							if(((0 <= var66) && (var66 < noStates))) {
 								double cv$temp$27$var149 = metric_var[st[sample][timeStep$var136]];
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$proposedValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$proposedValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1723,14 +1729,14 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 						}
 					} else {
-						for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
-							double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+						for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+							double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var50 = st[sample][0];
 							if(((0 <= var50) && (var50 < noStates))) {
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1766,14 +1772,14 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 							}
 						} else {
-							for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
-								double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+							for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
+								double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								int var50 = st[sample][timeStep$var136];
 								if(((0 <= var50) && (var50 < noStates))) {
-									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
-									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 								}
 								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 								if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1813,14 +1819,14 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 					}
 				} else {
-					for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
-						double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+					for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+						double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						int var50 = st[sample][0];
 						if(((0 <= var50) && (var50 < noStates))) {
-							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
-							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1856,14 +1862,14 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 						}
 					} else {
-						for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
-							double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+						for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
+							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var50 = st[sample][timeStep$var136];
 							if(((0 <= var50) && (var50 < noStates))) {
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
 							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
@@ -1973,14 +1979,14 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void allocator() {
 		v = new double[noStates];
-		if(!setFlag$initialStateDistribution)
+		if(!fixedFlag$sample19)
 			initialStateDistribution = new double[noStates];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample32) {
 			m = new double[noStates][];
 			for(int var31 = 0; var31 < noStates; var31 += 1)
 				m[var31] = new double[noStates];
 		}
-		if(!setFlag$st) {
+		if((!fixedFlag$sample104 || !fixedFlag$sample123)) {
 			st = new int[length$metric.length][];
 			for(int sample = 0; sample < length$metric.length; sample += 1)
 				st[sample] = new int[length$metric[sample]];
@@ -1991,11 +1997,11 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		metric_valid_g = new boolean[length$metric.length][];
 		for(int sample = 0; sample < length$metric.length; sample += 1)
 			metric_valid_g[sample] = new boolean[length$metric[sample]];
-		if(!setFlag$metric_mean)
+		if(!fixedFlag$sample52)
 			metric_mean = new double[noStates];
-		if(!setFlag$metric_var)
+		if(!fixedFlag$sample68)
 			metric_var = new double[noStates];
-		if(!setFlag$metric_valid_bias)
+		if(!fixedFlag$sample84)
 			metric_valid_bias = new double[noStates];
 		distribution$sample104 = new double[length$metric.length][];
 		for(int sample = 0; sample < length$metric.length; sample += 1)
@@ -2131,10 +2137,8 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
-						int sample = index$sample;
-						int threadID$sample = threadID$index$sample;
+			(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
 						if(!fixedFlag$sample104) {
 							double[] cv$distribution$sample104 = distribution$sample104[sample];
 							for(int index$var101 = 0; index$var101 < noStates; index$var101 += 1)
@@ -2184,17 +2188,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									cv$distribution$sample123[index$var120] = (cv$distribution$sample123[index$var120] / cv$var120$sum);
 							}
 						}
-						boolean[] metric_valid_1d = metric_valid_g[sample];
-						double[] metric_1d = metric_g[sample];
-						parallelFor(RNG$1, 0, length$metric[sample], 1,
-							(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
-								for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
-										metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
-											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
-									}
-							}
-						);
 					}
 			}
 		);
@@ -2237,10 +2230,8 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			);
 
 		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
-						int sample = index$sample;
-						int threadID$sample = threadID$index$sample;
+			(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
 						if(!fixedFlag$sample104)
 							st[sample][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
 						if(!fixedFlag$sample123) {
@@ -2248,17 +2239,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
 								var114[timeStep$var113] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample][(timeStep$var113 - 1)]], noStates);
 						}
-						boolean[] metric_valid_1d = metric_valid_g[sample];
-						double[] metric_1d = metric_g[sample];
-						parallelFor(RNG$1, 0, length$metric[sample], 1,
-							(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
-								for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
-										metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
-											metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
-									}
-							}
-						);
 					}
 			}
 		);

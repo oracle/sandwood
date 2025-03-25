@@ -24,7 +24,6 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$var5;
 	private double rate;
 	private int samples;
-	private boolean setFlag$decay = false;
 	private boolean system$gibbsForward = true;
 
 	public PoissonDecayMK1$MultiThreadCPU(ExecutionTarget target) {
@@ -70,8 +69,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	// Setter for decayDetected.
 	@Override
 	public final void set$decayDetected(int[] cv$value) {
-		// Set decayDetected with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set decayDetected
 		decayDetected = cv$value;
 	}
 
@@ -525,7 +523,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -535,7 +533,9 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

@@ -260,11 +260,10 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			u = DistributionSampling.sampleUniform(RNG$);
 			v = (u + 1);
 		}
-		if(guard) {
-			if(!fixedFlag$sample4)
-				value[0] = 1.0;
-		} else {
-			if((!fixedFlag$sample4 || !fixedFlag$sample10))
+		if(guard)
+			value[0] = 1.0;
+		else {
+			if(!fixedFlag$sample10)
 				value[0] = v;
 		}
 		if((!fixedFlag$sample4 || !fixedFlag$sample10))
@@ -345,16 +344,10 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			value2[cv$index1] = observedValue[cv$index1];
 		value[0] = value2[0];
-		if(!guard) {
-			v = value[0];
-			u = (v - 1);
-		}
 	}
 
 	@Override
-	public final void setIntermediates() {
-		v = (u + 1);
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

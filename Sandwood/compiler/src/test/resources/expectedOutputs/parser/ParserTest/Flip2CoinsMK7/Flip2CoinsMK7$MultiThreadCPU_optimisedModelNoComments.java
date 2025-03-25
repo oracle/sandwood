@@ -23,8 +23,6 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$sample18;
 	private double[] logProbability$sample46;
 	private double[] logProbability$var17;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK7$MultiThreadCPU(ExecutionTarget target) {
@@ -59,7 +57,6 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample18 = false;
 		fixedProbFlag$sample46 = false;
 	}
@@ -196,16 +193,16 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$originalValue, a, b);
-			double traceTempVariable$var34$1_1 = (1 - cv$originalValue);
+			double traceTempVariable$var34$2_1 = (1 - cv$originalValue);
 			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$1_1) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$2_1) + cv$accumulatedProbabilities);
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		bias[i] = (1 - cv$proposedValue);
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, a, b);
-		double traceTempVariable$var34$1_1 = (1 - cv$proposedValue);
+		double traceTempVariable$var34$2_1 = (1 - cv$proposedValue);
 		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$1_1) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], traceTempVariable$var34$2_1) + cv$accumulatedProbabilities);
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			bias[i] = (1 - cv$originalValue);
 	}
@@ -215,7 +212,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$bias)
+		if(!fixedFlag$sample18)
 			bias = new double[length$flipsMeasured.length];
 		flips = new boolean[length$flipsMeasured.length][];
 		for(int j = 0; j < length$flipsMeasured.length; j += 1)
@@ -363,7 +360,7 @@ class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			boolean[] cv$source2 = flipsMeasured[cv$index1];

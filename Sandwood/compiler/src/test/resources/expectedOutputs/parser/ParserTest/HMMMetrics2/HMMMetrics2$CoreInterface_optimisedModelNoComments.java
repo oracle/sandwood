@@ -1,6 +1,10 @@
 package org.sandwood.compiler.tests.parser;
 
 interface HMMMetrics2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+	public double[][] get$distribution$sample104();
+	public void set$distribution$sample104(double[][] cv$value);
+	public double[][][] get$distribution$sample123();
+	public void set$distribution$sample123(double[][][] cv$value);
 	public boolean get$fixedFlag$sample104();
 	public void set$fixedFlag$sample104(boolean cv$value);
 	public boolean get$fixedFlag$sample123();

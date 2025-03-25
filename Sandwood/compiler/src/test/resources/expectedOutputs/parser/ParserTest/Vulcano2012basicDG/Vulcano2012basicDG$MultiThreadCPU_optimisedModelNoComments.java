@@ -44,9 +44,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$weekly_ut;
 	private int numTimeSteps;
 	private int[][] sales;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$weekly_sales = false;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
 	private double[][] weekly_rates;
@@ -75,7 +72,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 	}
 
 	@Override
@@ -132,7 +128,6 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
-		setFlag$lambda = true;
 	}
 
 	@Override
@@ -168,6 +163,18 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final double get$r() {
 		return 0.3;
+	}
+
+	@Override
+	public final double[] get$ut() {
+		return ut;
+	}
+
+	@Override
+	public final void set$ut(double[] cv$value) {
+		ut = cv$value;
+		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample166 = false;
 	}
 
 	@Override
@@ -831,16 +838,17 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void allocator() {
 		if((0 < numTimeSteps)) {
-			ut = new double[avail[0].length];
+			if(!fixedFlag$sample32)
+				ut = new double[avail[0].length];
 			exped = new double[avail[0].length];
 			expedNorm = new double[avail[0].length];
 			sales = new int[avail.length][];
 			for(int var80 = 0; var80 < avail.length; var80 += 1)
 				sales[var80] = new int[avail[0].length];
 		}
-		if(!setFlag$lambda)
+		if(!fixedFlag$sample112)
 			lambda = new double[avail.length];
-		if(!setFlag$arrivals)
+		if(!fixedFlag$sample114)
 			arrivals = new int[avail.length];
 		if((0 < avail.length)) {
 			for(int t = 0; t < avail.length; t += 1)
@@ -1278,7 +1286,7 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		if((0 < numTimeSteps)) {
 			int cv$length1 = sales.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
@@ -1298,22 +1306,24 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void setIntermediates() {
 		if((0 < numTimeSteps)) {
-			parallelFor(RNG$, 0, avail[0].length, 1,
-				(int forStart$j$var41, int forEnd$j$var41, int threadID$j$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var41 = forStart$j$var41; j$var41 < forEnd$j$var41; j$var41 += 1)
-							exped[j$var41] = Math.exp(ut[j$var41]);
-				}
-			);
-			double reduceVar$sum$25 = 0.0;
-			for(int cv$reduction54Index = 0; cv$reduction54Index < avail[0].length; cv$reduction54Index += 1)
-				reduceVar$sum$25 = (reduceVar$sum$25 + exped[cv$reduction54Index]);
-			double reduceVar$sum$25$1 = reduceVar$sum$25;
-			parallelFor(RNG$, 0, avail[0].length, 1,
-				(int forStart$j$var66, int forEnd$j$var66, int threadID$j$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int j$var66 = forStart$j$var66; j$var66 < forEnd$j$var66; j$var66 += 1)
-							expedNorm[j$var66] = (exped[j$var66] / (reduceVar$sum$25$1 * 0.3));
-				}
-			);
+			if(fixedFlag$sample32) {
+				parallelFor(RNG$, 0, avail[0].length, 1,
+					(int forStart$j$var41, int forEnd$j$var41, int threadID$j$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int j$var41 = forStart$j$var41; j$var41 < forEnd$j$var41; j$var41 += 1)
+								exped[j$var41] = Math.exp(ut[j$var41]);
+					}
+				);
+				double reduceVar$sum$25 = 0.0;
+				for(int cv$reduction54Index = 0; cv$reduction54Index < avail[0].length; cv$reduction54Index += 1)
+					reduceVar$sum$25 = (reduceVar$sum$25 + exped[cv$reduction54Index]);
+				double reduceVar$sum$25$1 = reduceVar$sum$25;
+				parallelFor(RNG$, 0, avail[0].length, 1,
+					(int forStart$j$var66, int forEnd$j$var66, int threadID$j$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
+						for(int j$var66 = forStart$j$var66; j$var66 < forEnd$j$var66; j$var66 += 1)
+								expedNorm[j$var66] = (exped[j$var66] / (reduceVar$sum$25$1 * 0.3));
+					}
+				);
+			}
 			parallelFor(RNG$, 0, numTimeSteps, 1,
 				(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
@@ -1322,21 +1332,27 @@ class Vulcano2012basicDG$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							parallelFor(RNG$1, 0, avail[0].length, 1,
 								(int forStart$j$var121, int forEnd$j$var121, int threadID$j$var121, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j$var121 = forStart$j$var121; j$var121 < forEnd$j$var121; j$var121 += 1) {
-											if(avail[t][j$var121])
-												weekly_ut[t][j$var121] = expedNorm[j$var121];
+											if(avail[t][j$var121]) {
+												if(fixedFlag$sample32)
+													weekly_ut[t][j$var121] = expedNorm[j$var121];
+											} else
+												weekly_ut[t][j$var121] = 0.0;
 										}
 								}
 							);
-							double reduceVar$denom$29 = 0.0;
-							for(int cv$reduction144Index = 0; cv$reduction144Index <= avail[0].length; cv$reduction144Index += 1)
-								reduceVar$denom$29 = (reduceVar$denom$29 + weekly_ut[t][cv$reduction144Index]);
-							double reduceVar$denom$29$2 = reduceVar$denom$29;
-							parallelFor(RNG$1, 0, (avail[0].length + 1), 1,
-								(int forStart$j$var153, int forEnd$j$var153, int threadID$j$var153, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var153 = forStart$j$var153; j$var153 < forEnd$j$var153; j$var153 += 1)
-											weekly_rates[t][j$var153] = (weekly_ut[t][j$var153] / reduceVar$denom$29$2);
-								}
-							);
+							weekly_ut[t][avail[0].length] = 1.0;
+							if(fixedFlag$sample32) {
+								double reduceVar$denom$29 = 0.0;
+								for(int cv$reduction144Index = 0; cv$reduction144Index <= avail[0].length; cv$reduction144Index += 1)
+									reduceVar$denom$29 = (reduceVar$denom$29 + weekly_ut[t][cv$reduction144Index]);
+								double reduceVar$denom$29$2 = reduceVar$denom$29;
+								parallelFor(RNG$1, 0, (avail[0].length + 1), 1,
+									(int forStart$j$var153, int forEnd$j$var153, int threadID$j$var153, org.sandwood.random.internal.Rng RNG$2) -> { 
+										for(int j$var153 = forStart$j$var153; j$var153 < forEnd$j$var153; j$var153 += 1)
+												weekly_rates[t][j$var153] = (weekly_ut[t][j$var153] / reduceVar$denom$29$2);
+									}
+								);
+							}
 						}
 				}
 			);

@@ -18,7 +18,9 @@ public abstract class ComputedVariableInternal
         implements ComputedVariable, HasProbabilityInternal, JsonVariable, CurrentProbability {
     protected RetentionPolicy p = RetentionPolicy.SAMPLE;
 
-    private boolean valueComputed = false;
+    // A value is stored in this object.
+    protected boolean valueComputed = false;
+    // A value is set in the model core
     protected boolean valueSet = false;
 
     private double logProbability;
@@ -27,14 +29,18 @@ public abstract class ComputedVariableInternal
 
     protected final String name;
     protected final Model model;
-    public final boolean isSample;
+    private final boolean isSettable;
+    private final boolean isSample;
+    private final boolean isPrivate;
 
     protected int i;
 
-    public ComputedVariableInternal(Model model, String name, boolean isSample) {
+    public ComputedVariableInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate) {
         this.name = name;
         this.model = model;
+        this.isSettable = isSettable;
         this.isSample = isSample;
+        this.isPrivate = isPrivate;
     }
 
     @Override
@@ -72,7 +78,11 @@ public abstract class ComputedVariableInternal
      * @see forGenerator.ComputedVariableInterface#isSettable()
      */
     @Override
-    public boolean isSettable() {
+    public final boolean isSettable() {
+        return isSettable;
+    }
+
+    public final boolean isSample() {
         return isSample;
     }
 
@@ -97,7 +107,32 @@ public abstract class ComputedVariableInternal
                                 + "variables can be assigned, it can only be returned by variables if their "
                                 + "value is fixed.");
             if(p != this.p) {
-                this.p = p;
+                switch(p) {
+                    case MAP:
+                        this.p = p;
+                        clearSample();
+                        break;
+                    case MAP_AND_SAMPLE:
+                        if(isPrivate)
+                            this.p = RetentionPolicy.MAP;
+                        else
+                            this.p = p;
+                        break;
+                    case NONE:
+                        clearMap();
+                        clearSample();
+                        this.p = p;
+                        break;
+                    case SAMPLE:
+                        if(isPrivate)
+                            this.p = RetentionPolicy.NONE;
+                        else
+                            this.p = p;
+                        clearMap();
+                        break;
+                    default:
+                        break;
+                }
                 valueComputed = false;
             }
         }
@@ -154,6 +189,10 @@ public abstract class ComputedVariableInternal
     public abstract void ingestMap();
 
     public abstract void ingestSample();
+
+    protected abstract void clearMap();
+
+    protected abstract void clearSample();
 
     public void computeComplete() {
         valueComputed = true;

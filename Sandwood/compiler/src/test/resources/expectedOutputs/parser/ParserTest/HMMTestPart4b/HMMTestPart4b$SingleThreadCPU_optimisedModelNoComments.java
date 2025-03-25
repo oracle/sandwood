@@ -39,10 +39,6 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var79;
 	private double[][] m;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[][][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -59,7 +55,6 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample45 = false;
 		fixedProbFlag$sample189 = false;
 	}
@@ -176,7 +171,6 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample28 = false;
 		fixedProbFlag$sample82 = false;
 		fixedProbFlag$sample122 = false;
@@ -195,7 +189,6 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$st(int[][][] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample82 = false;
 		fixedProbFlag$sample122 = false;
 		fixedProbFlag$sample189 = false;
@@ -438,14 +431,14 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocator() {
 		v = new double[2];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			m = new double[2][];
 			m[0] = new double[2];
 			m[1] = new double[2];
 		}
-		if(!setFlag$bias)
+		if(!fixedFlag$sample45)
 			bias = new double[2];
-		if(!setFlag$st) {
+		if((!fixedFlag$sample82 || !fixedFlag$sample122)) {
 			st = new int[length$flipsMeasured.length][][];
 			for(int var57 = 0; var57 < length$flipsMeasured.length; var57 += 1) {
 				int[][] subarray$0 = new int[length$flipsMeasured.length][];
@@ -729,7 +722,7 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			boolean[][] cv$source2 = flipsMeasured[cv$index1];

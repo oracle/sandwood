@@ -44,10 +44,6 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$weekly_ut;
 	private int noProducts;
 	private int s;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$ut = false;
-	private boolean setFlag$weekly_sales = false;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
 	private double[][] weekly_rates;
@@ -67,8 +63,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	// Setter for Avail.
 	@Override
 	public final void set$Avail(int[][] cv$value) {
-		// Set Avail with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set Avail
 		Avail = cv$value;
 	}
 
@@ -81,8 +76,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	// Setter for ObsSales.
 	@Override
 	public final void set$ObsSales(int[][] cv$value) {
-		// Set ObsSales with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set ObsSales
 		ObsSales = cv$value;
 	}
 
@@ -115,10 +109,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	public final void set$arrivals(int[] cv$value) {
 		// Set flags for all the side effects of arrivals including if probabilities need
 		// to be updated.
-		// Set arrivals with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set arrivals
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 		
 		// Unset the fixed probability flag for sample 69 as it depends on arrivals.
 		fixedProbFlag$sample69 = false;
@@ -222,10 +214,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	public final void set$lambda(double[] cv$value) {
 		// Set flags for all the side effects of lambda including if probabilities need to
 		// be updated.
-		// Set lambda with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set lambda
 		lambda = cv$value;
-		setFlag$lambda = true;
 		
 		// Unset the fixed probability flag for sample 54 as it depends on lambda.
 		fixedProbFlag$sample54 = false;
@@ -317,10 +307,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 22 as it depends on ut.
 		fixedProbFlag$sample22 = false;
@@ -837,6 +825,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[var21] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
@@ -1023,6 +1013,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that ut is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			ut[var21] = cv$originalValue;
@@ -1131,6 +1123,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 54 drawn from Gamma 42. Inference was performed using a Gamma to
 	// Poisson conjugate prior.
 	private final void sample54(int var53, int threadID$cv$var53, Rng RNG$) {
+		// Guards to ensure that lambda is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
@@ -1208,9 +1202,9 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Substituted "t$var81" with its value "t$var66".
 		// 
-		// cv$temp$2$$var1222's comment
+		// cv$temp$2$$var1208's comment
 		// 
-		// $var1222's comment
+		// $var1208's comment
 		// Constructing a random variable input for use later.
 		// 
 		// cv$temp$3$var128's comment
@@ -1222,6 +1216,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		double cv$originalProbability = (DistributionSampling.logProbabilityMultinomial(weekly_sales[t$var66], weekly_rates[t$var66], (noProducts + 1), cv$originalValue) + DistributionSampling.logProbabilityPoisson(cv$originalValue, lambda[t$var66]));
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that arrivals is only updated when there is a valid path.
 		arrivals[t$var66] = cv$proposedValue;
 		
 		// Variable declaration of cv$accumulatedProbabilities moved.
@@ -1255,9 +1251,9 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Substituted "t$var81" with its value "t$var66".
 		// 
-		// cv$temp$2$$var1222's comment
+		// cv$temp$2$$var1208's comment
 		// 
-		// $var1222's comment
+		// $var1208's comment
 		// Constructing a random variable input for use later.
 		// 
 		// cv$temp$3$var128's comment
@@ -1282,6 +1278,8 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// 
+			// Guards to ensure that arrivals is only updated when there is a valid path.
 			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
@@ -1321,7 +1319,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut)
+		if(!fixedFlag$sample22)
 			// Constructor for ut
 			ut = new double[noProducts];
 		
@@ -1329,12 +1327,12 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		exped = new double[noProducts];
 		
 		// If lambda has not been set already allocate space.
-		if(!setFlag$lambda)
+		if(!fixedFlag$sample54)
 			// Constructor for lambda
 			lambda = new double[T];
 		
 		// If arrivals has not been set already allocate space.
-		if(!setFlag$arrivals)
+		if(!fixedFlag$sample69)
 			// Constructor for arrivals
 			arrivals = new int[T];
 		
@@ -2048,7 +2046,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		int cv$length1 = Sales.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
@@ -2066,11 +2064,13 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$ut)
+		if(fixedFlag$sample22)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$j$var34, int forEnd$j$var34, int threadID$j$var34, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -2094,7 +2094,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 						int threadID$t$var81 = threadID$index$t$var81;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(setFlag$ut)
+						if(fixedFlag$sample22)
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 							parallelFor(RNG$1, 0, noProducts, 1,
 								(int forStart$j$var96, int forEnd$j$var96, int threadID$j$var96, org.sandwood.random.internal.Rng RNG$2) -> { 
@@ -2106,26 +2106,25 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 								}
 							);
 
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$19 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction108Index = 0; cv$reduction108Index <= noProducts; cv$reduction108Index += 1)
-							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							// 
-							// l's comment
-							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$19 = (reduceVar$denom$19 + weekly_ut[t$var81][cv$reduction108Index]);
+						weekly_ut[t$var81][noProducts] = 1.0;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(setFlag$ut) {
+						if(fixedFlag$sample22) {
+							// Reduction of array weekly_ut
+							// 
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							double reduceVar$denom$19 = 0.0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction108Index = 0; cv$reduction108Index <= noProducts; cv$reduction108Index += 1)
+								// Copy the result of the reduction into the variable returned by the reduction.
+								// 
+								// l's comment
+								// Set the right hand term to a value from the array weekly_ut
+								reduceVar$denom$19 = (reduceVar$denom$19 + weekly_ut[t$var81][cv$reduction108Index]);
+							
 							// Alternative name for reduceVar$denom$19 to make it effectively final.
 							double reduceVar$denom$19$1 = reduceVar$denom$19;
 							

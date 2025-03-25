@@ -29,9 +29,9 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
     private final int arrayDimension;
     private final BaseType baseType;
 
-    public ComputedObjectArrayInternal(Model model, String name, boolean isSample, BaseType baseType,
-            int arrayDimension) {
-        super(model, name, isSample);
+    public ComputedObjectArrayInternal(Model model, String name, boolean isSettable, boolean isSample,
+            boolean isPrivate, BaseType baseType, int arrayDimension) {
+        super(model, name, isSettable, isSample, isPrivate);
         this.baseType = baseType;
         this.arrayDimension = arrayDimension;
     }
@@ -163,9 +163,12 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
 
     @Override
     public final void fromJSON(JsonDecoder decoder) throws SandwoodJsonException, IOException {
-        p = RetentionPolicy.MAP;
-        map = decoder.getObjectArray(baseType, arrayDimension);
-        setValueInternal(map);
+        if(isSettable()) {
+            p = RetentionPolicy.MAP;
+            map = decoder.getObjectArray(baseType, arrayDimension);
+            setValue(map);
+        } else
+            decoder.getObjectArray(baseType, arrayDimension);
     }
 
     @Override
@@ -173,19 +176,33 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
         synchronized(model) {
             testSettable();
             map = value;
+            valueSet = true;
             setValueInternal(map);
+            setFixed(true);
         }
     }
 
     @Override
     public final boolean setToMAPValue() {
         synchronized(model) {
-            if(p == RetentionPolicy.MAP && valueComputed()) {
+            if((p == RetentionPolicy.MAP || p == RetentionPolicy.MAP_AND_SAMPLE) && valueComputed()) {
                 setValue(getMAP());
                 return true;
             } else
                 return false;
         }
+    }
+
+    @Override
+    protected final void clearMap() {
+        map = null;
+        valueComputed = false;
+    }
+
+    @Override
+    protected final void clearSample() {
+        samples = null;
+        valueComputed = false;
     }
 
     protected abstract void setValueInternal(A[] value);

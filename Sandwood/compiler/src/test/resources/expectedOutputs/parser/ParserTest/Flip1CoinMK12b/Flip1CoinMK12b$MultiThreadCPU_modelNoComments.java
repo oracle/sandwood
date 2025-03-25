@@ -34,7 +34,6 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double var14;
 	private double var26;
@@ -158,6 +157,42 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	@Override
+	public final void set$var14(double cv$value) {
+		var14 = cv$value;
+		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample52 = false;
+	}
+
+	@Override
+	public final double get$var26() {
+		return var26;
+	}
+
+	@Override
+	public final void set$var26(double cv$value) {
+		var26 = cv$value;
+		fixedProbFlag$sample28 = false;
+		fixedProbFlag$sample52 = false;
+	}
+
+	@Override
+	public final double get$var33() {
+		return var33;
+	}
+
+	@Override
+	public final void set$var33(double cv$value) {
+		var33 = cv$value;
+		fixedProbFlag$sample35 = false;
+		fixedProbFlag$sample52 = false;
 	}
 
 	private final void logProbabilityValue$sample16() {
@@ -984,23 +1019,23 @@ class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i = (samples - ((((samples - 1) - 0) % 1) + 1)); i >= ((0 - 1) + 1); i -= 1)
 			flips[i] = flipsMeasured[i];
 	}
 
 	@Override
 	public final void setIntermediates() {
-		if(true) {
-			if(guard1)
+		if(guard1) {
+			if(fixedFlag$sample16)
 				bias = var14;
-			else {
-				double bias2;
-				if((guard2 <= 2))
-					bias2 = var26;
-				else
-					bias2 = var33;
-				bias = bias2;
+		} else {
+			if((guard2 <= 2)) {
+				if(fixedFlag$sample28)
+					bias = var26;
+			} else {
+				if(fixedFlag$sample35)
+					bias = var33;
 			}
 		}
 	}

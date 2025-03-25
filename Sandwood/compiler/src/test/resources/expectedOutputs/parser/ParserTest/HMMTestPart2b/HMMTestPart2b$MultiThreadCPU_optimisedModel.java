@@ -37,10 +37,6 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$var84;
 	private double[][] m;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -60,10 +56,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 45 as it depends on bias.
 		fixedProbFlag$sample45 = false;
@@ -165,8 +159,7 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -228,10 +221,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 28 as it depends on m.
 		fixedProbFlag$sample28 = false;
@@ -257,10 +248,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$st(int[] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 71 as it depends on st.
 		fixedProbFlag$sample71 = false;
@@ -738,6 +727,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		}
 		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
@@ -749,6 +740,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void sample71(int i$var64) {
 		// Unrolled loop
 		{
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
@@ -762,8 +755,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// cv$temp$0$var68's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = Math.log(m[st[i$var64]][0]);
-			int index$i$1_2 = (i$var64 + 1);
-			if((index$i$1_2 < (samples - 1)))
+			int index$i$2_2 = (i$var64 + 1);
+			if((index$i$2_2 < (samples - 1)))
 				// Processing sample task 71 of consumer random variable null.
 				// 
 				// A check to ensure rounding of floating point values can never result in a negative
@@ -789,7 +782,7 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$1_2 + 1)]) && (st[(index$i$1_2 + 1)] < 2))?Math.log(m[0][st[(index$i$1_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$2_2 + 1)]) && (st[(index$i$2_2 + 1)] < 2))?Math.log(m[0][st[(index$i$2_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -828,6 +821,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$var70$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
+		// Guards to ensure that st is only updated when there is a valid path.
+		// 
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
@@ -841,8 +836,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// cv$temp$0$var68's comment
 		// Constructing a random variable input for use later.
 		double cv$accumulatedProbabilities = Math.log(m[st[i$var64]][1]);
-		int index$i$1_2 = (i$var64 + 1);
-		if((index$i$1_2 < (samples - 1)))
+		int index$i$2_2 = (i$var64 + 1);
+		if((index$i$2_2 < (samples - 1)))
 			// Processing sample task 71 of consumer random variable null.
 			// 
 			// A check to ensure rounding of floating point values can never result in a negative
@@ -868,7 +863,7 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$1_2 + 1)]) && (st[(index$i$1_2 + 1)] < 2))?Math.log(m[1][st[(index$i$1_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$2_2 + 1)]) && (st[(index$i$2_2 + 1)] < 2))?Math.log(m[1][st[(index$i$2_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -966,6 +961,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Get a local reference to the scratch space.
 			cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
+		// Guards to ensure that st is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
@@ -1008,7 +1005,7 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		v = new double[2];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			// Constructor for m
 			m = new double[2][];
 			m[0] = new double[2];
@@ -1016,12 +1013,12 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias)
+		if(!fixedFlag$sample45)
 			// Constructor for bias
 			bias = new double[2];
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st)
+		if(!fixedFlag$sample71)
 			// Constructor for st
 			st = new int[length$flipsMeasured];
 		
@@ -1417,7 +1414,7 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1427,7 +1424,9 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

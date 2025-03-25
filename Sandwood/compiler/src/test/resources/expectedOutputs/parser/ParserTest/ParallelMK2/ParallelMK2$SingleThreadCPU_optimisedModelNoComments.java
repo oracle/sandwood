@@ -22,9 +22,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$var31;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK2$SingleThreadCPU(ExecutionTarget target) {
@@ -56,7 +53,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$indirection(double[] cv$value) {
 		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	@Override
@@ -112,7 +108,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
-		setFlag$sample = true;
 	}
 
 	private final void logProbabilityValue$sample26() {
@@ -223,9 +218,8 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void allocator() {
 		generated = new double[length$observed];
-		if(!setFlag$indirection)
-			indirection = new double[(length$observed + 1)];
-		if(!setFlag$sample)
+		indirection = new double[(length$observed + 1)];
+		if(!fixedFlag$sample26)
 			sample = new double[length$observed];
 		logProbability$var25 = new double[length$observed];
 		logProbability$sample26 = new double[length$observed];
@@ -343,14 +337,19 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			generated[cv$index1] = observed[cv$index1];
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		if(fixedFlag$sample26) {
+			for(int i = 0; i < length$observed; i += 1)
+				indirection[(i + 1)] = sample[i];
+		}
+	}
 
 	@Override
 	public String modelCode() {

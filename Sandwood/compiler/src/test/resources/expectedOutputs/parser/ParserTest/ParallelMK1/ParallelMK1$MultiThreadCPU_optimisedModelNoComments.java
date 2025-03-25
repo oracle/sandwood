@@ -23,9 +23,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var23;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK1$MultiThreadCPU(ExecutionTarget target) {
@@ -57,7 +54,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$indirection(double[] cv$value) {
 		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	@Override
@@ -113,7 +109,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
-		setFlag$sample = true;
 	}
 
 	private final void logProbabilityValue$sample20() {
@@ -227,9 +222,8 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void allocator() {
 		generated = new double[length$observed];
-		if(!setFlag$indirection)
-			indirection = new double[length$observed];
-		if(!setFlag$sample)
+		indirection = new double[length$observed];
+		if(!fixedFlag$sample20)
 			sample = new double[length$observed];
 		logProbability$var19 = new double[length$observed];
 		logProbability$sample20 = new double[length$observed];
@@ -368,14 +362,23 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			generated[cv$index1] = observed[cv$index1];
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		if(fixedFlag$sample20)
+			parallelFor(RNG$, 0, length$observed, 1,
+				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+							indirection[i] = sample[i];
+				}
+			);
+
+	}
 
 	@Override
 	public String modelCode() {

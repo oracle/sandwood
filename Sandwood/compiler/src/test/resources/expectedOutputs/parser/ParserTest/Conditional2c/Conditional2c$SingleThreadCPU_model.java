@@ -142,8 +142,7 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for observedValue.
 	@Override
 	public final void set$observedValue(double[] cv$value) {
-		// Set observedValue with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set observedValue
 		observedValue = cv$value;
 	}
 
@@ -836,11 +835,10 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			u = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		if(!fixedFlag$sample10)
 			v = (u + 1);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				value[0] = 1.0;
-		} else {
-			if(!(fixedFlag$sample4 && fixedFlag$sample10))
+		if(guard)
+			value[0] = 1.0;
+		else {
+			if(!fixedFlag$sample10)
 				value[0] = v;
 		}
 		if(!(fixedFlag$sample4 && fixedFlag$sample10))
@@ -994,35 +992,14 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				value[0] = value2[0];
 			}
 		}
-		{
-			if(!guard) {
-				// Looking for a path between Put 24 and consumer double[] 29.
-				{
-					if(!guard) {
-						if((0 == 0))
-							v = value[0];
-					}
-				}
-			}
-		}
-		{
-			// Looking for a path between Addition 12 and consumer double[] 29.
-			{
-				if(!guard) {
-					if((0 == 0))
-						u = (v - 1);
-				}
-			}
-		}
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
-	public final void setIntermediates() {
-		if(true)
-			v = (u + 1);
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

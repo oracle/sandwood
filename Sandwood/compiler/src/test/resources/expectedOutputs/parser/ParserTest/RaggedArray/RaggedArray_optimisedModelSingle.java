@@ -17,15 +17,14 @@ public class RaggedArray extends Model {
 
     private RaggedArray$CoreInterface system$c = new RaggedArray$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true) {
+    private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true, true, false) {
         @Override
         public int getValue() { return system$c.get$i(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$i(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class RaggedArray extends Model {
      */
     public final ComputedInteger i = $i;
 
-    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", true) {
+    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$obs(); }
 
@@ -83,7 +82,7 @@ public class RaggedArray extends Model {
      */
     public final ComputedBooleanArray obs = $obs;
 
-    private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false) {
+    private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false, false, false) {
         @Override
         public double getValue() { return system$c.get$p(); }
 
@@ -235,6 +234,7 @@ public class RaggedArray extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(RaggedArray$CoreInterface oldCore, RaggedArray$CoreInterface newCore) {
         //Model inputs
         if(y.isSet())
@@ -249,12 +249,11 @@ public class RaggedArray extends Model {
             newCore.set$length$obs_measured(oldCore.get$length$obs_measured());
 
         //ComputedVariables
-        if(i.isSet())
+        if($i.isSet())
             newCore.set$i(oldCore.get$i());
 
         //Set fixed flags
-        if(i.isSet())
-            newCore.set$fixedFlag$sample73(oldCore.get$fixedFlag$sample73());
+        newCore.set$fixedFlag$sample73(oldCore.get$fixedFlag$sample73());
     }
 
     /**

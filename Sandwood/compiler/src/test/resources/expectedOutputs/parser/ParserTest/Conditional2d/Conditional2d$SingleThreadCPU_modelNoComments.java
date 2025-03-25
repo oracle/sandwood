@@ -516,14 +516,6 @@ class Conditional2d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			}
 		}
-		{
-			if(!guard) {
-				{
-					if(!guard)
-						u = value;
-				}
-			}
-		}
 	}
 
 	@Override

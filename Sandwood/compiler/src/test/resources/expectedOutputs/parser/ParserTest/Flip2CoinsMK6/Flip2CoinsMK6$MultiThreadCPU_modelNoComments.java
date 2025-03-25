@@ -21,8 +21,6 @@ class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$flips;
 	private double[] logProbability$sample18;
 	private double[] logProbability$sample31;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private int[] shape;
 	private boolean system$gibbsForward = true;
 
@@ -38,7 +36,6 @@ class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 	}
 
 	@Override
@@ -254,7 +251,7 @@ class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			for(int j = 0; j < shape.length; j += 1)
 				flips[j] = new boolean[shape[j]];
 		}
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample18) {
 			{
 				bias = new double[((((shape.length - 1) - 0) / 1) + 1)];
 			}
@@ -406,7 +403,7 @@ class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[][] cv$source1 = flipsMeasured;
 		boolean[][] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;

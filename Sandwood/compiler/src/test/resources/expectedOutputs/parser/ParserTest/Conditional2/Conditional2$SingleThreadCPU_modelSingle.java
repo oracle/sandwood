@@ -21,7 +21,6 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var18;
 	private double logProbability$var19;
 	private double[] observedValue;
-	private boolean setFlag$value = false;
 	private boolean system$gibbsForward = true;
 	private double[] value;
 	private double[] value2;
@@ -128,8 +127,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for observedValue.
 	@Override
 	public final void set$observedValue(double[] cv$value) {
-		// Set observedValue with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set observedValue
 		observedValue = cv$value;
 	}
 
@@ -749,11 +747,10 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				value[0] = 1.0;
-		} else {
-			if(!(fixedFlag$sample4 && fixedFlag$sample21))
+		if(guard)
+			value[0] = 1.0;
+		else {
+			if(!fixedFlag$sample21)
 				value[0] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
 		if(!(fixedFlag$sample4 && fixedFlag$sample21))
@@ -909,7 +906,9 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

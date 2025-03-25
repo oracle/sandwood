@@ -19,8 +19,6 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var52;
 	private boolean[] obs;
 	private boolean[] obs_measured;
-	private boolean setFlag$d = false;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -41,7 +39,6 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$d(double[] cv$value) {
 		d = cv$value;
-		setFlag$d = true;
 		fixedProbFlag$sample39 = false;
 		fixedProbFlag$sample54 = false;
 	}
@@ -366,7 +363,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			a[0] = new double[2];
 			a[1] = new double[3];
 		}
-		if(!setFlag$d) {
+		if(!fixedFlag$sample39) {
 			{
 				int lengthCV$a$37_8 = -1;
 				{
@@ -531,7 +528,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
 		int cv$length1 = cv$target1.length;

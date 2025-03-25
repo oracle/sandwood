@@ -26,7 +26,6 @@ class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double variance;
 	private double[] x;
@@ -591,7 +590,7 @@ class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
 		int cv$length1 = cv$target1.length;

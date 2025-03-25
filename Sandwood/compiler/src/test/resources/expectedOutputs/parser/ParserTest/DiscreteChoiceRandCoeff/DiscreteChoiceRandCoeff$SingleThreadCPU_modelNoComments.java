@@ -44,9 +44,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
-	private boolean setFlag$beta = false;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -95,7 +92,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void set$beta(double[] cv$value) {
 		beta = cv$value;
-		setFlag$beta = true;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -238,7 +234,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample21 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -717,7 +712,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$proposedValue;
 				{
 					double var21 = cv$proposedValue;
-					ut[var20] = cv$currentValue;
+					{
+						{
+							ut[var20] = cv$currentValue;
+						}
+					}
 					{
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
@@ -834,28 +833,28 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var70$8_1 = cv$currentValue;
+						double traceTempVariable$var70$9_1 = cv$currentValue;
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
 								for(int i = 0; i < noObs; i += 1) {
-									double traceTempVariable$k$8_4 = Math.exp((traceTempVariable$var70$8_1 - (beta[i] * Prices[i][j$var69])));
+									double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
 									if(((0 <= j$var69) && (j$var69 < noProducts))) {
 										{
 											if((0 < noProducts)) {
 												double reduceVar$sum$2 = 0.0;
-												for(int cv$reduction365Index = 0; cv$reduction365Index < j$var69; cv$reduction365Index += 1) {
+												for(int cv$reduction368Index = 0; cv$reduction368Index < j$var69; cv$reduction368Index += 1) {
 													double k = reduceVar$sum$2;
-													double l = exped[((i - 0) / 1)][cv$reduction365Index];
+													double l = exped[((i - 0) / 1)][cv$reduction368Index];
 													reduceVar$sum$2 = (k + l);
 												}
-												for(int cv$reduction365Index = (j$var69 + 1); cv$reduction365Index < noProducts; cv$reduction365Index += 1) {
+												for(int cv$reduction368Index = (j$var69 + 1); cv$reduction368Index < noProducts; cv$reduction368Index += 1) {
 													double k = reduceVar$sum$2;
-													double l = exped[((i - 0) / 1)][cv$reduction365Index];
+													double l = exped[((i - 0) / 1)][cv$reduction368Index];
 													reduceVar$sum$2 = (k + l);
 												}
 												double cv$reduced82 = reduceVar$sum$2;
-												reduceVar$sum$2 = (traceTempVariable$k$8_4 + cv$reduced82);
-												double traceTempVariable$sum$8_5 = reduceVar$sum$2;
+												reduceVar$sum$2 = (traceTempVariable$k$9_4 + cv$reduced82);
+												double traceTempVariable$sum$9_5 = reduceVar$sum$2;
 												if(!guard$sample21categorical102[((i - 0) / 1)]) {
 													guard$sample21categorical102[((i - 0) / 1)] = true;
 													{
@@ -904,11 +903,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var70$9_1 = cv$currentValue;
+						double traceTempVariable$var70$10_1 = cv$currentValue;
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
 								for(int i = 0; i < noObs; i += 1) {
-									double traceTempVariable$var98$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
+									double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (beta[i] * Prices[i][j$var69])));
 									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!guard$sample21categorical102[((i - 0) / 1)]) {
@@ -977,7 +976,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var21 = cv$originalValue;
-			ut[var20] = var21;
+			{
+				{
+					ut[var20] = var21;
+				}
+			}
 			{
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 					if((var20 == j$var69)) {
@@ -1129,7 +1132,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$proposedValue;
 				{
 					double var47 = cv$proposedValue;
-					beta[var46] = cv$currentValue;
+					{
+						{
+							beta[var46] = cv$currentValue;
+						}
+					}
 					{
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
@@ -1246,28 +1253,28 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var71$8_1 = cv$currentValue;
+						double traceTempVariable$var71$9_1 = cv$currentValue;
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									double traceTempVariable$k$8_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$8_1 * Prices[i][j$var69])));
+									double traceTempVariable$k$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
 									if(((0 <= j$var69) && (j$var69 < noProducts))) {
 										{
 											if((0 < noProducts)) {
 												double reduceVar$sum$7 = 0.0;
-												for(int cv$reduction759Index = 0; cv$reduction759Index < j$var69; cv$reduction759Index += 1) {
+												for(int cv$reduction768Index = 0; cv$reduction768Index < j$var69; cv$reduction768Index += 1) {
 													double k = reduceVar$sum$7;
-													double l = exped[((i - 0) / 1)][cv$reduction759Index];
+													double l = exped[((i - 0) / 1)][cv$reduction768Index];
 													reduceVar$sum$7 = (k + l);
 												}
-												for(int cv$reduction759Index = (j$var69 + 1); cv$reduction759Index < noProducts; cv$reduction759Index += 1) {
+												for(int cv$reduction768Index = (j$var69 + 1); cv$reduction768Index < noProducts; cv$reduction768Index += 1) {
 													double k = reduceVar$sum$7;
-													double l = exped[((i - 0) / 1)][cv$reduction759Index];
+													double l = exped[((i - 0) / 1)][cv$reduction768Index];
 													reduceVar$sum$7 = (k + l);
 												}
 												double cv$reduced82 = reduceVar$sum$7;
-												reduceVar$sum$7 = (traceTempVariable$k$8_4 + cv$reduced82);
-												double traceTempVariable$sum$8_5 = reduceVar$sum$7;
+												reduceVar$sum$7 = (traceTempVariable$k$9_4 + cv$reduced82);
+												double traceTempVariable$sum$9_5 = reduceVar$sum$7;
 												if(!guard$sample47categorical102[((i - 0) / 1)]) {
 													guard$sample47categorical102[((i - 0) / 1)] = true;
 													{
@@ -1316,11 +1323,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var71$9_1 = cv$currentValue;
+						double traceTempVariable$var71$10_1 = cv$currentValue;
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									double traceTempVariable$var98$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
+									double traceTempVariable$var98$10_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$10_1 * Prices[i][j$var69])));
 									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!guard$sample47categorical102[((i - 0) / 1)]) {
@@ -1389,7 +1396,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var47 = cv$originalValue;
-			beta[var46] = var47;
+			{
+				{
+					beta[var46] = var47;
+				}
+			}
 			{
 				for(int i = 0; i < noObs; i += 1) {
 					if((var46 == i)) {
@@ -1504,12 +1515,12 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut) {
+		if(!fixedFlag$sample21) {
 			{
 				ut = new double[noProducts];
 			}
 		}
-		if(!setFlag$beta) {
+		if(!fixedFlag$sample47) {
 			{
 				beta = new double[noObs];
 			}
@@ -1783,7 +1794,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int[] cv$source1 = ObsChoices;
 		int[] cv$target1 = choices;
 		int cv$length1 = cv$target1.length;
@@ -1795,17 +1806,18 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	public final void setIntermediates() {
 		for(int i = 0; i < noObs; i += 1) {
 			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-				if((setFlag$ut && setFlag$beta))
+				if((fixedFlag$sample21 && fixedFlag$sample47))
 					exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
 			}
 			double reduceVar$sum$14 = 0.0;
 			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
 				double k = reduceVar$sum$14;
 				double l = exped[((i - 0) / 1)][cv$reduction82Index];
-				reduceVar$sum$14 = (k + l);
+				if((fixedFlag$sample21 && fixedFlag$sample47))
+					reduceVar$sum$14 = (k + l);
 			}
 			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-				if((setFlag$ut && setFlag$beta))
+				if((fixedFlag$sample21 && fixedFlag$sample47))
 					prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$14);
 			}
 		}

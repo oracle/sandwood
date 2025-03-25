@@ -20,8 +20,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$sample14;
 	private double logProbability$sample16;
 	private double logProbability$var11;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flip = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$SingleThreadCPU(ExecutionTarget target) {
@@ -347,7 +345,7 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		if(Double.isNaN(guard))
 			flip = flipMeasured;
 	}

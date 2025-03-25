@@ -38,6 +38,7 @@ import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
+import org.sandwood.compiler.compilation.CompilationContext.FieldType;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
@@ -56,7 +57,6 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
-import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.trees.Tag;
@@ -1177,8 +1177,8 @@ public class TreeUtils {
      * @return
      */
     public static <X extends Variable<X>> IRTreeVoid constructVariable(VariableDescription<X> varDesc,
-            IRTreeReturn<X> value, List<ScopeDesc> scopes, boolean isPrivate, CompilationContext compilationCtx) {
-        return constructVariable(varDesc, value, scopes, isPrivate, null, compilationCtx);
+            IRTreeReturn<X> value, List<ScopeDesc> scopes, FieldType fieldType, CompilationContext compilationCtx) {
+        return constructVariable(varDesc, value, scopes, fieldType, null, compilationCtx);
     }
 
     /**
@@ -1194,11 +1194,11 @@ public class TreeUtils {
      * @return
      */
     public static <A extends Variable<A>, X extends Variable<X>> IRTreeVoid constructVariable(
-            VariableDescription<X> varDesc, IRTreeReturn<X> value, List<ScopeDesc> scopes, boolean isPrivate,
+            VariableDescription<X> varDesc, IRTreeReturn<X> value, List<ScopeDesc> scopes, FieldType fieldType,
             String comment, CompilationContext compilationCtx) {
         int size = scopes.size() - 1;
         if(size == 0) {
-            compilationCtx.addConstructedClassField(varDesc, isPrivate);
+            compilationCtx.addConstructedClassField(varDesc, fieldType);
             return store(varDesc, value, Tree.NoComment);
         } else {
             // Construct a descriptor of the array.
@@ -1206,42 +1206,9 @@ public class TreeUtils {
             VariableDescription<ArrayVariable<A>> arrayName = VariableNames.altTypeName(varDesc, arrayDesc.type);
             compilationCtx.addConstructedClassField(arrayName,
                     // Allocate the variable
-                    allocate(arrayName, arrayDesc, compilationCtx), isPrivate, comment);
+                    allocate(arrayName, arrayDesc, compilationCtx), fieldType, comment);
             // Initialize it to value.
 
-            return initialize(arrayName, value, arrayDesc, compilationCtx);
-        }
-    }
-
-    /**
-     * Method to construct a variable to the sizes set by a list of scopes. This is not appropriate for variables that
-     * are defined in models.
-     * 
-     * @param varDesc        The name of the variable
-     * @param value          The value to set each element in the newly constructed variable to.
-     * @param pattern        A variable to use as a pattern for the shape of the variable to construct. This is used for
-     *                       arrays what should be the same shape as a variable described in the model, but possibly not
-     *                       the same type.
-     * @param isPrivate      Should this field be private?
-     * @param comment        Any comment that should go with this variable.
-     * @param compilationCtx The compilation context for this compilation process.
-     * @return
-     */
-    public static <A extends Variable<A>, X extends ScalarVariable<X>> IRTree constructVariable(
-            VariableDescription<X> varDesc, IRTreeReturn<X> value, Variable<?> pattern, boolean isPrivate,
-            String comment, CompilationContext compilationCtx) {
-        if(pattern.getType().getDepth() == 0) {
-            compilationCtx.addConstructedClassField(varDesc, isPrivate);
-            return store(varDesc, value, Tree.NoComment);
-        } else {
-            // Construct a descriptor of the array.
-            @SuppressWarnings("unchecked")
-            ArrayDesc<A> arrayDesc = (ArrayDesc<A>) getArrayDescription(pattern, Collections.emptyList(), varDesc.type);
-            VariableDescription<ArrayVariable<A>> arrayName = VariableNames.altTypeName(varDesc, arrayDesc.type);
-            compilationCtx.addConstructedClassField(varDesc,
-                    // Allocate the variable
-                    allocate(arrayName, arrayDesc, compilationCtx), isPrivate, comment);
-            // Initialize it to value.
             return initialize(arrayName, value, arrayDesc, compilationCtx);
         }
     }

@@ -17,7 +17,7 @@ public class DistributionTest1b extends Model {
 
     private DistributionTest1b$CoreInterface system$c = new DistributionTest1b$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $v = new ComputedBooleanInternal(this, "v", true) {
+    private final ComputedBooleanInternal $v = new ComputedBooleanInternal(this, "v", false, true, false) {
         @Override
         public boolean getValue() { return system$c.get$v(); }
 
@@ -48,15 +48,14 @@ public class DistributionTest1b extends Model {
      */
     public final ComputedBoolean v = $v;
 
-    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true) {
+    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false) {
         @Override
         public int getValue() { return system$c.get$v1(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$v1(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -83,15 +82,14 @@ public class DistributionTest1b extends Model {
      */
     public final ComputedInteger v1 = $v1;
 
-    private final ComputedIntegerInternal $v2 = new ComputedIntegerInternal(this, "v2", true) {
+    private final ComputedIntegerInternal $v2 = new ComputedIntegerInternal(this, "v2", true, true, false) {
         @Override
         public int getValue() { return system$c.get$v2(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$v2(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -118,15 +116,14 @@ public class DistributionTest1b extends Model {
      */
     public final ComputedInteger v2 = $v2;
 
-    private final ComputedIntegerInternal $v3 = new ComputedIntegerInternal(this, "v3", true) {
+    private final ComputedIntegerInternal $v3 = new ComputedIntegerInternal(this, "v3", true, true, false) {
         @Override
         public int getValue() { return system$c.get$v3(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$v3(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -267,6 +264,7 @@ public class DistributionTest1b extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(DistributionTest1b$CoreInterface oldCore, DistributionTest1b$CoreInterface newCore) {
         //Model inputs
         if(weightings.isSet())
@@ -276,20 +274,17 @@ public class DistributionTest1b extends Model {
             newCore.set$value(oldCore.get$value());
 
         //ComputedVariables
-        if(v1.isSet())
+        if($v1.isSet())
             newCore.set$v1(oldCore.get$v1());
-        if(v2.isSet())
+        if($v2.isSet())
             newCore.set$v2(oldCore.get$v2());
-        if(v3.isSet())
+        if($v3.isSet())
             newCore.set$v3(oldCore.get$v3());
 
         //Set fixed flags
-        if(v1.isSet())
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        if(v2.isSet())
-            newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
-        if(v3.isSet())
-            newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
     }
 
     /**

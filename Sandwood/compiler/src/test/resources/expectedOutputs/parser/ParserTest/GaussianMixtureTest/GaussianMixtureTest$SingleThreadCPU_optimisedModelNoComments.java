@@ -36,11 +36,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$z;
 	private double[] mu;
 	private double[] phi;
-	private boolean setFlag$mu = false;
-	private boolean setFlag$phi = false;
-	private boolean setFlag$sigma = false;
-	private boolean setFlag$x = false;
-	private boolean setFlag$z = false;
 	private double[] sigma;
 	private boolean system$gibbsForward = true;
 	private double[] x;
@@ -162,7 +157,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$mu(double[] cv$value) {
 		mu = cv$value;
-		setFlag$mu = true;
 		fixedProbFlag$sample34 = false;
 		fixedProbFlag$sample72 = false;
 	}
@@ -175,7 +169,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$phi(double[] cv$value) {
 		phi = cv$value;
-		setFlag$phi = true;
 		fixedProbFlag$sample17 = false;
 		fixedProbFlag$sample68 = false;
 	}
@@ -188,7 +181,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$sigma(double[] cv$value) {
 		sigma = cv$value;
-		setFlag$sigma = true;
 		fixedProbFlag$sample52 = false;
 		fixedProbFlag$sample72 = false;
 	}
@@ -216,7 +208,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$z(int[] cv$value) {
 		z = cv$value;
-		setFlag$z = true;
 	}
 
 	private final void logProbabilityValue$sample17() {
@@ -428,14 +419,14 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void allocator() {
 		alpha = new double[5];
-		if(!setFlag$phi)
+		if(!fixedFlag$sample17)
 			phi = new double[5];
-		if(!setFlag$mu)
+		if(!fixedFlag$sample34)
 			mu = new double[5];
-		if(!setFlag$sigma)
+		if(!fixedFlag$sample52)
 			sigma = new double[5];
 		x = new double[length$xMeasured];
-		if(!setFlag$z)
+		if(!fixedFlag$sample68)
 			z = new int[length$xMeasured];
 		logProbability$var67 = new double[length$xMeasured];
 		logProbability$sample68 = new double[length$xMeasured];
@@ -630,7 +621,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = x.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			x[cv$index1] = xMeasured[cv$index1];

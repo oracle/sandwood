@@ -54,11 +54,6 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private int noEvents;
 	private int noStates;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$events = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
-	private boolean setFlag$weights = false;
 	private int[][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -77,7 +72,6 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final void set$bias(double[][] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample57 = false;
 		fixedProbFlag$sample159 = false;
 	}
@@ -241,7 +235,6 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample42 = false;
 		fixedProbFlag$sample95 = false;
 		fixedProbFlag$sample126 = false;
@@ -280,7 +273,6 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample95 = false;
 		fixedProbFlag$sample126 = false;
 		fixedProbFlag$sample159 = false;
@@ -304,7 +296,6 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	@Override
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
-		setFlag$weights = true;
 		fixedProbFlag$sample78 = false;
 		fixedProbFlag$sample80 = false;
 	}
@@ -484,9 +475,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			st[i$var104][j$var115] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[st[i$var104][(j$var115 - 1)]][cv$valuePos]):Double.NEGATIVE_INFINITY);
-			int index$j$1_3 = (j$var115 + 1);
-			if((index$j$1_3 < length$eventsMeasured[i$var104]))
-				cv$accumulatedProbabilities = ((((0.0 <= st[i$var104][index$j$1_3]) && (st[i$var104][index$j$1_3] < noStates))?Math.log(m[cv$valuePos][st[i$var104][index$j$1_3]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			int index$j$2_3 = (j$var115 + 1);
+			if((index$j$2_3 < length$eventsMeasured[i$var104]))
+				cv$accumulatedProbabilities = ((((0.0 <= st[i$var104][index$j$2_3]) && (st[i$var104][index$j$2_3] < noStates))?Math.log(m[cv$valuePos][st[i$var104][index$j$2_3]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$accumulatedProbabilities = ((((1.0 <= events[i$var104][j$var115]) && (events[i$var104][j$var115] < (noEvents + 1)))?Math.log(bias[cv$valuePos][(events[i$var104][j$var115] - 1)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$stateProbabilityLocal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
@@ -659,22 +650,22 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	public final void allocator() {
 		v = new double[noStates];
 		v2 = new double[noEvents];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample42) {
 			m = new double[noStates][];
 			for(int var41 = 0; var41 < noStates; var41 += 1)
 				m[var41] = new double[noStates];
 		}
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample57) {
 			bias = new double[noStates][];
 			for(int var55 = 0; var55 < noStates; var55 += 1)
 				bias[var55] = new double[noEvents];
 		}
-		if(!setFlag$st) {
+		if((!fixedFlag$sample95 || !fixedFlag$sample126)) {
 			st = new int[length$eventsMeasured.length][];
 			for(int i$var69 = 0; i$var69 < length$eventsMeasured.length; i$var69 += 1)
 				st[i$var69] = new int[length$eventsMeasured[i$var69]];
 		}
-		if(!setFlag$weights)
+		if(!fixedFlag$sample78)
 			weights = new double[noStates];
 		events = new int[length$eventsMeasured.length][];
 		for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
@@ -1080,7 +1071,7 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = events.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = eventsMeasured[cv$index1];

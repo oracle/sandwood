@@ -17,15 +17,14 @@ public class HMMTestPart4b extends Model {
 
     private HMMTestPart4b$CoreInterface system$c = new HMMTestPart4b$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class HMMTestPart4b extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedObjectArrayInternal<boolean[][]> $flips = new ComputedObjectArrayInternal<boolean[][]>(this, "flips", true, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 3) {
+    private final ComputedObjectArrayInternal<boolean[][]> $flips = new ComputedObjectArrayInternal<boolean[][]>(this, "flips", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 3) {
         @Override
         public boolean[][][] getValue() { return system$c.get$flips(); }
 
@@ -88,15 +87,14 @@ public class HMMTestPart4b extends Model {
      */
     public final ComputedObjectArray<boolean[][]> flips = $flips;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -128,15 +126,14 @@ public class HMMTestPart4b extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedObjectArrayInternal<int[][]> $st = new ComputedObjectArrayInternal<int[][]>(this, "st", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 3) {
+    private final ComputedObjectArrayInternal<int[][]> $st = new ComputedObjectArrayInternal<int[][]>(this, "st", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 3) {
         @Override
         public int[][][] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[][][] value) {
             system$c.set$st(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -279,6 +276,7 @@ public class HMMTestPart4b extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(HMMTestPart4b$CoreInterface oldCore, HMMTestPart4b$CoreInterface newCore) {
 
         //Observed arrays
@@ -290,22 +288,18 @@ public class HMMTestPart4b extends Model {
             newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(m.isSet())
+        if($m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(st.isSet())
+        if($st.isSet())
             newCore.set$st(oldCore.get$st());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
-        if(m.isSet())
-            newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        if(st.isSet()){
-            newCore.set$fixedFlag$sample122(oldCore.get$fixedFlag$sample122());
-            newCore.set$fixedFlag$sample82(oldCore.get$fixedFlag$sample82());
-        }
+        newCore.set$fixedFlag$sample122(oldCore.get$fixedFlag$sample122());
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
+        newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
+        newCore.set$fixedFlag$sample82(oldCore.get$fixedFlag$sample82());
     }
 
     /**

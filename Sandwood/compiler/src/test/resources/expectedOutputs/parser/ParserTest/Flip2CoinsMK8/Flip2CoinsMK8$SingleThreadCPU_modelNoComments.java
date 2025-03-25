@@ -22,8 +22,6 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample17;
 	private double[] logProbability$sample46;
 	private double[] logProbability$var16;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK8$SingleThreadCPU(ExecutionTarget target) {
@@ -58,7 +56,6 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample17 = false;
 		fixedProbFlag$sample46 = false;
 	}
@@ -264,7 +261,11 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$currentValue = cv$proposedValue;
 				{
 					double var17 = cv$proposedValue;
-					bias[i] = cv$currentValue;
+					{
+						{
+							bias[i] = cv$currentValue;
+						}
+					}
 				}
 			}
 			{
@@ -280,7 +281,7 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$currentValue, cv$temp$0$a, cv$temp$1$b));
 				{
 					{
-						double traceTempVariable$var33$1_1 = cv$currentValue;
+						double traceTempVariable$var33$2_1 = cv$currentValue;
 						for(int j = 0; j < coins; j += 1) {
 							if((i == j)) {
 								{
@@ -293,7 +294,7 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 													{
 														double cv$temp$2$var34;
 														{
-															double var34 = (1 - traceTempVariable$var33$1_1);
+															double var34 = (1 - traceTempVariable$var33$2_1);
 															cv$temp$2$var34 = var34;
 														}
 														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j][var45], cv$temp$2$var34)) < cv$accumulatedConsumerProbabilities))
@@ -341,7 +342,11 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var17 = cv$originalValue;
-			bias[i] = var17;
+			{
+				{
+					bias[i] = var17;
+				}
+			}
 		}
 	}
 
@@ -350,7 +355,7 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample17) {
 			{
 				bias = new double[length$flipsMeasured.length];
 			}
@@ -480,7 +485,7 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[][] cv$source1 = flipsMeasured;
 		boolean[][] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;

@@ -27,8 +27,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private int noObs;
 	private int noProducts;
 	private double[] prob;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -46,8 +44,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for ObsChoices.
 	@Override
 	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set ObsChoices
 		ObsChoices = cv$value;
 	}
 
@@ -174,10 +171,8 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 24 as it depends on ut.
 		fixedProbFlag$sample24 = false;
@@ -609,7 +604,13 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var24 = cv$proposedValue;
-					ut[i$var18] = cv$currentValue;
+					
+					// Guards to ensure that ut is only updated when there is a valid path.
+					{
+						{
+							ut[i$var18] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that exped is only updated when there is a valid path.
 					// 
@@ -748,10 +749,10 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// Guard to check that at most one copy of the code is executed for a given set of
 						// loop iterations.
 						boolean guard$sample24categorical66 = false;
-						double traceTempVariable$var37$7_1 = cv$currentValue;
+						double traceTempVariable$var37$8_1 = cv$currentValue;
 						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								double traceTempVariable$i$7_3 = Math.exp(traceTempVariable$var37$7_1);
+								double traceTempVariable$i$8_3 = Math.exp(traceTempVariable$var37$8_1);
 								if(((0 <= i$var36) && (i$var36 < noProducts))) {
 									{
 										if((0 < noProducts)) {
@@ -763,24 +764,24 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 											double reduceVar$sum$1 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction265Index = 0; cv$reduction265Index < i$var36; cv$reduction265Index += 1) {
+											for(int cv$reduction268Index = 0; cv$reduction268Index < i$var36; cv$reduction268Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var47 = reduceVar$sum$1;
 												
 												// Set the right hand term to a value from the array exped
-												double j = exped[cv$reduction265Index];
+												double j = exped[cv$reduction268Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$sum$1 = (i$var47 + j);
 											}
-											for(int cv$reduction265Index = (i$var36 + 1); cv$reduction265Index < noProducts; cv$reduction265Index += 1) {
+											for(int cv$reduction268Index = (i$var36 + 1); cv$reduction268Index < noProducts; cv$reduction268Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var47 = reduceVar$sum$1;
 												
 												// Set the right hand term to a value from the array exped
-												double j = exped[cv$reduction265Index];
+												double j = exped[cv$reduction268Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -792,8 +793,8 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 											double cv$reduced44 = reduceVar$sum$1;
 											
 											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$sum$1 = (traceTempVariable$i$7_3 + cv$reduced44);
-											double traceTempVariable$sum$7_4 = reduceVar$sum$1;
+											reduceVar$sum$1 = (traceTempVariable$i$8_3 + cv$reduced44);
+											double traceTempVariable$sum$8_4 = reduceVar$sum$1;
 											if(!guard$sample24categorical66) {
 												// The body will execute, so should not be executed again
 												guard$sample24categorical66 = true;
@@ -864,10 +865,10 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 								}
 							}
 						}
-						double traceTempVariable$var37$8_1 = cv$currentValue;
+						double traceTempVariable$var37$9_1 = cv$currentValue;
 						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								double traceTempVariable$var62$8_3 = Math.exp(traceTempVariable$var37$8_1);
+								double traceTempVariable$var62$9_3 = Math.exp(traceTempVariable$var37$9_1);
 								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
 									if((i$var36 == i$var61)) {
 										if(!guard$sample24categorical66) {
@@ -977,7 +978,13 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var24 = cv$originalValue;
-			ut[i$var18] = var24;
+			
+			// Guards to ensure that ut is only updated when there is a valid path.
+			{
+				{
+					ut[i$var18] = var24;
+				}
+			}
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
@@ -1112,7 +1119,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut) {
+		if(!fixedFlag$sample24) {
 			// Constructor for ut
 			{
 				ut = new double[noProducts];
@@ -1429,7 +1436,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		int[] cv$source1 = ObsChoices;
 		int[] cv$target1 = choices;
@@ -1439,38 +1446,40 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(setFlag$ut)
+			if(fixedFlag$sample24)
 				exped[i$var36] = Math.exp(ut[i$var36]);
 		}
-		if(setFlag$ut) {
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$7 = 0.0;
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$7 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double i$var47 = reduceVar$sum$7;
 			
-			// For each index in the array to be reduced
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
-				// Set the left hand term of the reduction function to the return variable value.
-				double i$var47 = reduceVar$sum$7;
-				
-				// Set the right hand term to a value from the array exped
-				double j = exped[cv$reduction44Index];
-				
-				// Execute the reduction function, saving the result into the return value.
-				// 
+			// Set the right hand term to a value from the array exped
+			double j = exped[cv$reduction44Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			if(fixedFlag$sample24)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$7 = (i$var47 + j);
-			}
-			sum = reduceVar$sum$7;
 		}
+		if(fixedFlag$sample24)
+			sum = reduceVar$sum$7;
 		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(setFlag$ut)
+			if(fixedFlag$sample24)
 				prob[i$var61] = (exped[i$var61] / sum);
 		}
 	}

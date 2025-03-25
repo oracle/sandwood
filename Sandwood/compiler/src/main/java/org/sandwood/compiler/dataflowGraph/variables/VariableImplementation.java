@@ -634,10 +634,8 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
          * values have been constructed. TODO make this final point something that is checked against a set in the
          * compilationCtx so that constructed values can be used while other intermediates are being constructed.
          */
-        if(!calculateIntermediate && isIntermediate()
-                && (getType().isArray() || !isDeterministic()
-                        || (isDeterministic() && (compilationCtx.phase == CompilationPhase.MAIN_METHODS
-                                || compilationCtx.phase == CompilationPhase.INITIALIZATION_OF_INTERMEDIATES))))
+        if(!calculateIntermediate && isIntermediate() && (getType().isArray() || !isDeterministic()
+                || (isDeterministic() && compilationCtx.phase == CompilationPhase.MAIN_METHODS)))
             return TreeUtils.getIndirectValue(this, compilationCtx);
 
         // If the tree is stopping on a method variable just return it.
@@ -852,7 +850,8 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
 
     @Override
     public String toString() {
-        return Variable.getSandwoodCode(false, this);
+        // return Variable.getSandwoodCode(false, this);
+        return id + " " + alias;
     }
 
     /**

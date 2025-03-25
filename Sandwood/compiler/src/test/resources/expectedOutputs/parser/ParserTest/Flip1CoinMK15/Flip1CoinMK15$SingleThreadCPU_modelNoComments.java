@@ -24,7 +24,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var47;
 	private double logProbability$var7;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK15$SingleThreadCPU(ExecutionTarget target) {
@@ -906,27 +905,30 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i$var58 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var58 >= ((0 - 1) + 1); i$var58 -= 1)
 			flips[i$var58] = flipsMeasured[i$var58];
 	}
 
 	@Override
 	public final void setIntermediates() {
-		if(guard1)
-			bias = b;
-		else {
-			if(true)
+		if(guard1) {
+			if(fixedFlag$sample8)
+				bias = b;
+		} else {
+			if(fixedFlag$sample8)
 				c[0] = (b / 2);
-			if(true)
+			if(fixedFlag$sample8)
 				c[1] = (b / 2);
 			double reduceVar$var33$12 = 0.0;
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
 				double i$var30 = reduceVar$var33$12;
 				double j = c[cv$reduction30Index];
-				reduceVar$var33$12 = (i$var30 + j);
+				if(fixedFlag$sample8)
+					reduceVar$var33$12 = (i$var30 + j);
 			}
-			bias = reduceVar$var33$12;
+			if(fixedFlag$sample8)
+				bias = reduceVar$var33$12;
 		}
 	}
 

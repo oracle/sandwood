@@ -20,8 +20,6 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$var10;
 	private double logProbability$var9;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinArrayCopyPassMK2$MultiThreadCPU(ExecutionTarget target) {
@@ -46,7 +44,6 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample31 = false;
 	}
@@ -184,7 +181,7 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$bias)
+		if(!fixedFlag$sample10)
 			bias = new double[(samples + 1)];
 		flips = new boolean[samples];
 		logProbability$bernoulli = new double[samples];
@@ -300,7 +297,7 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];
@@ -308,7 +305,7 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$bias)
+		if(fixedFlag$sample10)
 			parallelFor(RNG$, 0, samples, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int i = forStart$i; i < forEnd$i; i += 1)

@@ -27,8 +27,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$y;
 	private int n;
 	private double[][] p;
-	private boolean setFlag$weights = false;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double[] weights;
 	private double[][] x;
@@ -118,7 +116,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
-		setFlag$weights = true;
 		fixedProbFlag$sample35 = false;
 		fixedProbFlag$sample94 = false;
 	}
@@ -326,52 +323,52 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			}
 			if((var33 == 0)) {
 				for(int i = 0; i < n; i += 1) {
-					double traceTempVariable$var69$14_4 = Math.exp((cv$originalValue * x[i][0]));
+					double traceTempVariable$var69$15_4 = Math.exp((cv$originalValue * x[i][0]));
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			if((var33 == 1)) {
 				for(int i = 0; i < n; i += 1) {
-					double traceTempVariable$var71$15_4 = Math.exp((cv$originalValue * x[i][1]));
+					double traceTempVariable$var71$16_4 = Math.exp((cv$originalValue * x[i][1]));
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			if((var33 == 2)) {
 				for(int i = 0; i < n; i += 1) {
-					double traceTempVariable$var74$16_4 = Math.exp((cv$originalValue * x[i][2]));
+					double traceTempVariable$var74$17_4 = Math.exp((cv$originalValue * x[i][2]));
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias)) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias)) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -558,52 +555,52 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		if((var33 == 0)) {
 			for(int i = 0; i < n; i += 1) {
-				double traceTempVariable$var69$14_4 = Math.exp((cv$proposedValue * x[i][0]));
+				double traceTempVariable$var69$15_4 = Math.exp((cv$proposedValue * x[i][0]));
 				if(!guard$sample35bernoulli93$global[i][0]) {
 					guard$sample35bernoulli93$global[i][0] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample35bernoulli93$global[i][1]) {
 					guard$sample35bernoulli93$global[i][1] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample35bernoulli93$global[i][2]) {
 					guard$sample35bernoulli93$global[i][2] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var69$14_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		if((var33 == 1)) {
 			for(int i = 0; i < n; i += 1) {
-				double traceTempVariable$var71$15_4 = Math.exp((cv$proposedValue * x[i][1]));
+				double traceTempVariable$var71$16_4 = Math.exp((cv$proposedValue * x[i][1]));
 				if(!guard$sample35bernoulli93$global[i][0]) {
 					guard$sample35bernoulli93$global[i][0] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample35bernoulli93$global[i][1]) {
 					guard$sample35bernoulli93$global[i][1] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample35bernoulli93$global[i][2]) {
 					guard$sample35bernoulli93$global[i][2] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$15_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		if((var33 == 2)) {
 			for(int i = 0; i < n; i += 1) {
-				double traceTempVariable$var74$16_4 = Math.exp((cv$proposedValue * x[i][2]));
+				double traceTempVariable$var74$17_4 = Math.exp((cv$proposedValue * x[i][2]));
 				if(!guard$sample35bernoulli93$global[i][0]) {
 					guard$sample35bernoulli93$global[i][0] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][0], ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias)) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample35bernoulli93$global[i][1]) {
 					guard$sample35bernoulli93$global[i][1] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][1], ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias)) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample35bernoulli93$global[i][2]) {
 					guard$sample35bernoulli93$global[i][2] = true;
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$16_4)) + bias)) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(y[i][2], ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias)) + cv$accumulatedProbabilities);
 				}
 			}
 		}
@@ -799,7 +796,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		y = new boolean[x.length][];
 		for(int var15 = 0; var15 < x.length; var15 += 1)
 			y[var15] = new boolean[3];
-		if(!setFlag$weights)
+		if(!fixedFlag$sample35)
 			weights = new double[3];
 		indicator = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
@@ -997,7 +994,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = y.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			boolean[] cv$source2 = yMeasured[cv$index1];
@@ -1010,7 +1007,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$weights) {
+		if(fixedFlag$sample35) {
 			for(int i = 0; i < n; i += 1) {
 				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
 				indicator[i][1] = Math.exp((weights[1] * x[i][1]));

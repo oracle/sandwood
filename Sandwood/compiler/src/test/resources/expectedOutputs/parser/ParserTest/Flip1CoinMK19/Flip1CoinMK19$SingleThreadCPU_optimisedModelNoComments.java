@@ -27,7 +27,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var9;
 	private double q;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double t;
 
@@ -366,17 +365,14 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];
 	}
 
 	@Override
-	public final void setIntermediates() {
-		bias[0][0] = q;
-		bias[0][1] = t;
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

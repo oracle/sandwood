@@ -100,6 +100,17 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	@Override
+	public final void set$var14(double cv$value) {
+		var14 = cv$value;
+		fixedProbFlag$sample16 = false;
+	}
+
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
@@ -372,8 +383,15 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample16)
-				var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample16) {
+				boolean observationGuard$var14 = false;
+				{
+					if(!guard)
+						observationGuard$var14 = true;
+				}
+				if(!observationGuard$var14)
+					var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
 		}
 	}
 
@@ -382,8 +400,15 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample16)
-				var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample16) {
+				boolean observationGuard$var14 = false;
+				{
+					if(!guard)
+						observationGuard$var14 = true;
+				}
+				if(!observationGuard$var14)
+					var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
 		}
 	}
 

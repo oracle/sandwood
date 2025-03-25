@@ -8,25 +8,15 @@
 
 package org.sandwood.compiler.compilation;
 
-import static org.sandwood.compiler.trees.irTree.IRTree.addDD;
-import static org.sandwood.compiler.trees.irTree.IRTree.and;
-import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
-import static org.sandwood.compiler.trees.irTree.IRTree.arrayPut;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
-import static org.sandwood.compiler.trees.irTree.IRTree.divideDD;
-import static org.sandwood.compiler.trees.irTree.IRTree.eq;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCall;
 import static org.sandwood.compiler.trees.irTree.IRTree.ifElse;
-import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
-import static org.sandwood.compiler.trees.irTree.IRTree.multiplyDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.negateBoolean;
-import static org.sandwood.compiler.trees.irTree.IRTree.nop;
 import static org.sandwood.compiler.trees.irTree.IRTree.sequential;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,6 +36,7 @@ import org.sandwood.compiler.CompilationOptions;
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
 import org.sandwood.compiler.compilation.CompilationContext.SampleFunctionClass;
+import org.sandwood.compiler.compilation.ForwardExecutionBuilder.GuardStatus;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorLookup;
 import org.sandwood.compiler.compilation.inference.marginalization.MarginalizationFunctions;
@@ -57,20 +48,16 @@ import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
-import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
-import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
-import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -78,32 +65,26 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
-import org.sandwood.compiler.dataflowGraph.variables.randomVariables.DistributableRandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
-import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.names.VariableNames;
-import org.sandwood.compiler.traces.Trace;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.Traces;
 import org.sandwood.compiler.traces.TracesImplementation;
-import org.sandwood.compiler.traces.guards.BackTraceInfo;
 import org.sandwood.compiler.traces.guards.ScopeConstructor;
-import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.irTree.IRFunction;
 import org.sandwood.compiler.trees.irTree.IRFunctionCall;
 import org.sandwood.compiler.trees.irTree.IRSandwoodClassGenerated;
-import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 import org.sandwood.compiler.trees.irTree.IRVoidFunction;
@@ -112,7 +93,6 @@ import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassWrapper;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
 import org.sandwood.compiler.trees.transformationTree.TransSandwoodClassGenerated;
-import org.sandwood.compiler.util.Pair;
 
 public class APICompile {
     // A flag used to make the compiler run in serial mode. THis is used to make it easier to debug errors in the
@@ -193,8 +173,8 @@ public class APICompile {
                 constructInitialisation(compilationCtx);
                 constructAllocators(compilationCtx);
 
-                constructSetIntermediates(compilationCtx);
-                constructPropogateObservedValues(compilationCtx);
+                constructSetIntermediates(forwardVariables, compilationCtx);
+                ObservedValuePropagationBuilder.constructPropagateObservedValues(compilationCtx);
 
                 IRSandwoodClassGenerated irCls = new IRSandwoodClassGenerated(className.backendName(target),
                         targetPackageName, ClassName.coreBase(target), interfaces, compilationCtx.getClassFields(),
@@ -227,7 +207,7 @@ public class APICompile {
             }
 
             compDesc.classes.add(new OutputSandwoodClassWrapper(className, targetPackageName, constructorArgs,
-                    compilationCtx.getClassFields(), traces, comment, ExecutionType.supportedTypes));
+                    compilationCtx.getClassFields(), traces, compDesc, comment, ExecutionType.supportedTypes));
 
             OutputSandwoodClassGenerated outputCls;
             Iterator<RecursiveTask<OutputSandwoodClassGenerated>> i = tasks.iterator();
@@ -270,608 +250,6 @@ public class APICompile {
         }
     }
 
-    /**
-     * Private class for sorting variables based on their dependencies. The class is created so that dependencies can be
-     * cached.
-     */
-    private static class VariableDependencyDesc implements Comparable<VariableDependencyDesc> {
-        public final Variable<?> variable;
-        private final Set<Variable<?>> dependencies;
-
-        private VariableDependencyDesc(Variable<?> v, VarTraces traces) {
-            variable = v;
-            dependencies = new HashSet<>();
-            getDependencies(traces.traceToSource);
-            for(TraceHandle t:traces.tracesToVar)
-                getDependencies(t);
-        }
-
-        private void getDependencies(TraceHandle t) {
-            if(!t.isEmpty()) {
-                // Add the output as this will be the value being created by a later operation.
-                dependencies.add(t.peek().task.getOutput());
-                for(DataflowTaskArgDesc d:t) {
-                    DataflowTask<?> task = d.task;
-                    Variable<?> scopeCondition = task.scope().getScopeCondition();
-                    addDependencies(scopeCondition);
-                    switch(task.getType()) {
-                        case GET: {
-                            GetTask<?> gt = (GetTask<?>) task;
-                            addDependencies(gt.index);
-                            addArrayDependencies(gt.array);
-                            break;
-                        }
-                        case IF_ASSIGNMENT: {
-                            IfElseAssignmentTask<?> ifElse = (IfElseAssignmentTask<?>) task;
-                            addDependencies(ifElse.guard);
-                            break;
-                        }
-                        case PUT: {
-                            PutTask<?> pt = (PutTask<?>) task;
-                            addDependencies(pt.index);
-                            addArrayDependencies(pt.array);
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-
-        private void addArrayDependencies(ArrayVariable<?> array) {
-            array = array.instanceHandle();
-            ProducingDataflowTask<?> parent = array.getParent();
-            DFType type = parent.getType();
-            while(true) {
-                switch(type) {
-                    case ARRAY_CONSTRUCTOR:
-                    case SAMPLE:
-                        return;
-                    case GET: {
-                        GetTask<?> gt = (GetTask<?>) parent;
-                        addDependencies(gt.index);
-                        array = gt.array.instanceHandle();
-                        parent = array.getParent();
-                        type = parent.getType();
-                        break;
-                    }
-                    default:
-                        throw new CompilerException("Unexpected task type: " + type);
-                }
-            }
-        }
-
-        private void addDependencies(Variable<?> v) {
-            if(!v.isDeterministic()) {
-                dependencies.add(v);
-                dependencies.addAll(v.collectInputVariables(DFType.SAMPLE));
-            }
-        }
-
-        @Override
-        public int compareTo(VariableDependencyDesc o) {
-            if(o == this)
-                return 0;
-            if(variable == o.variable)
-                throw new SandwoodException(
-                        "Multiple dependency descriptions have been created for variable: " + variable);
-            boolean contains = o.dependencies.contains(variable);
-            if(dependencies.contains(o.variable)) {
-                if(contains)
-                    throw new SandwoodModelException("Observed variables include a dependency cycle between "
-                            + variable.getAlias() + " and " + o.variable.getAlias(), variable, o.variable);
-                else
-                    return 1;
-            } else {
-                if(contains)
-                    return -1;
-                else
-                    return variable.getId() - o.variable.getId();
-            }
-        }
-
-        public static Set<VariableDependencyDesc> getVariableDependencyDescs(
-                Map<Variable<?>, VarTraces> segmentedTraces) {
-            Set<VariableDependencyDesc> vdds = new HashSet<>();
-            for(Variable<?> v:segmentedTraces.keySet()) {
-                // Construct the VariableDependencyDesc
-                VariableDependencyDesc vdd = new VariableDependencyDesc(v, segmentedTraces.get(v));
-
-                /*
-                 * Add any recursive dependencies, this works because any dependencies as a later step will have already
-                 * been added to the existing VariableDependenceyDescs
-                 */
-                for(VariableDependencyDesc existing:vdds) {
-                    if(vdd.dependencies.contains(existing.variable))
-                        vdd.dependencies.addAll(existing.dependencies);
-                }
-
-                /* Add the dependencies of this variable to anything that depends on it. */
-                for(VariableDependencyDesc existing:vdds) {
-                    if(existing.dependencies.contains(v))
-                        existing.dependencies.addAll(vdd.dependencies);
-                }
-
-                vdds.add(vdd);
-            }
-            return vdds;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("\nVariable " + variable.getAlias() + ":" + variable.getId() + " dependent on:");
-            for(Variable<?> v:dependencies) {
-                if(v.aliasSet()) {
-                    sb.append("\n\t" + v.getAlias() + ":" + v.getId());
-                }
-            }
-            return sb.toString();
-        }
-    }
-
-    /**
-     * A record class for recording the trace to the value that will be the source followed by the set of traces to the
-     * value that will be constructed from the source.
-     */
-    private static record VarTraces(TraceHandle traceToSource, Set<TraceHandle> tracesToVar) {}
-
-    private static void constructPropogateObservedValues(CompilationContext compilationCtx) {
-
-        // Set any observed variables required as input to the observation task.
-        IRTreeVoid t1;
-        {
-            // Set the phase
-            compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_CONSTANTS;
-            // Clear function dependent values to prevent pollution from one context to
-            // another.
-            compilationCtx.initialize();
-
-            // Order the required variables and construct the trees to generate them.
-            PriorityQueue<Variable<?>> p = new PriorityQueue<>(compilationCtx.traces.observedIntermediateVariables());
-            while(!p.isEmpty()) {
-                Variable<?> v = p.poll();
-                constructForwardMethod(v, false, true, compilationCtx);
-            }
-
-            t1 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
-                    "Setting intermediate variables that are used to constrain other variables.");
-        }
-
-        // Propagate back from the observation task to the intermediate variables in the model.
-        IRTreeVoid t2;
-        {
-            // Set the phase
-            compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_INTERMEDIATES;
-            // Clear function dependent values to prevent pollution from one context to another.
-            compilationCtx.initialize();
-            // Make this serial for now to protect the unit tests. This may be removed later, but it will break the unit
-            // tests as multiple RNGs will be created giving a different stream of numbers.
-            compilationCtx.pushIsSerial(true);
-            compilationCtx.setreverseScopes(true);
-
-            Map<Variable<?>, VarTraces> segmentedTraces = new HashMap<>();
-            for(SampleTask<?, ?> sTask:compilationCtx.traces.getAllSampleTasks()) {
-                if(compilationCtx.traces.isObserved(sTask)) {
-                    // Test that the traces are valid
-                    Map<Variable<?>, Set<TraceHandle>> t = compilationCtx.traces.getUnconditionalObservedTraces(sTask);
-                    if(t == null)
-                        throw new CompilerException("No observed trace provided.");
-
-                    /*
-                     * TODO weaken this guard so that traces that split on an if else are allowed, or traces that go via
-                     * different arrays are allowed. This is non trivial as arrays can be used in may ways to recombine
-                     * the traces.
-                     */
-                    int size = t.size();
-                    if(size != 1) {
-                        String s = "\"";
-                        for(Variable<?> v:t.keySet()) {
-                            s = s + v.getAlias();
-                            if(--size != 0) {
-                                if(size == 1)
-                                    s = s + "\", \"";
-                                else
-                                    s = s + "\", and \"";
-                            } else
-                                s = s + "\"";
-                        }
-
-                        throw new SandwoodModelException(
-                                "Multiple variables linked to sample task. This could result in inconsistencies. "
-                                        + "Relevant variables are " + s + ".",
-                                sTask);
-                    }
-
-                    ingestTrace(t.values(), segmentedTraces);
-                }
-            }
-
-            ingestTrace(compilationCtx.traces.getObservedConditionTraces().values(), segmentedTraces);
-
-            // Construct the code to populate the values.
-            Set<VariableDependencyDesc> vdds = VariableDependencyDesc.getVariableDependencyDescs(segmentedTraces);
-            PriorityQueue<VariableDependencyDesc> p = new PriorityQueue<>(vdds);
-
-            Set<Variable<?>> copied = new HashSet<>();
-            while(!p.isEmpty()) {
-                Variable<?> end = p.poll().variable;
-                Variable<?> instanceHandle = end.instanceHandle();
-                if(end.isObserved()) {
-                    if(!copied.contains(instanceHandle)) {
-                        copyObservation(end, compilationCtx);
-                        copied.add(instanceHandle);
-                    }
-                } else {
-                    VarTraces vt = segmentedTraces.get(end);
-                    for(TraceHandle th:vt.tracesToVar) {
-                        ProducingDataflowTask<?> endTask = th.get(0).task;
-                        ScopeConstructor sc = ScopeConstructor.construct(endTask, endTask.scope(), Tree.NoComment,
-                                compilationCtx);
-                        // make sure the path from the source to the value to be set is valid.
-                        sc = sc.addConstraint(th);
-                        // Make sure the path to the source is valid.
-                        if(!vt.traceToSource.isEmpty())
-                            sc = sc.addConstraint(vt.traceToSource);
-                        // Set the value using the source.
-                        sc.addTree(1, (TreeBuilderInfo info) -> {
-                            Variable<?> start = th.peek().task.getOutput();
-                            if(start.isObserved())
-                                start = start.getObservation().source;
-                            IRTreeReturn<?> current = start.getForwardIR(compilationCtx);
-                            processTask(th.size() - 1, th, current, info.backTraceInfo, compilationCtx);
-                        });
-                    }
-                }
-            }
-
-            compilationCtx.setreverseScopes(false);
-            compilationCtx.popIsSerial();
-
-            t2 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
-                    "Propagating values back from observations into the models intermediate variables.");
-        }
-
-        IRTreeVoid funcBody = IRTree.sequential(Tree.NoComment, t1, t2);
-        compilationCtx.addFunction(AuxFunctionType.OBSERVATION_PROPAGATION, Visibility.PUBLIC, new ArgDesc[0], funcBody,
-                true, "Method to propagate observed values back into the model.");
-    }
-
-    // TODO Replace the deep copies here with shallow copies of just the references, and then reallocate the variables
-    // assigned prior to forward execution.
-    private static <A extends Variable<A>, B extends Variable<B>> void copyObservation(Variable<A> end,
-            CompilationContext compilationCtx) {
-        ObserveVariableTask<A> ot = end.getObservation();
-        IRTreeReturn<A> current = ot.source.getForwardIR(compilationCtx);
-        DataflowTask<A> source = ot.target.getParent();
-        compilationCtx.enterScope(source.scope());
-        switch(source.getType()) {
-            case GET: {
-                // get Version
-                int outputDepth = end.getType().getDepth();
-                GetTask<A> gt = (GetTask<A>) source;
-                IRTreeReturn<ArrayVariable<A>> arrayTree = gt.array.getForwardIR(compilationCtx);
-
-                IRTreeReturn<IntVariable> indexTree = gt.index.getForwardIR(compilationCtx);
-                if(outputDepth == 0) {
-                    // If the observed value was a scalar just assign it to the array.
-                    IRTreeVoid store = IRTree.arrayPut(arrayTree, indexTree, current, Tree.NoComment);
-                    compilationCtx.addTreeToScope(gt.scope(), store);
-                } else {
-                    IRTreeVoid copyBody = TreeUtils.copyArray((IRTreeReturn<ArrayVariable<B>>) current,
-                            (IRTreeReturn<ArrayVariable<B>>) IRTree.arrayGet(arrayTree, indexTree));
-                    compilationCtx.addTreeToScope(end.scope(), copyBody);
-                }
-                break;
-            }
-            case PUT: {
-                // Put version
-                PutTask<A> pt = (PutTask<A>) source;
-
-                // Get the tree for the array
-                IRTreeReturn<ArrayVariable<A>> arrayTree = pt.array.getForwardIR(compilationCtx);
-
-                IRTreeVoid copyBody = TreeUtils.copyArray((IRTreeReturn<ArrayVariable<A>>) current, arrayTree);
-                compilationCtx.addTreeToScope(end.scope(), copyBody);
-                break;
-            }
-            default: {
-                // All other instances
-                saveIntermediate(end, current, compilationCtx);
-                break;
-            }
-        }
-        compilationCtx.leaveScope(source.scope());
-    }
-
-    /**
-     * A function to work out the segments of trace that values should be propagated back over and to store the results
-     * in a map indexed by the variable they create so they can be recovered and the required code computed in the
-     * correct order.
-     * 
-     * @param observedTraces
-     * @param segmentedTraces
-     */
-    private static void ingestTrace(Collection<Set<TraceHandle>> observedTraces,
-            Map<Variable<?>, VarTraces> segmentedTraces) {
-        for(Set<TraceHandle> traces:observedTraces) {
-            if(multiplePaths(traces)) {
-                TraceHandle t = traces.iterator().next();
-                Variable<?> output = t.peek().task.getOutput();
-                throw new SandwoodModelException("Multiple traces to observed variable " + output.getAlias()
-                        + ". This could result in inconsistencies.", output.getObservation());
-            }
-
-            for(TraceHandle t:traces) {
-                Trace segment = new Trace();
-                int i = 0;
-
-                // Skip all the tasks before the sample variable.
-                DataflowTaskArgDesc d = t.get(i++);
-                ProducingDataflowTask<?> task = d.task;
-                Variable<?> output = task.getOutput();
-                while(!output.isSample() && !output.isIntermediate()) {
-                    d = t.get(i++);
-                    output = d.task.getOutput();
-                }
-
-                // If the sample came from a put into an array skip it and find the outermost point of the trace.
-                while(d.task.getType() == DFType.PUT && !output.isObserved()) {
-                    d = t.get(i++);
-                    output = d.task.getOutput();
-                }
-
-                if(output.isObserved())
-                    segmentedTraces.computeIfAbsent(output,
-                            k -> new VarTraces(TraceHandle.emptyTrace(), Collections.emptySet()));
-                else {
-                    Variable<?> result;
-                    // If the result is a get
-                    if(d.task.getType() == DFType.GET) {
-                        if(d.argPos == 0)
-                            result = ((GetTask<?>) d.task).array;
-                        else
-                            throw new CompilerException("Array indexes cannot be observed, this should have been "
-                                    + "detected and prevented from happening by reporting an "
-                                    + "error to the user before this point.");
-                    } else
-                        result = output;
-                    while(true) {
-
-                        // Add the value as this is where the trace segment ends
-                        segment.add(d);
-                        // If the output is observed, this is also the end of the trace so store the segment and stop.
-                        if(output.isObserved()) {
-                            int start = i - 1;
-                            VarTraces segments = segmentedTraces.computeIfAbsent(result,
-                                    k -> new VarTraces(t.subTrace(start), new HashSet<>()));
-                            segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
-                            break;
-                        }
-
-                        // Move along a segment
-                        d = t.get(i++);
-                        output = d.task.getOutput();
-                        // If the next intermediate has been found store the segment and start the next segment.
-                        if(output.isIntermediate()) {
-                            int start = i - 1;
-                            VarTraces segments = segmentedTraces.computeIfAbsent(result,
-                                    k -> new VarTraces(t.subTrace(start), new HashSet<>()));
-                            segment.add(d);
-                            segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
-                            segment.clear();
-
-                            // If the value came from a put into an array skip it and find the outermost point of the
-                            // trace.
-                            while(d.task.getType() == DFType.PUT && !output.isObserved()) {
-                                d = t.get(i++);
-                                output = d.task.getOutput();
-                            }
-
-                            // If the result is a get
-                            if(d.task.getType() == DFType.GET) {
-                                if(d.argPos == 0)
-                                    result = ((GetTask<?>) d.task).array;
-                                else
-                                    throw new CompilerException(
-                                            "Array indexes cannot be observed, this should have been "
-                                                    + "detected and prevented from happening by reporting an "
-                                                    + "error to the user before this point.");
-                            } else
-                                result = output;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * A method to check if a set of traces represents more than one path through the DAG. A single path can have more
-     * than one trace if there are implicit puts, and puts specified by the user in the model that are semantically
-     * equivalent.
-     * 
-     * @param traces The set of traces to compare
-     * @return Returns true if the traces represent at least 2 different patterns.
-     */
-    private static boolean multiplePaths(Set<TraceHandle> traces) {
-        Iterator<TraceHandle> i = traces.iterator();
-        TraceHandle pattern = i.next();
-        int size = pattern.size();
-        while(i.hasNext()) {
-            TraceHandle test = i.next();
-
-            // Remove puts, samples, and if assignments that will not result in generated code.
-            int patternPrefix = 0;
-            while(patternPrefix < size) {
-                DataflowTaskArgDesc dt = pattern.get(patternPrefix);
-                DFType type = dt.task.getType();
-                if(type != DFType.PUT && type != DFType.IF_ASSIGNMENT && type != DFType.SAMPLE)
-                    break;
-                patternPrefix++;
-            }
-
-            int testSize = test.size();
-            int testPrefix = 0;
-            while(testPrefix < testSize) {
-                DataflowTaskArgDesc dt = test.get(testPrefix);
-                DFType type = dt.task.getType();
-                if(type != DFType.PUT && type != DFType.IF_ASSIGNMENT && type != DFType.SAMPLE)
-                    break;
-                testPrefix++;
-            }
-
-            // Test the remaining suffixes
-            if(size - patternPrefix != testSize - testPrefix)
-                return true;
-
-            int difference = testPrefix - patternPrefix;
-            for(int j = patternPrefix; j < size; j++) {
-                DataflowTaskArgDesc dt = test.get(j - difference);
-                DataflowTaskArgDesc pt = pattern.get(j);
-                if(!dt.equals(pt)) {
-                    // If the 2 trace elements are not the same check that they are both puts entered through the same
-                    // input and with the same index. This situation can occur because implicit puts are created when a
-                    // value is put into an array that is itself in an array.
-
-                    if(dt.argPos != pt.argPos)
-                        return true;
-                    if(dt.task.getType() != DFType.PUT || pt.task.getType() != DFType.PUT)
-                        return true;
-                    if(((PutTask<?>) dt.task).index != ((PutTask<?>) pt.task).index)
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private static <A extends Variable<A>, B extends Variable<B>> void processTask(int index, TraceHandle traceHandle,
-            IRTreeReturn<A> current, BackTraceInfo backTraceInfo, CompilationContext compilationCtx) {
-        DataflowTaskArgDesc d = traceHandle.get(index);
-        ProducingDataflowTask<?> task = d.task;
-
-        switch(task.getType()) {
-            case SAMPLE: {
-                // If this is an unobserved intermediate populate it with the current value.
-                Variable<?> v = task.getOutput();
-                if(v.isIntermediate() && v.getType().getDepth() == 0)
-                    saveIntermediate(v, current, compilationCtx);
-                break;
-            }
-            case GET: {
-                if(d.argPos == 1)
-                    throw new CompilerException(
-                            "Unique values are not guaranteed in arrays, this prevents indexes being "
-                                    + "calculated when inverting the model.");
-                if(d.argPos != 0)
-                    throw new CompilerException(
-                            "There are only 2 arguments to a get, this value of argPos is not valid.");
-
-                compilationCtx.enterScope(task.scope());
-
-                Variable<?> output = task.getOutput();
-                int outputDepth = output.getType().getDepth();
-                GetTask<A> gt = (GetTask<A>) task;
-                IRTreeReturn<ArrayVariable<A>> arrayTree = gt.array.getForwardIR(compilationCtx);
-
-                if(outputDepth == 0) {
-                    // If the value was a scalar just assign it to the array.
-                    IRTreeReturn<IntVariable> indexTree = gt.index.getForwardIR(compilationCtx);
-                    IRTreeVoid store = IRTree.arrayPut(arrayTree, indexTree, current, Tree.NoComment);
-                    compilationCtx.addTreeToScope(gt.scope(), store);
-                }
-                // If the value was an array as arrays can only be assigned to a single parent array and this
-                // will have happened in the allocator there is nothing to do.
-
-                if(index != 0)
-                    processTask(index - 1, traceHandle, arrayTree, backTraceInfo, compilationCtx);
-
-                compilationCtx.leaveScope(task.scope());
-                break;
-            }
-            case PUT: {
-                PutTask<B> pt = (PutTask<B>) task;
-                backTraceInfo.updateSubstitutions(pt, compilationCtx);
-                switch(d.argPos) {
-                    case 0:
-                        throw new CompilerException("Assignments to arrays where the input is the array"
-                                + " being assigned to should not appear in traces.");
-                    case 1:
-                        // The array was indexed by the value of a sample. If and only if we are sure
-                        // the array only contains unique elements
-                        // we could construct a reverse lookup and use that to determine the value of i
-                        // based on the forward value of arg 3 and
-                        // the current state of the array.
-                        throw new CompilerException("Unable to construct inverse function as put "
-                                + "tasks cannot currently determine the index a value came from.");
-                    case 2:
-                        compilationCtx.enterScope(task.scope());
-
-                        // Get the tree for the array
-                        IRTreeReturn<ArrayVariable<B>> arrayTree;
-                        if(compilationCtx.initialized(pt.array)) {
-                            pt.array.markStopPoint();
-                            arrayTree = pt.array.getForwardIR(compilationCtx);
-                            pt.array.unmarkStopPoint();
-                        } else
-                            arrayTree = pt.array.getForwardIR(compilationCtx);
-
-                        IRTreeReturn<IntVariable> indexTree = pt.index.getForwardIR(compilationCtx);
-
-                        // If this is not the last step in this trace segment and an array is being placed into this
-                        // array declare that array in scope so that it can be used in other code.
-                        if(index != 0) {
-                            Variable<B> value = pt.value.instanceHandle();
-                            if(value.getType().getDepth() != 0) {
-                                if(!compilationCtx.initialized(value)) {
-                                    compilationCtx.addTreeToScope(value.scope(),
-                                            IRTree.initializeUnsetVariable(value.getUniqueVarDesc(), Tree.NoComment));
-                                    compilationCtx.addInitialized(value);
-                                }
-                                compilationCtx.addTreeToScope(pt.scope(), IRTree.store(value.getUniqueVarDesc(),
-                                        IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
-                            }
-
-                            processTask(index - 1, traceHandle, IRTree.arrayGet(arrayTree, indexTree), backTraceInfo,
-                                    compilationCtx);
-                        }
-
-                        compilationCtx.leaveScope(task.scope());
-                        break;
-
-                    // Values are not propagated through scope conditions, instead we will have to infer these values
-                    // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
-                    // model probability of 0/-Infinity in normal/log space respectively.
-                    case 3:
-                        throw new CompilerException(
-                                "Values are not propagated through scope conditions, instead we will have to infer these values.");
-
-                    default:
-                        throw new CompilerException("Unknown operation put only accepts arguments in positions 0-3");
-                }
-                break;
-            }
-            default: {
-                if(index == 0) {
-                    Variable<?> output = task.getOutput();
-                    saveIntermediate(output, current, compilationCtx);
-                } else {
-                    IRTreeReturn<?> result = task.getInverseIR(d.argPos, current, backTraceInfo, compilationCtx);
-                    processTask(index - 1, traceHandle, result, backTraceInfo, compilationCtx);
-                }
-            }
-        }
-    }
-
-    private static <A extends Variable<A>> void saveIntermediate(Variable<A> variable, IRTreeReturn<?> value,
-            CompilationContext compilationCtx) {
-        IRTreeVoid tree = TreeUtils.putIndirectValue(variable, (IRTreeReturn<A>) value, Tree.NoComment, compilationCtx);
-        compilationCtx.addTreeToScope(variable.getParent().scope(), tree);
-    }
-
     // TODO make sure only currentInstances are used when allocating fields, otherwise the same fields will be allocated
     // again and again.
     private static void declareClassFields(CompilationContext compilationCtx) {
@@ -885,13 +263,13 @@ public class APICompile {
 
             VariableDescription<ArrayVariable<DoubleVariable>> distributionName = VariableNames.distribution(rv);
             v.setUniqueVarDesc(distributionName);
-            v.setIntermediate();
+            v.setSample();
             v.setPrivate();
 
             ScopeStack.popScope(rv.scope());
 
             rv.addProbabilityDistribution(v);
-            compilationCtx.addConstructedClassField(v, false, false, compilationCtx);
+            compilationCtx.addConstructedClassField(v, compilationCtx);
         }
 
         // Intermediates and sample variables
@@ -899,14 +277,7 @@ public class APICompile {
             boolean isSubArray = v.getType().isArray() && ((ArrayVariable<?>) v).isSubArray();
             boolean isModelInput = v.getParent().getType() == DFType.CONSTRUCT_INPUT;
             if((v.isIntermediate() || (v.isSample() && !isSubArray)) && !isModelInput) {
-                boolean setter = !v.isPrivate() && !v.isDeterministic() && setBySampleValue(v);
-                compilationCtx.addConstructedClassField(v, !v.isPrivate(), setter, compilationCtx);
-                // TODO decide if the setflag and the fixed flag should be merged into a single flag.
-                if(setter && (v.getType().isArray() || v.scope() != GlobalScope.scope)) {
-                    compilationCtx.addConstructedClassField(VariableNames.setFlagName(v.getVarDesc()), null, null,
-                            false, false, true, v.getObservationStatus(), false, false, IRTree.constant(false),
-                            Tree.NoComment);
-                }
+                compilationCtx.addConstructedClassField(v, compilationCtx);
             }
         }
 
@@ -914,7 +285,7 @@ public class APICompile {
         for(SampleTask<?, ?> s:compilationCtx.traces.getAllSampleTasks()) {
             if(!s.getOutput().isFixed()) {
                 VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
-                compilationCtx.addConstructedClassField(flagName, true, true, null, constant(false));
+                compilationCtx.addFlagClassField(flagName, constant(false));
             }
         }
 
@@ -1015,74 +386,26 @@ public class APICompile {
         compDesc.errors.addAll(errors);
     }
 
-    private static void constructSetIntermediates(CompilationContext compilationCtx) {
-        compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_INTERMEDIATES;
+    private static void constructSetIntermediates(Set<Variable<?>> vars, CompilationContext compilationCtx) {
+        compilationCtx.phase = CompilationPhase.MAIN_METHODS;
         compilationCtx.initialize();
-        PriorityQueue<Variable<?>> p = new PriorityQueue<>(compilationCtx.traces.getIntermediates());
-        while(!p.isEmpty()) {
-            Variable<?> v = p.poll();
-            if(!v.isDeterministic() && !v.isFixed() && !setBySampleValue(v))
-                constructIntermediate(v, compilationCtx);
+
+        Map<Variable<?>, Set<TraceHandle>> forwardVariables = getObservedVariableForwardableInputs(vars,
+                compilationCtx);
+        Set<Variable<?>> toRemove = new HashSet<>();
+        for(Variable<?> v:forwardVariables.keySet()) {
+            if(v.isSample())
+                toRemove.add(v);
         }
+        for(Variable<?> v:toRemove)
+            forwardVariables.remove(v);
 
-        compilationCtx.addFunction(AuxFunctionType.SET_INTERMEDIATES, Visibility.PUBLIC, new ArgDesc[0],
-                compilationCtx.getOutermostScopeTree(), true,
-                "A method to set array values that depend on the output of a sample task, but are not directly set by the sample task.");
-    }
-
-    /**
-     * Method to test if this intermediate value has already been set when the sample values were set.
-     * 
-     * @param v The intermediate variable to test.
-     * @return Returns true if the value will have been set by the sample value.
-     */
-    private static boolean setBySampleValue(Variable<?> v) {
-        if(v.isSample())
-            return true;
-
-        while(v.getParent().getType() == DFType.PUT) {
-            PutTask<?> pt = (PutTask<?>) v.getParent();
-            if(pt.value.isSample() && !pt.value.isIntermediate())
-                return true;
-            v = pt.value;
-        }
-        return false;
-    }
-
-    private static <A extends Variable<A>> void constructIntermediate(Variable<A> v,
-            CompilationContext compilationCtx) {
-        // TODO See if the uses of this guard can be constrained.
-        BooleanVariable guard = constructGuard(v, compilationCtx);
-
-        Scope targetScope = v.getParent().scope();
-        Scope newScope = new IfScope(targetScope, guard);
-
-        compilationCtx.touchScope(newScope);
-        compilationCtx.addScopeSubstitute(targetScope, newScope);
-
-        IRTreeReturn<A> t = v.getParent().getForwardIR(compilationCtx);
-        if(!compilationCtx.initialized(v)) {
-            compilationCtx.addTreeToScope(newScope, TreeUtils.putIndirectValue(v, t, Tree.NoComment, compilationCtx));
-            compilationCtx.addInitialized(v);
-        }
-
-        compilationCtx.removeScopeSubstitute(targetScope);
-    }
-
-    private static <A extends Variable<A>> BooleanVariable constructGuard(Variable<A> v,
-            CompilationContext compilationCtx) {
-        Collection<Variable<?>> dependencies = compilationCtx.traces.getIntermediateSampleVarDependencies(v);
-
-        PriorityQueue<Variable<?>> guardQueue = new PriorityQueue<>(dependencies);
-        BooleanVariable guard = BooleanVariable.booleanVariable(true, GlobalScope.scope);
-        while(!guardQueue.isEmpty()) {
-            Variable<?> sourceVar = guardQueue.poll();
-            // Test that the array is visible, and check for set values on arrays in case they have not been allocated
-            // yet.
-            if(!sourceVar.isPrivate() && sourceVar.getType().isArray())
-                guard = guard.and(Variable.namedVariable(VariableNames.setFlagName(sourceVar.getUniqueVarDesc())));
-        }
-        return guard;
+        IRTreeVoid forwardBody = forwardBody(forwardVariables, GuardStatus.FIXED, false, compilationCtx);
+        compilationCtx.addFunction(AuxFunctionType.SET_INTERMEDIATES, Visibility.PUBLIC, new ArgDesc[0], forwardBody,
+                true,
+                "A method to set array values that depend on the output of a sample task, but are not directly set by "
+                        + "the sample task. This method is called to propagate set values through the model. Any non-fixed sample "
+                        + "values may be sampled to random variables as part of this process.");
     }
 
     private static void constructAllocators(CompilationContext compilationCtx) {
@@ -1273,7 +596,7 @@ public class APICompile {
         compilationCtx.setInInference(true);
         VariableDescription<BooleanVariable> flagName = new VariableDescription<>(
                 VariableNames.internalSystemName("gibbsForward"), VariableType.BooleanVariable);
-        compilationCtx.addConstructedClassField(flagName, nop(), constant(true));
+        compilationCtx.addConstructedClassField(flagName, constant(true));
         Map<SampleTask<?, ?>, IRFunction<?>> inferenceFunctions = compilationCtx
                 .getFunctionMap(SampleFunctionClass.INFERENCE);
 
@@ -1365,18 +688,35 @@ public class APICompile {
         return toReturn;
     }
 
-    private static void addAllVars(Set<Variable<?>> set, Variable<?> v) {
-        set.add(v);
+    private static void addAllVars(Map<Variable<?>, Set<TraceHandle>> map, Variable<?> v,
+            CompilationContext compilationCtx) {
+        map.put(v, compilationCtx.traces.getVariableObservationsTraces(v));
         DataflowTask<?> task = v.getParent();
         while(task.getType() == DFType.PUT) {
             PutTask<?> putTask = (PutTask<?>) task;
             v = putTask.array;
-            set.add(v);
+            map.put(v, compilationCtx.traces.getVariableObservationsTraces(v));
             task = v.getParent();
         }
     }
 
-    private static IRTreeVoid forwardBody(Set<Variable<?>> vars, boolean useDistributions,
+    private static IRTreeVoid forwardBody(Map<Variable<?>, Set<TraceHandle>> vars, GuardStatus guardStatus,
+            boolean useDistributions, CompilationContext compilationCtx) {
+        // Clear function dependent values to prevent pollution from one context to
+        // another.
+        compilationCtx.initialize();
+        PriorityQueue<Variable<?>> p = new PriorityQueue<>(vars.keySet());
+        while(!p.isEmpty()) {
+            Variable<?> v = p.poll();
+            ForwardExecutionBuilder.constructForwardMethod(v, vars.get(v), guardStatus, useDistributions,
+                    compilationCtx);
+        }
+
+        return compilationCtx.getOutermostScopeTree();
+
+    }
+
+    private static IRTreeVoid forwardBody(Set<Variable<?>> vars, GuardStatus guardStatus, boolean useDistributions,
             CompilationContext compilationCtx) {
         // Clear function dependent values to prevent pollution from one context to
         // another.
@@ -1384,7 +724,7 @@ public class APICompile {
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(vars);
         while(!p.isEmpty()) {
             Variable<?> v = p.poll();
-            constructForwardMethod(v, true, useDistributions, compilationCtx);
+            ForwardExecutionBuilder.constructForwardMethod(v, guardStatus, useDistributions, compilationCtx);
         }
 
         return compilationCtx.getOutermostScopeTree();
@@ -1392,17 +732,18 @@ public class APICompile {
     }
 
     private static void forwardPasses(Set<Variable<?>> vars, CompilationContext compilationCtx) {
-        IRTreeVoid forwardBody = forwardBody(vars, false, compilationCtx);
+        IRTreeVoid forwardBody = forwardBody(vars, GuardStatus.FREE, false, compilationCtx);
         compilationCtx.addFunction(AuxFunctionType.FORWARD_GENERATION, Visibility.PUBLIC, new ArgDesc[0], forwardBody,
                 true, "Method to execute the model code conventionally.");
 
-        Set<Variable<?>> forwardVariables = getObservedVariableForwardableInputs(vars, compilationCtx);
-        forwardBody = forwardBody(forwardVariables, false, compilationCtx);
+        Map<Variable<?>, Set<TraceHandle>> forwardVariables = getObservedVariableForwardableInputs(vars,
+                compilationCtx);
+        forwardBody = forwardBody(forwardVariables, GuardStatus.FREE, false, compilationCtx);
         compilationCtx.addFunction(AuxFunctionType.FORWARD_GENERATION_VALUES_NO_OUTPUTS, Visibility.PUBLIC,
                 new ArgDesc[0], forwardBody, true,
                 "Method to execute the model code conventionally, excluding the elements that generate observed values. Distributions are collapsed to single values.");
 
-        forwardBody = forwardBody(forwardVariables, true, compilationCtx);
+        forwardBody = forwardBody(forwardVariables, GuardStatus.FREE, true, compilationCtx);
         compilationCtx.addFunction(AuxFunctionType.FORWARD_GENERATION_DISTRIBUTIONS_NO_OUTPUTS, Visibility.PUBLIC,
                 new ArgDesc[0], forwardBody, true,
                 "Method to execute the model code conventionally, excluding the elements that generate observed values. Distributions are calculated and stored.");
@@ -1419,392 +760,12 @@ public class APICompile {
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(compilationCtx.traces.deterministicVariables());
         while(!p.isEmpty()) {
             Variable<?> v = p.poll();
-            constructForwardMethod(v, false, true, compilationCtx);
+            ForwardExecutionBuilder.constructForwardMethod(v, GuardStatus.NONE, true, compilationCtx);
         }
 
         IRTreeVoid body = compilationCtx.getOutermostScopeTree();
         compilationCtx.addFunction(AuxFunctionType.INITIALIZE, Visibility.PUBLIC, new ArgDesc[0], body, true,
                 "Method for initialising the model into a valid state before commencing inference etc.");
-    }
-
-    private static IRTreeReturn<BooleanVariable> constructGuard(Set<SampleTask<?, ?>> sTasks) {
-        IRTreeReturn<BooleanVariable> guard = null;
-
-        PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>();
-        for(SampleTask<?, ?> s:sTasks) {
-            if(!s.getOutput().isFixed())
-                p.add(s);
-        }
-
-        if(!p.isEmpty()) {
-            VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(p.poll());
-            guard = load(flagName);
-
-            while(!p.isEmpty()) {
-                flagName = VariableNames.fixedFlagName(p.poll());
-                guard = and(guard, load(flagName));
-            }
-
-            guard = negateBoolean(guard);
-        }
-        return guard;
-
-    }
-
-    // TODO make sure this is only called on intermediates. Once this is done calls
-    // to isIntermediate can be removed as they will always be true.
-    private static void constructForwardMethod(Variable<?> intermediate, Boolean restricted, boolean useDistributions,
-            CompilationContext compilationCtx) {
-        if(intermediate instanceof RandomVariable) {
-            RandomVariable<?, ?> rv = (RandomVariable<?, ?>) intermediate;
-
-            if(rv.distributionSampled() && useDistributions) {
-                // If we are using restrictions in this code construct a guard for the code
-                // generating this intermediate.
-                IRTreeReturn<BooleanVariable> guard = null;
-                if(restricted) {
-                    // We want to generate new values from the distribution unless all the consumers
-                    // won't use it.
-                    Set<SampleTask<?, ?>> sTasks = new HashSet<>();
-                    for(DataflowTask<?> task:rv.getConsumers()) {
-                        SampleTask<?, ?> sTask = (SampleTask<?, ?>) task;
-                        sTasks.add(sTask);
-                    }
-                    guard = constructGuard(sTasks);
-                    compilationCtx.setCodeGuard(guard);
-                }
-
-                constructForwardRVDistribution((DistributableRandomVariable<?, ?>) rv, compilationCtx);
-
-                // If a guard was generated clear it.
-                if(guard != null)
-                    compilationCtx.clearCodeGuard();
-            }
-        } else {
-            if(!(intermediate.isDistribution() && useDistributions)) {
-                // A special case for if assignments.
-                if(intermediate.getParent().getType() == DFType.IF_ASSIGNMENT) {
-                    forwardIfAssignment(intermediate, restricted, compilationCtx);
-                } else {
-                    // If we are using restrictions in this code construct a guard for the code
-                    // generating this intermediate.
-                    IRTreeReturn<BooleanVariable> guard = null;
-                    if(restricted) {
-                        Set<SampleTask<?, ?>> sTasks = getSourceSampleTasks(intermediate, compilationCtx);
-                        guard = constructGuard(sTasks);
-                        compilationCtx.setCodeGuard(guard);
-                    }
-
-                    constructVariableForward(intermediate, compilationCtx);
-
-                    // If a guard was generated clear it.
-                    if(guard != null)
-                        compilationCtx.clearCodeGuard();
-                }
-            }
-        }
-    }
-
-    private static <A extends Variable<A>> void forwardIfAssignment(Variable<A> intermediate, Boolean restricted,
-            CompilationContext compilationCtx) {
-        /*
-         * This indirection is done to allow for the case where the intermediate variable is allocated inside a for
-         * loop. When this happens an array is created to allow each instantiation of the intermediate variable to be
-         * saved, and this array needs dereferencing. As this is constructed by the compiler there is no problem with
-         * complex indices, or different orders to the indices.
-         */
-        List<Pair<Variable<A>, Scope>> sources = new ArrayList<>();
-        sources.add(new Pair<>(intermediate, intermediate.scope()));
-        while(!sources.isEmpty()) {
-            Pair<Variable<A>, Scope> p = sources.remove(sources.size() - 1);
-            Variable<A> v = p.a;
-            Scope s = p.b;
-            DataflowTask<A> parent = v.getParent();
-            if(parent.getType() == DFType.IF_ASSIGNMENT) {
-                IfElseAssignmentTask<A> ifElseParent = (IfElseAssignmentTask<A>) parent;
-                sources.add(new Pair<>(ifElseParent.ifValue, ifElseParent.ifScope));
-                sources.add(new Pair<>(ifElseParent.elseValue, ifElseParent.ifScope.elseScope));
-            } else {
-                // If we are using restrictions in this code construct a guard for the code
-                // generating this intermediate.
-                IRTreeReturn<BooleanVariable> guard = null;
-                if(restricted) {
-                    Set<SampleTask<?, ?>> sTasks = getSourceSampleTasks(v, compilationCtx);
-                    guard = constructGuard(sTasks);
-                    compilationCtx.setCodeGuard(guard);
-                }
-
-                IRTreeReturn<A> tree;
-                if(v.isIntermediate() || v.isSample())
-                    tree = IRTree.load(v);
-                else
-                    tree = v.getForwardIR(compilationCtx);
-
-                compilationCtx.addTreeToScope(s, IRTree.store(intermediate.getUniqueVarDesc(), tree, Tree.NoComment));
-
-                // If a guard was generated clear it.
-                if(guard != null)
-                    compilationCtx.clearCodeGuard();
-            }
-        }
-    }
-
-    /**
-     * Method to get all the sample tasks that a variable is dependent on when performing forward execution.
-     * 
-     * @param v              The variable to get the dependent sample tasks for.
-     * @param compilationCtx The compilaiton context.
-     * @return A set containing all the dependent variables.
-     */
-    private static Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v, CompilationContext compilationCtx) {
-        return getSourceSampleTasks(v, new HashSet<>(), compilationCtx.traces);
-    }
-
-    /**
-     * Method to get all the sample tasks that a variable is dependent on when performing forward execution.
-     * 
-     * @param v      The variable to get the dependent sample tasks for.
-     * @param traces The traces object to query.
-     * @param seen   A set containing all the variables already seen.
-     * @return A set containing all the dependent variables.
-     */
-    private static Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v, Set<Variable<?>> seen, Traces traces) {
-        Set<SampleTask<?, ?>> samples = traces.getSourceSampleTasks(v);
-        seen.add(v);
-        for(Variable<?> o:traces.getSourceObservedVariables(v)) {
-            if(!seen.contains(o))
-                samples.addAll(getSourceSampleTasks(o, seen, traces));
-        }
-        return samples;
-    }
-
-    private static <A extends Variable<A>> void constructVariableForward(Variable<A> v,
-            CompilationContext compilationCtx) {
-        // Otherwise just generate regular code.
-        // NOTE Get parent is required to avoid tests that stop code generation at
-        // intermediate
-        // values.
-        if(!v.isDeterministic() || compilationCtx.phase == CompilationPhase.INITIALIZATION_OF_CONSTANTS) {
-            IRTreeReturn<A> returnBody = v.getParent().getForwardIR(compilationCtx);
-
-            // Typically this will be if the value is from a sample task and is written to an intermediate array.
-            // In this case the result will have already been written out to the outer array.
-            if(v.getType().isArray() && ((ArrayVariable<?>) v).isSubArray())
-                return;
-
-            /*
-             * This indirection is done to allow for the case where the intermediate variable is allocated inside a for
-             * loop. When this happens an array is created to allow each instantiation of the intermediate variable to
-             * be saved, and this array needs dereferencing. As this is constructed by the compiler there is no problem
-             * with complex indices, or different orders to the indices.
-             */
-            IRTreeVoid storedResult = TreeUtils.putIndirectValue(v, returnBody, Tree.NoComment, compilationCtx);
-            compilationCtx.addTreeToScope(v.scope(), storedResult);
-        }
-    }
-
-    private static void constructForwardRVDistribution(DistributableRandomVariable<?, ?> rv,
-            CompilationContext compilationCtx) {
-        Scope rvScope = rv.scope();
-
-        List<ArrayVariable<DoubleVariable>> probabilitiesArrays = new ArrayList<>();
-        for(DataflowTask<?> task:rv.getConsumers()) {
-            SampleTask<?, ?> sTask = (SampleTask<?, ?>) task;
-            if(sTask.isDistribution())
-                probabilitiesArrays.add(((DistributionSampleTask<?, ?>) sTask).getProbabilitiesArray());
-        }
-
-        List<VariableDescription<ArrayVariable<DoubleVariable>>> localNames = new ArrayList<>();
-        boolean first = true;
-        for(ArrayVariable<DoubleVariable> probabilities:probabilitiesArrays) {
-            VariableDescription<ArrayVariable<DoubleVariable>> probName = probabilities.getUniqueVarDesc();
-            // Get local instance of the variable.
-            VariableDescription<ArrayVariable<DoubleVariable>> localName = VariableNames.calcVarName(probName,
-                    probName.type);
-            List<IRTreeReturn<IntVariable>> indexes = TreeUtils.toArgTrees(TreeUtils.getScopeArgs(probabilities),
-                    compilationCtx);
-            IRTreeReturn<ArrayVariable<DoubleVariable>> probArray = TreeUtils.getIndirectValue(probName, indexes);
-            IRTreeVoid saveLocalProb = initializeVariable(localName, probArray,
-                    first ? "Create local copy of variable probabilities." : Tree.NoComment);
-            compilationCtx.addTreeToScope(rvScope, saveLocalProb);
-            localNames.add(localName);
-            first = false;
-        }
-
-        if(rv.isDistribution()) {
-
-            // zero values in first local array.
-            {
-                // Get an index name
-                VariableDescription<IntVariable> indexName = VariableNames.indexName(rv.getVarDesc());
-
-                // Get the number of states that this variable could be generating.
-                IntVariable noStates = rv.getNumStates();
-
-                ScopeStack.pushScope(rvScope);
-                ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,
-                        (index) -> {
-                            // Set alias for better readability, this has no effect on the generated code.
-                            index.setAlias(indexName);
-                            index.setUniqueVarDesc(indexName);
-                        });
-                ScopeStack.popScope(rvScope);
-
-                IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(localNames.get(0));
-                IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(compilationCtx);
-                IRTreeReturn<DoubleVariable> value = constant(0.0);
-                IRTreeVoid storeValue = arrayPut(array, index, value, "Zero the probability of each value");
-                compilationCtx.addTreeToScope(newScope, storeValue);
-            }
-
-            // Calculate the probabilities for the first array.
-            Set<Set<TraceHandle>> distributedTraces = Traces.findDistributionTraces(rv, compilationCtx);
-            ProducingDataflowTask<?> parent = rv.getParent();
-
-            ScopeConstructor a = ScopeConstructor.construct(parent, distributedTraces,
-                    "Iterate through possible values for " + rv.getVarDesc() + "'s arguments.", Tree.NoComment,
-                    compilationCtx);
-            a = a.applyAllDistributedArguments();
-            a = a.addIsolation();
-            a.addTree((TreeBuilderInfo info) -> {
-                // Get an index name
-                VariableDescription<IntVariable> indexName = VariableNames.indexName(rv.getVarDesc());
-
-                // Iterate through each value adding it to the available values
-                // Get the number of states that this variable could be generating.
-                IntVariable noStates = rv.getNumStates();
-
-                ScopeStack.pushScope(rvScope);
-                ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,
-                        (index) -> {
-                            // Set alias for better readability, this has no effect on the generated code.
-                            index.setAlias(indexName);
-                            index.setUniqueVarDesc(indexName);
-                        });
-                ScopeStack.popScope(rvScope);
-
-                IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(localNames.get(0));
-                IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(compilationCtx);
-                IRTreeReturn<DoubleVariable> value = arrayGet(array, index);
-                IRTreeReturn<DoubleVariable> prob = multiplyDD(info.probability,
-                        getProbability(rv, newScope, compilationCtx));
-                value = addDD(value, prob);
-                IRTreeVoid storeValue = arrayPut(array, index, value, "Save the probability of each value");
-                compilationCtx.addTreeToScope(newScope, storeValue);
-            });
-
-            // sum and normalise values
-            {
-                // Get an index name
-                VariableDescription<IntVariable> indexName = VariableNames.indexName(rv.getVarDesc());
-
-                // Init sum value
-                // Sum all the values in the array.
-                VariableDescription<DoubleVariable> sum = VariableNames.calcVarName(rv.getVarDesc(), "sum",
-                        VariableType.DoubleVariable);
-                compilationCtx.addTreeToScope(rvScope,
-                        initializeVariable(sum, constant(0.0), "Sum the values in the array"));
-
-                // Get the number of states that this variable could be generating.
-                IntVariable noStates = rv.getNumStates();
-                {
-                    ScopeStack.pushScope(rvScope);
-                    ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1),
-                            true, (index) -> {
-                                // Set alias for better readability, this has no effect on the generated code.
-                                index.setAlias(indexName);
-                                index.setUniqueVarDesc(indexName);
-                            });
-                    ScopeStack.popScope(rvScope);
-
-                    IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(localNames.get(0));
-                    IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(compilationCtx);
-                    IRTreeReturn<DoubleVariable> value = arrayGet(array, index);
-                    IRTreeVoid storeValue = store(sum, addDD(load(sum), value), "sum the probability of each value");
-                    compilationCtx.addTreeToScope(newScope, storeValue);
-                }
-
-                // Normalise the array and copy the result into any other local arrays.
-                {
-                    ScopeStack.pushScope(rvScope);
-                    ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1),
-                            true, (index) -> {
-                                // Set alias for better readability, this has no effect on the generated code.
-                                index.setAlias(indexName);
-                                index.setUniqueVarDesc(indexName);
-                            });
-                    ScopeStack.popScope(rvScope);
-
-                    IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(localNames.get(0));
-                    IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(compilationCtx);
-                    IRTreeReturn<DoubleVariable> value = divideDD(arrayGet(array, index), load(sum));
-                    IRTreeVoid storeValue = arrayPut(array, index, value, "Normalise the probability of each value");
-                    compilationCtx.addTreeToScope(newScope, storeValue);
-
-                    first = true;
-                    for(int i = 1; i < localNames.size(); i++) {
-                        value = arrayGet(array, index);
-                        storeValue = arrayPut(load(localNames.get(i)), index, value,
-                                first ? "Copy the value into the other sample task arrays" : Tree.NoComment);
-                        compilationCtx.addTreeToScope(newScope, storeValue);
-                        first = false;
-                    }
-                }
-            }
-        } else {
-            // Each value will only be set once, so there is no need to zero the values
-            // and then add weighted probabilities, instead we will just store the values.
-
-            // Get an index name
-            VariableDescription<IntVariable> indexName = VariableNames.indexName(rv.getVarDesc());
-
-            // Get the number of states that this variable could be generating.
-            IntVariable noStates = rv.getNumStates();
-
-            ScopeStack.pushScope(rvScope);
-            ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), noStates, Variable.intVariable(1), true,
-                    (index) -> {
-                        // Set alias for better readability, this has no effect on the generated code.
-                        index.setAlias(indexName);
-                        index.setUniqueVarDesc(indexName);
-                    });
-            ScopeStack.popScope(rvScope);
-
-            VariableDescription<DoubleVariable> valueName = VariableNames.calcVarName("value",
-                    VariableType.DoubleVariable, true);
-            IRTreeReturn<DoubleVariable> value = getProbability(rv, newScope, compilationCtx);
-            IRTreeVoid valueInit = IRTree.initializeVariable(valueName, value, "Probability for this value");
-            compilationCtx.addTreeToScope(newScope, valueInit);
-
-            first = true;
-            for(VariableDescription<ArrayVariable<DoubleVariable>> localName:localNames) {
-                IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(compilationCtx);
-                IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(localName);
-                IRTreeVoid storeValue = arrayPut(array, index, load(valueName),
-                        first ? "Save the probability of each value" : Tree.NoComment);
-                compilationCtx.addTreeToScope(newScope, storeValue);
-                first = false;
-            }
-        }
-    }
-
-    private static IRTreeReturn<DoubleVariable> getProbability(DistributableRandomVariable<?, ?> rv, ForTask newScope,
-            CompilationContext compilationCtx) {
-        compilationCtx.enterScope(newScope);
-        RandomVariableType<?, ?> type = rv.getType();
-        IRTreeReturn<IntVariable> indexValue = newScope.getIndex().getForwardIR(compilationCtx);
-        IRTreeReturn<DoubleVariable> toReturn;
-        if(type == VariableType.Bernoulli) {
-            IRTreeReturn<BooleanVariable> value = eq(indexValue, constant(1));
-            toReturn = ProbabilityFunction.getSampleProbability(rv, value, false, compilationCtx);
-        } else if(type == VariableType.Binomial) {
-            toReturn = ProbabilityFunction.getSampleProbability(rv, indexValue, false, compilationCtx);
-        } else if(type == VariableType.Categorical) {
-            toReturn = ProbabilityFunction.getSampleProbability(rv, indexValue, false, compilationCtx);
-        } else
-            throw new CompilerException("Unsupported type of random variable.");
-        compilationCtx.leaveScope(newScope);
-        return toReturn;
     }
 
     private static void evidenceProbabilities(CompilationContext compilationCtx) {
@@ -1858,16 +819,16 @@ public class APICompile {
                 "Method to generate a new random state for the model excluding any fixed values and then calculate its probability.");
     }
 
-    private static Set<Variable<?>> getObservedVariableForwardableInputs(Set<Variable<?>> forwardableVars,
-            CompilationContext compilationCtx) {
+    private static Map<Variable<?>, Set<TraceHandle>> getObservedVariableForwardableInputs(
+            Set<Variable<?>> forwardableVars, CompilationContext compilationCtx) {
         Set<Variable<?>> evidenceVariables = compilationCtx.traces.getEvidenceVariables();
 
         // Calculate all the variables that will need forward functions
         Set<Variable<?>> inputVariables = Variable.collectInputVariable(evidenceVariables);
-        Set<Variable<?>> outputVariables = new HashSet<>();
+        Map<Variable<?>, Set<TraceHandle>> outputVariables = new HashMap<>();
         for(Variable<?> v:inputVariables)
-            if(forwardableVars.contains(v))
-                addAllVars(outputVariables, v);
+            if(forwardableVars.contains(v) && !v.isFixed())
+                addAllVars(outputVariables, v, compilationCtx);
         return outputVariables;
     }
 
@@ -1882,15 +843,15 @@ public class APICompile {
         // Get the set of observed variables that we want the model to predict the
         // probability of generating.
         Set<Variable<?>> inputVariables = Variable.collectInputVariable(evidenceVariables);
-        Set<Variable<?>> forwardVariables = new HashSet<>();
+        Map<Variable<?>, Set<TraceHandle>> forwardVariables = new HashMap<>();
         for(Variable<?> v:inputVariables)
-            if(forwardableVars.contains(v))
-                forwardVariables.add(v);
+            if(forwardableVars.contains(v) && !v.isFixed())
+                forwardVariables.put(v, compilationCtx.traces.getVariableObservationsTraces(v));
 
         // Allocate a list to hold all the function calls that will be required.
         List<IRTreeVoid> calls = new ArrayList<>();
 
-        calls.add(forwardBody(forwardVariables, false, compilationCtx));
+        calls.add(forwardBody(forwardVariables, GuardStatus.FREE, false, compilationCtx));
 
         callProbabilities(compilationCtx);
         calls.add(functionCall(AuxFunctionType.ALL_LOG_PROBABILITIES_CALCULATION_VAL.functionName,

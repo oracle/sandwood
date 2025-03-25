@@ -30,8 +30,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$y;
 	private int n;
 	private double[][] p;
-	private boolean setFlag$weights = false;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double[] weights;
 	private double[][] x;
@@ -159,10 +157,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$weights(double[] cv$value) {
 		// Set flags for all the side effects of weights including if probabilities need to
 		// be updated.
-		// Set weights with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set weights
 		weights = cv$value;
-		setFlag$weights = true;
 		
 		// Unset the fixed probability flag for sample 35 as it depends on weights.
 		fixedProbFlag$sample35 = false;
@@ -180,8 +176,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for x.
 	@Override
 	public final void set$x(double[][] cv$value) {
-		// Set x with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set x
 		x = cv$value;
 	}
 
@@ -200,8 +195,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for yMeasured.
 	@Override
 	public final void set$yMeasured(boolean[][] cv$value) {
-		// Set yMeasured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set yMeasured
 		yMeasured = cv$value;
 	}
 
@@ -763,7 +757,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var34 = cv$proposedValue;
-					weights[var33] = cv$currentValue;
+					
+					// Guards to ensure that weights is only updated when there is a valid path.
+					{
+						{
+							weights[var33] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that indicator is only updated when there is a valid path.
 					// 
@@ -926,21 +926,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 							if((var33 == j$var61)) {
 								if((j$var61 == 0)) {
 									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										for(int index$j$10_3 = 0; index$j$10_3 < k; index$j$10_3 += 1) {
-											if((j$var85 == index$j$10_3)) {
-												for(int i = 0; i < n; i += 1)
-													// Set the flags to false
-													guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-											}
-										}
-									}
-								}
-							}
-						}
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 1)) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
 										for(int index$j$11_3 = 0; index$j$11_3 < k; index$j$11_3 += 1) {
 											if((j$var85 == index$j$11_3)) {
 												for(int i = 0; i < n; i += 1)
@@ -954,7 +939,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						}
 						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
 							if((var33 == j$var61)) {
-								if((j$var61 == 2)) {
+								if((j$var61 == 1)) {
 									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
 										for(int index$j$12_3 = 0; index$j$12_3 < k; index$j$12_3 += 1) {
 											if((j$var85 == index$j$12_3)) {
@@ -969,8 +954,8 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						}
 						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
 							if((var33 == j$var61)) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-									if((j$var61 == j$var85)) {
+								if((j$var61 == 2)) {
+									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
 										for(int index$j$13_3 = 0; index$j$13_3 < k; index$j$13_3 += 1) {
 											if((j$var85 == index$j$13_3)) {
 												for(int i = 0; i < n; i += 1)
@@ -982,16 +967,31 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-						double traceTempVariable$var62$14_1 = cv$currentValue;
+						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+							if((var33 == j$var61)) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+									if((j$var61 == j$var85)) {
+										for(int index$j$14_3 = 0; index$j$14_3 < k; index$j$14_3 += 1) {
+											if((j$var85 == index$j$14_3)) {
+												for(int i = 0; i < n; i += 1)
+													// Set the flags to false
+													guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+						}
+						double traceTempVariable$var62$15_1 = cv$currentValue;
 						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
 							if((var33 == j$var61)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var69$14_4 = Math.exp((traceTempVariable$var62$14_1 * x[i][j$var61]));
+									double traceTempVariable$var69$15_4 = Math.exp((traceTempVariable$var62$15_1 * x[i][j$var61]));
 									if((j$var61 == 0)) {
 										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											double traceTempVariable$var90$14_6 = (indicator[((i - 0) / 1)][j$var85] / ((traceTempVariable$var69$14_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-											for(int index$j$14_7 = 0; index$j$14_7 < k; index$j$14_7 += 1) {
-												if((j$var85 == index$j$14_7)) {
+											double traceTempVariable$var90$15_6 = (indicator[((i - 0) / 1)][j$var85] / ((traceTempVariable$var69$15_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											for(int index$j$15_7 = 0; index$j$15_7 < k; index$j$15_7 += 1) {
+												if((j$var85 == index$j$15_7)) {
 													if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
@@ -1012,95 +1012,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																			double cv$temp$2$var91;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var91 = (traceTempVariable$var90$14_6 + bias);
+																				double var91 = (traceTempVariable$var90$15_6 + bias);
 																				cv$temp$2$var91 = var91;
 																			}
 																			
 																			// Record the probability of sample task 94 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var91)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var91));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$14_7], cv$temp$2$var91)));
-																			}
-																			
-																			// Recorded the probability of reaching sample task 94 with the current configuration.
-																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																		}
-																	}
-																}
-															}
-															
-															// A check to ensure rounding of floating point values can never result in a negative
-															// value.
-															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-															
-															// Multiply (log space add) in the probability of the sample task to the overall probability
-															// for this configuration of the source random variable.
-															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																else
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						double traceTempVariable$var62$15_1 = cv$currentValue;
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var71$15_4 = Math.exp((traceTempVariable$var62$15_1 * x[i][j$var61]));
-									if((j$var61 == 1)) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											double traceTempVariable$var90$15_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var71$15_4) + indicator[((i - 0) / 1)][2]));
-											for(int index$j$15_7 = 0; index$j$15_7 < k; index$j$15_7 += 1) {
-												if((j$var85 == index$j$15_7)) {
-													if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-														
-														// Processing sample task 94 of consumer random variable null.
-														{
-															// Set an accumulator to sum the probabilities for each possible configuration of
-															// inputs.
-															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-															
-															// Set an accumulator to record the consumer distributions not seen. Initially set
-															// to 1 as seen values will be deducted from this value.
-															double cv$consumerDistributionProbabilityAccumulator = 1.0;
-															{
-																{
-																	{
-																		{
-																			double cv$temp$3$var91;
-																			{
-																				// Constructing a random variable input for use later.
-																				double var91 = (traceTempVariable$var90$15_6 + bias);
-																				cv$temp$3$var91 = var91;
-																			}
-																			
-																			// Record the probability of sample task 94 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var91)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																			else {
-																				// If the second value is -infinity.
-																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var91));
-																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$3$var91)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1138,10 +1062,10 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
 							if((var33 == j$var61)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var74$16_4 = Math.exp((traceTempVariable$var62$16_1 * x[i][j$var61]));
-									if((j$var61 == 2)) {
+									double traceTempVariable$var71$16_4 = Math.exp((traceTempVariable$var62$16_1 * x[i][j$var61]));
+									if((j$var61 == 1)) {
 										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											double traceTempVariable$var90$16_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var74$16_4));
+											double traceTempVariable$var90$16_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var71$16_4) + indicator[((i - 0) / 1)][2]));
 											for(int index$j$16_7 = 0; index$j$16_7 < k; index$j$16_7 += 1) {
 												if((j$var85 == index$j$16_7)) {
 													if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
@@ -1161,22 +1085,22 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																{
 																	{
 																		{
-																			double cv$temp$4$var91;
+																			double cv$temp$3$var91;
 																			{
 																				// Constructing a random variable input for use later.
 																				double var91 = (traceTempVariable$var90$16_6 + bias);
-																				cv$temp$4$var91 = var91;
+																				cv$temp$3$var91 = var91;
 																			}
 																			
 																			// Record the probability of sample task 94 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var91)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var91));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$4$var91)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1214,12 +1138,88 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
 							if((var33 == j$var61)) {
 								for(int i = 0; i < n; i += 1) {
-									double traceTempVariable$var86$17_4 = Math.exp((traceTempVariable$var62$17_1 * x[i][j$var61]));
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if((j$var61 == j$var85)) {
-											double traceTempVariable$var90$17_6 = (traceTempVariable$var86$17_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+									double traceTempVariable$var74$17_4 = Math.exp((traceTempVariable$var62$17_1 * x[i][j$var61]));
+									if((j$var61 == 2)) {
+										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											double traceTempVariable$var90$17_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var74$17_4));
 											for(int index$j$17_7 = 0; index$j$17_7 < k; index$j$17_7 += 1) {
 												if((j$var85 == index$j$17_7)) {
+													if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+														
+														// Processing sample task 94 of consumer random variable null.
+														{
+															// Set an accumulator to sum the probabilities for each possible configuration of
+															// inputs.
+															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+															
+															// Set an accumulator to record the consumer distributions not seen. Initially set
+															// to 1 as seen values will be deducted from this value.
+															double cv$consumerDistributionProbabilityAccumulator = 1.0;
+															{
+																{
+																	{
+																		{
+																			double cv$temp$4$var91;
+																			{
+																				// Constructing a random variable input for use later.
+																				double var91 = (traceTempVariable$var90$17_6 + bias);
+																				cv$temp$4$var91 = var91;
+																			}
+																			
+																			// Record the probability of sample task 94 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91));
+																				else
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)));
+																			}
+																			
+																			// Recorded the probability of reaching sample task 94 with the current configuration.
+																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																		}
+																	}
+																}
+															}
+															
+															// A check to ensure rounding of floating point values can never result in a negative
+															// value.
+															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+															
+															// Multiply (log space add) in the probability of the sample task to the overall probability
+															// for this configuration of the source random variable.
+															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																else
+																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						double traceTempVariable$var62$18_1 = cv$currentValue;
+						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+							if((var33 == j$var61)) {
+								for(int i = 0; i < n; i += 1) {
+									double traceTempVariable$var86$18_4 = Math.exp((traceTempVariable$var62$18_1 * x[i][j$var61]));
+									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+										if((j$var61 == j$var85)) {
+											double traceTempVariable$var90$18_6 = (traceTempVariable$var86$18_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											for(int index$j$18_7 = 0; index$j$18_7 < k; index$j$18_7 += 1) {
+												if((j$var85 == index$j$18_7)) {
 													if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
@@ -1240,19 +1240,19 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 																			double cv$temp$5$var91;
 																			{
 																				// Constructing a random variable input for use later.
-																				double var91 = (traceTempVariable$var90$17_6 + bias);
+																				double var91 = (traceTempVariable$var90$18_6 + bias);
 																				cv$temp$5$var91 = var91;
 																			}
 																			
 																			// Record the probability of sample task 94 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var91)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var91));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$5$var91)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1324,7 +1324,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var34 = cv$originalValue;
-			weights[var33] = var34;
+			
+			// Guards to ensure that weights is only updated when there is a valid path.
+			{
+				{
+					weights[var33] = var34;
+				}
+			}
 			
 			// Guards to ensure that indicator is only updated when there is a valid path.
 			// 
@@ -1685,7 +1691,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// If weights has not been set already allocate space.
-		if(!setFlag$weights) {
+		if(!fixedFlag$sample35) {
 			// Constructor for weights
 			{
 				weights = new double[3];
@@ -1936,7 +1942,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[][] cv$source1 = yMeasured;
 		boolean[][] cv$target1 = y;
@@ -1951,16 +1957,18 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		for(int i = 0; i < n; i += 1) {
 			for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-				if(setFlag$weights)
+				if(fixedFlag$sample35)
 					indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 			}
 			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				if(setFlag$weights)
+				if(fixedFlag$sample35)
 					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 			}
 		}

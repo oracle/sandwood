@@ -8,6 +8,18 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Setter for bias.
 	public void set$bias(double[][] cv$value);
 
+	// Getter for distribution$sample126.
+	public double[][][] get$distribution$sample126();
+
+	// Setter for distribution$sample126.
+	public void set$distribution$sample126(double[][][] cv$value);
+
+	// Getter for distribution$sample95.
+	public double[][] get$distribution$sample95();
+
+	// Setter for distribution$sample95.
+	public void set$distribution$sample95(double[][] cv$value);
+
 	// Getter for events.
 	public int[][] get$events();
 
