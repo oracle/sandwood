@@ -45,9 +45,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$weekly_ut;
 	private int numTimeSteps;
 	private int[][] sales;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$weekly_sales = false;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
 	private double[][] weekly_rates;
@@ -67,8 +64,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for ObsSales.
 	@Override
 	public final void set$ObsSales(int[][] cv$value) {
-		// Set ObsSales with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set ObsSales
 		ObsSales = cv$value;
 	}
 
@@ -81,10 +77,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for arrivals.
 	@Override
 	public final void set$arrivals(int[] cv$value) {
-		// Set arrivals with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set arrivals
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 	}
 
 	// Getter for avail.
@@ -96,8 +90,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for avail.
 	@Override
 	public final void set$avail(boolean[][] cv$value) {
-		// Set avail with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set avail
 		avail = cv$value;
 	}
 
@@ -188,10 +181,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for lambda.
 	@Override
 	public final void set$lambda(double[] cv$value) {
-		// Set lambda with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set lambda
 		lambda = cv$value;
-		setFlag$lambda = true;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -234,6 +225,27 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double get$r() {
 		return 0.3;
+	}
+
+	// Getter for ut.
+	@Override
+	public final double[] get$ut() {
+		return ut;
+	}
+
+	// Setter for ut.
+	@Override
+	public final void set$ut(double[] cv$value) {
+		// Set flags for all the side effects of ut including if probabilities need to be
+		// updated.
+		// Set ut
+		ut = cv$value;
+		
+		// Unset the fixed probability flag for sample 32 as it depends on ut.
+		fixedProbFlag$sample32 = false;
+		
+		// Unset the fixed probability flag for sample 166 as it depends on ut.
+		fixedProbFlag$sample166 = false;
 	}
 
 	// Getter for weekly_sales.
@@ -943,6 +955,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Update Sample and intermediate values
 		// 
+		// Guards to ensure that arrivals is only updated when there is a valid path.
+		// 
 		// Reduction of array null
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
@@ -1000,6 +1014,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that arrivals is only updated when there is a valid path.
+			// 
 			// Reduction of array null
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
@@ -1226,6 +1242,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[var29] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
@@ -1742,6 +1760,8 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that ut is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			ut[var29] = cv$originalValue;
@@ -2150,8 +2170,10 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void allocator() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 < numTimeSteps)) {
-			// Constructor for ut
-			ut = new double[avail[0].length];
+			// If ut has not been set already allocate space.
+			if(!fixedFlag$sample32)
+				// Constructor for ut
+				ut = new double[avail[0].length];
 			
 			// Constructor for exped
 			exped = new double[avail[0].length];
@@ -2166,12 +2188,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		
 		// If lambda has not been set already allocate space.
-		if(!setFlag$lambda)
+		if(!fixedFlag$sample112)
 			// Constructor for lambda
 			lambda = new double[avail.length];
 		
 		// If arrivals has not been set already allocate space.
-		if(!setFlag$arrivals)
+		if(!fixedFlag$sample114)
 			// Constructor for arrivals
 			arrivals = new int[avail.length];
 		
@@ -2734,7 +2756,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 < numTimeSteps)) {
 			int cv$length1 = sales.length;
@@ -2754,55 +2776,63 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		if((0 < numTimeSteps)) {
-			for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1)
-				exped[j$var41] = Math.exp(ut[j$var41]);
-			
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$12 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction54Index = 0; cv$reduction54Index < avail[0].length; cv$reduction54Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l$var55's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction54Index]);
-			for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1)
-				expedNorm[j$var66] = (exped[j$var66] / (reduceVar$sum$12 * 0.3));
-			for(int t = 0; t < numTimeSteps; t += 1) {
-				for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
-					if(avail[t][j$var121])
-						weekly_ut[t][j$var121] = expedNorm[j$var121];
-				}
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(fixedFlag$sample32) {
+				for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1)
+					exped[j$var41] = Math.exp(ut[j$var41]);
 				
-				// Reduction of array weekly_ut
+				// Reduction of array exped
 				// 
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				double reduceVar$denom$14 = 0.0;
+				double reduceVar$sum$12 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction144Index = 0; cv$reduction144Index <= avail[0].length; cv$reduction144Index += 1)
-					// Execute the reduction function, saving the result into the return value.
-					// 
+				for(int cv$reduction54Index = 0; cv$reduction54Index < avail[0].length; cv$reduction54Index += 1)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// l$var140's comment
-					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t][cv$reduction144Index]);
-				for(int j$var153 = 0; j$var153 <= avail[0].length; j$var153 += 1)
-					weekly_rates[t][j$var153] = (weekly_ut[t][j$var153] / reduceVar$denom$14);
+					// l$var55's comment
+					// Set the right hand term to a value from the array exped
+					reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction54Index]);
+				for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1)
+					expedNorm[j$var66] = (exped[j$var66] / (reduceVar$sum$12 * 0.3));
+			}
+			for(int t = 0; t < numTimeSteps; t += 1) {
+				for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
+					if(avail[t][j$var121]) {
+						if(fixedFlag$sample32)
+							weekly_ut[t][j$var121] = expedNorm[j$var121];
+					} else
+						weekly_ut[t][j$var121] = 0.0;
+				}
+				weekly_ut[t][avail[0].length] = 1.0;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(fixedFlag$sample32) {
+					// Reduction of array weekly_ut
+					// 
+					// A generated name to prevent name collisions if the reduction is implemented more
+					// than once in inference and probability code. Initialize the variable to the unit
+					// value
+					double reduceVar$denom$14 = 0.0;
+					
+					// For each index in the array to be reduced
+					for(int cv$reduction144Index = 0; cv$reduction144Index <= avail[0].length; cv$reduction144Index += 1)
+						// Copy the result of the reduction into the variable returned by the reduction.
+						// 
+						// l$var140's comment
+						// Set the right hand term to a value from the array weekly_ut
+						reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t][cv$reduction144Index]);
+					for(int j$var153 = 0; j$var153 <= avail[0].length; j$var153 += 1)
+						weekly_rates[t][j$var153] = (weekly_ut[t][j$var153] / reduceVar$denom$14);
+				}
 			}
 		}
 	}

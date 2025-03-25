@@ -23,7 +23,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -363,7 +362,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = obs.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			obs[cv$index1] = obs_measured[cv$index1];
@@ -371,7 +370,8 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void setIntermediates() {
-		p = b[y][i];
+		if(fixedFlag$sample73)
+			p = b[y][i];
 	}
 
 	@Override

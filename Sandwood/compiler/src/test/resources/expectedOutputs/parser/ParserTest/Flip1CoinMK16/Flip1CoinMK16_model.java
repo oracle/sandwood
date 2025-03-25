@@ -17,6 +17,71 @@ public class Flip1CoinMK16 extends Model {
 
     private Flip1CoinMK16$CoreInterface system$c = new Flip1CoinMK16$SingleThreadCPU(ExecutionTarget.singleThread);
 
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
+        @Override
+        public double getValue() { return system$c.get$bias(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$bias(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample14(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample14())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    /**
+     * Computed variable representing bias of type double from the Sandwood model 
+     */
+    public final ComputedDouble bias = $bias;
+
+    private final ComputedBooleanInternal $flip = new ComputedBooleanInternal(this, "flip", false, true, false) {
+        @Override
+        public boolean getValue() { return system$c.get$flip(); }
+
+        @Override
+        protected void setValueInternal(boolean value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable flip because it is fixed by observing a variable.");
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$flip(); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+        }
+
+        @Override
+        public Immutability isFixed() {
+            return Immutability.OBSERVED;
+        }
+    };
+
+    /**
+     * Computed variable representing flip of type boolean from the Sandwood model 
+     */
+    public final ComputedBoolean flip = $flip;
+
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -69,7 +134,7 @@ public class Flip1CoinMK16 extends Model {
      */
     public final RandomVariable bernoulli = $bernoulli;
 
-    private HasProbabilityInternal[] $probabilityVariables = {$bernoulli};
+    private HasProbabilityInternal[] $probabilityVariables = {$bias, $flip, $bernoulli};
 
     //Constructors
     /**
@@ -78,6 +143,8 @@ public class Flip1CoinMK16 extends Model {
     public Flip1CoinMK16() {
         super();
         //ComputedVariable
+        $computedVariables.put("bias", $bias);
+        $computedVariables.put("flip", $flip);
 
         //Observed scalar fields
         $regularObservedValues.put("flipMeasured", $flipMeasured);
@@ -114,6 +181,7 @@ public class Flip1CoinMK16 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK16$CoreInterface oldCore, Flip1CoinMK16$CoreInterface newCore) {
         //Observed scalars
         if(flipMeasured.isSet())
@@ -122,8 +190,11 @@ public class Flip1CoinMK16 extends Model {
             newCore.set$guard(oldCore.get$guard());
 
         //ComputedVariables
+        if($bias.isSet())
+            newCore.set$bias(oldCore.get$bias());
 
         //Set fixed flags
+        newCore.set$fixedFlag$sample14(oldCore.get$fixedFlag$sample14());
     }
 
     /**
@@ -164,8 +235,14 @@ public class Flip1CoinMK16 extends Model {
      * A class to hold all the outputs from the model after an infer values step.
      */
     public static class InferredValueOutputs {
+        /** Field holding the value of bias after a convention execution step.*/
+        public final double bias;
+        /** Field holding the value of flip after a convention execution step.*/
+        public final boolean flip;
 
         InferredValueOutputs(Flip1CoinMK16 system$model) {
+            this.bias = system$model.bias.getSamples()[0];
+            this.flip = system$model.flip.getSamples()[0];
         }
     }
 
@@ -176,10 +253,16 @@ public class Flip1CoinMK16 extends Model {
         private final double $logModelProbability;
         /** Field holding the log probability of random variable bernoulli */
         public final double bernoulli;
+        /** Field holding the log probability of computed variable bias */
+        public final double bias;
+        /** Field holding the log probability of computed variable flip */
+        public final double flip;
 
         LogProbabilities(Flip1CoinMK16 system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.bernoulli = system$model.bernoulli.getLogProbability();
+            this.bias = system$model.bias.getLogProbability();
+            this.flip = system$model.flip.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -194,10 +277,16 @@ public class Flip1CoinMK16 extends Model {
         private final double $modelProbability;
         /** Field holding the probability of random variable bernoulli */
         public final double bernoulli;
+        /** Field holding the probability of computed variable bias */
+        public final double bias;
+        /** Field holding the probability of computed variable flip */
+        public final double flip;
 
         Probabilities(Flip1CoinMK16 system$model) {
             this.$modelProbability = system$model.getProbability();
             this.bernoulli = system$model.bernoulli.getProbability();
+            this.bias = system$model.bias.getProbability();
+            this.flip = system$model.flip.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -209,8 +298,11 @@ public class Flip1CoinMK16 extends Model {
      * A class to hold all the outputs from the model after an infer model call.
      */
     public static class InferredModelOutputs {
+        /** Field holding the MAP or Sample value of bias after an infer model call. */
+        public final double[] bias;
 
         InferredModelOutputs(Flip1CoinMK16 system$model) {
+            this.bias = system$model.getInferredValue(system$model.$bias);
         }
     }
 

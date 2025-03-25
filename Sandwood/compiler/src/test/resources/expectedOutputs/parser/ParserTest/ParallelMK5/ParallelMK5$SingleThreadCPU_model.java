@@ -23,8 +23,6 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$var100;
 	private double[][] logProbability$var58;
 	private int[] observed;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection1 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK5$SingleThreadCPU(ExecutionTarget target) {
@@ -70,10 +68,8 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$indirection1(double[][] cv$value) {
 		// Set flags for all the side effects of indirection1 including if probabilities need
 		// to be updated.
-		// Set indirection1 with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set indirection1
 		indirection1 = cv$value;
-		setFlag$indirection1 = true;
 		
 		// Unset the fixed probability flag for sample 61 as it depends on indirection1.
 		fixedProbFlag$sample61 = false;
@@ -139,8 +135,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for observed.
 	@Override
 	public final void set$observed(int[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -455,8 +450,14 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var59 = cv$proposedValue;
-					double[] var55 = indirection1[i];
-					var55[j] = cv$currentValue;
+					
+					// Guards to ensure that indirection1 is only updated when there is a valid path.
+					{
+						{
+							double[] var55 = indirection1[i];
+							var55[j] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that indirection2 is only updated when there is a valid path.
 					// 
@@ -497,7 +498,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					// Looking for a path between Sample 61 and consumer Categorical 100.
 					{
-						double traceTempVariable$var85$2_1 = cv$currentValue;
+						double traceTempVariable$var85$3_1 = cv$currentValue;
 						for(int l = 0; l < 10; l += 1) {
 							if((i == l)) {
 								for(int k = 0; k < length$observed; k += 1) {
@@ -608,8 +609,14 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var59 = cv$originalValue;
-			double[] var55 = indirection1[i];
-			var55[j] = var59;
+			
+			// Guards to ensure that indirection1 is only updated when there is a valid path.
+			{
+				{
+					double[] var55 = indirection1[i];
+					var55[j] = var59;
+				}
+			}
 			
 			// Guards to ensure that indirection2 is only updated when there is a valid path.
 			// 
@@ -646,7 +653,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If indirection1 has not been set already allocate space.
-		if(!setFlag$indirection1) {
+		if(!fixedFlag$sample61) {
 			// Constructor for indirection1
 			{
 				indirection1 = new double[10][];
@@ -897,7 +904,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		int[] cv$source1 = observed;
 		int[] cv$target1 = generated;
@@ -907,13 +914,15 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		for(int k = 0; k < length$observed; k += 1) {
 			double[] var83 = indirection2[k];
 			for(int l = 0; l < 10; l += 1) {
-				if(setFlag$indirection1)
+				if(fixedFlag$sample61)
 					var83[l] = indirection1[l][k];
 			}
 		}

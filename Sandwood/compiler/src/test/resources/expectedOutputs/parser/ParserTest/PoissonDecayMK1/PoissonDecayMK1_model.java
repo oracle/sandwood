@@ -17,7 +17,7 @@ public class PoissonDecayMK1 extends Model {
 
     private PoissonDecayMK1$CoreInterface system$c = new PoissonDecayMK1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $decay = new ComputedIntegerArrayInternal(this, "decay", true) {
+    private final ComputedIntegerArrayInternal $decay = new ComputedIntegerArrayInternal(this, "decay", false, true, false) {
         @Override
         public int[] getValue() { return system$c.get$decay(); }
 
@@ -48,15 +48,14 @@ public class PoissonDecayMK1 extends Model {
      */
     public final ComputedIntegerArray decay = $decay;
 
-    private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true) {
+    private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true, true, false) {
         @Override
         public double getValue() { return system$c.get$rate(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$rate(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -232,6 +231,7 @@ public class PoissonDecayMK1 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(PoissonDecayMK1$CoreInterface oldCore, PoissonDecayMK1$CoreInterface newCore) {
         //Model inputs
         if(a.isSet())
@@ -248,12 +248,11 @@ public class PoissonDecayMK1 extends Model {
             newCore.set$length$decayDetected(oldCore.get$length$decayDetected());
 
         //ComputedVariables
-        if(rate.isSet())
+        if($rate.isSet())
             newCore.set$rate(oldCore.get$rate());
 
         //Set fixed flags
-        if(rate.isSet())
-            newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }
 
     /**

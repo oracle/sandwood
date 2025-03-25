@@ -20,6 +20,8 @@ import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.CompilationContext.FieldDesc;
+import org.sandwood.compiler.compilation.CompilationContext.FieldType;
+import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
@@ -30,6 +32,7 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
+import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.ModelClassName;
@@ -104,15 +107,18 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     private final String allInputs;
     private final VariableName coreName = VariableNames.internalSystemName("c");
     private final VariableName modelParam = VariableNames.internalSystemName("model");
+    private final CompilationDesc compDesc;
 
     public OutputSandwoodClassWrapper(ModelClassName className, PackageName packageName, VariableName[] constructorArgs,
-            Map<VariableName, FieldDesc<?>> classFields, Traces traces, String comment, ExecutionType[] targets) {
+            Map<VariableName, FieldDesc<?>> classFields, Traces traces, CompilationDesc compDesc, String comment,
+            ExecutionType[] targets) {
         this.className = className;
         this.packageName = packageName;
         this.constructorArgs = constructorArgs;
         fieldDescs.putAll(classFields);
-        this.comment = comment;
         this.traces = traces;
+        this.compDesc = compDesc;
+        this.comment = comment;
         this.targets = targets;
 
         // Generate list for random variables
@@ -127,9 +133,16 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         Arrays.sort(this.randomVariables);
 
         // Generate a list of computed variable
-        computedVariables = new ArrayList<>();
+        Set<VariableName> toAdd = new HashSet<>();
         for(Variable<?> v:traces.computedVariables())
-            computedVariables.add(v.getUniqueVarDesc().name);
+            toAdd.add(v.getUniqueVarDesc().name);
+        for(Variable<?> v:traces.getAllSampleVariables()) {
+            while(v.getType().isArray() && ((ArrayVariable<?>) v).isSubArray())
+                v = ((ArrayVariable<?>) v).getOuterArrayDesc().getArray();
+            if(!v.isFixed() || !v.isPrivate())
+                toAdd.add(v.getUniqueVarDesc().name);
+        }
+        computedVariables = new ArrayList<>(toAdd);
         Collections.sort(computedVariables);
 
         // Non observed model inputs
@@ -257,13 +270,15 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                     + " = {");
             boolean started = false;
             for(VariableName name:computedVariables) {
-                Variable<?> v = traces.getVariable(name);
-                if(fieldDescs.containsKey(VariableNames.logProbabilityName(v.getUniqueVarDesc()).name)) {
-                    if(started)
-                        sb.append(", ");
-                    else
-                        started = true;
-                    sb.append(VariableNames.internalName(name));
+                if(!fieldDescs.get(name).fieldType.isPrivate) {
+                    Variable<?> v = traces.getVariable(name);
+                    if(fieldDescs.containsKey(VariableNames.logProbabilityName(v.getUniqueVarDesc()).name)) {
+                        if(started)
+                            sb.append(", ");
+                        else
+                            started = true;
+                        sb.append(VariableNames.internalName(name));
+                    }
                 }
             }
 
@@ -315,7 +330,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         sb.append("        transferData(" + coreName + ", newCore);\n");
         sb.append("        " + coreName + " = newCore;\n");
         sb.append("        return newCore;\n");
-        sb.append("    }\n");
+        sb.append("    }\n\n");
 
         // Now construct the transferData method.
         sb.append("    private void transferData(" + interfaceName + " oldCore, " + interfaceName + " newCore) {\n");
@@ -352,24 +367,24 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("\n        //ComputedVariables\n");
         for(VariableName name:computedVariables) {
-            if(fieldDescs.get(name).setter) {
-                sb.append("        if(" + name + ".isSet())\n");
+            if(fieldDescs.get(name).fieldType.setter) {
+                sb.append("        if($" + name + ".isSet())\n");
                 sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
             }
         }
 
         sb.append("\n        //Set fixed flags\n");
+        Set<VariableDescription<BooleanVariable>> flags = new HashSet<>();
         for(VariableName name:computedVariables) {
             FieldDesc<?> f = fieldDescs.get(name);
-            if(f.sample && f.observed == Observed.FREE) {
-                List<VariableDescription<BooleanVariable>> flags = getFlags(traces, name);
-                sb.append("        if(" + name + ".isSet())" + ((flags.size() > 1) ? "{" : "") + "\n");
-                for(VariableDescription<BooleanVariable> flag:flags)
-                    sb.append("            newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name)
-                            + "());\n");
-                if(flags.size() > 1)
-                    sb.append("        }\n");
-            }
+            if(f.fieldType.isSample && f.fieldType.observed == Observed.FREE)
+                flags.addAll(getFlags(traces, name));
+        }
+
+        PriorityQueue<VariableDescription<BooleanVariable>> p = new PriorityQueue<>(flags);
+        while(!p.isEmpty()) {
+            VariableDescription<BooleanVariable> flag = p.poll();
+            sb.append("        newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name) + "());\n");
         }
 
         sb.append("    }\n");
@@ -565,7 +580,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         for(VariableName arg:computedVariables) {
             VariableDescription<?> uniqueName = traces.getVariable(arg).getUniqueVarDesc();
             FieldDesc<?> argDesc = fieldDescs.get(uniqueName.name);
-            if(argDesc.observed == Observed.FREE) {
+            FieldType ft = argDesc.fieldType;
+            if(ft.observed == Observed.FREE && !ft.isPrivate) {
                 fields.append("        /** Field holding the MAP or Sample value of " + arg
                         + " after an infer model call. */\n");
                 fields.append("        public final " + argDesc.varDesc.type.getJavaType() + "[] " + arg + ";\n");
@@ -595,9 +611,13 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         for(VariableName arg:computedVariables) {
             VariableDescription<?> uniqueName = traces.getVariable(arg).getUniqueVarDesc();
             FieldDesc<?> argDesc = fieldDescs.get(uniqueName.name);
-            fields.append("        /** Field holding the value of " + arg + " after a convention execution step.*/\n");
-            fields.append("        public final " + argDesc.varDesc.type.getJavaType() + " " + arg + ";\n");
-            constructorBody.append("            this." + arg + " = " + modelParam + "." + arg + ".getSamples()[0];\n");
+            if(!argDesc.fieldType.isPrivate) {
+                fields.append(
+                        "        /** Field holding the value of " + arg + " after a convention execution step.*/\n");
+                fields.append("        public final " + argDesc.varDesc.type.getJavaType() + " " + arg + ";\n");
+                constructorBody
+                        .append("            this." + arg + " = " + modelParam + "." + arg + ".getSamples()[0];\n");
+            }
         }
         constructorBody.append("        }\n");
 
@@ -640,12 +660,13 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         }
 
         for(VariableName arg:computedVariables) {
-
-            fields.append("        /** Field holding the " + ((useLogs) ? "log " : "")
-                    + "probability of computed variable " + arg + " */\n");
-            fields.append("        public final double " + arg + ";\n");
-            constructorBody.append("            this." + arg + " = " + modelParam + "." + arg + ".get"
-                    + ((useLogs) ? "Log" : "") + "Probability();\n");
+            if(!fieldDescs.get(arg).fieldType.isPrivate) {
+                fields.append("        /** Field holding the " + ((useLogs) ? "log " : "")
+                        + "probability of computed variable " + arg + " */\n");
+                fields.append("        public final double " + arg + ";\n");
+                constructorBody.append("            this." + arg + " = " + modelParam + "." + arg + ".get"
+                        + ((useLogs) ? "Log" : "") + "Probability();\n");
+            }
         }
 
         constructorBody.append("        }\n\n");
@@ -946,7 +967,22 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         String internalType;
         String genericType = "";
         String constructorArgs = "this, \"" + fieldName + "\"";
-        constructorArgs += ", " + ((fieldDesc.sample) ? "true" : "false");
+
+        FieldType ft = fieldDesc.fieldType;
+        Set<Variable<?>> requirements = getSourceVariables(fieldDesc);
+
+        if(ft.isSample && ft.isPrivate) {
+            compDesc.warnings.add(new SandwoodModelException(
+                    "This random variable sample is not saved into a named variable. This means that the model "
+                            + "will not provide a named variable field for you to access the results of this sample or "
+                            + "to configure its properties. If this is a problem you are recommended to save the sample "
+                            + "value into a local variable before using it.",
+                    traces.getVariable(fieldDesc.varDesc.name).getParent().getLocation()));
+        }
+
+        constructorArgs += ", " + (ft.setter ? "true" : "false");
+        constructorArgs += ", " + (ft.isSample ? "true" : "false");
+        constructorArgs += ", " + (ft.isPrivate ? "true" : "false");
         boolean generic = false;
         switch(javaType) {
             case "double":
@@ -1005,25 +1041,52 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         sb.append("        public " + javaType + " getValue() { return " + coreName + getMethod(uniqueName)
                 + "(); }\n\n");
 
-        Set<Variable<?>> requirements = getSourceVariables(fieldDesc);
-        if(fieldDesc.setter && requirements.isEmpty()) {
+        if(ft.setter) {
             sb.append("        @Override\n");
             sb.append("        protected void setValueInternal(" + javaType + " value) {\n");
             sb.append("            " + coreName + setMethod(uniqueName) + "(value);\n");
-            sb.append("            valueSet = true;\n");
-            sb.append("            setFixed(true);\n");
+            sb.append("            intermediatesPrimed = false;\n");
             sb.append("        }\n\n");
+
+            // Add warning if there are dependencies
+            if(!requirements.isEmpty()) {
+                Set<VariableName> toReport = new HashSet<>();
+                for(Variable<?> r:requirements) {
+                    VariableName name = r.getUniqueVarDesc().name;
+                    FieldDesc<?> fd = fieldDescs.get(name);
+                    if(fd != null && (fd.fieldType.isSample || fd.fieldType.observed != Observed.FREE))
+                        toReport.add(name);
+                }
+                StringBuilder warningMsg = new StringBuilder();
+                warningMsg.append("Sample value \"" + fieldDesc.varDesc.name + "\" depends on the variable"
+                        + ((toReport.size() > 1) ? "s " : " "));
+
+                PriorityQueue<String> p = new PriorityQueue<>();
+                for(VariableName name:toReport)
+                    p.add("\"" + name + "\"");
+                assert !p.isEmpty();
+                warningMsg.append(p.poll());
+                while(!p.isEmpty()) {
+                    warningMsg.append(", ");
+                    if(p.size() == 1)
+                        warningMsg.append("and ");
+                    warningMsg.append(p.poll());
+                }
+                warningMsg.append(". This means it is possible to set values that contradict each other.");
+                Variable<?> v = traces.getVariable(uniqueName);
+                compDesc.warnings.add(new SandwoodModelException(warningMsg.toString(), v.getLocation()));
+            }
         } else {
             sb.append("        @Override\n");
             sb.append("        protected void setValueInternal(" + javaType + " value) {}\n\n");
 
-            if(fieldDesc.observed == Observed.OBSERVED) {
+            if(ft.observed == Observed.OBSERVED) {
                 sb.append("        @Override\n");
                 sb.append("        protected void testSettable() {\n");
                 sb.append("            throw new SandwoodException(\"Set is not available for variable " + fieldName
                         + " because it is fixed by observing a variable.\");\n");
                 sb.append("        }\n\n");
-            } else if(fieldDesc.observed == Observed.FIXED) {
+            } else if(ft.observed == Observed.FIXED) {
                 sb.append("        @Override\n");
                 sb.append("        protected void testSettable() {\n");
                 sb.append("            throw new SandwoodException(\"Set is not available for variable " + fieldName
@@ -1056,7 +1119,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("        @Override\n");
         VariableDescription<?> probFieldName = VariableNames.logProbabilityName(uniqueName);
-        if(fieldDescs.containsKey(probFieldName.name))
+        if(fieldDescs.containsKey(probFieldName.name) && !ft.isPrivate)
             sb.append("        public double getCurrentLogProbability() { return " + coreName
                     + getMethod(probFieldName.name) + "(); }\n");
         else
@@ -1092,7 +1155,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         sb.append("        @Override\n");
         sb.append("        public Immutability isFixed() {\n");
         if(flags.isEmpty()) {
-            if(fieldDesc.observed == Observed.FREE)
+            if(ft.observed == Observed.FREE)
                 sb.append("            return Immutability.DETERMINISTIC;\n");
             else
                 sb.append("            return Immutability.OBSERVED;\n");
@@ -1132,10 +1195,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("    };\n\n");
 
-        computedJavaDoc(sb, javaType, fieldName, fieldDesc.comment);
+        if(!ft.isPrivate) {
+            computedJavaDoc(sb, javaType, fieldName, fieldDesc.comment);
 
-        sb.append("    public final " + internalType + genericType + " " + fieldName + " = "
-                + VariableNames.internalName(fieldName) + ";\n\n");
+            sb.append("    public final " + internalType + genericType + " " + fieldName + " = "
+                    + VariableNames.internalName(fieldName) + ";\n\n");
+        }
     }
 
     private Set<Variable<?>> getSourceVariables(FieldDesc<?> fieldDesc) {

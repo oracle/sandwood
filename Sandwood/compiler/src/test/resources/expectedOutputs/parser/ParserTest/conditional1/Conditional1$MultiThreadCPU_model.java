@@ -130,6 +130,23 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
+	// Getter for var14.
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	// Setter for var14.
+	@Override
+	public final void set$var14(double cv$value) {
+		// Set flags for all the side effects of var14 including if probabilities need to
+		// be updated.
+		var14 = cv$value;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on var14.
+		fixedProbFlag$sample16 = false;
+	}
+
 	// Calculate the probability of the samples represented by sample16 using sampled
 	// values.
 	private final void logProbabilityValue$sample16() {
@@ -606,8 +623,17 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample16)
-				var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample16) {
+				// Track if it is possible to reach an observed variable
+				boolean observationGuard$var14 = false;
+				{
+					if(!guard)
+						// Observation reached
+						observationGuard$var14 = true;
+				}
+				if(!observationGuard$var14)
+					var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
 		}
 	}
 
@@ -618,8 +644,17 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample16)
-				var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample16) {
+				// Track if it is possible to reach an observed variable
+				boolean observationGuard$var14 = false;
+				{
+					if(!guard)
+						// Observation reached
+						observationGuard$var14 = true;
+				}
+				if(!observationGuard$var14)
+					var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
 		}
 	}
 
@@ -744,7 +779,9 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

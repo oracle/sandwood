@@ -21,8 +21,9 @@ public abstract class ComputedDoubleArrayInternal extends ComputedVariableIntern
     private double[][] samples;
     private double[] map = null;
 
-    public ComputedDoubleArrayInternal(Model model, String name, boolean isSample) {
-        super(model, name, isSample);
+    public ComputedDoubleArrayInternal(Model model, String name, boolean isSettable, boolean isSample,
+            boolean isPrivate) {
+        super(model, name, isSettable, isSample, isPrivate);
     }
 
     @Override
@@ -76,9 +77,12 @@ public abstract class ComputedDoubleArrayInternal extends ComputedVariableIntern
 
     @Override
     public final void fromJSON(JsonDecoder decoder) throws SandwoodJsonException, IOException {
-        p = RetentionPolicy.MAP;
-        map = decoder.getDoubleArray();
-        setValueInternal(map);
+        if(isSettable()) {
+            p = RetentionPolicy.MAP;
+            map = decoder.getDoubleArray();
+            setValue(map);
+        } else
+            decoder.getDoubleArray();
     }
 
     @Override
@@ -86,19 +90,31 @@ public abstract class ComputedDoubleArrayInternal extends ComputedVariableIntern
         synchronized(model) {
             testSettable();
             map = value;
+            valueSet = true;
             setValueInternal(map);
+            setFixed(true);
         }
     }
 
     @Override
     public final boolean setToMAPValue() {
         synchronized(model) {
-            if(p == RetentionPolicy.MAP && valueComputed()) {
+            if((p == RetentionPolicy.MAP || p == RetentionPolicy.MAP_AND_SAMPLE) && valueComputed()) {
                 setValue(getMAP());
                 return true;
             } else
                 return false;
         }
+    }
+
+    @Override
+    protected final void clearMap() {
+        map = null;
+    }
+
+    @Override
+    protected final void clearSample() {
+        samples = null;
     }
 
     protected abstract void setValueInternal(double[] value);

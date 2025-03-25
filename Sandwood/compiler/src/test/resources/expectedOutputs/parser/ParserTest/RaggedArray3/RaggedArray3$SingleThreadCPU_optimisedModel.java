@@ -23,8 +23,6 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var51;
 	private int[] obs;
 	private int[] obs_measured;
-	private boolean setFlag$d = false;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -48,10 +46,8 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$d(double[] cv$value) {
 		// Set flags for all the side effects of d including if probabilities need to be updated.
-		// Set d with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set d
 		d = cv$value;
-		setFlag$d = true;
 		
 		// Unset the fixed probability flag for sample 39 as it depends on d.
 		fixedProbFlag$sample39 = false;
@@ -137,8 +133,7 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for obs_measured.
 	@Override
 	public final void set$obs_measured(int[] cv$value) {
-		// Set obs_measured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set obs_measured
 		obs_measured = cv$value;
 	}
 
@@ -427,7 +422,7 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		a[1] = new double[3];
 		
 		// If d has not been set already allocate space.
-		if(!setFlag$d) {
+		if(!fixedFlag$sample39) {
 			// Constructor for d
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$a$37_0 = -1;
@@ -651,7 +646,7 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -661,7 +656,9 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

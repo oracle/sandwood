@@ -17,7 +17,7 @@ public class UniformBernoulli extends Model {
 
     private UniformBernoulli$CoreInterface system$c = new UniformBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", true) {
+    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$output(); }
 
@@ -48,15 +48,14 @@ public class UniformBernoulli extends Model {
      */
     public final ComputedBooleanArray output = $output;
 
-    private final ComputedDoubleInternal $prior = new ComputedDoubleInternal(this, "prior", true) {
+    private final ComputedDoubleInternal $prior = new ComputedDoubleInternal(this, "prior", true, true, false) {
         @Override
         public double getValue() { return system$c.get$prior(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$prior(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -186,6 +185,7 @@ public class UniformBernoulli extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(UniformBernoulli$CoreInterface oldCore, UniformBernoulli$CoreInterface newCore) {
 
         //Observed arrays
@@ -197,12 +197,11 @@ public class UniformBernoulli extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(prior.isSet())
+        if($prior.isSet())
             newCore.set$prior(oldCore.get$prior());
 
         //Set fixed flags
-        if(prior.isSet())
-            newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
+        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
     }
 
     /**

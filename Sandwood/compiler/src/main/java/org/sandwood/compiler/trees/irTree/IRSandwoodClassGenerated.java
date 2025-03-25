@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -81,7 +81,7 @@ public class IRSandwoodClassGenerated {
     }
 
     private <A extends Variable<A>> void addGetterAndSetter(FieldDesc<A> f) {
-        if(f.getter) {
+        if(f.fieldType.getter) {
             IRTreeReturn<A> body = IRTree.load(f.varDesc);
             IRFunction<?> get;
             if(f.varDesc.equals(modelProbabilityName))
@@ -94,7 +94,7 @@ public class IRSandwoodClassGenerated {
             gettersAndSetters.add(get);
         }
 
-        if(f.setter) {
+        if(f.fieldType.setter) {
             ArgDesc<?>[] args = new ArgDesc[1];
             VariableDescription<A> valueName = VariableNames.calcVarName("value", f.varDesc.type, false);
             args[0] = new ArgDesc<>(valueName);
@@ -103,11 +103,7 @@ public class IRSandwoodClassGenerated {
             if(f.varDesc.type.isArray()) {
                 List<IRTreeVoid> bodyParts = new ArrayList<>();
                 bodyParts.add(IRTree.store(f.varDesc, argLoad, Tree.NoComment));
-                if(!f.input)
-                    bodyParts.add(
-                            IRTree.store(VariableNames.setFlagName(f.varDesc), IRTree.constant(true), Tree.NoComment));
-                body = IRTree.sequential(bodyParts, "Set " + f.varDesc + " with flag to mark that it has been set "
-                        + "so another array doesn't need to be constructed");
+                body = IRTree.sequential(bodyParts, "Set " + f.varDesc);
             } else
                 body = IRTree.store(f.varDesc, argLoad, Tree.NoComment);
 

@@ -29,7 +29,6 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var97;
 	private double q;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double t;
 
@@ -146,8 +145,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -1224,11 +1222,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample11)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample17)
-			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((!fixedFlag$sample11 || !fixedFlag$sample17)) {
+		if(!fixedFlag$sample17) {
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			double[][] var21 = bias[0];
 			double[] var23 = var21[0];
 			var23[0] = t;
@@ -1236,6 +1233,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double[] var36 = var21[1];
 			var36[0] = (1 - q);
 			var36[1] = t;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample11) {
 			double[][] var52 = bias[1];
 			double[] var54 = var52[0];
 			var54[0] = t;
@@ -1254,11 +1255,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample11)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample17)
-			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((!fixedFlag$sample11 || !fixedFlag$sample17)) {
+		if(!fixedFlag$sample17) {
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			double[][] var21 = bias[0];
 			double[] var23 = var21[0];
 			var23[0] = t;
@@ -1266,6 +1266,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double[] var36 = var21[1];
 			var36[0] = (1 - q);
 			var36[1] = t;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample11) {
 			double[][] var52 = bias[1];
 			double[] var54 = var52[0];
 			var54[0] = t;
@@ -1282,11 +1286,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample11)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample17)
-			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((!fixedFlag$sample11 || !fixedFlag$sample17)) {
+		if(!fixedFlag$sample17) {
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			double[][] var21 = bias[0];
 			double[] var23 = var21[0];
 			var23[0] = t;
@@ -1294,6 +1297,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double[] var36 = var21[1];
 			var36[0] = (1 - q);
 			var36[1] = t;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample11) {
 			double[][] var52 = bias[1];
 			double[] var54 = var52[0];
 			var54[0] = t;
@@ -1424,11 +1431,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample11)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample17)
-			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((!fixedFlag$sample11 || !fixedFlag$sample17)) {
+		if(!fixedFlag$sample17) {
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			double[][] var21 = bias[0];
 			double[] var23 = var21[0];
 			var23[0] = t;
@@ -1436,6 +1442,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double[] var36 = var21[1];
 			var36[0] = (1 - q);
 			var36[1] = t;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample11) {
 			double[][] var52 = bias[1];
 			double[] var54 = var52[0];
 			var54[0] = t;
@@ -1453,7 +1463,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1463,23 +1473,32 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		double[][] var21 = bias[0];
-		double[] var23 = var21[0];
-		var23[0] = t;
-		var23[1] = (1 - t);
-		double[] var36 = var21[1];
-		var36[0] = (1 - q);
-		var36[1] = t;
-		double[][] var52 = bias[1];
-		double[] var54 = var52[0];
-		var54[0] = t;
-		var54[1] = (1 - q);
-		double[] var67 = var52[1];
-		var67[0] = (1 - q);
-		var67[1] = q;
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(fixedFlag$sample17) {
+			double[][] var21 = bias[0];
+			double[] var23 = var21[0];
+			var23[0] = t;
+			var23[1] = (1 - t);
+			double[] var36 = var21[1];
+			var36[0] = (1 - q);
+			var36[1] = t;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(fixedFlag$sample11) {
+			double[][] var52 = bias[1];
+			double[] var54 = var52[0];
+			var54[0] = t;
+			var54[1] = (1 - q);
+			double[] var67 = var52[1];
+			var67[0] = (1 - q);
+			var67[1] = q;
+		}
 	}
 
 	@Override

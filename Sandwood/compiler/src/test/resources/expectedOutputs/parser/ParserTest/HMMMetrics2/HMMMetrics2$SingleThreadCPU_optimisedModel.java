@@ -74,20 +74,38 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] metric_var;
 	private int noSamples;
 	private int noStates;
-	private boolean setFlag$initialStateDistribution = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$metric_g = false;
-	private boolean setFlag$metric_mean = false;
-	private boolean setFlag$metric_valid_bias = false;
-	private boolean setFlag$metric_valid_g = false;
-	private boolean setFlag$metric_var = false;
-	private boolean setFlag$st = false;
 	private int[][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
 	public HMMMetrics2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
+	}
+
+	// Getter for distribution$sample104.
+	@Override
+	public final double[][] get$distribution$sample104() {
+		return distribution$sample104;
+	}
+
+	// Setter for distribution$sample104.
+	@Override
+	public final void set$distribution$sample104(double[][] cv$value) {
+		// Set distribution$sample104
+		distribution$sample104 = cv$value;
+	}
+
+	// Getter for distribution$sample123.
+	@Override
+	public final double[][][] get$distribution$sample123() {
+		return distribution$sample123;
+	}
+
+	// Setter for distribution$sample123.
+	@Override
+	public final void set$distribution$sample123(double[][][] cv$value) {
+		// Set distribution$sample123
+		distribution$sample123 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample104.
@@ -321,10 +339,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$initialStateDistribution(double[] cv$value) {
 		// Set flags for all the side effects of initialStateDistribution including if probabilities
 		// need to be updated.
-		// Set initialStateDistribution with flag to mark that it has been set so another
-		// array doesn't need to be constructed
+		// Set initialStateDistribution
 		initialStateDistribution = cv$value;
-		setFlag$initialStateDistribution = true;
 		
 		// Unset the fixed probability flag for sample 19 as it depends on initialStateDistribution.
 		fixedProbFlag$sample19 = false;
@@ -342,8 +358,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for length$metric.
 	@Override
 	public final void set$length$metric(int[] cv$value) {
-		// Set length$metric with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set length$metric
 		length$metric = cv$value;
 	}
 
@@ -417,10 +432,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 32 as it depends on m.
 		fixedProbFlag$sample32 = false;
@@ -438,8 +451,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for metric.
 	@Override
 	public final void set$metric(double[][] cv$value) {
-		// Set metric with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set metric
 		metric = cv$value;
 	}
 
@@ -460,10 +472,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_mean(double[] cv$value) {
 		// Set flags for all the side effects of metric_mean including if probabilities need
 		// to be updated.
-		// Set metric_mean with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set metric_mean
 		metric_mean = cv$value;
-		setFlag$metric_mean = true;
 		
 		// Unset the fixed probability flag for sample 52 as it depends on metric_mean.
 		fixedProbFlag$sample52 = false;
@@ -481,8 +491,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for metric_valid.
 	@Override
 	public final void set$metric_valid(boolean[][] cv$value) {
-		// Set metric_valid with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set metric_valid
 		metric_valid = cv$value;
 	}
 
@@ -497,10 +506,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_valid_bias(double[] cv$value) {
 		// Set flags for all the side effects of metric_valid_bias including if probabilities
 		// need to be updated.
-		// Set metric_valid_bias with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set metric_valid_bias
 		metric_valid_bias = cv$value;
-		setFlag$metric_valid_bias = true;
 		
 		// Unset the fixed probability flag for sample 84 as it depends on metric_valid_bias.
 		fixedProbFlag$sample84 = false;
@@ -526,10 +533,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$metric_var(double[] cv$value) {
 		// Set flags for all the side effects of metric_var including if probabilities need
 		// to be updated.
-		// Set metric_var with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set metric_var
 		metric_var = cv$value;
-		setFlag$metric_var = true;
 		
 		// Unset the fixed probability flag for sample 68 as it depends on metric_var.
 		fixedProbFlag$sample68 = false;
@@ -567,10 +572,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$st(int[][] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 104 as it depends on st.
 		fixedProbFlag$sample104 = false;
@@ -3837,11 +3840,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 					} else {
 						// Enumerating the possible outputs of Categorical 101.
-						for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
+						for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$4" with its value "sample".
-							double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+							// Substituted "index$sample$5" with its value "sample".
+							double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 							
 							// Processing sample task 157 of consumer random variable null.
 							// 
@@ -3874,13 +3877,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$originalValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$originalValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
 								
 								// Recorded the probability of reaching sample task 157 with the current configuration.
 								// 
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 							}
 							
 							// A check to ensure rounding of floating point values can never result in a negative
@@ -3954,11 +3957,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							}
 						} else {
 							// Enumerating the possible outputs of Categorical 120.
-							for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
+							for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
 								// Update the probability of sampling this value from the distribution value.
 								// 
-								// Substituted "index$sample$14" with its value "sample".
-								double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+								// Substituted "index$sample$15" with its value "sample".
+								double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 								
 								// Processing sample task 157 of consumer random variable null.
 								// 
@@ -3982,13 +3985,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									// Constructing a random variable input for use later.
 									// 
 									// Set the current value to the current state of the tree.
-									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$originalValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$originalValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
 									
 									// Recorded the probability of reaching sample task 157 with the current configuration.
 									// 
 									// Set an accumulator to record the consumer distributions not seen. Initially set
 									// to 1 as seen values will be deducted from this value.
-									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 								}
 								
 								// A check to ensure rounding of floating point values can never result in a negative
@@ -4022,6 +4025,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that metric_mean is only updated when there is a valid path.
 		metric_mean[var50] = cv$proposedValue;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
@@ -4089,11 +4094,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 				} else {
 					// Enumerating the possible outputs of Categorical 101.
-					for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
+					for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
 						// Update the probability of sampling this value from the distribution value.
 						// 
-						// Substituted "index$sample$4" with its value "sample".
-						double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+						// Substituted "index$sample$5" with its value "sample".
+						double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 						
 						// Processing sample task 157 of consumer random variable null.
 						// 
@@ -4124,13 +4129,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Variable declaration of cv$temp$8$var148 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$proposedValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - cv$proposedValue) / Math.sqrt(cv$temp$9$var149)))) - (Math.log(cv$temp$9$var149) * 0.5));
 							
 							// Recorded the probability of reaching sample task 157 with the current configuration.
 							// 
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
-							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 						}
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -4202,11 +4207,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 					} else {
 						// Enumerating the possible outputs of Categorical 120.
-						for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
+						for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$14" with its value "sample".
-							double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+							// Substituted "index$sample$15" with its value "sample".
+							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 							
 							// Processing sample task 157 of consumer random variable null.
 							// 
@@ -4228,13 +4233,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Variable declaration of cv$temp$26$var148 moved.
 								// 
 								// Constructing a random variable input for use later.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$proposedValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$proposedValue) / Math.sqrt(cv$temp$27$var149)))) - (Math.log(cv$temp$27$var149) * 0.5));
 								
 								// Recorded the probability of reaching sample task 157 with the current configuration.
 								// 
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 							}
 							
 							// A check to ensure rounding of floating point values can never result in a negative
@@ -4274,6 +4279,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// 
+			// Guards to ensure that metric_mean is only updated when there is a valid path.
 			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
@@ -4370,11 +4377,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 					} else {
 						// Enumerating the possible outputs of Categorical 101.
-						for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
+						for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$4" with its value "sample".
-							double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+							// Substituted "index$sample$5" with its value "sample".
+							double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 							
 							// Processing sample task 157 of consumer random variable null.
 							// 
@@ -4407,13 +4414,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								
 								// Recorded the probability of reaching sample task 157 with the current configuration.
 								// 
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 							}
 							
 							// A check to ensure rounding of floating point values can never result in a negative
@@ -4482,11 +4489,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							}
 						} else {
 							// Enumerating the possible outputs of Categorical 120.
-							for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
+							for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
 								// Update the probability of sampling this value from the distribution value.
 								// 
-								// Substituted "index$sample$14" with its value "sample".
-								double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+								// Substituted "index$sample$15" with its value "sample".
+								double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 								
 								// Processing sample task 157 of consumer random variable null.
 								// 
@@ -4505,13 +4512,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									// Constructing a random variable input for use later.
 									// 
 									// Set the current value to the current state of the tree.
-									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 									
 									// Recorded the probability of reaching sample task 157 with the current configuration.
 									// 
 									// Set an accumulator to record the consumer distributions not seen. Initially set
 									// to 1 as seen values will be deducted from this value.
-									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+									cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 								}
 								
 								// A check to ensure rounding of floating point values can never result in a negative
@@ -4545,6 +4552,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that metric_var is only updated when there is a valid path.
 		metric_var[var66] = cv$proposedValue;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
@@ -4612,11 +4621,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 				} else {
 					// Enumerating the possible outputs of Categorical 101.
-					for(int index$sample104$5 = 0; index$sample104$5 < noStates; index$sample104$5 += 1) {
+					for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
 						// Update the probability of sampling this value from the distribution value.
 						// 
-						// Substituted "index$sample$4" with its value "sample".
-						double cv$probabilitySample104Value6 = distribution$sample104[sample][index$sample104$5];
+						// Substituted "index$sample$5" with its value "sample".
+						double cv$probabilitySample104Value7 = distribution$sample104[sample][index$sample104$6];
 						
 						// Processing sample task 157 of consumer random variable null.
 						// 
@@ -4647,13 +4656,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Variable declaration of cv$temp$9$var149 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value6) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample104Value7) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							
 							// Recorded the probability of reaching sample task 157 with the current configuration.
 							// 
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
-							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value6);
+							cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample104Value7);
 						}
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -4720,11 +4729,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 					} else {
 						// Enumerating the possible outputs of Categorical 120.
-						for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
+						for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$14" with its value "sample".
-							double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$16];
+							// Substituted "index$sample$15" with its value "sample".
+							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$17];
 							
 							// Processing sample task 157 of consumer random variable null.
 							// 
@@ -4741,13 +4750,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Variable declaration of cv$temp$27$var149 moved.
 								// 
 								// Constructing a random variable input for use later.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value17) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample123Value18) + DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 								
 								// Recorded the probability of reaching sample task 157 with the current configuration.
 								// 
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
-								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value17);
+								cv$consumerDistributionProbabilityAccumulator = (1.0 - cv$probabilitySample123Value18);
 							}
 							
 							// A check to ensure rounding of floating point values can never result in a negative
@@ -4787,6 +4796,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// 
+			// Guards to ensure that metric_var is only updated when there is a valid path.
 			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
@@ -4884,6 +4895,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 		}
 		
+		// Guards to ensure that metric_valid_bias is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		metric_valid_bias[var82] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
@@ -4955,12 +4968,12 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		v = new double[noStates];
 		
 		// If initialStateDistribution has not been set already allocate space.
-		if(!setFlag$initialStateDistribution)
+		if(!fixedFlag$sample19)
 			// Constructor for initialStateDistribution
 			initialStateDistribution = new double[noStates];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample32) {
 			// Constructor for m
 			m = new double[noStates][];
 			for(int var31 = 0; var31 < noStates; var31 += 1)
@@ -4968,7 +4981,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st) {
+		if((!fixedFlag$sample104 || !fixedFlag$sample123)) {
 			// Constructor for st
 			st = new int[length$metric.length][];
 			for(int sample = 0; sample < length$metric.length; sample += 1)
@@ -4986,17 +4999,17 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			metric_valid_g[sample] = new boolean[length$metric[sample]];
 		
 		// If metric_mean has not been set already allocate space.
-		if(!setFlag$metric_mean)
+		if(!fixedFlag$sample52)
 			// Constructor for metric_mean
 			metric_mean = new double[noStates];
 		
 		// If metric_var has not been set already allocate space.
-		if(!setFlag$metric_var)
+		if(!fixedFlag$sample68)
 			// Constructor for metric_var
 			metric_var = new double[noStates];
 		
 		// If metric_valid_bias has not been set already allocate space.
-		if(!setFlag$metric_valid_bias)
+		if(!fixedFlag$sample84)
 			// Constructor for metric_valid_bias
 			metric_valid_bias = new double[noStates];
 		
@@ -5224,13 +5237,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$distribution$sample123[index$var120] = (cv$distribution$sample123[index$var120] / cv$var120$sum);
 				}
 			}
-			boolean[] metric_valid_1d = metric_valid_g[sample];
-			double[] metric_1d = metric_g[sample];
-			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
-				if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
-					metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
-			}
 		}
 	}
 
@@ -5273,13 +5279,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				int[] var114 = st[sample];
 				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
 					var114[timeStep$var113] = DistributionSampling.sampleCategorical(RNG$, m[st[sample][(timeStep$var113 - 1)]], noStates);
-			}
-			boolean[] metric_valid_1d = metric_valid_g[sample];
-			double[] metric_1d = metric_g[sample];
-			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
-				if((metric_valid_g[sample][timeStep$var136] && !fixedFlag$sample157))
-					metric_1d[timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 			}
 		}
 	}
@@ -5600,7 +5599,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

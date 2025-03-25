@@ -17,7 +17,7 @@ public class Flip1CoinMK1c extends Model {
 
     private Flip1CoinMK1c$CoreInterface system$c = new Flip1CoinMK1c$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -47,6 +47,35 @@ public class Flip1CoinMK1c extends Model {
      * Computed variable representing flips of type boolean[] from the Sandwood model 
      */
     public final ComputedBooleanArray flips = $flips;
+
+    private final ComputedDoubleInternal $var6 = new ComputedDoubleInternal(this, "var6", true, true, true) {
+        @Override
+        public double getValue() { return system$c.get$var6(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$var6(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample6(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample6())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -140,6 +169,7 @@ public class Flip1CoinMK1c extends Model {
         super();
         //ComputedVariable
         $computedVariables.put("flips", $flips);
+        $computedVariables.put("var6", $var6);
 
         //ModelInputs
         $modelInputs.put("a", $a);
@@ -196,6 +226,7 @@ public class Flip1CoinMK1c extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK1c$CoreInterface oldCore, Flip1CoinMK1c$CoreInterface newCore) {
         //Model inputs
         if(a.isSet())
@@ -212,8 +243,11 @@ public class Flip1CoinMK1c extends Model {
             newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
 
         //ComputedVariables
+        if($var6.isSet())
+            newCore.set$var6(oldCore.get$var6());
 
         //Set fixed flags
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }
 
     /**

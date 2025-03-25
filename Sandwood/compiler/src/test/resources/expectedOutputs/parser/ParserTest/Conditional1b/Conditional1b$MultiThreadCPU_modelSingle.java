@@ -741,18 +741,12 @@ class Conditional1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void propogateObservedValues() {
 		value = observedValue;
-		{
-			if(!guard) {
-				{
-					if(!guard)
-						u = observedValue;
-				}
-			}
-		}
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

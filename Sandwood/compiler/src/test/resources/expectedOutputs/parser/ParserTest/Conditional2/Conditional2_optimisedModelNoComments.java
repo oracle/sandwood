@@ -17,15 +17,14 @@ public class Conditional2 extends Model {
 
     private Conditional2$CoreInterface system$c = new Conditional2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {
             system$c.set$guard(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class Conditional2 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleArrayInternal $value = new ComputedDoubleArrayInternal(this, "value", true) {
+    private final ComputedDoubleArrayInternal $value = new ComputedDoubleArrayInternal(this, "value", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$value(); }
 
@@ -83,7 +82,7 @@ public class Conditional2 extends Model {
      */
     public final ComputedDoubleArray value = $value;
 
-    private final ComputedDoubleArrayInternal $value2 = new ComputedDoubleArrayInternal(this, "value2", false) {
+    private final ComputedDoubleArrayInternal $value2 = new ComputedDoubleArrayInternal(this, "value2", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$value2(); }
 
@@ -194,18 +193,18 @@ public class Conditional2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Conditional2$CoreInterface oldCore, Conditional2$CoreInterface newCore) {
         //Observed scalars
         if(observedValue.isSet())
             newCore.set$observedValue(oldCore.get$observedValue());
 
         //ComputedVariables
-        if(guard.isSet())
+        if($guard.isSet())
             newCore.set$guard(oldCore.get$guard());
 
         //Set fixed flags
-        if(guard.isSet())
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
     }
 
     /**

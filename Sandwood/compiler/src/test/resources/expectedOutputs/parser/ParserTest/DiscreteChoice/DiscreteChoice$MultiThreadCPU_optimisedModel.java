@@ -27,8 +27,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private int noObs;
 	private int noProducts;
 	private double[] prob;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -46,8 +44,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for ObsChoices.
 	@Override
 	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set ObsChoices
 		ObsChoices = cv$value;
 	}
 
@@ -178,10 +175,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 24 as it depends on ut.
 		fixedProbFlag$sample24 = false;
@@ -441,9 +436,9 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
 				// 
-				// cv$temp$3$$var529's comment
+				// cv$temp$3$$var509's comment
 				// 
-				// $var529's comment
+				// $var509's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
@@ -457,6 +452,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[i$var18] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
@@ -561,9 +558,9 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
 			// 
-			// cv$temp$3$$var529's comment
+			// cv$temp$3$$var509's comment
 			// 
-			// $var529's comment
+			// $var509's comment
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
@@ -583,6 +580,8 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that ut is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			ut[i$var18] = cv$originalValue;
@@ -688,7 +687,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut)
+		if(!fixedFlag$sample24)
 			// Constructor for ut
 			ut = new double[noProducts];
 		
@@ -1086,7 +1085,7 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1096,11 +1095,13 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$ut) {
+		if(fixedFlag$sample24) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 			parallelFor(RNG$, 0, noProducts, 1,
 				(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -1121,8 +1122,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j's comment

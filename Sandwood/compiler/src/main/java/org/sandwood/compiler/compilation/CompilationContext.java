@@ -25,6 +25,7 @@ import java.util.Stack;
 
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.CompilationOptions;
+import org.sandwood.compiler.compilation.ForwardExecutionBuilder.GuardStatus;
 import org.sandwood.compiler.compilation.inferenceRange.InferenceRange;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.compilation.util.TreeUtils.ArrayDesc;
@@ -32,6 +33,7 @@ import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
@@ -75,7 +77,7 @@ public class CompilationContext {
         ALL_LOG_PROBABILITIES("logProbabilityGeneration"),
         ALL_LOG_PROBABILITIES_CALCULATION_VAL("logModelProbabilitiesVal"),
         ALL_LOG_PROBABILITIES_CALCULATION_DIST("logModelProbabilitiesDist"),
-        OBSERVATION_PROPAGATION("propogateObservedValues");
+        OBSERVATION_PROPAGATION("propagateObservedValues");
 
         public final FunctionName functionName;
 
@@ -94,7 +96,6 @@ public class CompilationContext {
     public enum CompilationPhase {
         MAIN_METHODS,
         INITIALIZATION_OF_CONSTANTS,
-        INITIALIZATION_OF_INTERMEDIATES,
         ALLOCATION
     }
 
@@ -151,26 +152,154 @@ public class CompilationContext {
         }
     }
 
-    public static class FieldDesc<A extends Variable<A>> {
-        public final VariableDescription<A> varDesc;
+    public enum FieldType {
+        INTERNAL(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
+        PRIVATE_PROBABILITY(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
+        PUBLIC_PROBABILITY(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.FREE),
+        USER_FLAG(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
+
+        INPUT(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
+
+        PRIVATE_FREE_INTERMEDIATE(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
+        PRIVATE_FIXED_INTERMEDIATE(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FIXED),
+        PRIVATE_OBSERVED_INTERMEDIATE(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.OBSERVED),
+
+        PUBLIC_FREE_INTERMEDIATE(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.FREE),
+        PUBLIC_FIXED_INTERMEDIATE(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.FIXED),
+        PUBLIC_OBSERVED_INTERMEDIATE(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.OBSERVED),
+
+        PRIVATE_FREE_SAMPLE(Getter.REQUIRED, Setter.REQUIRED, true, Visibility.PRIVATE, Observed.FREE),
+        PRIVATE_FIXED_SAMPLE(Getter.NONE, Setter.NONE, true, Visibility.PRIVATE, Observed.FIXED),
+        PRIVATE_OBSERVED_SAMPLE(Getter.NONE, Setter.NONE, true, Visibility.PRIVATE, Observed.OBSERVED),
+
+        PUBLIC_FREE_SAMPLE(Getter.REQUIRED, Setter.REQUIRED, true, Visibility.PUBLIC, Observed.FREE),
+        PUBLIC_FIXED_SAMPLE(Getter.REQUIRED, Setter.NONE, true, Visibility.PUBLIC, Observed.FIXED),
+        PUBLIC_OBSERVED_SAMPLE(Getter.REQUIRED, Setter.NONE, true, Visibility.PUBLIC, Observed.OBSERVED);
+
+        private enum Getter {
+            NONE,
+            REQUIRED
+        }
+
+        private enum Setter {
+            NONE,
+            REQUIRED
+        }
+
+        private enum Visibility {
+            PUBLIC,
+            PRIVATE
+        }
+
+        public final boolean isSample;
         public final boolean getter;
         public final boolean setter;
-        public final boolean sample;
-        public final String comment;
+        public final boolean isPrivate;
         public final Observed observed;
-        public final boolean input;
+
+        private FieldType(Getter getter, Setter setter, boolean isSample, Visibility isPrivate, Observed observed) {
+            this.isSample = isSample;
+            this.getter = getter == Getter.REQUIRED;
+            this.setter = setter == Setter.REQUIRED;
+            this.isPrivate = isPrivate == Visibility.PRIVATE;
+            this.observed = observed;
+        }
+
+        public static FieldType getFieldType(Variable<?> v) {
+            v = v.getCurrentInstance();
+            switch(v.getObservationStatus()) {
+                case FREE: {
+                    if(v.getParent().getType() == DFType.NAMED_VARIABLE)
+                        return INPUT;
+                    if(v.isPrivate()) {
+                        if(setBySampleValue(v))
+                            return PRIVATE_FREE_SAMPLE;
+                        if(v.isIntermediate())
+                            return PRIVATE_FREE_INTERMEDIATE;
+                        throw new CompilerException("Unknown field category for variable " + v);
+                    } else {
+                        if(setBySampleValue(v))
+                            return PUBLIC_FREE_SAMPLE;
+                        if(v.isIntermediate())
+                            return PUBLIC_FREE_INTERMEDIATE;
+                        throw new CompilerException("Unknown field category for variable " + v);
+                    }
+                }
+                case FIXED: {
+                    if(v.isPrivate()) {
+                        if(v.isSample())
+                            return PRIVATE_FIXED_SAMPLE;
+                        if(v.isIntermediate())
+                            return PRIVATE_FIXED_INTERMEDIATE;
+                        throw new CompilerException("Unknown field category for variable " + v);
+                    } else {
+                        if(setBySampleValue(v))
+                            return PUBLIC_FIXED_SAMPLE;
+                        if(v.isIntermediate())
+                            return PUBLIC_FIXED_INTERMEDIATE;
+                        throw new CompilerException("Unknown field category for variable " + v);
+                    }
+                }
+                case OBSERVED:
+                    if(v.isPrivate()) {
+                        if(v.isSample())
+                            return PRIVATE_OBSERVED_SAMPLE;
+                        if(v.isIntermediate())
+                            return PRIVATE_OBSERVED_INTERMEDIATE;
+                        throw new CompilerException("Unknown field category for variable " + v);
+                    } else {
+                        if(setBySampleValue(v))
+                            return PUBLIC_OBSERVED_SAMPLE;
+                        if(v.isIntermediate())
+                            return PUBLIC_OBSERVED_INTERMEDIATE;
+                        throw new CompilerException("Unknown field category for variable " + v);
+                    }
+                default:
+                    throw new CompilerException("Unknown field category for variable " + v);
+            }
+        }
+
+        /**
+         * Method to test if this intermediate value has already been set when the sample values were set.
+         * 
+         * @param v The intermediate variable to test.
+         * @return Returns true if the value will have been set by the sample value.
+         */
+        private static boolean setBySampleValue(Variable<?> v) {
+            if(v.isSample())
+                return true;
+
+            if(v.getParent().getType() == DFType.PUT) {
+                PutTask<?> pt = (PutTask<?>) v.getParent();
+                Variable<?> value = pt.value;
+                if(value.isSample())
+                    return true;
+                ArrayVariable<?> array = pt.array;
+                while(value.getParent().getType() == DFType.PUT) {
+                    pt = (PutTask<?>) value.getParent();
+                    if(pt.value.isSample() && !pt.value.isIntermediate())
+                        return true;
+                    value = pt.value;
+                }
+                return setBySampleValue(array);
+            } else
+                return false;
+        }
+    }
+
+    public static class FieldDesc<A extends Variable<A>> {
+
+        public final VariableDescription<A> varDesc;
+        public final String comment;
         public final IRTreeReturn<A> initialValue;
         private final static Map<VariableDescription<?>, Set<WrappedTree<IRTree, IRTreeVoid>>> setSideEffects = new HashMap<>();
+        public final FieldType fieldType;
 
-        public FieldDesc(VariableDescription<A> varDesc, boolean getter, boolean setter, Observed observed,
-                boolean input, boolean sample, IRTreeReturn<A> initialValue, String comment) {
+        public FieldDesc(VariableDescription<A> varDesc, FieldType fieldType, IRTreeReturn<A> initialValue,
+                String comment) {
             this.varDesc = varDesc;
-            this.getter = getter;
-            this.setter = setter;
-            this.observed = observed;
             this.comment = comment;
-            this.sample = sample;
-            this.input = input;
+            this.fieldType = fieldType;
             this.initialValue = initialValue;
         }
 
@@ -191,20 +320,24 @@ public class CompilationContext {
     }
 
     private static class Allocators {
+        private final CompilationContext compilationCtx;
+
+        Allocators(CompilationContext compilationCtx) {
+            this.compilationCtx = compilationCtx;
+        }
+
         private class VarConstructor implements Comparable<VarConstructor> {
-            private final int id;
-            private final VariableDescription<?> varDesc;
+            private final Variable<?> v;
             public final IRTreeVoid tree;
 
-            public VarConstructor(int id, VariableDescription<?> varDesc, IRTreeVoid tree) {
-                this.id = id;
-                this.varDesc = varDesc;
+            public VarConstructor(Variable<?> v, IRTreeVoid tree) {
+                this.v = v.instanceHandle();
                 this.tree = tree;
             }
 
             @Override
             public int compareTo(VarConstructor o) {
-                return id - o.id;
+                return v.getId() - o.v.getId();
             }
         }
 
@@ -219,8 +352,8 @@ public class CompilationContext {
                 else
                     unorderedConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
             } else
-                orderedConstructors.add(new VarConstructor(v.getHandleId(), v.getUniqueVarDesc(),
-                        IRTree.treeScope(constructor, "Constructor for " + fieldName)));
+                orderedConstructors
+                        .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
         }
 
         public IRTreeVoid getVarTree(Map<VariableName, FieldDesc<?>> fieldDescs) {
@@ -231,11 +364,32 @@ public class CompilationContext {
             int size = p.size();
             for(int i = 0; i < size; i++) {
                 VarConstructor c = p.poll();
-                FieldDesc<?> f = fieldDescs.get(c.varDesc.name);
+                VariableName name = c.v.getUniqueVarDesc().name;
+                FieldDesc<?> f = fieldDescs.get(name);
                 IRTreeVoid t = c.tree;
-                if(f.setter)
-                    t = IRTree.ifElse(IRTree.negateBoolean(IRTree.load(VariableNames.setFlagName(c.varDesc))), t,
-                            "If " + c.varDesc + " has not been set already allocate space.");
+                if(f.fieldType.setter) {
+                    Variable<?> v = c.v;
+
+                    IRTreeReturn<BooleanVariable> guard = null;
+
+                    if(v.getType().isArray()) {
+                        while(v != null) {
+                            if(v.isSample()) {
+                                // Get the requirements for the array
+                                if(guard == null)
+                                    guard = ForwardExecutionBuilder.constructGuard(v, GuardStatus.FREE, compilationCtx);
+                                else
+                                    guard = IRTree.or(guard, ForwardExecutionBuilder.constructGuard(v, GuardStatus.FREE,
+                                            compilationCtx));
+                            }
+                            v = ((ArrayVariable<?>) v).getChildInstance();
+                        }
+                    } else if(v.isSample())
+                        guard = ForwardExecutionBuilder.constructGuard(v, GuardStatus.FREE, compilationCtx);
+
+                    if(guard != null)
+                        t = IRTree.ifElse(guard, t, "If " + name + " has not been set already allocate space.");
+                }
                 trees.add(t);
             }
 
@@ -423,7 +577,7 @@ public class CompilationContext {
     // Store the functions constructed by the compilation process.
     private final Functions functions = new Functions();
 
-    private final Allocators allocators = new Allocators();
+    private final Allocators allocators = new Allocators(this);
 
     private Substitutions substitutions = new Substitutions();
     private final Stack<Substitutions> substitutionsStack = new Stack<>();
@@ -560,86 +714,84 @@ public class CompilationContext {
 
     public <A extends Variable<A>> void addClassInputField(VariableDescription<A> varDesc, String comment) {
         if(!classFields.containsKey(varDesc.name)) {
-            classFields.put(varDesc.name,
-                    new FieldDesc<>(varDesc, true, true, Observed.FREE, true, false, null, comment));
+            classFields.put(varDesc.name, new FieldDesc<>(varDesc, FieldType.INPUT, null, comment));
 
         } else {
             @SuppressWarnings("unchecked")
             FieldDesc<A> f = (FieldDesc<A>) classFields.get(varDesc.name);
             assert (f.varDesc.type.equals(varDesc.type));
-            f = new FieldDesc<>(varDesc, true, true, f.observed, f.input, f.sample, f.initialValue, f.comment);
+            f = new FieldDesc<>(varDesc, f.fieldType, f.initialValue, f.comment);
             classFields.put(varDesc.name, f);
         }
     }
 
-    // TODO normalise all the getter and setter flags etc across all the methods
-    // here to ensure no unexpected results.
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
-            IRTreeVoid constructor, IRTreeReturn<A> initialValue) {
-        addConstructedClassField(fieldname, constructor, null, false, false, true, Observed.FREE, false, false,
-                initialValue, null);
+            IRTreeReturn<A> initialValue) {
+        addConstructedClassField(fieldname, null, null, FieldType.INTERNAL, initialValue, null);
     }
 
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname, boolean getter,
-            boolean setter, IRTreeVoid constructor, IRTreeReturn<A> initialValue) {
-        addConstructedClassField(fieldname, constructor, null, getter, setter, false, Observed.FREE, false, false,
-                initialValue, null);
+    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
+            IRTreeVoid constructor) {
+        addConstructedClassField(fieldname, constructor, null, FieldType.INTERNAL, null, null);
     }
 
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
-            IRTreeVoid constructor, boolean isPrivate, String comment) {
-        addConstructedClassField(fieldname, constructor, null, true, false, isPrivate, Observed.FREE, false, false,
-                null, comment);
+            IRTreeVoid constructor, IRTreeReturn<A> initialValue) {
+        addConstructedClassField(fieldname, constructor, null, FieldType.INTERNAL, initialValue, null);
     }
 
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname, boolean isPrivate) {
-        addConstructedClassField(fieldname, null, null, true, false, isPrivate, Observed.FREE, false, false, null,
-                null);
+    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
+            IRTreeVoid constructor, FieldType fieldType, String comment) {
+        addConstructedClassField(fieldname, constructor, null, fieldType, null, comment);
     }
 
-    public <A extends Variable<A>> void addConstructedClassField(Variable<A> v, boolean getter, boolean setter,
-            CompilationContext compilationCtx) {
+    public <A extends Variable<A>> void addFlagClassField(VariableDescription<A> fieldname,
+            IRTreeReturn<A> initialValue) {
+        addConstructedClassField(fieldname, null, null, FieldType.USER_FLAG, initialValue, null);
+    }
+
+    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
+            FieldType fieldType) {
+        addConstructedClassField(fieldname, null, null, fieldType, null, null);
+    }
+
+    public <A extends Variable<A>> void addConstructedClassField(Variable<A> v, CompilationContext compilationCtx) {
         VariableDescription<A> fieldDesc = v.getUniqueVarDesc();
         if(classFields.containsKey(fieldDesc.name)) {
             // If the field has already been declared just pass this through to update date the getter and setter flags
             // if required. They are a collective OR of all the passed flags.
-            addConstructedClassField(fieldDesc, null, v, getter, setter);
+            addConstructedClassField(fieldDesc, null, v);
         } else {
             ArrayDesc<?> arrayDesc = TreeUtils.getArrayDescription(v);
             if(arrayDesc == null) {
-                addConstructedClassField(fieldDesc, null, v, getter, setter);
+                addConstructedClassField(fieldDesc, null, v);
             } else {
-                addConstructedClassFieldArray(v, fieldDesc, arrayDesc, getter, setter, compilationCtx);
+                addConstructedClassFieldArray(v, fieldDesc, arrayDesc, compilationCtx);
             }
         }
     }
 
     private <A extends Variable<A>, B extends Variable<B>> void addConstructedClassFieldArray(Variable<A> v,
-            VariableDescription<A> fieldDesc, ArrayDesc<B> arrayDesc, boolean getter, boolean setter,
-            CompilationContext compilationCtx) {
+            VariableDescription<A> fieldDesc, ArrayDesc<B> arrayDesc, CompilationContext compilationCtx) {
         VariableDescription<ArrayVariable<B>> arrayName = VariableNames.altTypeName(fieldDesc, arrayDesc.type);
         pushIsSerial(true);
         IRTreeVoid allocator = allocate(arrayName, arrayDesc, compilationCtx);
         popIsSerial();
-        addConstructedClassField(arrayName, allocator, v, getter, setter);
+        addConstructedClassField(arrayName, allocator, v);
     }
 
     private <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
-            IRTreeVoid constructor, Variable<?> v, boolean getter, boolean setter) {
-        addConstructedClassField(fieldname, constructor, v, getter, setter, v.isPrivate(), v.getObservationStatus(),
-                v.getParent().getType() == DFType.NAMED_VARIABLE, v.isSample(), null, v.getComment());
+            IRTreeVoid constructor, Variable<?> v) {
+        addConstructedClassField(fieldname, constructor, v, FieldType.getFieldType(v), null, v.getComment());
     }
 
     public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> varDesc,
-            IRTreeVoid constructorTree, Variable<?> v, boolean getter, boolean setter, boolean isPrivate,
-            Observed observed, boolean input, boolean sample, IRTreeReturn<A> initialValue, String comment) {
+            IRTreeVoid constructorTree, Variable<?> v, FieldType fieldType, IRTreeReturn<A> initialValue,
+            String comment) {
         // Ensure variables that did not appear in the model, and variables that have
         // been marked private don't have getters and setters constructed.
-        getter = getter && !isPrivate;
-        setter = setter && !isPrivate && observed == Observed.FREE;
         if(!classFields.containsKey(varDesc.name)) {
-            classFields.put(varDesc.name,
-                    new FieldDesc<>(varDesc, getter, setter, observed, input, sample, initialValue, comment));
+            classFields.put(varDesc.name, new FieldDesc<>(varDesc, fieldType, initialValue, comment));
             if(constructorTree != null)
                 allocators.addConstructor(varDesc, v, constructorTree);
         } else {
@@ -651,9 +803,8 @@ public class CompilationContext {
                 assert f.initialValue == null || (f.initialValue.equivalent(initialValue));
             // It is important that f.varDesc is used here as only the first variable description is checked to see if
             // it need to be converted to an array type.
-            assert observed == f.observed;
-            f = new FieldDesc<>(f.varDesc, getter || f.getter, setter || f.setter, observed, f.input,
-                    sample || f.sample, initialValue, f.comment);
+            assert fieldType == f.fieldType;
+            f = new FieldDesc<>(f.varDesc, fieldType, initialValue, f.comment);
             classFields.put(varDesc.name, f);
         }
     }

@@ -23,6 +23,18 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	// Setter for cpu_measured.
 	public void set$cpu_measured(double[] cv$value);
 
+	// Getter for distribution$sample39.
+	public double[] get$distribution$sample39();
+
+	// Setter for distribution$sample39.
+	public void set$distribution$sample39(double[] cv$value);
+
+	// Getter for distribution$sample57.
+	public double[][] get$distribution$sample57();
+
+	// Setter for distribution$sample57.
+	public void set$distribution$sample57(double[][] cv$value);
+
 	// Getter for fixedFlag$sample113.
 	public boolean get$fixedFlag$sample113();
 

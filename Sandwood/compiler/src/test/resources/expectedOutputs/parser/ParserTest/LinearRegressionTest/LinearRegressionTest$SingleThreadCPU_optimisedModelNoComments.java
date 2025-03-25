@@ -29,8 +29,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$y;
 	private int n;
 	private double[][] phi;
-	private boolean setFlag$weights = false;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double tau;
 	private double[] weights;
@@ -150,7 +148,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
-		setFlag$weights = true;
 		fixedProbFlag$sample24 = false;
 		fixedProbFlag$sample74 = false;
 	}
@@ -338,7 +335,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void allocator() {
 		y = new double[x.length];
-		if(!setFlag$weights)
+		if(!fixedFlag$sample24)
 			weights = new double[x[0].length];
 		phi = new double[x.length][];
 		for(int i$var45 = 0; i$var45 < x.length; i$var45 += 1)
@@ -516,7 +513,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = y.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			y[cv$index1] = yMeasured[cv$index1];
@@ -524,7 +521,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$weights) {
+		if(fixedFlag$sample24) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 				for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
 					phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);

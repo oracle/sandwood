@@ -28,8 +28,6 @@ class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double[] logProbability$sample78;
 	private double logProbability$var10;
 	private double logProbability$var23;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK12$SingleThreadCPU(ExecutionTarget target) {
@@ -44,7 +42,6 @@ class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample23 = false;
 		fixedProbFlag$sample50 = false;
@@ -269,7 +266,7 @@ class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		intermediateFlips = new boolean[length$flipsMeasured.length][];
 		for(int l = 0; l < length$flipsMeasured.length; l += 1)
 			intermediateFlips[l] = new boolean[length$flipsMeasured[l]];
-		if(!setFlag$bias)
+		if((!fixedFlag$sample10 || !fixedFlag$sample23))
 			bias = new double[length$flipsMeasured.length];
 		logProbability$bernoulli1 = new double[1];
 		logProbability$sample50 = new double[1];
@@ -407,7 +404,7 @@ class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int l = 0; l < length$flipsMeasured.length; l += 1) {
 			boolean[] target = intermediateFlips[l];
 			for(int m$var102 = 0; m$var102 < length$flipsMeasured[l]; m$var102 += 1)

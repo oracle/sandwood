@@ -47,9 +47,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
-	private boolean setFlag$beta = false;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -67,8 +64,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for ObsChoices.
 	@Override
 	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set ObsChoices
 		ObsChoices = cv$value;
 	}
 
@@ -81,8 +77,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Setter for Prices.
 	@Override
 	public final void set$Prices(int[][] cv$value) {
-		// Set Prices with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set Prices
 		Prices = cv$value;
 	}
 
@@ -116,10 +111,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	public final void set$beta(double[] cv$value) {
 		// Set flags for all the side effects of beta including if probabilities need to be
 		// updated.
-		// Set beta with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set beta
 		beta = cv$value;
-		setFlag$beta = true;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on beta.
 		fixedProbFlag$sample47 = false;
@@ -331,10 +324,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 21 as it depends on ut.
 		fixedProbFlag$sample21 = false;
@@ -1167,7 +1158,13 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var21 = cv$proposedValue;
-					ut[var20] = cv$currentValue;
+					
+					// Guards to ensure that ut is only updated when there is a valid path.
+					{
+						{
+							ut[var20] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that exped is only updated when there is a valid path.
 					// 
@@ -1337,11 +1334,11 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 								}
 							}
 						}
-						double traceTempVariable$var70$8_1 = cv$currentValue;
+						double traceTempVariable$var70$9_1 = cv$currentValue;
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
 								for(int i = 0; i < noObs; i += 1) {
-									double traceTempVariable$k$8_4 = Math.exp((traceTempVariable$var70$8_1 - (beta[i] * Prices[i][j$var69])));
+									double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
 									if(((0 <= j$var69) && (j$var69 < noProducts))) {
 										{
 											if((0 < noProducts)) {
@@ -1353,24 +1350,24 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double reduceVar$sum$17 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction1470Index = 0; cv$reduction1470Index < j$var69; cv$reduction1470Index += 1) {
+												for(int cv$reduction1465Index = 0; cv$reduction1465Index < j$var69; cv$reduction1465Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$17;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1470Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1465Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$17 = (k + l);
 												}
-												for(int cv$reduction1470Index = (j$var69 + 1); cv$reduction1470Index < noProducts; cv$reduction1470Index += 1) {
+												for(int cv$reduction1465Index = (j$var69 + 1); cv$reduction1465Index < noProducts; cv$reduction1465Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$17;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1470Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1465Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1382,8 +1379,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double cv$reduced82 = reduceVar$sum$17;
 												
 												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$sum$17 = (traceTempVariable$k$8_4 + cv$reduced82);
-												double traceTempVariable$sum$8_5 = reduceVar$sum$17;
+												reduceVar$sum$17 = (traceTempVariable$k$9_4 + cv$reduced82);
+												double traceTempVariable$sum$9_5 = reduceVar$sum$17;
 												if(!guard$sample21categorical102[((i - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample21categorical102[((i - 0) / 1)] = true;
@@ -1405,22 +1402,22 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 																		{
 																			cv$temp$2$prob = prob[((i - 0) / 1)];
 																		}
-																		int cv$temp$3$$var1126;
+																		int cv$temp$3$$var1110;
 																		{
 																			// Constructing a random variable input for use later.
-																			int $var1126 = noProducts;
-																			cv$temp$3$$var1126 = $var1126;
+																			int $var1110 = noProducts;
+																			cv$temp$3$$var1110 = $var1110;
 																		}
 																		
 																		// Record the probability of sample task 103 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1126))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1126))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1110))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1110))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1126))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1110))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1126))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1126))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1110))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1110))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 103 with the current configuration.
@@ -1453,11 +1450,11 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 								}
 							}
 						}
-						double traceTempVariable$var70$9_1 = cv$currentValue;
+						double traceTempVariable$var70$10_1 = cv$currentValue;
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
 								for(int i = 0; i < noObs; i += 1) {
-									double traceTempVariable$var98$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
+									double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (beta[i] * Prices[i][j$var69])));
 									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!guard$sample21categorical102[((i - 0) / 1)]) {
@@ -1481,22 +1478,22 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 																	{
 																		cv$temp$4$prob = prob[((i - 0) / 1)];
 																	}
-																	int cv$temp$5$$var1129;
+																	int cv$temp$5$$var1113;
 																	{
 																		// Constructing a random variable input for use later.
-																		int $var1129 = noProducts;
-																		cv$temp$5$$var1129 = $var1129;
+																		int $var1113 = noProducts;
+																		cv$temp$5$$var1113 = $var1113;
 																	}
 																	
 																	// Record the probability of sample task 103 generating output with current configuration.
-																	if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1129))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1129))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1113))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1113))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1129))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1113))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1129))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1129))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1113))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1113))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
 																	}
 																	
 																	// Recorded the probability of reaching sample task 103 with the current configuration.
@@ -1566,7 +1563,13 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var21 = cv$originalValue;
-			ut[var20] = var21;
+			
+			// Guards to ensure that ut is only updated when there is a valid path.
+			{
+				{
+					ut[var20] = var21;
+				}
+			}
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
@@ -1836,7 +1839,13 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var47 = cv$proposedValue;
-					beta[var46] = cv$currentValue;
+					
+					// Guards to ensure that beta is only updated when there is a valid path.
+					{
+						{
+							beta[var46] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that exped is only updated when there is a valid path.
 					// 
@@ -2006,11 +2015,11 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 								}
 							}
 						}
-						double traceTempVariable$var71$8_1 = cv$currentValue;
+						double traceTempVariable$var71$9_1 = cv$currentValue;
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									double traceTempVariable$k$8_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$8_1 * Prices[i][j$var69])));
+									double traceTempVariable$k$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
 									if(((0 <= j$var69) && (j$var69 < noProducts))) {
 										{
 											if((0 < noProducts)) {
@@ -2022,24 +2031,24 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double reduceVar$sum$22 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction1864Index = 0; cv$reduction1864Index < j$var69; cv$reduction1864Index += 1) {
+												for(int cv$reduction1865Index = 0; cv$reduction1865Index < j$var69; cv$reduction1865Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$22;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1864Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1865Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$22 = (k + l);
 												}
-												for(int cv$reduction1864Index = (j$var69 + 1); cv$reduction1864Index < noProducts; cv$reduction1864Index += 1) {
+												for(int cv$reduction1865Index = (j$var69 + 1); cv$reduction1865Index < noProducts; cv$reduction1865Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$22;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction1864Index];
+													double l = exped[((i - 0) / 1)][cv$reduction1865Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -2051,8 +2060,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 												double cv$reduced82 = reduceVar$sum$22;
 												
 												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$sum$22 = (traceTempVariable$k$8_4 + cv$reduced82);
-												double traceTempVariable$sum$8_5 = reduceVar$sum$22;
+												reduceVar$sum$22 = (traceTempVariable$k$9_4 + cv$reduced82);
+												double traceTempVariable$sum$9_5 = reduceVar$sum$22;
 												if(!guard$sample47categorical102[((i - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample47categorical102[((i - 0) / 1)] = true;
@@ -2074,22 +2083,22 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 																		{
 																			cv$temp$2$prob = prob[((i - 0) / 1)];
 																		}
-																		int cv$temp$3$$var1395;
+																		int cv$temp$3$$var1379;
 																		{
 																			// Constructing a random variable input for use later.
-																			int $var1395 = noProducts;
-																			cv$temp$3$$var1395 = $var1395;
+																			int $var1379 = noProducts;
+																			cv$temp$3$$var1379 = $var1379;
 																		}
 																		
 																		// Record the probability of sample task 103 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1395))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1395))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1379))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1379))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1395))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1379))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1395))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1395))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1379))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$3$$var1379))?Math.log(cv$temp$2$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 103 with the current configuration.
@@ -2122,11 +2131,11 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 								}
 							}
 						}
-						double traceTempVariable$var71$9_1 = cv$currentValue;
+						double traceTempVariable$var71$10_1 = cv$currentValue;
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									double traceTempVariable$var98$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
+									double traceTempVariable$var98$10_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$10_1 * Prices[i][j$var69])));
 									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!guard$sample47categorical102[((i - 0) / 1)]) {
@@ -2150,22 +2159,22 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 																	{
 																		cv$temp$4$prob = prob[((i - 0) / 1)];
 																	}
-																	int cv$temp$5$$var1398;
+																	int cv$temp$5$$var1382;
 																	{
 																		// Constructing a random variable input for use later.
-																		int $var1398 = noProducts;
-																		cv$temp$5$$var1398 = $var1398;
+																		int $var1382 = noProducts;
+																		cv$temp$5$$var1382 = $var1382;
 																	}
 																	
 																	// Record the probability of sample task 103 generating output with current configuration.
-																	if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1398))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1398))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1382))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1382))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1398))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1382))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1398))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1398))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1382))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < cv$temp$5$$var1382))?Math.log(cv$temp$4$prob[choices[i]]):Double.NEGATIVE_INFINITY)));
 																	}
 																	
 																	// Recorded the probability of reaching sample task 103 with the current configuration.
@@ -2235,7 +2244,13 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var47 = cv$originalValue;
-			beta[var46] = var47;
+			
+			// Guards to ensure that beta is only updated when there is a valid path.
+			{
+				{
+					beta[var46] = var47;
+				}
+			}
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
@@ -2447,7 +2462,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut) {
+		if(!fixedFlag$sample21) {
 			// Constructor for ut
 			{
 				ut = new double[noProducts];
@@ -2455,7 +2470,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 		
 		// If beta has not been set already allocate space.
-		if(!setFlag$beta) {
+		if(!fixedFlag$sample47) {
 			// Constructor for beta
 			{
 				beta = new double[noObs];
@@ -3062,7 +3077,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		int[] cv$source1 = ObsChoices;
 		int[] cv$target1 = choices;
@@ -3072,7 +3087,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -3092,7 +3109,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1) {
-										if((setFlag$ut && setFlag$beta))
+										if((fixedFlag$sample21 && fixedFlag$sample47))
 											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
 									}
 							}
@@ -3114,9 +3131,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 							double l = exped[((i - 0) / 1)][cv$reduction82Index];
 							
 							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$sum$29 = (k + l);
+							if((fixedFlag$sample21 && fixedFlag$sample47))
+								// Copy the result of the reduction into the variable returned by the reduction.
+								reduceVar$sum$29 = (k + l);
 						}
 						
 						// Alternative name for reduceVar$sum$29 to make it effectively final.
@@ -3129,7 +3146,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1) {
-										if((setFlag$ut && setFlag$beta))
+										if((fixedFlag$sample21 && fixedFlag$sample47))
 											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$29$1);
 									}
 							}

@@ -35,9 +35,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private int states;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -56,10 +53,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$a(int[] cv$value) {
 		// Set flags for all the side effects of a including if probabilities need to be updated.
-		// Set a with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set a
 		a = cv$value;
-		setFlag$a = true;
 		
 		// Unset the fixed probability flag for sample 55 as it depends on a.
 		fixedProbFlag$sample55 = false;
@@ -72,6 +67,19 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int[] get$b() {
 		return b;
+	}
+
+	// Getter for distribution$sample55.
+	@Override
+	public final double[][] get$distribution$sample55() {
+		return distribution$sample55;
+	}
+
+	// Setter for distribution$sample55.
+	@Override
+	public final void set$distribution$sample55(double[][] cv$value) {
+		// Set distribution$sample55
+		distribution$sample55 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample29.
@@ -133,8 +141,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -184,10 +191,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 29 as it depends on m.
 		fixedProbFlag$sample29 = false;
@@ -1420,16 +1425,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 									double[] var52 = m[traceTempVariable$var51$15_3];
 									cv$temp$0$var52 = var52;
 								}
-								int cv$temp$1$$var835;
+								int cv$temp$1$$var829;
 								{
 									// Constructing a random variable input for use later.
-									int $var835 = states;
-									cv$temp$1$$var835 = $var835;
+									int $var829 = states;
+									cv$temp$1$$var829 = $var829;
 								}
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var835))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var829))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 53.
 								{
@@ -1543,16 +1548,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 									double[] var52 = m[traceTempVariable$var51$17_3];
 									cv$temp$2$var52 = var52;
 								}
-								int cv$temp$3$$var836;
+								int cv$temp$3$$var830;
 								{
 									// Constructing a random variable input for use later.
-									int $var836 = states;
-									cv$temp$3$$var836 = $var836;
+									int $var830 = states;
+									cv$temp$3$$var830 = $var830;
 								}
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var836))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var830))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 53.
 								{
@@ -1672,16 +1677,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double[] var52 = m[traceTempVariable$var51$22_3];
 												cv$temp$4$var52 = var52;
 											}
-											int cv$temp$5$$var837;
+											int cv$temp$5$$var831;
 											{
 												// Constructing a random variable input for use later.
-												int $var837 = states;
-												cv$temp$5$$var837 = $var837;
+												int $var831 = states;
+												cv$temp$5$$var831 = $var831;
 											}
 											
 											// An accumulator to allow the value for each distribution to be constructed before
 											// it is added to the index probabilities.
-											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var837))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+											double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var831))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 											
 											// Processing random variable 53.
 											{
@@ -1875,11 +1880,11 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 														double[] var52 = m[traceTempVariable$var51$37_3];
 														cv$temp$9$var52 = var52;
 													}
-													int cv$temp$10$$var887;
+													int cv$temp$10$$var881;
 													{
 														// Constructing a random variable input for use later.
-														int $var887 = states;
-														cv$temp$10$$var887 = $var887;
+														int $var881 = states;
+														cv$temp$10$$var881 = $var881;
 													}
 													
 													// The probability of reaching the consumer with this set of consumer arguments
@@ -1889,7 +1894,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 													
 													// Add the current distribution to the distribution accumulator.
-													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var887);
+													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var881);
 												}
 											}
 										}
@@ -2039,7 +2044,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			// Constructor for m
 			{
 				m = new double[5][];
@@ -2049,7 +2054,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If a has not been set already allocate space.
-		if(!setFlag$a) {
+		if(!fixedFlag$sample55) {
 			// Constructor for a
 			{
 				a = new int[n];
@@ -2469,7 +2474,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -2479,11 +2484,13 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(setFlag$a)
+			if(fixedFlag$sample55)
 				b[i$var46] = a[(i$var46 - 1)];
 		}
 	}

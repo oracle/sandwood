@@ -190,12 +190,6 @@ public final class VariableNames {
         return new VariableDescription<>(reduceTempVar + desc.name + Name.prefix + id, desc.type, true);
     }
 
-    private static final String setFlag = "setFlag" + Name.prefix;
-
-    public static VariableDescription<BooleanVariable> setFlagName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(setFlag + varDesc, VariableType.BooleanVariable, varDesc.name.comment);
-    }
-
     private static final String fixedFlag = "fixedFlag" + Name.prefix;
 
     public static VariableDescription<BooleanVariable> fixedFlagName(SampleTask<?, ?> task) {
@@ -307,5 +301,10 @@ public final class VariableNames {
     public static <A extends Variable<A>> VariableDescription<ArrayVariable<ArrayVariable<A>>> subarrayName(int suffix,
             Type<ArrayVariable<ArrayVariable<A>>> type) {
         return new VariableDescription<>("subarray" + Name.prefix + suffix, type, true);
+    }
+
+    public static VariableDescription<BooleanVariable> observedGuard(Variable<?> v) {
+        return new VariableDescription<>("observationGuard" + Name.prefix + v.getUniqueVarDesc().name,
+                VariableType.BooleanVariable, true);
     }
 }

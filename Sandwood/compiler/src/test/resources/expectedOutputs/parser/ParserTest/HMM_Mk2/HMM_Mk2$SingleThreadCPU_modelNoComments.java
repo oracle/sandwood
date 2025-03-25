@@ -53,11 +53,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private int noEvents;
 	private int noStates;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$events = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
-	private boolean setFlag$weights = false;
 	private int[][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -76,7 +71,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$bias(double[][] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample57 = false;
 		fixedProbFlag$sample159 = false;
 	}
@@ -240,7 +234,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample42 = false;
 		fixedProbFlag$sample95 = false;
 		fixedProbFlag$sample126 = false;
@@ -279,7 +272,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$st(int[][] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample95 = false;
 		fixedProbFlag$sample126 = false;
 		fixedProbFlag$sample159 = false;
@@ -303,7 +295,6 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	@Override
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
-		setFlag$weights = true;
 		fixedProbFlag$sample78 = false;
 		fixedProbFlag$sample80 = false;
 	}
@@ -699,8 +690,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			int cv$currentValue;
 			cv$currentValue = cv$valuePos;
 			int var123 = cv$currentValue;
-			int[] var116 = st[i$var104];
-			var116[j$var115] = cv$currentValue;
+			{
+				{
+					int[] var116 = st[i$var104];
+					var116[j$var115] = cv$currentValue;
+				}
+			}
 			{
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 				double[] cv$temp$0$var121;
@@ -716,11 +711,11 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var346))?Math.log(cv$temp$0$var121[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
-						int traceTempVariable$var120$1_1 = cv$currentValue;
-						for(int index$i$1_2 = 0; index$i$1_2 < samples; index$i$1_2 += 1) {
-							if((i$var104 == index$i$1_2)) {
-								for(int index$j$1_3 = 1; index$j$1_3 < length$eventsMeasured[index$i$1_2]; index$j$1_3 += 1) {
-									if((j$var115 == (index$j$1_3 - 1))) {
+						int traceTempVariable$var120$2_1 = cv$currentValue;
+						for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+							if((i$var104 == index$i$2_2)) {
+								for(int index$j$2_3 = 1; index$j$2_3 < length$eventsMeasured[index$i$2_2]; index$j$2_3 += 1) {
+									if((j$var115 == (index$j$2_3 - 1))) {
 										{
 											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 											double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -730,7 +725,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 														{
 															double[] cv$temp$2$var121;
 															{
-																double[] var121 = m[traceTempVariable$var120$1_1];
+																double[] var121 = m[traceTempVariable$var120$2_1];
 																cv$temp$2$var121 = var121;
 															}
 															int cv$temp$3$$var356;
@@ -738,13 +733,13 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 																int $var356 = noStates;
 																cv$temp$3$$var356 = $var356;
 															}
-															if(((Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2][index$j$2_3]) && (st[index$i$2_2][index$j$2_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$2_2][index$j$2_3]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2][index$j$2_3]) && (st[index$i$2_2][index$j$2_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$2_2][index$j$2_3]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2][index$j$2_3]) && (st[index$i$2_2][index$j$2_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$2_2][index$j$2_3]]):Double.NEGATIVE_INFINITY));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$1_2][index$j$1_3]) && (st[index$i$1_2][index$j$1_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$1_2][index$j$1_3]]):Double.NEGATIVE_INFINITY)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2][index$j$2_3]) && (st[index$i$2_2][index$j$2_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$2_2][index$j$2_3]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2][index$j$2_3]) && (st[index$i$2_2][index$j$2_3] < cv$temp$3$$var356))?Math.log(cv$temp$2$var121[st[index$i$2_2][index$j$2_3]]):Double.NEGATIVE_INFINITY)));
 															}
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
@@ -769,7 +764,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				}
 				{
 					{
-						int traceTempVariable$var152$4_1 = cv$currentValue;
+						int traceTempVariable$var152$5_1 = cv$currentValue;
 						for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 							if((i$var104 == i$var136)) {
 								for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1) {
@@ -783,7 +778,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 														{
 															double[] cv$temp$4$var153;
 															{
-																double[] var153 = bias[traceTempVariable$var152$4_1];
+																double[] var153 = bias[traceTempVariable$var152$5_1];
 																cv$temp$4$var153 = var153;
 															}
 															int cv$temp$5$$var366;
@@ -858,8 +853,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		int var123 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		int[] var116 = st[i$var104];
-		var116[j$var115] = var123;
+		{
+			{
+				int[] var116 = st[i$var104];
+				var116[j$var115] = var123;
+			}
+		}
 	}
 
 	private final void sample42(int var41) {
@@ -1085,8 +1084,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			int cv$currentValue;
 			cv$currentValue = cv$valuePos;
 			int var92 = cv$currentValue;
-			int[] var88 = st[i$var87];
-			var88[0] = cv$currentValue;
+			{
+				{
+					int[] var88 = st[i$var87];
+					var88[0] = cv$currentValue;
+				}
+			}
 			{
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 				double[] cv$temp$0$var90;
@@ -1102,7 +1105,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var312))?Math.log(cv$temp$0$var90[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
-						int traceTempVariable$var120$1_1 = cv$currentValue;
+						int traceTempVariable$var120$2_1 = cv$currentValue;
 						for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 							if((i$var87 == i$var104)) {
 								for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1) {
@@ -1116,7 +1119,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 														{
 															double[] cv$temp$2$var121;
 															{
-																double[] var121 = m[traceTempVariable$var120$1_1];
+																double[] var121 = m[traceTempVariable$var120$2_1];
 																cv$temp$2$var121 = var121;
 															}
 															int cv$temp$3$$var322;
@@ -1155,7 +1158,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				}
 				{
 					{
-						int traceTempVariable$var152$4_1 = cv$currentValue;
+						int traceTempVariable$var152$5_1 = cv$currentValue;
 						for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 							if((i$var87 == i$var136)) {
 								for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1) {
@@ -1169,7 +1172,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 														{
 															double[] cv$temp$4$var153;
 															{
-																double[] var153 = bias[traceTempVariable$var152$4_1];
+																double[] var153 = bias[traceTempVariable$var152$5_1];
 																cv$temp$4$var153 = var153;
 															}
 															int cv$temp$5$$var332;
@@ -1244,8 +1247,12 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		int var92 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		int[] var88 = st[i$var87];
-		var88[0] = var92;
+		{
+			{
+				int[] var88 = st[i$var87];
+				var88[0] = var92;
+			}
+		}
 	}
 
 	@Override
@@ -1280,28 +1287,28 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		{
 			v2 = new double[noEvents];
 		}
-		if(!setFlag$m) {
+		if(!fixedFlag$sample42) {
 			{
 				m = new double[noStates][];
 				for(int var41 = 0; var41 < noStates; var41 += 1)
 					m[var41] = new double[noStates];
 			}
 		}
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample57) {
 			{
 				bias = new double[noStates][];
 				for(int var55 = 0; var55 < noStates; var55 += 1)
 					bias[var55] = new double[noEvents];
 			}
 		}
-		if(!setFlag$st) {
+		if((!fixedFlag$sample95 || !fixedFlag$sample126)) {
 			{
 				st = new int[length$eventsMeasured.length][];
 				for(int i$var69 = 0; i$var69 < length$eventsMeasured.length; i$var69 += 1)
 					st[i$var69] = new int[length$eventsMeasured[i$var69]];
 			}
 		}
-		if(!setFlag$weights) {
+		if(!fixedFlag$sample78) {
 			{
 				weights = new double[noStates];
 			}
@@ -1622,7 +1629,7 @@ class HMM_Mk2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int[][] cv$source1 = eventsMeasured;
 		int[][] cv$target1 = events;
 		int cv$length1 = cv$target1.length;

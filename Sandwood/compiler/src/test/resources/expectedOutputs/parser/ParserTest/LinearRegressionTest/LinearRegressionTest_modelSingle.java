@@ -17,15 +17,14 @@ public class LinearRegressionTest extends Model {
 
     private LinearRegressionTest$CoreInterface system$c = new LinearRegressionTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class LinearRegressionTest extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedDoubleInternal $tau = new ComputedDoubleInternal(this, "tau", true) {
+    private final ComputedDoubleInternal $tau = new ComputedDoubleInternal(this, "tau", true, true, false) {
         @Override
         public double getValue() { return system$c.get$tau(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$tau(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -87,15 +85,14 @@ public class LinearRegressionTest extends Model {
      */
     public final ComputedDouble tau = $tau;
 
-    private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true) {
+    private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$weights(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$weights(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -122,7 +119,7 @@ public class LinearRegressionTest extends Model {
      */
     public final ComputedDoubleArray weights = $weights;
 
-    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", true) {
+    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$y(); }
 
@@ -255,6 +252,7 @@ public class LinearRegressionTest extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(LinearRegressionTest$CoreInterface oldCore, LinearRegressionTest$CoreInterface newCore) {
         //Model inputs
         if(x.isSet())
@@ -264,20 +262,17 @@ public class LinearRegressionTest extends Model {
             newCore.set$yMeasured(oldCore.get$yMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(tau.isSet())
+        if($tau.isSet())
             newCore.set$tau(oldCore.get$tau());
-        if(weights.isSet())
+        if($weights.isSet())
             newCore.set$weights(oldCore.get$weights());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31());
-        if(tau.isSet())
-            newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
-        if(weights.isSet())
-            newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
+        newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
+        newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31());
+        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
     }
 
     /**

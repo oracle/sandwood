@@ -24,7 +24,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$var5;
 	private double rate;
 	private int samples;
-	private boolean setFlag$decay = false;
 	private boolean system$gibbsForward = true;
 
 	public ExponentialDecayMK1$MultiThreadCPU(ExecutionTarget target) {
@@ -70,8 +69,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for decayDetected.
 	@Override
 	public final void set$decayDetected(double[] cv$value) {
-		// Set decayDetected with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set decayDetected
 		decayDetected = cv$value;
 	}
 
@@ -548,7 +546,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		double[] cv$source1 = decayDetected;
 		double[] cv$target1 = decay;
@@ -558,7 +556,9 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

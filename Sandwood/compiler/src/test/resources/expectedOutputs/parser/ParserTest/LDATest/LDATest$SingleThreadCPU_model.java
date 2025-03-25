@@ -37,10 +37,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private double logProbability$z;
 	private int noTopics;
 	private double[][] phi;
-	private boolean setFlag$phi = false;
-	private boolean setFlag$theta = false;
-	private boolean setFlag$w = false;
-	private boolean setFlag$z = false;
 	private boolean system$gibbsForward = true;
 	private double[][] theta;
 	private int vocabSize;
@@ -72,8 +68,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for documents.
 	@Override
 	public final void set$documents(int[][] cv$value) {
-		// Set documents with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set documents
 		documents = cv$value;
 	}
 
@@ -152,8 +147,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for length$documents.
 	@Override
 	public final void set$length$documents(int[] cv$value) {
-		// Set length$documents with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set length$documents
 		length$documents = cv$value;
 	}
 
@@ -216,10 +210,8 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	public final void set$phi(double[][] cv$value) {
 		// Set flags for all the side effects of phi including if probabilities need to be
 		// updated.
-		// Set phi with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set phi
 		phi = cv$value;
-		setFlag$phi = true;
 		
 		// Unset the fixed probability flag for sample 42 as it depends on phi.
 		fixedProbFlag$sample42 = false;
@@ -239,10 +231,8 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	public final void set$theta(double[][] cv$value) {
 		// Set flags for all the side effects of theta including if probabilities need to
 		// be updated.
-		// Set theta with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set theta
 		theta = cv$value;
-		setFlag$theta = true;
 		
 		// Unset the fixed probability flag for sample 58 as it depends on theta.
 		fixedProbFlag$sample58 = false;
@@ -278,10 +268,8 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Setter for z.
 	@Override
 	public final void set$z(int[][] cv$value) {
-		// Set z with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set z
 		z = cv$value;
-		setFlag$z = true;
 	}
 
 	// Calculate the probability of the samples represented by sample42 using sampled
@@ -1016,7 +1004,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		
 		// If phi has not been set already allocate space.
-		if(!setFlag$phi) {
+		if(!fixedFlag$sample42) {
 			// Constructor for phi
 			{
 				phi = new double[noTopics][];
@@ -1026,7 +1014,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		
 		// If theta has not been set already allocate space.
-		if(!setFlag$theta) {
+		if(!fixedFlag$sample58) {
 			// Constructor for theta
 			{
 				theta = new double[length$documents.length][];
@@ -1043,7 +1031,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		}
 		
 		// If z has not been set already allocate space.
-		if(!setFlag$z) {
+		if(!fixedFlag$sample90) {
 			// Constructor for z
 			{
 				z = new int[((((length$documents.length - 1) - 0) / 1) + 1)][];
@@ -1342,7 +1330,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		int[][] cv$source1 = documents;
 		int[][] cv$target1 = w;
@@ -1357,7 +1345,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

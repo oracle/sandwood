@@ -44,9 +44,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
-	private boolean setFlag$beta = false;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -95,7 +92,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void set$beta(double[] cv$value) {
 		beta = cv$value;
-		setFlag$beta = true;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -238,7 +234,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample21 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -617,9 +612,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut)
+		if(!fixedFlag$sample21)
 			ut = new double[noProducts];
-		if(!setFlag$beta)
+		if(!fixedFlag$sample47)
 			beta = new double[noObs];
 		choices = new int[noObs];
 		exped = new double[noObs][];
@@ -852,7 +847,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = choices.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			choices[cv$index1] = ObsChoices[cv$index1];
@@ -860,15 +855,13 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < noObs; i += 1) {
-			if((setFlag$ut && setFlag$beta)) {
+		if((fixedFlag$sample21 && fixedFlag$sample47)) {
+			for(int i = 0; i < noObs; i += 1) {
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
 					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-			}
-			double reduceVar$sum$14 = 0.0;
-			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
-				reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
-			if((setFlag$ut && setFlag$beta)) {
+				double reduceVar$sum$14 = 0.0;
+				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+					reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
 				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
 					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$14);
 			}

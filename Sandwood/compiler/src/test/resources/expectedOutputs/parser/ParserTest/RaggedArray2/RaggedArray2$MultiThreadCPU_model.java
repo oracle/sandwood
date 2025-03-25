@@ -31,7 +31,6 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -187,8 +186,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for obs_measured.
 	@Override
 	public final void set$obs_measured(boolean[] cv$value) {
-		// Set obs_measured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set obs_measured
 		obs_measured = cv$value;
 	}
 
@@ -627,14 +625,14 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					cv$temp$0$c = c;
 				}
-				int cv$temp$1$$var300;
+				int cv$temp$1$$var294;
 				{
-					cv$temp$1$$var300 = 2;
+					cv$temp$1$$var294 = 2;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var300))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var294))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 79.
 				{
@@ -660,7 +658,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 												double[] var78 = a[traceTempVariable$y$2_1];
 												cv$temp$2$var78 = var78;
 											}
-											int cv$temp$3$$var302;
+											int cv$temp$3$$var296;
 											{
 												// Allocate a local variable to hold the length of the array.
 												int lengthCV$a$82_8 = -1;
@@ -680,19 +678,19 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 												}
 												
 												// Constructing a random variable input for use later.
-												int $var302 = lengthCV$a$82_8;
-												cv$temp$3$$var302 = $var302;
+												int $var296 = lengthCV$a$82_8;
+												cv$temp$3$$var296 = $var296;
 											}
 											
 											// Record the probability of sample task 84 generating output with current configuration.
-											if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+											if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 											else {
 												// If the second value is -infinity.
 												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
+													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
 												else
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
 											}
 											
 											// Recorded the probability of reaching sample task 84 with the current configuration.
@@ -926,7 +924,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					double[] var78 = a[y];
 					cv$temp$0$var78 = var78;
 				}
-				int cv$temp$1$$var324;
+				int cv$temp$1$$var318;
 				{
 					// Allocate a local variable to hold the length of the array.
 					int lengthCV$a$82_10 = -1;
@@ -946,13 +944,13 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 					
 					// Constructing a random variable input for use later.
-					int $var324 = lengthCV$a$82_10;
-					cv$temp$1$$var324 = $var324;
+					int $var318 = lengthCV$a$82_10;
+					cv$temp$1$$var318 = $var318;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var324))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var318))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 83.
 				{
@@ -1430,7 +1428,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
@@ -1440,10 +1438,12 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(true)
+		if((fixedFlag$sample81 && fixedFlag$sample84))
 			p = b[y][i];
 	}
 

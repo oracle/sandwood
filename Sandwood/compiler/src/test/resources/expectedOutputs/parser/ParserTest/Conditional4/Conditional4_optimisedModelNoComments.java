@@ -17,16 +17,14 @@ public class Conditional4 extends Model {
 
     private Conditional4$CoreInterface system$c = new Conditional4$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
         @Override
-        protected void setValueInternal(double[] value) {}
-
-        @Override
-        protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable bias because its value depends on variable \"guard\".");
+        protected void setValueInternal(double[] value) {
+            system$c.set$bias(value);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -58,15 +56,14 @@ public class Conditional4 extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {
             system$c.set$guard(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -93,7 +90,7 @@ public class Conditional4 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", true) {
+    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, true, false) {
         @Override
         public double getValue() { return system$c.get$value(); }
 
@@ -204,24 +201,21 @@ public class Conditional4 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Conditional4$CoreInterface oldCore, Conditional4$CoreInterface newCore) {
         //Observed scalars
         if(observedValue.isSet())
             newCore.set$observedValue(oldCore.get$observedValue());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
-        if(guard.isSet())
+        if($guard.isSet())
             newCore.set$guard(oldCore.get$guard());
 
         //Set fixed flags
-        if(bias.isSet()){
-            newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        }
-        if(guard.isSet())
-            newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
     }
 
     /**

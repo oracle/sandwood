@@ -33,9 +33,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var74;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -53,10 +50,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$a(int[] cv$value) {
 		// Set flags for all the side effects of a including if probabilities need to be updated.
-		// Set a with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set a
 		a = cv$value;
-		setFlag$a = true;
 		
 		// Unset the fixed probability flag for sample 55 as it depends on a.
 		fixedProbFlag$sample55 = false;
@@ -138,8 +133,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -189,10 +183,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 29 as it depends on m.
 		fixedProbFlag$sample29 = false;
@@ -537,15 +529,17 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// cv$numNumStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
+			// Guards to ensure that a is only updated when there is a valid path.
+			// 
 			// Value of the variable at this index
 			a[i$var46] = cv$valuePos;
 			
 			// Guards to ensure that b is only updated when there is a valid path.
 			// 
 			// Looking for a path between Sample 55 and consumer int[] 50.
-			int index$i$1_1 = (i$var46 + 1);
-			if((index$i$1_1 < n))
-				b[index$i$1_1] = a[(index$i$1_1 - 1)];
+			int index$i$2_1 = (i$var46 + 1);
+			if((index$i$2_1 < n))
+				b[index$i$2_1] = a[(index$i$2_1 - 1)];
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -555,8 +549,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// cv$temp$0$var52's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = Math.log(m[b[i$var46]][cv$valuePos]);
-			int index$i$2_2 = (i$var46 + 1);
-			if((index$i$2_2 < n))
+			int index$i$3_2 = (i$var46 + 1);
+			if((index$i$3_2 < n))
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -572,7 +566,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "index$i$2_4" with its value "index$i$2_2".
+				// Substituted "index$i$3_4" with its value "index$i$3_2".
 				// 
 				// Substituted "cv$temp$2$var52" with its value "var52".
 				// 
@@ -583,7 +577,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Looking for a path between Sample 55 and consumer Categorical 53.
 				// 
 				// Value of the variable at this index
-				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$2_2]) && (a[index$i$2_2] < 5))?Math.log(m[cv$valuePos][a[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$3_2]) && (a[index$i$3_2] < 5))?Math.log(m[cv$valuePos][a[index$i$3_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -710,6 +704,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Get a local reference to the scratch space.
 			cv$var54$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
+		// Guards to ensure that a is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
@@ -720,9 +716,9 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Guards to ensure that b is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 55 and consumer int[] 50.
-		int index$i$8_1 = (i$var46 + 1);
-		if((index$i$8_1 < n))
-			b[index$i$8_1] = a[(index$i$8_1 - 1)];
+		int index$i$10_1 = (i$var46 + 1);
+		if((index$i$10_1 < n))
+			b[index$i$10_1] = a[(index$i$10_1 - 1)];
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -759,7 +755,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		v = new double[5];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			// Constructor for m
 			m = new double[5][];
 			for(int var28 = 0; var28 < 5; var28 += 1)
@@ -767,7 +763,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If a has not been set already allocate space.
-		if(!setFlag$a)
+		if(!fixedFlag$sample55)
 			// Constructor for a
 			a = new int[n];
 		
@@ -1069,7 +1065,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1079,11 +1075,13 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$a) {
+		if(fixedFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				b[i$var46] = a[(i$var46 - 1)];
 		}

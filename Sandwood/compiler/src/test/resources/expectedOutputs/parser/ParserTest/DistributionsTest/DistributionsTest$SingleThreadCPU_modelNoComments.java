@@ -21,7 +21,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$var6;
 	private double logProbability$y;
 	private int noSamples;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double[] x;
 	private double[] y;
@@ -606,7 +605,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
 		int cv$length1 = cv$target1.length;

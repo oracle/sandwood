@@ -27,7 +27,6 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var97;
 	private double q;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double t;
 
@@ -1093,25 +1092,25 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 		for(int var96 = 0; var96 < samples; var96 += 1)
 			flips[var96] = DistributionSampling.sampleBernoulli(RNG$, bias[a][b][c]);
@@ -1125,25 +1124,25 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 	}
 
@@ -1155,25 +1154,25 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 	}
 
@@ -1251,31 +1250,31 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample17)
 			var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[0] = t;
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[0] = (1 - q);
-		if(!(fixedFlag$sample11 && fixedFlag$sample17))
+		if(!fixedFlag$sample11)
 			var67[1] = q;
 		logModelProbabilitiesVal();
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;
@@ -1285,24 +1284,28 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void setIntermediates() {
-		if(true) {
-			double[][] var21 = bias[0];
-			double[] var23 = var21[0];
+		double[][] var21 = bias[0];
+		double[] var23 = var21[0];
+		if(fixedFlag$sample17)
 			var23[0] = t;
+		if(fixedFlag$sample17)
 			var23[1] = (1 - t);
-			double[] var36 = var21[1];
+		double[] var36 = var21[1];
+		if(fixedFlag$sample17)
 			var36[0] = (1 - q);
+		if(fixedFlag$sample17)
 			var36[1] = t;
-		}
-		if(true) {
-			double[][] var52 = bias[1];
-			double[] var54 = var52[0];
+		double[][] var52 = bias[1];
+		double[] var54 = var52[0];
+		if(fixedFlag$sample11)
 			var54[0] = t;
+		if(fixedFlag$sample11)
 			var54[1] = (1 - q);
-			double[] var67 = var52[1];
+		double[] var67 = var52[1];
+		if(fixedFlag$sample11)
 			var67[0] = (1 - q);
+		if(fixedFlag$sample11)
 			var67[1] = q;
-		}
 	}
 
 	@Override

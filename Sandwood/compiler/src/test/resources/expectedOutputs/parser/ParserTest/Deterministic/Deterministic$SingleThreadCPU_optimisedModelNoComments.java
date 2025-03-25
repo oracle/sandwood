@@ -30,9 +30,6 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -48,7 +45,6 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$a(int[] cv$value) {
 		a = cv$value;
-		setFlag$a = true;
 		fixedProbFlag$sample55 = false;
 		fixedProbFlag$sample75 = false;
 	}
@@ -135,7 +131,6 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample29 = false;
 		fixedProbFlag$sample55 = false;
 	}
@@ -253,13 +248,13 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void sample55(int i$var46) {
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			a[i$var46] = cv$valuePos;
-			int index$i$1_1 = (i$var46 + 1);
-			if((index$i$1_1 < n))
-				b[index$i$1_1] = a[(index$i$1_1 - 1)];
+			int index$i$2_1 = (i$var46 + 1);
+			if((index$i$2_1 < n))
+				b[index$i$2_1] = a[(index$i$2_1 - 1)];
 			double cv$accumulatedProbabilities = Math.log(m[b[i$var46]][cv$valuePos]);
-			int index$i$2_2 = (i$var46 + 1);
-			if((index$i$2_2 < n))
-				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$2_2]) && (a[index$i$2_2] < 5))?Math.log(m[cv$valuePos][a[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			int index$i$3_2 = (i$var46 + 1);
+			if((index$i$3_2 < n))
+				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$3_2]) && (a[index$i$3_2] < 5))?Math.log(m[cv$valuePos][a[index$i$3_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var46 - 1)], (1 / cv$valuePos)) + cv$accumulatedProbabilities);
 			cv$var54$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
@@ -301,9 +296,9 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		for(int cv$indexName = 5; cv$indexName < cv$var54$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$var54$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		a[i$var46] = DistributionSampling.sampleCategorical(RNG$, cv$var54$stateProbabilityGlobal, 5);
-		int index$i$8_1 = (i$var46 + 1);
-		if((index$i$8_1 < n))
-			b[index$i$8_1] = a[(index$i$8_1 - 1)];
+		int index$i$10_1 = (i$var46 + 1);
+		if((index$i$10_1 < n))
+			b[index$i$10_1] = a[(index$i$10_1 - 1)];
 	}
 
 	@Override
@@ -315,12 +310,12 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocator() {
 		v = new double[5];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			m = new double[5][];
 			for(int var28 = 0; var28 < 5; var28 += 1)
 				m[var28] = new double[5];
 		}
-		if(!setFlag$a)
+		if(!fixedFlag$sample55)
 			a = new int[n];
 		b = new int[n];
 		flips = new boolean[n];
@@ -477,7 +472,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];
@@ -485,7 +480,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$a) {
+		if(fixedFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				b[i$var46] = a[(i$var46 - 1)];
 		}

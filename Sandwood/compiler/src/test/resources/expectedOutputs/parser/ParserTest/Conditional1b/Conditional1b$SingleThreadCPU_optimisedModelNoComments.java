@@ -277,8 +277,6 @@ class Conditional1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void propogateObservedValues() {
 		value = observedValue;
-		if(!guard)
-			u = observedValue;
 	}
 
 	@Override

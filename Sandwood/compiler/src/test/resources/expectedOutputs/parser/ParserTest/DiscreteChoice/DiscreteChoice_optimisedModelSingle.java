@@ -17,7 +17,7 @@ public class DiscreteChoice extends Model {
 
     private DiscreteChoice$CoreInterface system$c = new DiscreteChoice$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", true) {
+    private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false) {
         @Override
         public int[] getValue() { return system$c.get$choices(); }
 
@@ -48,7 +48,7 @@ public class DiscreteChoice extends Model {
      */
     public final ComputedIntegerArray choices = $choices;
 
-    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false) {
+    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$exped(); }
 
@@ -84,7 +84,7 @@ public class DiscreteChoice extends Model {
      */
     public final ComputedDoubleArray exped = $exped;
 
-    private final ComputedDoubleArrayInternal $prob = new ComputedDoubleArrayInternal(this, "prob", false) {
+    private final ComputedDoubleArrayInternal $prob = new ComputedDoubleArrayInternal(this, "prob", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$prob(); }
 
@@ -120,7 +120,7 @@ public class DiscreteChoice extends Model {
      */
     public final ComputedDoubleArray prob = $prob;
 
-    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false) {
+    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false) {
         @Override
         public double getValue() { return system$c.get$sum(); }
 
@@ -156,15 +156,14 @@ public class DiscreteChoice extends Model {
      */
     public final ComputedDouble sum = $sum;
 
-    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -316,6 +315,7 @@ public class DiscreteChoice extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(DiscreteChoice$CoreInterface oldCore, DiscreteChoice$CoreInterface newCore) {
         //Model inputs
         if(noObs.isSet())
@@ -327,12 +327,11 @@ public class DiscreteChoice extends Model {
             newCore.set$ObsChoices(oldCore.get$ObsChoices());
 
         //ComputedVariables
-        if(ut.isSet())
+        if($ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(ut.isSet())
-            newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
+        newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
     }
 
     /**

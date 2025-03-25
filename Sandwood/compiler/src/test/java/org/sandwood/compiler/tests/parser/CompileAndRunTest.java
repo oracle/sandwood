@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -516,7 +516,7 @@ public class CompileAndRunTest {
         {
             // Test the output JSON method for All variables
             String outputJsonFile = compiledDir + File.separator + test.modelName + ".json";
-            model.exportToJson(outputJsonFile);
+            model.exportToJson(outputJsonFile, true);
             String json = new String(Files.readAllBytes(Paths.get(outputJsonFile)));
             json = StringUtil.normalizeNewLines(json);
             // Using null as the model name to avoid repetition as modelName is already the
@@ -538,7 +538,7 @@ public class CompileAndRunTest {
         {
             // Test the output JSON method for sample values
             String outputJsonFile = compiledDir + File.separator + test.modelName + ".json";
-            model.saveModel(outputJsonFile);
+            model.exportToJson(outputJsonFile);
             String json = new String(Files.readAllBytes(Paths.get(outputJsonFile)));
             json = StringUtil.normalizeNewLines(json);
             // Using null as the model name to avoid repetition as modelName is already the

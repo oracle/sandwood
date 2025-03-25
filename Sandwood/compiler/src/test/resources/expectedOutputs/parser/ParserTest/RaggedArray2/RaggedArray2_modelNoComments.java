@@ -17,15 +17,14 @@ public class RaggedArray2 extends Model {
 
     private RaggedArray2$CoreInterface system$c = new RaggedArray2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true) {
+    private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true, true, false) {
         @Override
         public int getValue() { return system$c.get$i(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$i(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class RaggedArray2 extends Model {
      */
     public final ComputedInteger i = $i;
 
-    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", true) {
+    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$obs(); }
 
@@ -83,7 +82,7 @@ public class RaggedArray2 extends Model {
      */
     public final ComputedBooleanArray obs = $obs;
 
-    private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false) {
+    private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false, false, false) {
         @Override
         public double getValue() { return system$c.get$p(); }
 
@@ -124,15 +123,14 @@ public class RaggedArray2 extends Model {
      */
     public final ComputedDouble p = $p;
 
-    private final ComputedIntegerInternal $y = new ComputedIntegerInternal(this, "y", true) {
+    private final ComputedIntegerInternal $y = new ComputedIntegerInternal(this, "y", true, true, false) {
         @Override
         public int getValue() { return system$c.get$y(); }
 
         @Override
         protected void setValueInternal(int value) {
             system$c.set$y(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -252,6 +250,7 @@ public class RaggedArray2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(RaggedArray2$CoreInterface oldCore, RaggedArray2$CoreInterface newCore) {
 
         //Observed arrays
@@ -263,16 +262,14 @@ public class RaggedArray2 extends Model {
             newCore.set$length$obs_measured(oldCore.get$length$obs_measured());
 
         //ComputedVariables
-        if(i.isSet())
+        if($i.isSet())
             newCore.set$i(oldCore.get$i());
-        if(y.isSet())
+        if($y.isSet())
             newCore.set$y(oldCore.get$y());
 
         //Set fixed flags
-        if(i.isSet())
-            newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
-        if(y.isSet())
-            newCore.set$fixedFlag$sample81(oldCore.get$fixedFlag$sample81());
+        newCore.set$fixedFlag$sample81(oldCore.get$fixedFlag$sample81());
+        newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
     }
 
     /**

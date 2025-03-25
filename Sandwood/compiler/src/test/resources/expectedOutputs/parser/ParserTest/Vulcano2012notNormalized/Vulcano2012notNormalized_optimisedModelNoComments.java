@@ -17,7 +17,7 @@ public class Vulcano2012notNormalized extends Model {
 
     private Vulcano2012notNormalized$CoreInterface system$c = new Vulcano2012notNormalized$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$Sales(); }
 
@@ -53,15 +53,14 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ComputedObjectArray<int[]> Sales = $Sales;
 
-    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true) {
+    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$arrivals(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$arrivals(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -88,7 +87,7 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ComputedIntegerArray arrivals = $arrivals;
 
-    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false) {
+    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$exped(); }
 
@@ -124,15 +123,14 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ComputedDoubleArray exped = $exped;
 
-    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true) {
+    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$lambda(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$lambda(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -159,15 +157,14 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ComputedDoubleArray lambda = $lambda;
 
-    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -193,6 +190,42 @@ public class Vulcano2012notNormalized extends Model {
      * Computed variable representing ut of type double[] from the Sandwood model 
      */
     public final ComputedDoubleArray ut = $ut;
+
+    private final ComputedObjectArrayInternal<int[]> $weekly_sales = new ComputedObjectArrayInternal<int[]>(this, "weekly_sales", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+        @Override
+        public int[][] getValue() { return system$c.get$weekly_sales(); }
+
+        @Override
+        protected void setValueInternal(int[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable weekly_sales because its value is fixed by observed values.");
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$weekly_sales(); }
+
+        @Override
+        public int[][][] constructArray(int iterations) {
+            return new int[iterations][][];
+        }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+        }
+
+        @Override
+        public Immutability isFixed() {
+            return Immutability.OBSERVED;
+        }
+    };
+
+    /**
+     * Computed variable representing weekly_sales of type int[][] from the Sandwood model 
+     */
+    public final ComputedObjectArray<int[]> weekly_sales = $weekly_sales;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -285,7 +318,7 @@ public class Vulcano2012notNormalized extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$Sales, $arrivals, $exped, $lambda, $ut};
+    private HasProbabilityInternal[] $probabilityVariables = {$Sales, $arrivals, $exped, $lambda, $ut, $weekly_sales};
 
     //Constructors
     /**
@@ -299,6 +332,7 @@ public class Vulcano2012notNormalized extends Model {
         $computedVariables.put("exped", $exped);
         $computedVariables.put("lambda", $lambda);
         $computedVariables.put("ut", $ut);
+        $computedVariables.put("weekly_sales", $weekly_sales);
 
         //ModelInputs
         $modelInputs.put("Avail", $Avail);
@@ -363,6 +397,7 @@ public class Vulcano2012notNormalized extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Vulcano2012notNormalized$CoreInterface oldCore, Vulcano2012notNormalized$CoreInterface newCore) {
         //Model inputs
         if(Avail.isSet())
@@ -378,20 +413,17 @@ public class Vulcano2012notNormalized extends Model {
             newCore.set$ObsSales(oldCore.get$ObsSales());
 
         //ComputedVariables
-        if(arrivals.isSet())
+        if($arrivals.isSet())
             newCore.set$arrivals(oldCore.get$arrivals());
-        if(lambda.isSet())
+        if($lambda.isSet())
             newCore.set$lambda(oldCore.get$lambda());
-        if(ut.isSet())
+        if($ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(arrivals.isSet())
-            newCore.set$fixedFlag$sample69(oldCore.get$fixedFlag$sample69());
-        if(lambda.isSet())
-            newCore.set$fixedFlag$sample54(oldCore.get$fixedFlag$sample54());
-        if(ut.isSet())
-            newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
+        newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
+        newCore.set$fixedFlag$sample54(oldCore.get$fixedFlag$sample54());
+        newCore.set$fixedFlag$sample69(oldCore.get$fixedFlag$sample69());
     }
 
     /**
@@ -470,6 +502,8 @@ public class Vulcano2012notNormalized extends Model {
         public final double[] lambda;
         /** Field holding the value of ut after a convention execution step.*/
         public final double[] ut;
+        /** Field holding the value of weekly_sales after a convention execution step.*/
+        public final int[][] weekly_sales;
 
         InferredValueOutputs(Vulcano2012notNormalized system$model) {
             this.Sales = system$model.Sales.getSamples()[0];
@@ -477,6 +511,7 @@ public class Vulcano2012notNormalized extends Model {
             this.exped = system$model.exped.getSamples()[0];
             this.lambda = system$model.lambda.getSamples()[0];
             this.ut = system$model.ut.getSamples()[0];
+            this.weekly_sales = system$model.weekly_sales.getSamples()[0];
         }
     }
 
@@ -495,6 +530,8 @@ public class Vulcano2012notNormalized extends Model {
         public final double lambda;
         /** Field holding the log probability of computed variable ut */
         public final double ut;
+        /** Field holding the log probability of computed variable weekly_sales */
+        public final double weekly_sales;
 
         LogProbabilities(Vulcano2012notNormalized system$model) {
             this.$logModelProbability = system$model.getLogProbability();
@@ -503,6 +540,7 @@ public class Vulcano2012notNormalized extends Model {
             this.exped = system$model.exped.getLogProbability();
             this.lambda = system$model.lambda.getLogProbability();
             this.ut = system$model.ut.getLogProbability();
+            this.weekly_sales = system$model.weekly_sales.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -525,6 +563,8 @@ public class Vulcano2012notNormalized extends Model {
         public final double lambda;
         /** Field holding the probability of computed variable ut */
         public final double ut;
+        /** Field holding the probability of computed variable weekly_sales */
+        public final double weekly_sales;
 
         Probabilities(Vulcano2012notNormalized system$model) {
             this.$modelProbability = system$model.getProbability();
@@ -533,6 +573,7 @@ public class Vulcano2012notNormalized extends Model {
             this.exped = system$model.exped.getProbability();
             this.lambda = system$model.lambda.getProbability();
             this.ut = system$model.ut.getProbability();
+            this.weekly_sales = system$model.weekly_sales.getProbability();
         }
 
         /** Method to return probability of the whole model 

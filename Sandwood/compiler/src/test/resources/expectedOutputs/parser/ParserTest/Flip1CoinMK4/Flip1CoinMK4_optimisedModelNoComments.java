@@ -17,15 +17,14 @@ public class Flip1CoinMK4 extends Model {
 
     private Flip1CoinMK4$CoreInterface system$c = new Flip1CoinMK4$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class Flip1CoinMK4 extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -174,6 +173,7 @@ public class Flip1CoinMK4 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK4$CoreInterface oldCore, Flip1CoinMK4$CoreInterface newCore) {
 
         //Observed arrays
@@ -185,12 +185,11 @@ public class Flip1CoinMK4 extends Model {
             newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
 
         //ComputedVariables
-        if(bias.isSet())
+        if($bias.isSet())
             newCore.set$bias(oldCore.get$bias());
 
         //Set fixed flags
-        if(bias.isSet())
-            newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
     }
 
     /**

@@ -46,9 +46,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
-	private boolean setFlag$beta = false;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -66,8 +63,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Setter for ObsChoices.
 	@Override
 	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set ObsChoices
 		ObsChoices = cv$value;
 	}
 
@@ -80,8 +76,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Setter for Prices.
 	@Override
 	public final void set$Prices(int[][] cv$value) {
-		// Set Prices with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set Prices
 		Prices = cv$value;
 	}
 
@@ -115,10 +110,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	public final void set$beta(double[] cv$value) {
 		// Set flags for all the side effects of beta including if probabilities need to be
 		// updated.
-		// Set beta with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set beta
 		beta = cv$value;
-		setFlag$beta = true;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on beta.
 		fixedProbFlag$sample47 = false;
@@ -330,10 +323,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 21 as it depends on ut.
 		fixedProbFlag$sample21 = false;
@@ -1166,7 +1157,13 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var21 = cv$proposedValue;
-					ut[var20] = cv$currentValue;
+					
+					// Guards to ensure that ut is only updated when there is a valid path.
+					{
+						{
+							ut[var20] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that exped is only updated when there is a valid path.
 					// 
@@ -1336,11 +1333,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var70$8_1 = cv$currentValue;
+						double traceTempVariable$var70$9_1 = cv$currentValue;
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
 								for(int i = 0; i < noObs; i += 1) {
-									double traceTempVariable$k$8_4 = Math.exp((traceTempVariable$var70$8_1 - (beta[i] * Prices[i][j$var69])));
+									double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
 									if(((0 <= j$var69) && (j$var69 < noProducts))) {
 										{
 											if((0 < noProducts)) {
@@ -1352,24 +1349,24 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 												double reduceVar$sum$2 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction365Index = 0; cv$reduction365Index < j$var69; cv$reduction365Index += 1) {
+												for(int cv$reduction368Index = 0; cv$reduction368Index < j$var69; cv$reduction368Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$2;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction365Index];
+													double l = exped[((i - 0) / 1)][cv$reduction368Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$2 = (k + l);
 												}
-												for(int cv$reduction365Index = (j$var69 + 1); cv$reduction365Index < noProducts; cv$reduction365Index += 1) {
+												for(int cv$reduction368Index = (j$var69 + 1); cv$reduction368Index < noProducts; cv$reduction368Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$2;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction365Index];
+													double l = exped[((i - 0) / 1)][cv$reduction368Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1381,8 +1378,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 												double cv$reduced82 = reduceVar$sum$2;
 												
 												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$sum$2 = (traceTempVariable$k$8_4 + cv$reduced82);
-												double traceTempVariable$sum$8_5 = reduceVar$sum$2;
+												reduceVar$sum$2 = (traceTempVariable$k$9_4 + cv$reduced82);
+												double traceTempVariable$sum$9_5 = reduceVar$sum$2;
 												if(!guard$sample21categorical102[((i - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample21categorical102[((i - 0) / 1)] = true;
@@ -1452,11 +1449,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var70$9_1 = cv$currentValue;
+						double traceTempVariable$var70$10_1 = cv$currentValue;
 						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
 								for(int i = 0; i < noObs; i += 1) {
-									double traceTempVariable$var98$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
+									double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (beta[i] * Prices[i][j$var69])));
 									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!guard$sample21categorical102[((i - 0) / 1)]) {
@@ -1565,7 +1562,13 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var21 = cv$originalValue;
-			ut[var20] = var21;
+			
+			// Guards to ensure that ut is only updated when there is a valid path.
+			{
+				{
+					ut[var20] = var21;
+				}
+			}
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
@@ -1835,7 +1838,13 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var47 = cv$proposedValue;
-					beta[var46] = cv$currentValue;
+					
+					// Guards to ensure that beta is only updated when there is a valid path.
+					{
+						{
+							beta[var46] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that exped is only updated when there is a valid path.
 					// 
@@ -2005,11 +2014,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var71$8_1 = cv$currentValue;
+						double traceTempVariable$var71$9_1 = cv$currentValue;
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									double traceTempVariable$k$8_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$8_1 * Prices[i][j$var69])));
+									double traceTempVariable$k$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
 									if(((0 <= j$var69) && (j$var69 < noProducts))) {
 										{
 											if((0 < noProducts)) {
@@ -2021,24 +2030,24 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 												double reduceVar$sum$7 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction759Index = 0; cv$reduction759Index < j$var69; cv$reduction759Index += 1) {
+												for(int cv$reduction768Index = 0; cv$reduction768Index < j$var69; cv$reduction768Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$7;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction759Index];
+													double l = exped[((i - 0) / 1)][cv$reduction768Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$7 = (k + l);
 												}
-												for(int cv$reduction759Index = (j$var69 + 1); cv$reduction759Index < noProducts; cv$reduction759Index += 1) {
+												for(int cv$reduction768Index = (j$var69 + 1); cv$reduction768Index < noProducts; cv$reduction768Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k = reduceVar$sum$7;
 													
 													// Set the right hand term to a value from the array exped
-													double l = exped[((i - 0) / 1)][cv$reduction759Index];
+													double l = exped[((i - 0) / 1)][cv$reduction768Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -2050,8 +2059,8 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 												double cv$reduced82 = reduceVar$sum$7;
 												
 												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$sum$7 = (traceTempVariable$k$8_4 + cv$reduced82);
-												double traceTempVariable$sum$8_5 = reduceVar$sum$7;
+												reduceVar$sum$7 = (traceTempVariable$k$9_4 + cv$reduced82);
+												double traceTempVariable$sum$9_5 = reduceVar$sum$7;
 												if(!guard$sample47categorical102[((i - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample47categorical102[((i - 0) / 1)] = true;
@@ -2121,11 +2130,11 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 								}
 							}
 						}
-						double traceTempVariable$var71$9_1 = cv$currentValue;
+						double traceTempVariable$var71$10_1 = cv$currentValue;
 						for(int i = 0; i < noObs; i += 1) {
 							if((var46 == i)) {
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									double traceTempVariable$var98$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
+									double traceTempVariable$var98$10_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$10_1 * Prices[i][j$var69])));
 									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!guard$sample47categorical102[((i - 0) / 1)]) {
@@ -2234,7 +2243,13 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var47 = cv$originalValue;
-			beta[var46] = var47;
+			
+			// Guards to ensure that beta is only updated when there is a valid path.
+			{
+				{
+					beta[var46] = var47;
+				}
+			}
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
@@ -2426,7 +2441,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut) {
+		if(!fixedFlag$sample21) {
 			// Constructor for ut
 			{
 				ut = new double[noProducts];
@@ -2434,7 +2449,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 		
 		// If beta has not been set already allocate space.
-		if(!setFlag$beta) {
+		if(!fixedFlag$sample47) {
 			// Constructor for beta
 			{
 				beta = new double[noObs];
@@ -2828,7 +2843,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		int[] cv$source1 = ObsChoices;
 		int[] cv$target1 = choices;
@@ -2838,12 +2853,14 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		for(int i = 0; i < noObs; i += 1) {
 			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-				if((setFlag$ut && setFlag$beta))
+				if((fixedFlag$sample21 && fixedFlag$sample47))
 					exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
 			}
 			
@@ -2863,12 +2880,12 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				double l = exped[((i - 0) / 1)][cv$reduction82Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$14 = (k + l);
+				if((fixedFlag$sample21 && fixedFlag$sample47))
+					// Copy the result of the reduction into the variable returned by the reduction.
+					reduceVar$sum$14 = (k + l);
 			}
 			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-				if((setFlag$ut && setFlag$beta))
+				if((fixedFlag$sample21 && fixedFlag$sample47))
 					prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$14);
 			}
 		}

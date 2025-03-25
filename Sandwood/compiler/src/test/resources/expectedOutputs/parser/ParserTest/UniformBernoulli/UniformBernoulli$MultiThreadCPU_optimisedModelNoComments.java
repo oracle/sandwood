@@ -18,7 +18,6 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private boolean[] observed;
 	private boolean[] output;
 	private double prior;
-	private boolean setFlag$output = false;
 	private boolean system$gibbsForward = true;
 
 	public UniformBernoulli$MultiThreadCPU(ExecutionTarget target) {
@@ -255,7 +254,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = output.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			output[cv$index1] = observed[cv$index1];

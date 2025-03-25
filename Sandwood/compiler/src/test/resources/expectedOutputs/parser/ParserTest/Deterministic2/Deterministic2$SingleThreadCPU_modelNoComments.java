@@ -32,9 +32,6 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private int states;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -51,7 +48,6 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final void set$a(int[] cv$value) {
 		a = cv$value;
-		setFlag$a = true;
 		fixedProbFlag$sample55 = false;
 		fixedProbFlag$sample75 = false;
 	}
@@ -59,6 +55,16 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final int[] get$b() {
 		return b;
+	}
+
+	@Override
+	public final double[][] get$distribution$sample55() {
+		return distribution$sample55;
+	}
+
+	@Override
+	public final void set$distribution$sample55(double[][] cv$value) {
+		distribution$sample55 = cv$value;
 	}
 
 	@Override
@@ -138,7 +144,6 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample29 = false;
 		fixedProbFlag$sample55 = false;
 	}
@@ -1314,14 +1319,14 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		{
 			v = new double[5];
 		}
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			{
 				m = new double[5][];
 				for(int var28 = 0; var28 < 5; var28 += 1)
 					m[var28] = new double[5];
 			}
 		}
-		if(!setFlag$a) {
+		if(!fixedFlag$sample55) {
 			{
 				a = new int[n];
 			}
@@ -1579,7 +1584,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;
@@ -1590,7 +1595,7 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final void setIntermediates() {
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(setFlag$a)
+			if(fixedFlag$sample55)
 				b[i$var46] = a[(i$var46 - 1)];
 		}
 	}

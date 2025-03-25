@@ -17,15 +17,14 @@ public class RaggedArray5 extends Model {
 
     private RaggedArray5$CoreInterface system$c = new RaggedArray5$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true) {
+    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$d(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$d(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class RaggedArray5 extends Model {
      */
     public final ComputedDoubleArray d = $d;
 
-    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", true) {
+    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$obs(); }
 
@@ -198,6 +197,7 @@ public class RaggedArray5 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(RaggedArray5$CoreInterface oldCore, RaggedArray5$CoreInterface newCore) {
         //Model inputs
         if(y.isSet())
@@ -212,12 +212,11 @@ public class RaggedArray5 extends Model {
             newCore.set$length$obs_measured(oldCore.get$length$obs_measured());
 
         //ComputedVariables
-        if(d.isSet())
+        if($d.isSet())
             newCore.set$d(oldCore.get$d());
 
         //Set fixed flags
-        if(d.isSet())
-            newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
+        newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39());
     }
 
     /**

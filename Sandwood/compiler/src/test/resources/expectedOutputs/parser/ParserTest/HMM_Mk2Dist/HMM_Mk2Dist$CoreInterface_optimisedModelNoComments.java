@@ -3,6 +3,10 @@ package org.sandwood.compiler.tests.parser;
 interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[][] get$bias();
 	public void set$bias(double[][] cv$value);
+	public double[][][] get$distribution$sample126();
+	public void set$distribution$sample126(double[][][] cv$value);
+	public double[][] get$distribution$sample95();
+	public void set$distribution$sample95(double[][] cv$value);
 	public int[][] get$events();
 	public int[][] get$eventsMeasured();
 	public void set$eventsMeasured(int[][] cv$value);

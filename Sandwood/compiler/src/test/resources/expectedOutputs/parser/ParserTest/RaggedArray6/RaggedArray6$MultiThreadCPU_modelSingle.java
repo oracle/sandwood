@@ -27,8 +27,6 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$y;
 	private boolean[] obs;
 	private boolean[] obs_measured;
-	private boolean setFlag$d = false;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -58,10 +56,8 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$d(double[] cv$value) {
 		// Set flags for all the side effects of d including if probabilities need to be updated.
-		// Set d with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set d
 		d = cv$value;
-		setFlag$d = true;
 		
 		// Unset the fixed probability flag for sample 50 as it depends on d.
 		fixedProbFlag$sample50 = false;
@@ -175,8 +171,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for obs_measured.
 	@Override
 	public final void set$obs_measured(boolean[] cv$value) {
-		// Set obs_measured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set obs_measured
 		obs_measured = cv$value;
 	}
 
@@ -1059,7 +1054,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If d has not been set already allocate space.
-		if(!setFlag$d) {
+		if(!fixedFlag$sample50) {
 			// Constructor for d
 			{
 				// Allocate a local variable to hold the length of the array.
@@ -1355,7 +1350,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
@@ -1365,7 +1360,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

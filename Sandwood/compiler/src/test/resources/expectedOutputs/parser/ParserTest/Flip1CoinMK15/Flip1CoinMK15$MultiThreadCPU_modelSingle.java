@@ -26,7 +26,6 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var47;
 	private double logProbability$var7;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK15$MultiThreadCPU(ExecutionTarget target) {
@@ -95,8 +94,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -795,24 +793,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										double reduceVar$var33$16 = 0.0;
 										
 										// Reduce for every value except a masked value which will be skipped.
-										for(int cv$reduction421Index = 0; cv$reduction421Index < 0; cv$reduction421Index += 1) {
+										for(int cv$reduction401Index = 0; cv$reduction401Index < 0; cv$reduction401Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double i$var30 = reduceVar$var33$16;
 											
 											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction421Index];
+											double j = c[cv$reduction401Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
 											// Copy the result of the reduction into the variable returned by the reduction.
 											reduceVar$var33$16 = (i$var30 + j);
 										}
-										for(int cv$reduction421Index = (0 + 1); cv$reduction421Index < 2; cv$reduction421Index += 1) {
+										for(int cv$reduction401Index = (0 + 1); cv$reduction401Index < 2; cv$reduction401Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double i$var30 = reduceVar$var33$16;
 											
 											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction421Index];
+											double j = c[cv$reduction401Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
@@ -906,24 +904,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										double reduceVar$var33$17 = 0.0;
 										
 										// Reduce for every value except a masked value which will be skipped.
-										for(int cv$reduction442Index = 0; cv$reduction442Index < 1; cv$reduction442Index += 1) {
+										for(int cv$reduction422Index = 0; cv$reduction422Index < 1; cv$reduction422Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double i$var30 = reduceVar$var33$17;
 											
 											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction442Index];
+											double j = c[cv$reduction422Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
 											// Copy the result of the reduction into the variable returned by the reduction.
 											reduceVar$var33$17 = (i$var30 + j);
 										}
-										for(int cv$reduction442Index = (1 + 1); cv$reduction442Index < 2; cv$reduction442Index += 1) {
+										for(int cv$reduction422Index = (1 + 1); cv$reduction422Index < 2; cv$reduction422Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double i$var30 = reduceVar$var33$17;
 											
 											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction442Index];
+											double j = c[cv$reduction422Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
@@ -1483,21 +1481,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i$var58 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var58 >= ((0 - 1) + 1); i$var58 -= 1)
 			flips[i$var58] = flipsMeasured[i$var58];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(guard1)
-			bias = b;
-		else {
-			if(true)
+		if(guard1) {
+			if(fixedFlag$sample8)
+				bias = b;
+		} else {
+			if(fixedFlag$sample8)
 				c[0] = (b / 2);
-			if(true)
+			if(fixedFlag$sample8)
 				c[1] = (b / 2);
 			
 			// Reduction of array c
@@ -1516,11 +1517,12 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				double j = c[cv$reduction30Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$var33$25 = (i$var30 + j);
+				if(fixedFlag$sample8)
+					// Copy the result of the reduction into the variable returned by the reduction.
+					reduceVar$var33$25 = (i$var30 + j);
 			}
-			bias = reduceVar$var33$25;
+			if(fixedFlag$sample8)
+				bias = reduceVar$var33$25;
 		}
 	}
 

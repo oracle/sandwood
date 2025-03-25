@@ -41,10 +41,6 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var98;
 	private double[][] m;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private int states;
 	private boolean system$gibbsForward = true;
@@ -65,10 +61,8 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 45 as it depends on bias.
 		fixedProbFlag$sample45 = false;
@@ -188,8 +182,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -251,10 +244,8 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 28 as it depends on m.
 		fixedProbFlag$sample28 = false;
@@ -283,10 +274,8 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$st(int[] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 53 as it depends on st.
 		fixedProbFlag$sample53 = false;
@@ -930,7 +919,13 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var44 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var43] = var44;
+		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		{
+			{
+				bias[var43] = var44;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -966,7 +961,13 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			int var52 = cv$currentValue;
-			st[0] = (states * cv$currentValue);
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[0] = (states * cv$currentValue);
+				}
+			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
@@ -991,7 +992,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				{
 					// Looking for a path between Sample 53 and consumer Categorical 74.
 					{
-						int traceTempVariable$var72$1_1 = (states * cv$currentValue);
+						int traceTempVariable$var72$2_1 = (states * cv$currentValue);
 						for(int i$var67 = 4; i$var67 < (samples + 3); i$var67 += 1) {
 							if((0 == (i$var67 - 4))) {
 								// Processing sample task 76 of consumer random variable null.
@@ -1010,7 +1011,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 													double[] cv$temp$2$var73;
 													{
 														// Constructing a random variable input for use later.
-														double[] var73 = m[traceTempVariable$var72$1_1];
+														double[] var73 = m[traceTempVariable$var72$2_1];
 														cv$temp$2$var73 = var73;
 													}
 													int cv$temp$3$$var195;
@@ -1063,7 +1064,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				{
 					// Looking for a path between Sample 53 and consumer Bernoulli 97.
 					{
-						int traceTempVariable$var95$4_1 = (states * cv$currentValue);
+						int traceTempVariable$var95$5_1 = (states * cv$currentValue);
 						for(int j = 5; j < (samples + 5); j += 1) {
 							if((0 == (j - 5))) {
 								// Processing sample task 99 of consumer random variable null.
@@ -1082,7 +1083,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 													double cv$temp$4$var96;
 													{
 														// Constructing a random variable input for use later.
-														double var96 = bias[traceTempVariable$var95$4_1];
+														double var96 = bias[traceTempVariable$var95$5_1];
 														cv$temp$4$var96 = var96;
 													}
 													
@@ -1193,7 +1194,13 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		int var52 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		st[0] = (states * var52);
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		{
+			{
+				st[0] = (states * var52);
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1229,7 +1236,13 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			int var75 = cv$currentValue;
-			st[(i$var67 - 3)] = (states * cv$currentValue);
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[(i$var67 - 3)] = (states * cv$currentValue);
+				}
+			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
@@ -1254,9 +1267,9 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				{
 					// Looking for a path between Sample 76 and consumer Categorical 74.
 					{
-						int traceTempVariable$var72$1_1 = (states * cv$currentValue);
-						for(int index$i$1_2 = 4; index$i$1_2 < (samples + 3); index$i$1_2 += 1) {
-							if(((i$var67 - 3) == (index$i$1_2 - 4))) {
+						int traceTempVariable$var72$2_1 = (states * cv$currentValue);
+						for(int index$i$2_2 = 4; index$i$2_2 < (samples + 3); index$i$2_2 += 1) {
+							if(((i$var67 - 3) == (index$i$2_2 - 4))) {
 								// Processing sample task 76 of consumer random variable null.
 								{
 									// Set an accumulator to sum the probabilities for each possible configuration of
@@ -1273,7 +1286,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 													double[] cv$temp$2$var73;
 													{
 														// Constructing a random variable input for use later.
-														double[] var73 = m[traceTempVariable$var72$1_1];
+														double[] var73 = m[traceTempVariable$var72$2_1];
 														cv$temp$2$var73 = var73;
 													}
 													int cv$temp$3$$var226;
@@ -1284,14 +1297,14 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 													
 													// Record the probability of sample task 76 generating output with current configuration.
-													if(((Math.log(1.0) + (((0.0 <= (st[(index$i$1_2 - 3)] / states)) && ((st[(index$i$1_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$1_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (st[(index$i$1_2 - 3)] / states)) && ((st[(index$i$1_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$1_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (((0.0 <= (st[(index$i$2_2 - 3)] / states)) && ((st[(index$i$2_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$2_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (st[(index$i$2_2 - 3)] / states)) && ((st[(index$i$2_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$2_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (st[(index$i$1_2 - 3)] / states)) && ((st[(index$i$1_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$1_2 - 3)] / states)]):Double.NEGATIVE_INFINITY));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (st[(index$i$2_2 - 3)] / states)) && ((st[(index$i$2_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$2_2 - 3)] / states)]):Double.NEGATIVE_INFINITY));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (st[(index$i$1_2 - 3)] / states)) && ((st[(index$i$1_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$1_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (st[(index$i$1_2 - 3)] / states)) && ((st[(index$i$1_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$1_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (st[(index$i$2_2 - 3)] / states)) && ((st[(index$i$2_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$2_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (st[(index$i$2_2 - 3)] / states)) && ((st[(index$i$2_2 - 3)] / states) < cv$temp$3$$var226))?Math.log(cv$temp$2$var73[(st[(index$i$2_2 - 3)] / states)]):Double.NEGATIVE_INFINITY)));
 													}
 													
 													// Recorded the probability of reaching sample task 76 with the current configuration.
@@ -1326,7 +1339,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				{
 					// Looking for a path between Sample 76 and consumer Bernoulli 97.
 					{
-						int traceTempVariable$var95$4_1 = (states * cv$currentValue);
+						int traceTempVariable$var95$5_1 = (states * cv$currentValue);
 						for(int j = 5; j < (samples + 5); j += 1) {
 							if(((i$var67 - 3) == (j - 5))) {
 								// Processing sample task 99 of consumer random variable null.
@@ -1345,7 +1358,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 													double cv$temp$4$var96;
 													{
 														// Constructing a random variable input for use later.
-														double var96 = bias[traceTempVariable$var95$4_1];
+														double var96 = bias[traceTempVariable$var95$5_1];
 														cv$temp$4$var96 = var96;
 													}
 													
@@ -1456,7 +1469,13 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		int var75 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		st[(i$var67 - 3)] = (states * var75);
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		{
+			{
+				st[(i$var67 - 3)] = (states * var75);
+			}
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -1501,7 +1520,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			// Constructor for m
 			{
 				m = new double[2][];
@@ -1511,7 +1530,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample45) {
 			// Constructor for bias
 			{
 				bias = new double[2];
@@ -1519,7 +1538,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st) {
+		if((!fixedFlag$sample53 || !fixedFlag$sample76)) {
 			// Constructor for st
 			{
 				st = new int[length$flipsMeasured];
@@ -1782,7 +1801,7 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -1792,7 +1811,9 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

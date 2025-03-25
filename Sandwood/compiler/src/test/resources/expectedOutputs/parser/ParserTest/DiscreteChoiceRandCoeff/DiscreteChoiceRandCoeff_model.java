@@ -17,15 +17,14 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private DiscreteChoiceRandCoeff$CoreInterface system$c = new DiscreteChoiceRandCoeff$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true) {
+    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true, true, false) {
         @Override
         public double getValue() { return system$c.get$b(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedDouble b = $b;
 
-    private final ComputedDoubleArrayInternal $beta = new ComputedDoubleArrayInternal(this, "beta", true) {
+    private final ComputedDoubleArrayInternal $beta = new ComputedDoubleArrayInternal(this, "beta", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$beta(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$beta(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -87,7 +85,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedDoubleArray beta = $beta;
 
-    private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", true) {
+    private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false) {
         @Override
         public int[] getValue() { return system$c.get$choices(); }
 
@@ -118,7 +116,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedIntegerArray choices = $choices;
 
-    private final ComputedObjectArrayInternal<double[]> $prob = new ComputedObjectArrayInternal<double[]>(this, "prob", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $prob = new ComputedObjectArrayInternal<double[]>(this, "prob", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$prob(); }
 
@@ -164,15 +162,14 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedObjectArray<double[]> prob = $prob;
 
-    private final ComputedDoubleInternal $sigma = new ComputedDoubleInternal(this, "sigma", true) {
+    private final ComputedDoubleInternal $sigma = new ComputedDoubleInternal(this, "sigma", true, true, false) {
         @Override
         public double getValue() { return system$c.get$sigma(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$sigma(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -199,15 +196,14 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedDouble sigma = $sigma;
 
-    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -382,6 +378,7 @@ public class DiscreteChoiceRandCoeff extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(DiscreteChoiceRandCoeff$CoreInterface oldCore, DiscreteChoiceRandCoeff$CoreInterface newCore) {
         //Model inputs
         if(Prices.isSet())
@@ -395,24 +392,20 @@ public class DiscreteChoiceRandCoeff extends Model {
             newCore.set$ObsChoices(oldCore.get$ObsChoices());
 
         //ComputedVariables
-        if(b.isSet())
+        if($b.isSet())
             newCore.set$b(oldCore.get$b());
-        if(beta.isSet())
+        if($beta.isSet())
             newCore.set$beta(oldCore.get$beta());
-        if(sigma.isSet())
+        if($sigma.isSet())
             newCore.set$sigma(oldCore.get$sigma());
-        if(ut.isSet())
+        if($ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(b.isSet())
-            newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        if(beta.isSet())
-            newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
-        if(sigma.isSet())
-            newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
-        if(ut.isSet())
-            newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
+        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
+        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
     }
 
     /**

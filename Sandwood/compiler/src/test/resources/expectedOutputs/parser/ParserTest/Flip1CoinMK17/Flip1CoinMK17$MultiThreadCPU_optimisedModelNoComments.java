@@ -212,7 +212,7 @@ class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		flip = flipMeasured;
 	}
 

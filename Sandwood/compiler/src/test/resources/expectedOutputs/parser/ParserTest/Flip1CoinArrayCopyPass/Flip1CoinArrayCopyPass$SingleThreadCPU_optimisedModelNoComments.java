@@ -20,8 +20,6 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$var10;
 	private double logProbability$var9;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinArrayCopyPass$SingleThreadCPU(ExecutionTarget target) {
@@ -46,7 +44,6 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample26 = false;
 	}
@@ -184,7 +181,7 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$bias)
+		if(!fixedFlag$sample10)
 			bias = new double[(samples + 1)];
 		flips = new boolean[samples];
 		logProbability$bernoulli = new double[samples];
@@ -275,19 +272,14 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];
 	}
 
 	@Override
-	public final void setIntermediates() {
-		if(setFlag$bias) {
-			for(int i = 0; i < samples; i += 1)
-				bias[(i + 1)] = bias[0];
-		}
-	}
+	public final void setIntermediates() {}
 
 	@Override
 	public String modelCode() {

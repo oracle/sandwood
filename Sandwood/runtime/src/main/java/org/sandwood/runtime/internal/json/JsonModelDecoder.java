@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -60,10 +60,7 @@ public class JsonModelDecoder extends JsonModel {
                 v.fromJSON(d);
             } else if(computedVariables.containsKey(name)) {
                 ComputedVariableInternal v = computedVariables.get(name);
-                if(v.isSample)
-                    v.fromJSON(d);
-                else
-                    throw new SandwoodJsonException("Tried to set non sample value " + name);
+                v.fromJSON(d);
             } else if(name.equals(modelCodeName)) {
                 compareModelCode(modelCode);
                 codeChecked = true;

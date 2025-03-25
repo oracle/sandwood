@@ -17,15 +17,14 @@ public class HMMMetrics2 extends Model {
 
     private HMMMetrics2$CoreInterface system$c = new HMMMetrics2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true) {
+    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$initialStateDistribution(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$initialStateDistribution(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray initialStateDistribution = $initialStateDistribution;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
             system$c.set$m(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -92,7 +90,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedObjectArrayInternal<double[]> $metric_g = new ComputedObjectArrayInternal<double[]>(this, "metric_g", false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $metric_g = new ComputedObjectArrayInternal<double[]>(this, "metric_g", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$metric_g(); }
 
@@ -128,15 +126,14 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedObjectArray<double[]> metric_g = $metric_g;
 
-    private final ComputedDoubleArrayInternal $metric_mean = new ComputedDoubleArrayInternal(this, "metric_mean", true) {
+    private final ComputedDoubleArrayInternal $metric_mean = new ComputedDoubleArrayInternal(this, "metric_mean", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$metric_mean(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$metric_mean(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -163,15 +160,14 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray metric_mean = $metric_mean;
 
-    private final ComputedDoubleArrayInternal $metric_valid_bias = new ComputedDoubleArrayInternal(this, "metric_valid_bias", true) {
+    private final ComputedDoubleArrayInternal $metric_valid_bias = new ComputedDoubleArrayInternal(this, "metric_valid_bias", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$metric_valid_bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$metric_valid_bias(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -198,7 +194,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray metric_valid_bias = $metric_valid_bias;
 
-    private final ComputedObjectArrayInternal<boolean[]> $metric_valid_g = new ComputedObjectArrayInternal<boolean[]>(this, "metric_valid_g", false, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
+    private final ComputedObjectArrayInternal<boolean[]> $metric_valid_g = new ComputedObjectArrayInternal<boolean[]>(this, "metric_valid_g", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
         public boolean[][] getValue() { return system$c.get$metric_valid_g(); }
 
@@ -234,15 +230,14 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedObjectArray<boolean[]> metric_valid_g = $metric_valid_g;
 
-    private final ComputedDoubleArrayInternal $metric_var = new ComputedDoubleArrayInternal(this, "metric_var", true) {
+    private final ComputedDoubleArrayInternal $metric_var = new ComputedDoubleArrayInternal(this, "metric_var", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$metric_var(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$metric_var(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -269,15 +264,14 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray metric_var = $metric_var;
 
-    private final ComputedObjectArrayInternal<int[]> $st = new ComputedObjectArrayInternal<int[]>(this, "st", true, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $st = new ComputedObjectArrayInternal<int[]>(this, "st", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$st(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
             system$c.set$st(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -465,6 +459,7 @@ public class HMMMetrics2 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(HMMMetrics2$CoreInterface oldCore, HMMMetrics2$CoreInterface newCore) {
         //Model inputs
         if(noStates.isSet())
@@ -482,34 +477,27 @@ public class HMMMetrics2 extends Model {
             newCore.set$length$metric(oldCore.get$length$metric());
 
         //ComputedVariables
-        if(initialStateDistribution.isSet())
+        if($initialStateDistribution.isSet())
             newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
-        if(m.isSet())
+        if($m.isSet())
             newCore.set$m(oldCore.get$m());
-        if(metric_mean.isSet())
+        if($metric_mean.isSet())
             newCore.set$metric_mean(oldCore.get$metric_mean());
-        if(metric_valid_bias.isSet())
+        if($metric_valid_bias.isSet())
             newCore.set$metric_valid_bias(oldCore.get$metric_valid_bias());
-        if(metric_var.isSet())
+        if($metric_var.isSet())
             newCore.set$metric_var(oldCore.get$metric_var());
-        if(st.isSet())
+        if($st.isSet())
             newCore.set$st(oldCore.get$st());
 
         //Set fixed flags
-        if(initialStateDistribution.isSet())
-            newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
-        if(m.isSet())
-            newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
-        if(metric_mean.isSet())
-            newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
-        if(metric_valid_bias.isSet())
-            newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
-        if(metric_var.isSet())
-            newCore.set$fixedFlag$sample68(oldCore.get$fixedFlag$sample68());
-        if(st.isSet()){
-            newCore.set$fixedFlag$sample104(oldCore.get$fixedFlag$sample104());
-            newCore.set$fixedFlag$sample123(oldCore.get$fixedFlag$sample123());
-        }
+        newCore.set$fixedFlag$sample104(oldCore.get$fixedFlag$sample104());
+        newCore.set$fixedFlag$sample123(oldCore.get$fixedFlag$sample123());
+        newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
+        newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
+        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
+        newCore.set$fixedFlag$sample68(oldCore.get$fixedFlag$sample68());
+        newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
     }
 
     /**

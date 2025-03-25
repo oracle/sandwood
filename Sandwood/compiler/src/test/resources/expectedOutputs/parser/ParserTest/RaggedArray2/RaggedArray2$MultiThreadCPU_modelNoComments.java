@@ -29,7 +29,6 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -373,11 +372,11 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				{
 					cv$temp$0$c = c;
 				}
-				int cv$temp$1$$var300;
+				int cv$temp$1$$var294;
 				{
-					cv$temp$1$$var300 = 2;
+					cv$temp$1$$var294 = 2;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var300))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var294))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$y$2_1 = cv$currentValue;
@@ -393,7 +392,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 												double[] var78 = a[traceTempVariable$y$2_1];
 												cv$temp$2$var78 = var78;
 											}
-											int cv$temp$3$$var302;
+											int cv$temp$3$$var296;
 											{
 												int lengthCV$a$82_8 = -1;
 												{
@@ -404,16 +403,16 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													if((0 == traceTempVariable$y$2_1))
 														lengthCV$a$82_8 = 2;
 												}
-												int $var302 = lengthCV$a$82_8;
-												cv$temp$3$$var302 = $var302;
+												int $var296 = lengthCV$a$82_8;
+												cv$temp$3$$var296 = $var296;
 											}
-											if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+											if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 											else {
 												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
+													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
 												else
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var302))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var296))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
 											}
 											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 										}
@@ -552,7 +551,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					double[] var78 = a[y];
 					cv$temp$0$var78 = var78;
 				}
-				int cv$temp$1$$var324;
+				int cv$temp$1$$var318;
 				{
 					int lengthCV$a$82_10 = -1;
 					{
@@ -563,10 +562,10 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						if((0 == y))
 							lengthCV$a$82_10 = 2;
 					}
-					int $var324 = lengthCV$a$82_10;
-					cv$temp$1$$var324 = $var324;
+					int $var318 = lengthCV$a$82_10;
+					cv$temp$1$$var318 = $var318;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var324))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var318))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$i$6_1 = cv$currentValue;
@@ -869,7 +868,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
 		int cv$length1 = cv$target1.length;
@@ -879,7 +878,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void setIntermediates() {
-		if(true)
+		if((fixedFlag$sample81 && fixedFlag$sample84))
 			p = b[y][i];
 	}
 

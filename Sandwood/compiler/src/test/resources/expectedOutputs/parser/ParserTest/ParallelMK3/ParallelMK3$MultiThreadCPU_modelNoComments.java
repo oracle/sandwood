@@ -21,8 +21,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var37;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -105,7 +103,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
-		setFlag$sample = true;
 		fixedProbFlag$sample21 = false;
 		fixedProbFlag$sample38 = false;
 	}
@@ -285,11 +282,11 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				{
 					cv$temp$0$v = v;
 				}
-				int cv$temp$1$$var263;
+				int cv$temp$1$$var257;
 				{
-					cv$temp$1$$var263 = 10;
+					cv$temp$1$$var257 = 10;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var263));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var257));
 				{
 					{
 						boolean[] guard$sample21gaussian37 = guard$sample21gaussian37$global;
@@ -444,7 +441,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		{
 			v = new double[10];
 		}
-		if(!setFlag$sample) {
+		if(!fixedFlag$sample21) {
 			{
 				sample = new double[10];
 			}
@@ -582,7 +579,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = observed;
 		double[] cv$target1 = generated;
 		int cv$length1 = cv$target1.length;
@@ -595,7 +592,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		parallelFor(RNG$, 0, length$observed, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(setFlag$sample)
+						if(fixedFlag$sample21)
 							indirection[i] = sample[i];
 					}
 			}

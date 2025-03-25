@@ -22,7 +22,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$var5;
 	private double rate;
 	private int samples;
-	private boolean setFlag$decay = false;
 	private boolean system$gibbsForward = true;
 
 	public ExponentialDecayMK1$MultiThreadCPU(ExecutionTarget target) {
@@ -342,7 +341,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = decayDetected;
 		double[] cv$target1 = decay;
 		int cv$length1 = cv$target1.length;

@@ -39,6 +39,32 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		super(target);
 	}
 
+	// Getter for distribution$sample4.
+	@Override
+	public final double[] get$distribution$sample4() {
+		return distribution$sample4;
+	}
+
+	// Setter for distribution$sample4.
+	@Override
+	public final void set$distribution$sample4(double[] cv$value) {
+		// Set distribution$sample4
+		distribution$sample4 = cv$value;
+	}
+
+	// Getter for distribution$sample6.
+	@Override
+	public final double[] get$distribution$sample6() {
+		return distribution$sample6;
+	}
+
+	// Setter for distribution$sample6.
+	@Override
+	public final void set$distribution$sample6(double[] cv$value) {
+		// Set distribution$sample6
+		distribution$sample6 = cv$value;
+	}
+
 	// Getter for fixedFlag$sample4.
 	@Override
 	public final boolean get$fixedFlag$sample4() {
@@ -246,8 +272,7 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Setter for weightings.
 	@Override
 	public final void set$weightings(double[] cv$value) {
-		// Set weightings with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set weightings
 		weightings = cv$value;
 	}
 
@@ -1799,13 +1824,15 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		v = value;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

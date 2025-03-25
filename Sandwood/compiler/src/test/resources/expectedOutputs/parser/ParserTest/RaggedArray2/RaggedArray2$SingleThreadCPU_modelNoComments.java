@@ -29,7 +29,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -865,7 +864,7 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
 		int cv$length1 = cv$target1.length;
@@ -875,7 +874,7 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void setIntermediates() {
-		if(true)
+		if((fixedFlag$sample81 && fixedFlag$sample84))
 			p = b[y][i];
 	}
 

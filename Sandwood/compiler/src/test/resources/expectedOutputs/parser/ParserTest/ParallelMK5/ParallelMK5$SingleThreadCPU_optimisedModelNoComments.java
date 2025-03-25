@@ -21,8 +21,6 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$var100;
 	private double[][] logProbability$var58;
 	private int[] observed;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection1 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK5$SingleThreadCPU(ExecutionTarget target) {
@@ -54,7 +52,6 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$indirection1(double[][] cv$value) {
 		indirection1 = cv$value;
-		setFlag$indirection1 = true;
 		fixedProbFlag$sample61 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -193,7 +190,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void allocator() {
 		generated = new int[length$observed];
-		if(!setFlag$indirection1) {
+		if(!fixedFlag$sample61) {
 			indirection1 = new double[10][];
 			for(int var16 = 0; var16 < 10; var16 += 1)
 				indirection1[var16] = new double[length$observed];
@@ -351,7 +348,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			generated[cv$index1] = observed[cv$index1];
@@ -359,7 +356,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void setIntermediates() {
-		if(setFlag$indirection1) {
+		if(fixedFlag$sample61) {
 			for(int k = 0; k < length$observed; k += 1) {
 				double[] var83 = indirection2[k];
 				for(int l = 0; l < 10; l += 1)

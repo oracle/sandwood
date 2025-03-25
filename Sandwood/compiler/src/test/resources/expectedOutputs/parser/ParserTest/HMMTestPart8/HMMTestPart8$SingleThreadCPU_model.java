@@ -43,10 +43,6 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$var85;
 	private double[][] m;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private int states;
 	private boolean system$gibbsForward = true;
@@ -67,16 +63,27 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 45 as it depends on bias.
 		fixedProbFlag$sample45 = false;
 		
 		// Unset the fixed probability flag for sample 87 as it depends on bias.
 		fixedProbFlag$sample87 = false;
+	}
+
+	// Getter for distribution$sample71.
+	@Override
+	public final double[][] get$distribution$sample71() {
+		return distribution$sample71;
+	}
+
+	// Setter for distribution$sample71.
+	@Override
+	public final void set$distribution$sample71(double[][] cv$value) {
+		// Set distribution$sample71
+		distribution$sample71 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample28.
@@ -190,8 +197,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -253,10 +259,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 28 as it depends on m.
 		fixedProbFlag$sample28 = false;
@@ -285,10 +289,8 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$st(int[] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 53 as it depends on st.
 		fixedProbFlag$sample53 = false;
@@ -1579,7 +1581,13 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var44 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var43] = var44;
+		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		{
+			{
+				bias[var43] = var44;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1615,7 +1623,13 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			int var52 = cv$currentValue;
-			st[0] = cv$currentValue;
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[0] = cv$currentValue;
+				}
+			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
@@ -1640,14 +1654,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				{
 					// Looking for a path between Sample 53 and consumer Categorical 69.
 					{
-						int traceTempVariable$var67$1_1 = cv$currentValue;
+						int traceTempVariable$var67$2_1 = cv$currentValue;
 						for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 							if((0 == (i$var64 - 1))) {
 								if(fixedFlag$sample71) {
 									// Processing sample task 71 of consumer random variable null.
 									{
 										// Copy of index so that its values can be safely substituted
-										int index$i$3 = i$var64;
+										int index$i$4 = i$var64;
 										
 										// Set an accumulator to sum the probabilities for each possible configuration of
 										// inputs.
@@ -1666,7 +1680,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 															double[] cv$temp$2$var68;
 															{
 																// Constructing a random variable input for use later.
-																double[] var68 = m[traceTempVariable$var67$1_1];
+																double[] var68 = m[traceTempVariable$var67$2_1];
 																cv$temp$2$var68 = var68;
 															}
 															int cv$temp$3$$var271;
@@ -1721,7 +1735,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				{
 					// Looking for a path between Sample 53 and consumer Bernoulli 85.
 					{
-						int traceTempVariable$var83$6_1 = cv$currentValue;
+						int traceTempVariable$var83$7_1 = cv$currentValue;
 						for(int j = 0; j < samples; j += 1) {
 							if((0 == j)) {
 								// Processing sample task 87 of consumer random variable null.
@@ -1743,7 +1757,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 														double cv$temp$4$var84;
 														{
 															// Constructing a random variable input for use later.
-															double var84 = bias[traceTempVariable$var83$6_1];
+															double var84 = bias[traceTempVariable$var83$7_1];
 															cv$temp$4$var84 = var84;
 														}
 														
@@ -1804,14 +1818,14 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			{
 				// Looking for a path between Sample 53 and consumer Categorical 69.
 				{
-					int traceTempVariable$var67$10_1 = cv$currentValue;
+					int traceTempVariable$var67$11_1 = cv$currentValue;
 					for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 						if((0 == (i$var64 - 1))) {
 							if(!fixedFlag$sample71) {
 								// Processing sample task 71 of consumer random variable null.
 								{
 									// Copy of index so that its values can be safely substituted
-									int index$i$12 = i$var64;
+									int index$i$13 = i$var64;
 									
 									// A local array to hold the accumulated distributions of the sample tasks for each
 									// configuration of distributions.
@@ -1838,7 +1852,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 												double[] cv$temp$5$var68;
 												{
 													// Constructing a random variable input for use later.
-													double[] var68 = m[traceTempVariable$var67$10_1];
+													double[] var68 = m[traceTempVariable$var67$11_1];
 													cv$temp$5$var68 = var68;
 												}
 												int cv$temp$6$$var291;
@@ -1949,7 +1963,13 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		int var52 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		st[0] = var52;
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		{
+			{
+				st[0] = var52;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -2631,7 +2651,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			// Constructor for m
 			{
 				m = new double[5][];
@@ -2641,7 +2661,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample45) {
 			// Constructor for bias
 			{
 				bias = new double[5];
@@ -2649,7 +2669,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st) {
+		if((!fixedFlag$sample53 || !fixedFlag$sample71)) {
 			// Constructor for st
 			{
 				st = new int[length$flipsMeasured];
@@ -3025,7 +3045,7 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -3035,7 +3055,9 @@ class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

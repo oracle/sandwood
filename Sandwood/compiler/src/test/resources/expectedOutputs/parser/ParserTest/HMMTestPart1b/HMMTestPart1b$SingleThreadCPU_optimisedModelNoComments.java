@@ -30,8 +30,6 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var48;
 	private double logProbability$var51;
 	private double[][] m;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$m = false;
 	private int st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -48,7 +46,6 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample45 = false;
 		fixedProbFlag$sample53 = false;
 	}
@@ -142,7 +139,6 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample28 = false;
 		fixedProbFlag$sample50 = false;
 	}
@@ -293,12 +289,12 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocator() {
 		v = new double[2];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			m = new double[2][];
 			m[0] = new double[2];
 			m[1] = new double[2];
 		}
-		if(!setFlag$bias)
+		if(!fixedFlag$sample45)
 			bias = new double[2];
 		allocateScratch();
 	}
@@ -450,7 +446,7 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		flip = flipMeasured;
 	}
 

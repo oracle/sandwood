@@ -25,7 +25,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -143,8 +142,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for obs_measured.
 	@Override
 	public final void set$obs_measured(boolean[] cv$value) {
-		// Set obs_measured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set obs_measured
 		obs_measured = cv$value;
 	}
 
@@ -466,7 +464,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				{
 					cv$temp$0$var67 = a[y];
 				}
-				int cv$temp$1$$var243;
+				int cv$temp$1$$var237;
 				{
 					// Allocate a local variable to hold the length of the array.
 					int lengthCV$a$71_8 = -1;
@@ -484,12 +482,12 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						if((1 == y))
 							lengthCV$a$71_8 = 3;
 					}
-					cv$temp$1$$var243 = lengthCV$a$71_8;
+					cv$temp$1$$var237 = lengthCV$a$71_8;
 				}
 				
 				// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var243))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var237))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				
 				// Processing random variable 72.
 				{
@@ -927,7 +925,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
@@ -937,10 +935,12 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(true)
+		if(fixedFlag$sample73)
 			p = b[y][i];
 	}
 

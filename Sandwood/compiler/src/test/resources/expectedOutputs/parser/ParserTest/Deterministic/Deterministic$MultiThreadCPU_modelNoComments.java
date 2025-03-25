@@ -31,9 +31,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
-	private boolean setFlag$a = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
 	private int states;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -50,7 +47,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$a(int[] cv$value) {
 		a = cv$value;
-		setFlag$a = true;
 		fixedProbFlag$sample55 = false;
 		fixedProbFlag$sample75 = false;
 	}
@@ -137,7 +133,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample29 = false;
 		fixedProbFlag$sample55 = false;
 	}
@@ -390,12 +385,16 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			int cv$currentValue;
 			cv$currentValue = cv$valuePos;
 			int var54 = cv$currentValue;
-			a[i$var46] = cv$currentValue;
 			{
-				for(int index$i$1_1 = 1; index$i$1_1 < n; index$i$1_1 += 1) {
-					if((i$var46 == (index$i$1_1 - 1))) {
+				{
+					a[i$var46] = cv$currentValue;
+				}
+			}
+			{
+				for(int index$i$2_1 = 1; index$i$2_1 < n; index$i$2_1 += 1) {
+					if((i$var46 == (index$i$2_1 - 1))) {
 						{
-							b[index$i$1_1] = a[(index$i$1_1 - 1)];
+							b[index$i$2_1] = a[(index$i$2_1 - 1)];
 						}
 					}
 				}
@@ -407,20 +406,20 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					double[] var52 = m[b[i$var46]];
 					cv$temp$0$var52 = var52;
 				}
-				int cv$temp$1$$var320;
+				int cv$temp$1$$var314;
 				{
-					int $var320 = states;
-					cv$temp$1$$var320 = $var320;
+					int $var314 = states;
+					cv$temp$1$$var314 = $var314;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var320))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var314))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
-						int traceTempVariable$var49$2_1 = cv$currentValue;
-						for(int index$i$2_2 = 1; index$i$2_2 < n; index$i$2_2 += 1) {
-							if((i$var46 == (index$i$2_2 - 1))) {
-								int traceTempVariable$var51$2_3 = traceTempVariable$var49$2_1;
-								for(int index$i$2_4 = 1; index$i$2_4 < n; index$i$2_4 += 1) {
-									if((index$i$2_2 == index$i$2_4)) {
+						int traceTempVariable$var49$3_1 = cv$currentValue;
+						for(int index$i$3_2 = 1; index$i$3_2 < n; index$i$3_2 += 1) {
+							if((i$var46 == (index$i$3_2 - 1))) {
+								int traceTempVariable$var51$3_3 = traceTempVariable$var49$3_1;
+								for(int index$i$3_4 = 1; index$i$3_4 < n; index$i$3_4 += 1) {
+									if((index$i$3_2 == index$i$3_4)) {
 										{
 											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 											double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -430,21 +429,21 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 														{
 															double[] cv$temp$2$var52;
 															{
-																double[] var52 = m[traceTempVariable$var51$2_3];
+																double[] var52 = m[traceTempVariable$var51$3_3];
 																cv$temp$2$var52 = var52;
 															}
-															int cv$temp$3$$var331;
+															int cv$temp$3$$var325;
 															{
-																int $var331 = states;
-																cv$temp$3$$var331 = $var331;
+																int $var325 = states;
+																cv$temp$3$$var325 = $var325;
 															}
-															if(((Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$3$$var331))?Math.log(cv$temp$2$var52[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$3$$var331))?Math.log(cv$temp$2$var52[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var325))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var325))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$3$$var331))?Math.log(cv$temp$2$var52[a[index$i$2_4]]):Double.NEGATIVE_INFINITY));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var325))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$3$$var331))?Math.log(cv$temp$2$var52[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= a[index$i$2_4]) && (a[index$i$2_4] < cv$temp$3$$var331))?Math.log(cv$temp$2$var52[a[index$i$2_4]]):Double.NEGATIVE_INFINITY)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var325))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var325))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)));
 															}
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
@@ -469,7 +468,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 				{
 					{
-						int traceTempVariable$var70$5_1 = cv$currentValue;
+						int traceTempVariable$var70$6_1 = cv$currentValue;
 						for(int j = 0; j < n; j += 1) {
 							if((i$var46 == (j + 1))) {
 								{
@@ -481,7 +480,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 												{
 													double cv$temp$4$var72;
 													{
-														double var72 = (double)(1 / traceTempVariable$var70$5_1);
+														double var72 = (double)(1 / traceTempVariable$var70$6_1);
 														cv$temp$4$var72 = var72;
 													}
 													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j], cv$temp$4$var72)) < cv$accumulatedConsumerProbabilities))
@@ -549,12 +548,16 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		int var54 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		a[i$var46] = var54;
 		{
-			for(int index$i$8_1 = 1; index$i$8_1 < n; index$i$8_1 += 1) {
-				if((i$var46 == (index$i$8_1 - 1))) {
+			{
+				a[i$var46] = var54;
+			}
+		}
+		{
+			for(int index$i$10_1 = 1; index$i$10_1 < n; index$i$10_1 += 1) {
+				if((i$var46 == (index$i$10_1 - 1))) {
 					{
-						b[index$i$8_1] = a[(index$i$8_1 - 1)];
+						b[index$i$10_1] = a[(index$i$10_1 - 1)];
 					}
 				}
 			}
@@ -582,14 +585,14 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		{
 			v = new double[5];
 		}
-		if(!setFlag$m) {
+		if(!fixedFlag$sample29) {
 			{
 				m = new double[5][];
 				for(int var28 = 0; var28 < 5; var28 += 1)
 					m[var28] = new double[5];
 			}
 		}
-		if(!setFlag$a) {
+		if(!fixedFlag$sample55) {
 			{
 				a = new int[n];
 			}
@@ -798,7 +801,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
 		int cv$length1 = cv$target1.length;
@@ -809,7 +812,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void setIntermediates() {
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(setFlag$a)
+			if(fixedFlag$sample55)
 				b[i$var46] = a[(i$var46 - 1)];
 		}
 	}

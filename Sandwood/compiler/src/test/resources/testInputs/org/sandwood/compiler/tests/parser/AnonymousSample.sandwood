@@ -1,0 +1,29 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ 
+package org.sandwood.compiler.tests.parser;
+
+public model AnonymousSample(double[] obsAmounts1, double[] obsAmounts2) {
+    int n = obsAmounts1.length;
+
+    double priorSigma2 = gaussian(10000, 900).sample();   // can always use inverseGamma(1.5, 100)
+
+    double mean1 = gaussian(2000, 10000).sample();
+    double mean2 = gaussian(2000, 10000).sample();
+
+
+    double[] amounts1 = new double[n];
+    double[] amounts2 = new double[n];
+    for(int i : [0..n)) {
+        amounts1[i] = gaussian(mean1, priorSigma2).sample();
+        amounts2[i] = amounts1[i] + gaussian(mean2, priorSigma2).sample();
+    }
+
+    amounts1.observe(obsAmounts1);
+    amounts2.observe(obsAmounts2);
+}

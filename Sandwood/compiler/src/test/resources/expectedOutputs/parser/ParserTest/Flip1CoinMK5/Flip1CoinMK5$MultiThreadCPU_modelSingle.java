@@ -30,8 +30,6 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var8;
 	private int samples1;
 	private int samples2;
-	private boolean setFlag$flips1 = false;
-	private boolean setFlag$flips2 = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK5$MultiThreadCPU(ExecutionTarget target) {
@@ -108,8 +106,7 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for flipsMeasured1.
 	@Override
 	public final void set$flipsMeasured1(boolean[] cv$value) {
-		// Set flipsMeasured1 with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured1
 		flipsMeasured1 = cv$value;
 	}
 
@@ -122,8 +119,7 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for flipsMeasured2.
 	@Override
 	public final void set$flipsMeasured2(boolean[] cv$value) {
-		// Set flipsMeasured2 with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured2
 		flipsMeasured2 = cv$value;
 	}
 
@@ -730,7 +726,7 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i$var50 = ((-1) + ((((samples1 - 1) - ((-1) + 1)) % 1) + 1)); i$var50 < samples1; i$var50 += 1)
 			flips1[i$var50] = flipsMeasured1[i$var50];
 		for(int i$var68 = ((0 - 1) + (((((2 * samples2) - 2) - ((0 - 1) + 1)) % 2) + 1)); i$var68 < ((samples2 * 2) - 1); i$var68 += 2)
@@ -738,7 +734,9 @@ class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

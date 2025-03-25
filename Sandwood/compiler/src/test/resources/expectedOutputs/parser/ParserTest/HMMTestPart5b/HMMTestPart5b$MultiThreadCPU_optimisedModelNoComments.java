@@ -40,10 +40,6 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$var97;
 	private double[][] m;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -60,7 +56,6 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample45 = false;
 		fixedProbFlag$sample99 = false;
 	}
@@ -178,7 +173,6 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample28 = false;
 		fixedProbFlag$sample53 = false;
 		fixedProbFlag$sample76 = false;
@@ -197,7 +191,6 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample53 = false;
 		fixedProbFlag$sample76 = false;
 		fixedProbFlag$sample99 = false;
@@ -392,17 +385,17 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		{
 			st[(i$var67 - 3)] = 0;
 			double cv$accumulatedProbabilities = Math.log(m[st[(i$var67 - 4)]][0]);
-			int index$i$1_2 = (i$var67 + 1);
-			if((index$i$1_2 < (samples + 3)))
-				cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$1_2 - 3)] / 2)) && ((st[(index$i$1_2 - 3)] / 2) < 2))?Math.log(m[0][(st[(index$i$1_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			int index$i$2_2 = (i$var67 + 1);
+			if((index$i$2_2 < (samples + 3)))
+				cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$2_2 - 3)] / 2)) && ((st[(index$i$2_2 - 3)] / 2) < 2))?Math.log(m[0][(st[(index$i$2_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var67 - 3)], bias[0]) + cv$accumulatedProbabilities);
 			cv$var75$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		st[(i$var67 - 3)] = 2;
 		double cv$accumulatedProbabilities = Math.log(m[st[(i$var67 - 4)]][1]);
-		int index$i$1_2 = (i$var67 + 1);
-		if((index$i$1_2 < (samples + 3)))
-			cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$1_2 - 3)] / 2)) && ((st[(index$i$1_2 - 3)] / 2) < 2))?Math.log(m[2][(st[(index$i$1_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+		int index$i$2_2 = (i$var67 + 1);
+		if((index$i$2_2 < (samples + 3)))
+			cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$2_2 - 3)] / 2)) && ((st[(index$i$2_2 - 3)] / 2) < 2))?Math.log(m[2][(st[(index$i$2_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var67 - 3)], bias[2]) + cv$accumulatedProbabilities);
 		cv$var75$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
@@ -439,14 +432,14 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void allocator() {
 		v = new double[2];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			m = new double[2][];
 			m[0] = new double[2];
 			m[1] = new double[2];
 		}
-		if(!setFlag$bias)
+		if(!fixedFlag$sample45)
 			bias = new double[2];
-		if(!setFlag$st)
+		if((!fixedFlag$sample53 || !fixedFlag$sample76))
 			st = new int[length$flipsMeasured];
 		flips = new boolean[length$flipsMeasured];
 		logProbability$var74 = new double[(length$flipsMeasured - 1)];
@@ -700,7 +693,7 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = flipsMeasured[cv$index1];

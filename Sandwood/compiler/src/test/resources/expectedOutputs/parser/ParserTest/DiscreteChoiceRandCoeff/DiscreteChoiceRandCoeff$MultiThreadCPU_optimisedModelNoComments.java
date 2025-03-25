@@ -45,9 +45,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
-	private boolean setFlag$beta = false;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sigma;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -96,7 +93,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void set$beta(double[] cv$value) {
 		beta = cv$value;
-		setFlag$beta = true;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -239,7 +235,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample21 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -636,9 +631,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut)
+		if(!fixedFlag$sample21)
 			ut = new double[noProducts];
-		if(!setFlag$beta)
+		if(!fixedFlag$sample47)
 			beta = new double[noObs];
 		choices = new int[noObs];
 		exped = new double[noObs][];
@@ -971,7 +966,7 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = choices.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			choices[cv$index1] = ObsChoices[cv$index1];
@@ -979,23 +974,21 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	@Override
 	public final void setIntermediates() {
-		parallelFor(RNG$, 0, noObs, 1,
-			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-						int i = index$i;
-						int threadID$i = threadID$index$i;
-						if((setFlag$ut && setFlag$beta))
+		if((fixedFlag$sample21 && fixedFlag$sample47))
+			parallelFor(RNG$, 0, noObs, 1,
+				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+							int i = index$i;
+							int threadID$i = threadID$index$i;
 							parallelFor(RNG$1, 0, noProducts, 1,
 								(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
 											exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
 								}
 							);
-
-						double reduceVar$sum$29 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
-							reduceVar$sum$29 = (reduceVar$sum$29 + exped[i][cv$reduction82Index]);
-						if((setFlag$ut && setFlag$beta)) {
+							double reduceVar$sum$29 = 0.0;
+							for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+								reduceVar$sum$29 = (reduceVar$sum$29 + exped[i][cv$reduction82Index]);
 							double reduceVar$sum$29$1 = reduceVar$sum$29;
 							parallelFor(RNG$1, 0, noProducts, 1,
 								(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
@@ -1004,9 +997,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 								}
 							);
 						}
-					}
-			}
-		);
+				}
+			);
+
 	}
 
 	@Override

@@ -34,9 +34,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	private boolean[] output;
 	private double[] p;
 	private int[] prior;
-	private boolean setFlag$output = false;
-	private boolean setFlag$p = false;
-	private boolean setFlag$prior = false;
 	private boolean system$gibbsForward = true;
 
 	public MultinomialBernoulli$SingleThreadCPU(ExecutionTarget target) {
@@ -157,7 +154,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$p(double[] cv$value) {
 		p = cv$value;
-		setFlag$p = true;
 		fixedProbFlag$sample17 = false;
 		fixedProbFlag$sample20 = false;
 	}
@@ -170,7 +166,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void set$prior(int[] cv$value) {
 		prior = cv$value;
-		setFlag$prior = true;
 		fixedProbFlag$sample20 = false;
 		fixedProbFlag$sample48 = false;
 		fixedProbFlag$sample60 = false;
@@ -658,12 +653,12 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		{
 			beta = new double[3];
 		}
-		if(!setFlag$p) {
+		if(!fixedFlag$sample17) {
 			{
 				p = new double[3];
 			}
 		}
-		if(!setFlag$prior) {
+		if(!fixedFlag$sample20) {
 			{
 				prior = new int[3];
 			}
@@ -797,7 +792,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = observed;
 		boolean[] cv$target1 = output;
 		int cv$length1 = cv$target1.length;

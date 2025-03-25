@@ -59,11 +59,6 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private int noEvents;
 	private int noStates;
 	private int samples;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$events = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
-	private boolean setFlag$weights = false;
 	private int[][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -85,16 +80,40 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$bias(double[][] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 57 as it depends on bias.
 		fixedProbFlag$sample57 = false;
 		
 		// Unset the fixed probability flag for sample 159 as it depends on bias.
 		fixedProbFlag$sample159 = false;
+	}
+
+	// Getter for distribution$sample126.
+	@Override
+	public final double[][][] get$distribution$sample126() {
+		return distribution$sample126;
+	}
+
+	// Setter for distribution$sample126.
+	@Override
+	public final void set$distribution$sample126(double[][][] cv$value) {
+		// Set distribution$sample126
+		distribution$sample126 = cv$value;
+	}
+
+	// Getter for distribution$sample95.
+	@Override
+	public final double[][] get$distribution$sample95() {
+		return distribution$sample95;
+	}
+
+	// Setter for distribution$sample95.
+	@Override
+	public final void set$distribution$sample95(double[][] cv$value) {
+		// Set distribution$sample95
+		distribution$sample95 = cv$value;
 	}
 
 	// Getter for events.
@@ -112,8 +131,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for eventsMeasured.
 	@Override
 	public final void set$eventsMeasured(int[][] cv$value) {
-		// Set eventsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set eventsMeasured
 		eventsMeasured = cv$value;
 	}
 
@@ -314,8 +332,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for length$eventsMeasured.
 	@Override
 	public final void set$length$eventsMeasured(int[] cv$value) {
-		// Set length$eventsMeasured with flag to mark that it has been set so another array
-		// doesn't need to be constructed
+		// Set length$eventsMeasured
 		length$eventsMeasured = cv$value;
 	}
 
@@ -377,10 +394,8 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 42 as it depends on m.
 		fixedProbFlag$sample42 = false;
@@ -433,10 +448,8 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$st(int[][] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 95 as it depends on st.
 		fixedProbFlag$sample95 = false;
@@ -471,10 +484,8 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$weights(double[] cv$value) {
 		// Set flags for all the side effects of weights including if probabilities need to
 		// be updated.
-		// Set weights with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set weights
 		weights = cv$value;
-		setFlag$weights = true;
 		
 		// Unset the fixed probability flag for sample 78 as it depends on weights.
 		fixedProbFlag$sample78 = false;
@@ -2880,7 +2891,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		v2 = new double[noEvents];
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample42) {
 			// Constructor for m
 			m = new double[noStates][];
 			for(int var41 = 0; var41 < noStates; var41 += 1)
@@ -2888,7 +2899,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample57) {
 			// Constructor for bias
 			bias = new double[noStates][];
 			for(int var55 = 0; var55 < noStates; var55 += 1)
@@ -2896,7 +2907,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st) {
+		if((!fixedFlag$sample95 || !fixedFlag$sample126)) {
 			// Constructor for st
 			st = new int[length$eventsMeasured.length][];
 			for(int i$var69 = 0; i$var69 < length$eventsMeasured.length; i$var69 += 1)
@@ -2904,7 +2915,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If weights has not been set already allocate space.
-		if(!setFlag$weights)
+		if(!fixedFlag$sample78)
 			// Constructor for weights
 			weights = new double[noStates];
 		
@@ -3363,7 +3374,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -3378,7 +3389,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

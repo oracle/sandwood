@@ -42,10 +42,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	private double[] logProbability$var80;
 	private int noProducts;
 	private int s;
-	private boolean setFlag$Sales = false;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -63,8 +59,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for Avail.
 	@Override
 	public final void set$Avail(int[][] cv$value) {
-		// Set Avail with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set Avail
 		Avail = cv$value;
 	}
 
@@ -77,8 +72,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// Setter for ObsSales.
 	@Override
 	public final void set$ObsSales(double[][] cv$value) {
-		// Set ObsSales with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set ObsSales
 		ObsSales = cv$value;
 	}
 
@@ -111,10 +105,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$arrivals(int[] cv$value) {
 		// Set flags for all the side effects of arrivals including if probabilities need
 		// to be updated.
-		// Set arrivals with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set arrivals
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 		
 		// Unset the fixed probability flag for sample 82 as it depends on arrivals.
 		fixedProbFlag$sample82 = false;
@@ -224,10 +216,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$lambda(double[] cv$value) {
 		// Set flags for all the side effects of lambda including if probabilities need to
 		// be updated.
-		// Set lambda with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set lambda
 		lambda = cv$value;
-		setFlag$lambda = true;
 		
 		// Unset the fixed probability flag for sample 67 as it depends on lambda.
 		fixedProbFlag$sample67 = false;
@@ -331,10 +321,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	public final void set$ut(double[] cv$value) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set ut
 		ut = cv$value;
-		setFlag$ut = true;
 		
 		// Unset the fixed probability flag for sample 22 as it depends on ut.
 		fixedProbFlag$sample22 = false;
@@ -790,17 +778,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Reduce for every value except a masked value which will be skipped.
 			// 
 			// Substituted "j$var34" with its value "var21".
-			for(int cv$reduction320Index = 0; cv$reduction320Index < var21; cv$reduction320Index += 1)
+			for(int cv$reduction323Index = 0; cv$reduction323Index < var21; cv$reduction323Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction320Index]);
+				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction323Index]);
 			
 			// Substituted "j$var34" with its value "var21".
-			for(int cv$reduction320Index = (var21 + 1); cv$reduction320Index < noProducts; cv$reduction320Index += 1)
+			for(int cv$reduction323Index = (var21 + 1); cv$reduction323Index < noProducts; cv$reduction323Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
@@ -809,7 +797,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction320Index]);
+				reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction323Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -854,7 +842,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			}
 			
 			// Set the current value to the current state of the tree.
-			double traceTempVariable$var116$7_3 = Math.exp(cv$originalValue);
+			double traceTempVariable$var116$8_3 = Math.exp(cv$originalValue);
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
@@ -888,7 +876,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var115" with its value "var21".
-					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$7_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$8_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -901,6 +889,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[var21] = cv$proposedValue;
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
@@ -972,17 +962,17 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		// Reduce for every value except a masked value which will be skipped.
 		// 
 		// Substituted "j$var34" with its value "var21".
-		for(int cv$reduction320Index = 0; cv$reduction320Index < var21; cv$reduction320Index += 1)
+		for(int cv$reduction323Index = 0; cv$reduction323Index < var21; cv$reduction323Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// l's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction320Index]);
+			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction323Index]);
 		
 		// Substituted "j$var34" with its value "var21".
-		for(int cv$reduction320Index = (var21 + 1); cv$reduction320Index < noProducts; cv$reduction320Index += 1)
+		for(int cv$reduction323Index = (var21 + 1); cv$reduction323Index < noProducts; cv$reduction323Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Execute the reduction function, saving the result into the return value.
@@ -991,7 +981,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// l's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction320Index]);
+			reduceVar$sum$1 = (reduceVar$sum$1 + exped[cv$reduction323Index]);
 		
 		// Copy the result of the reduction into the variable returned by the reduction.
 		reduceVar$sum$1 = (Math.exp(cv$proposedValue) + reduceVar$sum$1);
@@ -1032,7 +1022,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 		}
-		double traceTempVariable$var116$7_3 = Math.exp(cv$proposedValue);
+		double traceTempVariable$var116$8_3 = Math.exp(cv$proposedValue);
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
@@ -1074,7 +1064,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// Constructing a random variable input for use later.
 				// 
 				// Substituted "j$var115" with its value "var21".
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$7_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((Sales[t$var105][var21] - (((traceTempVariable$var116$8_3 * Avail[t$var105][var21]) / denom) * arrivals[t$var105])) / 0.4472135954999579)) + cv$accumulatedProbabilities) + 0.8047189562170501);
 			}
 		}
 		
@@ -1094,6 +1084,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// Guards to ensure that ut is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			ut[var21] = cv$originalValue;
@@ -1141,6 +1133,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// by sample task 67 drawn from Gamma 54. Inference was performed using a Gamma to
 	// Poisson conjugate prior.
 	private final void sample67(int var65) {
+		// Guards to ensure that lambda is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
@@ -1223,6 +1217,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		
 		// Update Sample and intermediate values
+		// 
+		// Guards to ensure that arrivals is only updated when there is a valid path.
 		arrivals[t$var78] = cv$proposedValue;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
@@ -1276,6 +1272,8 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Set the sample value
 			// 
+			// Guards to ensure that arrivals is only updated when there is a valid path.
+			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			arrivals[t$var78] = cv$originalValue;
@@ -1308,7 +1306,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void allocator() {
 		// If ut has not been set already allocate space.
-		if(!setFlag$ut)
+		if(!fixedFlag$sample22)
 			// Constructor for ut
 			ut = new double[noProducts];
 		
@@ -1316,12 +1314,12 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		exped = new double[noProducts];
 		
 		// If lambda has not been set already allocate space.
-		if(!setFlag$lambda)
+		if(!fixedFlag$sample67)
 			// Constructor for lambda
 			lambda = new double[T];
 		
 		// If arrivals has not been set already allocate space.
-		if(!setFlag$arrivals)
+		if(!fixedFlag$sample82)
 			// Constructor for arrivals
 			arrivals = new int[T];
 		
@@ -1706,7 +1704,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -1721,11 +1719,13 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(setFlag$ut) {
+		if(fixedFlag$sample22) {
 			for(int j$var34 = 0; j$var34 < noProducts; j$var34 += 1)
 				exped[j$var34] = Math.exp(ut[j$var34]);
 			
@@ -1738,8 +1738,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction42Index = 0; cv$reduction42Index < noProducts; cv$reduction42Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// l's comment

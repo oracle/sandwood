@@ -22,9 +22,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$var23;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK1$SingleThreadCPU(ExecutionTarget target) {
@@ -56,7 +53,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$indirection(double[] cv$value) {
 		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	@Override
@@ -112,7 +108,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$sample(double[] cv$value) {
 		sample = cv$value;
-		setFlag$sample = true;
 	}
 
 	private final void logProbabilityValue$sample20() {
@@ -219,9 +214,8 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void allocator() {
 		generated = new double[length$observed];
-		if(!setFlag$indirection)
-			indirection = new double[length$observed];
-		if(!setFlag$sample)
+		indirection = new double[length$observed];
+		if(!fixedFlag$sample20)
 			sample = new double[length$observed];
 		logProbability$var19 = new double[length$observed];
 		logProbability$sample20 = new double[length$observed];
@@ -337,14 +331,19 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			generated[cv$index1] = observed[cv$index1];
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		if(fixedFlag$sample20) {
+			for(int i = 0; i < length$observed; i += 1)
+				indirection[i] = sample[i];
+		}
+	}
 
 	@Override
 	public String modelCode() {

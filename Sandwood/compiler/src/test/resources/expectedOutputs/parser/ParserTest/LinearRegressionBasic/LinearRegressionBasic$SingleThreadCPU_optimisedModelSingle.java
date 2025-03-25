@@ -28,7 +28,6 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double variance;
 	private double[] x;
@@ -228,8 +227,7 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Setter for x.
 	@Override
 	public final void set$x(double[] cv$value) {
-		// Set x with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set x
 		x = cv$value;
 	}
 
@@ -248,8 +246,7 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Setter for yMeasured.
 	@Override
 	public final void set$yMeasured(double[] cv$value) {
-		// Set yMeasured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set yMeasured
 		yMeasured = cv$value;
 	}
 
@@ -958,7 +955,7 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -968,7 +965,9 @@ class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

@@ -38,10 +38,6 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private int noCats;
 	private int noFlips;
 	private int noStates;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -61,10 +57,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on bias.
 		fixedProbFlag$sample47 = false;
@@ -154,8 +148,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -217,10 +210,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 30 as it depends on m.
 		fixedProbFlag$sample30 = false;
@@ -264,10 +255,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$st(int[] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 62 as it depends on st.
 		fixedProbFlag$sample62 = false;
@@ -806,7 +795,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var46 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var45] = var46;
+		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		{
+			{
+				bias[var45] = var46;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -842,7 +837,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			int var61 = cv$currentValue;
-			st[i$var58] = cv$currentValue;
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[i$var58] = cv$currentValue;
+				}
+			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
@@ -866,7 +867,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Processing random variable 84.
 				{
 					{
-						int traceTempVariable$i$1_1 = cv$currentValue;
+						int traceTempVariable$i$2_1 = cv$currentValue;
 						if(((0 <= i$var58) && (i$var58 < noCats))) {
 							{
 								if((0 < noCats)) {
@@ -878,24 +879,24 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									int reduceVar$var82$1 = 0;
 									
 									// Reduce for every value except a masked value which will be skipped.
-									for(int cv$reduction210Index = 0; cv$reduction210Index < i$var58; cv$reduction210Index += 1) {
+									for(int cv$reduction216Index = 0; cv$reduction216Index < i$var58; cv$reduction216Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										int i$var79 = reduceVar$var82$1;
 										
 										// Set the right hand term to a value from the array st
-										int j$var80 = st[cv$reduction210Index];
+										int j$var80 = st[cv$reduction216Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
 										// Copy the result of the reduction into the variable returned by the reduction.
 										reduceVar$var82$1 = (i$var79 + j$var80);
 									}
-									for(int cv$reduction210Index = (i$var58 + 1); cv$reduction210Index < noCats; cv$reduction210Index += 1) {
+									for(int cv$reduction216Index = (i$var58 + 1); cv$reduction216Index < noCats; cv$reduction216Index += 1) {
 										// Set the left hand term of the reduction function to the return variable value.
 										int i$var79 = reduceVar$var82$1;
 										
 										// Set the right hand term to a value from the array st
-										int j$var80 = st[cv$reduction210Index];
+										int j$var80 = st[cv$reduction216Index];
 										
 										// Execute the reduction function, saving the result into the return value.
 										// 
@@ -907,8 +908,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									int cv$reduced78 = reduceVar$var82$1;
 									
 									// Copy the result of the reduction into the variable returned by the reduction.
-									reduceVar$var82$1 = (traceTempVariable$i$1_1 + cv$reduced78);
-									int traceTempVariable$var82$1_2 = reduceVar$var82$1;
+									reduceVar$var82$1 = (traceTempVariable$i$2_1 + cv$reduced78);
+									int traceTempVariable$var82$2_2 = reduceVar$var82$1;
 									for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 										// Set an accumulator to sum the probabilities for each possible configuration of
 										// inputs.
@@ -924,7 +925,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 														double cv$temp$2$var83;
 														{
 															// Constructing a random variable input for use later.
-															double var83 = bias[traceTempVariable$var82$1_2];
+															double var83 = bias[traceTempVariable$var82$2_2];
 															cv$temp$2$var83 = var83;
 														}
 														
@@ -1036,7 +1037,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		st[i$var58] = var61;
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		{
+			{
+				st[i$var58] = var61;
+			}
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -1071,7 +1078,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample30) {
 			// Constructor for m
 			{
 				m = new double[noCats][];
@@ -1081,7 +1088,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample47) {
 			// Constructor for bias
 			{
 				bias = new double[length$flipsMeasured];
@@ -1089,7 +1096,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st) {
+		if(!fixedFlag$sample62) {
 			// Constructor for st
 			{
 				st = new int[noCats];
@@ -1354,7 +1361,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -1364,7 +1371,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

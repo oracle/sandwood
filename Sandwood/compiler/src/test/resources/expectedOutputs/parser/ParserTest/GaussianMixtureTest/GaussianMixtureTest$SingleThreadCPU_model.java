@@ -39,11 +39,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$z;
 	private double[] mu;
 	private double[] phi;
-	private boolean setFlag$mu = false;
-	private boolean setFlag$phi = false;
-	private boolean setFlag$sigma = false;
-	private boolean setFlag$x = false;
-	private boolean setFlag$z = false;
 	private double[] sigma;
 	private boolean system$gibbsForward = true;
 	private double[] x;
@@ -219,10 +214,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$mu(double[] cv$value) {
 		// Set flags for all the side effects of mu including if probabilities need to be
 		// updated.
-		// Set mu with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set mu
 		mu = cv$value;
-		setFlag$mu = true;
 		
 		// Unset the fixed probability flag for sample 34 as it depends on mu.
 		fixedProbFlag$sample34 = false;
@@ -242,10 +235,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$phi(double[] cv$value) {
 		// Set flags for all the side effects of phi including if probabilities need to be
 		// updated.
-		// Set phi with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set phi
 		phi = cv$value;
-		setFlag$phi = true;
 		
 		// Unset the fixed probability flag for sample 17 as it depends on phi.
 		fixedProbFlag$sample17 = false;
@@ -265,10 +256,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void set$sigma(double[] cv$value) {
 		// Set flags for all the side effects of sigma including if probabilities need to
 		// be updated.
-		// Set sigma with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set sigma
 		sigma = cv$value;
-		setFlag$sigma = true;
 		
 		// Unset the fixed probability flag for sample 52 as it depends on sigma.
 		fixedProbFlag$sample52 = false;
@@ -292,8 +281,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for xMeasured.
 	@Override
 	public final void set$xMeasured(double[] cv$value) {
-		// Set xMeasured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set xMeasured
 		xMeasured = cv$value;
 	}
 
@@ -306,10 +294,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Setter for z.
 	@Override
 	public final void set$z(int[] cv$value) {
-		// Set z with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set z
 		z = cv$value;
-		setFlag$z = true;
 	}
 
 	// Calculate the probability of the samples represented by sample17 using sampled
@@ -912,7 +898,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var34 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		mu[var33] = var34;
+		
+		// Guards to ensure that mu is only updated when there is a valid path.
+		{
+			{
+				mu[var33] = var34;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -965,7 +957,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var52 = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		sigma[var51] = var52;
+		
+		// Guards to ensure that sigma is only updated when there is a valid path.
+		{
+			{
+				sigma[var51] = var52;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1254,7 +1252,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// If phi has not been set already allocate space.
-		if(!setFlag$phi) {
+		if(!fixedFlag$sample17) {
 			// Constructor for phi
 			{
 				phi = new double[5];
@@ -1262,7 +1260,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// If mu has not been set already allocate space.
-		if(!setFlag$mu) {
+		if(!fixedFlag$sample34) {
 			// Constructor for mu
 			{
 				mu = new double[5];
@@ -1270,7 +1268,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// If sigma has not been set already allocate space.
-		if(!setFlag$sigma) {
+		if(!fixedFlag$sample52) {
 			// Constructor for sigma
 			{
 				sigma = new double[5];
@@ -1283,7 +1281,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		
 		// If z has not been set already allocate space.
-		if(!setFlag$z) {
+		if(!fixedFlag$sample68) {
 			// Constructor for z
 			{
 				z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
@@ -1561,7 +1559,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		double[] cv$source1 = xMeasured;
 		double[] cv$target1 = x;
@@ -1571,7 +1569,9 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

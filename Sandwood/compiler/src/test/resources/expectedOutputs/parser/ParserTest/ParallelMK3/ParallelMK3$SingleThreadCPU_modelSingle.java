@@ -23,8 +23,6 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var38;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -117,8 +115,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for observed.
 	@Override
 	public final void set$observed(double[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -133,10 +130,8 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$sample(double[] cv$value) {
 		// Set flags for all the side effects of sample including if probabilities need to
 		// be updated.
-		// Set sample with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set sample
 		sample = cv$value;
-		setFlag$sample = true;
 		
 		// Unset the fixed probability flag for sample 21 as it depends on sample.
 		fixedProbFlag$sample21 = false;
@@ -744,7 +739,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		
 		// If sample has not been set already allocate space.
-		if(!setFlag$sample) {
+		if(!fixedFlag$sample21) {
 			// Constructor for sample
 			{
 				sample = new double[10];
@@ -916,7 +911,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		double[] cv$source1 = observed;
 		double[] cv$target1 = generated;
@@ -926,11 +921,13 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		for(int i = 0; i < length$observed; i += 1) {
-			if(setFlag$sample)
+			if(fixedFlag$sample21)
 				indirection[i] = sample[i];
 		}
 	}

@@ -20,7 +20,6 @@ class Flip1CoinMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var20;
 	private double logProbability$var6;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK10$SingleThreadCPU(ExecutionTarget target) {
@@ -319,7 +318,7 @@ class Flip1CoinMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		for(int i = (samples - ((((samples - 1) - 0) % 1) + 1)); i >= ((0 - 1) + 1); i -= 1)
 			flips[i] = (false == !flipsMeasured[i]);
 	}

@@ -29,8 +29,6 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$y;
 	private int n;
 	private double[][] phi;
-	private boolean setFlag$weights = false;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double tau;
 	private double[] weights;
@@ -150,7 +148,6 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$weights(double[] cv$value) {
 		weights = cv$value;
-		setFlag$weights = true;
 		fixedProbFlag$sample24 = false;
 		fixedProbFlag$sample74 = false;
 	}
@@ -449,14 +446,14 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 															cv$denominator = (cv$denominator * x[i$var45][j$var55]);
 															if((0 < k)) {
 																double reduceVar$var70$5 = 0.0;
-																for(int cv$reduction383Index = 0; cv$reduction383Index < j$var55; cv$reduction383Index += 1) {
+																for(int cv$reduction378Index = 0; cv$reduction378Index < j$var55; cv$reduction378Index += 1) {
 																	double i$var67 = reduceVar$var70$5;
-																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction383Index];
+																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction378Index];
 																	reduceVar$var70$5 = (i$var67 + j$var68);
 																}
-																for(int cv$reduction383Index = (j$var55 + 1); cv$reduction383Index < k; cv$reduction383Index += 1) {
+																for(int cv$reduction378Index = (j$var55 + 1); cv$reduction378Index < k; cv$reduction378Index += 1) {
 																	double i$var67 = reduceVar$var70$5;
-																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction383Index];
+																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction378Index];
 																	reduceVar$var70$5 = (i$var67 + j$var68);
 																}
 																double cv$reduced65 = reduceVar$var70$5;
@@ -483,7 +480,11 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			}
 		}
 		double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		weights[var23] = var24;
+		{
+			{
+				weights[var23] = var24;
+			}
+		}
 		{
 			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
 				if((var23 == j$var55)) {
@@ -557,7 +558,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		{
 			y = new double[x.length];
 		}
-		if(!setFlag$weights) {
+		if(!fixedFlag$sample24) {
 			{
 				weights = new double[x[0].length];
 			}
@@ -805,7 +806,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
 		int cv$length1 = cv$target1.length;
@@ -823,7 +824,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 						parallelFor(RNG$1, 0, k, 1,
 							(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1) {
-										if(setFlag$weights)
+										if(fixedFlag$sample24)
 											phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
 									}
 							}

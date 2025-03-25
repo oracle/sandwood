@@ -32,8 +32,6 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] logProbability$var26;
 	private double logProbability$var4;
 	private double[] logProbability$var52;
-	private boolean setFlag$v = false;
-	private boolean setFlag$v2 = false;
 	private int size;
 	private boolean system$gibbsForward = true;
 	private boolean[] v;
@@ -44,6 +42,36 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	public DistributionTest4$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
+	}
+
+	@Override
+	public final double[] get$distribution$sample11() {
+		return distribution$sample11;
+	}
+
+	@Override
+	public final void set$distribution$sample11(double[] cv$value) {
+		distribution$sample11 = cv$value;
+	}
+
+	@Override
+	public final double[][] get$distribution$sample27() {
+		return distribution$sample27;
+	}
+
+	@Override
+	public final void set$distribution$sample27(double[][] cv$value) {
+		distribution$sample27 = cv$value;
+	}
+
+	@Override
+	public final double[] get$distribution$sample5() {
+		return distribution$sample5;
+	}
+
+	@Override
+	public final void set$distribution$sample5(double[] cv$value) {
+		distribution$sample5 = cv$value;
 	}
 
 	@Override
@@ -147,7 +175,6 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$v2(int[] cv$value) {
 		v2 = cv$value;
-		setFlag$v2 = true;
 		fixedProbFlag$sample11 = false;
 		fixedProbFlag$sample27 = false;
 		fixedProbFlag$sample53 = false;
@@ -1150,7 +1177,7 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$v2)
+		if((!fixedFlag$sample11 || !fixedFlag$sample27))
 			v2 = new int[(length$value + 1)];
 		v = new boolean[length$value];
 		distribution$sample5 = new double[weightings.length];
@@ -1307,7 +1334,7 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = v.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			v[cv$index1] = value[cv$index1];

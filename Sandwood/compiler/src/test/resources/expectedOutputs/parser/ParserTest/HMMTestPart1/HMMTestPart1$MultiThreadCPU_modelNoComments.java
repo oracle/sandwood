@@ -31,8 +31,6 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var48;
 	private double logProbability$var51;
 	private double[][] m;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$m = false;
 	private int st;
 	private int states;
 	private boolean system$gibbsForward = true;
@@ -50,7 +48,6 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample45 = false;
 		fixedProbFlag$sample53 = false;
 	}
@@ -144,7 +141,6 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample28 = false;
 		fixedProbFlag$sample50 = false;
 	}
@@ -430,7 +426,11 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 		}
 		double var44 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var43] = var44;
+		{
+			{
+				bias[var43] = var44;
+			}
+		}
 	}
 
 	private final void sample50() {
@@ -560,14 +560,14 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			v = new double[2];
 		}
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			{
 				m = new double[2][];
 				for(int var27 = 0; var27 < 2; var27 += 1)
 					m[var27] = new double[2];
 			}
 		}
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample45) {
 			{
 				bias = new double[2];
 			}
@@ -779,7 +779,7 @@ class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		flip = flipMeasured;
 	}
 

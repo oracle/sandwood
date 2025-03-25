@@ -17,7 +17,7 @@ public class ParallelMK3 extends Model {
 
     private ParallelMK3$CoreInterface system$c = new ParallelMK3$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", true) {
+    private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", false, true, false) {
         @Override
         public double[] getValue() { return system$c.get$generated(); }
 
@@ -48,7 +48,7 @@ public class ParallelMK3 extends Model {
      */
     public final ComputedDoubleArray generated = $generated;
 
-    private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", false) {
+    private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$indirection(); }
 
@@ -84,15 +84,14 @@ public class ParallelMK3 extends Model {
      */
     public final ComputedDoubleArray indirection = $indirection;
 
-    private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true) {
+    private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$sample(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$sample(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -211,6 +210,7 @@ public class ParallelMK3 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(ParallelMK3$CoreInterface oldCore, ParallelMK3$CoreInterface newCore) {
 
         //Observed arrays
@@ -222,12 +222,11 @@ public class ParallelMK3 extends Model {
             newCore.set$length$observed(oldCore.get$length$observed());
 
         //ComputedVariables
-        if(sample.isSet())
+        if($sample.isSet())
             newCore.set$sample(oldCore.get$sample());
 
         //Set fixed flags
-        if(sample.isSet())
-            newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
     }
 
     /**

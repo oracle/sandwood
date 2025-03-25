@@ -21,5 +21,11 @@ interface Flip1CoinMK12b$CoreInterface extends org.sandwood.runtime.internal.mod
 	public double get$logProbability$bias();
 	public double get$logProbability$flips();
 	public int get$samples();
+	public double get$var14();
+	public void set$var14(double cv$value);
+	public double get$var26();
+	public void set$var26(double cv$value);
+	public double get$var33();
+	public void set$var33(double cv$value);
 	public void logEvidenceGeneration();
 }

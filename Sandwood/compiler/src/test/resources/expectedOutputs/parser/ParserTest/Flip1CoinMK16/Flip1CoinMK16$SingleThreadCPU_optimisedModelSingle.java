@@ -20,8 +20,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bias;
 	private double logProbability$flip;
 	private double logProbability$var11;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flip = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$SingleThreadCPU(ExecutionTarget target) {
@@ -455,14 +453,16 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(Double.isNaN(guard))
 			flip = flipMeasured;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

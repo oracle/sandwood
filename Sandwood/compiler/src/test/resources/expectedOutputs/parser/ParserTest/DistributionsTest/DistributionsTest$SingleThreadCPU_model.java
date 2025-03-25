@@ -23,7 +23,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$var6;
 	private double logProbability$y;
 	private int noSamples;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double[] x;
 	private double[] y;
@@ -162,8 +161,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for x.
 	@Override
 	public final void set$x(double[] cv$value) {
-		// Set x with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set x
 		x = cv$value;
 	}
 
@@ -182,8 +180,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for yMeasured.
 	@Override
 	public final void set$yMeasured(double[] cv$value) {
-		// Set yMeasured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set yMeasured
 		yMeasured = cv$value;
 	}
 
@@ -1008,7 +1005,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
@@ -1018,7 +1015,9 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

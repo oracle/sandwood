@@ -19,7 +19,6 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$value2;
 	private double logProbability$var18;
 	private double[] observedValue;
-	private boolean setFlag$value = false;
 	private boolean system$gibbsForward = true;
 	private double[] value;
 	private double[] value2;
@@ -463,11 +462,10 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				value[0] = 1.0;
-		} else {
-			if(!(fixedFlag$sample4 && fixedFlag$sample21))
+		if(guard)
+			value[0] = 1.0;
+		else {
+			if(!fixedFlag$sample21)
 				value[0] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
 		if(!(fixedFlag$sample4 && fixedFlag$sample21))

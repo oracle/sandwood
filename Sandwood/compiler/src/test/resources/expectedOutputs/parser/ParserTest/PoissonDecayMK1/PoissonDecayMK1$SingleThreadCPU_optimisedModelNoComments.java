@@ -22,7 +22,6 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private double logProbability$var5;
 	private double rate;
 	private int samples;
-	private boolean setFlag$decay = false;
 	private boolean system$gibbsForward = true;
 
 	public PoissonDecayMK1$SingleThreadCPU(ExecutionTarget target) {
@@ -261,7 +260,7 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = decay.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			decay[cv$index1] = decayDetected[cv$index1];

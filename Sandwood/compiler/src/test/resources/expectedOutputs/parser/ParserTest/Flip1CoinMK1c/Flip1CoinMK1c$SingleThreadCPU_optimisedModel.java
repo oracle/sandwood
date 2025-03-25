@@ -23,7 +23,6 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$var5;
 	private double logProbability$var6;
 	private int samples;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 	private double var6;
 
@@ -96,8 +95,7 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -141,6 +139,26 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	// Getter for var6.
+	@Override
+	public final double get$var6() {
+		return var6;
+	}
+
+	// Setter for var6.
+	@Override
+	public final void set$var6(double cv$value) {
+		// Set flags for all the side effects of var6 including if probabilities need to be
+		// updated.
+		var6 = cv$value;
+		
+		// Unset the fixed probability flag for sample 6 as it depends on var6.
+		fixedProbFlag$sample6 = false;
+		
+		// Unset the fixed probability flag for sample 19 as it depends on var6.
+		fixedProbFlag$sample19 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample19 using sampled
@@ -493,7 +511,7 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -503,7 +521,9 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

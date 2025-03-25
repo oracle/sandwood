@@ -62,6 +62,24 @@ interface Flip1CoinMK12b$CoreInterface extends org.sandwood.runtime.internal.mod
 	// Getter for samples.
 	public int get$samples();
 
+	// Getter for var14.
+	public double get$var14();
+
+	// Setter for var14.
+	public void set$var14(double cv$value);
+
+	// Getter for var26.
+	public double get$var26();
+
+	// Setter for var26.
+	public void set$var26(double cv$value);
+
+	// Getter for var33.
+	public double get$var33();
+
+	// Setter for var33.
+	public void set$var33(double cv$value);
+
 	// Method to generate a new random state for the model excluding any fixed values
 	// and then calculate its probability.
 	public void logEvidenceGeneration();

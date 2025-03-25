@@ -21,8 +21,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$var100;
 	private double[][] logProbability$var58;
 	private int[] observed;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection1 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK4$SingleThreadCPU(ExecutionTarget target) {
@@ -54,7 +52,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void set$indirection1(double[][] cv$value) {
 		indirection1 = cv$value;
-		setFlag$indirection1 = true;
 		fixedProbFlag$sample61 = false;
 		fixedProbFlag$sample103 = false;
 	}
@@ -277,8 +274,12 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$currentValue = cv$proposedValue;
 				{
 					double var59 = cv$proposedValue;
-					double[] var55 = indirection1[i];
-					var55[j] = cv$currentValue;
+					{
+						{
+							double[] var55 = indirection1[i];
+							var55[j] = cv$currentValue;
+						}
+					}
 					{
 						for(int k = 0; k < length$observed; k += 1) {
 							if((i == k)) {
@@ -308,7 +309,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var56 <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var57))?(-Math.log((cv$temp$1$var57 - cv$temp$0$var56))):Double.NEGATIVE_INFINITY));
 				{
 					{
-						double traceTempVariable$var85$2_1 = cv$currentValue;
+						double traceTempVariable$var85$3_1 = cv$currentValue;
 						for(int k = 0; k < length$observed; k += 1) {
 							if((i == k)) {
 								for(int l = 0; l < 10; l += 1) {
@@ -380,8 +381,12 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var59 = cv$originalValue;
-			double[] var55 = indirection1[i];
-			var55[j] = var59;
+			{
+				{
+					double[] var55 = indirection1[i];
+					var55[j] = var59;
+				}
+			}
 			{
 				for(int k = 0; k < length$observed; k += 1) {
 					if((i == k)) {
@@ -407,7 +412,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			generated = new int[length$observed];
 		}
-		if(!setFlag$indirection1) {
+		if(!fixedFlag$sample61) {
 			{
 				indirection1 = new double[length$observed][];
 				for(int var16 = 0; var16 < length$observed; var16 += 1)
@@ -587,7 +592,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int[] cv$source1 = observed;
 		int[] cv$target1 = generated;
 		int cv$length1 = cv$target1.length;
@@ -600,7 +605,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		for(int k = 0; k < length$observed; k += 1) {
 			double[] var83 = indirection2[k];
 			for(int l = 0; l < 10; l += 1) {
-				if(setFlag$indirection1)
+				if(fixedFlag$sample61)
 					var83[l] = indirection1[k][l];
 			}
 		}

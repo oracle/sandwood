@@ -117,6 +117,18 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value;
 	}
 
+	@Override
+	public final double get$var14() {
+		return var14;
+	}
+
+	@Override
+	public final void set$var14(double cv$value) {
+		var14 = cv$value;
+		fixedProbFlag$sample16 = false;
+		fixedProbFlag$sample20 = false;
+	}
+
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
@@ -365,7 +377,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		value = observedValue;
 	}
 
@@ -373,8 +385,10 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void setIntermediates() {
 		if(guard)
 			bias = 0.5;
-		else
-			bias = var14;
+		else {
+			if(fixedFlag$sample16)
+				bias = var14;
+		}
 	}
 
 	@Override

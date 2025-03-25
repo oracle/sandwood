@@ -24,9 +24,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$var31;
 	private double[] observed;
 	private double[] sample;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection = false;
-	private boolean setFlag$sample = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK2$SingleThreadCPU(ExecutionTarget target) {
@@ -74,10 +71,8 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for indirection.
 	@Override
 	public final void set$indirection(double[] cv$value) {
-		// Set indirection with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set indirection
 		indirection = cv$value;
-		setFlag$indirection = true;
 	}
 
 	// Getter for length$observed.
@@ -131,8 +126,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for observed.
 	@Override
 	public final void set$observed(double[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -145,10 +139,8 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for sample.
 	@Override
 	public final void set$sample(double[] cv$value) {
-		// Set sample with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set sample
 		sample = cv$value;
-		setFlag$sample = true;
 	}
 
 	// Calculate the probability of the samples represented by sample26 using sampled
@@ -571,13 +563,11 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Constructor for generated
 		generated = new double[length$observed];
 		
-		// If indirection has not been set already allocate space.
-		if(!setFlag$indirection)
-			// Constructor for indirection
-			indirection = new double[(length$observed + 1)];
+		// Constructor for indirection
+		indirection = new double[(length$observed + 1)];
 		
 		// If sample has not been set already allocate space.
-		if(!setFlag$sample)
+		if(!fixedFlag$sample26)
 			// Constructor for sample
 			sample = new double[length$observed];
 		
@@ -771,7 +761,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -781,9 +771,17 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(fixedFlag$sample26) {
+			for(int i = 0; i < length$observed; i += 1)
+				indirection[(i + 1)] = sample[i];
+		}
+	}
 
 	@Override
 	public String modelCode() {

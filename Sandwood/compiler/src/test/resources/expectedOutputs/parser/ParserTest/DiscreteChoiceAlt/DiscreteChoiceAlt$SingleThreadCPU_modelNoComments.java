@@ -25,8 +25,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private int noObs;
 	private int noProducts;
 	private double[] prob;
-	private boolean setFlag$choices = false;
-	private boolean setFlag$ut = false;
 	private double sum;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
@@ -140,7 +138,6 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void set$ut(double[] cv$value) {
 		ut = cv$value;
-		setFlag$ut = true;
 		fixedProbFlag$sample24 = false;
 		fixedProbFlag$sample78 = false;
 	}
@@ -386,7 +383,11 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$currentValue = cv$proposedValue;
 				{
 					double var24 = cv$proposedValue;
-					ut[i$var18] = cv$currentValue;
+					{
+						{
+							ut[i$var18] = cv$currentValue;
+						}
+					}
 					{
 						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
@@ -482,27 +483,27 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				{
 					{
 						boolean guard$sample24categorical66 = false;
-						double traceTempVariable$var37$7_1 = cv$currentValue;
+						double traceTempVariable$var37$8_1 = cv$currentValue;
 						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								double traceTempVariable$i$7_3 = Math.exp(traceTempVariable$var37$7_1);
+								double traceTempVariable$i$8_3 = Math.exp(traceTempVariable$var37$8_1);
 								if(((0 <= i$var36) && (i$var36 < noProducts))) {
 									{
 										if((0 < noProducts)) {
 											double reduceVar$sum$1 = 0.0;
-											for(int cv$reduction265Index = 0; cv$reduction265Index < i$var36; cv$reduction265Index += 1) {
+											for(int cv$reduction268Index = 0; cv$reduction268Index < i$var36; cv$reduction268Index += 1) {
 												double i$var47 = reduceVar$sum$1;
-												double j = exped[cv$reduction265Index];
+												double j = exped[cv$reduction268Index];
 												reduceVar$sum$1 = (i$var47 + j);
 											}
-											for(int cv$reduction265Index = (i$var36 + 1); cv$reduction265Index < noProducts; cv$reduction265Index += 1) {
+											for(int cv$reduction268Index = (i$var36 + 1); cv$reduction268Index < noProducts; cv$reduction268Index += 1) {
 												double i$var47 = reduceVar$sum$1;
-												double j = exped[cv$reduction265Index];
+												double j = exped[cv$reduction268Index];
 												reduceVar$sum$1 = (i$var47 + j);
 											}
 											double cv$reduced44 = reduceVar$sum$1;
-											reduceVar$sum$1 = (traceTempVariable$i$7_3 + cv$reduced44);
-											double traceTempVariable$sum$7_4 = reduceVar$sum$1;
+											reduceVar$sum$1 = (traceTempVariable$i$8_3 + cv$reduced44);
+											double traceTempVariable$sum$8_4 = reduceVar$sum$1;
 											if(!guard$sample24categorical66) {
 												guard$sample24categorical66 = true;
 												{
@@ -552,10 +553,10 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 								}
 							}
 						}
-						double traceTempVariable$var37$8_1 = cv$currentValue;
+						double traceTempVariable$var37$9_1 = cv$currentValue;
 						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								double traceTempVariable$var62$8_3 = Math.exp(traceTempVariable$var37$8_1);
+								double traceTempVariable$var62$9_3 = Math.exp(traceTempVariable$var37$9_1);
 								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
 									if((i$var36 == i$var61)) {
 										if(!guard$sample24categorical66) {
@@ -625,7 +626,11 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var24 = cv$originalValue;
-			ut[i$var18] = var24;
+			{
+				{
+					ut[i$var18] = var24;
+				}
+			}
 			{
 				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
@@ -717,7 +722,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	@Override
 	public final void allocator() {
-		if(!setFlag$ut) {
+		if(!fixedFlag$sample24) {
 			{
 				ut = new double[noProducts];
 			}
@@ -911,7 +916,7 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int[] cv$source1 = ObsChoices;
 		int[] cv$target1 = choices;
 		int cv$length1 = cv$target1.length;
@@ -922,20 +927,20 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void setIntermediates() {
 		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(setFlag$ut)
+			if(fixedFlag$sample24)
 				exped[i$var36] = Math.exp(ut[i$var36]);
 		}
-		if(setFlag$ut) {
-			double reduceVar$sum$7 = 0.0;
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
-				double i$var47 = reduceVar$sum$7;
-				double j = exped[cv$reduction44Index];
+		double reduceVar$sum$7 = 0.0;
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			double i$var47 = reduceVar$sum$7;
+			double j = exped[cv$reduction44Index];
+			if(fixedFlag$sample24)
 				reduceVar$sum$7 = (i$var47 + j);
-			}
-			sum = reduceVar$sum$7;
 		}
+		if(fixedFlag$sample24)
+			sum = reduceVar$sum$7;
 		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(setFlag$ut)
+			if(fixedFlag$sample24)
 				prob[i$var61] = (exped[i$var61] / sum);
 		}
 	}

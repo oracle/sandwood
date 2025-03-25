@@ -34,8 +34,6 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] logProbability$var26;
 	private double logProbability$var4;
 	private double[] logProbability$var52;
-	private boolean setFlag$v = false;
-	private boolean setFlag$v2 = false;
 	private int size;
 	private boolean system$gibbsForward = true;
 	private boolean[] v;
@@ -46,6 +44,45 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	public DistributionTest4$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
+	}
+
+	// Getter for distribution$sample11.
+	@Override
+	public final double[] get$distribution$sample11() {
+		return distribution$sample11;
+	}
+
+	// Setter for distribution$sample11.
+	@Override
+	public final void set$distribution$sample11(double[] cv$value) {
+		// Set distribution$sample11
+		distribution$sample11 = cv$value;
+	}
+
+	// Getter for distribution$sample27.
+	@Override
+	public final double[][] get$distribution$sample27() {
+		return distribution$sample27;
+	}
+
+	// Setter for distribution$sample27.
+	@Override
+	public final void set$distribution$sample27(double[][] cv$value) {
+		// Set distribution$sample27
+		distribution$sample27 = cv$value;
+	}
+
+	// Getter for distribution$sample5.
+	@Override
+	public final double[] get$distribution$sample5() {
+		return distribution$sample5;
+	}
+
+	// Setter for distribution$sample5.
+	@Override
+	public final void set$distribution$sample5(double[] cv$value) {
+		// Set distribution$sample5
+		distribution$sample5 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample11.
@@ -199,10 +236,8 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$v2(int[] cv$value) {
 		// Set flags for all the side effects of v2 including if probabilities need to be
 		// updated.
-		// Set v2 with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set v2
 		v2 = cv$value;
-		setFlag$v2 = true;
 		
 		// Unset the fixed probability flag for sample 11 as it depends on v2.
 		fixedProbFlag$sample11 = false;
@@ -223,8 +258,7 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for value.
 	@Override
 	public final void set$value(boolean[] cv$value) {
-		// Set value with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set value
 		value = cv$value;
 	}
 
@@ -237,8 +271,7 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for weightings.
 	@Override
 	public final void set$weightings(double[] cv$value) {
-		// Set weightings with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set weightings
 		weightings = cv$value;
 	}
 
@@ -14180,7 +14213,7 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void allocator() {
 		// If v2 has not been set already allocate space.
-		if(!setFlag$v2) {
+		if((!fixedFlag$sample11 || !fixedFlag$sample27)) {
 			// Constructor for v2
 			{
 				v2 = new int[(length$value + 1)];
@@ -14443,7 +14476,7 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = value;
 		boolean[] cv$target1 = v;
@@ -14453,7 +14486,9 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

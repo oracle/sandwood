@@ -324,21 +324,31 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         put(i, value, false, location);
     }
 
-    private <B extends Variable<B>> void put(IntVariable i, B value, boolean implicit, Location location) {
+    private <B extends Variable<B>> void put(IntVariable index, B value, boolean implicit, Location location) {
         if(getElementType().equals(value.getType())) {
-            typeCheckedPut(i, (A) value, implicit, location);
+            typeCheckedPut(index, (A) value, implicit, location);
         } else if(getElementType() == VariableType.DoubleVariable && value.getType() == VariableType.IntVariable) {
-            typeCheckedPut(i, (A) ((IntVariable) value).castToDouble(location), implicit, location);
+            typeCheckedPut(index, (A) ((IntVariable) value).castToDouble(location), implicit, location);
         } else {
             throw new SandwoodModelException("Incompatible types, type " + value.getType().getJavaType()
                     + " cannot be assigned to an array of type " + getType().getJavaType() + ".", location);
         }
     }
 
-    private <C extends Variable<C>> void typeCheckedPut(IntVariable i, A value, boolean implicit, Location location) {
+    /**
+     * The put operation after type checking it.
+     * 
+     * @param <C>
+     * @param index
+     * @param value
+     * @param implicit
+     * @param location
+     */
+    private <C extends Variable<C>> void typeCheckedPut(IntVariable index, A value, boolean implicit,
+            Location location) {
         if(implicit)
             ScopeStack.pushScope(((ArrayVariable<?>) value).outerArrayDesc.scope);
-        PutTask<A> putTask = new PutTask<>(this, i, value.getCurrentInstance(), implicit, location);
+        PutTask<A> putTask = new PutTask<>(this, index, value.getCurrentInstance(), implicit, location);
         ArrayVariable<A> newArray = new ArrayVariable<>(putTask, this);
         if(implicit)
             ScopeStack.popScope(((ArrayVariable<?>) value).outerArrayDesc.scope);
@@ -349,7 +359,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
             ArrayVariable<C> arrayValue = (ArrayVariable<C>) value;
             if(arrayValue.outerArrayDesc.array == null) {
                 arrayValue.outerArrayDesc.array = (ArrayVariable<ArrayVariable<C>>) instanceHandle();
-                arrayValue.outerArrayDesc.index = i;
+                arrayValue.outerArrayDesc.index = index;
                 arrayValue.outerArrayDesc.scope = ScopeStack.getCurrentScope();
                 arrayValue.outerArrayDesc.getTask = new GetArrayTask<>((PutTask<ArrayVariable<C>>) putTask);
             } else {
@@ -358,7 +368,7 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                 ArrayVariable<A> exisitingOuterArray = (ArrayVariable<A>) arrayValue.outerArrayDesc.array;
                 if(thisArray == exisitingOuterArray) {
                     IntVariable exisitingIndex = arrayValue.outerArrayDesc.index;
-                    if(i.equivalent(exisitingIndex)) {
+                    if(index.equivalent(exisitingIndex)) {
                         putTask.assignmentToSameArrayElement();
                     } else {
                         putTask.assignmentToSameArrayDifferntElements();

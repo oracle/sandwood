@@ -132,6 +132,9 @@ public class TracesImplementation extends Traces {
     // in the outer array.
     private final Map<GetTask<?>, LengthTraceDesc> lengthTraces = new HashMap<>();
 
+    // A map from variables to the traces that lead to observed fixed.
+    private final Map<Variable<?>, Set<TraceHandle>> observedVariableTraces = new HashMap<>();
+
     /**
      * TODO currently using a variable as a means of collecting the graph, a neater way would be nice, but I don't want
      * state to leak between programs, so some form of context object would be required, and a clean way of adding that
@@ -457,7 +460,7 @@ public class TracesImplementation extends Traces {
                                 Variable<?> output = p.getOutput();
                                 // If the putput is fixed look to see if an input can be fixed
                                 if(output.isFixed()) {
-                                    fixFreeInput(tracking, v, os, p);
+                                    fixFreeInput(tracking, v, output.getFixingObservations(), p);
                                 } else {
                                     fixOutput(tracking, constraints, v, p, output);
                                 }
@@ -1052,18 +1055,18 @@ public class TracesImplementation extends Traces {
     private void setIntermediates() {
         for(Variable<?> v:allVariables) {
             if(!(v.getParent().getType() == DFType.CONSTRUCT_INPUT || (v instanceof RandomVariable))) {
-                if(!v.isPrivate()) {
-                    v.setIntermediate();
-                    if(v.isDeterministic())
-                        deterministicVars.add(v);
-                    else
-                        computedVars.add(v.instanceHandle());
-                } else { // Look for outermost arrays and set them as intermediates.
+                if(v.isPrivate()) { // Look for outermost arrays and set them as intermediates.
                     if((v.getType().isArray() && !((ArrayVariable<?>) v).isSubArray())) {
                         v.setIntermediate();
                         if(v.isDeterministic())
                             deterministicVars.add(v);
                     }
+                } else {
+                    v.setIntermediate();
+                    if(v.isDeterministic())
+                        deterministicVars.add(v);
+                    else
+                        computedVars.add(v.instanceHandle());
                 }
             }
         }
@@ -1195,6 +1198,9 @@ public class TracesImplementation extends Traces {
 
                 sampleTrace.computeIfAbsent(sourceSample,
                         k -> new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle));
+
+                addVariableObservationsTraces(handle);
+
                 break;
             }
             case CONSTRUCT_INPUT: {
@@ -1245,6 +1251,47 @@ public class TracesImplementation extends Traces {
                 break;
             }
         }
+    }
+
+    private void addVariableObservationsTraces(TraceHandle handle) {
+        // Find the index of the first observed variable.
+        int end = handle.size() - 1;
+        Variable<?> v = handle.get(end).task.getOutput();
+        while(end != 0 && v.isFixed()) {
+            end--;
+            v = handle.get(end).task.getOutput();
+        }
+
+        // If the whole trace is fixed.
+        if(v.isFixed())
+            return;
+
+        // Move end back to the fixed variable.
+        end++;
+
+        // Move the start back to the first variable that can be calculated by inverting the trace
+        int start = end;
+        if(start != 0) {
+            DataflowTaskArgDesc d = handle.get(start);
+            while(start != 0 && d.task.checkInversionError(d.argPos) == null)
+                d = handle.get(--start);
+        }
+
+        // Search for sample and intermediate variables that link to the observed variable
+        while(start < end) {
+            v = handle.get(start).task.getOutput();
+            if(v.isIntermediate() || v.isSample()) {
+                TraceHandle t = handle.subTrace(start, end + 1);
+                Set<TraceHandle> ts = observedVariableTraces.computeIfAbsent(v, k -> new HashSet<>());
+                ts.add(t);
+            }
+            start++;
+        }
+    }
+
+    @Override
+    public Set<TraceHandle> getVariableObservationsTraces(Variable<?> v) {
+        return observedVariableTraces.getOrDefault(v, Collections.emptySet());
     }
 
     private boolean shapeParameterRequired(TraceHandle handle) {
@@ -1846,12 +1893,7 @@ public class TracesImplementation extends Traces {
 
     @Override
     public IntermediateDesc getIntermediates(SampleTask<?, ?> sample) {
-        IntermediateDesc result = sampleToIntermediates.get(sample);
-        if(result == null) {
-            result = new IntermediateDesc(sample);
-            sampleToIntermediates.put(sample, result);
-        }
-        return result;
+        return sampleToIntermediates.computeIfAbsent(sample, k -> new IntermediateDesc(sample));
     }
 
     @Override
@@ -1865,7 +1907,7 @@ public class TracesImplementation extends Traces {
 
     @Override
     public Set<Variable<?>> getRequiredIntermediates(Variable<?> v) {
-        Set<Variable<?>> result = requiredIntermediates.get(v);
+        Set<Variable<?>> result = requiredIntermediates.get(v.instanceHandle());
         if(result == null)
             return Collections.emptySet();
         else
@@ -2052,6 +2094,12 @@ public class TracesImplementation extends Traces {
 
         Set<Variable<?>> requirements = new HashSet<>();
         for(TraceSinkPair p:dagInfo.allTraces()) {
+            DataflowTaskArgDesc d = p.handle.get(0);
+            if(d.task.getInputsCount() > 0) {
+                Variable<?> sourceVar = d.task.getInput(d.argPos);
+                if(sourceVar.isFixed())
+                    requirements.add(sourceVar);
+            }
             for(DataflowTaskArgDesc a:p.handle) {
                 Variable<?> v = a.task.getOutput().instanceHandle();
                 if(v.isIntermediate()) {

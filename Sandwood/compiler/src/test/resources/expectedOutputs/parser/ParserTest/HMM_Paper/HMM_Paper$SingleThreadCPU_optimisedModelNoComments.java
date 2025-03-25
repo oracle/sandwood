@@ -46,11 +46,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private boolean[] measured;
 	private int nCoins;
 	private int nFlips;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$initialCoin = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -67,7 +62,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		setFlag$bias = true;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample87 = false;
 	}
@@ -146,7 +140,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final void set$initialCoin(double[] cv$value) {
 		initialCoin = cv$value;
-		setFlag$initialCoin = true;
 		fixedProbFlag$sample32 = false;
 		fixedProbFlag$sample53 = false;
 	}
@@ -204,7 +197,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final void set$m(double[][] cv$value) {
 		m = cv$value;
-		setFlag$m = true;
 		fixedProbFlag$sample28 = false;
 		fixedProbFlag$sample71 = false;
 	}
@@ -242,7 +234,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final void set$st(int[] cv$value) {
 		st = cv$value;
-		setFlag$st = true;
 		fixedProbFlag$sample53 = false;
 		fixedProbFlag$sample71 = false;
 		fixedProbFlag$sample87 = false;
@@ -460,9 +451,9 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			st[i] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < nCoins)?Math.log(m[st[(i - 1)]][cv$valuePos]):Double.NEGATIVE_INFINITY);
-			int index$i$1_2 = (i + 1);
-			if((index$i$1_2 < nFlips))
-				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < nCoins))?Math.log(m[cv$valuePos][st[index$i$1_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			int index$i$2_2 = (i + 1);
+			if((index$i$2_2 < nFlips))
+				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < nCoins))?Math.log(m[cv$valuePos][st[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i], bias[cv$valuePos]) + cv$accumulatedProbabilities);
 			cv$var70$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
@@ -504,16 +495,16 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	@Override
 	public final void allocator() {
 		v = new double[nCoins];
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			m = new double[nCoins][];
 			for(int var27 = 0; var27 < nCoins; var27 += 1)
 				m[var27] = new double[nCoins];
 		}
-		if(!setFlag$initialCoin)
+		if(!fixedFlag$sample32)
 			initialCoin = new double[nCoins];
-		if(!setFlag$bias)
+		if(!fixedFlag$sample47)
 			bias = new double[nCoins];
-		if(!setFlag$st)
+		if((!fixedFlag$sample53 || !fixedFlag$sample71))
 			st = new int[length$measured];
 		flips = new boolean[length$measured];
 		logProbability$var69 = new double[(length$measured - 1)];
@@ -730,7 +721,7 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		int cv$length1 = flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			flips[cv$index1] = measured[cv$index1];

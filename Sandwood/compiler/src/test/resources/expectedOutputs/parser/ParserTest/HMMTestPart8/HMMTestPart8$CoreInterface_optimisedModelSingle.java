@@ -8,6 +8,12 @@ interface HMMTestPart8$CoreInterface extends org.sandwood.runtime.internal.model
 	// Setter for bias.
 	public void set$bias(double[] cv$value);
 
+	// Getter for distribution$sample71.
+	public double[][] get$distribution$sample71();
+
+	// Setter for distribution$sample71.
+	public void set$distribution$sample71(double[][] cv$value);
+
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 

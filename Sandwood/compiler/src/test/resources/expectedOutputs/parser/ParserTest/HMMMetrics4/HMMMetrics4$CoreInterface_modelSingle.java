@@ -20,6 +20,18 @@ interface HMMMetrics4$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Setter for current_metric_var.
 	public void set$current_metric_var(double[][] cv$value);
 
+	// Getter for distribution$sample57.
+	public double[][] get$distribution$sample57();
+
+	// Setter for distribution$sample57.
+	public void set$distribution$sample57(double[][] cv$value);
+
+	// Getter for distribution$sample76.
+	public double[][][] get$distribution$sample76();
+
+	// Setter for distribution$sample76.
+	public void set$distribution$sample76(double[][][] cv$value);
+
 	// Getter for fixedFlag$sample134.
 	public boolean get$fixedFlag$sample134();
 

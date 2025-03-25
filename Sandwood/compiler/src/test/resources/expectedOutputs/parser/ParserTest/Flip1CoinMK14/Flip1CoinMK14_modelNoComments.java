@@ -17,15 +17,14 @@ public class Flip1CoinMK14 extends Model {
 
     private Flip1CoinMK14$CoreInterface system$c = new Flip1CoinMK14$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true) {
+    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true, true, false) {
         @Override
         public double getValue() { return system$c.get$b(); }
 
         @Override
         protected void setValueInternal(double value) {
             system$c.set$b(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,7 +51,7 @@ public class Flip1CoinMK14 extends Model {
      */
     public final ComputedDouble b = $b;
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", false) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", false, false, false) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
@@ -88,7 +87,7 @@ public class Flip1CoinMK14 extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", true) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -247,6 +246,7 @@ public class Flip1CoinMK14 extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Flip1CoinMK14$CoreInterface oldCore, Flip1CoinMK14$CoreInterface newCore) {
         //Model inputs
         if(guard1.isSet())
@@ -261,12 +261,11 @@ public class Flip1CoinMK14 extends Model {
             newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
 
         //ComputedVariables
-        if(b.isSet())
+        if($b.isSet())
             newCore.set$b(oldCore.get$b());
 
         //Set fixed flags
-        if(b.isSet())
-            newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
+        newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
     }
 
     /**

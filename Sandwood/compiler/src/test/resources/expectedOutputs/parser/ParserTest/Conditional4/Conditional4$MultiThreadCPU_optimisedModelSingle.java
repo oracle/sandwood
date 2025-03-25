@@ -24,7 +24,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var19;
 	private double logProbability$var24;
 	private double observedValue;
-	private boolean setFlag$bias = false;
 	private boolean system$gibbsForward = true;
 	private double value;
 
@@ -43,10 +42,8 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 21 as it depends on bias.
 		fixedProbFlag$sample21 = false;
@@ -593,7 +590,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Set the current value to the current state of the tree.
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		
-		// Update Sample and intermediate values
+		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[0] = cv$proposedValue;
 		
 		// Variable declaration of cv$accumulatedProbabilities moved.
@@ -647,6 +644,8 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
+			// 
+			// Guards to ensure that bias is only updated when there is a valid path.
 			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
@@ -847,7 +846,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void allocator() {
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias)
+		if((!fixedFlag$sample4 || !fixedFlag$sample21))
 			// Constructor for bias
 			bias = new double[1];
 		
@@ -860,11 +859,10 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				bias[0] = 0.5;
-		} else {
-			if((!fixedFlag$sample4 || !fixedFlag$sample21))
+		if(guard)
+			bias[0] = 0.5;
+		else {
+			if(!fixedFlag$sample21)
 				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
 		}
 		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
@@ -876,11 +874,10 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				bias[0] = 0.5;
-		} else {
-			if((!fixedFlag$sample4 || !fixedFlag$sample21))
+		if(guard)
+			bias[0] = 0.5;
+		else {
+			if(!fixedFlag$sample21)
 				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
 		}
 	}
@@ -891,11 +888,10 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				bias[0] = 0.5;
-		} else {
-			if((!fixedFlag$sample4 || !fixedFlag$sample21))
+		if(guard)
+			bias[0] = 0.5;
+		else {
+			if(!fixedFlag$sample21)
 				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
 		}
 	}
@@ -1019,11 +1015,10 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				bias[0] = 0.5;
-		} else {
-			if((!fixedFlag$sample4 || !fixedFlag$sample21))
+		if(guard)
+			bias[0] = 0.5;
+		else {
+			if(!fixedFlag$sample21)
 				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
 		}
 		
@@ -1035,13 +1030,15 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		value = observedValue;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		if(guard)

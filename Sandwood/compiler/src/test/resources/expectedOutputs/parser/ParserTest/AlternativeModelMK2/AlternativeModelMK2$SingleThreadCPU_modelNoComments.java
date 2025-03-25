@@ -306,7 +306,7 @@ class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		positiveCount = observedPositiveCount;
 	}
 

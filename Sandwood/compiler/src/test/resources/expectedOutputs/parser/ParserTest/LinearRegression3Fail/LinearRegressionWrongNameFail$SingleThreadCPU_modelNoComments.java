@@ -26,7 +26,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
-	private boolean setFlag$y = false;
 	private boolean system$gibbsForward = true;
 	private double variance;
 	private double[] x;
@@ -587,7 +586,7 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
 		int cv$length1 = cv$target1.length;

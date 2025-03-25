@@ -49,11 +49,6 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private boolean[] measured;
 	private int nCoins;
 	private int nFlips;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
-	private boolean setFlag$initialCoin = false;
-	private boolean setFlag$m = false;
-	private boolean setFlag$st = false;
 	private int[] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
@@ -73,10 +68,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on bias.
 		fixedProbFlag$sample47 = false;
@@ -216,10 +209,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$initialCoin(double[] cv$value) {
 		// Set flags for all the side effects of initialCoin including if probabilities need
 		// to be updated.
-		// Set initialCoin with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set initialCoin
 		initialCoin = cv$value;
-		setFlag$initialCoin = true;
 		
 		// Unset the fixed probability flag for sample 32 as it depends on initialCoin.
 		fixedProbFlag$sample32 = false;
@@ -292,10 +283,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	@Override
 	public final void set$m(double[][] cv$value) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m with flag to mark that it has been set so another array doesn't need to be
-		// constructed
+		// Set m
 		m = cv$value;
-		setFlag$m = true;
 		
 		// Unset the fixed probability flag for sample 28 as it depends on m.
 		fixedProbFlag$sample28 = false;
@@ -313,8 +302,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	// Setter for measured.
 	@Override
 	public final void set$measured(boolean[] cv$value) {
-		// Set measured with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set measured
 		measured = cv$value;
 	}
 
@@ -347,10 +335,8 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	public final void set$st(int[] cv$value) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set st
 		st = cv$value;
-		setFlag$st = true;
 		
 		// Unset the fixed probability flag for sample 53 as it depends on st.
 		fixedProbFlag$sample53 = false;
@@ -1101,7 +1087,13 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		double var46 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[var45] = var46;
+		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		{
+			{
+				bias[var45] = var46;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1137,7 +1129,13 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			int var52 = cv$currentValue;
-			st[0] = cv$currentValue;
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[0] = cv$currentValue;
+				}
+			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
@@ -1160,7 +1158,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				{
 					// Looking for a path between Sample 53 and consumer Categorical 69.
 					{
-						int traceTempVariable$var67$1_1 = cv$currentValue;
+						int traceTempVariable$var67$2_1 = cv$currentValue;
 						for(int i = 1; i < nFlips; i += 1) {
 							if((0 == (i - 1))) {
 								// Processing sample task 71 of consumer random variable null.
@@ -1179,7 +1177,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 													double[] cv$temp$2$var68;
 													{
 														// Constructing a random variable input for use later.
-														double[] var68 = m[traceTempVariable$var67$1_1];
+														double[] var68 = m[traceTempVariable$var67$2_1];
 														cv$temp$2$var68 = var68;
 													}
 													int cv$temp$3$$var341;
@@ -1232,7 +1230,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				{
 					// Looking for a path between Sample 53 and consumer Bernoulli 85.
 					{
-						int traceTempVariable$var83$4_1 = cv$currentValue;
+						int traceTempVariable$var83$5_1 = cv$currentValue;
 						for(int j = 0; j < nFlips; j += 1) {
 							if((0 == j)) {
 								// Processing sample task 87 of consumer random variable null.
@@ -1251,7 +1249,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 													double cv$temp$4$var84;
 													{
 														// Constructing a random variable input for use later.
-														double var84 = bias[traceTempVariable$var83$4_1];
+														double var84 = bias[traceTempVariable$var83$5_1];
 														cv$temp$4$var84 = var84;
 													}
 													
@@ -1362,7 +1360,13 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		int var52 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		st[0] = var52;
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		{
+			{
+				st[0] = var52;
+			}
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1398,7 +1402,13 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			int var70 = cv$currentValue;
-			st[i] = cv$currentValue;
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[i] = cv$currentValue;
+				}
+			}
 			{
 				// Record the reached probability density.
 				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
@@ -1423,9 +1433,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				{
 					// Looking for a path between Sample 71 and consumer Categorical 69.
 					{
-						int traceTempVariable$var67$1_1 = cv$currentValue;
-						for(int index$i$1_2 = 1; index$i$1_2 < nFlips; index$i$1_2 += 1) {
-							if((i == (index$i$1_2 - 1))) {
+						int traceTempVariable$var67$2_1 = cv$currentValue;
+						for(int index$i$2_2 = 1; index$i$2_2 < nFlips; index$i$2_2 += 1) {
+							if((i == (index$i$2_2 - 1))) {
 								// Processing sample task 71 of consumer random variable null.
 								{
 									// Set an accumulator to sum the probabilities for each possible configuration of
@@ -1442,7 +1452,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 													double[] cv$temp$2$var68;
 													{
 														// Constructing a random variable input for use later.
-														double[] var68 = m[traceTempVariable$var67$1_1];
+														double[] var68 = m[traceTempVariable$var67$2_1];
 														cv$temp$2$var68 = var68;
 													}
 													int cv$temp$3$$var372;
@@ -1453,14 +1463,14 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 													}
 													
 													// Record the probability of sample task 71 generating output with current configuration.
-													if(((Math.log(1.0) + (((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$1_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$1_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$1_2]]):Double.NEGATIVE_INFINITY));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$1_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$1_2]) && (st[index$i$1_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$1_2]]):Double.NEGATIVE_INFINITY)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var372))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
 													}
 													
 													// Recorded the probability of reaching sample task 71 with the current configuration.
@@ -1495,7 +1505,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				{
 					// Looking for a path between Sample 71 and consumer Bernoulli 85.
 					{
-						int traceTempVariable$var83$4_1 = cv$currentValue;
+						int traceTempVariable$var83$5_1 = cv$currentValue;
 						for(int j = 0; j < nFlips; j += 1) {
 							if((i == j)) {
 								// Processing sample task 87 of consumer random variable null.
@@ -1514,7 +1524,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 													double cv$temp$4$var84;
 													{
 														// Constructing a random variable input for use later.
-														double var84 = bias[traceTempVariable$var83$4_1];
+														double var84 = bias[traceTempVariable$var83$5_1];
 														cv$temp$4$var84 = var84;
 													}
 													
@@ -1625,7 +1635,13 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		int var70 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		st[i] = var70;
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		{
+			{
+				st[i] = var70;
+			}
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -1682,7 +1698,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		}
 		
 		// If m has not been set already allocate space.
-		if(!setFlag$m) {
+		if(!fixedFlag$sample28) {
 			// Constructor for m
 			{
 				m = new double[nCoins][];
@@ -1692,7 +1708,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		}
 		
 		// If initialCoin has not been set already allocate space.
-		if(!setFlag$initialCoin) {
+		if(!fixedFlag$sample32) {
 			// Constructor for initialCoin
 			{
 				initialCoin = new double[nCoins];
@@ -1700,7 +1716,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample47) {
 			// Constructor for bias
 			{
 				bias = new double[nCoins];
@@ -1708,7 +1724,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		}
 		
 		// If st has not been set already allocate space.
-		if(!setFlag$st) {
+		if((!fixedFlag$sample53 || !fixedFlag$sample71)) {
 			// Constructor for st
 			{
 				st = new int[length$measured];
@@ -2109,7 +2125,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[] cv$source1 = measured;
 		boolean[] cv$target1 = flips;
@@ -2119,7 +2135,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

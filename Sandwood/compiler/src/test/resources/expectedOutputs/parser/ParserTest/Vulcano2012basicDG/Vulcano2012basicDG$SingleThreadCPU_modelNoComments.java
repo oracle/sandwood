@@ -44,9 +44,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private int numTimeSteps;
 	private double r;
 	private int[][] sales;
-	private boolean setFlag$arrivals = false;
-	private boolean setFlag$lambda = false;
-	private boolean setFlag$weekly_sales = false;
 	private boolean system$gibbsForward = true;
 	private double[] ut;
 	private double[][] weekly_rates;
@@ -75,7 +72,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$arrivals(int[] cv$value) {
 		arrivals = cv$value;
-		setFlag$arrivals = true;
 	}
 
 	@Override
@@ -132,7 +128,6 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$lambda(double[] cv$value) {
 		lambda = cv$value;
-		setFlag$lambda = true;
 	}
 
 	@Override
@@ -168,6 +163,18 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double get$r() {
 		return r;
+	}
+
+	@Override
+	public final double[] get$ut() {
+		return ut;
+	}
+
+	@Override
+	public final void set$ut(double[] cv$value) {
+		ut = cv$value;
+		fixedProbFlag$sample32 = false;
+		fixedProbFlag$sample166 = false;
 	}
 
 	@Override
@@ -936,13 +943,19 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				cv$currentValue = cv$proposedValue;
 				{
 					int var109 = cv$proposedValue;
-					int reduceVar$numSales$2 = 0;
-					for(int cv$reduction100Index = 0; cv$reduction100Index < ObsSales[t].length; cv$reduction100Index += 1) {
-						int k$var98 = reduceVar$numSales$2;
-						int l$var99 = ObsSales[t][cv$reduction100Index];
-						reduceVar$numSales$2 = (k$var98 + l$var99);
+					{
+						if((0 < numTimeSteps)) {
+							{
+								int reduceVar$numSales$2 = 0;
+								for(int cv$reduction100Index = 0; cv$reduction100Index < ObsSales[t].length; cv$reduction100Index += 1) {
+									int k$var98 = reduceVar$numSales$2;
+									int l$var99 = ObsSales[t][cv$reduction100Index];
+									reduceVar$numSales$2 = (k$var98 + l$var99);
+								}
+								arrivals[((t - 0) / 1)] = (reduceVar$numSales$2 + cv$currentValue);
+							}
+						}
 					}
-					arrivals[((t - 0) / 1)] = (reduceVar$numSales$2 + cv$currentValue);
 				}
 			}
 			{
@@ -955,7 +968,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				{
 					{
 						if((0 < numTimeSteps)) {
-							int traceTempVariable$arrivals$1_1 = arrivals[((t - 0) / 1)];
+							int traceTempVariable$arrivals$2_1 = arrivals[((t - 0) / 1)];
 							{
 								if((0 < numTimeSteps)) {
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -976,7 +989,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 														}
 														int cv$temp$3$arrivals;
 														{
-															cv$temp$3$arrivals = traceTempVariable$arrivals$1_1;
+															cv$temp$3$arrivals = traceTempVariable$arrivals$2_1;
 														}
 														if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var791, cv$temp$3$arrivals)) < cv$accumulatedConsumerProbabilities))
 															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(weekly_sales[((t - 0) / 1)], cv$temp$1$weekly_rates, cv$temp$2$$var791, cv$temp$3$arrivals)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
@@ -1023,13 +1036,19 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			int var109 = cv$originalValue;
-			int reduceVar$numSales$3 = 0;
-			for(int cv$reduction100Index = 0; cv$reduction100Index < ObsSales[t].length; cv$reduction100Index += 1) {
-				int k$var98 = reduceVar$numSales$3;
-				int l$var99 = ObsSales[t][cv$reduction100Index];
-				reduceVar$numSales$3 = (k$var98 + l$var99);
+			{
+				if((0 < numTimeSteps)) {
+					{
+						int reduceVar$numSales$3 = 0;
+						for(int cv$reduction100Index = 0; cv$reduction100Index < ObsSales[t].length; cv$reduction100Index += 1) {
+							int k$var98 = reduceVar$numSales$3;
+							int l$var99 = ObsSales[t][cv$reduction100Index];
+							reduceVar$numSales$3 = (k$var98 + l$var99);
+						}
+						arrivals[((t - 0) / 1)] = (reduceVar$numSales$3 + var109);
+					}
+				}
 			}
-			arrivals[((t - 0) / 1)] = (reduceVar$numSales$3 + var109);
 		}
 	}
 
@@ -1056,7 +1075,13 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				cv$currentValue = cv$proposedValue;
 				{
 					double var30 = cv$proposedValue;
-					ut[var29] = cv$currentValue;
+					{
+						if((0 < numTimeSteps)) {
+							{
+								ut[var29] = cv$currentValue;
+							}
+						}
+					}
 					{
 						if((0 < numTimeSteps)) {
 							for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
@@ -1584,51 +1609,51 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							}
 						}
 						if((0 < numTimeSteps)) {
-							double traceTempVariable$var42$22_1 = cv$currentValue;
+							double traceTempVariable$var42$23_1 = cv$currentValue;
 							for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
 								if((var29 == j$var41)) {
-									double traceTempVariable$k$22_3 = Math.exp(traceTempVariable$var42$22_1);
+									double traceTempVariable$k$23_3 = Math.exp(traceTempVariable$var42$23_1);
 									if(((0 <= j$var41) && (j$var41 < avail[0].length))) {
 										{
 											if((0 < avail[0].length)) {
 												double reduceVar$sum$2 = 0.0;
-												for(int cv$reduction784Index = 0; cv$reduction784Index < j$var41; cv$reduction784Index += 1) {
+												for(int cv$reduction789Index = 0; cv$reduction789Index < j$var41; cv$reduction789Index += 1) {
 													double k$var54 = reduceVar$sum$2;
-													double l$var55 = exped[cv$reduction784Index];
+													double l$var55 = exped[cv$reduction789Index];
 													reduceVar$sum$2 = (k$var54 + l$var55);
 												}
-												for(int cv$reduction784Index = (j$var41 + 1); cv$reduction784Index < avail[0].length; cv$reduction784Index += 1) {
+												for(int cv$reduction789Index = (j$var41 + 1); cv$reduction789Index < avail[0].length; cv$reduction789Index += 1) {
 													double k$var54 = reduceVar$sum$2;
-													double l$var55 = exped[cv$reduction784Index];
+													double l$var55 = exped[cv$reduction789Index];
 													reduceVar$sum$2 = (k$var54 + l$var55);
 												}
 												double cv$reduced54 = reduceVar$sum$2;
-												reduceVar$sum$2 = (traceTempVariable$k$22_3 + cv$reduced54);
-												double traceTempVariable$sum$22_4 = reduceVar$sum$2;
+												reduceVar$sum$2 = (traceTempVariable$k$23_3 + cv$reduced54);
+												double traceTempVariable$sum$23_4 = reduceVar$sum$2;
 												for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1) {
-													double traceTempVariable$var127$22_6 = (exped[j$var66] / (r * traceTempVariable$sum$22_4));
+													double traceTempVariable$var127$23_6 = (exped[j$var66] / (r * traceTempVariable$sum$23_4));
 													for(int t = 0; t < numTimeSteps; t += 1) {
 														for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
 															if(avail[t][j$var121]) {
 																if((j$var66 == j$var121)) {
-																	double traceTempVariable$k$22_9 = traceTempVariable$var127$22_6;
+																	double traceTempVariable$k$23_9 = traceTempVariable$var127$23_6;
 																	if(((0 <= j$var121) && (j$var121 < (avail[0].length + 1)))) {
 																		{
 																			if((0 < (avail[0].length + 1))) {
 																				double reduceVar$denom$4 = 0.0;
-																				for(int cv$reduction805Index = 0; cv$reduction805Index < j$var121; cv$reduction805Index += 1) {
+																				for(int cv$reduction810Index = 0; cv$reduction810Index < j$var121; cv$reduction810Index += 1) {
 																					double k$var139 = reduceVar$denom$4;
-																					double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction805Index];
+																					double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction810Index];
 																					reduceVar$denom$4 = (k$var139 + l$var140);
 																				}
-																				for(int cv$reduction805Index = (j$var121 + 1); cv$reduction805Index < (avail[0].length + 1); cv$reduction805Index += 1) {
+																				for(int cv$reduction810Index = (j$var121 + 1); cv$reduction810Index < (avail[0].length + 1); cv$reduction810Index += 1) {
 																					double k$var139 = reduceVar$denom$4;
-																					double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction805Index];
+																					double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction810Index];
 																					reduceVar$denom$4 = (k$var139 + l$var140);
 																				}
 																				double cv$reduced144 = reduceVar$denom$4;
-																				reduceVar$denom$4 = (traceTempVariable$k$22_9 + cv$reduced144);
-																				double traceTempVariable$denom$22_10 = reduceVar$denom$4;
+																				reduceVar$denom$4 = (traceTempVariable$k$23_9 + cv$reduced144);
+																				double traceTempVariable$denom$23_10 = reduceVar$denom$4;
 																				if(!guard$sample32multinomial165[((t - 0) / 1)]) {
 																					guard$sample32multinomial165[((t - 0) / 1)] = true;
 																					{
@@ -1694,34 +1719,34 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							}
 						}
 						if((0 < numTimeSteps)) {
-							double traceTempVariable$var42$23_1 = cv$currentValue;
+							double traceTempVariable$var42$24_1 = cv$currentValue;
 							for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
 								if((var29 == j$var41)) {
-									double traceTempVariable$k$23_3 = Math.exp(traceTempVariable$var42$23_1);
+									double traceTempVariable$k$24_3 = Math.exp(traceTempVariable$var42$24_1);
 									if(((0 <= j$var41) && (j$var41 < avail[0].length))) {
 										{
 											if((0 < avail[0].length)) {
 												double reduceVar$sum$3 = 0.0;
-												for(int cv$reduction830Index = 0; cv$reduction830Index < j$var41; cv$reduction830Index += 1) {
+												for(int cv$reduction835Index = 0; cv$reduction835Index < j$var41; cv$reduction835Index += 1) {
 													double k$var54 = reduceVar$sum$3;
-													double l$var55 = exped[cv$reduction830Index];
+													double l$var55 = exped[cv$reduction835Index];
 													reduceVar$sum$3 = (k$var54 + l$var55);
 												}
-												for(int cv$reduction830Index = (j$var41 + 1); cv$reduction830Index < avail[0].length; cv$reduction830Index += 1) {
+												for(int cv$reduction835Index = (j$var41 + 1); cv$reduction835Index < avail[0].length; cv$reduction835Index += 1) {
 													double k$var54 = reduceVar$sum$3;
-													double l$var55 = exped[cv$reduction830Index];
+													double l$var55 = exped[cv$reduction835Index];
 													reduceVar$sum$3 = (k$var54 + l$var55);
 												}
 												double cv$reduced54 = reduceVar$sum$3;
-												reduceVar$sum$3 = (traceTempVariable$k$23_3 + cv$reduced54);
-												double traceTempVariable$sum$23_4 = reduceVar$sum$3;
+												reduceVar$sum$3 = (traceTempVariable$k$24_3 + cv$reduced54);
+												double traceTempVariable$sum$24_4 = reduceVar$sum$3;
 												for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1) {
-													double traceTempVariable$var127$23_6 = (exped[j$var66] / (r * traceTempVariable$sum$23_4));
+													double traceTempVariable$var127$24_6 = (exped[j$var66] / (r * traceTempVariable$sum$24_4));
 													for(int t = 0; t < numTimeSteps; t += 1) {
 														for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
 															if(avail[t][j$var121]) {
 																if((j$var66 == j$var121)) {
-																	double traceTempVariable$var154$23_9 = traceTempVariable$var127$23_6;
+																	double traceTempVariable$var154$24_9 = traceTempVariable$var127$24_6;
 																	for(int j$var153 = 0; j$var153 < (avail[0].length + 1); j$var153 += 1) {
 																		if((j$var121 == j$var153)) {
 																			if(!guard$sample32multinomial165[((t - 0) / 1)]) {
@@ -1788,10 +1813,10 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							}
 						}
 						if((0 < numTimeSteps)) {
-							double traceTempVariable$var42$24_1 = cv$currentValue;
+							double traceTempVariable$var42$25_1 = cv$currentValue;
 							for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
 								if((var29 == j$var41)) {
-									double traceTempVariable$var67$24_3 = Math.exp(traceTempVariable$var42$24_1);
+									double traceTempVariable$var67$25_3 = Math.exp(traceTempVariable$var42$25_1);
 									for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1) {
 										if((j$var41 == j$var66)) {
 											double reduceVar$sum$4 = 0.0;
@@ -1800,29 +1825,29 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 												double l$var55 = exped[cv$reduction54Index];
 												reduceVar$sum$4 = (k$var54 + l$var55);
 											}
-											double traceTempVariable$var127$24_5 = (traceTempVariable$var67$24_3 / (r * reduceVar$sum$4));
+											double traceTempVariable$var127$25_5 = (traceTempVariable$var67$25_3 / (r * reduceVar$sum$4));
 											for(int t = 0; t < numTimeSteps; t += 1) {
 												for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
 													if(avail[t][j$var121]) {
 														if((j$var66 == j$var121)) {
-															double traceTempVariable$k$24_8 = traceTempVariable$var127$24_5;
+															double traceTempVariable$k$25_8 = traceTempVariable$var127$25_5;
 															if(((0 <= j$var121) && (j$var121 < (avail[0].length + 1)))) {
 																{
 																	if((0 < (avail[0].length + 1))) {
 																		double reduceVar$denom$5 = 0.0;
-																		for(int cv$reduction876Index = 0; cv$reduction876Index < j$var121; cv$reduction876Index += 1) {
+																		for(int cv$reduction881Index = 0; cv$reduction881Index < j$var121; cv$reduction881Index += 1) {
 																			double k$var139 = reduceVar$denom$5;
-																			double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction876Index];
+																			double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction881Index];
 																			reduceVar$denom$5 = (k$var139 + l$var140);
 																		}
-																		for(int cv$reduction876Index = (j$var121 + 1); cv$reduction876Index < (avail[0].length + 1); cv$reduction876Index += 1) {
+																		for(int cv$reduction881Index = (j$var121 + 1); cv$reduction881Index < (avail[0].length + 1); cv$reduction881Index += 1) {
 																			double k$var139 = reduceVar$denom$5;
-																			double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction876Index];
+																			double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction881Index];
 																			reduceVar$denom$5 = (k$var139 + l$var140);
 																		}
 																		double cv$reduced144 = reduceVar$denom$5;
-																		reduceVar$denom$5 = (traceTempVariable$k$24_8 + cv$reduced144);
-																		double traceTempVariable$denom$24_9 = reduceVar$denom$5;
+																		reduceVar$denom$5 = (traceTempVariable$k$25_8 + cv$reduced144);
+																		double traceTempVariable$denom$25_9 = reduceVar$denom$5;
 																		if(!guard$sample32multinomial165[((t - 0) / 1)]) {
 																			guard$sample32multinomial165[((t - 0) / 1)] = true;
 																			{
@@ -1886,10 +1911,10 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							}
 						}
 						if((0 < numTimeSteps)) {
-							double traceTempVariable$var42$25_1 = cv$currentValue;
+							double traceTempVariable$var42$26_1 = cv$currentValue;
 							for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
 								if((var29 == j$var41)) {
-									double traceTempVariable$var67$25_3 = Math.exp(traceTempVariable$var42$25_1);
+									double traceTempVariable$var67$26_3 = Math.exp(traceTempVariable$var42$26_1);
 									for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1) {
 										if((j$var41 == j$var66)) {
 											double reduceVar$sum$5 = 0.0;
@@ -1898,12 +1923,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 												double l$var55 = exped[cv$reduction54Index];
 												reduceVar$sum$5 = (k$var54 + l$var55);
 											}
-											double traceTempVariable$var127$25_5 = (traceTempVariable$var67$25_3 / (r * reduceVar$sum$5));
+											double traceTempVariable$var127$26_5 = (traceTempVariable$var67$26_3 / (r * reduceVar$sum$5));
 											for(int t = 0; t < numTimeSteps; t += 1) {
 												for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
 													if(avail[t][j$var121]) {
 														if((j$var66 == j$var121)) {
-															double traceTempVariable$var154$25_8 = traceTempVariable$var127$25_5;
+															double traceTempVariable$var154$26_8 = traceTempVariable$var127$26_5;
 															for(int j$var153 = 0; j$var153 < (avail[0].length + 1); j$var153 += 1) {
 																if((j$var121 == j$var153)) {
 																	if(!guard$sample32multinomial165[((t - 0) / 1)]) {
@@ -1986,7 +2011,13 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 			double var30 = cv$originalValue;
-			ut[var29] = var30;
+			{
+				if((0 < numTimeSteps)) {
+					{
+						ut[var29] = var30;
+					}
+				}
+			}
 			{
 				if((0 < numTimeSteps)) {
 					for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
@@ -2444,9 +2475,11 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public final void allocator() {
-		{
-			if((0 < numTimeSteps))
-				ut = new double[avail[0].length];
+		if(!fixedFlag$sample32) {
+			{
+				if((0 < numTimeSteps))
+					ut = new double[avail[0].length];
+			}
 		}
 		{
 			if((0 < numTimeSteps))
@@ -2463,12 +2496,12 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					sales[var80] = new int[avail[0].length];
 			}
 		}
-		if(!setFlag$lambda) {
+		if(!fixedFlag$sample112) {
 			{
 				lambda = new double[((((avail.length - 1) - 0) / 1) + 1)];
 			}
 		}
-		if(!setFlag$arrivals) {
+		if(!fixedFlag$sample114) {
 			{
 				arrivals = new int[((((avail.length - 1) - 0) / 1) + 1)];
 			}
@@ -2876,7 +2909,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		if((0 < numTimeSteps)) {
 			{
 				int[][] cv$source1 = ObsSales;
@@ -2908,34 +2941,38 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void setIntermediates() {
 		if((0 < numTimeSteps)) {
 			for(int j$var41 = 0; j$var41 < avail[0].length; j$var41 += 1) {
-				if(true)
+				if(fixedFlag$sample32)
 					exped[j$var41] = Math.exp(ut[j$var41]);
 			}
 			double reduceVar$sum$12 = 0.0;
 			for(int cv$reduction54Index = 0; cv$reduction54Index < avail[0].length; cv$reduction54Index += 1) {
 				double k$var54 = reduceVar$sum$12;
 				double l$var55 = exped[cv$reduction54Index];
-				reduceVar$sum$12 = (k$var54 + l$var55);
+				if(fixedFlag$sample32)
+					reduceVar$sum$12 = (k$var54 + l$var55);
 			}
 			for(int j$var66 = 0; j$var66 < avail[0].length; j$var66 += 1) {
-				if(true)
+				if(fixedFlag$sample32)
 					expedNorm[j$var66] = (exped[j$var66] / (r * reduceVar$sum$12));
 			}
 			for(int t = 0; t < numTimeSteps; t += 1) {
 				for(int j$var121 = 0; j$var121 < avail[0].length; j$var121 += 1) {
 					if(avail[t][j$var121]) {
-						if(true)
+						if(fixedFlag$sample32)
 							weekly_ut[((t - 0) / 1)][j$var121] = expedNorm[j$var121];
-					}
+					} else
+						weekly_ut[((t - 0) / 1)][j$var121] = 0.0;
 				}
+				weekly_ut[((t - 0) / 1)][avail[0].length] = 1.0;
 				double reduceVar$denom$14 = 0.0;
 				for(int cv$reduction144Index = 0; cv$reduction144Index < (avail[0].length + 1); cv$reduction144Index += 1) {
 					double k$var139 = reduceVar$denom$14;
 					double l$var140 = weekly_ut[((t - 0) / 1)][cv$reduction144Index];
-					reduceVar$denom$14 = (k$var139 + l$var140);
+					if(fixedFlag$sample32)
+						reduceVar$denom$14 = (k$var139 + l$var140);
 				}
 				for(int j$var153 = 0; j$var153 < (avail[0].length + 1); j$var153 += 1) {
-					if(true)
+					if(fixedFlag$sample32)
 						weekly_rates[((t - 0) / 1)][j$var153] = (weekly_ut[((t - 0) / 1)][j$var153] / reduceVar$denom$14);
 				}
 			}

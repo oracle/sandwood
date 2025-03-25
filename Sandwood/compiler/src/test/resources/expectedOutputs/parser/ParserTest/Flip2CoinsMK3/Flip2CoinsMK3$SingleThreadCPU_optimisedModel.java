@@ -25,8 +25,6 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample44;
 	private double logProbability$var17;
 	private double logProbability$var5;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK3$SingleThreadCPU(ExecutionTarget target) {
@@ -68,10 +66,8 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void set$bias(double[] cv$value) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 		
 		// Unset the fixed probability flag for sample 17 as it depends on bias.
 		fixedProbFlag$sample17 = false;
@@ -127,8 +123,7 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[][] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -141,8 +136,7 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// Setter for length$flipsMeasured.
 	@Override
 	public final void set$length$flipsMeasured(int[] cv$value) {
-		// Set length$flipsMeasured with flag to mark that it has been set so another array
-		// doesn't need to be constructed
+		// Set length$flipsMeasured
 		length$flipsMeasured = cv$value;
 	}
 
@@ -356,6 +350,8 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sum = (cv$sum + 1);
 		}
 		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		// 
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		bias[var16] = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
@@ -371,7 +367,7 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void allocator() {
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias)
+		if(!fixedFlag$sample17)
 			// Constructor for bias
 			bias = new double[length$flipsMeasured.length];
 		
@@ -553,7 +549,7 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -568,7 +564,9 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

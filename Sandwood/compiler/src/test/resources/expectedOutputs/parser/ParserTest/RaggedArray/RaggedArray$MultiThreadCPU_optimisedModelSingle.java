@@ -25,7 +25,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -147,8 +146,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for obs_measured.
 	@Override
 	public final void set$obs_measured(boolean[] cv$value) {
-		// Set obs_measured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set obs_measured
 		obs_measured = cv$value;
 	}
 
@@ -429,7 +427,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$var67" with its value "a[y]".
 			// 
-			// Substituted "cv$temp$1$$var243" with its value "lengthCV$a$71_8".
+			// Substituted "cv$temp$1$$var237" with its value "lengthCV$a$71_8".
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_8)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 89 of consumer random variable null.
@@ -778,7 +776,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -788,10 +786,13 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		p = b[y][i];
+		if(fixedFlag$sample73)
+			p = b[y][i];
 	}
 
 	@Override

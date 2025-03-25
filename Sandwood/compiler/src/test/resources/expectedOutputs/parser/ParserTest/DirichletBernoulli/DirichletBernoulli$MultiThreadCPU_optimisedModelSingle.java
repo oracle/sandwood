@@ -24,8 +24,6 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private boolean[] observed;
 	private boolean[] output;
 	private double[] prior;
-	private boolean setFlag$output = false;
-	private boolean setFlag$prior = false;
 	private boolean system$gibbsForward = true;
 	private double[] v;
 
@@ -128,8 +126,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Setter for observed.
 	@Override
 	public final void set$observed(boolean[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -150,10 +147,8 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void set$prior(double[] cv$value) {
 		// Set flags for all the side effects of prior including if probabilities need to
 		// be updated.
-		// Set prior with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set prior
 		prior = cv$value;
-		setFlag$prior = true;
 		
 		// Unset the fixed probability flag for sample 17 as it depends on prior.
 		fixedProbFlag$sample17 = false;
@@ -684,7 +679,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		v = new double[2];
 		
 		// If prior has not been set already allocate space.
-		if(!setFlag$prior)
+		if(!fixedFlag$sample17)
 			// Constructor for prior
 			prior = new double[2];
 		
@@ -865,7 +860,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
@@ -875,7 +870,9 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

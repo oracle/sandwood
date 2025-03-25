@@ -22,8 +22,6 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double[] logProbability$sample31;
-	private boolean setFlag$bias = false;
-	private boolean setFlag$flips = false;
 	private int[] shape;
 	private boolean system$gibbsForward = true;
 
@@ -40,10 +38,8 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[] cv$value) {
-		// Set bias with flag to mark that it has been set so another array doesn't need to
-		// be constructed
+		// Set bias
 		bias = cv$value;
-		setFlag$bias = true;
 	}
 
 	// Getter for coins.
@@ -89,8 +85,7 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for flipsMeasured.
 	@Override
 	public final void set$flipsMeasured(boolean[][] cv$value) {
-		// Set flipsMeasured with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set flipsMeasured
 		flipsMeasured = cv$value;
 	}
 
@@ -139,8 +134,7 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for shape.
 	@Override
 	public final void set$shape(int[] cv$value) {
-		// Set shape with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set shape
 		shape = cv$value;
 	}
 
@@ -388,7 +382,7 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 		
 		// If bias has not been set already allocate space.
-		if(!setFlag$bias) {
+		if(!fixedFlag$sample18) {
 			// Constructor for bias
 			{
 				bias = new double[((((shape.length - 1) - 0) / 1) + 1)];
@@ -623,7 +617,7 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		boolean[][] cv$source1 = flipsMeasured;
 		boolean[][] cv$target1 = flips;
@@ -638,7 +632,9 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {}
 

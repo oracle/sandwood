@@ -23,7 +23,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private boolean[] obs;
 	private boolean[] obs_measured;
 	private double p;
-	private boolean setFlag$obs = false;
 	private boolean system$gibbsForward = true;
 	private int y;
 
@@ -287,7 +286,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				{
 					cv$temp$0$var67 = a[y];
 				}
-				int cv$temp$1$$var243;
+				int cv$temp$1$$var237;
 				{
 					int lengthCV$a$71_8 = -1;
 					{
@@ -298,9 +297,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						if((1 == y))
 							lengthCV$a$71_8 = 3;
 					}
-					cv$temp$1$$var243 = lengthCV$a$71_8;
+					cv$temp$1$$var237 = lengthCV$a$71_8;
 				}
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var243))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var237))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
 				{
 					{
 						int traceTempVariable$i$6_1 = cv$currentValue;
@@ -574,7 +573,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		boolean[] cv$source1 = obs_measured;
 		boolean[] cv$target1 = obs;
 		int cv$length1 = cv$target1.length;
@@ -584,7 +583,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void setIntermediates() {
-		if(true)
+		if(fixedFlag$sample73)
 			p = b[y][i];
 	}
 

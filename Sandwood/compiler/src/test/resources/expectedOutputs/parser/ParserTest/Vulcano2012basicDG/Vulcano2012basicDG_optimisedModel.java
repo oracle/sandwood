@@ -17,15 +17,14 @@ public class Vulcano2012basicDG extends Model {
 
     private Vulcano2012basicDG$CoreInterface system$c = new Vulcano2012basicDG$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true) {
+    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$arrivals(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$arrivals(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -52,15 +51,14 @@ public class Vulcano2012basicDG extends Model {
      */
     public final ComputedIntegerArray arrivals = $arrivals;
 
-    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true) {
+    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$lambda(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$lambda(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -86,6 +84,71 @@ public class Vulcano2012basicDG extends Model {
      * Computed variable representing lambda of type double[] from the Sandwood model 
      */
     public final ComputedDoubleArray lambda = $lambda;
+
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, true) {
+        @Override
+        public double[] getValue() { return system$c.get$ut(); }
+
+        @Override
+        protected void setValueInternal(double[] value) {
+            system$c.set$ut(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample32(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample32())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    private final ComputedObjectArrayInternal<int[]> $weekly_sales = new ComputedObjectArrayInternal<int[]>(this, "weekly_sales", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+        @Override
+        public int[][] getValue() { return system$c.get$weekly_sales(); }
+
+        @Override
+        protected void setValueInternal(int[][] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable weekly_sales because its value is fixed by observed values.");
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$weekly_sales(); }
+
+        @Override
+        public int[][][] constructArray(int iterations) {
+            return new int[iterations][][];
+        }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+        }
+
+        @Override
+        public Immutability isFixed() {
+            return Immutability.OBSERVED;
+        }
+    };
+
+    /**
+     * Computed variable representing weekly_sales of type int[][] from the Sandwood model 
+     */
+    public final ComputedObjectArray<int[]> weekly_sales = $weekly_sales;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -127,7 +190,7 @@ public class Vulcano2012basicDG extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$arrivals, $lambda};
+    private HasProbabilityInternal[] $probabilityVariables = {$arrivals, $lambda, $weekly_sales};
 
     //Constructors
     /**
@@ -138,6 +201,8 @@ public class Vulcano2012basicDG extends Model {
         //ComputedVariable
         $computedVariables.put("arrivals", $arrivals);
         $computedVariables.put("lambda", $lambda);
+        $computedVariables.put("ut", $ut);
+        $computedVariables.put("weekly_sales", $weekly_sales);
 
         //ModelInputs
         $modelInputs.put("ObsSales", $ObsSales);
@@ -174,6 +239,7 @@ public class Vulcano2012basicDG extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Vulcano2012basicDG$CoreInterface oldCore, Vulcano2012basicDG$CoreInterface newCore) {
         //Model inputs
         if(ObsSales.isSet())
@@ -182,16 +248,17 @@ public class Vulcano2012basicDG extends Model {
             newCore.set$avail(oldCore.get$avail());
 
         //ComputedVariables
-        if(arrivals.isSet())
+        if($arrivals.isSet())
             newCore.set$arrivals(oldCore.get$arrivals());
-        if(lambda.isSet())
+        if($lambda.isSet())
             newCore.set$lambda(oldCore.get$lambda());
+        if($ut.isSet())
+            newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(arrivals.isSet())
-            newCore.set$fixedFlag$sample114(oldCore.get$fixedFlag$sample114());
-        if(lambda.isSet())
-            newCore.set$fixedFlag$sample112(oldCore.get$fixedFlag$sample112());
+        newCore.set$fixedFlag$sample112(oldCore.get$fixedFlag$sample112());
+        newCore.set$fixedFlag$sample114(oldCore.get$fixedFlag$sample114());
+        newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
     }
 
     /**
@@ -244,10 +311,13 @@ public class Vulcano2012basicDG extends Model {
         public final int[] arrivals;
         /** Field holding the value of lambda after a convention execution step.*/
         public final double[] lambda;
+        /** Field holding the value of weekly_sales after a convention execution step.*/
+        public final int[][] weekly_sales;
 
         InferredValueOutputs(Vulcano2012basicDG system$model) {
             this.arrivals = system$model.arrivals.getSamples()[0];
             this.lambda = system$model.lambda.getSamples()[0];
+            this.weekly_sales = system$model.weekly_sales.getSamples()[0];
         }
     }
 
@@ -260,11 +330,14 @@ public class Vulcano2012basicDG extends Model {
         public final double arrivals;
         /** Field holding the log probability of computed variable lambda */
         public final double lambda;
+        /** Field holding the log probability of computed variable weekly_sales */
+        public final double weekly_sales;
 
         LogProbabilities(Vulcano2012basicDG system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.arrivals = system$model.arrivals.getLogProbability();
             this.lambda = system$model.lambda.getLogProbability();
+            this.weekly_sales = system$model.weekly_sales.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -281,11 +354,14 @@ public class Vulcano2012basicDG extends Model {
         public final double arrivals;
         /** Field holding the probability of computed variable lambda */
         public final double lambda;
+        /** Field holding the probability of computed variable weekly_sales */
+        public final double weekly_sales;
 
         Probabilities(Vulcano2012basicDG system$model) {
             this.$modelProbability = system$model.getProbability();
             this.arrivals = system$model.arrivals.getProbability();
             this.lambda = system$model.lambda.getProbability();
+            this.weekly_sales = system$model.weekly_sales.getProbability();
         }
 
         /** Method to return probability of the whole model 

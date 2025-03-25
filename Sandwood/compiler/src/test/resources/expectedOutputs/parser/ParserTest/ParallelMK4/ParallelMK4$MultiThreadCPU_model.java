@@ -24,8 +24,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double[] logProbability$var100;
 	private double[][] logProbability$var58;
 	private int[] observed;
-	private boolean setFlag$generated = false;
-	private boolean setFlag$indirection1 = false;
 	private boolean system$gibbsForward = true;
 
 	public ParallelMK4$MultiThreadCPU(ExecutionTarget target) {
@@ -71,10 +69,8 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	public final void set$indirection1(double[][] cv$value) {
 		// Set flags for all the side effects of indirection1 including if probabilities need
 		// to be updated.
-		// Set indirection1 with flag to mark that it has been set so another array doesn't
-		// need to be constructed
+		// Set indirection1
 		indirection1 = cv$value;
-		setFlag$indirection1 = true;
 		
 		// Unset the fixed probability flag for sample 61 as it depends on indirection1.
 		fixedProbFlag$sample61 = false;
@@ -140,8 +136,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	// Setter for observed.
 	@Override
 	public final void set$observed(int[] cv$value) {
-		// Set observed with flag to mark that it has been set so another array doesn't need
-		// to be constructed
+		// Set observed
 		observed = cv$value;
 	}
 
@@ -456,8 +451,14 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// Write out the value of the sample to a temporary variable prior to updating the
 					// intermediate variables.
 					double var59 = cv$proposedValue;
-					double[] var55 = indirection1[i];
-					var55[j] = cv$currentValue;
+					
+					// Guards to ensure that indirection1 is only updated when there is a valid path.
+					{
+						{
+							double[] var55 = indirection1[i];
+							var55[j] = cv$currentValue;
+						}
+					}
 					
 					// Guards to ensure that indirection2 is only updated when there is a valid path.
 					// 
@@ -498,7 +499,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				{
 					// Looking for a path between Sample 61 and consumer Categorical 100.
 					{
-						double traceTempVariable$var85$2_1 = cv$currentValue;
+						double traceTempVariable$var85$3_1 = cv$currentValue;
 						for(int k = 0; k < length$observed; k += 1) {
 							if((i == k)) {
 								for(int l = 0; l < 10; l += 1) {
@@ -524,22 +525,22 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		double[] var99 = indirection2[m];
 																		cv$temp$2$var99 = var99;
 																	}
-																	int cv$temp$3$$var310;
+																	int cv$temp$3$$var304;
 																	{
 																		// Constructing a random variable input for use later.
-																		int $var310 = 10;
-																		cv$temp$3$$var310 = $var310;
+																		int $var304 = 10;
+																		cv$temp$3$$var304 = $var304;
 																	}
 																	
 																	// Record the probability of sample task 103 generating output with current configuration.
-																	if(((Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var310))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var310))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var304))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var304))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var310))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var304))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var310))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var310))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var304))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= generated[m]) && (generated[m] < cv$temp$3$$var304))?Math.log(cv$temp$2$var99[generated[m]]):Double.NEGATIVE_INFINITY)));
 																	}
 																	
 																	// Recorded the probability of reaching sample task 103 with the current configuration.
@@ -609,8 +610,14 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			double var59 = cv$originalValue;
-			double[] var55 = indirection1[i];
-			var55[j] = var59;
+			
+			// Guards to ensure that indirection1 is only updated when there is a valid path.
+			{
+				{
+					double[] var55 = indirection1[i];
+					var55[j] = var59;
+				}
+			}
 			
 			// Guards to ensure that indirection2 is only updated when there is a valid path.
 			// 
@@ -647,7 +654,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 		
 		// If indirection1 has not been set already allocate space.
-		if(!setFlag$indirection1) {
+		if(!fixedFlag$sample61) {
 			// Constructor for indirection1
 			{
 				indirection1 = new double[length$observed][];
@@ -1069,7 +1076,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	// Method to propagate observed values back into the model.
 	@Override
-	public final void propogateObservedValues() {
+	public final void propagateObservedValues() {
 		// Deep copy between arrays
 		int[] cv$source1 = observed;
 		int[] cv$target1 = generated;
@@ -1079,7 +1086,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
-	// not directly set by the sample task.
+	// not directly set by the sample task. This method is called to propagate set values
+	// through the model. Any non-fixed sample values may be sampled to random variables
+	// as part of this process.
 	@Override
 	public final void setIntermediates() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1100,7 +1109,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int l = forStart$l; l < forEnd$l; l += 1) {
-										if(setFlag$indirection1)
+										if(fixedFlag$sample61)
 											var83[l] = indirection1[k][l];
 									}
 							}

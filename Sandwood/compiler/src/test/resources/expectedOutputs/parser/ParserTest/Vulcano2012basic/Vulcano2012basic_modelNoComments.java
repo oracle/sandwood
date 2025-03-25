@@ -17,7 +17,7 @@ public class Vulcano2012basic extends Model {
 
     private Vulcano2012basic$CoreInterface system$c = new Vulcano2012basic$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<double[]> $Sales = new ComputedObjectArrayInternal<double[]>(this, "Sales", true, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $Sales = new ComputedObjectArrayInternal<double[]>(this, "Sales", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$Sales(); }
 
@@ -53,15 +53,14 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedObjectArray<double[]> Sales = $Sales;
 
-    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true) {
+    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true, true, false) {
         @Override
         public int[] getValue() { return system$c.get$arrivals(); }
 
         @Override
         protected void setValueInternal(int[] value) {
             system$c.set$arrivals(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -88,7 +87,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedIntegerArray arrivals = $arrivals;
 
-    private final ComputedDoubleInternal $denom = new ComputedDoubleInternal(this, "denom", false) {
+    private final ComputedDoubleInternal $denom = new ComputedDoubleInternal(this, "denom", false, false, false) {
         @Override
         public double getValue() { return system$c.get$denom(); }
 
@@ -124,7 +123,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDouble denom = $denom;
 
-    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false) {
+    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$exped(); }
 
@@ -160,15 +159,14 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDoubleArray exped = $exped;
 
-    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true) {
+    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$lambda(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$lambda(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -195,7 +193,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDoubleArray lambda = $lambda;
 
-    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false) {
+    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false) {
         @Override
         public double getValue() { return system$c.get$sum(); }
 
@@ -231,15 +229,14 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDouble sum = $sum;
 
-    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true) {
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
         @Override
         public double[] getValue() { return system$c.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
             system$c.set$ut(value);
-            valueSet = true;
-            setFixed(true);
+            intermediatesPrimed = false;
         }
 
         @Override
@@ -437,6 +434,7 @@ public class Vulcano2012basic extends Model {
         system$c = newCore;
         return newCore;
     }
+
     private void transferData(Vulcano2012basic$CoreInterface oldCore, Vulcano2012basic$CoreInterface newCore) {
         //Model inputs
         if(Avail.isSet())
@@ -452,20 +450,17 @@ public class Vulcano2012basic extends Model {
             newCore.set$ObsSales(oldCore.get$ObsSales());
 
         //ComputedVariables
-        if(arrivals.isSet())
+        if($arrivals.isSet())
             newCore.set$arrivals(oldCore.get$arrivals());
-        if(lambda.isSet())
+        if($lambda.isSet())
             newCore.set$lambda(oldCore.get$lambda());
-        if(ut.isSet())
+        if($ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        if(arrivals.isSet())
-            newCore.set$fixedFlag$sample82(oldCore.get$fixedFlag$sample82());
-        if(lambda.isSet())
-            newCore.set$fixedFlag$sample67(oldCore.get$fixedFlag$sample67());
-        if(ut.isSet())
-            newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
+        newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
+        newCore.set$fixedFlag$sample67(oldCore.get$fixedFlag$sample67());
+        newCore.set$fixedFlag$sample82(oldCore.get$fixedFlag$sample82());
     }
 
     /**
