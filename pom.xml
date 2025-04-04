@@ -3,55 +3,60 @@
 <!-- 
  Sandwood
 
- Copyright (c) 2019-2024, Oracle and/or its affiliates
+ Copyright (c) 2019-2025, Oracle and/or its affiliates
 
  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.sandwood</groupId>
-    <artifactId>sandwood-project</artifactId>
-    <version>0.6.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<groupId>org.sandwood</groupId>
+	<artifactId>sandwood-project</artifactId>
+	<version>0.6.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 
-    <modules>
-        <module>Sandwood</module>
-        <module>SandwoodMavenPlugin</module>
-        <module>SandwoodExamples</module>
-    </modules>
+	<modules>
+		<module>Sandwood</module>
+		<module>SandwoodMavenPlugin</module>
+		<module>SandwoodExamples</module>
+	</modules>
 
-    <licenses>
-        <license>
-            <name>Oracle Universal Permissive License</name>
-            <url>https://oss.oracle.com/licenses/upl/</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>Oracle Universal Permissive License</name>
+			<url>https://oss.oracle.com/licenses/upl/</url>
+		</license>
+	</licenses>
 
-    <developers>
-        <developer>
-            <name>Daniel Goodman</name>
-            <email>daniel.goodman@oracle.com</email>
-            <organization>Oracle Labs</organization>
-            <organizationUrl>https://labs.oracle.com</organizationUrl>
-        </developer>
-        <developer>
-            <name>Adam Pocock</name>
-            <email>adam.pocock@oracle.com</email>
-            <organization>Oracle Labs</organization>
-            <organizationUrl>https://labs.oracle.com</organizationUrl>
-        </developer>
-        <developer>
-            <name>Guy Steele</name>
-            <email>guy.steele@oracle.com</email>
-            <organization>Oracle Labs</organization>
-            <organizationUrl>https://labs.oracle.com</organizationUrl>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<name>Daniel Goodman</name>
+			<email>daniel.goodman@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Adam Pocock</name>
+			<email>adam.pocock@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Guy Steele</name>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Natalia Kosilova</name>
+			<email>natalia.kosilova@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+	</developers>
 </project>
