@@ -8,7 +8,7 @@
 
 package org.sandwood.runtime.internal.model.variables;
 
-import org.sandwood.runtime.exceptions.RetentionPolicyException;
+import org.sandwood.runtime.exceptions.SandwooodRetentionPolicyException;
 import org.sandwood.runtime.internal.numericTools.LogSumExponential;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
@@ -92,7 +92,7 @@ public abstract class ComputedVariableInternal
     public final void setRetentionPolicy(RetentionPolicy p) {
         synchronized(model) {
             if(p == RetentionPolicy.NA)
-                throw new RetentionPolicyException(
+                throw new SandwooodRetentionPolicyException(
                         "Unable to set the retention policy to NA. This is not a retention policy "
                                 + "variables can be assigned, it can only be returned by variables if their "
                                 + "value is fixed.");
