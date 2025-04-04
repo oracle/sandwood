@@ -3,7 +3,7 @@
 <!-- 
  Sandwood
 
- Copyright (c) 2019-2024, Oracle and/or its affiliates
+ Copyright (c) 2019-2025, Oracle and/or its affiliates
 
  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
@@ -52,7 +52,12 @@
 		</developer>
 		<developer>
 			<name>Guy Steele</name>
-			<email>guy.steele@oracle.com</email>
+			<organization>Oracle Labs</organization>
+			<organizationUrl>https://labs.oracle.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Natalia Kosilova</name>
+			<email>natalia.kosilova@oracle.com</email>
 			<organization>Oracle Labs</organization>
 			<organizationUrl>https://labs.oracle.com</organizationUrl>
 		</developer>
