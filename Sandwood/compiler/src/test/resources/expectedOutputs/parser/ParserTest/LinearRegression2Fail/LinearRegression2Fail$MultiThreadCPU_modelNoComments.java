@@ -374,73 +374,79 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	private final void sample11() {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		{
+		if(true) {
+			double cv$sum = 0.0;
+			double cv$denominatorSquareSum = 0.0;
+			boolean cv$sigmaNotFound = true;
+			double cv$sigmaValue = 1.0;
 			{
 				{
-					for(int i = 0; i < noSamples; i += 1) {
-						double cv$denominator = 1.0;
-						double cv$numerator = 0.0;
-						cv$numerator = (cv$numerator * x[i]);
-						cv$denominator = (cv$denominator * x[i]);
-						cv$numerator = (b0 + cv$numerator);
-						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-						cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-						if(cv$sigmaNotFound) {
-							cv$sigmaValue = variance;
-							cv$sigmaNotFound = false;
+					{
+						for(int i = 0; i < noSamples; i += 1) {
+							double cv$denominator = 1.0;
+							double cv$numerator = 0.0;
+							cv$numerator = (cv$numerator * x[i]);
+							cv$denominator = (cv$denominator * x[i]);
+							cv$numerator = (b0 + cv$numerator);
+							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+							cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+							if(cv$sigmaNotFound) {
+								cv$sigmaValue = variance;
+								cv$sigmaNotFound = false;
+							}
 						}
 					}
 				}
 			}
+			b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
-		b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void sample15() {
-		double cv$sum = 0.0;
-		int cv$count = 0;
-		{
+		if(true) {
+			double cv$sum = 0.0;
+			int cv$count = 0;
 			{
 				{
-					for(int i = 0; i < noSamples; i += 1) {
-						double cv$var30$mu = (b0 + (b1 * x[i]));
-						double cv$var30$diff = (cv$var30$mu - y[i]);
-						cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
-						cv$count = (cv$count + 1);
-					}
-				}
-			}
-		}
-		variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
-	private final void sample7() {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		{
-			{
-				{
-					for(int i = 0; i < noSamples; i += 1) {
-						double cv$denominator = 1.0;
-						double cv$numerator = 0.0;
-						cv$numerator = (cv$numerator + (b1 * x[i]));
-						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-						cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-						if(cv$sigmaNotFound) {
-							cv$sigmaValue = variance;
-							cv$sigmaNotFound = false;
+					{
+						for(int i = 0; i < noSamples; i += 1) {
+							double cv$var30$mu = (b0 + (b1 * x[i]));
+							double cv$var30$diff = (cv$var30$mu - y[i]);
+							cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
+							cv$count = (cv$count + 1);
 						}
 					}
 				}
 			}
+			variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+	}
+
+	private final void sample7() {
+		if(true) {
+			double cv$sum = 0.0;
+			double cv$denominatorSquareSum = 0.0;
+			boolean cv$sigmaNotFound = true;
+			double cv$sigmaValue = 1.0;
+			{
+				{
+					{
+						for(int i = 0; i < noSamples; i += 1) {
+							double cv$denominator = 1.0;
+							double cv$numerator = 0.0;
+							cv$numerator = (cv$numerator + (b1 * x[i]));
+							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+							cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+							if(cv$sigmaNotFound) {
+								cv$sigmaValue = variance;
+								cv$sigmaNotFound = false;
+							}
+						}
+					}
+				}
+			}
+			b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
 	}
 
 	@Override

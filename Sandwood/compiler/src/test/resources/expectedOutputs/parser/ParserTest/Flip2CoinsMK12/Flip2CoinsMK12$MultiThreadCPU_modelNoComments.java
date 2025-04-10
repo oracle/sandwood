@@ -366,87 +366,91 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	private final void sample10() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int j = 0; j < 1; j += 1) {
-						if((0 == j)) {
-							{
-								for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[j][var49])
-										cv$sum = (cv$sum + 1);
+					{
+						for(int j = 0; j < 1; j += 1) {
+							if((0 == j)) {
+								{
+									for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[j][var49])
+											cv$sum = (cv$sum + 1);
+									}
+								}
+							}
+						}
+					}
+				}
+				{
+					{
+						for(int k = 1; k < coins; k += 1) {
+							if((0 == k)) {
+								{
+									for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[k][var76])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
 				{
-					for(int k = 1; k < coins; k += 1) {
-						if((0 == k)) {
-							{
-								for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[k][var76])
-										cv$sum = (cv$sum + 1);
-								}
-							}
-						}
-					}
+					bias[0] = var10;
 				}
-			}
-		}
-		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
-			{
-				bias[0] = var10;
 			}
 		}
 	}
 
 	private final void sample23(int i$var22, int threadID$cv$i$var22, Rng RNG$) {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int j = 0; j < 1; j += 1) {
-						if((i$var22 == j)) {
-							{
-								for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[j][var49])
-										cv$sum = (cv$sum + 1);
+					{
+						for(int j = 0; j < 1; j += 1) {
+							if((i$var22 == j)) {
+								{
+									for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[j][var49])
+											cv$sum = (cv$sum + 1);
+									}
+								}
+							}
+						}
+					}
+				}
+				{
+					{
+						for(int k = 1; k < coins; k += 1) {
+							if((i$var22 == k)) {
+								{
+									for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[k][var76])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+			double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
 				{
-					for(int k = 1; k < coins; k += 1) {
-						if((i$var22 == k)) {
-							{
-								for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[k][var76])
-										cv$sum = (cv$sum + 1);
-								}
-							}
-						}
-					}
+					bias[i$var22] = var23;
 				}
-			}
-		}
-		double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
-			{
-				bias[i$var22] = var23;
 			}
 		}
 	}

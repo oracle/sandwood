@@ -228,21 +228,23 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	private final void sample6() {
-		double cv$sum = 0.0;
-		int cv$count = 0;
-		{
+		if(true) {
+			double cv$sum = 0.0;
+			int cv$count = 0;
 			{
 				{
 					{
-						for(int var18 = 0; var18 < samples; var18 += 1) {
-							cv$sum = (cv$sum + decay[var18]);
-							cv$count = (cv$count + 1);
+						{
+							for(int var18 = 0; var18 < samples; var18 += 1) {
+								cv$sum = (cv$sum + decay[var18]);
+								cv$count = (cv$count + 1);
+							}
 						}
 					}
 				}
 			}
+			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 		}
-		rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	@Override

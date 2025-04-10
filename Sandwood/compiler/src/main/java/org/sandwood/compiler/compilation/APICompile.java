@@ -354,7 +354,10 @@ public class APICompile {
                         for(TraceHandle t1:h1) {
                             if(!linkFound && t1.invertable()) {
                                 for(TraceHandle t2:h2) {
-                                    if(t2.invertable() && Traces.observedDependentTraces(t1, t2)) {
+                                    // Traces that go via a random variable to another random variable are valid
+                                    // as different information will be extracted by each.
+                                    if(t2.invertable() && !(t1.hasSuffix(t2) || t2.hasSuffix(t1))
+                                            && Traces.observedDependentTraces(t1, t2)) {
                                         // There is an error
                                         String name;
                                         // Calculate the named variable

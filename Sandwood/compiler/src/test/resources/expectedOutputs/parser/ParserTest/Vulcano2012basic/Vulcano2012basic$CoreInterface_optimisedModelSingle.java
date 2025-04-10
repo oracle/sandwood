@@ -9,13 +9,13 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	public void set$Avail(int[][] cv$value);
 
 	// Getter for ObsSales.
-	public double[][] get$ObsSales();
+	public int[][] get$ObsSales();
 
 	// Setter for ObsSales.
-	public void set$ObsSales(double[][] cv$value);
+	public void set$ObsSales(int[][] cv$value);
 
 	// Getter for Sales.
-	public double[][] get$Sales();
+	public int[][] get$Sales();
 
 	// Getter for T.
 	public int get$T();
@@ -23,56 +23,26 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	// Setter for T.
 	public void set$T(int cv$value);
 
-	// Getter for arrivals.
-	public int[] get$arrivals();
-
-	// Setter for arrivals.
-	public void set$arrivals(int[] cv$value);
-
-	// Getter for denom.
-	public double get$denom();
-
 	// Getter for exped.
 	public double[] get$exped();
 
-	// Getter for fixedFlag$sample22.
-	public boolean get$fixedFlag$sample22();
+	// Getter for expedNorm.
+	public double[] get$expedNorm();
 
-	// Setter for fixedFlag$sample22.
-	public void set$fixedFlag$sample22(boolean cv$value);
+	// Getter for fixedFlag$sample26.
+	public boolean get$fixedFlag$sample26();
 
-	// Getter for fixedFlag$sample67.
-	public boolean get$fixedFlag$sample67();
-
-	// Setter for fixedFlag$sample67.
-	public void set$fixedFlag$sample67(boolean cv$value);
-
-	// Getter for fixedFlag$sample82.
-	public boolean get$fixedFlag$sample82();
-
-	// Setter for fixedFlag$sample82.
-	public void set$fixedFlag$sample82(boolean cv$value);
-
-	// Getter for lambda.
-	public double[] get$lambda();
-
-	// Setter for lambda.
-	public void set$lambda(double[] cv$value);
+	// Setter for fixedFlag$sample26.
+	public void set$fixedFlag$sample26(boolean cv$value);
 
 	// Getter for logProbability$Sales.
 	public double get$logProbability$Sales();
 
-	// Getter for logProbability$arrivals.
-	public double get$logProbability$arrivals();
-
-	// Getter for logProbability$denom.
-	public double get$logProbability$denom();
-
 	// Getter for logProbability$exped.
 	public double get$logProbability$exped();
 
-	// Getter for logProbability$lambda.
-	public double get$logProbability$lambda();
+	// Getter for logProbability$expedNorm.
+	public double get$logProbability$expedNorm();
 
 	// Getter for logProbability$sum.
 	public double get$logProbability$sum();
@@ -86,11 +56,14 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	// Setter for noProducts.
 	public void set$noProducts(int cv$value);
 
-	// Getter for s.
-	public int get$s();
+	// Getter for r.
+	public double get$r();
 
-	// Setter for s.
-	public void set$s(int cv$value);
+	// Setter for r.
+	public void set$r(double cv$value);
+
+	// Getter for sales_sum.
+	public int[] get$sales_sum();
 
 	// Getter for sum.
 	public double get$sum();

@@ -352,40 +352,13 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample10() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					if((0 == b)) {
-						{
-							for(int var46 = 0; var46 < samples; var46 += 1) {
-								cv$count = (cv$count + 1);
-								if(flips[var46])
-									cv$sum = (cv$sum + 1);
-							}
-						}
-					}
-				}
-			}
-		}
-		q = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
-			{
-				double[] inner = bias[0];
-				inner[0] = q;
-			}
-		}
-	}
-
-	private final void sample16() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
-			{
-				{
-					if((0 == 0)) {
-						if((1 == b)) {
+					{
+						if((0 == b)) {
 							{
 								for(int var46 = 0; var46 < samples; var46 += 1) {
 									cv$count = (cv$count + 1);
@@ -397,12 +370,43 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 			}
-		}
-		t = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
+			q = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
-				double[] var28 = bias[0];
-				var28[1] = t;
+				{
+					double[] inner = bias[0];
+					inner[0] = q;
+				}
+			}
+		}
+	}
+
+	private final void sample16() {
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
+			{
+				{
+					{
+						if((0 == 0)) {
+							if((1 == b)) {
+								{
+									for(int var46 = 0; var46 < samples; var46 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[var46])
+											cv$sum = (cv$sum + 1);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			t = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			{
+				{
+					double[] var28 = bias[0];
+					var28[1] = t;
+				}
 			}
 		}
 	}

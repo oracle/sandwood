@@ -300,28 +300,30 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// by sample task 5 drawn from Beta 4. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample5() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 6.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
+				// Processing random variable 6.
 				{
-					// Processing sample task 7 of consumer random variable bernoulli.
 					{
+						// Processing sample task 7 of consumer random variable bernoulli.
 						{
 							{
 								{
 									{
-										// Include the value sampled by task 7 from random variable bernoulli.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flip)
-											cv$sum = (cv$sum + 1);
+										{
+											// Include the value sampled by task 7 from random variable bernoulli.
+											// Increment the number of samples.
+											cv$count = (cv$count + 1);
+											
+											// If the sample value was positive increase the count
+											if(flip)
+												cv$sum = (cv$sum + 1);
+										}
 									}
 								}
 							}
@@ -329,10 +331,10 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 				}
 			}
+			
+			// Write out the new value of the sample.
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		
-		// Write out the new value of the sample.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

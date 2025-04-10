@@ -598,28 +598,53 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// by sample task 22 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample22(int i$var21) {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 38.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 22 and consumer Bernoulli 38.
+				// Processing random variable 38.
 				{
-					for(int j = 0; j < 1; j += 1) {
-						if((i$var21 == j)) {
-							// Processing sample task 49 of consumer random variable bernoulli1.
-							{
-								for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
-									// Include the value sampled by task 49 from random variable bernoulli1.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[j][var48])
-										cv$sum = (cv$sum + 1);
+					// Looking for a path between Sample 22 and consumer Bernoulli 38.
+					{
+						for(int j = 0; j < 1; j += 1) {
+							if((i$var21 == j)) {
+								// Processing sample task 49 of consumer random variable bernoulli1.
+								{
+									for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
+										// Include the value sampled by task 49 from random variable bernoulli1.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[j][var48])
+											cv$sum = (cv$sum + 1);
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				// Processing random variable 65.
+				{
+					// Looking for a path between Sample 22 and consumer Bernoulli 65.
+					{
+						for(int k = 1; k < coins; k += 1) {
+							if((i$var21 == k)) {
+								// Processing sample task 77 of consumer random variable bernoulli2.
+								{
+									for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+										// Include the value sampled by task 77 from random variable bernoulli2.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[k][var75])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
@@ -627,38 +652,15 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				}
 			}
 			
-			// Processing random variable 65.
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var22 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				// Looking for a path between Sample 22 and consumer Bernoulli 65.
 				{
-					for(int k = 1; k < coins; k += 1) {
-						if((i$var21 == k)) {
-							// Processing sample task 77 of consumer random variable bernoulli2.
-							{
-								for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
-									// Include the value sampled by task 77 from random variable bernoulli2.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[k][var75])
-										cv$sum = (cv$sum + 1);
-								}
-							}
-						}
-					}
+					bias[i$var21] = var22;
 				}
-			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var22 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
-			{
-				bias[i$var21] = var22;
 			}
 		}
 	}
@@ -667,28 +669,53 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// by sample task 9 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample9() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 38.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 9 and consumer Bernoulli 38.
+				// Processing random variable 38.
 				{
-					for(int j = 0; j < 1; j += 1) {
-						if((0 == j)) {
-							// Processing sample task 49 of consumer random variable bernoulli1.
-							{
-								for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
-									// Include the value sampled by task 49 from random variable bernoulli1.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[j][var48])
-										cv$sum = (cv$sum + 1);
+					// Looking for a path between Sample 9 and consumer Bernoulli 38.
+					{
+						for(int j = 0; j < 1; j += 1) {
+							if((0 == j)) {
+								// Processing sample task 49 of consumer random variable bernoulli1.
+								{
+									for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
+										// Include the value sampled by task 49 from random variable bernoulli1.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[j][var48])
+											cv$sum = (cv$sum + 1);
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				// Processing random variable 65.
+				{
+					// Looking for a path between Sample 9 and consumer Bernoulli 65.
+					{
+						for(int k = 1; k < coins; k += 1) {
+							if((0 == k)) {
+								// Processing sample task 77 of consumer random variable bernoulli2.
+								{
+									for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+										// Include the value sampled by task 77 from random variable bernoulli2.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[k][var75])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
@@ -696,38 +723,15 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				}
 			}
 			
-			// Processing random variable 65.
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var9 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				// Looking for a path between Sample 9 and consumer Bernoulli 65.
 				{
-					for(int k = 1; k < coins; k += 1) {
-						if((0 == k)) {
-							// Processing sample task 77 of consumer random variable bernoulli2.
-							{
-								for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
-									// Include the value sampled by task 77 from random variable bernoulli2.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[k][var75])
-										cv$sum = (cv$sum + 1);
-								}
-							}
-						}
-					}
+					bias[0] = var9;
 				}
-			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var9 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
-			{
-				bias[0] = var9;
 			}
 		}
 	}

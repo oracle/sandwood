@@ -327,10 +327,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			st[i$var58] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int reduceVar$var82$5 = 0;
-			for(int cv$reduction394Index = 0; cv$reduction394Index < i$var58; cv$reduction394Index += 1)
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction394Index]);
-			for(int cv$reduction394Index = (i$var58 + 1); cv$reduction394Index < noCats; cv$reduction394Index += 1)
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction394Index]);
+			for(int cv$reduction406Index = 0; cv$reduction406Index < i$var58; cv$reduction406Index += 1)
+				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction406Index]);
+			for(int cv$reduction406Index = (i$var58 + 1); cv$reduction406Index < noCats; cv$reduction406Index += 1)
+				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction406Index]);
 			reduceVar$var82$5 = (cv$valuePos + reduceVar$var82$5);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$5]) + cv$accumulatedProbabilities);

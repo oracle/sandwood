@@ -483,44 +483,46 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// by sample task 10 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample10() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 37.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 10 and consumer Bernoulli 37.
+				// Processing random variable 37.
 				{
-					for(int j = 0; j < coins; j += 1) {
-						if((0 == j)) {
-							// Processing sample task 48 of consumer random variable bernoulli.
-							{
-								for(int var47 = 0; var47 < shape[j]; var47 += 1) {
-									// Include the value sampled by task 48 from random variable bernoulli.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[j][var47])
-										cv$sum = (cv$sum + 1);
+					// Looking for a path between Sample 10 and consumer Bernoulli 37.
+					{
+						for(int j = 0; j < coins; j += 1) {
+							if((0 == j)) {
+								// Processing sample task 48 of consumer random variable bernoulli.
+								{
+									for(int var47 = 0; var47 < shape[j]; var47 += 1) {
+										// Include the value sampled by task 48 from random variable bernoulli.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[j][var47])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				bias[0] = var10;
+				{
+					bias[0] = var10;
+				}
 			}
 		}
 	}
@@ -529,44 +531,46 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// by sample task 23 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample23(int i) {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 37.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 23 and consumer Bernoulli 37.
+				// Processing random variable 37.
 				{
-					for(int j = 0; j < coins; j += 1) {
-						if((i == j)) {
-							// Processing sample task 48 of consumer random variable bernoulli.
-							{
-								for(int var47 = 0; var47 < shape[j]; var47 += 1) {
-									// Include the value sampled by task 48 from random variable bernoulli.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[j][var47])
-										cv$sum = (cv$sum + 1);
+					// Looking for a path between Sample 23 and consumer Bernoulli 37.
+					{
+						for(int j = 0; j < coins; j += 1) {
+							if((i == j)) {
+								// Processing sample task 48 of consumer random variable bernoulli.
+								{
+									for(int var47 = 0; var47 < shape[j]; var47 += 1) {
+										// Include the value sampled by task 48 from random variable bernoulli.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[j][var47])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				bias[i] = var23;
+				{
+					bias[i] = var23;
+				}
 			}
 		}
 	}

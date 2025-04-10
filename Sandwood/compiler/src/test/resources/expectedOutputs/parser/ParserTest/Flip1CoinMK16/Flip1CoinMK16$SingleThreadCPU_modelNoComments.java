@@ -215,22 +215,24 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	private final void sample14() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					if(Double.isNaN(guard)) {
-						{
-							if(Double.isNaN(guard)) {
-								{
+					{
+						if(Double.isNaN(guard)) {
+							{
+								if(Double.isNaN(guard)) {
 									{
 										{
 											{
-												if(Double.isNaN(guard)) {
-													cv$count = (cv$count + 1);
-													if(flip)
-														cv$sum = (cv$sum + 1);
+												{
+													if(Double.isNaN(guard)) {
+														cv$count = (cv$count + 1);
+														if(flip)
+															cv$sum = (cv$sum + 1);
+													}
 												}
 											}
 										}
@@ -241,8 +243,8 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					}
 				}
 			}
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override

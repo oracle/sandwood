@@ -423,48 +423,50 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	private final void sample24(int var23) {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		{
+		if(true) {
+			double cv$sum = 0.0;
+			double cv$denominatorSquareSum = 0.0;
+			boolean cv$sigmaNotFound = true;
+			double cv$sigmaValue = 1.0;
 			{
 				{
-					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-						if((var23 == j$var55)) {
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-								if(((0 <= j$var55) && (j$var55 < k))) {
-									{
+					{
+						for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+							if((var23 == j$var55)) {
+								for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+									if(((0 <= j$var55) && (j$var55 < k))) {
 										{
 											{
 												{
 													{
 														{
-															double cv$denominator = 1.0;
-															double cv$numerator = 0.0;
-															cv$numerator = (cv$numerator * x[i$var45][j$var55]);
-															cv$denominator = (cv$denominator * x[i$var45][j$var55]);
-															if((0 < k)) {
-																double reduceVar$var70$0 = 0.0;
-																for(int cv$reduction152Index = 0; cv$reduction152Index < j$var55; cv$reduction152Index += 1) {
-																	double i$var67 = reduceVar$var70$0;
-																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction152Index];
-																	reduceVar$var70$0 = (i$var67 + j$var68);
+															{
+																double cv$denominator = 1.0;
+																double cv$numerator = 0.0;
+																cv$numerator = (cv$numerator * x[i$var45][j$var55]);
+																cv$denominator = (cv$denominator * x[i$var45][j$var55]);
+																if((0 < k)) {
+																	double reduceVar$var70$0 = 0.0;
+																	for(int cv$reduction154Index = 0; cv$reduction154Index < j$var55; cv$reduction154Index += 1) {
+																		double i$var67 = reduceVar$var70$0;
+																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction154Index];
+																		reduceVar$var70$0 = (i$var67 + j$var68);
+																	}
+																	for(int cv$reduction154Index = (j$var55 + 1); cv$reduction154Index < k; cv$reduction154Index += 1) {
+																		double i$var67 = reduceVar$var70$0;
+																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction154Index];
+																		reduceVar$var70$0 = (i$var67 + j$var68);
+																	}
+																	double cv$reduced65 = reduceVar$var70$0;
+																	cv$numerator = (cv$numerator + cv$reduced65);
 																}
-																for(int cv$reduction152Index = (j$var55 + 1); cv$reduction152Index < k; cv$reduction152Index += 1) {
-																	double i$var67 = reduceVar$var70$0;
-																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction152Index];
-																	reduceVar$var70$0 = (i$var67 + j$var68);
+																cv$numerator = (cv$numerator + bias);
+																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+																if(cv$sigmaNotFound) {
+																	cv$sigmaValue = tau;
+																	cv$sigmaNotFound = false;
 																}
-																double cv$reduced65 = reduceVar$var70$0;
-																cv$numerator = (cv$numerator + cv$reduced65);
-															}
-															cv$numerator = (cv$numerator + bias);
-															cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-															cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-															if(cv$sigmaNotFound) {
-																cv$sigmaValue = tau;
-																cv$sigmaNotFound = false;
 															}
 														}
 													}
@@ -478,76 +480,80 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 					}
 				}
 			}
-		}
-		double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		{
+			double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 			{
-				weights[var23] = var24;
+				{
+					weights[var23] = var24;
+				}
 			}
-		}
-		{
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if((var23 == j$var55)) {
-					for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-						phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+			{
+				for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+					if((var23 == j$var55)) {
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+							phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+					}
 				}
 			}
 		}
 	}
 
 	private final void sample31() {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		{
+		if(true) {
+			double cv$sum = 0.0;
+			double cv$denominatorSquareSum = 0.0;
+			boolean cv$sigmaNotFound = true;
+			double cv$sigmaValue = 1.0;
 			{
 				{
-					for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-						double cv$denominator = 1.0;
-						double cv$numerator = 0.0;
-						double reduceVar$var70$1 = 0.0;
-						for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-							double i$var67 = reduceVar$var70$1;
-							double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-							reduceVar$var70$1 = (i$var67 + j$var68);
-						}
-						cv$numerator = (reduceVar$var70$1 + cv$numerator);
-						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-						cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-						if(cv$sigmaNotFound) {
-							cv$sigmaValue = tau;
-							cv$sigmaNotFound = false;
+					{
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+							double cv$denominator = 1.0;
+							double cv$numerator = 0.0;
+							double reduceVar$var70$1 = 0.0;
+							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+								double i$var67 = reduceVar$var70$1;
+								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+								reduceVar$var70$1 = (i$var67 + j$var68);
+							}
+							cv$numerator = (reduceVar$var70$1 + cv$numerator);
+							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+							cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+							if(cv$sigmaNotFound) {
+								cv$sigmaValue = tau;
+								cv$sigmaNotFound = false;
+							}
 						}
 					}
 				}
 			}
+			bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
-		bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void sample35() {
-		double cv$sum = 0.0;
-		int cv$count = 0;
-		{
+		if(true) {
+			double cv$sum = 0.0;
+			int cv$count = 0;
 			{
 				{
-					for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-						double reduceVar$var70$2 = 0.0;
-						for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-							double i$var67 = reduceVar$var70$2;
-							double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-							reduceVar$var70$2 = (i$var67 + j$var68);
+					{
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+							double reduceVar$var70$2 = 0.0;
+							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+								double i$var67 = reduceVar$var70$2;
+								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+								reduceVar$var70$2 = (i$var67 + j$var68);
+							}
+							double cv$var72$mu = (reduceVar$var70$2 + bias);
+							double cv$var72$diff = (cv$var72$mu - y[i$var45]);
+							cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
+							cv$count = (cv$count + 1);
 						}
-						double cv$var72$mu = (reduceVar$var70$2 + bias);
-						double cv$var72$diff = (cv$var72$mu - y[i$var45]);
-						cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
-						cv$count = (cv$count + 1);
 					}
 				}
 			}
+			tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
 		}
-		tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override

@@ -219,29 +219,31 @@ class Flip2CoinsMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample18(int var17, int threadID$cv$var17, Rng RNG$) {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int j = 0; j < coins; j += 1) {
-						if((var17 == j)) {
-							{
-								for(int var43 = 0; var43 < shape[j]; var43 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[j][var43])
-										cv$sum = (cv$sum + 1);
+					{
+						for(int j = 0; j < coins; j += 1) {
+							if((var17 == j)) {
+								{
+									for(int var43 = 0; var43 < shape[j]; var43 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[j][var43])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-		double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
+			double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
-				bias[var17] = var18;
+				{
+					bias[var17] = var18;
+				}
 			}
 		}
 	}

@@ -369,16 +369,21 @@ public class ProbabilityFunction {
             compilationCtx.addSetSideEffect(sampleName, restFixed);
         }
 
-        // Priority queue for fixed ordering of assignments.
-
-        PriorityQueue<SampleTask<?, ?>> inputSamples = new PriorityQueue<>();
-        for(Variable<?> v:random.getParent().getInputs())
-            inputSamples.addAll(compilationCtx.traces.getSourceSampleTasks(v));
+        // Gather all the sample tasks that are used as inputs.
+        Set<SampleTask<?, ?>> inputSamples = new HashSet<>();
+        for(Variable<?> v:random.getParent().getInputs()) {
+            for(SampleTask<?, ?> s:compilationCtx.traces.getSourceSampleTasks(v)) {
+                if(!s.getOutput().isFixed())
+                    inputSamples.add(s);
+            }
+        }
 
         // Construct an expression to determine if the flag should be set.
         if(!inputSamples.isEmpty()) {
-            while(!inputSamples.isEmpty()) {
-                SampleTask<?, ?> s = inputSamples.poll();
+            // Priority queue for fixed ordering of assignments.
+            PriorityQueue<SampleTask<?,?>> p = new PriorityQueue<>(inputSamples); 
+            while(!p.isEmpty()) {
+                SampleTask<?, ?> s = p.poll();
                 sampleFixedName = VariableNames.fixedFlagName(s);
                 fixed = IRTree.and(fixed, load(sampleFixedName));
 
@@ -875,8 +880,10 @@ public class ProbabilityFunction {
         // updating the probability.
         if(useDistributions && v.isDistribution()) {
             IRTreeReturn<BooleanVariable> fixedGuard = constant(true);
-            for(SampleTask<?, ?> sTask:compilationCtx.traces.getSourceSampleTasks(v))
-                fixedGuard = and(fixedGuard, load(VariableNames.fixedFlagName(sTask)));
+            for(SampleTask<?, ?> sTask:compilationCtx.traces.getSourceSampleTasks(v)) {
+                if(!sTask.getOutput().isFixed())
+                    fixedGuard = and(fixedGuard, load(VariableNames.fixedFlagName(sTask)));
+            }
             guardedTree = ifElse(fixedGuard, guardedTree,
                     "Make sure all the inputs have been fixed so the variable is not a distribution.");
         }

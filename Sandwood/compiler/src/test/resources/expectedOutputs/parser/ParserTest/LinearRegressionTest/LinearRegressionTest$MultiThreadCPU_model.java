@@ -718,94 +718,96 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// by sample task 24 drawn from Gaussian 12. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
 	private final void sample24(int var23) {
-		// State to record the weighting of each sample that is consumed. This is the:
-		// sum of the sample denominator*(the sample value - the sample nominator).
-		double cv$sum = 0.0;
-		
-		// State for storing the sum of the squares of the sample denominators.
-		double cv$denominatorSquareSum = 0.0;
-		
-		// Flag to record if we have a value for Sigma.
-		boolean cv$sigmaNotFound = true;
-		
-		// State for the value of sigma once we find it.
-		double cv$sigmaValue = 1.0;
-		{
-			// Processing random variable 72.
+		if(true) {
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
 			{
-				// Looking for a path between Sample 24 and consumer Gaussian 72.
+				// Processing random variable 72.
 				{
-					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-						if((var23 == j$var55)) {
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-								if(((0 <= j$var55) && (j$var55 < k))) {
-									{
-										// Processing sample task 74 of consumer random variable null.
+					// Looking for a path between Sample 24 and consumer Gaussian 72.
+					{
+						for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+							if((var23 == j$var55)) {
+								for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+									if(((0 <= j$var55) && (j$var55 < k))) {
 										{
+											// Processing sample task 74 of consumer random variable null.
 											{
 												{
 													{
 														{
-															// State for tracking the changes that happen to the sampled value between it being
-															// consumed and it being produced.
-															double cv$denominator = 1.0;
-															double cv$numerator = 0.0;
-															cv$numerator = (cv$numerator * x[i$var45][j$var55]);
-															cv$denominator = (cv$denominator * x[i$var45][j$var55]);
-															if((0 < k)) {
-																// Reduction of array phi
-																// 
-																// A generated name to prevent name collisions if the reduction is implemented more
-																// than once in inference and probability code. Initialize the variable to the unit
-																// value
-																double reduceVar$var70$5 = 0.0;
+															{
+																// State for tracking the changes that happen to the sampled value between it being
+																// consumed and it being produced.
+																double cv$denominator = 1.0;
+																double cv$numerator = 0.0;
+																cv$numerator = (cv$numerator * x[i$var45][j$var55]);
+																cv$denominator = (cv$denominator * x[i$var45][j$var55]);
+																if((0 < k)) {
+																	// Reduction of array phi
+																	// 
+																	// A generated name to prevent name collisions if the reduction is implemented more
+																	// than once in inference and probability code. Initialize the variable to the unit
+																	// value
+																	double reduceVar$var70$5 = 0.0;
+																	
+																	// Reduce for every value except a masked value which will be skipped.
+																	for(int cv$reduction386Index = 0; cv$reduction386Index < j$var55; cv$reduction386Index += 1) {
+																		// Set the left hand term of the reduction function to the return variable value.
+																		double i$var67 = reduceVar$var70$5;
+																		
+																		// Set the right hand term to a value from the array phi
+																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction386Index];
+																		
+																		// Execute the reduction function, saving the result into the return value.
+																		// 
+																		// Copy the result of the reduction into the variable returned by the reduction.
+																		reduceVar$var70$5 = (i$var67 + j$var68);
+																	}
+																	for(int cv$reduction386Index = (j$var55 + 1); cv$reduction386Index < k; cv$reduction386Index += 1) {
+																		// Set the left hand term of the reduction function to the return variable value.
+																		double i$var67 = reduceVar$var70$5;
+																		
+																		// Set the right hand term to a value from the array phi
+																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction386Index];
+																		
+																		// Execute the reduction function, saving the result into the return value.
+																		// 
+																		// Execute the reduction function, saving the result into the return value.
+																		// 
+																		// Copy the result of the reduction into the variable returned by the reduction.
+																		reduceVar$var70$5 = (i$var67 + j$var68);
+																	}
+																	double cv$reduced65 = reduceVar$var70$5;
+																	cv$numerator = (cv$numerator + cv$reduced65);
+																}
+																cv$numerator = (cv$numerator + bias);
 																
-																// Reduce for every value except a masked value which will be skipped.
-																for(int cv$reduction378Index = 0; cv$reduction378Index < j$var55; cv$reduction378Index += 1) {
-																	// Set the left hand term of the reduction function to the return variable value.
-																	double i$var67 = reduceVar$var70$5;
-																	
-																	// Set the right hand term to a value from the array phi
-																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction378Index];
-																	
-																	// Execute the reduction function, saving the result into the return value.
-																	// 
-																	// Copy the result of the reduction into the variable returned by the reduction.
-																	reduceVar$var70$5 = (i$var67 + j$var68);
+																// Record the value of a sample generated by a consuming sample 74 of random variable
+																// var72.
+																// 
+																// Add the denominator squared to the sample denominator
+																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																
+																// Add the weighting of the sample to the sum.
+																cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+																
+																// If we have not got the value of sigma yet record it and set a flag so it is not
+																// recorded again.
+																if(cv$sigmaNotFound) {
+																	cv$sigmaValue = tau;
+																	cv$sigmaNotFound = false;
 																}
-																for(int cv$reduction378Index = (j$var55 + 1); cv$reduction378Index < k; cv$reduction378Index += 1) {
-																	// Set the left hand term of the reduction function to the return variable value.
-																	double i$var67 = reduceVar$var70$5;
-																	
-																	// Set the right hand term to a value from the array phi
-																	double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction378Index];
-																	
-																	// Execute the reduction function, saving the result into the return value.
-																	// 
-																	// Execute the reduction function, saving the result into the return value.
-																	// 
-																	// Copy the result of the reduction into the variable returned by the reduction.
-																	reduceVar$var70$5 = (i$var67 + j$var68);
-																}
-																double cv$reduced65 = reduceVar$var70$5;
-																cv$numerator = (cv$numerator + cv$reduced65);
-															}
-															cv$numerator = (cv$numerator + bias);
-															
-															// Record the value of a sample generated by a consuming sample 74 of random variable
-															// var72.
-															// 
-															// Add the denominator squared to the sample denominator
-															cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-															
-															// Add the weighting of the sample to the sum.
-															cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-															
-															// If we have not got the value of sigma yet record it and set a flag so it is not
-															// recorded again.
-															if(cv$sigmaNotFound) {
-																cv$sigmaValue = tau;
-																cv$sigmaNotFound = false;
 															}
 														}
 													}
@@ -819,27 +821,27 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 					}
 				}
 			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		
-		// Guards to ensure that weights is only updated when there is a valid path.
-		{
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			
+			// Guards to ensure that weights is only updated when there is a valid path.
 			{
-				weights[var23] = var24;
+				{
+					weights[var23] = var24;
+				}
 			}
-		}
-		
-		// Guards to ensure that phi is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 24 and consumer double[] 60.
-		{
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if((var23 == j$var55)) {
-					for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-						phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+			
+			// Guards to ensure that phi is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 24 and consumer double[] 60.
+			{
+				for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+					if((var23 == j$var55)) {
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+							phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+					}
 				}
 			}
 		}
@@ -849,130 +851,134 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// by sample task 31 drawn from Gaussian 30. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
 	private final void sample31() {
-		// State to record the weighting of each sample that is consumed. This is the:
-		// sum of the sample denominator*(the sample value - the sample nominator).
-		double cv$sum = 0.0;
-		
-		// State for storing the sum of the squares of the sample denominators.
-		double cv$denominatorSquareSum = 0.0;
-		
-		// Flag to record if we have a value for Sigma.
-		boolean cv$sigmaNotFound = true;
-		
-		// State for the value of sigma once we find it.
-		double cv$sigmaValue = 1.0;
-		{
-			// Processing random variable 72.
+		if(true) {
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
 			{
+				// Processing random variable 72.
 				{
-					for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-						// State for tracking the changes that happen to the sampled value between it being
-						// consumed and it being produced.
-						double cv$denominator = 1.0;
-						double cv$numerator = 0.0;
-						
-						// Reduction of array phi
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$var70$6 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double i$var67 = reduceVar$var70$6;
+					{
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+							// State for tracking the changes that happen to the sampled value between it being
+							// consumed and it being produced.
+							double cv$denominator = 1.0;
+							double cv$numerator = 0.0;
 							
-							// Set the right hand term to a value from the array phi
-							double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-							
-							// Execute the reduction function, saving the result into the return value.
+							// Reduction of array phi
 							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$var70$6 = (i$var67 + j$var68);
-						}
-						cv$numerator = (reduceVar$var70$6 + cv$numerator);
-						
-						// Record the value of a sample generated by a consuming sample 74 of random variable
-						// var72.
-						// 
-						// Add the denominator squared to the sample denominator
-						cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-						
-						// Add the weighting of the sample to the sum.
-						cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-						
-						// If we have not got the value of sigma yet record it and set a flag so it is not
-						// recorded again.
-						if(cv$sigmaNotFound) {
-							cv$sigmaValue = tau;
-							cv$sigmaNotFound = false;
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							double reduceVar$var70$6 = 0.0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+								// Set the left hand term of the reduction function to the return variable value.
+								double i$var67 = reduceVar$var70$6;
+								
+								// Set the right hand term to a value from the array phi
+								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+								
+								// Execute the reduction function, saving the result into the return value.
+								// 
+								// Copy the result of the reduction into the variable returned by the reduction.
+								reduceVar$var70$6 = (i$var67 + j$var68);
+							}
+							cv$numerator = (reduceVar$var70$6 + cv$numerator);
+							
+							// Record the value of a sample generated by a consuming sample 74 of random variable
+							// var72.
+							// 
+							// Add the denominator squared to the sample denominator
+							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+							
+							// Add the weighting of the sample to the sum.
+							cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+							
+							// If we have not got the value of sigma yet record it and set a flag so it is not
+							// recorded again.
+							if(cv$sigmaNotFound) {
+								cv$sigmaValue = tau;
+								cv$sigmaNotFound = false;
+							}
 						}
 					}
 				}
 			}
+			
+			// Write out the new value of the sample.
+			bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
-		
-		// Write out the new value of the sample.
-		bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 35 drawn from InverseGamma 34. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
 	private final void sample35() {
-		// Variable to track the sum of the difference between the samples and the random
-		// variables mean squared.
-		double cv$sum = 0.0;
-		
-		// Variable to record the number of samples from consuming random variables.
-		int cv$count = 0;
-		{
-			// Processing random variable 72.
+		if(true) {
+			// Variable to track the sum of the difference between the samples and the random
+			// variables mean squared.
+			double cv$sum = 0.0;
+			
+			// Variable to record the number of samples from consuming random variables.
+			int cv$count = 0;
 			{
+				// Processing random variable 72.
 				{
-					for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-						// Reduction of array phi
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$var70$7 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double i$var67 = reduceVar$var70$7;
-							
-							// Set the right hand term to a value from the array phi
-							double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-							
-							// Execute the reduction function, saving the result into the return value.
+					{
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+							// Reduction of array phi
 							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$var70$7 = (i$var67 + j$var68);
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							double reduceVar$var70$7 = 0.0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+								// Set the left hand term of the reduction function to the return variable value.
+								double i$var67 = reduceVar$var70$7;
+								
+								// Set the right hand term to a value from the array phi
+								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+								
+								// Execute the reduction function, saving the result into the return value.
+								// 
+								// Copy the result of the reduction into the variable returned by the reduction.
+								reduceVar$var70$7 = (i$var67 + j$var68);
+							}
+							
+							// The mean parameter for Gaussian var72.
+							double cv$var72$mu = (reduceVar$var70$7 + bias);
+							
+							// Consume sample task 74 from random variable var72.
+							// 
+							// The difference between the mean parameter and the value sampled from the Gaussian.
+							double cv$var72$diff = (cv$var72$mu - y[i$var45]);
+							
+							// Include this sample by adding the square of the difference to the sum.
+							cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
+							
+							// Increment the number of samples in the calculation.
+							cv$count = (cv$count + 1);
 						}
-						
-						// The mean parameter for Gaussian var72.
-						double cv$var72$mu = (reduceVar$var70$7 + bias);
-						
-						// Consume sample task 74 from random variable var72.
-						// 
-						// The difference between the mean parameter and the value sampled from the Gaussian.
-						double cv$var72$diff = (cv$var72$mu - y[i$var45]);
-						
-						// Include this sample by adding the square of the difference to the sum.
-						cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
-						
-						// Increment the number of samples in the calculation.
-						cv$count = (cv$count + 1);
 					}
 				}
 			}
+			
+			// Write out the new value of the sample.
+			tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
 		}
-		
-		// Write out the new value of the sample.
-		tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

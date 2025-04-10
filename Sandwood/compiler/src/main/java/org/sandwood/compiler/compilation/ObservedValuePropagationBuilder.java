@@ -28,6 +28,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -213,13 +214,17 @@ public class ObservedValuePropagationBuilder {
 
         // Order the required variables and construct the trees to generate them.
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(compilationCtx.traces.observedIntermediateVariables());
-        while(!p.isEmpty()) {
-            Variable<?> v = p.poll();
-            ForwardExecutionBuilder.constructForwardMethod(v, GuardStatus.NONE, true, compilationCtx);
-        }
+        if(p.isEmpty())
+            t1 = IRTree.nop();
+        else {
+            while(!p.isEmpty()) {
+                Variable<?> v = p.poll();
+                ForwardExecutionBuilder.constructForwardMethod(v, GuardStatus.NONE, true, compilationCtx);
+            }
 
-        t1 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
-                "Setting intermediate variables that are used to constrain other variables.");
+            t1 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
+                    "Setting intermediate variables that are used to constrain other variables.");
+        }
         return t1;
     }
 
@@ -264,7 +269,7 @@ public class ObservedValuePropagationBuilder {
                     throw new SandwoodModelException(
                             "Multiple variables linked to sample task. This could result in inconsistencies. "
                                     + "Relevant variables are " + s + ".",
-                            sTask);
+                                    sTask);
                 }
 
                 ingestTrace(t.values(), segmentedTraces);
@@ -375,14 +380,21 @@ public class ObservedValuePropagationBuilder {
                 Variable<?> v = task.getOutput();
                 if((v.isIntermediate() || v.isSample()) && v.getType().getDepth() == 0)
                     saveIntermediate(v, current, compilationCtx);
+                if(index > 1) {
+                    d = traceHandle.get(index-1);
+                    RandomVariableConstructorTask<A, ?> rv = (RandomVariableConstructorTask<A, ?>) d.task;
+                    IRTreeReturn<?> rvArg = rv.getInverseArg(current, d.argPos, compilationCtx);
+                    // Starting at the -2 position as the value at -1 has already been calculated to generate rvArg.
+                    processTask(index - 2, traceHandle, rvArg, backTraceInfo, compilationCtx);
+                }
                 break;
             }
             case GET: {
                 if(d.argPos == 1)
                     throw new CompilerException(
                             "Unable to invert an array lookup operation to determine the value of the index based "
-                            + "on the output. Array values are not guaranteed to be unique, this prevents indexes "
-                            + "being calculated when back tracking through the model.");
+                                    + "on the output. Array values are not guaranteed to be unique, this prevents indexes "
+                                    + "being calculated when back tracking through the model.");
                 if(d.argPos != 0)
                     throw new CompilerException(
                             "There are only 2 arguments to a get, this value of argPos is not valid.");
@@ -459,9 +471,9 @@ public class ObservedValuePropagationBuilder {
                         compilationCtx.leaveScope(task.scope());
                         break;
 
-                    // Values are not propagated through scope conditions, instead we will have to infer these values
-                    // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
-                    // model probability of 0/-Infinity in normal/log space respectively.
+                        // Values are not propagated through scope conditions, instead we will have to infer these values
+                        // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
+                        // model probability of 0/-Infinity in normal/log space respectively.
                     case 3:
                         throw new CompilerException(
                                 "Values are not propagated through scope conditions, instead we will have to infer these values.");
@@ -504,7 +516,7 @@ public class ObservedValuePropagationBuilder {
                 TraceHandle t = traces.iterator().next();
                 Variable<?> output = t.peek().task.getOutput();
                 throw new SandwoodModelException("Multiple traces to observed variable " + output.getAlias()
-                        + ". This could result in inconsistencies.", output.getObservation());
+                + ". This could result in inconsistencies.", output.getObservation());
             }
 
             for(TraceHandle t:traces) {

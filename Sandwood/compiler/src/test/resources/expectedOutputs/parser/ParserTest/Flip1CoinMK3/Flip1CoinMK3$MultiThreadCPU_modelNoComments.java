@@ -210,20 +210,22 @@ class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	private final void sample6() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int i$var21 = 0; i$var21 < samples; i$var21 += 1) {
-						cv$count = (cv$count + 1);
-						if(flips[i$var21])
-							cv$sum = (cv$sum + 1);
+					{
+						for(int i$var21 = 0; i$var21 < samples; i$var21 += 1) {
+							cv$count = (cv$count + 1);
+							if(flips[i$var21])
+								cv$sum = (cv$sum + 1);
+						}
 					}
 				}
 			}
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override

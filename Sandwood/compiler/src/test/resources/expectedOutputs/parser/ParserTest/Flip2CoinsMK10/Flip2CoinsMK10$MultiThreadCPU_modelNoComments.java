@@ -293,57 +293,61 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	private final void sample10() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int j = 0; j < coins; j += 1) {
-						if((0 == j)) {
-							{
-								for(int var47 = 0; var47 < shape[j]; var47 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[j][var47])
-										cv$sum = (cv$sum + 1);
+					{
+						for(int j = 0; j < coins; j += 1) {
+							if((0 == j)) {
+								{
+									for(int var47 = 0; var47 < shape[j]; var47 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[j][var47])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
+			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
-				bias[0] = var10;
+				{
+					bias[0] = var10;
+				}
 			}
 		}
 	}
 
 	private final void sample23(int i, int threadID$cv$i, Rng RNG$) {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int j = 0; j < coins; j += 1) {
-						if((i == j)) {
-							{
-								for(int var47 = 0; var47 < shape[j]; var47 += 1) {
-									cv$count = (cv$count + 1);
-									if(flips[j][var47])
-										cv$sum = (cv$sum + 1);
+					{
+						for(int j = 0; j < coins; j += 1) {
+							if((i == j)) {
+								{
+									for(int var47 = 0; var47 < shape[j]; var47 += 1) {
+										cv$count = (cv$count + 1);
+										if(flips[j][var47])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-		double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		{
+			double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
-				bias[i] = var23;
+				{
+					bias[i] = var23;
+				}
 			}
 		}
 	}

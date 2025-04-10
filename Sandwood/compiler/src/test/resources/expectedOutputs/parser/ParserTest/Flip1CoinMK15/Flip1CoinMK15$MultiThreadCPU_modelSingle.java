@@ -508,664 +508,666 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 8 drawn from Beta 7. Inference was performed using Metropolis-Hastings.
 	private final void sample8() {
-		// Calculate the number of states to evaluate.
-		int cv$numNumStates = 0;
-		{
-			// Metropolis-Hastings
-			cv$numNumStates = Math.max(cv$numNumStates, 2);
-		}
-		
-		// The original value of the sample
-		double cv$originalValue = b;
-		
-		// The probability of the random variable generating the originally sampled value
-		double cv$originalProbability = 0.0;
-		
-		// Calculate a proposed variance.
-		double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-		
-		// Ensure the variance is at least 0.01
-		if((cv$var < (0.1 * 0.1)))
-			cv$var = (0.1 * 0.1);
-		
-		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		
-		// The probability of the random variable generating the new sample value.
-		double cv$proposedProbability = 0.0;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
-			// Initialize the summed probabilities to 0.
-			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-			
-			// Initialize a counter to track the reached distributions.
-			double cv$reachedDistributionSourceRV = 0.0;
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			double cv$accumulatedDistributionProbabilities = 0.0;
-			
-			// The value currently being tested
-			double cv$currentValue;
-			if((cv$valuePos == 0))
-				// Set the current value to the current state of the tree.
-				cv$currentValue = cv$originalValue;
-			else {
-				cv$currentValue = cv$proposedValue;
-				
-				// Update Sample and intermediate values
-				{
-					// Write out the new value of the sample.
-					b = cv$proposedValue;
-					
-					// Guards to ensure that c is only updated when there is a valid path.
-					{
-						if(!guard1) {
-							{
-								c[0] = (cv$currentValue / 2);
-							}
-						}
-					}
-					
-					// Guards to ensure that c is only updated when there is a valid path.
-					{
-						if(!guard1) {
-							{
-								c[1] = (cv$currentValue / 2);
-							}
-						}
-					}
-					
-					// Guards to ensure that bias is only updated when there is a valid path.
-					{
-						// Guard to check that at most one copy of the code is executed for a given set of
-						// loop iterations.
-						boolean guard$sample8if37 = false;
-						if(guard1) {
-							if(!guard$sample8if37) {
-								// The body will execute, so should not be executed again
-								guard$sample8if37 = true;
-								{
-									if(guard1)
-										bias = cv$currentValue;
-									else {
-										// Reduction of array c
-										// 
-										// A generated name to prevent name collisions if the reduction is implemented more
-										// than once in inference and probability code. Initialize the variable to the unit
-										// value
-										double reduceVar$var33$13 = 0.0;
-										
-										// For each index in the array to be reduced
-										for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-											// Set the left hand term of the reduction function to the return variable value.
-											double i$var30 = reduceVar$var33$13;
-											
-											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction30Index];
-											
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var33$13 = (i$var30 + j);
-										}
-										bias = reduceVar$var33$13;
-									}
-								}
-							}
-						}
-						if(!guard1) {
-							if(((0 <= 0) && (0 < 2))) {
-								{
-									if(!guard1) {
-										if(!guard$sample8if37) {
-											// The body will execute, so should not be executed again
-											guard$sample8if37 = true;
-											{
-												if(guard1)
-													bias = cv$currentValue;
-												else {
-													// Reduction of array c
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$var33$14 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double i$var30 = reduceVar$var33$14;
-														
-														// Set the right hand term to a value from the array c
-														double j = c[cv$reduction30Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$var33$14 = (i$var30 + j);
-													}
-													bias = reduceVar$var33$14;
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(!guard1) {
-							if(((0 <= 1) && (1 < 2))) {
-								{
-									if(!guard1) {
-										if(!guard$sample8if37) {
-											// The body will execute, so should not be executed again
-											guard$sample8if37 = true;
-											{
-												if(guard1)
-													bias = cv$currentValue;
-												else {
-													// Reduction of array c
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$var33$15 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double i$var30 = reduceVar$var33$15;
-														
-														// Set the right hand term to a value from the array c
-														double j = c[cv$reduction30Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$var33$15 = (i$var30 + j);
-													}
-													bias = reduceVar$var33$15;
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+		if(true) {
+			// Calculate the number of states to evaluate.
+			int cv$numNumStates = 0;
 			{
-				// Record the reached probability density.
-				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double cv$temp$0$var4;
-				{
-					cv$temp$0$var4 = 1.0;
-				}
-				double cv$temp$1$var6;
-				{
-					cv$temp$1$var6 = 1.0;
-				}
+				// Metropolis-Hastings
+				cv$numNumStates = Math.max(cv$numNumStates, 2);
+			}
+			
+			// The original value of the sample
+			double cv$originalValue = b;
+			
+			// The probability of the random variable generating the originally sampled value
+			double cv$originalProbability = 0.0;
+			
+			// Calculate a proposed variance.
+			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			
+			// Ensure the variance is at least 0.01
+			if((cv$var < (0.1 * 0.1)))
+				cv$var = (0.1 * 0.1);
+			
+			// The proposed new value for the sample
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			
+			// The probability of the random variable generating the new sample value.
+			double cv$proposedProbability = 0.0;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+				// Initialize the summed probabilities to 0.
+				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				
-				// An accumulator to allow the value for each distribution to be constructed before
-				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$currentValue, cv$temp$0$var4, cv$temp$1$var6));
+				// Initialize a counter to track the reached distributions.
+				double cv$reachedDistributionSourceRV = 0.0;
 				
-				// Processing random variable 35.
-				{
+				// Initialize a log space accumulator to take the product of all the distribution
+				// probabilities.
+				double cv$accumulatedDistributionProbabilities = 0.0;
+				
+				// The value currently being tested
+				double cv$currentValue;
+				if((cv$valuePos == 0))
+					// Set the current value to the current state of the tree.
+					cv$currentValue = cv$originalValue;
+				else {
+					cv$currentValue = cv$proposedValue;
+					
+					// Update Sample and intermediate values
 					{
-						// Guard to check that at most one copy of the code is executed for a given set of
-						// loop iterations.
-						boolean guard$sample8bernoulli38 = false;
-						if(guard1) {
-							double traceTempVariable$bias$6_1 = cv$currentValue;
-							double traceTempVariable$b$6_2 = cv$currentValue;
-							if(!guard$sample8bernoulli38) {
-								// The body will execute, so should not be executed again
-								guard$sample8bernoulli38 = true;
-								
-								// Processing sample task 50 of consumer random variable bernoulli.
+						// Write out the new value of the sample.
+						b = cv$proposedValue;
+						
+						// Guards to ensure that c is only updated when there is a valid path.
+						{
+							if(!guard1) {
 								{
-									for(int var46 = 0; var46 < samples; var46 += 1) {
-										// Set an accumulator to sum the probabilities for each possible configuration of
-										// inputs.
-										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-										
-										// Set an accumulator to record the consumer distributions not seen. Initially set
-										// to 1 as seen values will be deducted from this value.
-										double cv$consumerDistributionProbabilityAccumulator = 1.0;
-										{
+									c[0] = (cv$currentValue / 2);
+								}
+							}
+						}
+						
+						// Guards to ensure that c is only updated when there is a valid path.
+						{
+							if(!guard1) {
+								{
+									c[1] = (cv$currentValue / 2);
+								}
+							}
+						}
+						
+						// Guards to ensure that bias is only updated when there is a valid path.
+						{
+							// Guard to check that at most one copy of the code is executed for a given set of
+							// loop iterations.
+							boolean guard$sample8if37 = false;
+							if(guard1) {
+								if(!guard$sample8if37) {
+									// The body will execute, so should not be executed again
+									guard$sample8if37 = true;
+									{
+										if(guard1)
+											bias = cv$currentValue;
+										else {
+											// Reduction of array c
+											// 
+											// A generated name to prevent name collisions if the reduction is implemented more
+											// than once in inference and probability code. Initialize the variable to the unit
+											// value
+											double reduceVar$var33$13 = 0.0;
+											
+											// For each index in the array to be reduced
+											for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var30 = reduceVar$var33$13;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction30Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var33$13 = (i$var30 + j);
+											}
+											bias = reduceVar$var33$13;
+										}
+									}
+								}
+							}
+							if(!guard1) {
+								if(((0 <= 0) && (0 < 2))) {
+									{
+										if(!guard1) {
+											if(!guard$sample8if37) {
+												// The body will execute, so should not be executed again
+												guard$sample8if37 = true;
+												{
+													if(guard1)
+														bias = cv$currentValue;
+													else {
+														// Reduction of array c
+														// 
+														// A generated name to prevent name collisions if the reduction is implemented more
+														// than once in inference and probability code. Initialize the variable to the unit
+														// value
+														double reduceVar$var33$14 = 0.0;
+														
+														// For each index in the array to be reduced
+														for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double i$var30 = reduceVar$var33$14;
+															
+															// Set the right hand term to a value from the array c
+															double j = c[cv$reduction30Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$var33$14 = (i$var30 + j);
+														}
+														bias = reduceVar$var33$14;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							if(!guard1) {
+								if(((0 <= 1) && (1 < 2))) {
+									{
+										if(!guard1) {
+											if(!guard$sample8if37) {
+												// The body will execute, so should not be executed again
+												guard$sample8if37 = true;
+												{
+													if(guard1)
+														bias = cv$currentValue;
+													else {
+														// Reduction of array c
+														// 
+														// A generated name to prevent name collisions if the reduction is implemented more
+														// than once in inference and probability code. Initialize the variable to the unit
+														// value
+														double reduceVar$var33$15 = 0.0;
+														
+														// For each index in the array to be reduced
+														for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double i$var30 = reduceVar$var33$15;
+															
+															// Set the right hand term to a value from the array c
+															double j = c[cv$reduction30Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$var33$15 = (i$var30 + j);
+														}
+														bias = reduceVar$var33$15;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				{
+					// Record the reached probability density.
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+					double cv$temp$0$var4;
+					{
+						cv$temp$0$var4 = 1.0;
+					}
+					double cv$temp$1$var6;
+					{
+						cv$temp$1$var6 = 1.0;
+					}
+					
+					// An accumulator to allow the value for each distribution to be constructed before
+					// it is added to the index probabilities.
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$currentValue, cv$temp$0$var4, cv$temp$1$var6));
+					
+					// Processing random variable 35.
+					{
+						{
+							// Guard to check that at most one copy of the code is executed for a given set of
+							// loop iterations.
+							boolean guard$sample8bernoulli38 = false;
+							if(guard1) {
+								double traceTempVariable$bias$6_1 = cv$currentValue;
+								double traceTempVariable$b$6_2 = cv$currentValue;
+								if(!guard$sample8bernoulli38) {
+									// The body will execute, so should not be executed again
+									guard$sample8bernoulli38 = true;
+									
+									// Processing sample task 50 of consumer random variable bernoulli.
+									{
+										for(int var46 = 0; var46 < samples; var46 += 1) {
+											// Set an accumulator to sum the probabilities for each possible configuration of
+											// inputs.
+											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+											
+											// Set an accumulator to record the consumer distributions not seen. Initially set
+											// to 1 as seen values will be deducted from this value.
+											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 											{
 												{
 													{
-														double cv$temp$2$bias;
 														{
-															cv$temp$2$bias = traceTempVariable$bias$6_1;
+															double cv$temp$2$bias;
+															{
+																cv$temp$2$bias = traceTempVariable$bias$6_1;
+															}
+															
+															// Record the probability of sample task 50 generating output with current configuration.
+															if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias));
+																else
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)));
+															}
+															
+															// Recorded the probability of reaching sample task 50 with the current configuration.
+															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
-														
-														// Record the probability of sample task 50 generating output with current configuration.
-														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-														else {
-															// If the second value is -infinity.
-															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias));
-															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$2$bias)));
+													}
+												}
+											}
+											
+											// A check to ensure rounding of floating point values can never result in a negative
+											// value.
+											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+											
+											// Multiply (log space add) in the probability of the sample task to the overall probability
+											// for this configuration of the source random variable.
+											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+											else {
+												// If the second value is -infinity.
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+												else
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+											}
+										}
+									}
+								}
+							}
+							if(!guard1) {
+								double traceTempVariable$b$7_1 = cv$currentValue;
+								double traceTempVariable$i$7_2 = (traceTempVariable$b$7_1 / 2);
+								if(((0 <= 0) && (0 < 2))) {
+									{
+										if((0 < 2)) {
+											// Reduction of array c
+											// 
+											// A generated name to prevent name collisions if the reduction is implemented more
+											// than once in inference and probability code. Initialize the variable to the unit
+											// value
+											double reduceVar$var33$16 = 0.0;
+											
+											// Reduce for every value except a masked value which will be skipped.
+											for(int cv$reduction405Index = 0; cv$reduction405Index < 0; cv$reduction405Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var30 = reduceVar$var33$16;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction405Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var33$16 = (i$var30 + j);
+											}
+											for(int cv$reduction405Index = (0 + 1); cv$reduction405Index < 2; cv$reduction405Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var30 = reduceVar$var33$16;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction405Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var33$16 = (i$var30 + j);
+											}
+											double cv$reduced30 = reduceVar$var33$16;
+											
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var33$16 = (traceTempVariable$i$7_2 + cv$reduced30);
+											double traceTempVariable$var33$7_3 = reduceVar$var33$16;
+											if(!guard1) {
+												double traceTempVariable$bias$7_4 = traceTempVariable$var33$7_3;
+												if(!guard$sample8bernoulli38) {
+													// The body will execute, so should not be executed again
+													guard$sample8bernoulli38 = true;
+													
+													// Processing sample task 50 of consumer random variable bernoulli.
+													{
+														for(int var46 = 0; var46 < samples; var46 += 1) {
+															// Set an accumulator to sum the probabilities for each possible configuration of
+															// inputs.
+															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+															
+															// Set an accumulator to record the consumer distributions not seen. Initially set
+															// to 1 as seen values will be deducted from this value.
+															double cv$consumerDistributionProbabilityAccumulator = 1.0;
+															{
+																{
+																	{
+																		{
+																			double cv$temp$3$bias;
+																			{
+																				cv$temp$3$bias = traceTempVariable$bias$7_4;
+																			}
+																			
+																			// Record the probability of sample task 50 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias));
+																				else
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)));
+																			}
+																			
+																			// Recorded the probability of reaching sample task 50 with the current configuration.
+																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																		}
+																	}
+																}
+															}
+															
+															// A check to ensure rounding of floating point values can never result in a negative
+															// value.
+															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+															
+															// Multiply (log space add) in the probability of the sample task to the overall probability
+															// for this configuration of the source random variable.
+															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																else
+																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+															}
 														}
-														
-														// Recorded the probability of reaching sample task 50 with the current configuration.
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
 												}
 											}
 										}
-										
-										// A check to ensure rounding of floating point values can never result in a negative
-										// value.
-										cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-										
-										// Multiply (log space add) in the probability of the sample task to the overall probability
-										// for this configuration of the source random variable.
-										if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-										else {
-											// If the second value is -infinity.
-											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-											else
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+									}
+								}
+							}
+							if(!guard1) {
+								double traceTempVariable$b$8_1 = cv$currentValue;
+								double traceTempVariable$i$8_2 = (traceTempVariable$b$8_1 / 2);
+								if(((0 <= 1) && (1 < 2))) {
+									{
+										if((0 < 2)) {
+											// Reduction of array c
+											// 
+											// A generated name to prevent name collisions if the reduction is implemented more
+											// than once in inference and probability code. Initialize the variable to the unit
+											// value
+											double reduceVar$var33$17 = 0.0;
+											
+											// Reduce for every value except a masked value which will be skipped.
+											for(int cv$reduction426Index = 0; cv$reduction426Index < 1; cv$reduction426Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var30 = reduceVar$var33$17;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction426Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var33$17 = (i$var30 + j);
+											}
+											for(int cv$reduction426Index = (1 + 1); cv$reduction426Index < 2; cv$reduction426Index += 1) {
+												// Set the left hand term of the reduction function to the return variable value.
+												double i$var30 = reduceVar$var33$17;
+												
+												// Set the right hand term to a value from the array c
+												double j = c[cv$reduction426Index];
+												
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Execute the reduction function, saving the result into the return value.
+												// 
+												// Copy the result of the reduction into the variable returned by the reduction.
+												reduceVar$var33$17 = (i$var30 + j);
+											}
+											double cv$reduced30 = reduceVar$var33$17;
+											
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var33$17 = (traceTempVariable$i$8_2 + cv$reduced30);
+											double traceTempVariable$var33$8_3 = reduceVar$var33$17;
+											if(!guard1) {
+												double traceTempVariable$bias$8_4 = traceTempVariable$var33$8_3;
+												if(!guard$sample8bernoulli38) {
+													// The body will execute, so should not be executed again
+													guard$sample8bernoulli38 = true;
+													
+													// Processing sample task 50 of consumer random variable bernoulli.
+													{
+														for(int var46 = 0; var46 < samples; var46 += 1) {
+															// Set an accumulator to sum the probabilities for each possible configuration of
+															// inputs.
+															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+															
+															// Set an accumulator to record the consumer distributions not seen. Initially set
+															// to 1 as seen values will be deducted from this value.
+															double cv$consumerDistributionProbabilityAccumulator = 1.0;
+															{
+																{
+																	{
+																		{
+																			double cv$temp$4$bias;
+																			{
+																				cv$temp$4$bias = traceTempVariable$bias$8_4;
+																			}
+																			
+																			// Record the probability of sample task 50 generating output with current configuration.
+																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias));
+																				else
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)));
+																			}
+																			
+																			// Recorded the probability of reaching sample task 50 with the current configuration.
+																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																		}
+																	}
+																}
+															}
+															
+															// A check to ensure rounding of floating point values can never result in a negative
+															// value.
+															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+															
+															// Multiply (log space add) in the probability of the sample task to the overall probability
+															// for this configuration of the source random variable.
+															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																else
+																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+															}
+														}
+													}
+												}
+											}
 										}
 									}
 								}
 							}
 						}
-						if(!guard1) {
-							double traceTempVariable$b$7_1 = cv$currentValue;
-							double traceTempVariable$i$7_2 = (traceTempVariable$b$7_1 / 2);
-							if(((0 <= 0) && (0 < 2))) {
-								{
-									if((0 < 2)) {
-										// Reduction of array c
-										// 
-										// A generated name to prevent name collisions if the reduction is implemented more
-										// than once in inference and probability code. Initialize the variable to the unit
-										// value
-										double reduceVar$var33$16 = 0.0;
-										
-										// Reduce for every value except a masked value which will be skipped.
-										for(int cv$reduction401Index = 0; cv$reduction401Index < 0; cv$reduction401Index += 1) {
-											// Set the left hand term of the reduction function to the return variable value.
-											double i$var30 = reduceVar$var33$16;
-											
-											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction401Index];
-											
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var33$16 = (i$var30 + j);
-										}
-										for(int cv$reduction401Index = (0 + 1); cv$reduction401Index < 2; cv$reduction401Index += 1) {
-											// Set the left hand term of the reduction function to the return variable value.
-											double i$var30 = reduceVar$var33$16;
-											
-											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction401Index];
-											
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var33$16 = (i$var30 + j);
-										}
-										double cv$reduced30 = reduceVar$var33$16;
-										
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var33$16 = (traceTempVariable$i$7_2 + cv$reduced30);
-										double traceTempVariable$var33$7_3 = reduceVar$var33$16;
-										if(!guard1) {
-											double traceTempVariable$bias$7_4 = traceTempVariable$var33$7_3;
-											if(!guard$sample8bernoulli38) {
-												// The body will execute, so should not be executed again
-												guard$sample8bernoulli38 = true;
-												
-												// Processing sample task 50 of consumer random variable bernoulli.
-												{
-													for(int var46 = 0; var46 < samples; var46 += 1) {
-														// Set an accumulator to sum the probabilities for each possible configuration of
-														// inputs.
-														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-														
-														// Set an accumulator to record the consumer distributions not seen. Initially set
-														// to 1 as seen values will be deducted from this value.
-														double cv$consumerDistributionProbabilityAccumulator = 1.0;
-														{
-															{
-																{
-																	{
-																		double cv$temp$3$bias;
-																		{
-																			cv$temp$3$bias = traceTempVariable$bias$7_4;
-																		}
-																		
-																		// Record the probability of sample task 50 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias));
-																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$3$bias)));
-																		}
-																		
-																		// Recorded the probability of reaching sample task 50 with the current configuration.
-																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																	}
-																}
-															}
-														}
-														
-														// A check to ensure rounding of floating point values can never result in a negative
-														// value.
-														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-														
-														// Multiply (log space add) in the probability of the sample task to the overall probability
-														// for this configuration of the source random variable.
-														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-														else {
-															// If the second value is -infinity.
-															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-															else
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(!guard1) {
-							double traceTempVariable$b$8_1 = cv$currentValue;
-							double traceTempVariable$i$8_2 = (traceTempVariable$b$8_1 / 2);
-							if(((0 <= 1) && (1 < 2))) {
-								{
-									if((0 < 2)) {
-										// Reduction of array c
-										// 
-										// A generated name to prevent name collisions if the reduction is implemented more
-										// than once in inference and probability code. Initialize the variable to the unit
-										// value
-										double reduceVar$var33$17 = 0.0;
-										
-										// Reduce for every value except a masked value which will be skipped.
-										for(int cv$reduction422Index = 0; cv$reduction422Index < 1; cv$reduction422Index += 1) {
-											// Set the left hand term of the reduction function to the return variable value.
-											double i$var30 = reduceVar$var33$17;
-											
-											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction422Index];
-											
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var33$17 = (i$var30 + j);
-										}
-										for(int cv$reduction422Index = (1 + 1); cv$reduction422Index < 2; cv$reduction422Index += 1) {
-											// Set the left hand term of the reduction function to the return variable value.
-											double i$var30 = reduceVar$var33$17;
-											
-											// Set the right hand term to a value from the array c
-											double j = c[cv$reduction422Index];
-											
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Execute the reduction function, saving the result into the return value.
-											// 
-											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$var33$17 = (i$var30 + j);
-										}
-										double cv$reduced30 = reduceVar$var33$17;
-										
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var33$17 = (traceTempVariable$i$8_2 + cv$reduced30);
-										double traceTempVariable$var33$8_3 = reduceVar$var33$17;
-										if(!guard1) {
-											double traceTempVariable$bias$8_4 = traceTempVariable$var33$8_3;
-											if(!guard$sample8bernoulli38) {
-												// The body will execute, so should not be executed again
-												guard$sample8bernoulli38 = true;
-												
-												// Processing sample task 50 of consumer random variable bernoulli.
-												{
-													for(int var46 = 0; var46 < samples; var46 += 1) {
-														// Set an accumulator to sum the probabilities for each possible configuration of
-														// inputs.
-														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-														
-														// Set an accumulator to record the consumer distributions not seen. Initially set
-														// to 1 as seen values will be deducted from this value.
-														double cv$consumerDistributionProbabilityAccumulator = 1.0;
-														{
-															{
-																{
-																	{
-																		double cv$temp$4$bias;
-																		{
-																			cv$temp$4$bias = traceTempVariable$bias$8_4;
-																		}
-																		
-																		// Record the probability of sample task 50 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias));
-																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var46], cv$temp$4$bias)));
-																		}
-																		
-																		// Recorded the probability of reaching sample task 50 with the current configuration.
-																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																	}
-																}
-															}
-														}
-														
-														// A check to ensure rounding of floating point values can never result in a negative
-														// value.
-														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-														
-														// Multiply (log space add) in the probability of the sample task to the overall probability
-														// for this configuration of the source random variable.
-														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-														else {
-															// If the second value is -infinity.
-															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-															else
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
+					}
+					
+					// Add the values for the source and any standard consumers for this configuration
+					// of arguments to the source.
+					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+					else {
+						// If the second value is -infinity.
+						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+							cv$stateProbabilityValue = cv$accumulatedProbabilities;
+						else
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+					}
+				}
+				
+				// Save the probability of the original value.
+				if((cv$valuePos == 0))
+					cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+				
+				// Save the probability of the proposed value.
+				else
+					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the new value of the sample.
+				b = cv$originalValue;
+				
+				// Guards to ensure that c is only updated when there is a valid path.
+				{
+					if(!guard1) {
+						{
+							c[0] = (b / 2);
 						}
 					}
 				}
 				
-				// Add the values for the source and any standard consumers for this configuration
-				// of arguments to the source.
-				if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-					cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-				else {
-					// If the second value is -infinity.
-					if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-						cv$stateProbabilityValue = cv$accumulatedProbabilities;
-					else
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-				}
-			}
-			
-			// Save the probability of the original value.
-			if((cv$valuePos == 0))
-				cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			
-			// Save the probability of the proposed value.
-			else
-				cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-		}
-		
-		// The probability ration for the proposed value and the current value.
-		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// Write out the new value of the sample.
-			b = cv$originalValue;
-			
-			// Guards to ensure that c is only updated when there is a valid path.
-			{
-				if(!guard1) {
-					{
-						c[0] = (b / 2);
-					}
-				}
-			}
-			
-			// Guards to ensure that c is only updated when there is a valid path.
-			{
-				if(!guard1) {
-					{
-						c[1] = (b / 2);
-					}
-				}
-			}
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			{
-				// Guard to check that at most one copy of the code is executed for a given set of
-				// loop iterations.
-				boolean guard$sample8if37 = false;
-				if(guard1) {
-					if(!guard$sample8if37) {
-						// The body will execute, so should not be executed again
-						guard$sample8if37 = true;
+				// Guards to ensure that c is only updated when there is a valid path.
+				{
+					if(!guard1) {
 						{
-							if(guard1)
-								bias = b;
-							else {
-								// Reduction of array c
-								// 
-								// A generated name to prevent name collisions if the reduction is implemented more
-								// than once in inference and probability code. Initialize the variable to the unit
-								// value
-								double reduceVar$var33$18 = 0.0;
-								
-								// For each index in the array to be reduced
-								for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-									// Set the left hand term of the reduction function to the return variable value.
-									double i$var30 = reduceVar$var33$18;
-									
-									// Set the right hand term to a value from the array c
-									double j = c[cv$reduction30Index];
-									
-									// Execute the reduction function, saving the result into the return value.
-									// 
-									// Copy the result of the reduction into the variable returned by the reduction.
-									reduceVar$var33$18 = (i$var30 + j);
-								}
-								bias = reduceVar$var33$18;
-							}
+							c[1] = (b / 2);
 						}
 					}
 				}
-				if(!guard1) {
-					if(((0 <= 0) && (0 < 2))) {
-						{
-							if(!guard1) {
-								if(!guard$sample8if37) {
-									// The body will execute, so should not be executed again
-									guard$sample8if37 = true;
-									{
-										if(guard1)
-											bias = b;
-										else {
-											// Reduction of array c
-											// 
-											// A generated name to prevent name collisions if the reduction is implemented more
-											// than once in inference and probability code. Initialize the variable to the unit
-											// value
-											double reduceVar$var33$19 = 0.0;
-											
-											// For each index in the array to be reduced
-											for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var30 = reduceVar$var33$19;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction30Index];
-												
-												// Execute the reduction function, saving the result into the return value.
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				{
+					// Guard to check that at most one copy of the code is executed for a given set of
+					// loop iterations.
+					boolean guard$sample8if37 = false;
+					if(guard1) {
+						if(!guard$sample8if37) {
+							// The body will execute, so should not be executed again
+							guard$sample8if37 = true;
+							{
+								if(guard1)
+									bias = b;
+								else {
+									// Reduction of array c
+									// 
+									// A generated name to prevent name collisions if the reduction is implemented more
+									// than once in inference and probability code. Initialize the variable to the unit
+									// value
+									double reduceVar$var33$18 = 0.0;
+									
+									// For each index in the array to be reduced
+									for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+										// Set the left hand term of the reduction function to the return variable value.
+										double i$var30 = reduceVar$var33$18;
+										
+										// Set the right hand term to a value from the array c
+										double j = c[cv$reduction30Index];
+										
+										// Execute the reduction function, saving the result into the return value.
+										// 
+										// Copy the result of the reduction into the variable returned by the reduction.
+										reduceVar$var33$18 = (i$var30 + j);
+									}
+									bias = reduceVar$var33$18;
+								}
+							}
+						}
+					}
+					if(!guard1) {
+						if(((0 <= 0) && (0 < 2))) {
+							{
+								if(!guard1) {
+									if(!guard$sample8if37) {
+										// The body will execute, so should not be executed again
+										guard$sample8if37 = true;
+										{
+											if(guard1)
+												bias = b;
+											else {
+												// Reduction of array c
 												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var33$19 = (i$var30 + j);
+												// A generated name to prevent name collisions if the reduction is implemented more
+												// than once in inference and probability code. Initialize the variable to the unit
+												// value
+												double reduceVar$var33$19 = 0.0;
+												
+												// For each index in the array to be reduced
+												for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+													// Set the left hand term of the reduction function to the return variable value.
+													double i$var30 = reduceVar$var33$19;
+													
+													// Set the right hand term to a value from the array c
+													double j = c[cv$reduction30Index];
+													
+													// Execute the reduction function, saving the result into the return value.
+													// 
+													// Copy the result of the reduction into the variable returned by the reduction.
+													reduceVar$var33$19 = (i$var30 + j);
+												}
+												bias = reduceVar$var33$19;
 											}
-											bias = reduceVar$var33$19;
 										}
 									}
 								}
 							}
 						}
 					}
-				}
-				if(!guard1) {
-					if(((0 <= 1) && (1 < 2))) {
-						{
-							if(!guard1) {
-								if(!guard$sample8if37) {
-									// The body will execute, so should not be executed again
-									guard$sample8if37 = true;
-									{
-										if(guard1)
-											bias = b;
-										else {
-											// Reduction of array c
-											// 
-											// A generated name to prevent name collisions if the reduction is implemented more
-											// than once in inference and probability code. Initialize the variable to the unit
-											// value
-											double reduceVar$var33$20 = 0.0;
-											
-											// For each index in the array to be reduced
-											for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-												// Set the left hand term of the reduction function to the return variable value.
-												double i$var30 = reduceVar$var33$20;
-												
-												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction30Index];
-												
-												// Execute the reduction function, saving the result into the return value.
+					if(!guard1) {
+						if(((0 <= 1) && (1 < 2))) {
+							{
+								if(!guard1) {
+									if(!guard$sample8if37) {
+										// The body will execute, so should not be executed again
+										guard$sample8if37 = true;
+										{
+											if(guard1)
+												bias = b;
+											else {
+												// Reduction of array c
 												// 
-												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$var33$20 = (i$var30 + j);
+												// A generated name to prevent name collisions if the reduction is implemented more
+												// than once in inference and probability code. Initialize the variable to the unit
+												// value
+												double reduceVar$var33$20 = 0.0;
+												
+												// For each index in the array to be reduced
+												for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+													// Set the left hand term of the reduction function to the return variable value.
+													double i$var30 = reduceVar$var33$20;
+													
+													// Set the right hand term to a value from the array c
+													double j = c[cv$reduction30Index];
+													
+													// Execute the reduction function, saving the result into the return value.
+													// 
+													// Copy the result of the reduction into the variable returned by the reduction.
+													reduceVar$var33$20 = (i$var30 + j);
+												}
+												bias = reduceVar$var33$20;
 											}
-											bias = reduceVar$var33$20;
 										}
 									}
 								}

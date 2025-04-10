@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
@@ -166,6 +165,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         allocateGlobalStateInternal(compilationCtx, funcData);
 
         Scope targetScope = constructTargetScope(funcData, compilationCtx);
+
+        // Add a test to check that the sample inference is needed based on the random variables arguments.
+        targetScope = constructInferenceCheck(targetScope, funcData, compilationCtx);
 
         // If required add a guard to ensure that the value to be inferred is not already observed.
         targetScope = observationGuard(targetScope, funcData, compilationCtx);
@@ -452,6 +454,25 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // And place the subtree in a void function.
         return voidFunction(Visibility.PRIVATE, FunctionName.createFunctionName(funcData.sampleDesc.uniqueName),
                 functionArgs, result, comment, knownValues);
+    }
+
+    /**
+     * A method to construct a guard to prevent inference if the sample value cannot change due to the arguments to the
+     * random variable
+     * 
+     * @param targetScope
+     * @param funcData
+     * @param compilationCtx
+     * @return
+     */
+    private Scope constructInferenceCheck(Scope targetScope, FuncData funcData, CompilationContext compilationCtx) {
+        targetScope = new IfScope(targetScope, inferenceSampleGuard(funcData, compilationCtx));
+        return targetScope;
+    }
+
+    @SuppressWarnings("unused")
+    protected IRTreeReturn<BooleanVariable> inferenceSampleGuard(FuncData funcData, CompilationContext compilationCtx) {
+        return IRTree.constant(true);
     }
 
     /**

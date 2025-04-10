@@ -1,0 +1,69 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ 
+/*
+ * Model based on the paper Estimating Primary Demand for Substitutable Products from Sales Transaction 
+ * Data by Gustavo Vulcano, Garrett van Ryzin, and Richard Ratliff.
+ * https://business.columbia.edu/sites/default/files-efs/pubfiles/5397/vanRyzin_Estimating.pdf
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+model Vulcano2012basic2(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
+    // draw utilities
+    double[] ut = new double[noProducts];
+    ut[0] = 0.0;  //the first one is fixed so that we can normalize the sum to be equal 1/r
+    for(int j : [1..noProducts)) {
+        ut[j] = gaussian(0, 2).sample();
+    }
+
+    //exponentiate right here (in the non-basic models move to the for loop)
+    double[] exped = new double[noProducts];
+    for(int j : [0..noProducts)) {
+        exped[j] = exp(ut[j]);
+    }
+
+    double sum = reduce(exped, 0, (k, l) -> { return k + l; });
+
+    //now normalize
+    double[] expedNorm = new double[noProducts];
+    for(int j : [0..noProducts)) {
+        expedNorm[j] = exped[j]/(r*sum);
+    }
+
+    int[] sales_sum = new int[T];
+    for (int t : [0..T)){
+        sales_sum[t] = poisson(0.5).sample();
+    }
+
+    int[][] Sales = new int[T][noProducts];
+
+    for (int t:[0..T)){
+        // for each period t calculate choice probabilities and sales
+
+        double[] weekly_rates = new double[noProducts];
+        double[] weekly_ut = new double[noProducts];
+
+        for (int j : [0..noProducts)) {
+            weekly_ut[j] = expedNorm[j]*Avail[t][j] ;
+        }
+        double denom = reduce(weekly_ut, 0, (k, l) -> { return k + l; });
+
+        for (int j : [0..noProducts)) {
+            weekly_rates[j] = weekly_ut[j]/denom ;
+        }
+
+        int[] weekly_sales = multinomial(weekly_rates, sales_sum[t]).sample();
+
+        // record sales for period t
+        Sales[t] = weekly_sales;
+
+                                }
+    // assert that generated sales match observed sales
+    Sales.observe(ObsSales);
+}

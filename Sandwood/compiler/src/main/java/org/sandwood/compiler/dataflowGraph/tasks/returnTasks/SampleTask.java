@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -32,6 +32,8 @@ public abstract class SampleTask<A extends Variable<A>, B extends RandomVariable
     public void constructTrace(TraceConstructionDesc desc) {
         desc.trace.add(new DataflowTaskArgDesc(this, 0));
         desc.c.callback(desc.trace, desc.sink);
+        if(desc.sink.isObserved())
+            randomVariable.constructTrace(desc);
         desc.trace.pop();
     }
 
