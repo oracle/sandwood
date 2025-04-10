@@ -353,32 +353,34 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// by sample task 6 drawn from Gamma 5. Inference was performed using a Gamma to Exponential
 	// conjugate prior.
 	private final void sample6() {
-		// Variable to track the sum of the samples.
-		double cv$sum = 0.0;
-		
-		// Variable to record how many samples have been included in this calculation.
-		int cv$count = 0;
-		{
-			// Processing random variable 7.
+		if(true) {
+			// Variable to track the sum of the samples.
+			double cv$sum = 0.0;
+			
+			// Variable to record how many samples have been included in this calculation.
+			int cv$count = 0;
 			{
+				// Processing random variable 7.
 				{
-					// Processing sample task 19 of consumer random variable exponential.
 					{
-						for(int var18 = 0; var18 < samples; var18 += 1) {
-							// Consume sample task 19 from random variable exponential.
-							// Include this sample by adding the value to the sum.
-							cv$sum = (cv$sum + decay[var18]);
-							
-							// Increment the number of samples in the calculation.
-							cv$count = (cv$count + 1);
+						// Processing sample task 19 of consumer random variable exponential.
+						{
+							for(int var18 = 0; var18 < samples; var18 += 1) {
+								// Consume sample task 19 from random variable exponential.
+								// Include this sample by adding the value to the sum.
+								cv$sum = (cv$sum + decay[var18]);
+								
+								// Increment the number of samples in the calculation.
+								cv$count = (cv$count + 1);
+							}
 						}
 					}
 				}
 			}
+			
+			// Write out the new value of the sample.
+			rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
 		}
-		
-		// Write out the new value of the sample.
-		rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

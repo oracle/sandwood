@@ -1242,8 +1242,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             }
 
             List<VariableDescription<BooleanVariable>> l = new ArrayList<>();
-            for(SampleTask<?, ?> task:s)
-                l.add(VariableNames.fixedFlagName(task));
+            for(SampleTask<?, ?> task:s) {
+                if(!task.getOutput().isFixed())
+                    l.add(VariableNames.fixedFlagName(task));
+            }
             Collections.sort(l);
             return l;
         }

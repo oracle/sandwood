@@ -1,56 +1,71 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
+ 
 /*
  * Model based on the paper Estimating Primary Demand for Substitutable Products from Sales Transaction 
  * Data by Gustavo Vulcano, Garrett van Ryzin, and Richard Ratliff.
  * https://business.columbia.edu/sites/default/files-efs/pubfiles/5397/vanRyzin_Estimating.pdf
  */
+
 package org.sandwood.compiler.tests.parser;
 
-
-model Vulcano2012basic(int noProducts, int T, int s, double[][] ObsSales, int[][] Avail) {
-    // Avail is the availability matrix, T-by-noProducts
-    // s is the normalization constant (market share), number between 0 and 1
-
+model Vulcano2012basic(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
     // draw utilities
-    double[] ut = gaussian(0, 10).sample(noProducts);
+    double[] ut = new double[noProducts];
+    ut[0] = 0.0;  //the first one is fixed so that we can normalize the sum to be equal 1/r
+    for(int j : [1..noProducts)) {
+        ut[j] = gaussian(0, 2).sample();
+    }
 
     //exponentiate right here (in the non-basic models move to the for loop)
     double[] exped = new double[noProducts];
     for(int j : [0..noProducts)) {
-    exped[j] = exp(ut[j]);
+        exped[j] = exp(ut[j]);
     }
+
     double sum = reduce(exped, 0, (k, l) -> { return k + l; });
-    double denom = sum/s;   // this is the sum of utilities plus normalized by s outside options
 
-    // priors for the distribution of lambdas (for arrivals). They can be supplied as a vector, or just use some priors
-    double[ ] lambda = gamma(10,10).sample(T);
-
-    // draw arrivals
-    int[] arrivals = new int[T];
-    for (int t : [0..T)){
-    arrivals[t]= poisson(lambda[t]).sample();
+    //now normalize
+    double[] expedNorm = new double[noProducts];
+    for(int j : [0..noProducts)) {
+        expedNorm[j] = exped[j]/(r*sum);
     }
 
-    double[][] Sales = new double[T][noProducts];
+    int[] sales_sum = new int[T];
+    for (int t : [0..T)){
+        int[] week_sales = ObsSales[t];
+        sales_sum[t] = reduce(week_sales, 0, (k, l) -> { return k + l; });
+    }
+
+    int[][] Sales = new int[T][noProducts];
 
     for (int t:[0..T)){
-        // for each period t calculate choice probabilities
-        // (does it matter if choice probabilities or individual choices?)
-        // let's try aggregate first
+        // for each period t calculate choice probabilities and sales
 
-        double[] weekly_sales = new double[noProducts];
+        double[] weekly_rates = new double[noProducts];
+        double[] weekly_ut = new double[noProducts];
+
         for (int j : [0..noProducts)) {
-            weekly_sales[j] = gaussian(exped[j]*Avail[t][j] /denom *arrivals[t], 0.2).sample();
+            weekly_ut[j] = expedNorm[j]*Avail[t][j] ;
         }
+        double denom = reduce(weekly_ut, 0, (k, l) -> { return k + l; });
+
+        for (int j : [0..noProducts)) {
+            weekly_rates[j] = weekly_ut[j]/denom ;
+        }
+
+        int[] weekly_sales = multinomial(weekly_rates, sales_sum[t]).sample();
+
         // record sales for period t
         Sales[t] = weekly_sales;
+
                                 }
     // assert that generated sales match observed sales
     Sales.observe(ObsSales);
+
 }

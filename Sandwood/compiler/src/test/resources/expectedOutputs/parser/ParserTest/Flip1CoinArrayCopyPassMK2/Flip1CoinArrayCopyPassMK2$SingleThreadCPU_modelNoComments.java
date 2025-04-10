@@ -218,40 +218,42 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	private final void sample10() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
-					for(int i = 0; i < samples; i += 1) {
-						if((0 == i)) {
-							{
+					{
+						for(int i = 0; i < samples; i += 1) {
+							if((0 == i)) {
 								{
 									{
 										{
 											{
-												cv$count = (cv$count + 1);
-												if(flips[i])
-													cv$sum = (cv$sum + 1);
+												{
+													cv$count = (cv$count + 1);
+													if(flips[i])
+														cv$sum = (cv$sum + 1);
+												}
 											}
 										}
 									}
 								}
 							}
 						}
-					}
-					if((0 == 0)) {
-						for(int i = 0; i < samples; i += 1) {
-							for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
-								if(((i + 1) == index$i$2_2)) {
-									{
+						if((0 == 0)) {
+							for(int i = 0; i < samples; i += 1) {
+								for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+									if(((i + 1) == index$i$2_2)) {
 										{
 											{
 												{
 													{
-														cv$count = (cv$count + 1);
-														if(flips[index$i$2_2])
-															cv$sum = (cv$sum + 1);
+														{
+															cv$count = (cv$count + 1);
+															if(flips[index$i$2_2])
+																cv$sum = (cv$sum + 1);
+														}
 													}
 												}
 											}
@@ -263,17 +265,17 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 					}
 				}
 			}
-		}
-		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-		{
+			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
 			{
-				bias[0] = var10;
+				{
+					bias[0] = var10;
+				}
 			}
-		}
-		{
-			if((0 == 0)) {
-				for(int i = 0; i < samples; i += 1)
-					bias[(i + 1)] = bias[0];
+			{
+				if((0 == 0)) {
+					for(int i = 0; i < samples; i += 1)
+						bias[(i + 1)] = bias[0];
+				}
 			}
 		}
 	}

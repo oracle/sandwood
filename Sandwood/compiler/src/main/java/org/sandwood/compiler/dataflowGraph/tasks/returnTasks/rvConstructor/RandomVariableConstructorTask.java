@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -16,10 +16,12 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariable
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
+import org.sandwood.compiler.traces.TraceConstructionDesc;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public abstract class RandomVariableConstructorTask<A extends Variable<A>, B extends RandomVariable<A, B>> extends VariableConstructorTask<B> {
+public abstract class RandomVariableConstructorTask<A extends Variable<A>, B extends RandomVariable<A, B>>
+        extends VariableConstructorTask<B> {
 
     public RandomVariableConstructorTask(DFType vType, RandomVariableType<A, B> outputType, Location location,
             Variable<?>... vars) {
@@ -30,7 +32,7 @@ public abstract class RandomVariableConstructorTask<A extends Variable<A>, B ext
     public RandomVariableType<A, B> getOutputType() {
         return (RandomVariableType<A, B>) super.getOutputType();
     }
-    
+
     @Override
     protected IRTreeReturn<B> getForwardIRinternal(CompilationContext compilationCtx) {
         throw new CompilerException("Method should never be called on a random variable constructor,"
@@ -45,8 +47,7 @@ public abstract class RandomVariableConstructorTask<A extends Variable<A>, B ext
 
     @Override
     public String checkInversionError(int argPos) {
-        return "The only operation on a random variable should be sampling, which should terminate "
-                + "a trace, so there should not be a trace from here.";
+        return "In the general case this random variable argument cannot be directly calculated from an output sample.";
     }
 
     @Override
@@ -58,5 +59,26 @@ public abstract class RandomVariableConstructorTask<A extends Variable<A>, B ext
             if(getInput(i).equivalent(other.getInput(i)))
                 return false;
         return true;
+    }
+
+    @Override
+    public void constructTrace(TraceConstructionDesc desc) {
+        // Skip traces that do not start here.
+        if(desc.sink == output)
+            super.constructTrace(desc);
+    }
+
+    /**
+     * A method to where possible construct a tree providing the value of the requested random variable argument based
+     * on the value of a sample.
+     * 
+     * @param current        An IRTree providing the value of the sample.
+     * @param argPos         The position of the argument to calculate.
+     * @param compilationCtx The compilation context.
+     * @return A tree returning the value of the argument.
+     */
+    public IRTreeReturn<?> getInverseArg(IRTreeReturn<A> current, int argPos, CompilationContext compilationCtx) {
+        throw new CompilerException(
+                "This random variable does not have an implemented method to invert argument " + argPos + ".");
     }
 }

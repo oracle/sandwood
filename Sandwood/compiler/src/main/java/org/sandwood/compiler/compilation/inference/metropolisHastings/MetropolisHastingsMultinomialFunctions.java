@@ -71,6 +71,12 @@ public class MetropolisHastingsMultinomialFunctions extends MetropolisHastingsAr
         return true;
     }
 
+    @Override
+    protected IRTreeReturn<BooleanVariable> inferenceSampleGuard(
+            MetropolisHastingsArrayData<IntVariable, Multinomial> funcData, CompilationContext compilationCtx) {
+        return negateBoolean(eq(funcData.sourceRandom.n.getForwardIR(compilationCtx), constant(0)));
+    }
+
     /**
      * Allocate space to store the current value and the proposed sample value.
      * <p>

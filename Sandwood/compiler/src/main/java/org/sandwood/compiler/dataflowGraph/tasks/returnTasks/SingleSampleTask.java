@@ -47,7 +47,7 @@ public class SingleSampleTask<A extends Variable<A>, B extends RandomVariable<A,
 
     @Override
     public String checkInversionError(int argPos) {
-        return "Currently, there should not be any traces that pass through random variables.";
+        return "Currently, there should not be any inference that pass through random variables.";
     }
 
     @Override

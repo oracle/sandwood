@@ -353,30 +353,32 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	// by sample task 6 drawn from Gamma 5. Inference was performed using a Gamma to Poisson
 	// conjugate prior.
 	private final void sample6() {
-		// Variable to store the sum of all the samples from consuming random variables.
-		double cv$sum = 0.0;
-		
-		// Variable to record the number of samples from consuming random variables.
-		int cv$count = 0;
-		{
-			// Processing random variable 7.
+		if(true) {
+			// Variable to store the sum of all the samples from consuming random variables.
+			double cv$sum = 0.0;
+			
+			// Variable to record the number of samples from consuming random variables.
+			int cv$count = 0;
 			{
+				// Processing random variable 7.
 				{
-					// Processing sample task 19 of consumer random variable poisson.
 					{
-						for(int var18 = 0; var18 < samples; var18 += 1) {
-							// Add the value of a sample from consuming random variable poisson to the inference
-							// state.
-							cv$sum = (cv$sum + decay[var18]);
-							cv$count = (cv$count + 1);
+						// Processing sample task 19 of consumer random variable poisson.
+						{
+							for(int var18 = 0; var18 < samples; var18 += 1) {
+								// Add the value of a sample from consuming random variable poisson to the inference
+								// state.
+								cv$sum = (cv$sum + decay[var18]);
+								cv$count = (cv$count + 1);
+							}
 						}
 					}
 				}
 			}
+			
+			// Write out the new value of the sample.
+			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 		}
-		
-		// Write out the new value of the sample.
-		rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

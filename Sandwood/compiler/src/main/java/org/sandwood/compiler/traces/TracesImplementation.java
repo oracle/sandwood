@@ -38,10 +38,12 @@ import org.sandwood.compiler.dataflowGraph.transformations.DAGTransformations;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable.OuterArrayDesc;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
+import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Multinomial;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
@@ -522,9 +524,15 @@ public class TracesImplementation extends Traces {
 
                         break;
                     }
-                    case SAMPLE:
-                        // If the parent of this value is a sample task do nothing.
+                    case SAMPLE: {
+                        SampleTask<?, ?> s = (SampleTask<?, ?>) p;
+                        RandomVariable<?, ?> rv = s.randomVariable;
+                        if(rv.getType() == VariableType.Multinomial) {
+                            Multinomial m = (Multinomial) rv;
+                            tracking.addObservations(m.n, os);
+                        }
                         break;
+                    }
                     case IF_ASSIGNMENT: {
                         IfElseAssignmentTask<?> ifElse = (IfElseAssignmentTask<?>) p;
                         if(ifElse.guard.isDeterministic() || ifElse.guard.isFixed()) {
@@ -806,9 +814,15 @@ public class TracesImplementation extends Traces {
 
                                 break;
                             }
-                            case SAMPLE:
-                                // If the parent of this value is a sample task do nothing.
+                            case SAMPLE: {
+                                SampleTask<?, ?> s = (SampleTask<?, ?>) p;
+                                RandomVariable<?, ?> rv = s.randomVariable;
+                                if(rv.getType() == VariableType.Multinomial) {
+                                    Multinomial m = (Multinomial) rv;
+                                    tracking.addObservations(m.n, os);
+                                }
                                 break;
+                            }
                             case IF_ASSIGNMENT: {
                                 IfElseAssignmentTask<?> ifElse = (IfElseAssignmentTask<?>) p;
                                 if(ifElse.guard.isDeterministic()
@@ -1184,7 +1198,7 @@ public class TracesImplementation extends Traces {
                 addToVarToSample(sink, sourceRV);
 
                 // Nothing progresses beyond this variable.
-                if(sink.getConsumers().size() == 1)
+                if(sink.getConsumers().size() == 1 && sink.isObserved())
                     findTerminalVariables(handle);
 
                 // Populate sampleToRVTraces and intermediateChildrenTraces

@@ -10,14 +10,14 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
-  * Class representing the Sandwood model Vulcano2012notNormalized This is the class that
+  * Class representing the Sandwood model Vulcano2012basic2 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Vulcano2012notNormalized extends Model {
+public class Vulcano2012basic2 extends Model {
 
-    private Vulcano2012notNormalized$CoreInterface system$c = new Vulcano2012notNormalized$SingleThreadCPU(ExecutionTarget.singleThread);
+    private Vulcano2012basic2$CoreInterface system$c = new Vulcano2012basic2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$Sales(); }
 
@@ -53,40 +53,6 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ComputedObjectArray<int[]> Sales = $Sales;
 
-    private final ComputedIntegerArrayInternal $arrivals = new ComputedIntegerArrayInternal(this, "arrivals", true, true, false) {
-        @Override
-        public int[] getValue() { return system$c.get$arrivals(); }
-
-        @Override
-        protected void setValueInternal(int[] value) {
-            system$c.set$arrivals(value);
-            intermediatesPrimed = false;
-        }
-
-        @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$arrivals(); }
-
-        @Override
-        public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample69(fixed);
-            }
-        }
-
-        @Override
-        public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample69())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
-        }
-    };
-
-    /**
-     * Computed variable representing arrivals of type int[] from the Sandwood model 
-     */
-    public final ComputedIntegerArray arrivals = $arrivals;
-
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false) {
         @Override
         public double[] getValue() { return system$c.get$exped(); }
@@ -105,13 +71,13 @@ public class Vulcano2012notNormalized extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample22(fixed);
+                system$c.set$fixedFlag$sample26(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample22())
+            if(system$c.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -123,29 +89,31 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ComputedDoubleArray exped = $exped;
 
-    private final ComputedDoubleArrayInternal $lambda = new ComputedDoubleArrayInternal(this, "lambda", true, true, false) {
+    private final ComputedDoubleArrayInternal $expedNorm = new ComputedDoubleArrayInternal(this, "expedNorm", false, false, false) {
         @Override
-        public double[] getValue() { return system$c.get$lambda(); }
+        public double[] getValue() { return system$c.get$expedNorm(); }
 
         @Override
-        protected void setValueInternal(double[] value) {
-            system$c.set$lambda(value);
-            intermediatesPrimed = false;
+        protected void setValueInternal(double[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable expedNorm because its value depends on variables \"exped\", \"sum\", and \"ut\".");
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$lambda(); }
+        public double getCurrentLogProbability() { return system$c.get$logProbability$expedNorm(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample54(fixed);
+                system$c.set$fixedFlag$sample26(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample54())
+            if(system$c.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -153,9 +121,76 @@ public class Vulcano2012notNormalized extends Model {
     };
 
     /**
-     * Computed variable representing lambda of type double[] from the Sandwood model 
+     * Computed variable representing expedNorm of type double[] from the Sandwood model 
      */
-    public final ComputedDoubleArray lambda = $lambda;
+    public final ComputedDoubleArray expedNorm = $expedNorm;
+
+    private final ComputedIntegerArrayInternal $sales_sum = new ComputedIntegerArrayInternal(this, "sales_sum", false, true, false) {
+        @Override
+        public int[] getValue() { return system$c.get$sales_sum(); }
+
+        @Override
+        protected void setValueInternal(int[] value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable sales_sum because its value is fixed by observed values.");
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$sales_sum(); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+        }
+
+        @Override
+        public Immutability isFixed() {
+            return Immutability.OBSERVED;
+        }
+    };
+
+    /**
+     * Computed variable representing sales_sum of type int[] from the Sandwood model 
+     */
+    public final ComputedIntegerArray sales_sum = $sales_sum;
+
+    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false) {
+        @Override
+        public double getValue() { return system$c.get$sum(); }
+
+        @Override
+        protected void setValueInternal(double value) {}
+
+        @Override
+        protected void testSettable() {
+            throw new SandwoodException("Set is not available for variable sum because its value depends on variables \"exped\", and \"ut\".");
+        }
+
+        @Override
+        public double getCurrentLogProbability() { return system$c.get$logProbability$sum(); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample26(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample26())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
+    /**
+     * Computed variable representing sum of type double from the Sandwood model 
+     */
+    public final ComputedDouble sum = $sum;
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
         @Override
@@ -173,13 +208,13 @@ public class Vulcano2012notNormalized extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample22(fixed);
+                system$c.set$fixedFlag$sample26(fixed);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample22())
+            if(system$c.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -190,42 +225,6 @@ public class Vulcano2012notNormalized extends Model {
      * Computed variable representing ut of type double[] from the Sandwood model 
      */
     public final ComputedDoubleArray ut = $ut;
-
-    private final ComputedObjectArrayInternal<int[]> $weekly_sales = new ComputedObjectArrayInternal<int[]>(this, "weekly_sales", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
-        @Override
-        public int[][] getValue() { return system$c.get$weekly_sales(); }
-
-        @Override
-        protected void setValueInternal(int[][] value) {}
-
-        @Override
-        protected void testSettable() {
-            throw new SandwoodException("Set is not available for variable weekly_sales because its value is fixed by observed values.");
-        }
-
-        @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$weekly_sales(); }
-
-        @Override
-        public int[][][] constructArray(int iterations) {
-            return new int[iterations][][];
-        }
-
-        @Override
-        public void setFixed(boolean fixed) {
-            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
-        }
-
-        @Override
-        public Immutability isFixed() {
-            return Immutability.OBSERVED;
-        }
-    };
-
-    /**
-     * Computed variable representing weekly_sales of type int[][] from the Sandwood model 
-     */
-    public final ComputedObjectArray<int[]> weekly_sales = $weekly_sales;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -280,22 +279,22 @@ public class Vulcano2012notNormalized extends Model {
      */
     public final ObservedInteger noProducts = $noProducts;
 
-    private final ObservedIntegerInternal $s = new ObservedIntegerInternal(this, "s") {
+    private final ObservedDoubleInternal $r = new ObservedDoubleInternal(this, "r") {
         @Override
-        public int getValue() {
+        public double getValue() {
             synchronized(model) {
-                return system$c.get$s();
+                return system$c.get$r();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$s(value); }
+        protected void setValueInternal(double value) { system$c.set$r(value); }
     };
 
     /**
-     * Observed variable representing s of type int from the Sandwood model 
+     * Observed variable representing r of type double from the Sandwood model 
      */
-    public final ObservedInteger s = $s;
+    public final ObservedDouble r = $r;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
 
@@ -318,27 +317,27 @@ public class Vulcano2012notNormalized extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$Sales, $arrivals, $exped, $lambda, $ut, $weekly_sales};
+    private HasProbabilityInternal[] $probabilityVariables = {$Sales, $exped, $expedNorm, $sales_sum, $sum, $ut};
 
     //Constructors
     /**
      * A constructor for a model where no variable values are set.
      */
-    public Vulcano2012notNormalized() {
+    public Vulcano2012basic2() {
         super();
         //ComputedVariable
         $computedVariables.put("Sales", $Sales);
-        $computedVariables.put("arrivals", $arrivals);
         $computedVariables.put("exped", $exped);
-        $computedVariables.put("lambda", $lambda);
+        $computedVariables.put("expedNorm", $expedNorm);
+        $computedVariables.put("sales_sum", $sales_sum);
+        $computedVariables.put("sum", $sum);
         $computedVariables.put("ut", $ut);
-        $computedVariables.put("weekly_sales", $weekly_sales);
 
         //ModelInputs
         $modelInputs.put("Avail", $Avail);
         $modelInputs.put("T", $T);
         $modelInputs.put("noProducts", $noProducts);
-        $modelInputs.put("s", $s);
+        $modelInputs.put("r", $r);
 
         //Observed scalar fields
         $regularObservedValues.put("ObsSales", $ObsSales);
@@ -350,45 +349,45 @@ public class Vulcano2012notNormalized extends Model {
       * default distributions described in the model.
       * @param noProducts The value to set noProducts to.
       * @param T The value to set T to.
-      * @param s The value to set s to.
       * @param Avail The value to set Avail to.
+      * @param r The value to set r to.
       */
 
-    public Vulcano2012notNormalized(int noProducts, int T, int s, int[][] Avail) {
+    public Vulcano2012basic2(int noProducts, int T, int[][] Avail, double r) {
         this();
         this.$Avail.setValue(Avail);
         this.$T.setValue(T);
         this.$noProducts.setValue(noProducts);
-        this.$s.setValue(s);
+        this.$r.setValue(r);
     }
     /**
       * A constructor to set all the required values in the model to infer the model
       * parameters, or to generate probabilities for the model.
       * @param noProducts The value to set noProducts to.
       * @param T The value to set T to.
-      * @param s The value to set s to.
       * @param ObsSales The value to set ObsSales to.
       * @param Avail The value to set Avail to.
+      * @param r The value to set r to.
       */
 
-    public Vulcano2012notNormalized(int noProducts, int T, int s, int[][] ObsSales, int[][] Avail) {
+    public Vulcano2012basic2(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
         this();
         this.noProducts.setValue(noProducts);
         this.T.setValue(T);
-        this.s.setValue(s);
         this.ObsSales.setValue(ObsSales);
         this.Avail.setValue(Avail);
+        this.r.setValue(r);
     }
     
     @Override
-    protected Vulcano2012notNormalized$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Vulcano2012notNormalized$CoreInterface newCore;
+    protected Vulcano2012basic2$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
+        Vulcano2012basic2$CoreInterface newCore;
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Vulcano2012notNormalized$SingleThreadCPU(target);
+                newCore = new Vulcano2012basic2$SingleThreadCPU(target);
                 break;
             case MultiThreadCPU:
-                newCore = new Vulcano2012notNormalized$MultiThreadCPU(target);
+                newCore = new Vulcano2012basic2$MultiThreadCPU(target);
                 break;
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
@@ -398,7 +397,7 @@ public class Vulcano2012notNormalized extends Model {
         return newCore;
     }
 
-    private void transferData(Vulcano2012notNormalized$CoreInterface oldCore, Vulcano2012notNormalized$CoreInterface newCore) {
+    private void transferData(Vulcano2012basic2$CoreInterface oldCore, Vulcano2012basic2$CoreInterface newCore) {
         //Model inputs
         if(Avail.isSet())
             newCore.set$Avail(oldCore.get$Avail());
@@ -406,24 +405,18 @@ public class Vulcano2012notNormalized extends Model {
             newCore.set$T(oldCore.get$T());
         if(noProducts.isSet())
             newCore.set$noProducts(oldCore.get$noProducts());
-        if(s.isSet())
-            newCore.set$s(oldCore.get$s());
+        if(r.isSet())
+            newCore.set$r(oldCore.get$r());
         //Observed scalars
         if(ObsSales.isSet())
             newCore.set$ObsSales(oldCore.get$ObsSales());
 
         //ComputedVariables
-        if($arrivals.isSet())
-            newCore.set$arrivals(oldCore.get$arrivals());
-        if($lambda.isSet())
-            newCore.set$lambda(oldCore.get$lambda());
         if($ut.isSet())
             newCore.set$ut(oldCore.get$ut());
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample22(oldCore.get$fixedFlag$sample22());
-        newCore.set$fixedFlag$sample54(oldCore.get$fixedFlag$sample54());
-        newCore.set$fixedFlag$sample69(oldCore.get$fixedFlag$sample69());
+        newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
     }
 
     /**
@@ -434,23 +427,23 @@ public class Vulcano2012notNormalized extends Model {
         public final int noProducts;
         /** Field holding the value of model input T */
         public final int T;
-        /** Field holding the value of model input s */
-        public final int s;
         /** Field holding the value of model input Avail */
         public final int[][] Avail;
+        /** Field holding the value of model input r */
+        public final double r;
 
         /**
           * A constructor taking all the values required to set up the model to infer variables.
           * @param noProducts The value to set noProducts to.
           * @param T The value to set T to.
-          * @param s The value to set s to.
           * @param Avail The value to set Avail to.
+          * @param r The value to set r to.
           */
-        public InferValueInputs(int noProducts, int T, int s, int[][] Avail) {
+        public InferValueInputs(int noProducts, int T, int[][] Avail, double r) {
             this.Avail = Avail;
             this.T = T;
             this.noProducts = noProducts;
-            this.s = s;
+            this.r = r;
         }
     }
 
@@ -463,28 +456,28 @@ public class Vulcano2012notNormalized extends Model {
         public final int noProducts;
         /** Field holding the value of model input T */
         public final int T;
-        /** Field holding the value of model input s */
-        public final int s;
         /** Field holding the value of model input ObsSales */
         public final int[][] ObsSales;
         /** Field holding the value of model input Avail */
         public final int[][] Avail;
+        /** Field holding the value of model input r */
+        public final double r;
 
         /**
           * A constructor to take all the required values by the model to infer the model
           * parameters, or to generate probabilities for the model.
           * @param noProducts The value to set noProducts to.
           * @param T The value to set T to.
-          * @param s The value to set s to.
           * @param ObsSales The value to set ObsSales to.
           * @param Avail The value to set Avail to.
+          * @param r The value to set r to.
           */
-        public AllInputs(int noProducts, int T, int s, int[][] ObsSales, int[][] Avail) {
+        public AllInputs(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
             this.noProducts = noProducts;
             this.T = T;
-            this.s = s;
             this.ObsSales = ObsSales;
             this.Avail = Avail;
+            this.r = r;
         }
     }
 
@@ -494,24 +487,24 @@ public class Vulcano2012notNormalized extends Model {
     public static class InferredValueOutputs {
         /** Field holding the value of Sales after a convention execution step.*/
         public final int[][] Sales;
-        /** Field holding the value of arrivals after a convention execution step.*/
-        public final int[] arrivals;
         /** Field holding the value of exped after a convention execution step.*/
         public final double[] exped;
-        /** Field holding the value of lambda after a convention execution step.*/
-        public final double[] lambda;
+        /** Field holding the value of expedNorm after a convention execution step.*/
+        public final double[] expedNorm;
+        /** Field holding the value of sales_sum after a convention execution step.*/
+        public final int[] sales_sum;
+        /** Field holding the value of sum after a convention execution step.*/
+        public final double sum;
         /** Field holding the value of ut after a convention execution step.*/
         public final double[] ut;
-        /** Field holding the value of weekly_sales after a convention execution step.*/
-        public final int[][] weekly_sales;
 
-        InferredValueOutputs(Vulcano2012notNormalized system$model) {
+        InferredValueOutputs(Vulcano2012basic2 system$model) {
             this.Sales = system$model.Sales.getSamples()[0];
-            this.arrivals = system$model.arrivals.getSamples()[0];
             this.exped = system$model.exped.getSamples()[0];
-            this.lambda = system$model.lambda.getSamples()[0];
+            this.expedNorm = system$model.expedNorm.getSamples()[0];
+            this.sales_sum = system$model.sales_sum.getSamples()[0];
+            this.sum = system$model.sum.getSamples()[0];
             this.ut = system$model.ut.getSamples()[0];
-            this.weekly_sales = system$model.weekly_sales.getSamples()[0];
         }
     }
 
@@ -522,25 +515,25 @@ public class Vulcano2012notNormalized extends Model {
         private final double $logModelProbability;
         /** Field holding the log probability of computed variable Sales */
         public final double Sales;
-        /** Field holding the log probability of computed variable arrivals */
-        public final double arrivals;
         /** Field holding the log probability of computed variable exped */
         public final double exped;
-        /** Field holding the log probability of computed variable lambda */
-        public final double lambda;
+        /** Field holding the log probability of computed variable expedNorm */
+        public final double expedNorm;
+        /** Field holding the log probability of computed variable sales_sum */
+        public final double sales_sum;
+        /** Field holding the log probability of computed variable sum */
+        public final double sum;
         /** Field holding the log probability of computed variable ut */
         public final double ut;
-        /** Field holding the log probability of computed variable weekly_sales */
-        public final double weekly_sales;
 
-        LogProbabilities(Vulcano2012notNormalized system$model) {
+        LogProbabilities(Vulcano2012basic2 system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.Sales = system$model.Sales.getLogProbability();
-            this.arrivals = system$model.arrivals.getLogProbability();
             this.exped = system$model.exped.getLogProbability();
-            this.lambda = system$model.lambda.getLogProbability();
+            this.expedNorm = system$model.expedNorm.getLogProbability();
+            this.sales_sum = system$model.sales_sum.getLogProbability();
+            this.sum = system$model.sum.getLogProbability();
             this.ut = system$model.ut.getLogProbability();
-            this.weekly_sales = system$model.weekly_sales.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -555,25 +548,25 @@ public class Vulcano2012notNormalized extends Model {
         private final double $modelProbability;
         /** Field holding the probability of computed variable Sales */
         public final double Sales;
-        /** Field holding the probability of computed variable arrivals */
-        public final double arrivals;
         /** Field holding the probability of computed variable exped */
         public final double exped;
-        /** Field holding the probability of computed variable lambda */
-        public final double lambda;
+        /** Field holding the probability of computed variable expedNorm */
+        public final double expedNorm;
+        /** Field holding the probability of computed variable sales_sum */
+        public final double sales_sum;
+        /** Field holding the probability of computed variable sum */
+        public final double sum;
         /** Field holding the probability of computed variable ut */
         public final double ut;
-        /** Field holding the probability of computed variable weekly_sales */
-        public final double weekly_sales;
 
-        Probabilities(Vulcano2012notNormalized system$model) {
+        Probabilities(Vulcano2012basic2 system$model) {
             this.$modelProbability = system$model.getProbability();
             this.Sales = system$model.Sales.getProbability();
-            this.arrivals = system$model.arrivals.getProbability();
             this.exped = system$model.exped.getProbability();
-            this.lambda = system$model.lambda.getProbability();
+            this.expedNorm = system$model.expedNorm.getProbability();
+            this.sales_sum = system$model.sales_sum.getProbability();
+            this.sum = system$model.sum.getProbability();
             this.ut = system$model.ut.getProbability();
-            this.weekly_sales = system$model.weekly_sales.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -585,19 +578,19 @@ public class Vulcano2012notNormalized extends Model {
      * A class to hold all the outputs from the model after an infer model call.
      */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of arrivals after an infer model call. */
-        public final int[][] arrivals;
         /** Field holding the MAP or Sample value of exped after an infer model call. */
         public final double[][] exped;
-        /** Field holding the MAP or Sample value of lambda after an infer model call. */
-        public final double[][] lambda;
+        /** Field holding the MAP or Sample value of expedNorm after an infer model call. */
+        public final double[][] expedNorm;
+        /** Field holding the MAP or Sample value of sum after an infer model call. */
+        public final double[] sum;
         /** Field holding the MAP or Sample value of ut after an infer model call. */
         public final double[][] ut;
 
-        InferredModelOutputs(Vulcano2012notNormalized system$model) {
-            this.arrivals = system$model.getInferredValue(system$model.$arrivals);
+        InferredModelOutputs(Vulcano2012basic2 system$model) {
             this.exped = system$model.getInferredValue(system$model.$exped);
-            this.lambda = system$model.getInferredValue(system$model.$lambda);
+            this.expedNorm = system$model.getInferredValue(system$model.$expedNorm);
+            this.sum = system$model.getInferredValue(system$model.$sum);
             this.ut = system$model.getInferredValue(system$model.$ut);
         }
     }
@@ -611,7 +604,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         execute();
         return new InferredValueOutputs(this);
     }
@@ -626,7 +619,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferValues(iterations);
         return new InferredModelOutputs(this);
@@ -642,7 +635,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(iterations);
         return new Probabilities(this);
@@ -662,7 +655,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
@@ -684,7 +677,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
@@ -700,7 +693,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
@@ -720,7 +713,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
@@ -742,7 +735,7 @@ public class Vulcano2012notNormalized extends Model {
         this.Avail.setValue(inputs.Avail);
         this.T.setValue(inputs.T);
         this.noProducts.setValue(inputs.noProducts);
-        this.s.setValue(inputs.s);
+        this.r.setValue(inputs.r);
         this.$ObsSales.setValue(inputs.ObsSales);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);

@@ -372,71 +372,73 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// by sample task 39 drawn from Dirichlet 36. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample39() {
-		// A reference local to the function for the sample variable.
-		double[] cv$targetLocal = d;
-		
-		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var37$countGlobal;
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_11 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			if((0 == y))
-				lengthCV$a$37_11 = 2;
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			if((1 == y))
-				lengthCV$a$37_11 = 3;
-		}
-		
-		// Get the length of the array
-		int cv$arrayLength = lengthCV$a$37_11;
-		
-		// Initialize the array values to 0.
-		for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		{
-			// Processing random variable 38.
+		if(true) {
+			// A reference local to the function for the sample variable.
+			double[] cv$targetLocal = d;
+			
+			// A local reference to the scratch space.
+			double[] cv$countLocal = cv$var37$countGlobal;
+			
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_11 = -1;
+			
+			// calculate array length.
+			// 
+			// Looking for a path between Put 17 and consumer double[] 35.
 			{
+				if((0 == y))
+					lengthCV$a$37_11 = 2;
+			}
+			
+			// Looking for a path between Put 35 and consumer double[] 35.
+			{
+				if((1 == y))
+					lengthCV$a$37_11 = 3;
+			}
+			
+			// Get the length of the array
+			int cv$arrayLength = lengthCV$a$37_11;
+			
+			// Initialize the array values to 0.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
+			{
+				// Processing random variable 38.
 				{
-					// Processing sample task 53 of consumer random variable null.
 					{
-						for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-							// Increment the sample counter with the value sampled by sample task 53 of random
-							// variable var38
-							cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+						// Processing sample task 53 of consumer random variable null.
+						{
+							for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+								// Increment the sample counter with the value sampled by sample task 53 of random
+								// variable var38
+								cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+						}
 					}
 				}
 			}
+			
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_12 = -1;
+			
+			// calculate array length.
+			// 
+			// Looking for a path between Put 17 and consumer double[] 35.
+			{
+				if((0 == y))
+					lengthCV$a$37_12 = 2;
+			}
+			
+			// Looking for a path between Put 35 and consumer double[] 35.
+			{
+				if((1 == y))
+					lengthCV$a$37_12 = 3;
+			}
+			
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_12);
 		}
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_12 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			if((0 == y))
-				lengthCV$a$37_12 = 2;
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			if((1 == y))
-				lengthCV$a$37_12 = 3;
-		}
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_12);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

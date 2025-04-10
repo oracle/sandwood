@@ -204,4 +204,19 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
     public static TraceHandle emptyTrace() {
         return emptyTrace;
     }
+
+    public boolean hasSuffix(TraceHandle t1) {
+        int tSize = t.size();
+        int t1Size = t1.size();
+        if(t1Size > tSize)
+            return false;
+
+        int diff = tSize - t1Size;
+        for(int i = t1Size - 1; i >= 0; i--) {
+            if(!t1.get(i).equals(t.get(i + diff)))
+                return false;
+        }
+
+        return true;
+    }
 }

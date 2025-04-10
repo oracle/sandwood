@@ -346,44 +346,46 @@ class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// by sample task 18 drawn from Beta 6. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample18(int var17) {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 33.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 18 and consumer Bernoulli 33.
+				// Processing random variable 33.
 				{
-					for(int j = 0; j < coins; j += 1) {
-						if((var17 == j)) {
-							// Processing sample task 44 of consumer random variable bernoulli.
-							{
-								for(int var43 = 0; var43 < shape[j]; var43 += 1) {
-									// Include the value sampled by task 44 from random variable bernoulli.
-									// Increment the number of samples.
-									cv$count = (cv$count + 1);
-									
-									// If the sample value was positive increase the count
-									if(flips[j][var43])
-										cv$sum = (cv$sum + 1);
+					// Looking for a path between Sample 18 and consumer Bernoulli 33.
+					{
+						for(int j = 0; j < coins; j += 1) {
+							if((var17 == j)) {
+								// Processing sample task 44 of consumer random variable bernoulli.
+								{
+									for(int var43 = 0; var43 < shape[j]; var43 += 1) {
+										// Include the value sampled by task 44 from random variable bernoulli.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[j][var43])
+											cv$sum = (cv$sum + 1);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				bias[var17] = var18;
+				{
+					bias[var17] = var18;
+				}
 			}
 		}
 	}

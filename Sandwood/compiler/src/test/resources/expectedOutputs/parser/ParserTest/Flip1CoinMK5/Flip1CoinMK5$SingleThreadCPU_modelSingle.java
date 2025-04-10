@@ -487,51 +487,53 @@ class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 9 drawn from Beta 8. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample9() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 10.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
+				// Processing random variable 10.
 				{
-					// Processing sample task 22 of consumer random variable bernoulli1.
 					{
-						for(int var21 = 0; var21 < samples1; var21 += 1) {
-							// Include the value sampled by task 22 from random variable bernoulli1.
-							// Increment the number of samples.
-							cv$count = (cv$count + 1);
-							
-							// If the sample value was positive increase the count
-							if(flips1[var21])
-								cv$sum = (cv$sum + 1);
+						// Processing sample task 22 of consumer random variable bernoulli1.
+						{
+							for(int var21 = 0; var21 < samples1; var21 += 1) {
+								// Include the value sampled by task 22 from random variable bernoulli1.
+								// Increment the number of samples.
+								cv$count = (cv$count + 1);
+								
+								// If the sample value was positive increase the count
+								if(flips1[var21])
+									cv$sum = (cv$sum + 1);
+							}
+						}
+					}
+				}
+				
+				// Processing random variable 24.
+				{
+					{
+						// Processing sample task 36 of consumer random variable bernoulli2.
+						{
+							for(int var35 = 0; var35 < samples2; var35 += 1) {
+								// Include the value sampled by task 36 from random variable bernoulli2.
+								// Increment the number of samples.
+								cv$count = (cv$count + 1);
+								
+								// If the sample value was positive increase the count
+								if(flips2[var35])
+									cv$sum = (cv$sum + 1);
+							}
 						}
 					}
 				}
 			}
 			
-			// Processing random variable 24.
-			{
-				{
-					// Processing sample task 36 of consumer random variable bernoulli2.
-					{
-						for(int var35 = 0; var35 < samples2; var35 += 1) {
-							// Include the value sampled by task 36 from random variable bernoulli2.
-							// Increment the number of samples.
-							cv$count = (cv$count + 1);
-							
-							// If the sample value was positive increase the count
-							if(flips2[var35])
-								cv$sum = (cv$sum + 1);
-						}
-					}
-				}
-			}
+			// Write out the new value of the sample.
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		
-		// Write out the new value of the sample.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

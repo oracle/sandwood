@@ -313,27 +313,29 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// by sample task 6 drawn from Beta 5. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample6() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 7.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
+				// Processing random variable 7.
 				{
-					// Processing sample task 8 of consumer random variable binomial.
 					{
+						// Processing sample task 8 of consumer random variable binomial.
 						{
 							{
 								{
 									{
-										// Include the value sampled by task 8 from random variable binomial.
-										// Increment the number of booleans sampled.
-										cv$count = (cv$count + observedSampleCount);
-										
-										// Add to the count the number of booleans that were true.
-										cv$sum = (cv$sum + positiveCount);
+										{
+											// Include the value sampled by task 8 from random variable binomial.
+											// Increment the number of booleans sampled.
+											cv$count = (cv$count + observedSampleCount);
+											
+											// Add to the count the number of booleans that were true.
+											cv$sum = (cv$sum + positiveCount);
+										}
 									}
 								}
 							}
@@ -341,10 +343,10 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
+			
+			// Write out the new value of the sample.
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		
-		// Write out the new value of the sample.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

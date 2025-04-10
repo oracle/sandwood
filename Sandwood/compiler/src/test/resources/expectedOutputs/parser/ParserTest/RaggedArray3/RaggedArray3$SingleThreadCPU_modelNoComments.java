@@ -232,40 +232,42 @@ class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample39() {
-		double[] cv$targetLocal = d;
-		double[] cv$countLocal = cv$var37$countGlobal;
-		int lengthCV$a$37_1 = -1;
-		{
-			if((0 == y))
-				lengthCV$a$37_1 = 2;
-		}
-		{
-			if((1 == y))
-				lengthCV$a$37_1 = 3;
-		}
-		int cv$arrayLength = lengthCV$a$37_1;
-		for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		{
+		if(true) {
+			double[] cv$targetLocal = d;
+			double[] cv$countLocal = cv$var37$countGlobal;
+			int lengthCV$a$37_1 = -1;
+			{
+				if((0 == y))
+					lengthCV$a$37_1 = 2;
+			}
+			{
+				if((1 == y))
+					lengthCV$a$37_1 = 3;
+			}
+			int cv$arrayLength = lengthCV$a$37_1;
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
 			{
 				{
 					{
-						for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-							cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+						{
+							for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+								cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+						}
 					}
 				}
 			}
+			int lengthCV$a$37_2 = -1;
+			{
+				if((0 == y))
+					lengthCV$a$37_2 = 2;
+			}
+			{
+				if((1 == y))
+					lengthCV$a$37_2 = 3;
+			}
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
 		}
-		int lengthCV$a$37_2 = -1;
-		{
-			if((0 == y))
-				lengthCV$a$37_2 = 2;
-		}
-		{
-			if((1 == y))
-				lengthCV$a$37_2 = 3;
-		}
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
 	}
 
 	@Override

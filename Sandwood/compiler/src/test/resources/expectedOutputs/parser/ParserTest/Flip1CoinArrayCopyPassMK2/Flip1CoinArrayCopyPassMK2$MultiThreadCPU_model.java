@@ -347,55 +347,57 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 	// by sample task 10 drawn from Beta 9. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample10() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 30.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 10 and consumer Bernoulli 30.
+				// Processing random variable 30.
 				{
-					for(int i = 0; i < samples; i += 1) {
-						if((0 == i)) {
-							// Processing sample task 31 of consumer random variable bernoulli.
-							{
+					// Looking for a path between Sample 10 and consumer Bernoulli 30.
+					{
+						for(int i = 0; i < samples; i += 1) {
+							if((0 == i)) {
+								// Processing sample task 31 of consumer random variable bernoulli.
 								{
 									{
 										{
 											{
-												// Include the value sampled by task 31 from random variable bernoulli.
-												// Increment the number of samples.
-												cv$count = (cv$count + 1);
-												
-												// If the sample value was positive increase the count
-												if(flips[i])
-													cv$sum = (cv$sum + 1);
+												{
+													// Include the value sampled by task 31 from random variable bernoulli.
+													// Increment the number of samples.
+													cv$count = (cv$count + 1);
+													
+													// If the sample value was positive increase the count
+													if(flips[i])
+														cv$sum = (cv$sum + 1);
+												}
 											}
 										}
 									}
 								}
 							}
 						}
-					}
-					if((0 == 0)) {
-						for(int i = 0; i < samples; i += 1) {
-							for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
-								if(((i + 1) == index$i$2_2)) {
-									// Processing sample task 31 of consumer random variable bernoulli.
-									{
+						if((0 == 0)) {
+							for(int i = 0; i < samples; i += 1) {
+								for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+									if(((i + 1) == index$i$2_2)) {
+										// Processing sample task 31 of consumer random variable bernoulli.
 										{
 											{
 												{
 													{
-														// Include the value sampled by task 31 from random variable bernoulli.
-														// Increment the number of samples.
-														cv$count = (cv$count + 1);
-														
-														// If the sample value was positive increase the count
-														if(flips[index$i$2_2])
-															cv$sum = (cv$sum + 1);
+														{
+															// Include the value sampled by task 31 from random variable bernoulli.
+															// Increment the number of samples.
+															cv$count = (cv$count + 1);
+															
+															// If the sample value was positive increase the count
+															if(flips[index$i$2_2])
+																cv$sum = (cv$sum + 1);
+														}
 													}
 												}
 											}
@@ -407,26 +409,26 @@ class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 					}
 				}
 			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				bias[0] = var10;
+				{
+					bias[0] = var10;
+				}
 			}
-		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 10 and consumer double[] 28.
-		{
-			if((0 == 0)) {
-				for(int i = 0; i < samples; i += 1)
-					bias[(i + 1)] = bias[0];
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 10 and consumer double[] 28.
+			{
+				if((0 == 0)) {
+					for(int i = 0; i < samples; i += 1)
+						bias[(i + 1)] = bias[0];
+				}
 			}
 		}
 	}

@@ -703,34 +703,36 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 30 drawn from Dirichlet 18. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample30(int var29, int threadID$cv$var29, Rng RNG$) {
-		// A reference local to the function for the sample variable.
-		double[] cv$targetLocal = m[var29];
-		
-		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var30$countGlobal[threadID$cv$var29];
-		
-		// Get the length of the array
-		int cv$arrayLength = noStates;
-		
-		// Initialize the array values to 0.
-		for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		{
-			// Processing random variable 60.
+		if(true) {
+			// A reference local to the function for the sample variable.
+			double[] cv$targetLocal = m[var29];
+			
+			// A local reference to the scratch space.
+			double[] cv$countLocal = cv$var30$countGlobal[threadID$cv$var29];
+			
+			// Get the length of the array
+			int cv$arrayLength = noStates;
+			
+			// Initialize the array values to 0.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
 			{
-				// Looking for a path between Sample 30 and consumer Categorical 60.
+				// Processing random variable 60.
 				{
-					for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
-						if((var29 == i$var58)) {
-							// Processing sample task 62 of consumer random variable null.
-							{
+					// Looking for a path between Sample 30 and consumer Categorical 60.
+					{
+						for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+							if((var29 == i$var58)) {
+								// Processing sample task 62 of consumer random variable null.
 								{
 									{
 										{
 											{
-												// Increment the sample counter with the value sampled by sample task 62 of random
-												// variable var60
-												cv$countLocal[st[i$var58]] = (cv$countLocal[st[i$var58]] + 1.0);
+												{
+													// Increment the sample counter with the value sampled by sample task 62 of random
+													// variable var60
+													cv$countLocal[st[i$var58]] = (cv$countLocal[st[i$var58]] + 1.0);
+												}
 											}
 										}
 									}
@@ -740,71 +742,73 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					}
 				}
 			}
+			
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal, noStates);
 		}
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal, noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 47 drawn from Beta 34. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample47(int var45, int threadID$cv$var45, Rng RNG$) {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		{
-			// Processing random variable 84.
+		if(true) {
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
 			{
-				// Looking for a path between Sample 47 and consumer Bernoulli 84.
+				// Processing random variable 84.
 				{
-					// Reduction of array st
-					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					int reduceVar$var82$4 = 0;
-					
-					// For each index in the array to be reduced
-					for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
-						// Set the left hand term of the reduction function to the return variable value.
-						int i$var79 = reduceVar$var82$4;
-						
-						// Set the right hand term to a value from the array st
-						int j$var80 = st[cv$reduction78Index];
-						
-						// Execute the reduction function, saving the result into the return value.
+					// Looking for a path between Sample 47 and consumer Bernoulli 84.
+					{
+						// Reduction of array st
 						// 
-						// Copy the result of the reduction into the variable returned by the reduction.
-						reduceVar$var82$4 = (i$var79 + j$var80);
-					}
-					if((var45 == reduceVar$var82$4)) {
-						for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-							// Include the value sampled by task 87 from random variable var84.
-							// Increment the number of samples.
-							cv$count = (cv$count + 1);
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						int reduceVar$var82$4 = 0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							int i$var79 = reduceVar$var82$4;
 							
-							// If the sample value was positive increase the count
-							if(flips[j$var73])
-								cv$sum = (cv$sum + 1);
+							// Set the right hand term to a value from the array st
+							int j$var80 = st[cv$reduction78Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$var82$4 = (i$var79 + j$var80);
+						}
+						if((var45 == reduceVar$var82$4)) {
+							for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+								// Include the value sampled by task 87 from random variable var84.
+								// Increment the number of samples.
+								cv$count = (cv$count + 1);
+								
+								// If the sample value was positive increase the count
+								if(flips[j$var73])
+									cv$sum = (cv$sum + 1);
+							}
 						}
 					}
 				}
 			}
-		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		double var46 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		{
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			double var46 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
 			{
-				bias[var45] = var46;
+				{
+					bias[var45] = var46;
+				}
 			}
 		}
 	}
@@ -813,240 +817,242 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 62 drawn from Categorical 60. Inference was performed using variable
 	// marginalization.
 	private final void sample62(int i$var58) {
-		// Calculate the number of states to evaluate.
-		int cv$numNumStates = 0;
-		{
-			// variable marginalization
-			cv$numNumStates = Math.max(cv$numNumStates, noStates);
-		}
-		
-		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var61$stateProbabilityGlobal;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
-			// Initialize the summed probabilities to 0.
-			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-			
-			// Initialize a counter to track the reached distributions.
-			double cv$reachedDistributionSourceRV = 0.0;
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			double cv$accumulatedDistributionProbabilities = 0.0;
-			
-			// The value currently being tested
-			int cv$currentValue;
-			
-			// Value of the variable at this index
-			cv$currentValue = cv$valuePos;
-			
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			int var61 = cv$currentValue;
-			
-			// Guards to ensure that st is only updated when there is a valid path.
+		if(true) {
+			// Calculate the number of states to evaluate.
+			int cv$numNumStates = 0;
 			{
-				{
-					st[i$var58] = cv$currentValue;
-				}
+				// variable marginalization
+				cv$numNumStates = Math.max(cv$numNumStates, noStates);
 			}
-			{
-				// Record the reached probability density.
-				cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-				double[] cv$temp$0$var59;
-				{
-					// Constructing a random variable input for use later.
-					double[] var59 = m[i$var58];
-					cv$temp$0$var59 = var59;
-				}
-				int cv$temp$1$$var277;
-				{
-					// Constructing a random variable input for use later.
-					int $var277 = noStates;
-					cv$temp$1$$var277 = $var277;
-				}
+			
+			// Get a local reference to the scratch space.
+			double[] cv$stateProbabilityLocal = cv$var61$stateProbabilityGlobal;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+				// Initialize the summed probabilities to 0.
+				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				
-				// An accumulator to allow the value for each distribution to be constructed before
-				// it is added to the index probabilities.
-				double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var277))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+				// Initialize a counter to track the reached distributions.
+				double cv$reachedDistributionSourceRV = 0.0;
 				
-				// Processing random variable 84.
+				// Initialize a log space accumulator to take the product of all the distribution
+				// probabilities.
+				double cv$accumulatedDistributionProbabilities = 0.0;
+				
+				// The value currently being tested
+				int cv$currentValue;
+				
+				// Value of the variable at this index
+				cv$currentValue = cv$valuePos;
+				
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				int var61 = cv$currentValue;
+				
+				// Guards to ensure that st is only updated when there is a valid path.
 				{
 					{
-						int traceTempVariable$i$2_1 = cv$currentValue;
-						if(((0 <= i$var58) && (i$var58 < noCats))) {
-							{
-								if((0 < noCats)) {
-									// Reduction of array st
-									// 
-									// A generated name to prevent name collisions if the reduction is implemented more
-									// than once in inference and probability code. Initialize the variable to the unit
-									// value
-									int reduceVar$var82$5 = 0;
-									
-									// Reduce for every value except a masked value which will be skipped.
-									for(int cv$reduction394Index = 0; cv$reduction394Index < i$var58; cv$reduction394Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										int i$var79 = reduceVar$var82$5;
-										
-										// Set the right hand term to a value from the array st
-										int j$var80 = st[cv$reduction394Index];
-										
-										// Execute the reduction function, saving the result into the return value.
+						st[i$var58] = cv$currentValue;
+					}
+				}
+				{
+					// Record the reached probability density.
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+					double[] cv$temp$0$var59;
+					{
+						// Constructing a random variable input for use later.
+						double[] var59 = m[i$var58];
+						cv$temp$0$var59 = var59;
+					}
+					int cv$temp$1$$var277;
+					{
+						// Constructing a random variable input for use later.
+						int $var277 = noStates;
+						cv$temp$1$$var277 = $var277;
+					}
+					
+					// An accumulator to allow the value for each distribution to be constructed before
+					// it is added to the index probabilities.
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var277))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					
+					// Processing random variable 84.
+					{
+						{
+							int traceTempVariable$i$2_1 = cv$currentValue;
+							if(((0 <= i$var58) && (i$var58 < noCats))) {
+								{
+									if((0 < noCats)) {
+										// Reduction of array st
 										// 
+										// A generated name to prevent name collisions if the reduction is implemented more
+										// than once in inference and probability code. Initialize the variable to the unit
+										// value
+										int reduceVar$var82$5 = 0;
+										
+										// Reduce for every value except a masked value which will be skipped.
+										for(int cv$reduction406Index = 0; cv$reduction406Index < i$var58; cv$reduction406Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											int i$var79 = reduceVar$var82$5;
+											
+											// Set the right hand term to a value from the array st
+											int j$var80 = st[cv$reduction406Index];
+											
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var82$5 = (i$var79 + j$var80);
+										}
+										for(int cv$reduction406Index = (i$var58 + 1); cv$reduction406Index < noCats; cv$reduction406Index += 1) {
+											// Set the left hand term of the reduction function to the return variable value.
+											int i$var79 = reduceVar$var82$5;
+											
+											// Set the right hand term to a value from the array st
+											int j$var80 = st[cv$reduction406Index];
+											
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Execute the reduction function, saving the result into the return value.
+											// 
+											// Copy the result of the reduction into the variable returned by the reduction.
+											reduceVar$var82$5 = (i$var79 + j$var80);
+										}
+										int cv$reduced78 = reduceVar$var82$5;
+										
 										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var82$5 = (i$var79 + j$var80);
-									}
-									for(int cv$reduction394Index = (i$var58 + 1); cv$reduction394Index < noCats; cv$reduction394Index += 1) {
-										// Set the left hand term of the reduction function to the return variable value.
-										int i$var79 = reduceVar$var82$5;
-										
-										// Set the right hand term to a value from the array st
-										int j$var80 = st[cv$reduction394Index];
-										
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Execute the reduction function, saving the result into the return value.
-										// 
-										// Copy the result of the reduction into the variable returned by the reduction.
-										reduceVar$var82$5 = (i$var79 + j$var80);
-									}
-									int cv$reduced78 = reduceVar$var82$5;
-									
-									// Copy the result of the reduction into the variable returned by the reduction.
-									reduceVar$var82$5 = (traceTempVariable$i$2_1 + cv$reduced78);
-									int traceTempVariable$var82$2_2 = reduceVar$var82$5;
-									for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-										// Set an accumulator to sum the probabilities for each possible configuration of
-										// inputs.
-										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-										
-										// Set an accumulator to record the consumer distributions not seen. Initially set
-										// to 1 as seen values will be deducted from this value.
-										double cv$consumerDistributionProbabilityAccumulator = 1.0;
-										{
+										reduceVar$var82$5 = (traceTempVariable$i$2_1 + cv$reduced78);
+										int traceTempVariable$var82$2_2 = reduceVar$var82$5;
+										for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+											// Set an accumulator to sum the probabilities for each possible configuration of
+											// inputs.
+											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+											
+											// Set an accumulator to record the consumer distributions not seen. Initially set
+											// to 1 as seen values will be deducted from this value.
+											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 											{
 												{
 													{
-														double cv$temp$2$var83;
 														{
-															// Constructing a random variable input for use later.
-															double var83 = bias[traceTempVariable$var82$2_2];
-															cv$temp$2$var83 = var83;
+															double cv$temp$2$var83;
+															{
+																// Constructing a random variable input for use later.
+																double var83 = bias[traceTempVariable$var82$2_2];
+																cv$temp$2$var83 = var83;
+															}
+															
+															// Record the probability of sample task 87 generating output with current configuration.
+															if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83));
+																else
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)));
+															}
+															
+															// Recorded the probability of reaching sample task 87 with the current configuration.
+															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
-														
-														// Record the probability of sample task 87 generating output with current configuration.
-														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-														else {
-															// If the second value is -infinity.
-															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83));
-															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)));
-														}
-														
-														// Recorded the probability of reaching sample task 87 with the current configuration.
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
 												}
 											}
-										}
-										
-										// A check to ensure rounding of floating point values can never result in a negative
-										// value.
-										cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-										
-										// Multiply (log space add) in the probability of the sample task to the overall probability
-										// for this configuration of the source random variable.
-										if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-										else {
-											// If the second value is -infinity.
-											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-											else
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+											
+											// A check to ensure rounding of floating point values can never result in a negative
+											// value.
+											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+											
+											// Multiply (log space add) in the probability of the sample task to the overall probability
+											// for this configuration of the source random variable.
+											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+											else {
+												// If the second value is -infinity.
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+												else
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+											}
 										}
 									}
 								}
 							}
 						}
 					}
+					
+					// Add the values for the source and any standard consumers for this configuration
+					// of arguments to the source.
+					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+					else {
+						// If the second value is -infinity.
+						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+							cv$stateProbabilityValue = cv$accumulatedProbabilities;
+						else
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+					}
 				}
 				
-				// Add the values for the source and any standard consumers for this configuration
-				// of arguments to the source.
-				if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-					cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-				else {
-					// If the second value is -infinity.
-					if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-						cv$stateProbabilityValue = cv$accumulatedProbabilities;
-					else
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-				}
+				// Save the calculated index value into the array of index value probabilities
+				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
 			
-			// Save the calculated index value into the array of index value probabilities
-			cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-		}
-		
-		// The sum of all the probabilities in log space
-		double cv$logSum = 0.0;
-		
-		// Sum all the values
-		{
-			// Initialise the max to the first element.
-			double cv$lseMax = cv$stateProbabilityLocal[0];
+			// The sum of all the probabilities in log space
+			double cv$logSum = 0.0;
 			
-			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
-				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			
-			// If the maximum value is -infinity return -infinity.
-			if((cv$lseMax == Double.NEGATIVE_INFINITY))
-				cv$logSum = Double.NEGATIVE_INFINITY;
-			
-			// Sum the values in the array.
-			else {
-				// Initialise the sum of the array elements
-				double cv$lseSum = 0.0;
-				
-				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
-					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-				
-				// Increment the value of the target, moving the value back into log space.
-				cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
-			}
-		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
-		} else {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
-		
-		// Guards to ensure that st is only updated when there is a valid path.
-		{
+			// Sum all the values
 			{
-				st[i$var58] = var61;
+				// Initialise the max to the first element.
+				double cv$lseMax = cv$stateProbabilityLocal[0];
+				
+				// Find max value.
+				for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+					if((cv$lseMax < cv$lseElementValue))
+						cv$lseMax = cv$lseElementValue;
+				}
+				
+				// If the maximum value is -infinity return -infinity.
+				if((cv$lseMax == Double.NEGATIVE_INFINITY))
+					cv$logSum = Double.NEGATIVE_INFINITY;
+				
+				// Sum the values in the array.
+				else {
+					// Initialise the sum of the array elements
+					double cv$lseSum = 0.0;
+					
+					// Offset values, move to normal space, and sum.
+					for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+					
+					// Increment the value of the target, moving the value back into log space.
+					cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
+				}
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
+			} else {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			{
+				{
+					st[i$var58] = var61;
+				}
 			}
 		}
 	}

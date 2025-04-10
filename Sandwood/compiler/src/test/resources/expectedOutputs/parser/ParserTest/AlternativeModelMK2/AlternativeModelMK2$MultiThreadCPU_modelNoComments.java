@@ -197,9 +197,9 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	private final void sample6() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		{
+		if(true) {
+			int cv$sum = 0;
+			int cv$count = 0;
 			{
 				{
 					{
@@ -207,8 +207,10 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							{
 								{
 									{
-										cv$count = (cv$count + observedSampleCount);
-										cv$sum = (cv$sum + positiveCount);
+										{
+											cv$count = (cv$count + observedSampleCount);
+											cv$sum = (cv$sum + positiveCount);
+										}
 									}
 								}
 							}
@@ -216,8 +218,8 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override

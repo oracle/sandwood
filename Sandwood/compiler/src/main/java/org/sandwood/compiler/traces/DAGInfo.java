@@ -182,13 +182,18 @@ public class DAGInfo {
 
     public void filterTraces() {
         filterTraces(observedVarTraces);
-        filterTraces(observedSourceTraces);
         filterTraces(randomVarTraces);
         filterTraces(terminalVarTraces);
     }
 
+    /**
+     * A method to filter out bits of traces that are fixed by observations that do not include the observations that
+     * the trace ends at. This is done because these earlier parts of the trace cannot be set by the observations of the
+     * sink value, so are not effected by it.
+     * 
+     * @param traces
+     */
     private void filterTraces(List<TraceSinkPair> traces) {
-        Set<ObserveVariableTask<?>> s = new LinkedHashSet<>();
         Set<TraceSinkPair> toAdd = new LinkedHashSet<>();
         Set<TraceSinkPair> toRemove = new LinkedHashSet<>();
 
