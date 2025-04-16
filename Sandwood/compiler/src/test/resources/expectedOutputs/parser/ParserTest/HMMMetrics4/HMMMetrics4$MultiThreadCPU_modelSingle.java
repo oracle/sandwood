@@ -49,7 +49,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$metric_g;
 	private double logProbability$metric_valid_g;
 	private double logProbability$metric_valid_inner;
-	private double[][][] logProbability$sample241;
 	private double logProbability$st;
 	private double logProbability$var108;
 	private double logProbability$var130;
@@ -60,6 +59,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$var19;
 	private double logProbability$var21;
 	private double logProbability$var231;
+	private double logProbability$var232;
 	private double logProbability$var244;
 	private double logProbability$var245;
 	private double logProbability$var33;
@@ -783,25 +783,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						
 						// Add the probability of this sample task to the sample task accumulator.
 						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-						
-						// Store the sample task probability
-						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleProbability);
-							}
-						}
 					}
 				}
 			}
@@ -811,8 +792,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var231 = cv$sampleAccumulator;
 			
+			// Store the random variable instance probability
+			logProbability$var232 = cv$accumulator;
+			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -828,35 +827,28 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$sampleValue = logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
-						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-							}
-						}
-					}
-				}
-			}
+			double cv$sampleValue = logProbability$var232;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var231 = cv$rvAccumulator;
 			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -2634,25 +2626,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						
 						// Add the probability of this sample task to the sample task accumulator.
 						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-						
-						// Store the sample task probability
-						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleProbability);
-							}
-						}
 					}
 				}
 			}
@@ -2662,8 +2635,26 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var231 = cv$sampleAccumulator;
 			
+			// Store the random variable instance probability
+			logProbability$var232 = cv$accumulator;
+			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -2679,35 +2670,28 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$sampleValue = logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
-						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-							}
-						}
-					}
-				}
-			}
+			double cv$sampleValue = logProbability$var232;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var231 = cv$rvAccumulator;
 			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -6056,16 +6040,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					{
 						cv$temp$0$initialStateDistribution = initialStateDistribution;
 					}
-					int cv$temp$1$$var2554;
+					int cv$temp$1$$var2512;
 					{
 						// Constructing a random variable input for use later.
-						int $var2554 = noStates;
-						cv$temp$1$$var2554 = $var2554;
+						int $var2512 = noStates;
+						cv$temp$1$$var2512 = $var2512;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2554))?Math.log(cv$temp$0$initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2512))?Math.log(cv$temp$0$initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 73.
 					{
@@ -6105,22 +6089,22 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			double[] var72 = m[traceTempVariable$var71$3_1];
 																			cv$temp$2$var72 = var72;
 																		}
-																		int cv$temp$3$$var2567;
+																		int cv$temp$3$$var2525;
 																		{
 																			// Constructing a random variable input for use later.
-																			int $var2567 = noStates;
-																			cv$temp$3$$var2567 = $var2567;
+																			int $var2525 = noStates;
+																			cv$temp$3$$var2525 = $var2525;
 																		}
 																		
 																		// Record the probability of sample task 76 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2567))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2567))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2525))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2525))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2567))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2525))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2567))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2567))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2525))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var66]) && (st[index$sample$3_2][timeStep$var66] < cv$temp$3$$var2525))?Math.log(cv$temp$2$var72[st[index$sample$3_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 76 with the current configuration.
@@ -6927,11 +6911,11 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																double[] var72 = m[traceTempVariable$var71$67_1];
 																cv$temp$21$var72 = var72;
 															}
-															int cv$temp$22$$var2732;
+															int cv$temp$22$$var2690;
 															{
 																// Constructing a random variable input for use later.
-																int $var2732 = noStates;
-																cv$temp$22$$var2732 = $var2732;
+																int $var2690 = noStates;
+																cv$temp$22$$var2690 = $var2690;
 															}
 															
 															// The probability of reaching the consumer with this set of consumer arguments
@@ -6941,7 +6925,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 															cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 															
 															// Add the current distribution to the distribution accumulator.
-															DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$21$var72, cv$temp$22$$var2732);
+															DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$21$var72, cv$temp$22$$var2690);
 														}
 													}
 												}
@@ -7184,16 +7168,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
 											cv$temp$0$var72 = var72;
 										}
-										int cv$temp$1$$var2818;
+										int cv$temp$1$$var2776;
 										{
 											// Constructing a random variable input for use later.
-											int $var2818 = noStates;
-											cv$temp$1$$var2818 = $var2818;
+											int $var2776 = noStates;
+											cv$temp$1$$var2776 = $var2776;
 										}
 										
 										// An accumulator to allow the value for each distribution to be constructed before
 										// it is added to the index probabilities.
-										double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2818))?Math.log(cv$temp$0$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+										double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2776))?Math.log(cv$temp$0$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 										
 										// Processing random variable 73.
 										{
@@ -7819,16 +7803,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
 													cv$temp$2$var72 = var72;
 												}
-												int cv$temp$3$$var2819;
+												int cv$temp$3$$var2777;
 												{
 													// Constructing a random variable input for use later.
-													int $var2819 = noStates;
-													cv$temp$3$$var2819 = $var2819;
+													int $var2777 = noStates;
+													cv$temp$3$$var2777 = $var2777;
 												}
 												
 												// An accumulator to allow the value for each distribution to be constructed before
 												// it is added to the index probabilities.
-												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value27) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var2819))?Math.log(cv$temp$2$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value27) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var2777))?Math.log(cv$temp$2$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												
 												// Processing random variable 73.
 												{
@@ -8575,16 +8559,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double[] var72 = m[traceTempVariable$var71$32_1];
 									cv$temp$4$var72 = var72;
 								}
-								int cv$temp$5$$var2820;
+								int cv$temp$5$$var2778;
 								{
 									// Constructing a random variable input for use later.
-									int $var2820 = noStates;
-									cv$temp$5$$var2820 = $var2820;
+									int $var2778 = noStates;
+									cv$temp$5$$var2778 = $var2778;
 								}
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var2820))?Math.log(cv$temp$4$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var2778))?Math.log(cv$temp$4$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 73.
 								{
@@ -9340,16 +9324,16 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													double[] var72 = m[traceTempVariable$var71$38_1];
 													cv$temp$6$var72 = var72;
 												}
-												int cv$temp$7$$var2821;
+												int cv$temp$7$$var2779;
 												{
 													// Constructing a random variable input for use later.
-													int $var2821 = noStates;
-													cv$temp$7$$var2821 = $var2821;
+													int $var2779 = noStates;
+													cv$temp$7$$var2779 = $var2779;
 												}
 												
 												// An accumulator to allow the value for each distribution to be constructed before
 												// it is added to the index probabilities.
-												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value36) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$7$$var2821))?Math.log(cv$temp$6$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value36) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$7$$var2779))?Math.log(cv$temp$6$var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												
 												// Processing random variable 73.
 												{
@@ -10304,11 +10288,11 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 															double[] var72 = m[traceTempVariable$var71$269_1];
 															cv$temp$76$var72 = var72;
 														}
-														int cv$temp$77$$var3321;
+														int cv$temp$77$$var3279;
 														{
 															// Constructing a random variable input for use later.
-															int $var3321 = noStates;
-															cv$temp$77$$var3321 = $var3321;
+															int $var3279 = noStates;
+															cv$temp$77$$var3279 = $var3279;
 														}
 														
 														// The probability of reaching the consumer with this set of consumer arguments
@@ -10318,7 +10302,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 														cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 														
 														// Add the current distribution to the distribution accumulator.
-														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$76$var72, cv$temp$77$$var3321);
+														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$76$var72, cv$temp$77$$var3279);
 													}
 												}
 											}
@@ -10681,17 +10665,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				distribution$sample76[((sample$var45 - 0) / 1)] = subarray$0;
 				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
 					subarray$0[((timeStep$var66 - 1) / 1)] = new double[noStates];
-			}
-		}
-		
-		// Constructor for logProbability$sample241
-		{
-			logProbability$sample241 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				double[][] subarray$0 = new double[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-				logProbability$sample241[((sample$var196 - 0) / 1)] = subarray$0;
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					subarray$0[((server - 0) / 1)] = new double[((((length$metric[sample$var196][0] - 1) - 0) / 1) + 1)];
 			}
 		}
 		
@@ -11512,14 +11485,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$var231 = 0.0;
 		logProbability$metric_valid_inner = 0.0;
 		logProbability$metric_valid_g = 0.0;
-		if(!fixedProbFlag$sample241) {
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = 0.0;
-				}
-			}
-		}
+		if(!fixedProbFlag$sample241)
+			logProbability$var232 = 0.0;
 		logProbability$var244 = 0.0;
 		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample256)

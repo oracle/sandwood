@@ -25,7 +25,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$mean1;
 	private double logProbability$mean2;
 	private double logProbability$priorSigma2;
-	private double[] logProbability$sample39;
 	private double logProbability$var14;
 	private double logProbability$var20;
 	private double logProbability$var34;
@@ -616,25 +615,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Store the sample task probability
-				logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that amounts2 is only updated once for this probability.
-				boolean cv$guard$amounts2 = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$amounts2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$amounts2 = true;
-						
-						// Update the variable probability
-						logProbability$amounts2 = (logProbability$amounts2 + cv$sampleProbability);
-					}
-				}
 			}
 			
 			// Add the probability of this instance of the random variable to the probability
@@ -642,8 +622,23 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var38 = cv$sampleAccumulator;
 			
-			// Update the variable probability
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			// Store the random variable instance probability
+			logProbability$var39 = cv$accumulator;
+			
+			// Guard to ensure that amounts2 is only updated once for this probability.
+			boolean cv$guard$amounts2 = false;
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$amounts2) {
+					// Set the guard so the update is only applied once.
+					cv$guard$amounts2 = true;
+					
+					// Update the variable probability
+					logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -659,31 +654,25 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				double cv$sampleValue = logProbability$sample39[((i - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Guard to ensure that amounts2 is only updated once for this probability.
-				boolean cv$guard$amounts2 = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$amounts2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$amounts2 = true;
-						
-						// Update the variable probability
-						logProbability$amounts2 = (logProbability$amounts2 + cv$sampleValue);
-					}
-				}
-			}
+			double cv$sampleValue = logProbability$var39;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var38 = cv$rvAccumulator;
 			
-			// Update the variable probability
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			// Guard to ensure that amounts2 is only updated once for this probability.
+			boolean cv$guard$amounts2 = false;
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$amounts2) {
+					// Set the guard so the update is only applied once.
+					cv$guard$amounts2 = true;
+					
+					// Update the variable probability
+					logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1154,11 +1143,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		{
 			var39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
 		}
-		
-		// Constructor for logProbability$sample39
-		{
-			logProbability$sample39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
 	}
 
 	// Method to execute the model code conventionally.
@@ -1267,12 +1251,9 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		if(!fixedProbFlag$sample35)
 			logProbability$var35 = 0.0;
 		logProbability$var38 = 0.0;
-		logProbability$var39 = 0.0;
 		logProbability$amounts2 = 0.0;
-		if(!fixedProbFlag$sample39) {
-			for(int i = 0; i < n; i += 1)
-				logProbability$sample39[((i - 0) / 1)] = 0.0;
-		}
+		if(!fixedProbFlag$sample39)
+			logProbability$var39 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

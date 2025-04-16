@@ -92,23 +92,76 @@ public class ProbabilityFunction {
             for(Variable<?> v:intermediateDesc.getVariables()) {
                 if(v.instanceHandle() != sampleVariable.instanceHandle()) {
                     Set<TraceHandle> traces = intermediateDesc.getTraces(v);
-
-                    boolean perSampleValuesRequired = false;
-                    for(TraceHandle t:traces)
-                        if(perSampleValueRequired(t, sTask)) {
-                            perSampleValuesRequired = true;
-                            break;
+                    traces = filterProbabilityTraces(traces);
+                    if(!traces.isEmpty()) {
+                        boolean perSampleValuesRequired = false;
+                        for(TraceHandle t:traces) {
+                            if(perSampleValueRequired(t)) {
+                                perSampleValuesRequired = true;
+                                break;
+                            }
                         }
 
-                    if(perSampleValuesRequired)
-                        perSampleVariables.put(v, traces);
-                    else
-                        accumulatorVariables.put(v, traces);
+                        if(perSampleValuesRequired)
+                            perSampleVariables.put(v, traces);
+                        else
+                            accumulatorVariables.put(v, traces);
+                    }
                 }
             }
         }
 
-        private static boolean perSampleValueRequired(TraceHandle t, SampleTask<?, ?> sTask) {
+        private Set<TraceHandle> filterProbabilityTraces(Set<TraceHandle> traces) {
+            Set<TraceHandle> filtered = new HashSet<>();
+            for(TraceHandle t:traces)
+                if(filterTrace(t))
+                    filtered.add(t);
+            return filtered;
+        }
+
+        /**
+         * A method to filter out traces to variables the probability is accounted for by the Monte Carlo nature of the
+         * sampling as this variable controls the control flow, not the value of the variable.
+         * 
+         * @param t
+         * @return Returns true if the trace should be kept and false if it should be discarded.
+         */
+        private boolean filterTrace(TraceHandle t) {
+            for(DataflowTaskArgDesc d:t) {
+                switch(d.task.getType()) {
+                    case GET:
+                        if(d.argPos != 0)
+                            return false;
+                        break;
+                    case GET_LENGTH:
+                        return false;
+                    case IF_ASSIGNMENT:
+                        if(d.argPos == 0)
+                            return false;
+                        break;
+                    case PUT:
+                        if(d.argPos != 2)
+                            return false;
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * A method to determine if the probabilities generated from a sample need be calculated on a one by one basis,
+         * and so need their own set of scope constructors for their traces, or if they can be accumulated and only have
+         * a single constraint applied to them.
+         * 
+         * @param t A trace from the sample task variable to the value the probability is being constructed for.
+         * @return Returns true if the probabilities need to be considered at the per sample granularity.
+         */
+        private static boolean perSampleValueRequired(TraceHandle t) {
+            SampleTask<?, ?> sTask = (SampleTask<?, ?>) t.get(0).task;
             Set<Scope> scopes = new HashSet<>();
             Scope s = sTask.scope();
 
@@ -118,8 +171,65 @@ public class ProbabilityFunction {
                 s = s.getEnclosingScope();
             }
 
+            // A counter to track the dimensionality of the value that was sampled.
+            int sampleDepth = sTask.getOutputType().getDepth();
+            // A counter to track the depth of the array the sample is currently placed in.
+            int arrayDepth = 0;
             for(DataflowTaskArgDesc d:t) {
-                if(d.task.getType() == DFType.PUT) {
+                switch(d.task.getType()) {
+                    case GET: {
+                        if(d.argPos == 0) {
+                            if(arrayDepth != 0)
+                                return true;
+                        } else {
+                            return false;
+                        }
+                        break;
+                    }
+                    case GET_LENGTH: {
+                        return false;
+                    }
+                    case IF_ASSIGNMENT: {
+                        assert d.argPos > 0 : "Traces via the guard should have been filtered out.";
+                        return true;
+                    }
+                    case PUT: {
+                        if(d.argPos == 2) {
+                            if(arrayDepth == 0) {
+                                boolean iterating = false;
+                                s = d.task.scope();
+                                while(s != GlobalScope.scope) {
+                                    if(scopes.contains(s)) {
+                                        iterating = true;
+                                        break;
+                                    }
+                                    s = s.getEnclosingScope();
+                                }
+                                // If the first put was not in an iterating scope of the sample task,
+                                // no later put can be.
+                                if(!iterating)
+                                    return false;
+                            }
+                            arrayDepth++;
+                        } else
+                            return false;
+                        break;
+                    }
+                    case REDUCE_INPUT: {
+                        if(sampleDepth > 0 && arrayDepth == 0)
+                            sampleDepth--;
+                        else
+                            arrayDepth--;
+                        break;
+                    }
+                    default:
+                        break;
+
+                }
+
+                if(d.task.getType() == DFType.PUT && d.argPos == 2)
+                    arrayDepth++;
+                else if(d.task.getType() == DFType.IF_ASSIGNMENT && d.argPos != 0) {
                     s = d.task.scope();
                     while(s != GlobalScope.scope) {
                         if(scopes.contains(s))
@@ -381,7 +491,7 @@ public class ProbabilityFunction {
         // Construct an expression to determine if the flag should be set.
         if(!inputSamples.isEmpty()) {
             // Priority queue for fixed ordering of assignments.
-            PriorityQueue<SampleTask<?,?>> p = new PriorityQueue<>(inputSamples); 
+            PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(inputSamples);
             while(!p.isEmpty()) {
                 SampleTask<?, ?> s = p.poll();
                 sampleFixedName = VariableNames.fixedFlagName(s);
@@ -484,24 +594,12 @@ public class ProbabilityFunction {
             Set<Set<TraceHandle>> distributionTraces, boolean useDistributions, CompilationContext compilationCtx) {
 
         SampleTraceDesc sampleVarDesc = compilationCtx.traces.getSampleTrace(sTask);
-        TraceHandle traceHandle = sampleVarDesc.traceToSampleVariable;
-
-        getInverseIRTrace(sTask, dependantVariables, sampleVarDesc.sampleVariable, traceHandle, randomName,
-                randomArgTrees, randomStoreScope, storedName, sampleArgTrees, sampleStoreScope, distributionTraces,
-                useDistributions, compilationCtx);
-    }
-
-    private static void getInverseIRTrace(SampleTask<?, ?> sTask, DependantVariables dependantVariables,
-            Variable<?> current, TraceHandle traceHandle, VariableDescription<DoubleVariable> randomName,
-            List<IRTreeReturn<IntVariable>> randomArgTrees, Scope randomStoreScope,
-            VariableDescription<DoubleVariable> storedName, List<IRTreeReturn<IntVariable>> sampleArgTrees,
-            Scope sampleStoreScope, Set<Set<TraceHandle>> distributionTraces, boolean useDistributions,
-            CompilationContext compilationCtx) {
+        TraceHandle tracetoSampleVariable = sampleVarDesc.traceToSampleVariable;
 
         // Calculate the global scope for these variables.
         GlobalScope globalScope = GlobalScope.scope;
 
-        Scope sTaskScope = traceHandle.get(0).task.scope();
+        Scope sTaskScope = tracetoSampleVariable.get(0).task.scope();
 
         /* Initialize accumulators */
         // Enter the scope of to force all allocations to the global scope to happen
@@ -532,8 +630,8 @@ public class ProbabilityFunction {
         compilationCtx.leaveScope(sTaskScope);
 
         /* Explore the trace */
-        IRTreeReturn<DoubleVariable> sampleProbability = distributionsProb(current, sTask, distributionTraces,
-                traceHandle, compilationCtx);
+        IRTreeReturn<DoubleVariable> sampleProbability = distributionsProb(sampleVarDesc.sampleVariable, sTask,
+                distributionTraces, tracetoSampleVariable, compilationCtx);
 
         VariableDescription<DoubleVariable> sampleProbName = VariableNames.calcVarName("sampleProbability",
                 VariableType.DoubleVariable, true);
@@ -575,7 +673,7 @@ public class ProbabilityFunction {
     }
 
     private static <A extends Variable<A>> IRTreeReturn<DoubleVariable> distributionsProb(Variable<?> start,
-            SampleTask<A, ?> sampleTask, Set<Set<TraceHandle>> distributionTraces, TraceHandle traceHandle,
+            SampleTask<A, ?> sampleTask, Set<Set<TraceHandle>> distributionTraces, TraceHandle traceToSampleVariable,
             CompilationContext compilationCtx) {
         Scope sampleTaskScope = sampleTask.scope();
 
@@ -598,17 +696,17 @@ public class ProbabilityFunction {
                         sampleTask, distributionTraces, "Look for paths between the variable and the sample task "
                                 + sampleTask.id() + " including any distribution values.",
                         Tree.NoComment, compilationCtx);
-        a = a.addConstraint(traceHandle);
+        a = a.addConstraint(traceToSampleVariable);
 
         VariableDescription<A> sampleVariableName = VariableNames.calcVarName("sampleValue", sampleTask.getOutputType(),
                 true);
 
         a.addTree(0, (TreeBuilderInfo info) -> {
             IRTreeReturn<?> current = start.getForwardIR(compilationCtx);
-            int index = traceHandle.size() - 1;
+            int index = traceToSampleVariable.size() - 1;
             BackTraceInfo backTraceInfo = new BackTraceInfo();
             while(index >= 0) {
-                DataflowTaskArgDesc d = traceHandle.get(index--);
+                DataflowTaskArgDesc d = traceToSampleVariable.get(index--);
                 ProducingDataflowTask<?> t = d.task;
 
                 switch(t.getType()) {
@@ -650,7 +748,7 @@ public class ProbabilityFunction {
             Set<TraceHandle> ts = conditionalTraces.get(p);
             Set<TraceHandle> subTraces = new HashSet<>();
             for(TraceHandle t:ts)
-                subTraces.add(t.subTrace(traceHandle));
+                subTraces.add(t.subTrace(traceToSampleVariable));
             ScopeConstructor b = a.addConstraints(subTraces);
 
             SplitConditionalTraces scts = compilationCtx.traces.getSplitConditionalTraces(p);
@@ -796,7 +894,7 @@ public class ProbabilityFunction {
                         sampleVariable, null, useDistributions, compilationCtx));
             }
 
-            // Rest the priority queue.
+            // Reset the priority queue.
             if(!variables.perSampleVariables.isEmpty()) {
                 ScopeConstructor sPerSample = ScopeConstructor.construct(sTask,
                         "Add probability to constructed variables that have guards, so need per sample probabilities from the combined probability",

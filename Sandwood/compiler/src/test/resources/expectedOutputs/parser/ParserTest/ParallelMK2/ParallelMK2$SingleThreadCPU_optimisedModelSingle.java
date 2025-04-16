@@ -18,7 +18,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$generated;
 	private double logProbability$indirection;
 	private double logProbability$sample;
-	private double[] logProbability$sample26;
 	private double logProbability$var25;
 	private double logProbability$var31;
 	private double logProbability$var32;
@@ -156,13 +155,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// The sample value to calculate the probability of generating
 				double cv$sampleValue = sample[i];
 				
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
+				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -175,18 +168,17 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
-				
-				// Store the sample task probability
-				logProbability$sample26[i] = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$indirection = (logProbability$indirection + cv$distributionAccumulator);
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 			}
 			logProbability$var25 = cv$sampleAccumulator;
+			
+			// Store the random variable instance probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$sample = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -194,7 +186,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$sample = (logProbability$sample + cv$sampleAccumulator);
+			logProbability$indirection = (logProbability$indirection + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -221,26 +213,23 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			for(int i = 0; i < length$observed; i += 1) {
-				double cv$sampleValue = logProbability$sample26[i];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Update the variable probability
-				logProbability$indirection = (logProbability$indirection + cv$sampleValue);
-			}
-			logProbability$var25 = cv$rvAccumulator;
+			logProbability$var25 = logProbability$sample;
 			
 			// Update the variable probability
-			logProbability$sample = (logProbability$sample + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$indirection = (logProbability$indirection + logProbability$sample);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$sample);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$sample);
 		}
 	}
 
@@ -576,9 +565,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Constructor for sample
 			sample = new double[length$observed];
 		
-		// Constructor for logProbability$sample26
-		logProbability$sample26 = new double[length$observed];
-		
 		// Allocate scratch space
 		allocateScratch();
 	}
@@ -661,12 +647,9 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var25 = 0.0;
-		logProbability$sample = 0.0;
 		logProbability$indirection = 0.0;
-		if(!fixedProbFlag$sample26) {
-			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample26[i] = 0.0;
-		}
+		if(!fixedProbFlag$sample26)
+			logProbability$sample = 0.0;
 		logProbability$var31 = 0.0;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample32)

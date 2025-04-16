@@ -16,7 +16,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$$model;
 	private double logProbability$i;
 	private double logProbability$obs;
-	private double logProbability$p;
 	private double logProbability$var68;
 	private double logProbability$var72;
 	private double logProbability$var85;
@@ -95,11 +94,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final double get$logProbability$p() {
-		return logProbability$p;
-	}
-
-	@Override
 	public final boolean[] get$obs() {
 		return obs;
 	}
@@ -171,13 +165,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var68 = cv$sampleAccumulator;
 			logProbability$i = cv$sampleProbability;
-			boolean cv$guard$p = false;
-			{
-				if(!cv$guard$p) {
-					cv$guard$p = true;
-					logProbability$p = (logProbability$p + cv$accumulator);
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample73)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -189,13 +176,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var68 = cv$rvAccumulator;
-			boolean cv$guard$p = false;
-			{
-				if(!cv$guard$p) {
-					cv$guard$p = true;
-					logProbability$p = (logProbability$p + cv$accumulator);
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample73)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -516,7 +496,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var68 = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample73)
 			logProbability$i = 0.0;
 		logProbability$var72 = 0.0;

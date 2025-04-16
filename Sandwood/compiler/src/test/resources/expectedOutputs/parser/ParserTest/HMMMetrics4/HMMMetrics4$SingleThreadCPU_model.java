@@ -790,28 +790,27 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Store the sample task probability
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleProbability);
-							}
-						}
 					}
 				}
 			}
 			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -834,28 +833,27 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-							}
-						}
 					}
 				}
 			}
 			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -2655,28 +2653,27 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Store the sample task probability
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleProbability);
-							}
-						}
 					}
 				}
 			}
 			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -2699,28 +2696,27 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
-						
-						// Guard to ensure that metric_valid_g is only updated once for this probability.
-						boolean cv$guard$metric_valid_g = false;
-						
-						// Add probability to constructed variables that have guards, so need per sample probabilities
-						// from the combined probability
-						{
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$metric_valid_g) {
-								// Set the guard so the update is only applied once.
-								cv$guard$metric_valid_g = true;
-								
-								// Update the variable probability
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-							}
-						}
 					}
 				}
 			}
 			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$metric_valid_g) {
+					// Set the guard so the update is only applied once.
+					cv$guard$metric_valid_g = true;
+					
+					// Update the variable probability
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

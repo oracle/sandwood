@@ -386,15 +386,15 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var38[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
-				boolean cv$guard$amounts2 = false;
-				{
-					if(!cv$guard$amounts2) {
-						cv$guard$amounts2 = true;
-						logProbability$amounts2 = (logProbability$amounts2 + cv$sampleProbability);
-					}
+			}
+			boolean cv$guard$amounts2 = false;
+			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			{
+				if(!cv$guard$amounts2) {
+					cv$guard$amounts2 = true;
+					logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 				}
 			}
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedFlag$sample21);
@@ -406,15 +406,15 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var38[((i - 0) / 1)] = cv$rvAccumulator;
-				boolean cv$guard$amounts2 = false;
-				{
-					if(!cv$guard$amounts2) {
-						cv$guard$amounts2 = true;
-						logProbability$amounts2 = (logProbability$amounts2 + cv$sampleValue);
-					}
+			}
+			boolean cv$guard$amounts2 = false;
+			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			{
+				if(!cv$guard$amounts2) {
+					cv$guard$amounts2 = true;
+					logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 				}
 			}
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}

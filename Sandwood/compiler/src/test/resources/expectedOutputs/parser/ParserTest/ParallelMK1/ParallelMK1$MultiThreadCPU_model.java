@@ -203,26 +203,25 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				
 				// Store the sample task probability
 				logProbability$sample20[((i - 0) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that indirection is only updated once for this probability.
-				boolean cv$guard$indirection = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$indirection) {
-						// Set the guard so the update is only applied once.
-						cv$guard$indirection = true;
-						
-						// Update the variable probability
-						logProbability$indirection = (logProbability$indirection + cv$sampleProbability);
-					}
-				}
 			}
+			
+			// Guard to ensure that indirection is only updated once for this probability.
+			boolean cv$guard$indirection = false;
 			
 			// Update the variable probability
 			logProbability$sample = (logProbability$sample + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$indirection) {
+					// Set the guard so the update is only applied once.
+					cv$guard$indirection = true;
+					
+					// Update the variable probability
+					logProbability$indirection = (logProbability$indirection + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -247,26 +246,25 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var19[((i - 0) / 1)] = cv$rvAccumulator;
-				
-				// Guard to ensure that indirection is only updated once for this probability.
-				boolean cv$guard$indirection = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$indirection) {
-						// Set the guard so the update is only applied once.
-						cv$guard$indirection = true;
-						
-						// Update the variable probability
-						logProbability$indirection = (logProbability$indirection + cv$sampleValue);
-					}
-				}
 			}
+			
+			// Guard to ensure that indirection is only updated once for this probability.
+			boolean cv$guard$indirection = false;
 			
 			// Update the variable probability
 			logProbability$sample = (logProbability$sample + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$indirection) {
+					// Set the guard so the update is only applied once.
+					cv$guard$indirection = true;
+					
+					// Update the variable probability
+					logProbability$indirection = (logProbability$indirection + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

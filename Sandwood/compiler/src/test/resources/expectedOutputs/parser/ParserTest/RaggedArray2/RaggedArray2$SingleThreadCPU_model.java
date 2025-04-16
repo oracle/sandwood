@@ -22,7 +22,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$$model;
 	private double logProbability$i;
 	private double logProbability$obs;
-	private double logProbability$p;
 	private double logProbability$var76;
 	private double logProbability$var79;
 	private double logProbability$var83;
@@ -157,12 +156,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final double get$logProbability$obs() {
 		return logProbability$obs;
-	}
-
-	// Getter for logProbability$p.
-	@Override
-	public final double get$logProbability$p() {
-		return logProbability$p;
 	}
 
 	// Getter for logProbability$y.
@@ -372,21 +365,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the sample task probability
 			logProbability$y = cv$sampleProbability;
 			
-			// Guard to ensure that p is only updated once for this probability.
-			boolean cv$guard$p = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$p) {
-					// Set the guard so the update is only applied once.
-					cv$guard$p = true;
-					
-					// Update the variable probability
-					logProbability$p = (logProbability$p + cv$accumulator);
-				}
-			}
-			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
@@ -409,21 +387,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var76 = cv$rvAccumulator;
-			
-			// Guard to ensure that p is only updated once for this probability.
-			boolean cv$guard$p = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$p) {
-					// Set the guard so the update is only applied once.
-					cv$guard$p = true;
-					
-					// Update the variable probability
-					logProbability$p = (logProbability$p + cv$accumulator);
-				}
-			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -515,21 +478,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the sample task probability
 			logProbability$i = cv$sampleProbability;
 			
-			// Guard to ensure that p is only updated once for this probability.
-			boolean cv$guard$p = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$p) {
-					// Set the guard so the update is only applied once.
-					cv$guard$p = true;
-					
-					// Update the variable probability
-					logProbability$p = (logProbability$p + cv$accumulator);
-				}
-			}
-			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
@@ -552,21 +500,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var79 = cv$rvAccumulator;
-			
-			// Guard to ensure that p is only updated once for this probability.
-			boolean cv$guard$p = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$p) {
-					// Set the guard so the update is only applied once.
-					cv$guard$p = true;
-					
-					// Update the variable probability
-					logProbability$p = (logProbability$p + cv$accumulator);
-				}
-			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1307,7 +1240,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var76 = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample81)
 			logProbability$y = 0.0;
 		logProbability$var79 = 0.0;

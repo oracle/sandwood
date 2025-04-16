@@ -18,6 +18,8 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
+	private double logProbability$sample13;
+	private double logProbability$sample9;
 	private double logProbability$value;
 	private double logProbability$var12;
 	private double logProbability$var8;
@@ -158,24 +160,27 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$var12 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
-			logProbability$b = cv$distributionAccumulator;
+			logProbability$sample13 = cv$distributionAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$b = (logProbability$b + cv$distributionAccumulator);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!guard)
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			
 			// Add probability to model
@@ -216,22 +221,25 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var12 = logProbability$b;
+			logProbability$var12 = logProbability$sample13;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$b = (logProbability$b + logProbability$sample13);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!guard)
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$b);
+				logProbability$value = (logProbability$value + logProbability$sample13);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$b);
+			logProbability$$model = (logProbability$$model + logProbability$sample13);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$sample13);
 		}
 	}
 
@@ -392,24 +400,27 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$var8 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
-			logProbability$a = cv$distributionAccumulator;
+			logProbability$sample9 = cv$distributionAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$a = (logProbability$a + cv$distributionAccumulator);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard)
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			
 			// Add probability to model
@@ -450,22 +461,25 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var8 = logProbability$a;
+			logProbability$var8 = logProbability$sample9;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$a = (logProbability$a + logProbability$sample9);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard)
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$a);
+				logProbability$value = (logProbability$value + logProbability$sample9);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$a);
+			logProbability$$model = (logProbability$$model + logProbability$sample9);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$a);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$sample9);
 		}
 	}
 
@@ -527,12 +541,14 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = 0.0;
 		logProbability$var8 = 0.0;
+		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$a = 0.0;
+			logProbability$sample9 = 0.0;
 		logProbability$var12 = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample13)
-			logProbability$b = 0.0;
+			logProbability$sample13 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

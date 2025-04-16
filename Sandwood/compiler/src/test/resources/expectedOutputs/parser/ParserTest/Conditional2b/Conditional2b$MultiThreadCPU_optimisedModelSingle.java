@@ -352,112 +352,6 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator for the distributed probability space covered.
 			logProbability$guard = cv$weightedProbability;
 			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard) {
-				// Set the guard so the update is only applied once.
-				cv$guard$value = true;
-				
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$value = (logProbability$value + cv$weightedProbability);
-			}
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard && !cv$guard$value))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$value = (logProbability$value + cv$weightedProbability);
-			if(guard) {
-				// Set the guard so the update is only applied once.
-				cv$guard$value2 = true;
-				
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$value2 = (logProbability$value2 + cv$weightedProbability);
-			}
-			if((!guard && !cv$guard$value2))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$value2 = (logProbability$value2 + cv$weightedProbability);
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -512,44 +406,6 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli = logProbability$guard;
-			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard) {
-				// Set the guard so the update is only applied once.
-				cv$guard$value = true;
-				
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$guard);
-			}
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard && !cv$guard$value))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$guard);
-			if(guard) {
-				// Set the guard so the update is only applied once.
-				cv$guard$value2 = true;
-				
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value2 = (logProbability$value2 + logProbability$guard);
-			}
-			if((!guard && !cv$guard$value2))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value2 = (logProbability$value2 + logProbability$guard);
 			
 			// Add probability to model
 			// 
@@ -786,11 +642,11 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
-		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var9 = 0.0;
+		logProbability$value = 0.0;
+		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$u = 0.0;
 	}

@@ -617,13 +617,13 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				
 				// Store the sample task probability
 				logProbability$sample39[i] = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$amounts2 = (logProbability$amounts2 + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -639,16 +639,17 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// this sample
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				double cv$sampleValue = logProbability$sample39[i];
-				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var38[i] = cv$sampleValue;
-				
-				// Update the variable probability
-				logProbability$amounts2 = (logProbability$amounts2 + cv$sampleValue);
+				// Variable declaration of cv$rvAccumulator moved.
+				double cv$rvAccumulator = logProbability$sample39[i];
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				logProbability$var38[i] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

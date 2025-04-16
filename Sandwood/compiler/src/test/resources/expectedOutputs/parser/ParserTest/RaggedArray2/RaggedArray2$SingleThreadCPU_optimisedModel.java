@@ -22,7 +22,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$$model;
 	private double logProbability$i;
 	private double logProbability$obs;
-	private double logProbability$p;
 	private double logProbability$var76;
 	private double logProbability$var79;
 	private double logProbability$var83;
@@ -167,12 +166,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final double get$logProbability$obs() {
 		return logProbability$obs;
-	}
-
-	// Getter for logProbability$p.
-	@Override
-	public final double get$logProbability$p() {
-		return logProbability$p;
 	}
 
 	// Getter for logProbability$y.
@@ -346,22 +339,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the sample task probability
 			logProbability$y = cv$distributionAccumulator;
 			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$p = (logProbability$p + cv$distributionAccumulator);
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -404,11 +381,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$var76 = logProbability$y;
-			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$p = (logProbability$p + logProbability$y);
 			
 			// Add probability to model
 			// 
@@ -474,22 +446,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the sample task probability
 			logProbability$i = cv$distributionAccumulator;
 			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$p = (logProbability$p + cv$distributionAccumulator);
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -532,11 +488,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$var79 = logProbability$i;
-			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$p = (logProbability$p + logProbability$i);
 			
 			// Add probability to model
 			// 
@@ -1124,7 +1075,6 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var76 = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample81)
 			logProbability$y = 0.0;
 		logProbability$var79 = 0.0;

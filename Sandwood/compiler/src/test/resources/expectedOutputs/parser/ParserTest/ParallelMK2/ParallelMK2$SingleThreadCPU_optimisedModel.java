@@ -192,13 +192,13 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				
 				// Store the sample task probability
 				logProbability$sample26[i] = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$indirection = (logProbability$indirection + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
 			logProbability$sample = (logProbability$sample + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$indirection = (logProbability$indirection + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -218,16 +218,17 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// this sample
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
-				double cv$sampleValue = logProbability$sample26[i];
-				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var25[i] = cv$sampleValue;
-				
-				// Update the variable probability
-				logProbability$indirection = (logProbability$indirection + cv$sampleValue);
+				// Variable declaration of cv$rvAccumulator moved.
+				double cv$rvAccumulator = logProbability$sample26[i];
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				logProbability$var25[i] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
 			logProbability$sample = (logProbability$sample + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$indirection = (logProbability$indirection + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

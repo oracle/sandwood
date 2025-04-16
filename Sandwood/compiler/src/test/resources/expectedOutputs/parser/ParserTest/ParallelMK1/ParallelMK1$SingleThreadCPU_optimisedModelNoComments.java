@@ -119,9 +119,9 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var19[i] = cv$distributionAccumulator;
 				logProbability$sample20[i] = cv$distributionAccumulator;
-				logProbability$indirection = (logProbability$indirection + cv$distributionAccumulator);
 			}
 			logProbability$sample = (logProbability$sample + cv$accumulator);
+			logProbability$indirection = (logProbability$indirection + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -129,12 +129,12 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
-				double cv$sampleValue = logProbability$sample20[i];
-				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var19[i] = cv$sampleValue;
-				logProbability$indirection = (logProbability$indirection + cv$sampleValue);
+				double cv$rvAccumulator = logProbability$sample20[i];
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				logProbability$var19[i] = cv$rvAccumulator;
 			}
 			logProbability$sample = (logProbability$sample + cv$accumulator);
+			logProbability$indirection = (logProbability$indirection + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);

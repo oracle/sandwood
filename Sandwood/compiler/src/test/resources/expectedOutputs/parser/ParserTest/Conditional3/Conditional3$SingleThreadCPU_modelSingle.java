@@ -19,6 +19,7 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$guard;
+	private double logProbability$sample16;
 	private double logProbability$value;
 	private double logProbability$var13;
 	private double logProbability$var14;
@@ -233,6 +234,27 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				
+				// Store the sample task probability
+				logProbability$sample16 = cv$sampleProbability;
+				
+				// Guard to ensure that bias is only updated once for this probability.
+				boolean cv$guard$bias = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				{
+					if(!guard) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$bias) {
+							// Set the guard so the update is only applied once.
+							cv$guard$bias = true;
+							
+							// Update the variable probability
+							logProbability$bias = (logProbability$bias + cv$sampleProbability);
+						}
+					}
+				}
 			}
 			
 			// Add the probability of this instance of the random variable to the probability
@@ -240,25 +262,8 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$var13 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var14 = cv$accumulator;
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$bias) {
-						// Set the guard so the update is only applied once.
-						cv$guard$bias = true;
-						
-						// Update the variable probability
-						logProbability$bias = (logProbability$bias + cv$accumulator);
-					}
-				}
-			}
+			// Update the variable probability
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -278,27 +283,33 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var14;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var13 = cv$rvAccumulator;
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$bias) {
-						// Set the guard so the update is only applied once.
-						cv$guard$bias = true;
-						
-						// Update the variable probability
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+			if(!guard) {
+				double cv$sampleValue = logProbability$sample16;
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Guard to ensure that bias is only updated once for this probability.
+				boolean cv$guard$bias = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				{
+					if(!guard) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$bias) {
+							// Set the guard so the update is only applied once.
+							cv$guard$bias = true;
+							
+							// Update the variable probability
+							logProbability$bias = (logProbability$bias + cv$sampleValue);
+						}
 					}
 				}
 			}
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$var13 = cv$rvAccumulator;
+			
+			// Update the variable probability
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -460,21 +471,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the sample task probability
 			logProbability$guard = cv$sampleProbability;
 			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$bias) {
-					// Set the guard so the update is only applied once.
-					cv$guard$bias = true;
-					
-					// Update the variable probability
-					logProbability$bias = (logProbability$bias + cv$accumulator);
-				}
-			}
-			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
@@ -497,21 +493,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$bernoulli = cv$rvAccumulator;
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$bias) {
-					// Set the guard so the update is only applied once.
-					cv$guard$bias = true;
-					
-					// Update the variable probability
-					logProbability$bias = (logProbability$bias + cv$accumulator);
-				}
-			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1157,12 +1138,13 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var13 = 0.0;
+		logProbability$var14 = 0.0;
+		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$var14 = 0.0;
+			logProbability$sample16 = 0.0;
 		logProbability$var17 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$value = 0.0;

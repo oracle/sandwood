@@ -20,6 +20,7 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flips;
+	private double logProbability$sample9;
 	private double logProbability$var36;
 	private double logProbability$var8;
 	private int samples;
@@ -161,8 +162,9 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(!fixedProbFlag$sample9) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			logProbability$var8 = cv$distributionAccumulator;
-			logProbability$b = cv$distributionAccumulator;
+			logProbability$sample9 = cv$distributionAccumulator;
 			boolean cv$guard$bias = false;
+			logProbability$b = (logProbability$b + cv$distributionAccumulator);
 			if(guard1)
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			else {
@@ -178,21 +180,22 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample9 = fixedFlag$sample9;
 		} else {
-			logProbability$var8 = logProbability$b;
+			logProbability$var8 = logProbability$sample9;
 			boolean cv$guard$bias = false;
+			logProbability$b = (logProbability$b + logProbability$sample9);
 			if(guard1)
-				logProbability$bias = (logProbability$bias + logProbability$b);
+				logProbability$bias = (logProbability$bias + logProbability$sample9);
 			else {
 				if(guard2) {
 					cv$guard$bias = true;
-					logProbability$bias = (logProbability$bias + logProbability$b);
+					logProbability$bias = (logProbability$bias + logProbability$sample9);
 				}
 				if((!guard2 && !cv$guard$bias))
-					logProbability$bias = (logProbability$bias + logProbability$b);
+					logProbability$bias = (logProbability$bias + logProbability$sample9);
 			}
-			logProbability$$model = (logProbability$$model + logProbability$b);
+			logProbability$$model = (logProbability$$model + logProbability$sample9);
 			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+				logProbability$$evidence = (logProbability$$evidence + logProbability$sample9);
 		}
 	}
 
@@ -329,9 +332,10 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var8 = 0.0;
+		logProbability$b = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$b = 0.0;
+			logProbability$sample9 = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample40)

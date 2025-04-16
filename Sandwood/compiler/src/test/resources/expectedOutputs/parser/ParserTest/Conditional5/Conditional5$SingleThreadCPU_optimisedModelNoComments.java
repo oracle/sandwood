@@ -16,6 +16,8 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
+	private double logProbability$sample13;
+	private double logProbability$sample9;
 	private double logProbability$value;
 	private double logProbability$var12;
 	private double logProbability$var8;
@@ -107,18 +109,20 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample13) {
 			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			logProbability$var12 = cv$distributionAccumulator;
-			logProbability$b = cv$distributionAccumulator;
+			logProbability$sample13 = cv$distributionAccumulator;
+			logProbability$b = (logProbability$b + cv$distributionAccumulator);
 			if(!guard)
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample13 = true;
 		} else {
-			logProbability$var12 = logProbability$b;
+			logProbability$var12 = logProbability$sample13;
+			logProbability$b = (logProbability$b + logProbability$sample13);
 			if(!guard)
-				logProbability$value = (logProbability$value + logProbability$b);
-			logProbability$$model = (logProbability$$model + logProbability$b);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+				logProbability$value = (logProbability$value + logProbability$sample13);
+			logProbability$$model = (logProbability$$model + logProbability$sample13);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$sample13);
 		}
 	}
 
@@ -140,18 +144,20 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample9) {
 			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			logProbability$var8 = cv$distributionAccumulator;
-			logProbability$a = cv$distributionAccumulator;
+			logProbability$sample9 = cv$distributionAccumulator;
+			logProbability$a = (logProbability$a + cv$distributionAccumulator);
 			if(guard)
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample9 = true;
 		} else {
-			logProbability$var8 = logProbability$a;
+			logProbability$var8 = logProbability$sample9;
+			logProbability$a = (logProbability$a + logProbability$sample9);
 			if(guard)
-				logProbability$value = (logProbability$value + logProbability$a);
-			logProbability$$model = (logProbability$$model + logProbability$a);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$a);
+				logProbability$value = (logProbability$value + logProbability$sample9);
+			logProbability$$model = (logProbability$$model + logProbability$sample9);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$sample9);
 		}
 	}
 
@@ -193,12 +199,14 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = 0.0;
 		logProbability$var8 = 0.0;
+		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$a = 0.0;
+			logProbability$sample9 = 0.0;
 		logProbability$var12 = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample13)
-			logProbability$b = 0.0;
+			logProbability$sample13 = 0.0;
 	}
 
 	@Override

@@ -20,7 +20,6 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$$model;
 	private double logProbability$i;
 	private double logProbability$obs;
-	private double logProbability$p;
 	private double logProbability$var76;
 	private double logProbability$var79;
 	private double logProbability$var83;
@@ -119,11 +118,6 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final double get$logProbability$p() {
-		return logProbability$p;
-	}
-
-	@Override
 	public final double get$logProbability$y() {
 		return logProbability$y;
 	}
@@ -185,14 +179,12 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$distributionAccumulator = (((0.0 <= y) && (y < 2))?Math.log(c[y]):Double.NEGATIVE_INFINITY);
 			logProbability$var76 = cv$distributionAccumulator;
 			logProbability$y = cv$distributionAccumulator;
-			logProbability$p = (logProbability$p + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample81)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample81 = fixedFlag$sample81;
 		} else {
 			logProbability$var76 = logProbability$y;
-			logProbability$p = (logProbability$p + logProbability$y);
 			logProbability$$model = (logProbability$$model + logProbability$y);
 			if(fixedFlag$sample81)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$y);
@@ -209,14 +201,12 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$distributionAccumulator = (((0.0 <= i) && (i < lengthCV$a$82_11))?Math.log(a[y][i]):Double.NEGATIVE_INFINITY);
 			logProbability$var79 = cv$distributionAccumulator;
 			logProbability$i = cv$distributionAccumulator;
-			logProbability$p = (logProbability$p + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample84)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample84 = (fixedFlag$sample84 && fixedFlag$sample81);
 		} else {
 			logProbability$var79 = logProbability$i;
-			logProbability$p = (logProbability$p + logProbability$i);
 			logProbability$$model = (logProbability$$model + logProbability$i);
 			if(fixedFlag$sample84)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$i);
@@ -421,7 +411,6 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var76 = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample81)
 			logProbability$y = 0.0;
 		logProbability$var79 = 0.0;

@@ -203,10 +203,9 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var13 = cv$distributionAccumulator;
 				logProbability$sample16 = cv$distributionAccumulator;
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			if(guard1)
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -216,10 +215,9 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(guard1) {
 				cv$accumulator = logProbability$sample16;
 				logProbability$var13 = logProbability$sample16;
+				logProbability$bias = (logProbability$bias + logProbability$sample16);
 			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			if(guard1)
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -234,10 +232,9 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var23 = cv$distributionAccumulator;
 				logProbability$sample28 = cv$distributionAccumulator;
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			if((!guard1 && (guard2 <= 2)))
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -247,10 +244,9 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((!guard1 && (guard2 <= 2))) {
 				cv$accumulator = logProbability$sample28;
 				logProbability$var23 = logProbability$sample28;
+				logProbability$bias = (logProbability$bias + logProbability$sample28);
 			}
 			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			if((!guard1 && (guard2 <= 2)))
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -265,10 +261,9 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var30 = cv$distributionAccumulator;
 				logProbability$sample35 = cv$distributionAccumulator;
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			if((!guard1 && !(guard2 <= 2)))
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -278,10 +273,9 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((!guard1 && !(guard2 <= 2))) {
 				cv$accumulator = logProbability$sample35;
 				logProbability$var30 = logProbability$sample35;
+				logProbability$bias = (logProbability$bias + logProbability$sample35);
 			}
 			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			if((!guard1 && !(guard2 <= 2)))
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);

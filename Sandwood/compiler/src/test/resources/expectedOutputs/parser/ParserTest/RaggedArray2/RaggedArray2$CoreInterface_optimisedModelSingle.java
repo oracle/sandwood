@@ -41,9 +41,6 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	// Getter for logProbability$obs.
 	public double get$logProbability$obs();
 
-	// Getter for logProbability$p.
-	public double get$logProbability$p();
-
 	// Getter for logProbability$y.
 	public double get$logProbability$y();
 

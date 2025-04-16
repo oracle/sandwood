@@ -171,40 +171,12 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$weightedProbability = Double.NEGATIVE_INFINITY;
 			logProbability$bernoulli = cv$weightedProbability;
 			logProbability$guard = cv$weightedProbability;
-			boolean cv$guard$value = false;
-			boolean cv$guard$value2 = false;
-			if(guard) {
-				cv$guard$value = true;
-				logProbability$value = (logProbability$value + cv$weightedProbability);
-			}
-			if((!guard && !cv$guard$value))
-				logProbability$value = (logProbability$value + cv$weightedProbability);
-			if(guard) {
-				cv$guard$value2 = true;
-				logProbability$value2 = (logProbability$value2 + cv$weightedProbability);
-			}
-			if((!guard && !cv$guard$value2))
-				logProbability$value2 = (logProbability$value2 + cv$weightedProbability);
 			logProbability$$model = (logProbability$$model + cv$weightedProbability);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$weightedProbability);
 			fixedProbFlag$sample4 = fixedFlag$sample4;
 		} else {
 			logProbability$bernoulli = logProbability$guard;
-			boolean cv$guard$value = false;
-			boolean cv$guard$value2 = false;
-			if(guard) {
-				cv$guard$value = true;
-				logProbability$value = (logProbability$value + logProbability$guard);
-			}
-			if((!guard && !cv$guard$value))
-				logProbability$value = (logProbability$value + logProbability$guard);
-			if(guard) {
-				cv$guard$value2 = true;
-				logProbability$value2 = (logProbability$value2 + logProbability$guard);
-			}
-			if((!guard && !cv$guard$value2))
-				logProbability$value2 = (logProbability$value2 + logProbability$guard);
 			logProbability$$model = (logProbability$$model + logProbability$guard);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
@@ -296,12 +268,12 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
-		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var9 = 0.0;
 		logProbability$v = 0.0;
+		logProbability$value = 0.0;
+		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$u = 0.0;
 	}

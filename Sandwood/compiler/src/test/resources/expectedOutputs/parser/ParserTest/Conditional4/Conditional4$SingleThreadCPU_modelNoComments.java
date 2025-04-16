@@ -263,23 +263,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$guard = cv$sampleProbability;
-			boolean cv$guard$bias = false;
-			{
-				if(guard) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$accumulator);
-					}
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -291,23 +274,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$bernoulli = cv$rvAccumulator;
-			boolean cv$guard$bias = false;
-			{
-				if(guard) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$accumulator);
-					}
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -758,10 +724,10 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$sample21 = 0.0;
 		logProbability$var24 = 0.0;
