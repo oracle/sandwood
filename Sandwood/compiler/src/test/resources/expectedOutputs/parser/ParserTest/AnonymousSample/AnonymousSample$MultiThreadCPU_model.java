@@ -626,26 +626,25 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				
 				// Store the sample task probability
 				logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that amounts2 is only updated once for this probability.
-				boolean cv$guard$amounts2 = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$amounts2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$amounts2 = true;
-						
-						// Update the variable probability
-						logProbability$amounts2 = (logProbability$amounts2 + cv$sampleProbability);
-					}
-				}
 			}
+			
+			// Guard to ensure that amounts2 is only updated once for this probability.
+			boolean cv$guard$amounts2 = false;
 			
 			// Update the variable probability
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$amounts2) {
+					// Set the guard so the update is only applied once.
+					cv$guard$amounts2 = true;
+					
+					// Update the variable probability
+					logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -666,26 +665,25 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var38[((i - 0) / 1)] = cv$rvAccumulator;
-				
-				// Guard to ensure that amounts2 is only updated once for this probability.
-				boolean cv$guard$amounts2 = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$amounts2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$amounts2 = true;
-						
-						// Update the variable probability
-						logProbability$amounts2 = (logProbability$amounts2 + cv$sampleValue);
-					}
-				}
 			}
+			
+			// Guard to ensure that amounts2 is only updated once for this probability.
+			boolean cv$guard$amounts2 = false;
 			
 			// Update the variable probability
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$amounts2) {
+					// Set the guard so the update is only applied once.
+					cv$guard$amounts2 = true;
+					
+					// Update the variable probability
+					logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
+				}
+			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

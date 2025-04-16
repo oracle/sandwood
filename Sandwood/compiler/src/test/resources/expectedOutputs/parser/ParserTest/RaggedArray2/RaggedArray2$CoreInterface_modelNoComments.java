@@ -14,7 +14,6 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$length$obs_measured(int cv$value);
 	public double get$logProbability$i();
 	public double get$logProbability$obs();
-	public double get$logProbability$p();
 	public double get$logProbability$y();
 	public boolean[] get$obs();
 	public boolean[] get$obs_measured();

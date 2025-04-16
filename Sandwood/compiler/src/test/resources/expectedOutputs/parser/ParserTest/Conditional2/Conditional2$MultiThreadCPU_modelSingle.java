@@ -360,64 +360,6 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the sample task probability
 			logProbability$guard = cv$sampleProbability;
 			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(guard) {
-					if((0 == 0)) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$value2) {
-							// Set the guard so the update is only applied once.
-							cv$guard$value2 = true;
-							
-							// Update the variable probability
-							logProbability$value2 = (logProbability$value2 + cv$accumulator);
-						}
-					}
-				}
-				if(!guard) {
-					if((0 == 0)) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$value2) {
-							// Set the guard so the update is only applied once.
-							cv$guard$value2 = true;
-							
-							// Update the variable probability
-							logProbability$value2 = (logProbability$value2 + cv$accumulator);
-						}
-					}
-				}
-			}
-			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
@@ -440,64 +382,6 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$bernoulli = cv$rvAccumulator;
-			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(guard) {
-					if((0 == 0)) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$value2) {
-							// Set the guard so the update is only applied once.
-							cv$guard$value2 = true;
-							
-							// Update the variable probability
-							logProbability$value2 = (logProbability$value2 + cv$accumulator);
-						}
-					}
-				}
-				if(!guard) {
-					if((0 == 0)) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$value2) {
-							// Set the guard so the update is only applied once.
-							cv$guard$value2 = true;
-							
-							// Update the variable probability
-							logProbability$value2 = (logProbability$value2 + cv$accumulator);
-						}
-					}
-				}
-			}
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -809,11 +693,11 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
-		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$value = 0.0;
+		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$var19 = 0.0;
 	}

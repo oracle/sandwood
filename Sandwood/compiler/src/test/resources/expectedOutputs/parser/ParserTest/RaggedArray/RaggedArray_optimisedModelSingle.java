@@ -95,7 +95,7 @@ public class RaggedArray extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$p(); }
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -171,7 +171,7 @@ public class RaggedArray extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$i, $obs, $p};
+    private HasProbabilityInternal[] $probabilityVariables = {$i, $obs};
 
     //Constructors
     /**

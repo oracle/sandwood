@@ -119,10 +119,9 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var13 = cv$distributionAccumulator;
 				logProbability$sample16 = cv$distributionAccumulator;
+				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			if(!guard)
-				logProbability$value = (logProbability$value + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample16 = fixedFlag$sample16;
@@ -131,10 +130,9 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if(!guard) {
 				cv$accumulator = logProbability$sample16;
 				logProbability$var13 = logProbability$sample16;
+				logProbability$value = (logProbability$value + logProbability$sample16);
 			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			if(!guard)
-				logProbability$value = (logProbability$value + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
@@ -147,14 +145,12 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$weightedProbability = Double.NEGATIVE_INFINITY;
 			logProbability$bernoulli = cv$weightedProbability;
 			logProbability$guard = cv$weightedProbability;
-			logProbability$value = (logProbability$value + cv$weightedProbability);
 			logProbability$$model = (logProbability$$model + cv$weightedProbability);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$weightedProbability);
 			fixedProbFlag$sample4 = fixedFlag$sample4;
 		} else {
 			logProbability$bernoulli = logProbability$guard;
-			logProbability$value = (logProbability$value + logProbability$guard);
 			logProbability$$model = (logProbability$$model + logProbability$guard);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
@@ -240,11 +236,11 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var13 = 0.0;
 		logProbability$var14 = 0.0;
+		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = 0.0;
 	}

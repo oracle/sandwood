@@ -23,6 +23,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bias;
 	private double logProbability$c;
 	private double logProbability$flips;
+	private double logProbability$sample8;
 	private double logProbability$var35;
 	private double logProbability$var7;
 	private int samples;
@@ -318,28 +319,20 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var7 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$b = cv$sampleProbability;
-			
-			// Guard to ensure that c is only updated once for this probability.
-			boolean cv$guard$c = false;
+			logProbability$sample8 = cv$sampleProbability;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
 			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
+			// Guard to ensure that c is only updated once for this probability.
+			boolean cv$guard$c = false;
 			
+			// Update the variable probability
+			logProbability$b = (logProbability$b + cv$accumulator);
+			
+			// Add probability to constructed variables that have guards, so need per sample probabilities
+			// from the combined probability
+			// 
 			// Looking for a path between Sample 8 and consumer double 22.
 			{
 				if(guard1) {
@@ -349,7 +342,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						cv$guard$bias = true;
 						
 						// Update the variable probability
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+						logProbability$bias = (logProbability$bias + cv$sampleProbability);
 					}
 				}
 				if(!guard1) {
@@ -361,9 +354,23 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								cv$guard$bias = true;
 								
 								// Update the variable probability
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+								logProbability$bias = (logProbability$bias + cv$sampleProbability);
 							}
 						}
+					}
+				}
+			}
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				if(!guard1) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$c) {
+						// Set the guard so the update is only applied once.
+						cv$guard$c = true;
+						
+						// Update the variable probability
+						logProbability$c = (logProbability$c + cv$accumulator);
 					}
 				}
 			}
@@ -386,31 +393,23 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b;
+			double cv$sampleValue = logProbability$sample8;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var7 = cv$rvAccumulator;
 			
-			// Guard to ensure that c is only updated once for this probability.
-			boolean cv$guard$c = false;
-			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
 			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
+			// Guard to ensure that c is only updated once for this probability.
+			boolean cv$guard$c = false;
 			
+			// Update the variable probability
+			logProbability$b = (logProbability$b + cv$accumulator);
+			
+			// Add probability to constructed variables that have guards, so need per sample probabilities
+			// from the combined probability
+			// 
 			// Looking for a path between Sample 8 and consumer double 22.
 			{
 				if(guard1) {
@@ -420,7 +419,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						cv$guard$bias = true;
 						
 						// Update the variable probability
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+						logProbability$bias = (logProbability$bias + cv$sampleValue);
 					}
 				}
 				if(!guard1) {
@@ -432,9 +431,23 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								cv$guard$bias = true;
 								
 								// Update the variable probability
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+								logProbability$bias = (logProbability$bias + cv$sampleValue);
 							}
 						}
+					}
+				}
+			}
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				if(!guard1) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$c) {
+						// Set the guard so the update is only applied once.
+						cv$guard$c = true;
+						
+						// Update the variable probability
+						logProbability$c = (logProbability$c + cv$accumulator);
 					}
 				}
 			}
@@ -866,10 +879,11 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var7 = 0.0;
+		logProbability$b = 0.0;
 		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$b = 0.0;
+			logProbability$sample8 = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample37)

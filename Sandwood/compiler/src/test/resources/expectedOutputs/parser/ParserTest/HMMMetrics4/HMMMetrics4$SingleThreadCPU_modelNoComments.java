@@ -549,17 +549,17 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleAccumulator;
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
-						boolean cv$guard$metric_valid_g = false;
-						{
-							if(!cv$guard$metric_valid_g) {
-								cv$guard$metric_valid_g = true;
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleProbability);
-							}
-						}
 					}
 				}
 			}
+			boolean cv$guard$metric_valid_g = false;
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			{
+				if(!cv$guard$metric_valid_g) {
+					cv$guard$metric_valid_g = true;
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
@@ -573,17 +573,17 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
-						boolean cv$guard$metric_valid_g = false;
-						{
-							if(!cv$guard$metric_valid_g) {
-								cv$guard$metric_valid_g = true;
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-							}
-						}
 					}
 				}
 			}
+			boolean cv$guard$metric_valid_g = false;
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			{
+				if(!cv$guard$metric_valid_g) {
+					cv$guard$metric_valid_g = true;
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
@@ -1834,17 +1834,17 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleAccumulator;
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
-						boolean cv$guard$metric_valid_g = false;
-						{
-							if(!cv$guard$metric_valid_g) {
-								cv$guard$metric_valid_g = true;
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleProbability);
-							}
-						}
 					}
 				}
 			}
+			boolean cv$guard$metric_valid_g = false;
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			{
+				if(!cv$guard$metric_valid_g) {
+					cv$guard$metric_valid_g = true;
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
@@ -1858,17 +1858,17 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
-						boolean cv$guard$metric_valid_g = false;
-						{
-							if(!cv$guard$metric_valid_g) {
-								cv$guard$metric_valid_g = true;
-								logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
-							}
-						}
 					}
 				}
 			}
+			boolean cv$guard$metric_valid_g = false;
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			{
+				if(!cv$guard$metric_valid_g) {
+					cv$guard$metric_valid_g = true;
+					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+				}
+			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}

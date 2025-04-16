@@ -232,17 +232,17 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var13 = cv$sampleAccumulator;
 				logProbability$sample16 = cv$sampleProbability;
-			}
-			boolean cv$guard$bias = false;
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			{
-				if(guard1) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+				boolean cv$guard$bias = false;
+				{
+					if(guard1) {
+						if(!cv$guard$bias) {
+							cv$guard$bias = true;
+							logProbability$bias = (logProbability$bias + cv$sampleProbability);
+						}
 					}
 				}
 			}
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -255,17 +255,17 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var13 = cv$rvAccumulator;
-			}
-			boolean cv$guard$bias = false;
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			{
-				if(guard1) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+				boolean cv$guard$bias = false;
+				{
+					if(guard1) {
+						if(!cv$guard$bias) {
+							cv$guard$bias = true;
+							logProbability$bias = (logProbability$bias + cv$sampleValue);
+						}
 					}
 				}
 			}
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -312,22 +312,22 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var23 = cv$sampleAccumulator;
 					logProbability$sample28 = cv$sampleProbability;
-				}
-			}
-			boolean cv$guard$bias = false;
-			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			{
-				if(!guard1) {
-					if((guard2 <= 2)) {
+					boolean cv$guard$bias = false;
+					{
 						if(!guard1) {
-							if(!cv$guard$bias) {
-								cv$guard$bias = true;
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if((guard2 <= 2)) {
+								if(!guard1) {
+									if(!cv$guard$bias) {
+										cv$guard$bias = true;
+										logProbability$bias = (logProbability$bias + cv$sampleProbability);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			logProbability$var26 = (logProbability$var26 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -341,22 +341,22 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var23 = cv$rvAccumulator;
-				}
-			}
-			boolean cv$guard$bias = false;
-			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			{
-				if(!guard1) {
-					if((guard2 <= 2)) {
+					boolean cv$guard$bias = false;
+					{
 						if(!guard1) {
-							if(!cv$guard$bias) {
-								cv$guard$bias = true;
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if((guard2 <= 2)) {
+								if(!guard1) {
+									if(!cv$guard$bias) {
+										cv$guard$bias = true;
+										logProbability$bias = (logProbability$bias + cv$sampleValue);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			logProbability$var26 = (logProbability$var26 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -403,22 +403,22 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var30 = cv$sampleAccumulator;
 					logProbability$sample35 = cv$sampleProbability;
-				}
-			}
-			boolean cv$guard$bias = false;
-			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			{
-				if(!guard1) {
-					if(!(guard2 <= 2)) {
+					boolean cv$guard$bias = false;
+					{
 						if(!guard1) {
-							if(!cv$guard$bias) {
-								cv$guard$bias = true;
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if(!(guard2 <= 2)) {
+								if(!guard1) {
+									if(!cv$guard$bias) {
+										cv$guard$bias = true;
+										logProbability$bias = (logProbability$bias + cv$sampleProbability);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			logProbability$var33 = (logProbability$var33 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -432,22 +432,22 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var30 = cv$rvAccumulator;
-				}
-			}
-			boolean cv$guard$bias = false;
-			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			{
-				if(!guard1) {
-					if(!(guard2 <= 2)) {
+					boolean cv$guard$bias = false;
+					{
 						if(!guard1) {
-							if(!cv$guard$bias) {
-								cv$guard$bias = true;
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if(!(guard2 <= 2)) {
+								if(!guard1) {
+									if(!cv$guard$bias) {
+										cv$guard$bias = true;
+										logProbability$bias = (logProbability$bias + cv$sampleValue);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			logProbability$var33 = (logProbability$var33 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);

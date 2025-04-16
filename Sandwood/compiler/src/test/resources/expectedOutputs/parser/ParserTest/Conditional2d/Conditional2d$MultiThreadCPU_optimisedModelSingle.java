@@ -16,6 +16,7 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$$model;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
+	private double logProbability$sample8;
 	private double logProbability$u;
 	private double logProbability$value;
 	private double logProbability$value2;
@@ -205,52 +206,6 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// An accumulator for the distributed probability space covered.
 			logProbability$guard = cv$weightedProbability;
 			
-			// Add probability to constructed variables from the combined probability
-			// 
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			logProbability$value = (logProbability$value + cv$weightedProbability);
-			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			logProbability$value2 = (logProbability$value2 + cv$weightedProbability);
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -306,18 +261,6 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			logProbability$bernoulli = logProbability$guard;
 			
-			// Add probability to constructed variables from the combined probability
-			// 
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$value = (logProbability$value + logProbability$guard);
-			
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$value2 = (logProbability$value2 + logProbability$guard);
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -368,42 +311,33 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var7 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
-			logProbability$u = cv$distributionAccumulator;
+			logProbability$sample8 = cv$distributionAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$u = (logProbability$u + cv$distributionAccumulator);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!guard) {
-				// Add probability to constructed variables from the combined probability
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
 				// 
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 				
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
 				logProbability$value2 = (logProbability$value2 + cv$distributionAccumulator);
 			}
 			
@@ -445,30 +379,32 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var7 = logProbability$u;
+			logProbability$var7 = logProbability$sample8;
+			
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$u = (logProbability$u + logProbability$sample8);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!guard) {
-				// Add probability to constructed variables from the combined probability
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
 				// 
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$u);
+				logProbability$value = (logProbability$value + logProbability$sample8);
 				
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value2 = (logProbability$value2 + logProbability$u);
+				logProbability$value2 = (logProbability$value2 + logProbability$sample8);
 			}
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$u);
+			logProbability$$model = (logProbability$$model + logProbability$sample8);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$u);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$sample8);
 		}
 	}
 
@@ -708,13 +644,14 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
-		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var7 = 0.0;
+		logProbability$u = 0.0;
+		logProbability$value = 0.0;
+		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$u = 0.0;
+			logProbability$sample8 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

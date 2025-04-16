@@ -266,21 +266,21 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var38[i] = cv$distributionAccumulator;
 				logProbability$sample39[i] = cv$distributionAccumulator;
-				logProbability$amounts2 = (logProbability$amounts2 + cv$distributionAccumulator);
 			}
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedFlag$sample21);
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				double cv$sampleValue = logProbability$sample39[i];
-				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var38[i] = cv$sampleValue;
-				logProbability$amounts2 = (logProbability$amounts2 + cv$sampleValue);
+				double cv$rvAccumulator = logProbability$sample39[i];
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				logProbability$var38[i] = cv$rvAccumulator;
 			}
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}

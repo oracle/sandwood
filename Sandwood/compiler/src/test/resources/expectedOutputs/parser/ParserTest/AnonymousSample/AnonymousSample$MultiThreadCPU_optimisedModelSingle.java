@@ -25,7 +25,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$mean1;
 	private double logProbability$mean2;
 	private double logProbability$priorSigma2;
-	private double[] logProbability$sample39;
 	private double logProbability$var14;
 	private double logProbability$var20;
 	private double logProbability$var34;
@@ -575,16 +574,8 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
+			for(int i = 0; i < n; i += 1)
+				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -599,18 +590,16 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
-				
-				// Store the sample task probability
-				logProbability$sample39[i] = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$amounts2 = (logProbability$amounts2 + cv$distributionAccumulator);
-			}
+				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2)))) - (Math.log(priorSigma2) * 0.5));
 			logProbability$var38 = cv$sampleAccumulator;
+			
+			// Store the random variable instance probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$var39 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -618,7 +607,7 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$var39 = (logProbability$var39 + cv$sampleAccumulator);
+			logProbability$amounts2 = (logProbability$amounts2 + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -642,22 +631,20 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				double cv$sampleValue = logProbability$sample39[i];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Update the variable probability
-				logProbability$amounts2 = (logProbability$amounts2 + cv$sampleValue);
-			}
-			logProbability$var38 = cv$rvAccumulator;
+			logProbability$var38 = logProbability$var39;
 			
 			// Update the variable probability
-			logProbability$var39 = (logProbability$var39 + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$amounts2 = (logProbability$amounts2 + logProbability$var39);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var39);
+			
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var39);
 		}
 	}
 
@@ -1039,9 +1026,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		
 		// Constructor for var39
 		var39 = new double[length$obsAmounts1];
-		
-		// Constructor for logProbability$sample39
-		logProbability$sample39 = new double[length$obsAmounts1];
 	}
 
 	// Method to execute the model code conventionally.
@@ -1150,12 +1134,9 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		if(!fixedProbFlag$sample35)
 			logProbability$var35 = 0.0;
 		logProbability$var38 = 0.0;
-		logProbability$var39 = 0.0;
 		logProbability$amounts2 = 0.0;
-		if(!fixedProbFlag$sample39) {
-			for(int i = 0; i < n; i += 1)
-				logProbability$sample39[i] = 0.0;
-		}
+		if(!fixedProbFlag$sample39)
+			logProbability$var39 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

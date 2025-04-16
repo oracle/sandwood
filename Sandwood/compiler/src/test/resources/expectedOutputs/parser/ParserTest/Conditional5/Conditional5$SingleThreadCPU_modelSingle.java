@@ -18,6 +18,8 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
+	private double logProbability$sample13;
+	private double logProbability$sample9;
 	private double logProbability$value;
 	private double logProbability$var12;
 	private double logProbability$var8;
@@ -182,12 +184,16 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var12 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$b = cv$sampleProbability;
+			logProbability$sample13 = cv$sampleProbability;
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Add probability to constructed variables from the combined probability
+			// Update the variable probability
+			logProbability$b = (logProbability$b + cv$accumulator);
+			
+			// Add probability to constructed variables that have guards, so need per sample probabilities
+			// from the combined probability
 			{
 				if(!guard) {
 					// If the probability of the variable has not already been updated
@@ -196,7 +202,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						cv$guard$value = true;
 						
 						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
+						logProbability$value = (logProbability$value + cv$sampleProbability);
 					}
 				}
 			}
@@ -215,7 +221,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b;
+			double cv$sampleValue = logProbability$sample13;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var12 = cv$rvAccumulator;
@@ -223,7 +229,11 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Add probability to constructed variables from the combined probability
+			// Update the variable probability
+			logProbability$b = (logProbability$b + cv$accumulator);
+			
+			// Add probability to constructed variables that have guards, so need per sample probabilities
+			// from the combined probability
 			{
 				if(!guard) {
 					// If the probability of the variable has not already been updated
@@ -232,7 +242,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						cv$guard$value = true;
 						
 						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
+						logProbability$value = (logProbability$value + cv$sampleValue);
 					}
 				}
 			}
@@ -391,12 +401,16 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var8 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$a = cv$sampleProbability;
+			logProbability$sample9 = cv$sampleProbability;
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Add probability to constructed variables from the combined probability
+			// Update the variable probability
+			logProbability$a = (logProbability$a + cv$accumulator);
+			
+			// Add probability to constructed variables that have guards, so need per sample probabilities
+			// from the combined probability
 			{
 				if(guard) {
 					// If the probability of the variable has not already been updated
@@ -405,7 +419,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						cv$guard$value = true;
 						
 						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
+						logProbability$value = (logProbability$value + cv$sampleProbability);
 					}
 				}
 			}
@@ -424,7 +438,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$a;
+			double cv$sampleValue = logProbability$sample9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var8 = cv$rvAccumulator;
@@ -432,7 +446,11 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Add probability to constructed variables from the combined probability
+			// Update the variable probability
+			logProbability$a = (logProbability$a + cv$accumulator);
+			
+			// Add probability to constructed variables that have guards, so need per sample probabilities
+			// from the combined probability
 			{
 				if(guard) {
 					// If the probability of the variable has not already been updated
@@ -441,7 +459,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						cv$guard$value = true;
 						
 						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$accumulator);
+						logProbability$value = (logProbability$value + cv$sampleValue);
 					}
 				}
 			}
@@ -510,12 +528,14 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = 0.0;
 		logProbability$var8 = 0.0;
+		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$a = 0.0;
+			logProbability$sample9 = 0.0;
 		logProbability$var12 = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample13)
-			logProbability$b = 0.0;
+			logProbability$sample13 = 0.0;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

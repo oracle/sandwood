@@ -148,17 +148,17 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var13 = cv$sampleAccumulator;
 				logProbability$sample16 = cv$sampleProbability;
-			}
-			boolean cv$guard$value = false;
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			{
-				if(!guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$accumulator);
+				boolean cv$guard$value = false;
+				{
+					if(!guard) {
+						if(!cv$guard$value) {
+							cv$guard$value = true;
+							logProbability$value = (logProbability$value + cv$sampleProbability);
+						}
 					}
 				}
 			}
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample16 = fixedFlag$sample16;
@@ -170,17 +170,17 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var13 = cv$rvAccumulator;
-			}
-			boolean cv$guard$value = false;
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			{
-				if(!guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$accumulator);
+				boolean cv$guard$value = false;
+				{
+					if(!guard) {
+						if(!cv$guard$value) {
+							cv$guard$value = true;
+							logProbability$value = (logProbability$value + cv$sampleValue);
+						}
 					}
 				}
 			}
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
@@ -227,13 +227,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$guard = cv$sampleProbability;
-			boolean cv$guard$value = false;
-			{
-				if(!cv$guard$value) {
-					cv$guard$value = true;
-					logProbability$value = (logProbability$value + cv$accumulator);
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -245,13 +238,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$bernoulli = cv$rvAccumulator;
-			boolean cv$guard$value = false;
-			{
-				if(!cv$guard$value) {
-					cv$guard$value = true;
-					logProbability$value = (logProbability$value + cv$accumulator);
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -433,11 +419,11 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var13 = 0.0;
 		logProbability$var14 = 0.0;
+		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = 0.0;
 	}

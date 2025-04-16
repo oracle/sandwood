@@ -333,27 +333,28 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				
 				// Store the sample task probability
 				logProbability$sample16 = cv$sampleProbability;
-			}
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Update the variable probability
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$bias) {
-						// Set the guard so the update is only applied once.
-						cv$guard$bias = true;
-						
-						// Update the variable probability
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+				
+				// Guard to ensure that bias is only updated once for this probability.
+				boolean cv$guard$bias = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				{
+					if(guard1) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$bias) {
+							// Set the guard so the update is only applied once.
+							cv$guard$bias = true;
+							
+							// Update the variable probability
+							logProbability$bias = (logProbability$bias + cv$sampleProbability);
+						}
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -378,27 +379,28 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var13 = cv$rvAccumulator;
-			}
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Update the variable probability
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$bias) {
-						// Set the guard so the update is only applied once.
-						cv$guard$bias = true;
-						
-						// Update the variable probability
-						logProbability$bias = (logProbability$bias + cv$accumulator);
+				
+				// Guard to ensure that bias is only updated once for this probability.
+				boolean cv$guard$bias = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				{
+					if(guard1) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$bias) {
+							// Set the guard so the update is only applied once.
+							cv$guard$bias = true;
+							
+							// Update the variable probability
+							logProbability$bias = (logProbability$bias + cv$sampleValue);
+						}
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -478,32 +480,33 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					
 					// Store the sample task probability
 					logProbability$sample28 = cv$sampleProbability;
-				}
-			}
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Update the variable probability
-			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					if((guard2 <= 2)) {
+					
+					// Guard to ensure that bias is only updated once for this probability.
+					boolean cv$guard$bias = false;
+					
+					// Add probability to constructed variables that have guards, so need per sample probabilities
+					// from the combined probability
+					{
 						if(!guard1) {
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$bias) {
-								// Set the guard so the update is only applied once.
-								cv$guard$bias = true;
-								
-								// Update the variable probability
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if((guard2 <= 2)) {
+								if(!guard1) {
+									// If the probability of the variable has not already been updated
+									if(!cv$guard$bias) {
+										// Set the guard so the update is only applied once.
+										cv$guard$bias = true;
+										
+										// Update the variable probability
+										logProbability$bias = (logProbability$bias + cv$sampleProbability);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var26 = (logProbability$var26 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -529,32 +532,33 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var23 = cv$rvAccumulator;
-				}
-			}
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Update the variable probability
-			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					if((guard2 <= 2)) {
+					
+					// Guard to ensure that bias is only updated once for this probability.
+					boolean cv$guard$bias = false;
+					
+					// Add probability to constructed variables that have guards, so need per sample probabilities
+					// from the combined probability
+					{
 						if(!guard1) {
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$bias) {
-								// Set the guard so the update is only applied once.
-								cv$guard$bias = true;
-								
-								// Update the variable probability
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if((guard2 <= 2)) {
+								if(!guard1) {
+									// If the probability of the variable has not already been updated
+									if(!cv$guard$bias) {
+										// Set the guard so the update is only applied once.
+										cv$guard$bias = true;
+										
+										// Update the variable probability
+										logProbability$bias = (logProbability$bias + cv$sampleValue);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var26 = (logProbability$var26 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -634,32 +638,33 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					
 					// Store the sample task probability
 					logProbability$sample35 = cv$sampleProbability;
-				}
-			}
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Update the variable probability
-			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					if(!(guard2 <= 2)) {
+					
+					// Guard to ensure that bias is only updated once for this probability.
+					boolean cv$guard$bias = false;
+					
+					// Add probability to constructed variables that have guards, so need per sample probabilities
+					// from the combined probability
+					{
 						if(!guard1) {
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$bias) {
-								// Set the guard so the update is only applied once.
-								cv$guard$bias = true;
-								
-								// Update the variable probability
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if(!(guard2 <= 2)) {
+								if(!guard1) {
+									// If the probability of the variable has not already been updated
+									if(!cv$guard$bias) {
+										// Set the guard so the update is only applied once.
+										cv$guard$bias = true;
+										
+										// Update the variable probability
+										logProbability$bias = (logProbability$bias + cv$sampleProbability);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var33 = (logProbability$var33 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -685,32 +690,33 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var30 = cv$rvAccumulator;
-				}
-			}
-			
-			// Guard to ensure that bias is only updated once for this probability.
-			boolean cv$guard$bias = false;
-			
-			// Update the variable probability
-			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					if(!(guard2 <= 2)) {
+					
+					// Guard to ensure that bias is only updated once for this probability.
+					boolean cv$guard$bias = false;
+					
+					// Add probability to constructed variables that have guards, so need per sample probabilities
+					// from the combined probability
+					{
 						if(!guard1) {
-							// If the probability of the variable has not already been updated
-							if(!cv$guard$bias) {
-								// Set the guard so the update is only applied once.
-								cv$guard$bias = true;
-								
-								// Update the variable probability
-								logProbability$bias = (logProbability$bias + cv$accumulator);
+							if(!(guard2 <= 2)) {
+								if(!guard1) {
+									// If the probability of the variable has not already been updated
+									if(!cv$guard$bias) {
+										// Set the guard so the update is only applied once.
+										cv$guard$bias = true;
+										
+										// Update the variable probability
+										logProbability$bias = (logProbability$bias + cv$sampleValue);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var33 = (logProbability$var33 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

@@ -1011,14 +1011,14 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					
 					// Store the sample task probability
 					logProbability$sample145[sample][timeStep$var136] = cv$distributionAccumulator;
-					
-					// Update the variable probability
-					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1035,17 +1035,18 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$accumulator = 0.0;
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					double cv$sampleValue = logProbability$sample145[sample][timeStep$var136];
-					cv$accumulator = (cv$accumulator + cv$sampleValue);
-					logProbability$var140[sample][timeStep$var136] = cv$sampleValue;
-					
-					// Update the variable probability
-					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+					// Variable declaration of cv$rvAccumulator moved.
+					double cv$rvAccumulator = logProbability$sample145[sample][timeStep$var136];
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var140[sample][timeStep$var136] = cv$rvAccumulator;
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1212,15 +1213,15 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Store the sample task probability
 						logProbability$sample157[sample][timeStep$var136] = cv$distributionAccumulator;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_1d = (logProbability$metric_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1238,18 +1239,19 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
 					if(metric_valid_g[sample][timeStep$var136]) {
-						double cv$sampleValue = logProbability$sample157[sample][timeStep$var136];
-						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var150[sample][timeStep$var136] = cv$sampleValue;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
+						// Variable declaration of cv$rvAccumulator moved.
+						double cv$rvAccumulator = logProbability$sample157[sample][timeStep$var136];
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+						logProbability$var150[sample][timeStep$var136] = cv$rvAccumulator;
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_1d = (logProbability$metric_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1496,14 +1498,14 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					
 					// Store the sample task probability
 					logProbability$sample145[sample][timeStep$var136] = cv$distributionAccumulator;
-					
-					// Update the variable probability
-					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1520,17 +1522,18 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$accumulator = 0.0;
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					double cv$sampleValue = logProbability$sample145[sample][timeStep$var136];
-					cv$accumulator = (cv$accumulator + cv$sampleValue);
-					logProbability$var140[sample][timeStep$var136] = cv$sampleValue;
-					
-					// Update the variable probability
-					logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+					// Variable declaration of cv$rvAccumulator moved.
+					double cv$rvAccumulator = logProbability$sample145[sample][timeStep$var136];
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					logProbability$var140[sample][timeStep$var136] = cv$rvAccumulator;
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1592,15 +1595,15 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Store the sample task probability
 						logProbability$sample157[sample][timeStep$var136] = cv$distributionAccumulator;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_1d = (logProbability$metric_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1618,18 +1621,19 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
 					if(metric_valid_g[sample][timeStep$var136]) {
-						double cv$sampleValue = logProbability$sample157[sample][timeStep$var136];
-						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var150[sample][timeStep$var136] = cv$sampleValue;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$sampleValue);
+						// Variable declaration of cv$rvAccumulator moved.
+						double cv$rvAccumulator = logProbability$sample157[sample][timeStep$var136];
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+						logProbability$var150[sample][timeStep$var136] = cv$rvAccumulator;
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_1d = (logProbability$metric_1d + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

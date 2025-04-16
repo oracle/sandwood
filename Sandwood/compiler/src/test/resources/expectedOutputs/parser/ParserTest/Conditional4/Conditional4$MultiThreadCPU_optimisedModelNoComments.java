@@ -169,26 +169,12 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample4) {
 			logProbability$bernoulli = -0.6931471805599453;
 			logProbability$guard = -0.6931471805599453;
-			boolean cv$guard$bias = false;
-			if(guard) {
-				cv$guard$bias = true;
-				logProbability$bias = (logProbability$bias - 0.6931471805599453);
-			}
-			if((!guard && !cv$guard$bias))
-				logProbability$bias = (logProbability$bias - 0.6931471805599453);
 			logProbability$$model = (logProbability$$model - 0.6931471805599453);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
 			fixedProbFlag$sample4 = fixedFlag$sample4;
 		} else {
 			logProbability$bernoulli = logProbability$guard;
-			boolean cv$guard$bias = false;
-			if(guard) {
-				cv$guard$bias = true;
-				logProbability$bias = (logProbability$bias + logProbability$guard);
-			}
-			if((!guard && !cv$guard$bias))
-				logProbability$bias = (logProbability$bias + logProbability$guard);
 			logProbability$$model = (logProbability$$model + logProbability$guard);
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
@@ -310,10 +296,10 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
-		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$sample21 = 0.0;
 		logProbability$var24 = 0.0;

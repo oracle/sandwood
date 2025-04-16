@@ -146,15 +146,15 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var19[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample20[((i - 0) / 1)] = cv$sampleProbability;
-				boolean cv$guard$indirection = false;
-				{
-					if(!cv$guard$indirection) {
-						cv$guard$indirection = true;
-						logProbability$indirection = (logProbability$indirection + cv$sampleProbability);
-					}
+			}
+			boolean cv$guard$indirection = false;
+			logProbability$sample = (logProbability$sample + cv$accumulator);
+			{
+				if(!cv$guard$indirection) {
+					cv$guard$indirection = true;
+					logProbability$indirection = (logProbability$indirection + cv$accumulator);
 				}
 			}
-			logProbability$sample = (logProbability$sample + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -167,15 +167,15 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var19[((i - 0) / 1)] = cv$rvAccumulator;
-				boolean cv$guard$indirection = false;
-				{
-					if(!cv$guard$indirection) {
-						cv$guard$indirection = true;
-						logProbability$indirection = (logProbability$indirection + cv$sampleValue);
-					}
+			}
+			boolean cv$guard$indirection = false;
+			logProbability$sample = (logProbability$sample + cv$accumulator);
+			{
+				if(!cv$guard$indirection) {
+					cv$guard$indirection = true;
+					logProbability$indirection = (logProbability$indirection + cv$accumulator);
 				}
 			}
-			logProbability$sample = (logProbability$sample + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);

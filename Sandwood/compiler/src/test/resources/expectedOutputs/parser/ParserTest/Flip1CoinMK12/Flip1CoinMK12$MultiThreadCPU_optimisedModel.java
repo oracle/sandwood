@@ -332,15 +332,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Store the sample task probability
 				logProbability$sample16 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1)
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -362,15 +360,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(guard1) {
 				cv$accumulator = logProbability$sample16;
 				logProbability$var13 = logProbability$sample16;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + logProbability$sample16);
 			}
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1)
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -434,15 +430,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Store the sample task probability
 				logProbability$sample28 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
 			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && (guard2 <= 2)))
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -464,15 +458,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((!guard1 && (guard2 <= 2))) {
 				cv$accumulator = logProbability$sample28;
 				logProbability$var23 = logProbability$sample28;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + logProbability$sample28);
 			}
 			
 			// Update the variable probability
 			logProbability$var26 = (logProbability$var26 + cv$accumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && (guard2 <= 2)))
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -536,15 +528,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Store the sample task probability
 				logProbability$sample35 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
 			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && !(guard2 <= 2)))
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -566,15 +556,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((!guard1 && !(guard2 <= 2))) {
 				cv$accumulator = logProbability$sample35;
 				logProbability$var30 = logProbability$sample35;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + logProbability$sample35);
 			}
 			
 			// Update the variable probability
 			logProbability$var33 = (logProbability$var33 + cv$accumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && !(guard2 <= 2)))
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

@@ -21,6 +21,7 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bias;
 	private double logProbability$c;
 	private double logProbability$flips;
+	private double logProbability$sample8;
 	private double logProbability$var35;
 	private double logProbability$var7;
 	private int samples;
@@ -152,32 +153,30 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample8) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			logProbability$var7 = cv$distributionAccumulator;
-			logProbability$b = cv$distributionAccumulator;
-			boolean cv$guard$bias = false;
-			if(guard1) {
-				cv$guard$bias = true;
+			logProbability$sample8 = cv$distributionAccumulator;
+			logProbability$b = (logProbability$b + cv$distributionAccumulator);
+			if(guard1)
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
-			} else
+			else {
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 				logProbability$c = (logProbability$c + cv$distributionAccumulator);
-			if((!guard1 && !cv$guard$bias))
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			}
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample8)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample8 = fixedFlag$sample8;
 		} else {
-			logProbability$var7 = logProbability$b;
-			boolean cv$guard$bias = false;
-			if(guard1) {
-				cv$guard$bias = true;
-				logProbability$bias = (logProbability$bias + logProbability$b);
-			} else
-				logProbability$c = (logProbability$c + logProbability$b);
-			if((!guard1 && !cv$guard$bias))
-				logProbability$bias = (logProbability$bias + logProbability$b);
-			logProbability$$model = (logProbability$$model + logProbability$b);
+			logProbability$var7 = logProbability$sample8;
+			logProbability$b = (logProbability$b + logProbability$sample8);
+			if(guard1)
+				logProbability$bias = (logProbability$bias + logProbability$sample8);
+			else {
+				logProbability$bias = (logProbability$bias + logProbability$sample8);
+				logProbability$c = (logProbability$c + logProbability$sample8);
+			}
+			logProbability$$model = (logProbability$$model + logProbability$sample8);
 			if(fixedFlag$sample8)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+				logProbability$$evidence = (logProbability$$evidence + logProbability$sample8);
 		}
 	}
 
@@ -298,10 +297,11 @@ class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var7 = 0.0;
+		logProbability$b = 0.0;
 		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$b = 0.0;
+			logProbability$sample8 = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample37)

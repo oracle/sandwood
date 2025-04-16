@@ -765,15 +765,15 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Store the sample task probability
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -791,18 +791,19 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$sampleValue = logProbability$sample241[sample$var196][server][timeStep$var226];
-						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var231[sample$var196][server][timeStep$var226] = cv$sampleValue;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+						// Variable declaration of cv$rvAccumulator moved.
+						double cv$rvAccumulator = logProbability$sample241[sample$var196][server][timeStep$var226];
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+						logProbability$var231[sample$var196][server][timeStep$var226] = cv$rvAccumulator;
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1686,15 +1687,15 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Store the sample task probability
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1712,18 +1713,19 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$sampleValue = logProbability$sample241[sample$var196][server][timeStep$var226];
-						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var231[sample$var196][server][timeStep$var226] = cv$sampleValue;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+						// Variable declaration of cv$rvAccumulator moved.
+						double cv$rvAccumulator = logProbability$sample241[sample$var196][server][timeStep$var226];
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+						logProbability$var231[sample$var196][server][timeStep$var226] = cv$rvAccumulator;
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);

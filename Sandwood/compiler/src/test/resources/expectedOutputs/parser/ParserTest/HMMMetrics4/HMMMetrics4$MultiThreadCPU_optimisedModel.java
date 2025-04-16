@@ -766,15 +766,15 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						
 						// Store the sample task probability
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -792,18 +792,19 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$sampleValue = logProbability$sample241[sample$var196][server][timeStep$var226];
-						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var231[sample$var196][server][timeStep$var226] = cv$sampleValue;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+						// Variable declaration of cv$rvAccumulator moved.
+						double cv$rvAccumulator = logProbability$sample241[sample$var196][server][timeStep$var226];
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+						logProbability$var231[sample$var196][server][timeStep$var226] = cv$rvAccumulator;
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1687,15 +1688,15 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						
 						// Store the sample task probability
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$distributionAccumulator);
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1713,18 +1714,19 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$sampleValue = logProbability$sample241[sample$var196][server][timeStep$var226];
-						cv$accumulator = (cv$accumulator + cv$sampleValue);
-						logProbability$var231[sample$var196][server][timeStep$var226] = cv$sampleValue;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleValue);
+						// Variable declaration of cv$rvAccumulator moved.
+						double cv$rvAccumulator = logProbability$sample241[sample$var196][server][timeStep$var226];
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+						logProbability$var231[sample$var196][server][timeStep$var226] = cv$rvAccumulator;
 					}
 				}
 			}
 			
 			// Update the variable probability
 			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -3493,9 +3495,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var2740's comment
+			// cv$temp$1$$var2728's comment
 			// 
-			// $var2740's comment
+			// $var2728's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -3517,9 +3519,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				if(((0 <= var32) && (var32 < noStates))) {
 					// Substituted "index$sample$3_2" with its value "sample$var45".
 					// 
-					// cv$temp$3$$var2753's comment
+					// cv$temp$3$$var2741's comment
 					// 
-					// $var2753's comment
+					// $var2741's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var72's comment
@@ -3797,9 +3799,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$22$$var2918's comment
+					// cv$temp$22$$var2906's comment
 					// 
-					// $var2918's comment
+					// $var2906's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$21$var72's comment
@@ -4009,9 +4011,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var3004's comment
+						// cv$temp$1$$var2992's comment
 						// 
-						// $var3004's comment
+						// $var2992's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var72's comment
@@ -4279,9 +4281,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var3005's comment
+							// cv$temp$3$$var2993's comment
 							// 
-							// $var3005's comment
+							// $var2993's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var72's comment
@@ -4579,9 +4581,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var3007's comment
+						// cv$temp$7$$var2995's comment
 						// 
-						// $var3007's comment
+						// $var2995's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var72's comment
@@ -4895,9 +4897,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$77$$var3507's comment
+					// cv$temp$77$$var3495's comment
 					// 
-					// $var3507's comment
+					// $var3495's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$76$var72's comment

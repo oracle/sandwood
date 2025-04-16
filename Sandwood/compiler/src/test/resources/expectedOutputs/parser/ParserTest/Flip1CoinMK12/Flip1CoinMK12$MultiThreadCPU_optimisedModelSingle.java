@@ -25,13 +25,14 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flips;
+	private double logProbability$sample16;
+	private double logProbability$sample28;
+	private double logProbability$sample35;
 	private double logProbability$var13;
 	private double logProbability$var14;
 	private double logProbability$var23;
-	private double logProbability$var24;
 	private double logProbability$var26;
 	private double logProbability$var30;
-	private double logProbability$var31;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -288,10 +289,16 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if(guard1)
-				// Add the probability of this sample task to the sample task accumulator.
+			if(guard1) {
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
 				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -306,26 +313,28 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta(var14, 1.0, 1.0);
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(var14, 1.0, 1.0);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				cv$sampleAccumulator = cv$distributionAccumulator;
+				
+				// Store the sample task probability
+				logProbability$sample16 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			}
 			logProbability$var13 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
+			// Update the variable probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$var14 = cv$sampleAccumulator;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1)
-				// Update the variable probability
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
+			logProbability$var14 = (logProbability$var14 + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -352,25 +361,25 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var13 = logProbability$var14;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1)
+			double cv$rvAccumulator = 0.0;
+			if(guard1) {
+				cv$rvAccumulator = logProbability$sample16;
+				
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$bias = (logProbability$bias + logProbability$var14);
+				logProbability$bias = (logProbability$bias + logProbability$sample16);
+			}
+			logProbability$var13 = cv$rvAccumulator;
+			
+			// Update the variable probability
+			logProbability$var14 = (logProbability$var14 + cv$rvAccumulator);
 			
 			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var14);
+			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample16)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var14);
+				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
@@ -383,10 +392,16 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if((!guard1 && (guard2 <= 2)))
-				// Add the probability of this sample task to the sample task accumulator.
+			if((!guard1 && (guard2 <= 2))) {
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
 				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -401,16 +416,20 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta((var26 * 2), 1.0, 1.0);
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var26 * 2), 1.0, 1.0);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				cv$sampleAccumulator = cv$distributionAccumulator;
+				
+				// Store the sample task probability
+				logProbability$sample28 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			}
 			logProbability$var23 = cv$sampleAccumulator;
-			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var24 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -419,16 +438,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var26 = (logProbability$var26 + cv$sampleAccumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && (guard2 <= 2)))
-				// Update the variable probability
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -455,30 +464,25 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var23 = logProbability$var24;
+			double cv$rvAccumulator = 0.0;
+			if((!guard1 && (guard2 <= 2))) {
+				cv$rvAccumulator = logProbability$sample28;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + logProbability$sample28);
+			}
+			logProbability$var23 = cv$rvAccumulator;
 			
 			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$var26 = (logProbability$var26 + logProbability$var24);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && (guard2 <= 2)))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$bias = (logProbability$bias + logProbability$var24);
+			logProbability$var26 = (logProbability$var26 + cv$rvAccumulator);
 			
 			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var24);
+			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample28)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var24);
+				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
@@ -491,10 +495,16 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if((!guard1 && !(guard2 <= 2)))
-				// Add the probability of this sample task to the sample task accumulator.
+			if((!guard1 && !(guard2 <= 2))) {
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
 				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -509,16 +519,20 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta((var33 * 3), 1.0, 1.0);
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var33 * 3), 1.0, 1.0);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				cv$sampleAccumulator = cv$distributionAccumulator;
+				
+				// Store the sample task probability
+				logProbability$sample35 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			}
 			logProbability$var30 = cv$sampleAccumulator;
-			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var31 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -527,16 +541,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var33 = (logProbability$var33 + cv$sampleAccumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && !(guard2 <= 2)))
-				// Update the variable probability
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -563,30 +567,25 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var30 = logProbability$var31;
+			double cv$rvAccumulator = 0.0;
+			if((!guard1 && !(guard2 <= 2))) {
+				cv$rvAccumulator = logProbability$sample35;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + logProbability$sample35);
+			}
+			logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$var33 = (logProbability$var33 + logProbability$var31);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!guard1 && !(guard2 <= 2)))
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$bias = (logProbability$bias + logProbability$var31);
+			logProbability$var33 = (logProbability$var33 + cv$rvAccumulator);
 			
 			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var31);
+			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample35)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var31);
+				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
@@ -1060,17 +1059,18 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$var13 = 0.0;
+		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$var14 = 0.0;
+			logProbability$sample16 = 0.0;
 		logProbability$var23 = 0.0;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var24 = 0.0;
+			logProbability$sample28 = 0.0;
 		logProbability$var30 = 0.0;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$var31 = 0.0;
+			logProbability$sample35 = 0.0;
 		logProbability$bernoulli = 0.0;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample52)
