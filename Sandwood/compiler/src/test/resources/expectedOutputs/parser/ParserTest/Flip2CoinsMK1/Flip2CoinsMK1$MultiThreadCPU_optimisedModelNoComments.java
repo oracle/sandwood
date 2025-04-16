@@ -133,8 +133,10 @@ class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
 				double cv$sampleAccumulator = 0.0;
-				for(int var43 = 0; var43 < length$flipsMeasured[j]; var43 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j][var43], bias[j]));
+				for(int var43 = 0; var43 < length$flipsMeasured[j]; var43 += 1) {
+					double var32 = bias[j];
+					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var43]?var32:(1.0 - var32))));
+				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli[j] = cv$sampleAccumulator;
 				logProbability$sample44[j] = cv$sampleAccumulator;

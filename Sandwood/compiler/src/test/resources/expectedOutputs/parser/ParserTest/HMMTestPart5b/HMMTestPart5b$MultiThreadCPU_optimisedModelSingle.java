@@ -761,7 +761,9 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int j = 5; j < (samples + 5); j += 1)
+			for(int j = 5; j < (samples + 5); j += 1) {
+				double var96 = bias[st[(j - 5)]];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -777,7 +779,8 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[(j - 5)], bias[st[(j - 5)]]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[(j - 5)]?var96:(1.0 - var96))));
+			}
 			logProbability$var97 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -955,9 +958,21 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulatedProbabilities = ((((0.0 <= (st[1] / 2)) && ((st[1] / 2) < 2))?Math.log(m[0][(st[1] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Substituted "j" with its value "5".
-			if((0 < samples))
+			if((0 < samples)) {
 				// Processing sample task 99 of consumer random variable null.
+				// Variable declaration of cv$temp$4$var96 moved.
 				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 97.
+				// 
+				// Looking for a path between Sample 53 and consumer Bernoulli 97.
+				// 
+				// Value of the variable at this index
+				// 
+				// Substituted "cv$valuePos" with its value "0".
+				double cv$temp$4$var96 = bias[0];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -972,18 +987,8 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// inputs.
 				// 
 				// Substituted "j" with its value "5".
-				// 
-				// cv$temp$4$var96's comment
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 97.
-				// 
-				// Looking for a path between Sample 53 and consumer Bernoulli 97.
-				// 
-				// Value of the variable at this index
-				// 
-				// Substituted "cv$valuePos" with its value "0".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[0]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
+			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1036,9 +1041,21 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$accumulatedProbabilities = ((((0.0 <= (st[1] / 2)) && ((st[1] / 2) < 2))?Math.log(m[2][(st[1] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
 		// Substituted "j" with its value "5".
-		if((0 < samples))
+		if((0 < samples)) {
 			// Processing sample task 99 of consumer random variable null.
+			// Variable declaration of cv$temp$4$var96 moved.
 			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 97.
+			// 
+			// Looking for a path between Sample 53 and consumer Bernoulli 97.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "1".
+			double cv$temp$4$var96 = bias[2];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -1053,18 +1070,8 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// inputs.
 			// 
 			// Substituted "j" with its value "5".
-			// 
-			// cv$temp$4$var96's comment
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 97.
-			// 
-			// Looking for a path between Sample 53 and consumer Bernoulli 97.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "1".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[2]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
+		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -1195,6 +1202,19 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Substituted "cv$valuePos" with its value "0".
 				cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$2_2 - 3)] / 2)) && ((st[(index$i$2_2 - 3)] / 2) < 2))?Math.log(m[0][(st[(index$i$2_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
+			// Variable declaration of cv$temp$4$var96 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 97.
+			// 
+			// Looking for a path between Sample 76 and consumer Bernoulli 97.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			double cv$temp$4$var96 = bias[0];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -1210,17 +1230,8 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$4$var96's comment
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 97.
-			// 
-			// Looking for a path between Sample 76 and consumer Bernoulli 97.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var67 - 3)], bias[0]) + cv$accumulatedProbabilities);
+			// Substituted "j" with its value "(i$var67 + 2)".
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var67 - 3)]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1276,6 +1287,19 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Substituted "cv$valuePos" with its value "1".
 			cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$2_2 - 3)] / 2)) && ((st[(index$i$2_2 - 3)] / 2) < 2))?Math.log(m[2][(st[(index$i$2_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
+		// Variable declaration of cv$temp$4$var96 moved.
+		// 
+		// Constructing a random variable input for use later.
+		// 
+		// Processing random variable 97.
+		// 
+		// Looking for a path between Sample 76 and consumer Bernoulli 97.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		double cv$temp$4$var96 = bias[2];
+		
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
@@ -1291,17 +1315,8 @@ class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$4$var96's comment
-		// Constructing a random variable input for use later.
-		// 
-		// Processing random variable 97.
-		// 
-		// Looking for a path between Sample 76 and consumer Bernoulli 97.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var67 - 3)], bias[2]) + cv$accumulatedProbabilities);
+		// Substituted "j" with its value "(i$var67 + 2)".
+		cv$accumulatedProbabilities = (Math.log((flips[(i$var67 - 3)]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 

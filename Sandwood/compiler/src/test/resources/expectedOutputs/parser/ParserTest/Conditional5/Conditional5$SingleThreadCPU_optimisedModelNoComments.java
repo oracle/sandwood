@@ -105,7 +105,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample13() {
 		if(!fixedProbFlag$sample13) {
-			double cv$distributionAccumulator = (((0.0 <= b) && (b <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			logProbability$var12 = cv$distributionAccumulator;
 			logProbability$b = cv$distributionAccumulator;
 			if(!guard)
@@ -124,11 +124,10 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample5() {
 		if(!fixedProbFlag$sample5) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(guard, 0.5);
-			logProbability$bernoulli = cv$distributionAccumulator;
-			logProbability$guard = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			logProbability$bernoulli = -0.6931471805599453;
+			logProbability$guard = -0.6931471805599453;
+			logProbability$$model = (logProbability$$model - 0.6931471805599453);
+			logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
 			fixedProbFlag$sample5 = true;
 		} else {
 			logProbability$bernoulli = logProbability$guard;
@@ -139,7 +138,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
-			double cv$distributionAccumulator = (((0.0 <= a) && (a <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			logProbability$var8 = cv$distributionAccumulator;
 			logProbability$a = cv$distributionAccumulator;
 			if(guard)

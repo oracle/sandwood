@@ -274,7 +274,8 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				int reduceVar$var82$2 = 0;
 				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
 					reduceVar$var82$2 = (reduceVar$var82$2 + st[cv$reduction78Index]);
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$2]);
+				double var83 = bias[reduceVar$var82$2];
+				double cv$distributionAccumulator = Math.log((flips[j$var73]?var83:(1.0 - var83)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var84[j$var73] = cv$distributionAccumulator;
 				logProbability$sample87[j$var73] = cv$distributionAccumulator;
@@ -330,8 +331,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int cv$reduction222Index = (i$var58 + 1); cv$reduction222Index < noCats; cv$reduction222Index += 1)
 				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
 			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$1]) + cv$accumulatedProbabilities);
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+				double cv$temp$2$var83 = bias[reduceVar$var82$1];
+				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))) + cv$accumulatedProbabilities);
+			}
 			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;

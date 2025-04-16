@@ -414,7 +414,9 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int j = 0; j < n; j += 1)
+			for(int j = 0; j < n; j += 1) {
+				double var72 = (double)(1 / a[(j + 1)]);
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -430,7 +432,8 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j], (1 / a[(j + 1)])));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j]?var72:(1.0 - var72))));
+			}
 			logProbability$var73 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -578,6 +581,17 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Value of the variable at this index
 				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$3_2]) && (a[index$i$3_2] < 5))?Math.log(m[cv$valuePos][a[index$i$3_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
+			// Variable declaration of cv$temp$4$var72 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 73.
+			// 
+			// Looking for a path between Sample 55 and consumer Bernoulli 73.
+			// 
+			// Value of the variable at this index
+			double cv$temp$4$var72 = (double)(1 / cv$valuePos);
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -594,18 +608,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// inputs.
 			// 
 			// Substituted "j" with its value "(i$var46 - 1)".
-			// 
-			// cv$temp$4$var72's comment
-			// Variable declaration of cv$temp$4$var72 moved.
-			// 
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 73.
-			// 
-			// Looking for a path between Sample 55 and consumer Bernoulli 73.
-			// 
-			// Value of the variable at this index
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var46 - 1)], (1 / cv$valuePos)) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var46 - 1)]?cv$temp$4$var72:(1.0 - cv$temp$4$var72))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 

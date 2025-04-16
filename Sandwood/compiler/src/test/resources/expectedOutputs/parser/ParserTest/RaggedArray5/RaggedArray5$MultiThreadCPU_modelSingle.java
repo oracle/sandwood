@@ -282,7 +282,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							double var38 = d[y];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var38));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var38:(1.0 - var38))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -525,14 +525,14 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													}
 													
 													// Record the probability of sample task 54 generating output with current configuration.
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var51], cv$temp$2$var38)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var51], cv$temp$2$var38)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														// If the second value is -infinity.
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var51], cv$temp$2$var38));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var51], cv$temp$2$var38)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var51], cv$temp$2$var38)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38)))))) + 1)) + (Math.log(1.0) + Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38)))));
 													}
 													
 													// Recorded the probability of reaching sample task 54 with the current configuration.

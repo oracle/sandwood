@@ -139,7 +139,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
 					double cv$sampleValue = indirection1[i][j];
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$var58[i][j] = cv$distributionAccumulator;
 					logProbability$sample61[i][j] = cv$distributionAccumulator;
@@ -174,10 +174,10 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		double cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		indirection1[i][j] = cv$proposedValue;
 		indirection2[i][j] = indirection1[i][j];
-		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			indirection1[i][j] = cv$originalValue;
 			indirection2[i][j] = indirection1[i][j];

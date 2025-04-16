@@ -109,7 +109,7 @@ class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample23) {
 			double cv$accumulator = 0.0;
 			for(int i$var21 = 0; i$var21 < samples; i$var21 += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[i$var21], bias);
+				double cv$distributionAccumulator = Math.log((flips[i$var21]?bias:(1.0 - bias)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$bernoulli[i$var21] = cv$distributionAccumulator;
 				logProbability$sample23[i$var21] = cv$distributionAccumulator;

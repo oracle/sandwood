@@ -243,7 +243,7 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flip, bias);
+			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 

@@ -179,7 +179,7 @@ class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						boolean cv$sampleValue = flips[j][var30];
 						{
 							{
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[((j - 0) / 1)]));
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias[((j - 0) / 1)]:(1.0 - bias[((j - 0) / 1)]))));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {

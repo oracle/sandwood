@@ -147,7 +147,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double var11 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue <= var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue < var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -268,7 +268,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double var3 = 0.5;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var3));
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -356,7 +356,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double var7 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue <= var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue < var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))

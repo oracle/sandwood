@@ -135,8 +135,10 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void logProbabilityValue$sample54() {
 		if(!fixedProbFlag$sample54) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var51], d[y]));
+			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
+				double var38 = d[y];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var51]?var38:(1.0 - var38))));
+			}
 			logProbability$var39 = cv$sampleAccumulator;
 			logProbability$var52 = cv$sampleAccumulator;
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
@@ -185,8 +187,10 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if((1 == y))
 				lengthCV$a$37_10 = 3;
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
-			for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var51], d[y]) + cv$accumulatedProbabilities);
+			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
+				double cv$temp$2$var38 = d[y];
+				cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
@@ -200,8 +204,10 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if((1 == y))
 			lengthCV$a$37_10 = 3;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
-		for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var51], d[y]) + cv$accumulatedProbabilities);
+		for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
+			double cv$temp$2$var38 = d[y];
+			cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+		}
 		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);

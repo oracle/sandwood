@@ -611,7 +611,7 @@ class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var47], bias));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var47]?bias:(1.0 - bias))));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -737,7 +737,7 @@ class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$bias" with its value "traceTempVariable$bias$2_2".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var47], var26) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var47]?var26:(1.0 - var26))) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -778,7 +778,7 @@ class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// inputs.
 			// 
 			// Substituted "cv$temp$2$bias" with its value "traceTempVariable$bias$2_2".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var47], var26) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[var47]?var26:(1.0 - var26))) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -852,7 +852,7 @@ class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$bias" with its value "traceTempVariable$bias$2_2".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var47], var33) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var47]?var33:(1.0 - var33))) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -893,7 +893,7 @@ class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// inputs.
 			// 
 			// Substituted "cv$temp$2$bias" with its value "traceTempVariable$bias$2_2".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var47], var33) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[var47]?var33:(1.0 - var33))) + cv$accumulatedProbabilities);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and

@@ -274,7 +274,9 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < samples; i += 1)
+			for(int i = 0; i < samples; i += 1) {
+				double var24 = bias[i];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -290,7 +292,8 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[i], bias[i]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[i]?var24:(1.0 - var24))));
+			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability

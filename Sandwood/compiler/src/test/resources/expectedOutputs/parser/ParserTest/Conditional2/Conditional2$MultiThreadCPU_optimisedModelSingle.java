@@ -175,7 +175,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
+				cv$sampleAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			}
 			logProbability$var18 = cv$sampleAccumulator;
 			
@@ -260,7 +260,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(guard, 0.5);
+			double cv$weightedProbability = -0.6931471805599453;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((guard && !(value2[0] == 1.0)))
@@ -521,19 +521,17 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var2" with its value "0.5".
-		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "0".
-		cv$var4$stateProbabilityGlobal[0] = DistributionSampling.logProbabilityBernoulli(false, 0.5);
+		cv$var4$stateProbabilityGlobal[0] = -0.6931471805599453;
 		
 		// Write out the new value of the sample.
 		// 
@@ -564,27 +562,11 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching branch with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var2" with its value "0.5".
-		// 
-		// Variable declaration of cv$currentValue moved.
-		// Declaration comment was:
-		// The value currently being tested
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		cv$var4$stateProbabilityGlobal[1] = (cv$accumulatedConsumerProbabilities + DistributionSampling.logProbabilityBernoulli(true, 0.5));
+		cv$var4$stateProbabilityGlobal[1] = (cv$accumulatedConsumerProbabilities - 0.6931471805599453);
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 

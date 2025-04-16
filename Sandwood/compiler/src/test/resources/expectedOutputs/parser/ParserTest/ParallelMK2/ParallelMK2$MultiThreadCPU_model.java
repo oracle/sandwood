@@ -166,7 +166,7 @@ class ParallelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double var24 = 1.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((var23 <= cv$sampleValue) && (cv$sampleValue <= var24))?(-Math.log((var24 - var23))):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((var23 <= cv$sampleValue) && (cv$sampleValue < var24))?(-Math.log((var24 - var23))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -449,7 +449,7 @@ class ParallelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var23 <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var24))?(-Math.log((cv$temp$1$var24 - cv$temp$0$var23))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var23 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var24))?(-Math.log((cv$temp$1$var24 - cv$temp$0$var23))):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 31.
 					{

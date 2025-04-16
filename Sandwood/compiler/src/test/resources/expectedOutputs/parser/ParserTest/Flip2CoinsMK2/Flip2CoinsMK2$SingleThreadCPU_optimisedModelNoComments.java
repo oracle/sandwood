@@ -160,7 +160,8 @@ class Flip2CoinsMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < samples; i += 1) {
 				for(int j = 0; j < coins; j += 1) {
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[i][j], bias[j]);
+					double var43 = bias[j];
+					double cv$distributionAccumulator = Math.log((flips[i][j]?var43:(1.0 - var43)));
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					logProbability$bernoulli[i][j] = cv$distributionAccumulator;
 					logProbability$sample45[i][j] = cv$distributionAccumulator;

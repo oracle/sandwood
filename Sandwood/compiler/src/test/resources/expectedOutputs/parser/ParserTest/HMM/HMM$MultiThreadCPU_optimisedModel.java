@@ -711,6 +711,8 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
+				double var84 = bias[st[j]];
+				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -734,7 +736,7 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], bias[st[j]]);
+				double cv$distributionAccumulator = Math.log((flips[j]?var84:(1.0 - var84)));
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -927,9 +929,19 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < states))?Math.log(m[cv$valuePos][st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Substituted "j" with its value "0".
-			if((0 < samples))
+			if((0 < samples)) {
 				// Processing sample task 87 of consumer random variable null.
+				// Variable declaration of cv$temp$4$var84 moved.
 				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 85.
+				// 
+				// Looking for a path between Sample 53 and consumer Bernoulli 85.
+				// 
+				// Value of the variable at this index
+				double cv$temp$4$var84 = bias[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -944,18 +956,8 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// inputs.
 				// 
 				// Substituted "j" with its value "0".
-				// 
-				// cv$temp$4$var84's comment
-				// Variable declaration of cv$temp$4$var84 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 85.
-				// 
-				// Looking for a path between Sample 53 and consumer Bernoulli 85.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[cv$valuePos]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$4$var84:(1.0 - cv$temp$4$var84))) + cv$accumulatedProbabilities);
+			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1097,6 +1099,17 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// Value of the variable at this index
 				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < states))?Math.log(m[cv$valuePos][st[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
+			// Variable declaration of cv$temp$4$var84 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 85.
+			// 
+			// Looking for a path between Sample 71 and consumer Bernoulli 85.
+			// 
+			// Value of the variable at this index
+			double cv$temp$4$var84 = bias[cv$valuePos];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -1113,18 +1126,7 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 			// inputs.
 			// 
 			// Substituted "j" with its value "i".
-			// 
-			// cv$temp$4$var84's comment
-			// Variable declaration of cv$temp$4$var84 moved.
-			// 
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 85.
-			// 
-			// Looking for a path between Sample 71 and consumer Bernoulli 85.
-			// 
-			// Value of the variable at this index
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i], bias[cv$valuePos]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[i]?cv$temp$4$var84:(1.0 - cv$temp$4$var84))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 

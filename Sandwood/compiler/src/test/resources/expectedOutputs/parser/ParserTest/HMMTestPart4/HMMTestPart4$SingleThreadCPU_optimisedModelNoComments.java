@@ -247,7 +247,8 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1) {
-						double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[l][n][p], bias[st[p][l][n]]);
+						double var184 = bias[st[p][l][n]];
+						double cv$distributionAccumulator = Math.log((flips[l][n][p]?var184:(1.0 - var184)));
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 						logProbability$var185[l][p][n] = cv$distributionAccumulator;
 						logProbability$sample191[l][p][n] = cv$distributionAccumulator;
@@ -334,8 +335,12 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample124(int i1, int j1, int k1) {
-		cv$var121$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[0]) + Math.log(m[0][0]));
-		cv$var121$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[1]) + Math.log(m[0][1]));
+		{
+			double cv$temp$2$var184 = bias[0];
+			cv$var121$stateProbabilityGlobal[0] = (Math.log((flips[j1][k1][i1]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + Math.log(m[0][0]));
+		}
+		double cv$temp$2$var184 = bias[1];
+		cv$var121$stateProbabilityGlobal[1] = (Math.log((flips[j1][k1][i1]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + Math.log(m[0][1]));
 		double cv$logSum;
 		double cv$lseMax = cv$var121$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var121$stateProbabilityGlobal[1];
@@ -392,13 +397,17 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void sample84() {
 		{
 			double cv$accumulatedProbabilities = Math.log(m[0][0]);
-			if((0 < samples))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0][0][0], bias[0]) + cv$accumulatedProbabilities);
+			if((0 < samples)) {
+				double cv$temp$2$var184 = bias[0];
+				cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + cv$accumulatedProbabilities);
+			}
 			cv$var81$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		double cv$accumulatedProbabilities = Math.log(m[0][1]);
-		if((0 < samples))
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0][0][0], bias[1]) + cv$accumulatedProbabilities);
+		if((0 < samples)) {
+			double cv$temp$2$var184 = bias[1];
+			cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + cv$accumulatedProbabilities);
+		}
 		cv$var81$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
 		double cv$lseMax = cv$var81$stateProbabilityGlobal[0];

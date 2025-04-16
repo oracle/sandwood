@@ -403,8 +403,10 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				if(fixedFlag$sample55) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if((j < (n - 1))) {
+						double var72 = (double)(1 / a[(j + 1)]);
+						
 						// Store the value of the function call, so the function call is only made once.
-						cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, (1 / a[(j + 1)]));
+						cv$distributionAccumulator = Math.log((cv$sampleValue?var72:(1.0 - var72)));
 						
 						// Add the probability of this distribution configuration to the accumulator.
 						// 
@@ -420,9 +422,10 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						for(int index$sample55$5 = 0; index$sample55$5 < 5; index$sample55$5 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							double cv$probabilitySample55Value6 = distribution$sample55[(i$var46 - 1)][index$sample55$5];
+							double var72 = (double)(1 / a[(j + 1)]);
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(cv$probabilitySample55Value6) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, (1 / a[(j + 1)])));
+							double cv$weightedProbability = (Math.log(cv$probabilitySample55Value6) + Math.log((cv$sampleValue?var72:(1.0 - var72))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -705,7 +708,9 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int j = 0; j < n; j += 1)
+			for(int j = 0; j < n; j += 1) {
+				double var72 = (double)(1 / a[(j + 1)]);
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -721,7 +726,8 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j], (1 / a[(j + 1)])));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j]?var72:(1.0 - var72))));
+			}
 			logProbability$var73 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -939,6 +945,17 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					// Initialize a counter to track the reached distributions.
 					cv$reachedDistributionSourceRV = 1.0;
 					
+					// Variable declaration of cv$temp$6$var72 moved.
+					// 
+					// Constructing a random variable input for use later.
+					// 
+					// Processing random variable 73.
+					// 
+					// Looking for a path between Sample 55 and consumer Bernoulli 73.
+					// 
+					// Value of the variable at this index
+					double cv$temp$6$var72 = (double)(1 / cv$valuePos);
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -963,7 +980,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					// Constructing a random variable input for use later.
 					// 
 					// Enumerating the possible arguments for Categorical 53.
-					cv$stateProbabilityValue = (DistributionSampling.logProbabilityBernoulli(flips[0], (1 / cv$valuePos)) + Math.log(m[0][cv$valuePos]));
+					cv$stateProbabilityValue = (Math.log((flips[0]?cv$temp$6$var72:(1.0 - cv$temp$6$var72))) + Math.log(m[0][cv$valuePos]));
 				}
 			}
 			int index$i$18 = (i$var46 - 1);
@@ -987,6 +1004,15 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					if(((0 <= var28) && (var28 < 5))) {
 						// Record the reached probability density.
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample55Value20);
+						
+						// Variable declaration of cv$temp$8$var72 moved.
+						// 
+						// Constructing a random variable input for use later.
+						// 
+						// Processing random variable 73.
+						// 
+						// Looking for a path between Sample 55 and consumer Bernoulli 73.
+						double cv$temp$8$var72 = (double)(1 / index$sample55$19);
 						
 						// Variable declaration of cv$accumulatedProbabilities moved.
 						// Declaration comment was:
@@ -1018,15 +1044,6 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						// 
 						// Substituted "j" with its value "(i$var46 - 1)".
 						// 
-						// cv$temp$8$var72's comment
-						// Variable declaration of cv$temp$8$var72 moved.
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Processing random variable 73.
-						// 
-						// Looking for a path between Sample 55 and consumer Bernoulli 73.
-						// 
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
@@ -1037,7 +1054,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 						// Constructing a random variable input for use later.
 						// 
 						// Value of the variable at this index
-						double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityBernoulli(flips[(i$var46 - 1)], (1 / index$sample55$19)) + Math.log(cv$probabilitySample55Value20)) + Math.log(m[cv$valuePos][cv$valuePos]));
+						double cv$accumulatedProbabilities = ((Math.log((flips[(i$var46 - 1)]?cv$temp$8$var72:(1.0 - cv$temp$8$var72))) + Math.log(cv$probabilitySample55Value20)) + Math.log(m[cv$valuePos][cv$valuePos]));
 						
 						// Add the values for the source and any standard consumers for this configuration
 						// of arguments to the source.

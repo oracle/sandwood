@@ -475,6 +475,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			for(int var46 = 0; var46 < samples; var46 += 1) {
 				double[] inner = bias[0];
 				inner[0] = q;
+				double var34 = inner[b];
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -491,7 +492,7 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var46], inner[b]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var46]?var34:(1.0 - var34))));
 			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			

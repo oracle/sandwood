@@ -173,7 +173,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double var8 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((min <= cv$sampleValue) && (cv$sampleValue <= var8))?(-Math.log((var8 - min))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((min <= cv$sampleValue) && (cv$sampleValue < var8))?(-Math.log((var8 - min))):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -397,7 +397,7 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$min <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var8))?(-Math.log((cv$temp$1$var8 - cv$temp$0$min))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$min <= cv$currentValue) && (cv$currentValue < cv$temp$1$var8))?(-Math.log((cv$temp$1$var8 - cv$temp$0$min))):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 11.
 					{

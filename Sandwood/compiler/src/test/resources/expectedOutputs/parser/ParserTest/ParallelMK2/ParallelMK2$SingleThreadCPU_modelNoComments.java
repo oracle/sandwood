@@ -123,7 +123,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						{
 							double var23 = 0.0;
 							double var24 = 1.0;
-							double cv$weightedProbability = (Math.log(1.0) + (((var23 <= cv$sampleValue) && (cv$sampleValue <= var24))?(-Math.log((var24 - var23))):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((var23 <= cv$sampleValue) && (cv$sampleValue < var24))?(-Math.log((var24 - var23))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -276,7 +276,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$1$var24 = 1.0;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var23 <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var24))?(-Math.log((cv$temp$1$var24 - cv$temp$0$var23))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var23 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var24))?(-Math.log((cv$temp$1$var24 - cv$temp$0$var23))):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean[] guard$sample26gaussian31 = guard$sample26gaussian31$global;

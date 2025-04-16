@@ -151,7 +151,201 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
 
         // Split out expensive constants so that future model transformations can cache the values when possible.
 
-        if(source == VariableType.TruncatedGaussian) {
+        if(source == VariableType.Bernoulli) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<BooleanVariable> value = (IRTreeReturn<BooleanVariable>) args[0];
+                    IRTreeReturn<DoubleVariable> elementProb = (IRTreeReturn<DoubleVariable>) args[1];
+
+                    return (IRTreeReturn<X>) log(conditionalAssignment(value, elementProb, subtractDD(constant(1.0), elementProb)));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<BooleanVariable> value = (IRTreeReturn<BooleanVariable>) args[0];
+                    IRTreeReturn<DoubleVariable> elementProb = (IRTreeReturn<DoubleVariable>) args[1];
+
+                    return (IRTreeReturn<X>) conditionalAssignment(value, elementProb, subtractDD(constant(1.0), elementProb));
+                }
+                case SAMPLE:
+                    break;
+            }
+        } else if(source == VariableType.Categorical) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<ArrayVariable<DoubleVariable>> elementProbs = (IRTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
+                    IRTreeReturn<IntVariable> length = (IRTreeReturn<IntVariable>) args[2];
+
+                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
+                    constraints.add(greaterThanEqual(value, constant(0.0)));
+                    constraints.add(lessThan(value, length));
+                    IRTreeReturn<BooleanVariable> guard = and(constraints);
+
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, log(arrayGet(elementProbs, value)),
+                            constant(Double.NEGATIVE_INFINITY));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<ArrayVariable<DoubleVariable>> elementProbs = (IRTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
+                    IRTreeReturn<IntVariable> length = (IRTreeReturn<IntVariable>) args[2];
+
+                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
+                    constraints.add(greaterThanEqual(value, constant(0.0)));
+                    constraints.add(lessThan(value, length));
+                    IRTreeReturn<BooleanVariable> guard = and(constraints);
+
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, arrayGet(elementProbs, value), constant(0.0));
+                }
+                case SAMPLE:
+                    break;
+            }
+        } else if(source == VariableType.Exponential) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
+                    IRTreeReturn<DoubleVariable> lambda = (IRTreeReturn<DoubleVariable>) args[1];
+
+                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
+                    constraints.add(greaterThanEqual(value, constant(0.0)));
+                    constraints.add(negateBoolean(eq(value, constant(Double.POSITIVE_INFINITY))));
+                    IRTreeReturn<BooleanVariable> guard = and(constraints);
+
+                    return (IRTreeReturn<X>) conditionalAssignment(guard,
+                            subtractDD(log(lambda), multiplyDD(lambda, value)), constant(Double.NEGATIVE_INFINITY));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
+                    IRTreeReturn<DoubleVariable> lambda = (IRTreeReturn<DoubleVariable>) args[1];
+
+                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
+                    constraints.add(greaterThanEqual(value, constant(0.0)));
+                    constraints.add(negateBoolean(eq(value, constant(Double.POSITIVE_INFINITY))));
+                    IRTreeReturn<BooleanVariable> guard = and(constraints);
+
+                    return (IRTreeReturn<X>) conditionalAssignment(guard,
+                            multiplyDD(lambda, exp(negate(multiplyDD(lambda, value)))), constant(0.0));
+                }
+                case SAMPLE: {
+                    IRTreeReturn<DoubleVariable> lambda = (IRTreeReturn<DoubleVariable>) args[1];
+
+                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
+                    newArgs[0] = args[0];
+                    IRTreeReturn<DoubleVariable> sample = new IRRVFunctionCallReturn<DoubleVariable>(t,
+                            VariableType.DoubleVariable, source, sink, newArgs);
+                    return (IRTreeReturn<X>) divideDD(sample, lambda);
+                }
+            }
+        } else if(source == VariableType.Geometric) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(Double.NEGATIVE_INFINITY));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(0.0));
+                }
+                case SAMPLE:
+                    break;
+            }
+        } else if(source == VariableType.Gaussian) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
+                    IRTreeReturn<DoubleVariable> mean = (IRTreeReturn<DoubleVariable>) args[1];
+                    IRTreeReturn<DoubleVariable> variance = (IRTreeReturn<DoubleVariable>) args[2];
+
+                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
+                    newArgs[0] = normalizeGaussian(value, mean, variance);
+                    IRTreeReturn<DoubleVariable> p = new IRRVFunctionCallReturn<DoubleVariable>(t,
+                            VariableType.DoubleVariable, source, sink, newArgs);
+                    // It is possible to change the multiplication with the square root of the variance if the
+                    // optimisations start caching results.
+                    return (IRTreeReturn<X>) subtractDD(p, multiplyDD(constant(0.5), log(variance)));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
+                    IRTreeReturn<DoubleVariable> mean = (IRTreeReturn<DoubleVariable>) args[1];
+                    IRTreeReturn<DoubleVariable> variance = (IRTreeReturn<DoubleVariable>) args[2];
+
+                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
+                    newArgs[0] = normalizeGaussian(value, mean, variance);
+                    IRTreeReturn<DoubleVariable> p = new IRRVFunctionCallReturn<DoubleVariable>(t,
+                            VariableType.DoubleVariable, source, sink, newArgs);
+                    return (IRTreeReturn<X>) divideDD(p, sqrt(variance));
+                }
+                case SAMPLE: {
+                    IRTreeReturn<DoubleVariable> mean = (IRTreeReturn<DoubleVariable>) args[1];
+                    IRTreeReturn<DoubleVariable> variance = (IRTreeReturn<DoubleVariable>) args[2];
+
+                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
+                    newArgs[0] = args[0];
+                    IRTreeReturn<DoubleVariable> sample = new IRRVFunctionCallReturn<DoubleVariable>(t,
+                            VariableType.DoubleVariable, source, sink, newArgs);
+
+                    return (IRTreeReturn<X>) addDD(multiplyDD(sqrt(variance), sample), mean);
+                }
+            }
+        } else if(source == VariableType.NegativeBinomial) {
+            switch(t) {
+                case ADD_DISTRIBUTION:
+                case CONJUGATE_SAMPLE:
+                    break;
+                case LOG_PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(Double.NEGATIVE_INFINITY));
+                }
+                case PROBABILITY: {
+                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
+                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
+                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
+                            t, outputType, source, sink, args);
+                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(0.0));
+                }
+                case SAMPLE: {
+                    // Samples are drawn from a Poisson distribution with lambda drawn from the Gamma distribution with
+                    // parameters r and p/(1-p)
+                    IRTreeReturn<DoubleVariable> p = (IRTreeReturn<DoubleVariable>) args[1];
+                    IRTreeReturn<IntVariable> r = (IRTreeReturn<IntVariable>) args[2];
+
+                    IRTreeReturn<?>[] gammaArgs = new IRTreeReturn<?>[3];
+                    gammaArgs[0] = args[0]; // RNG
+                    gammaArgs[1] = r;
+                    gammaArgs[2] = divideDD(p, subtractDD(constant(1.0), p));
+
+                    IRTreeReturn<?>[] poissonArgs = new IRTreeReturn<?>[2];
+                    poissonArgs[0] = args[0]; // RNG
+                    poissonArgs[1] = constructInternal(t, VariableType.DoubleVariable, VariableType.Gamma, sink,
+                            gammaArgs);
+
+                    return (IRTreeReturn<X>) constructInternal(t, VariableType.IntVariable, VariableType.Poisson, sink,
+                            poissonArgs);
+                }
+            }
+        } else if(source == VariableType.TruncatedGaussian) {
             switch(t) {
                 case ADD_DISTRIBUTION:
                 case CONJUGATE_SAMPLE:
@@ -237,179 +431,6 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
                     return (IRTreeReturn<X>) addDD(multiplyDD(sqrt(variance), sample), mean);
                 }
             }
-        } else if(source == VariableType.Gaussian) {
-            switch(t) {
-                case ADD_DISTRIBUTION:
-                case CONJUGATE_SAMPLE:
-                    break;
-                case LOG_PROBABILITY: {
-                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
-                    IRTreeReturn<DoubleVariable> mean = (IRTreeReturn<DoubleVariable>) args[1];
-                    IRTreeReturn<DoubleVariable> variance = (IRTreeReturn<DoubleVariable>) args[2];
-
-                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
-                    newArgs[0] = normalizeGaussian(value, mean, variance);
-                    IRTreeReturn<DoubleVariable> p = new IRRVFunctionCallReturn<DoubleVariable>(t,
-                            VariableType.DoubleVariable, source, sink, newArgs);
-                    // It is possible to change the multiplication with the square root of the variance if the
-                    // optimisations start caching results.
-                    return (IRTreeReturn<X>) subtractDD(p, multiplyDD(constant(0.5), log(variance)));
-                }
-                case PROBABILITY: {
-                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
-                    IRTreeReturn<DoubleVariable> mean = (IRTreeReturn<DoubleVariable>) args[1];
-                    IRTreeReturn<DoubleVariable> variance = (IRTreeReturn<DoubleVariable>) args[2];
-
-                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
-                    newArgs[0] = normalizeGaussian(value, mean, variance);
-                    IRTreeReturn<DoubleVariable> p = new IRRVFunctionCallReturn<DoubleVariable>(t,
-                            VariableType.DoubleVariable, source, sink, newArgs);
-                    return (IRTreeReturn<X>) divideDD(p, sqrt(variance));
-                }
-                case SAMPLE: {
-                    IRTreeReturn<DoubleVariable> mean = (IRTreeReturn<DoubleVariable>) args[1];
-                    IRTreeReturn<DoubleVariable> variance = (IRTreeReturn<DoubleVariable>) args[2];
-
-                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
-                    newArgs[0] = args[0];
-                    IRTreeReturn<DoubleVariable> sample = new IRRVFunctionCallReturn<DoubleVariable>(t,
-                            VariableType.DoubleVariable, source, sink, newArgs);
-
-                    return (IRTreeReturn<X>) addDD(multiplyDD(sqrt(variance), sample), mean);
-                }
-            }
-        } else if(source == VariableType.Categorical) {
-            switch(t) {
-                case ADD_DISTRIBUTION:
-                case CONJUGATE_SAMPLE:
-                case SAMPLE:
-                    break;
-                case LOG_PROBABILITY: {
-                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
-                    IRTreeReturn<ArrayVariable<DoubleVariable>> elementProbs = (IRTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
-                    IRTreeReturn<IntVariable> length = (IRTreeReturn<IntVariable>) args[2];
-
-                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
-                    constraints.add(greaterThanEqual(value, constant(0.0)));
-                    constraints.add(lessThan(value, length));
-                    IRTreeReturn<BooleanVariable> guard = and(constraints);
-
-                    return (IRTreeReturn<X>) conditionalAssignment(guard, log(arrayGet(elementProbs, value)),
-                            constant(Double.NEGATIVE_INFINITY));
-                }
-                case PROBABILITY: {
-                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
-                    IRTreeReturn<ArrayVariable<DoubleVariable>> elementProbs = (IRTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
-                    IRTreeReturn<IntVariable> length = (IRTreeReturn<IntVariable>) args[2];
-
-                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
-                    constraints.add(greaterThanEqual(value, constant(0.0)));
-                    constraints.add(lessThan(value, length));
-                    IRTreeReturn<BooleanVariable> guard = and(constraints);
-
-                    return (IRTreeReturn<X>) conditionalAssignment(guard, arrayGet(elementProbs, value), constant(0.0));
-                }
-            }
-        } else if(source == VariableType.Exponential) {
-            switch(t) {
-                case ADD_DISTRIBUTION:
-                case CONJUGATE_SAMPLE:
-                    break;
-                case LOG_PROBABILITY: {
-                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
-                    IRTreeReturn<DoubleVariable> lambda = (IRTreeReturn<DoubleVariable>) args[1];
-
-                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
-                    constraints.add(greaterThanEqual(value, constant(0.0)));
-                    constraints.add(negateBoolean(eq(value, constant(Double.POSITIVE_INFINITY))));
-                    IRTreeReturn<BooleanVariable> guard = and(constraints);
-
-                    return (IRTreeReturn<X>) conditionalAssignment(guard,
-                            subtractDD(log(lambda), multiplyDD(lambda, value)), constant(Double.NEGATIVE_INFINITY));
-                }
-                case PROBABILITY: {
-                    IRTreeReturn<DoubleVariable> value = (IRTreeReturn<DoubleVariable>) args[0];
-                    IRTreeReturn<DoubleVariable> lambda = (IRTreeReturn<DoubleVariable>) args[1];
-
-                    List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
-                    constraints.add(greaterThanEqual(value, constant(0.0)));
-                    constraints.add(negateBoolean(eq(value, constant(Double.POSITIVE_INFINITY))));
-                    IRTreeReturn<BooleanVariable> guard = and(constraints);
-
-                    return (IRTreeReturn<X>) conditionalAssignment(guard,
-                            multiplyDD(lambda, exp(negate(multiplyDD(lambda, value)))), constant(0.0));
-                }
-                case SAMPLE: {
-                    IRTreeReturn<DoubleVariable> lambda = (IRTreeReturn<DoubleVariable>) args[1];
-
-                    IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[1];
-                    newArgs[0] = args[0];
-                    IRTreeReturn<DoubleVariable> sample = new IRRVFunctionCallReturn<DoubleVariable>(t,
-                            VariableType.DoubleVariable, source, sink, newArgs);
-                    return (IRTreeReturn<X>) divideDD(sample, lambda);
-                }
-            }
-        } else if(source == VariableType.Geometric) {
-            switch(t) {
-                case ADD_DISTRIBUTION:
-                case CONJUGATE_SAMPLE:
-                    break;
-                case LOG_PROBABILITY: {
-                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
-                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
-                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
-                            t, outputType, source, sink, args);
-                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(Double.NEGATIVE_INFINITY));
-                }
-                case PROBABILITY: {
-                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
-                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
-                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
-                            t, outputType, source, sink, args);
-                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(0.0));
-                }
-                case SAMPLE:
-                    break;
-            }
-        } else if(source == VariableType.NegativeBinomial) {
-            switch(t) {
-                case ADD_DISTRIBUTION:
-                case CONJUGATE_SAMPLE:
-                    break;
-                case LOG_PROBABILITY: {
-                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
-                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
-                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
-                            t, outputType, source, sink, args);
-                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(Double.NEGATIVE_INFINITY));
-                }
-                case PROBABILITY: {
-                    IRTreeReturn<IntVariable> value = (IRTreeReturn<IntVariable>) args[0];
-                    IRTreeReturn<BooleanVariable> guard = greaterThanEqual(value, constant(0));
-                    IRTreeReturn<DoubleVariable> function = (IRTreeReturn<DoubleVariable>) new IRRVFunctionCallReturn<>(
-                            t, outputType, source, sink, args);
-                    return (IRTreeReturn<X>) conditionalAssignment(guard, function, constant(0.0));
-                }
-                case SAMPLE: {
-                    // Samples are drawn from a Poisson distribution with lambda drawn from the Gamma distribution with
-                    // parameters r and p/(1-p)
-                    IRTreeReturn<DoubleVariable> p = (IRTreeReturn<DoubleVariable>) args[1];
-                    IRTreeReturn<IntVariable> r = (IRTreeReturn<IntVariable>) args[2];
-
-                    IRTreeReturn<?>[] gammaArgs = new IRTreeReturn<?>[3];
-                    gammaArgs[0] = args[0]; // RNG
-                    gammaArgs[1] = r;
-                    gammaArgs[2] = divideDD(p, subtractDD(constant(1.0), p));
-
-                    IRTreeReturn<?>[] poissonArgs = new IRTreeReturn<?>[2];
-                    poissonArgs[0] = args[0]; // RNG
-                    poissonArgs[1] = constructInternal(t, VariableType.DoubleVariable, VariableType.Gamma, sink,
-                            gammaArgs);
-
-                    return (IRTreeReturn<X>) constructInternal(t, VariableType.IntVariable, VariableType.Poisson, sink,
-                            poissonArgs);
-                }
-            }
         } else if(source == VariableType.Uniform) {
             switch(t) {
                 case ADD_DISTRIBUTION:
@@ -422,7 +443,7 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
 
                     List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
                     constraints.add(greaterThanEqual(value, start));
-                    constraints.add(lessThanEqual(value, end));
+                    constraints.add(lessThan(value, end));
                     IRTreeReturn<BooleanVariable> guard = and(constraints);
                     return (IRTreeReturn<X>) conditionalAssignment(guard, negate(log(subtractDD(end, start))),
                             constant(Double.NEGATIVE_INFINITY));
@@ -434,7 +455,7 @@ public class IRRVFunctionCallReturn<X extends Variable<X>> extends IRTreeReturn<
 
                     List<IRTreeReturn<BooleanVariable>> constraints = new ArrayList<>();
                     constraints.add(greaterThanEqual(value, start));
-                    constraints.add(lessThanEqual(value, end));
+                    constraints.add(lessThan(value, end));
                     IRTreeReturn<BooleanVariable> guard = and(constraints);
                     return (IRTreeReturn<X>) conditionalAssignment(guard,
                             divideDD(constant(1.0), subtractDD(end, start)), constant(0.0));

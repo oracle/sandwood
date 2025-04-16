@@ -253,7 +253,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var95], p));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var95]?p:(1.0 - p))));
 			logProbability$var83 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -629,7 +629,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// inputs.
 				// 
 				// Substituted "cv$temp$4$p" with its value "p".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var95], p) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -714,7 +714,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// inputs.
 			// 
 			// Substituted "cv$temp$4$p" with its value "p".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var95], p) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -870,7 +870,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$p" with its value "p".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var95], p) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 

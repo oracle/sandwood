@@ -396,7 +396,9 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int j = 0; j < coins; j += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
-				for(int var47 = 0; var47 < shape[j]; var47 += 1)
+				for(int var47 = 0; var47 < shape[j]; var47 += 1) {
+					double var36 = bias[j];
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -412,7 +414,8 @@ class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j][var47], bias[j]));
+					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var47]?var36:(1.0 - var36))));
+				}
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.

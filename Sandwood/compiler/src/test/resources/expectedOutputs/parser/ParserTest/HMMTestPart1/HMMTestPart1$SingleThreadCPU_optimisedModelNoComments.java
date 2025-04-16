@@ -222,7 +222,8 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample53() {
 		if(!fixedProbFlag$sample53) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flip, bias[st]);
+			double var50 = bias[st];
+			double cv$distributionAccumulator = Math.log((flip?var50:(1.0 - var50)));
 			logProbability$var51 = cv$distributionAccumulator;
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -255,10 +256,14 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void sample50() {
-		st = 0;
-		cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + Math.log(m[0][0]));
+		{
+			st = 0;
+			double cv$temp$2$var50 = bias[0];
+			cv$var49$stateProbabilityGlobal[0] = (Math.log((flip?cv$temp$2$var50:(1.0 - cv$temp$2$var50))) + Math.log(m[0][0]));
+		}
 		st = 1;
-		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + Math.log(m[0][1]));
+		double cv$temp$2$var50 = bias[1];
+		cv$var49$stateProbabilityGlobal[1] = (Math.log((flip?cv$temp$2$var50:(1.0 - cv$temp$2$var50))) + Math.log(m[0][1]));
 		double cv$logSum;
 		double cv$lseMax = cv$var49$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var49$stateProbabilityGlobal[1];

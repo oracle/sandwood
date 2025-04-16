@@ -180,8 +180,10 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample103() {
 		if(!fixedProbFlag$sample103) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var96 = 0; var96 < samples; var96 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var96], bias[a][b][c]));
+			for(int var96 = 0; var96 < samples; var96 += 1) {
+				double var84 = bias[a][b][c];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var96]?var84:(1.0 - var84))));
+			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var97 = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
@@ -248,23 +250,23 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				if((((0 == a) && (1 == b)) && (0 == c))) {
 					double traceTempVariable$var84$5_2 = (1 - q);
 					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$5_2) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))) + cv$accumulatedProbabilities);
 				}
 				if((1 == a)) {
 					if(((0 == b) && (1 == c))) {
 						double traceTempVariable$var84$6_2 = (1 - q);
 						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 					}
 					if((1 == b)) {
 						if((0 == c)) {
 							double traceTempVariable$var84$7_2 = (1 - q);
 							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$7_2) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))) + cv$accumulatedProbabilities);
 						}
 						if((1 == c)) {
 							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], q) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?q:(1.0 - q))) + cv$accumulatedProbabilities);
 						}
 					}
 				}
@@ -281,23 +283,23 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			if((((0 == a) && (1 == b)) && (0 == c))) {
 				double traceTempVariable$var84$5_2 = (1 - cv$proposedValue);
 				for(int var96 = 0; var96 < samples; var96 += 1)
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$5_2) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))) + cv$accumulatedProbabilities);
 			}
 			if((1 == a)) {
 				if(((0 == b) && (1 == c))) {
 					double traceTempVariable$var84$6_2 = (1 - cv$proposedValue);
 					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 				}
 				if((1 == b)) {
 					if((0 == c)) {
 						double traceTempVariable$var84$7_2 = (1 - cv$proposedValue);
 						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$7_2) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))) + cv$accumulatedProbabilities);
 					}
 					if((1 == c)) {
 						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -329,22 +331,22 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					if((0 == b)) {
 						if((0 == c)) {
 							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], t) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
 						}
 						if((1 == c)) {
 							double traceTempVariable$var84$6_2 = (1 - t);
 							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 						}
 					}
 					if(((1 == b) && (1 == c))) {
 						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], t) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
 					}
 				}
 				if((((1 == a) && (0 == b)) && (0 == c))) {
 					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], t) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
 				}
 				cv$originalProbability = cv$accumulatedProbabilities;
 			}
@@ -360,22 +362,22 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				if((0 == b)) {
 					if((0 == c)) {
 						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 					}
 					if((1 == c)) {
 						double traceTempVariable$var84$6_2 = (1 - cv$proposedValue);
 						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 					}
 				}
 				if(((1 == b) && (1 == c))) {
 					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 				}
 			}
 			if((((1 == a) && (0 == b)) && (0 == c))) {
 				for(int var96 = 0; var96 < samples; var96 += 1)
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 			}
 			cv$proposedProbability = cv$accumulatedProbabilities;
 		}

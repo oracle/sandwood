@@ -250,7 +250,9 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var96 = 0; var96 < samples; var96 += 1)
+			for(int var96 = 0; var96 < samples; var96 += 1) {
+				double var84 = bias[a][b][c];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -266,7 +268,8 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var96], bias[a][b][c]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var96]?var84:(1.0 - var84))));
+			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -619,7 +622,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						// 
 						// cv$temp$2$var84's comment
 						// Constructing a random variable input for use later.
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$5_2) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -648,7 +651,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							// 
 							// cv$temp$3$var84's comment
 							// Constructing a random variable input for use later.
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -677,7 +680,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								// 
 								// cv$temp$4$var84's comment
 								// Constructing a random variable input for use later.
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$7_2) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))) + cv$accumulatedProbabilities);
 						}
 						if((1 == c)) {
 							// Processing sample task 103 of consumer random variable bernoulli.
@@ -703,7 +706,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								// Set the current value to the current state of the tree.
 								// 
 								// The original value of the sample
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], q) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?q:(1.0 - q))) + cv$accumulatedProbabilities);
 						}
 					}
 				}
@@ -755,7 +758,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// 
 					// cv$temp$2$var84's comment
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$5_2) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))) + cv$accumulatedProbabilities);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -781,7 +784,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						// 
 						// cv$temp$3$var84's comment
 						// Constructing a random variable input for use later.
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -807,7 +810,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							// 
 							// cv$temp$4$var84's comment
 							// Constructing a random variable input for use later.
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$7_2) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))) + cv$accumulatedProbabilities);
 					}
 					if((1 == c)) {
 						// Processing sample task 103 of consumer random variable bernoulli.
@@ -829,7 +832,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							// Variable declaration of cv$temp$5$var84 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -945,7 +948,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								// Set the current value to the current state of the tree.
 								// 
 								// The original value of the sample
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], t) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -972,7 +975,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								// 
 								// cv$temp$3$var84's comment
 								// Constructing a random variable input for use later.
-								cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 						}
 					}
 					if(((1 == b) && (1 == c))) {
@@ -999,7 +1002,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							// Set the current value to the current state of the tree.
 							// 
 							// The original value of the sample
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], t) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
 					}
 				}
 				if((((1 == a) && (0 == b)) && (0 == c))) {
@@ -1026,7 +1029,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						// Set the current value to the current state of the tree.
 						// 
 						// The original value of the sample
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], t) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
 				}
 				
 				// Initialize a log space accumulator to take the product of all the distribution
@@ -1079,7 +1082,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							// Variable declaration of cv$temp$2$var84 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1103,7 +1106,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 							// 
 							// cv$temp$3$var84's comment
 							// Constructing a random variable input for use later.
-							cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], traceTempVariable$var84$6_2) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
 					}
 				}
 				if(((1 == b) && (1 == c))) {
@@ -1126,7 +1129,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						// Variable declaration of cv$temp$4$var84 moved.
 						// 
 						// Constructing a random variable input for use later.
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 				}
 			}
 			if((((1 == a) && (0 == b)) && (0 == c))) {
@@ -1149,7 +1152,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Variable declaration of cv$temp$5$var84 moved.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var96], cv$proposedValue) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution

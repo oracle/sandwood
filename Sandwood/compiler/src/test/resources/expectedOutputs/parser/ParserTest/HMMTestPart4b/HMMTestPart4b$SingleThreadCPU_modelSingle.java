@@ -431,7 +431,7 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 									double var182 = bias[st[p][l][n]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var182));
+									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var182:(1.0 - var182))));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -904,14 +904,14 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																		}
 																		
 																		// Record the probability of sample task 189 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182))));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))))) + 1)) + (Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 189 with the current configuration.
@@ -1245,14 +1245,14 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																		}
 																		
 																		// Record the probability of sample task 189 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182))));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[l][n][p], cv$temp$2$var182)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))))) + 1)) + (Math.log(1.0) + Math.log((flips[l][n][p]?cv$temp$2$var182:(1.0 - cv$temp$2$var182)))));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 189 with the current configuration.

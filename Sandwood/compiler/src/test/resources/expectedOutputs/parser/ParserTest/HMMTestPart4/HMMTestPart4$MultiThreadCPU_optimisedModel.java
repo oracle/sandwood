@@ -425,6 +425,8 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1) {
+						double var184 = bias[st[p][l][n]];
+						
 						// Variable declaration of cv$distributionAccumulator moved.
 						// Declaration comment was:
 						// Variable declaration of cv$distributionAccumulator moved.
@@ -448,7 +450,7 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Store the value of the function call, so the function call is only made once.
 						// 
 						// The sample value to calculate the probability of generating
-						double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[l][n][p], bias[st[p][l][n]]);
+						double cv$distributionAccumulator = Math.log((flips[l][n][p]?var184:(1.0 - var184)));
 						
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
@@ -855,32 +857,59 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		double[] cv$stateProbabilityLocal = cv$var121$stateProbabilityGlobal[threadID$cv$k1];
 		
 		// Unrolled loop
+		{
+			// Variable declaration of cv$temp$2$var184 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 185.
+			// 
+			// Looking for a path between Sample 124 and consumer Bernoulli 185.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			double cv$temp$2$var184 = bias[0];
+			
+			// Save the calculated index value into the array of index value probabilities
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 191 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Value of the variable at this index
+			// 
+			// cv$temp$0$var119's comment
+			// Constructing a random variable input for use later.
+			cv$stateProbabilityLocal[0] = (Math.log((flips[j1][k1][i1]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + Math.log(m[0][0]));
+		}
+		
+		// Variable declaration of cv$temp$2$var184 moved.
 		// 
-		// Save the calculated index value into the array of index value probabilities
+		// Constructing a random variable input for use later.
 		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
+		// Processing random variable 185.
 		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 191 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
+		// Looking for a path between Sample 124 and consumer Bernoulli 185.
 		// 
 		// Value of the variable at this index
 		// 
-		// cv$temp$0$var119's comment
-		// Constructing a random variable input for use later.
-		cv$stateProbabilityLocal[0] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[0]) + Math.log(m[0][0]));
+		// Substituted "cv$valuePos" with its value "1".
+		double cv$temp$2$var184 = bias[1];
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -906,7 +935,7 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// cv$temp$0$var119's comment
 		// Constructing a random variable input for use later.
-		cv$stateProbabilityLocal[1] = (DistributionSampling.logProbabilityBernoulli(flips[j1][k1][i1], bias[1]) + Math.log(m[0][1]));
+		cv$stateProbabilityLocal[1] = (Math.log((flips[j1][k1][i1]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + Math.log(m[0][1]));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -1065,7 +1094,20 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$accumulatedProbabilities = Math.log(m[0][0]);
 			
 			// Substituted "p" with its value "0".
-			if((0 < samples))
+			if((0 < samples)) {
+				// Variable declaration of cv$temp$2$var184 moved.
+				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 185.
+				// 
+				// Looking for a path between Sample 84 and consumer Bernoulli 185.
+				// 
+				// Value of the variable at this index
+				// 
+				// Substituted "cv$valuePos" with its value "0".
+				double cv$temp$2$var184 = bias[0];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1082,18 +1124,8 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// inputs.
 				// 
 				// Substituted "l" with its value "0".
-				// 
-				// cv$temp$2$var184's comment
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 185.
-				// 
-				// Looking for a path between Sample 84 and consumer Bernoulli 185.
-				// 
-				// Value of the variable at this index
-				// 
-				// Substituted "cv$valuePos" with its value "0".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0][0][0], bias[0]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + cv$accumulatedProbabilities);
+			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1115,7 +1147,20 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		double cv$accumulatedProbabilities = Math.log(m[0][1]);
 		
 		// Substituted "p" with its value "0".
-		if((0 < samples))
+		if((0 < samples)) {
+			// Variable declaration of cv$temp$2$var184 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 185.
+			// 
+			// Looking for a path between Sample 84 and consumer Bernoulli 185.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "1".
+			double cv$temp$2$var184 = bias[1];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -1132,18 +1177,8 @@ class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// inputs.
 			// 
 			// Substituted "l" with its value "0".
-			// 
-			// cv$temp$2$var184's comment
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 185.
-			// 
-			// Looking for a path between Sample 84 and consumer Bernoulli 185.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "1".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0][0][0], bias[1]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + cv$accumulatedProbabilities);
+		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 

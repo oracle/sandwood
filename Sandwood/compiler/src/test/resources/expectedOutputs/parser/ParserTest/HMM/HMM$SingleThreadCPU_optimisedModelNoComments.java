@@ -306,7 +306,8 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 		if(!fixedProbFlag$sample87) {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], bias[st[j]]);
+				double var84 = bias[st[j]];
+				double cv$distributionAccumulator = Math.log((flips[j]?var84:(1.0 - var84)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var85[j] = cv$distributionAccumulator;
 				logProbability$sample87[j] = cv$distributionAccumulator;
@@ -360,8 +361,10 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 			double cv$accumulatedProbabilities = ((cv$valuePos < states)?Math.log(m[0][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			if((1 < samples))
 				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < states))?Math.log(m[cv$valuePos][st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			if((0 < samples))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[cv$valuePos]) + cv$accumulatedProbabilities);
+			if((0 < samples)) {
+				double cv$temp$4$var84 = bias[cv$valuePos];
+				cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$4$var84:(1.0 - cv$temp$4$var84))) + cv$accumulatedProbabilities);
+			}
 			cv$var52$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;
@@ -399,7 +402,8 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 			int index$i$2_2 = (i + 1);
 			if((index$i$2_2 < samples))
 				cv$accumulatedProbabilities = ((((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < states))?Math.log(m[cv$valuePos][st[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i], bias[cv$valuePos]) + cv$accumulatedProbabilities);
+			double cv$temp$4$var84 = bias[cv$valuePos];
+			cv$accumulatedProbabilities = (Math.log((flips[i]?cv$temp$4$var84:(1.0 - cv$temp$4$var84))) + cv$accumulatedProbabilities);
 			cv$var70$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;

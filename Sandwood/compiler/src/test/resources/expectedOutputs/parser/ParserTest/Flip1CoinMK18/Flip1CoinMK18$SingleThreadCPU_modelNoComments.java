@@ -189,7 +189,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					{
 						{
 							double var84 = bias[a][b][c];
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var84));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var84:(1.0 - var84))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -515,13 +515,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$5_2;
 																	cv$temp$2$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -560,13 +560,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$6_2;
 																	cv$temp$3$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -605,13 +605,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$7_2;
 																	cv$temp$4$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -649,13 +649,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$8_1;
 																	cv$temp$5$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -841,13 +841,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$5_1;
 																	cv$temp$2$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$2$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$2$var84:(1.0 - cv$temp$2$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -886,13 +886,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$6_2;
 																	cv$temp$3$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$3$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$3$var84:(1.0 - cv$temp$3$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -930,13 +930,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$7_1;
 																	cv$temp$4$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$4$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -974,13 +974,13 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 																	double var84 = traceTempVariable$var84$8_1;
 																	cv$temp$5$var84 = var84;
 																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84))));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[var96], cv$temp$5$var84)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var96]?cv$temp$5$var84:(1.0 - cv$temp$5$var84)))));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
