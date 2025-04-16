@@ -116,7 +116,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void logProbabilityValue$sample10() {
 		if(!fixedProbFlag$sample10) {
-			double cv$distributionAccumulator = (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
 			logProbability$var9 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -152,9 +152,9 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
-		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		bias = cv$proposedValue;
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			bias = cv$originalValue;
 	}

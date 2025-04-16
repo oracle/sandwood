@@ -125,7 +125,7 @@ class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				{
 					{
 						double var8 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + (((min <= cv$sampleValue) && (cv$sampleValue <= var8))?(-Math.log((var8 - min))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((min <= cv$sampleValue) && (cv$sampleValue < var8))?(-Math.log((var8 - min))):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -247,7 +247,7 @@ class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						cv$temp$1$var8 = 1.0;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$min <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var8))?(-Math.log((cv$temp$1$var8 - cv$temp$0$min))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$min <= cv$currentValue) && (cv$currentValue < cv$temp$1$var8))?(-Math.log((cv$temp$1$var8 - cv$temp$0$min))):Double.NEGATIVE_INFINITY));
 					{
 						{
 							double traceTempVariable$bias$1_1 = cv$currentValue;

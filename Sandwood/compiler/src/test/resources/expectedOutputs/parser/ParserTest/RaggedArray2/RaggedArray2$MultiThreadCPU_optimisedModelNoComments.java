@@ -165,7 +165,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample100) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var95], p));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var95]?p:(1.0 - p))));
 			logProbability$var83 = cv$sampleAccumulator;
 			logProbability$var96 = cv$sampleAccumulator;
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
@@ -229,14 +229,14 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			p = b[0][i];
 			double cv$accumulatedProbabilities = ((((0.0 <= i) && (i < 2))?Math.log(a[0][i]):Double.NEGATIVE_INFINITY) + Math.log(c[0]));
 			for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var95], p) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			cv$var77$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		y = 1;
 		p = b[1][i];
 		double cv$accumulatedProbabilities = ((((0.0 <= i) && (i < 3))?Math.log(a[1][i]):Double.NEGATIVE_INFINITY) + Math.log(c[1]));
 		for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var95], p) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 		cv$var77$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
 		double cv$lseMax = cv$var77$stateProbabilityGlobal[0];
@@ -277,7 +277,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				lengthCV$a$82_10 = 2;
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$82_10)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var95], p) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			cv$var80$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;

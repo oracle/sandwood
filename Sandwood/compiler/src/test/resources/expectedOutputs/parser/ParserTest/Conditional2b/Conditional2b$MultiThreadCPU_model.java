@@ -193,7 +193,7 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double var8 = 1.0;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((var7 <= cv$sampleValue) && (cv$sampleValue <= var8))?(-Math.log((var8 - var7))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((var7 <= cv$sampleValue) && (cv$sampleValue < var8))?(-Math.log((var8 - var7))):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -352,7 +352,7 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double var2 = 0.5;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var2));
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var2:(1.0 - var2))));
 						{
 							if(guard) {
 								// Looking for a path between Put 20 and consumer double[] 27.
@@ -595,7 +595,7 @@ class Conditional2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var2));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + Math.log((cv$currentValue?cv$temp$0$var2:(1.0 - cv$temp$0$var2))));
 					
 					// Processing conditional point20.
 					{

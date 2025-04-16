@@ -125,7 +125,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							{
 								double var11 = 0.0;
 								double var12 = 1.0;
-								double cv$weightedProbability = (Math.log(1.0) + (((var11 <= cv$sampleValue) && (cv$sampleValue <= var12))?(-Math.log((var12 - var11))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + (((var11 <= cv$sampleValue) && (cv$sampleValue < var12))?(-Math.log((var12 - var11))):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -197,7 +197,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				{
 					{
 						double var2 = 0.5;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var2));
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var2:(1.0 - var2))));
 						{
 							{
 								if(guard) {
@@ -278,7 +278,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						cv$temp$0$var2 = 0.5;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var2));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + Math.log((cv$currentValue?cv$temp$0$var2:(1.0 - cv$temp$0$var2))));
 					{
 						{
 							{

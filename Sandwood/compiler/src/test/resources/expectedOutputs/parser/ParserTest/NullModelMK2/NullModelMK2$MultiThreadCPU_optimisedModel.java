@@ -181,7 +181,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -386,7 +386,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
-		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		
 		// Update Sample and intermediate values
 		// 
@@ -412,7 +412,7 @@ class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$min" with its value "min".
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and

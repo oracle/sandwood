@@ -426,7 +426,10 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleAccumulator = 0.0;
 			
 			// Substituted "j" with its value "0".
-			for(int var49 = 0; var49 < length$flipsMeasured[0]; var49 += 1)
+			for(int var49 = 0; var49 < length$flipsMeasured[0]; var49 += 1) {
+				// Substituted "j" with its value "0".
+				double var38 = bias[0];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -437,8 +440,11 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
+				// The sample value to calculate the probability of generating
+				// 
 				// Substituted "j" with its value "0".
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[0][var49], bias[0]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[0][var49]?var38:(1.0 - var38))));
+			}
 			logProbability$bernoulli1 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -506,7 +512,9 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int k = 1; k < coins; k += 1) {
-				for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1)
+				for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
+					double var65 = bias[k];
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -522,7 +530,8 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[k][var76], bias[k]));
+					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[k][var76]?var65:(1.0 - var65))));
+				}
 			}
 			logProbability$bernoulli2 = cv$sampleAccumulator;
 			

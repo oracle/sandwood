@@ -115,7 +115,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						double var10 = 0.0;
 						double var11 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue <= var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue < var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -181,7 +181,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				{
 					{
 						double var3 = 0.5;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var3));
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -230,7 +230,7 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						double var6 = 0.0;
 						double var7 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue <= var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue < var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {

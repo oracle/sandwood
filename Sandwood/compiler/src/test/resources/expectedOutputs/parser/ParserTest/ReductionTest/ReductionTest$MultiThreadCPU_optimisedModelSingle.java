@@ -569,6 +569,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// j$var80's comment
 					// Set the right hand term to a value from the array st
 					reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction78Index]);
+				double var83 = bias[reduceVar$var82$6];
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -585,7 +586,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$6]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j$var73]?var83:(1.0 - var83))));
 			}
 			logProbability$var84 = cv$sampleAccumulator;
 			
@@ -785,9 +786,13 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			reduceVar$var82$5 = (cv$valuePos + reduceVar$var82$5);
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Processing sample task 87 of consumer random variable null.
+				// Variable declaration of cv$temp$2$var83 moved.
 				// 
+				// Constructing a random variable input for use later.
+				double cv$temp$2$var83 = bias[reduceVar$var82$5];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -800,12 +805,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$2$var83's comment
-				// Variable declaration of cv$temp$2$var83 moved.
-				// 
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j$var73], bias[reduceVar$var82$5]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))) + cv$accumulatedProbabilities);
+			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 

@@ -657,10 +657,11 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						
 						// Substituted "j" with its value "0".
 						if(((0 <= var43) && (var43 < 5))) {
-							// Store the value of the function call, so the function call is only made once.
-							// 
 							// Substituted "j" with its value "0".
-							cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[0]]);
+							double var84 = bias[st[0]];
+							
+							// Store the value of the function call, so the function call is only made once.
+							cv$distributionAccumulator = Math.log((cv$sampleValue?var84:(1.0 - var84)));
 							
 							// Add the probability of this distribution configuration to the accumulator.
 							// 
@@ -676,10 +677,11 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							
 							// Substituted "j" with its value "0".
 							if(((0 <= var43) && (var43 < 5))) {
-								// Store the value of the function call, so the function call is only made once.
-								// 
 								// Substituted "j" with its value "0".
-								double cv$weightedProbability = (Math.log(cv$probabilitySample53Value4) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[0]]));
+								double var84 = bias[st[0]];
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(cv$probabilitySample53Value4) + Math.log((cv$sampleValue?var84:(1.0 - var84))));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -705,8 +707,10 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					if(fixedFlag$sample71) {
 						int var43 = st[j];
 						if(((0 <= var43) && (var43 < 5))) {
+							double var84 = bias[st[j]];
+							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[j]]);
+							double cv$weightedProbability = Math.log((cv$sampleValue?var84:(1.0 - var84)));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -731,8 +735,10 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							double cv$probabilitySample71Value12 = distribution$sample71[(j - 1)][index$sample71$11];
 							int var43 = st[j];
 							if(((0 <= var43) && (var43 < 5))) {
+								double var84 = bias[st[j]];
+								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(cv$probabilitySample71Value12) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[j]]));
+								double cv$weightedProbability = (Math.log(cv$probabilitySample71Value12) + Math.log((cv$sampleValue?var84:(1.0 - var84))));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1192,6 +1198,8 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
+				double var84 = bias[st[j]];
+				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -1215,7 +1223,7 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], bias[st[j]]);
+				double cv$distributionAccumulator = Math.log((flips[j]?var84:(1.0 - var84)));
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1610,9 +1618,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				
 				// Substituted "j" with its value "0".
 				if(((0 <= var43) && (var43 < 5))) {
-					// Substituted "j" with its value "0".
-					// 
-					// cv$temp$4$var84's comment
 					// Variable declaration of cv$temp$4$var84 moved.
 					// 
 					// Constructing a random variable input for use later.
@@ -1622,7 +1627,10 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Looking for a path between Sample 53 and consumer Bernoulli 85.
 					// 
 					// Value of the variable at this index
-					cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[0], bias[cv$valuePos]);
+					double cv$temp$4$var84 = bias[cv$valuePos];
+					
+					// Substituted "j" with its value "0".
+					cv$accumulatedConsumerProbabilities = Math.log((flips[0]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)));
 					
 					// Recorded the probability of reaching sample task 87 with the current configuration.
 					// 
@@ -1935,9 +1943,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Substituted "j" with its value "1".
 						int var43 = st[1];
 						if(((0 <= var43) && (var43 < 5))) {
-							// Substituted "j" with its value "1".
-							// 
-							// cv$temp$8$var84's comment
 							// Variable declaration of cv$temp$8$var84 moved.
 							// 
 							// Constructing a random variable input for use later.
@@ -1947,7 +1952,10 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Looking for a path between Sample 71 and consumer Bernoulli 85.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]);
+							double cv$temp$8$var84 = bias[cv$valuePos];
+							
+							// Substituted "j" with its value "1".
+							cv$accumulatedConsumerProbabilities = Math.log((flips[1]?cv$temp$8$var84:(1.0 - cv$temp$8$var84)));
 							
 							// Recorded the probability of reaching sample task 87 with the current configuration.
 							// 
@@ -2016,9 +2024,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Substituted "j" with its value "1".
 							int var43 = st[1];
 							if(((0 <= var43) && (var43 < 5))) {
-								// Substituted "j" with its value "1".
-								// 
-								// cv$temp$9$var84's comment
 								// Variable declaration of cv$temp$9$var84 moved.
 								// 
 								// Constructing a random variable input for use later.
@@ -2028,7 +2033,10 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 								// Looking for a path between Sample 71 and consumer Bernoulli 85.
 								// 
 								// Value of the variable at this index
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]);
+								double cv$temp$9$var84 = bias[cv$valuePos];
+								
+								// Substituted "j" with its value "1".
+								cv$accumulatedConsumerProbabilities = Math.log((flips[1]?cv$temp$9$var84:(1.0 - cv$temp$9$var84)));
 								
 								// Recorded the probability of reaching sample task 87 with the current configuration.
 								// 
@@ -2121,9 +2129,6 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						
 						// Substituted "j" with its value "i$var64".
 						if(((0 <= var43) && (var43 < 5))) {
-							// Substituted "j" with its value "i$var64".
-							// 
-							// cv$temp$11$var84's comment
 							// Variable declaration of cv$temp$11$var84 moved.
 							// 
 							// Constructing a random variable input for use later.
@@ -2131,7 +2136,10 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							// Processing random variable 85.
 							// 
 							// Looking for a path between Sample 71 and consumer Bernoulli 85.
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[i$var64], bias[index$sample71$29]);
+							double cv$temp$11$var84 = bias[index$sample71$29];
+							
+							// Substituted "j" with its value "i$var64".
+							cv$accumulatedConsumerProbabilities = Math.log((flips[i$var64]?cv$temp$11$var84:(1.0 - cv$temp$11$var84)));
 							
 							// Recorded the probability of reaching sample task 87 with the current configuration.
 							// 

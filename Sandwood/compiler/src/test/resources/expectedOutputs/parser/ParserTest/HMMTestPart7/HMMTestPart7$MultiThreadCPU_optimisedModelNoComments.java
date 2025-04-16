@@ -339,7 +339,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					if(fixedFlag$sample53) {
 						int var43 = st[0];
 						if(((0 <= var43) && (var43 < 5))) {
-							cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[0]]);
+							double var84 = bias[st[0]];
+							cv$distributionAccumulator = Math.log((cv$sampleValue?var84:(1.0 - var84)));
 							cv$probabilityReached = 1.0;
 						}
 					} else {
@@ -347,7 +348,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							double cv$probabilitySample53Value4 = distribution$sample53[index$sample53$3];
 							int var43 = st[0];
 							if(((0 <= var43) && (var43 < 5))) {
-								double cv$weightedProbability = (Math.log(cv$probabilitySample53Value4) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[0]]));
+								double var84 = bias[st[0]];
+								double cv$weightedProbability = (Math.log(cv$probabilitySample53Value4) + Math.log((cv$sampleValue?var84:(1.0 - var84))));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -365,7 +367,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					if(fixedFlag$sample71) {
 						int var43 = st[j];
 						if(((0 <= var43) && (var43 < 5))) {
-							double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[j]]);
+							double var84 = bias[st[j]];
+							double cv$weightedProbability = Math.log((cv$sampleValue?var84:(1.0 - var84)));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -381,7 +384,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							double cv$probabilitySample71Value12 = distribution$sample71[(j - 1)][index$sample71$11];
 							int var43 = st[j];
 							if(((0 <= var43) && (var43 < 5))) {
-								double cv$weightedProbability = (Math.log(cv$probabilitySample71Value12) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias[st[j]]));
+								double var84 = bias[st[j]];
+								double cv$weightedProbability = (Math.log(cv$probabilitySample71Value12) + Math.log((cv$sampleValue?var84:(1.0 - var84))));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -515,7 +519,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample87) {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], bias[st[j]]);
+				double var84 = bias[st[j]];
+				double cv$distributionAccumulator = Math.log((flips[j]?var84:(1.0 - var84)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var85[j] = cv$distributionAccumulator;
 				logProbability$sample87[j] = cv$distributionAccumulator;
@@ -653,7 +658,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double cv$consumerDistributionProbabilityAccumulator = 1.0;
 				int var43 = st[0];
 				if(((0 <= var43) && (var43 < 5))) {
-					cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[0], bias[cv$valuePos]);
+					double cv$temp$4$var84 = bias[cv$valuePos];
+					cv$accumulatedConsumerProbabilities = Math.log((flips[0]?cv$temp$4$var84:(1.0 - cv$temp$4$var84)));
 					cv$consumerDistributionProbabilityAccumulator = 0.0;
 				}
 				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -763,7 +769,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						int var43 = st[1];
 						if(((0 <= var43) && (var43 < 5))) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]);
+							double cv$temp$8$var84 = bias[cv$valuePos];
+							cv$accumulatedConsumerProbabilities = Math.log((flips[1]?cv$temp$8$var84:(1.0 - cv$temp$8$var84)));
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -788,7 +795,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var43 = st[1];
 							if(((0 <= var43) && (var43 < 5))) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[1], bias[cv$valuePos]);
+								double cv$temp$9$var84 = bias[cv$valuePos];
+								cv$accumulatedConsumerProbabilities = Math.log((flips[1]?cv$temp$9$var84:(1.0 - cv$temp$9$var84)));
 								cv$consumerDistributionProbabilityAccumulator = 0.0;
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -824,7 +832,8 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						int var43 = st[i$var64];
 						if(((0 <= var43) && (var43 < 5))) {
-							cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(flips[i$var64], bias[index$sample71$29]);
+							double cv$temp$11$var84 = bias[index$sample71$29];
+							cv$accumulatedConsumerProbabilities = Math.log((flips[i$var64]?cv$temp$11$var84:(1.0 - cv$temp$11$var84)));
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						}
 						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);

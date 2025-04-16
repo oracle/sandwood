@@ -626,7 +626,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							double var83 = bias[reduceVar$var82$6];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var83));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var83:(1.0 - var83))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -936,14 +936,14 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 															}
 															
 															// Record the probability of sample task 87 generating output with current configuration.
-															if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																// If the second value is -infinity.
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))))) + 1)) + (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))));
 															}
 															
 															// Recorded the probability of reaching sample task 87 with the current configuration.

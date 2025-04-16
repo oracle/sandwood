@@ -150,7 +150,7 @@ class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				boolean cv$sampleValue = flip;
 				{
 					{
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, bias));
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -246,13 +246,13 @@ class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 												{
 													cv$temp$4$bias = traceTempVariable$bias$1_1;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flip, cv$temp$4$bias)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flip, cv$temp$4$bias)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + Math.log((flip?cv$temp$4$bias:(1.0 - cv$temp$4$bias)))) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flip?cv$temp$4$bias:(1.0 - cv$temp$4$bias)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flip, cv$temp$4$bias));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flip?cv$temp$4$bias:(1.0 - cv$temp$4$bias))));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flip, cv$temp$4$bias)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flip, cv$temp$4$bias)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flip?cv$temp$4$bias:(1.0 - cv$temp$4$bias)))))) + 1)) + (Math.log(1.0) + Math.log((flip?cv$temp$4$bias:(1.0 - cv$temp$4$bias)))));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}

@@ -161,8 +161,10 @@ class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
 				double cv$sampleAccumulator = 0.0;
-				for(int var45 = 0; var45 < length$flipsMeasured[j]; var45 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j][var45], (1 - bias[j])));
+				for(int var45 = 0; var45 < length$flipsMeasured[j]; var45 += 1) {
+					double var34 = (1 - bias[j]);
+					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var45]?var34:(1.0 - var34))));
+				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli[j] = cv$sampleAccumulator;
 				logProbability$sample46[j] = cv$sampleAccumulator;
@@ -193,14 +195,18 @@ class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$originalValue, a, b);
-			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], (1 - cv$originalValue)) + cv$accumulatedProbabilities);
+			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
+				double cv$temp$2$var34 = (1 - cv$originalValue);
+				cv$accumulatedProbabilities = (Math.log((flips[i][var45]?cv$temp$2$var34:(1.0 - cv$temp$2$var34))) + cv$accumulatedProbabilities);
+			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		bias[i] = cv$proposedValue;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, a, b);
-		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], (1 - cv$proposedValue)) + cv$accumulatedProbabilities);
+		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
+			double cv$temp$2$var34 = (1 - cv$proposedValue);
+			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?cv$temp$2$var34:(1.0 - cv$temp$2$var34))) + cv$accumulatedProbabilities);
+		}
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			bias[i] = cv$originalValue;
 	}

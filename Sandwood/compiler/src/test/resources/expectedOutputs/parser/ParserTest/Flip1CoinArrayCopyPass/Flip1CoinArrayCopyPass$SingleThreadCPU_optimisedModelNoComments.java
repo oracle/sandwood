@@ -133,7 +133,8 @@ class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample26) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < samples; i += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[i], bias[i]);
+				double var24 = bias[i];
+				double cv$distributionAccumulator = Math.log((flips[i]?var24:(1.0 - var24)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$bernoulli[i] = cv$distributionAccumulator;
 				logProbability$sample26[i] = cv$distributionAccumulator;

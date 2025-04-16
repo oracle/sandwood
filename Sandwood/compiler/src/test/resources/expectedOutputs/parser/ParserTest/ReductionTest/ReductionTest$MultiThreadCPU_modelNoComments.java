@@ -379,7 +379,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								reduceVar$var82$6 = (i$var79 + j$var80);
 							}
 							double var83 = bias[reduceVar$var82$6];
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var83));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var83:(1.0 - var83))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -549,13 +549,13 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 																double var83 = bias[traceTempVariable$var82$2_2];
 																cv$temp$2$var83 = var83;
 															}
-															if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(flips[j$var73], cv$temp$2$var83)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))))) + 1)) + (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))));
 															}
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}

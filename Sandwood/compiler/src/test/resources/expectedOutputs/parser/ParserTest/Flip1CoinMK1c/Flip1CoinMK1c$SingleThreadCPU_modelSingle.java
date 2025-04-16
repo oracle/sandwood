@@ -181,7 +181,7 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var6));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var6:(1.0 - var6))));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))

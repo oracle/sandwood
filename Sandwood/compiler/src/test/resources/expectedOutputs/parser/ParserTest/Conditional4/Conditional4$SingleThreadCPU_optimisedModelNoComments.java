@@ -127,7 +127,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$accumulator = 0.0;
 			if(!guard) {
 				double cv$sampleValue = bias[0];
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var18 = cv$distributionAccumulator;
 				logProbability$sample21 = cv$distributionAccumulator;
@@ -167,19 +167,18 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample4() {
 		if(!fixedProbFlag$sample4) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(guard, 0.5);
-			logProbability$bernoulli = cv$distributionAccumulator;
-			logProbability$guard = cv$distributionAccumulator;
+			logProbability$bernoulli = -0.6931471805599453;
+			logProbability$guard = -0.6931471805599453;
 			boolean cv$guard$bias = false;
 			if(guard) {
 				cv$guard$bias = true;
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+				logProbability$bias = (logProbability$bias - 0.6931471805599453);
 			}
 			if((!guard && !cv$guard$bias))
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+				logProbability$bias = (logProbability$bias - 0.6931471805599453);
+			logProbability$$model = (logProbability$$model - 0.6931471805599453);
 			if(fixedFlag$sample4)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
 			fixedProbFlag$sample4 = fixedFlag$sample4;
 		} else {
 			logProbability$bernoulli = logProbability$guard;
@@ -202,18 +201,18 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		bias[0] = cv$proposedValue;
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
 			bias[0] = cv$originalValue;
 	}
 
 	private final void sample4() {
 		guard = false;
-		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= bias[0]) && (bias[0] <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) + DistributionSampling.logProbabilityBernoulli(false, 0.5));
+		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= bias[0]) && (bias[0] < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) - 0.6931471805599453);
 		guard = true;
-		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, bias[0], 1.0) + DistributionSampling.logProbabilityBernoulli(true, 0.5));
+		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, bias[0], 1.0) - 0.6931471805599453);
 		double cv$logSum;
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];

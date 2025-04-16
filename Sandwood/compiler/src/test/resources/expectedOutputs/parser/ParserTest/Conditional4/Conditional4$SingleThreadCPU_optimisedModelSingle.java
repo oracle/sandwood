@@ -206,7 +206,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
+				cv$sampleAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
 			}
 			logProbability$var18 = cv$sampleAccumulator;
 			
@@ -367,15 +367,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// just use cached values.
 		if(!fixedProbFlag$sample4) {
 			// Generating probabilities for sample task
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
+			// Add the probability of this sample task to the sample task accumulator.
 			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
+			// Accumulator for sample probabilities for a specific instance of the random variable.
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -390,15 +384,24 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(guard, 0.5);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$bernoulli = cv$distributionAccumulator;
+			logProbability$bernoulli = -0.6931471805599453;
 			
 			// Store the sample task probability
-			logProbability$guard = cv$distributionAccumulator;
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			logProbability$guard = -0.6931471805599453;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
@@ -422,7 +425,21 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				logProbability$bias = (logProbability$bias - 0.6931471805599453);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -441,7 +458,21 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				logProbability$bias = (logProbability$bias - 0.6931471805599453);
 			
 			// Add probability to model
 			// 
@@ -457,7 +488,21 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			logProbability$$model = (logProbability$$model - 0.6931471805599453);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
@@ -474,7 +519,21 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
@@ -588,7 +647,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Constructing a random variable input for use later.
 		// 
 		// Set the current value to the current state of the tree.
-		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[0] = cv$proposedValue;
@@ -626,7 +685,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Variable declaration of cv$temp$2$var22 moved.
 		// 
 		// Constructing a random variable input for use later.
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -691,27 +750,21 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Substituted "cv$temp$3$var16" with its value "0.0".
 		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 27 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
-		// Variable declaration of cv$currentValue moved.
+		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
-		// The value currently being tested
+		// Set an accumulator to sum the probabilities for each possible configuration of
+		// inputs.
 		// 
-		// Value of the variable at this index
+		// Substituted "cv$temp$2$var23" with its value "1.0".
 		// 
-		// Substituted "cv$valuePos" with its value "0".
-		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= bias[0]) && (bias[0] <= 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) + DistributionSampling.logProbabilityBernoulli(false, 0.5));
+		// cv$temp$1$var22's comment
+		// Constructing a random variable input for use later.
+		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= bias[0]) && (bias[0] < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) - 0.6931471805599453);
 		
 		// Write out the new value of the sample.
 		// 
@@ -732,27 +785,32 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
+		// Variable declaration of cv$accumulatedProbabilities moved.
+		// Declaration comment was:
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
 		// 
-		// Recorded the probability of reaching sample task 27 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
+		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
-		// Variable declaration of cv$currentValue moved.
+		// Looking for a path between Put 16 and consumer Beta 24.
+		// 
+		// Processing sample task 27 of consumer random variable null.
+		// 
+		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
-		// The value currently being tested
+		// Set an accumulator to sum the probabilities for each possible configuration of
+		// inputs.
 		// 
-		// Value of the variable at this index
+		// Substituted "cv$temp$6$var23" with its value "1.0".
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, bias[0], 1.0) + DistributionSampling.logProbabilityBernoulli(true, 0.5));
+		// cv$temp$5$var22's comment
+		// Constructing a random variable input for use later.
+		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, bias[0], 1.0) - 0.6931471805599453);
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 

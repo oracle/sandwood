@@ -157,7 +157,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample89) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var84], p));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var84]?p:(1.0 - p))));
 			logProbability$var72 = cv$sampleAccumulator;
 			logProbability$var85 = cv$sampleAccumulator;
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
@@ -189,7 +189,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				lengthCV$a$71_1 = 3;
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_1)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var84], p) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var84]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			cv$var69$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;

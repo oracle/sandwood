@@ -575,6 +575,8 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// just use cached values.
 		if(!fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
+			double var50 = bias[st];
+			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -598,7 +600,7 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flip, bias[st]);
+			double cv$distributionAccumulator = Math.log((flip?var50:(1.0 - var50)));
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -728,37 +730,50 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 50 drawn from Categorical 48. Inference was performed using variable
 	// marginalization.
 	private final void sample50() {
-		// Write out the new value of the sample.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "0".
-		st = 0;
-		
-		// Save the calculated index value into the array of index value probabilities
-		// 
-		// Get a local reference to the scratch space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 53 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Value of the variable at this index
-		// 
-		// cv$temp$0$var47's comment
-		// Constructing a random variable input for use later.
-		cv$var49$stateProbabilityGlobal[0] = (DistributionSampling.logProbabilityBernoulli(flip, bias[0]) + Math.log(m[0][0]));
+		{
+			// Write out the new value of the sample.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			st = 0;
+			
+			// Variable declaration of cv$temp$2$var50 moved.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Processing random variable 51.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			double cv$temp$2$var50 = bias[0];
+			
+			// Save the calculated index value into the array of index value probabilities
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 53 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Value of the variable at this index
+			// 
+			// cv$temp$0$var47's comment
+			// Constructing a random variable input for use later.
+			cv$var49$stateProbabilityGlobal[0] = (Math.log((flip?cv$temp$2$var50:(1.0 - cv$temp$2$var50))) + Math.log(m[0][0]));
+		}
 		
 		// Write out the new value of the sample.
 		// 
@@ -767,6 +782,17 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Substituted "cv$valuePos" with its value "1".
 		st = 1;
 		
+		// Variable declaration of cv$temp$2$var50 moved.
+		// 
+		// Constructing a random variable input for use later.
+		// 
+		// Processing random variable 51.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		double cv$temp$2$var50 = bias[1];
+		
 		// Save the calculated index value into the array of index value probabilities
 		// 
 		// Get a local reference to the scratch space.
@@ -790,7 +816,7 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// cv$temp$0$var47's comment
 		// Constructing a random variable input for use later.
-		cv$var49$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBernoulli(flip, bias[1]) + Math.log(m[0][1]));
+		cv$var49$stateProbabilityGlobal[1] = (Math.log((flip?cv$temp$2$var50:(1.0 - cv$temp$2$var50))) + Math.log(m[0][1]));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 

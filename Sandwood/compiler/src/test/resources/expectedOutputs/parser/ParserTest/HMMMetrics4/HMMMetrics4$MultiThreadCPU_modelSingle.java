@@ -618,7 +618,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
 																
 																// Store the value of the function call, so the function call is only made once.
-																double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var230));
+																double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 																
 																// Add the probability of this sample task to the distribution accumulator.
 																if((cv$weightedProbability < cv$distributionAccumulator))
@@ -660,7 +660,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
 																		
 																		// Store the value of the function call, so the function call is only made once.
-																		double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var230));
+																		double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 																		
 																		// Add the probability of this sample task to the distribution accumulator.
 																		if((cv$weightedProbability < cv$distributionAccumulator))
@@ -701,7 +701,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																	double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
 																	
 																	// Store the value of the function call, so the function call is only made once.
-																	double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var230));
+																	double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 																	
 																	// Add the probability of this sample task to the distribution accumulator.
 																	if((cv$weightedProbability < cv$distributionAccumulator))
@@ -745,7 +745,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
 																			
 																			// Store the value of the function call, so the function call is only made once.
-																			double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var230));
+																			double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 																			
 																			// Add the probability of this sample task to the distribution accumulator.
 																			if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2194,7 +2194,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								double var107 = (double)max_metric;
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((var106 <= cv$sampleValue) && (cv$sampleValue <= var107))?(-Math.log((var107 - var106))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + (((var106 <= cv$sampleValue) && (cv$sampleValue < var107))?(-Math.log((var107 - var106))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2606,7 +2606,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var230));
+									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -3211,7 +3211,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var106 <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var107))?(-Math.log((cv$temp$1$var107 - cv$temp$0$var106))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var106 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var107))?(-Math.log((cv$temp$1$var107 - cv$temp$0$var106))):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 244.
 					{
@@ -6189,14 +6189,14 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			}
 																			
 																			// Record the probability of sample task 241 generating output with current configuration.
-																			if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$4$var230)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$4$var230)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$4$var230:(1.0 - cv$temp$4$var230)))) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$4$var230:(1.0 - cv$temp$4$var230)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$4$var230));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$4$var230:(1.0 - cv$temp$4$var230))));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$4$var230)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$4$var230)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$4$var230:(1.0 - cv$temp$4$var230)))))) + 1)) + (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$4$var230:(1.0 - cv$temp$4$var230)))));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -7237,14 +7237,14 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																								}
 																								
 																								// Record the probability of sample task 241 generating output with current configuration.
-																								if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$8$var230)) < cv$accumulatedConsumerProbabilities))
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$8$var230)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																								if(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$8$var230:(1.0 - cv$temp$8$var230)))) < cv$accumulatedConsumerProbabilities))
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$8$var230:(1.0 - cv$temp$8$var230)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																								else {
 																									// If the second value is -infinity.
 																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$8$var230));
+																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$8$var230:(1.0 - cv$temp$8$var230))));
 																									else
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$8$var230)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$8$var230)));
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$8$var230:(1.0 - cv$temp$8$var230)))))) + 1)) + (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$8$var230:(1.0 - cv$temp$8$var230)))));
 																								}
 																								
 																								// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -7872,14 +7872,14 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																										}
 																										
 																										// Record the probability of sample task 241 generating output with current configuration.
-																										if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$9$var230)) < cv$accumulatedConsumerProbabilities))
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$9$var230)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										if(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$9$var230:(1.0 - cv$temp$9$var230)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$9$var230:(1.0 - cv$temp$9$var230)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																										else {
 																											// If the second value is -infinity.
 																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$9$var230));
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$9$var230:(1.0 - cv$temp$9$var230))));
 																											else
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$9$var230)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$9$var230)));
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$9$var230:(1.0 - cv$temp$9$var230)))))) + 1)) + (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$9$var230:(1.0 - cv$temp$9$var230)))));
 																										}
 																										
 																										// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -8628,14 +8628,14 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																						}
 																						
 																						// Record the probability of sample task 241 generating output with current configuration.
-																						if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$10$var230)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$10$var230)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$10$var230:(1.0 - cv$temp$10$var230)))) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$10$var230:(1.0 - cv$temp$10$var230)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$10$var230));
+																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$10$var230:(1.0 - cv$temp$10$var230))));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$10$var230)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$10$var230)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$10$var230:(1.0 - cv$temp$10$var230)))))) + 1)) + (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$10$var230:(1.0 - cv$temp$10$var230)))));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -9393,14 +9393,14 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																										}
 																										
 																										// Record the probability of sample task 241 generating output with current configuration.
-																										if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$11$var230)) < cv$accumulatedConsumerProbabilities))
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$11$var230)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										if(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$11$var230:(1.0 - cv$temp$11$var230)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$11$var230:(1.0 - cv$temp$11$var230)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																										else {
 																											// If the second value is -infinity.
 																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$11$var230));
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$11$var230:(1.0 - cv$temp$11$var230))));
 																											else
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$11$var230)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], cv$temp$11$var230)));
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$11$var230:(1.0 - cv$temp$11$var230)))))) + 1)) + (Math.log(1.0) + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?cv$temp$11$var230:(1.0 - cv$temp$11$var230)))));
 																										}
 																										
 																										// Recorded the probability of reaching sample task 241 with the current configuration.

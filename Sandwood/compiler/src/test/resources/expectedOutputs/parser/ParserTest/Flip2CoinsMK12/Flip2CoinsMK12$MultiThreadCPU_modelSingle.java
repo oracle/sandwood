@@ -436,7 +436,7 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								double var38 = bias[j];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var38));
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var38:(1.0 - var38))));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -533,7 +533,7 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 								double var65 = bias[k];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var65));
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var65:(1.0 - var65))));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))

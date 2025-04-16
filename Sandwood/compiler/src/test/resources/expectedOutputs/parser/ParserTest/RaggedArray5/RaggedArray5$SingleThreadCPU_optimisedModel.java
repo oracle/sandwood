@@ -263,7 +263,9 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
+			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
+				double var38 = d[y];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -279,7 +281,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var51], d[y]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var51]?var38:(1.0 - var38))));
+			}
 			logProbability$var39 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -442,7 +445,12 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Processing random variable 39.
 			// 
 			// Processing sample task 54 of consumer random variable null.
-			for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
+			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
+				// Variable declaration of cv$temp$2$var38 moved.
+				// 
+				// Constructing a random variable input for use later.
+				double cv$temp$2$var38 = d[y];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -455,10 +463,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$2$var38's comment
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var51], d[y]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
 			// in log space.
@@ -510,7 +516,12 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Processing random variable 39.
 		// 
 		// Processing sample task 54 of consumer random variable null.
-		for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
+		for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
+			// Variable declaration of cv$temp$2$var38 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$temp$2$var38 = d[y];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -523,10 +534,8 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// cv$temp$2$var38's comment
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var51], d[y]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and

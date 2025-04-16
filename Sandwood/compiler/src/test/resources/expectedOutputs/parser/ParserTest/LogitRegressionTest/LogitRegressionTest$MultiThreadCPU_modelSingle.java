@@ -635,7 +635,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 								double var91 = (p[((i - 0) / 1)][j$var85] + bias);
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var91));
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var91:(1.0 - var91))));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1018,14 +1018,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 																				}
 																				
 																				// Record the probability of sample task 94 generating output with current configuration.
-																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + Math.log((y[i][index$j$15_7]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$15_7]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$15_7]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$15_7], cv$temp$2$var91)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$15_7]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$15_7]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1094,14 +1094,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 																				}
 																				
 																				// Record the probability of sample task 94 generating output with current configuration.
-																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + Math.log((y[i][index$j$16_7]?cv$temp$3$var91:(1.0 - cv$temp$3$var91)))) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$16_7]?cv$temp$3$var91:(1.0 - cv$temp$3$var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$16_7]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$16_7], cv$temp$3$var91)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$16_7]?cv$temp$3$var91:(1.0 - cv$temp$3$var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$16_7]?cv$temp$3$var91:(1.0 - cv$temp$3$var91)))));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1170,14 +1170,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 																				}
 																				
 																				// Record the probability of sample task 94 generating output with current configuration.
-																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + Math.log((y[i][index$j$17_7]?cv$temp$4$var91:(1.0 - cv$temp$4$var91)))) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$17_7]?cv$temp$4$var91:(1.0 - cv$temp$4$var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$17_7]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$17_7], cv$temp$4$var91)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$17_7]?cv$temp$4$var91:(1.0 - cv$temp$4$var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$17_7]?cv$temp$4$var91:(1.0 - cv$temp$4$var91)))));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1246,14 +1246,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 																				}
 																				
 																				// Record the probability of sample task 94 generating output with current configuration.
-																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + Math.log((y[i][index$j$18_7]?cv$temp$5$var91:(1.0 - cv$temp$5$var91)))) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$18_7]?cv$temp$5$var91:(1.0 - cv$temp$5$var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$18_7]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][index$j$18_7], cv$temp$5$var91)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$18_7]?cv$temp$5$var91:(1.0 - cv$temp$5$var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$18_7]?cv$temp$5$var91:(1.0 - cv$temp$5$var91)))));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1567,14 +1567,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 														}
 														
 														// Record the probability of sample task 94 generating output with current configuration.
-														if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var85], cv$temp$2$var91)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var85], cv$temp$2$var91)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + Math.log((y[i][j$var85]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][j$var85]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															// If the second value is -infinity.
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var85], cv$temp$2$var91));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][j$var85]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var85], cv$temp$2$var91)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(y[i][j$var85], cv$temp$2$var91)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][j$var85]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][j$var85]?cv$temp$2$var91:(1.0 - cv$temp$2$var91)))));
 														}
 														
 														// Recorded the probability of reaching sample task 94 with the current configuration.

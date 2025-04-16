@@ -887,10 +887,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							
 							// Substituted "timeStep$var136" with its value "0".
 							if(((0 <= var82) && (var82 < noStates))) {
-								// Store the value of the function call, so the function call is only made once.
-								// 
 								// Substituted "timeStep$var136" with its value "0".
-								cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, metric_valid_bias[st[sample][0]]);
+								double var139 = metric_valid_bias[st[sample][0]];
+								
+								// Store the value of the function call, so the function call is only made once.
+								cv$distributionAccumulator = Math.log((cv$sampleValue?var139:(1.0 - var139)));
 								
 								// Add the probability of this distribution configuration to the accumulator.
 								// 
@@ -908,10 +909,11 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								
 								// Substituted "timeStep$var136" with its value "0".
 								if(((0 <= var82) && (var82 < noStates))) {
-									// Store the value of the function call, so the function call is only made once.
-									// 
 									// Substituted "timeStep$var136" with its value "0".
-									double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, metric_valid_bias[st[sample][0]]));
+									double var139 = metric_valid_bias[st[sample][0]];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + Math.log((cv$sampleValue?var139:(1.0 - var139))));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -937,8 +939,10 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						if(fixedFlag$sample123) {
 							int var82 = st[sample][timeStep$var136];
 							if(((0 <= var82) && (var82 < noStates))) {
+								double var139 = metric_valid_bias[st[sample][timeStep$var136]];
+								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, metric_valid_bias[st[sample][timeStep$var136]]);
+								double cv$weightedProbability = Math.log((cv$sampleValue?var139:(1.0 - var139)));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -963,8 +967,10 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								double cv$probabilitySample123Value14 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$13];
 								int var82 = st[sample][timeStep$var136];
 								if(((0 <= var82) && (var82 < noStates))) {
+									double var139 = metric_valid_bias[st[sample][timeStep$var136]];
+									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample123Value14) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, metric_valid_bias[st[sample][timeStep$var136]]));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample123Value14) + Math.log((cv$sampleValue?var139:(1.0 - var139))));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1448,6 +1454,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$accumulator = 0.0;
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					double var139 = metric_valid_bias[st[sample][timeStep$var136]];
+					
 					// Variable declaration of cv$distributionAccumulator moved.
 					// Declaration comment was:
 					// Variable declaration of cv$distributionAccumulator moved.
@@ -1471,7 +1479,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample][timeStep$var136], metric_valid_bias[st[sample][timeStep$var136]]);
+					double cv$distributionAccumulator = Math.log((metric_valid_g[sample][timeStep$var136]?var139:(1.0 - var139)));
 					
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
@@ -1835,7 +1843,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY));
 			}
 			logProbability$var39 = cv$sampleAccumulator;
 			
@@ -2165,15 +2173,15 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					
 					// Substituted "index$sample$9_2" with its value "sample".
 					if(((0 <= var82) && (var82 < noStates))) {
-						// Substituted "index$sample$9_2" with its value "sample".
-						// 
-						// cv$temp$4$var139's comment
 						// Variable declaration of cv$temp$4$var139 moved.
 						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Value of the variable at this index
-						cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample][0], metric_valid_bias[cv$valuePos]);
+						double cv$temp$4$var139 = metric_valid_bias[cv$valuePos];
+						
+						// Substituted "index$sample$9_2" with its value "sample".
+						cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample][0]?cv$temp$4$var139:(1.0 - cv$temp$4$var139)));
 						
 						// Recorded the probability of reaching sample task 145 with the current configuration.
 						// 
@@ -2632,17 +2640,17 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								
 								// Substituted "index$sample$45_2" with its value "sample".
 								if(((0 <= var82) && (var82 < noStates))) {
-									// Substituted "index$sample$45_2" with its value "sample".
-									// 
-									// Substituted "timeStep$var136" with its value "1".
-									// 
-									// cv$temp$8$var139's comment
 									// Variable declaration of cv$temp$8$var139 moved.
 									// 
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample][1], metric_valid_bias[cv$valuePos]);
+									double cv$temp$8$var139 = metric_valid_bias[cv$valuePos];
+									
+									// Substituted "index$sample$45_2" with its value "sample".
+									// 
+									// Substituted "timeStep$var136" with its value "1".
+									cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample][1]?cv$temp$8$var139:(1.0 - cv$temp$8$var139)));
 									
 									// Recorded the probability of reaching sample task 145 with the current configuration.
 									// 
@@ -2886,17 +2894,17 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									
 									// Substituted "index$sample$46_2" with its value "sample".
 									if(((0 <= var82) && (var82 < noStates))) {
-										// Substituted "index$sample$46_2" with its value "sample".
-										// 
-										// Substituted "timeStep$var136" with its value "1".
-										// 
-										// cv$temp$9$var139's comment
 										// Variable declaration of cv$temp$9$var139 moved.
 										// 
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample][1], metric_valid_bias[cv$valuePos]);
+										double cv$temp$9$var139 = metric_valid_bias[cv$valuePos];
+										
+										// Substituted "index$sample$46_2" with its value "sample".
+										// 
+										// Substituted "timeStep$var136" with its value "1".
+										cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample][1]?cv$temp$9$var139:(1.0 - cv$temp$9$var139)));
 										
 										// Recorded the probability of reaching sample task 145 with the current configuration.
 										// 
@@ -3166,13 +3174,13 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							
 							// Substituted "index$sample$48_2" with its value "sample".
 							if(((0 <= var82) && (var82 < noStates))) {
-								// Substituted "index$sample$48_2" with its value "sample".
-								// 
-								// cv$temp$11$var139's comment
 								// Variable declaration of cv$temp$11$var139 moved.
 								// 
 								// Constructing a random variable input for use later.
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample][timeStep$var113], metric_valid_bias[index$sample123$35]);
+								double cv$temp$11$var139 = metric_valid_bias[index$sample123$35];
+								
+								// Substituted "index$sample$48_2" with its value "sample".
+								cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample][timeStep$var113]?cv$temp$11$var139:(1.0 - cv$temp$11$var139)));
 								
 								// Recorded the probability of reaching sample task 145 with the current configuration.
 								// 
@@ -3777,7 +3785,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Substituted "cv$temp$0$var37" with its value "0.0".
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue <= 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
 			
 			// Processing random variable 150.
 			// 
@@ -4033,7 +4041,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var37" with its value "0.0".
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
 		
 		// Processing random variable 150.
 		// 

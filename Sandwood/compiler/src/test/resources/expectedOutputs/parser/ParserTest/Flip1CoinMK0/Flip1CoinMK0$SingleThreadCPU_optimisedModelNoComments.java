@@ -106,7 +106,7 @@ class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample7() {
 		if(!fixedProbFlag$sample7) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flip, bias);
+			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
 			logProbability$bernoulli = cv$distributionAccumulator;
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);

@@ -268,7 +268,9 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			for(int j = 0; j < coins; j += 1) {
-				for(int var45 = 0; var45 < length$flipsMeasured[j]; var45 += 1)
+				for(int var45 = 0; var45 < length$flipsMeasured[j]; var45 += 1) {
+					double var34 = (1 - bias[j]);
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
 					// Scale the probability relative to the observed distribution space.
@@ -284,7 +286,8 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[j][var45], (1 - bias[j])));
+					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var45]?var34:(1.0 - var34))));
+				}
 			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
@@ -375,7 +378,14 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Processing sample task 46 of consumer random variable bernoulli.
 			// 
 			// Substituted "j" with its value "i".
-			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
+			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
+				// Variable declaration of cv$temp$2$var34 moved.
+				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Set the current value to the current state of the tree.
+				double cv$temp$2$var34 = (1 - cv$originalValue);
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -390,14 +400,8 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// inputs.
 				// 
 				// Substituted "j" with its value "i".
-				// 
-				// cv$temp$2$var34's comment
-				// Variable declaration of cv$temp$2$var34 moved.
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Set the current value to the current state of the tree.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], (1 - cv$originalValue)) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[i][var45]?cv$temp$2$var34:(1.0 - cv$temp$2$var34))) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -422,7 +426,12 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Processing sample task 46 of consumer random variable bernoulli.
 		// 
 		// Substituted "j" with its value "i".
-		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
+		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
+			// Variable declaration of cv$temp$2$var34 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$temp$2$var34 = (1 - cv$proposedValue);
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -437,12 +446,8 @@ class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// inputs.
 			// 
 			// Substituted "j" with its value "i".
-			// 
-			// cv$temp$2$var34's comment
-			// Variable declaration of cv$temp$2$var34 moved.
-			// 
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[i][var45], (1 - cv$proposedValue)) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?cv$temp$2$var34:(1.0 - cv$temp$2$var34))) + cv$accumulatedProbabilities);
+		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and

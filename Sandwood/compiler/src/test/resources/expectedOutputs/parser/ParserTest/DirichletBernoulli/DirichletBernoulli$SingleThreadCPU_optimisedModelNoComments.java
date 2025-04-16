@@ -140,8 +140,10 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample38() {
 		if(!fixedProbFlag$sample38) {
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var37], prior[0]));
+			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+				double var19 = prior[0];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var37]?var19:(1.0 - var19))));
+			}
 			logProbability$b1 = cv$sampleAccumulator;
 			logProbability$var38 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
@@ -159,8 +161,10 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample51() {
 		if(!fixedProbFlag$sample51) {
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var50], prior[1]));
+			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+				double var22 = prior[1];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var50]?var22:(1.0 - var22))));
+			}
 			logProbability$b2 = cv$sampleAccumulator;
 			logProbability$var51 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
@@ -198,10 +202,14 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		cv$proposedDifference = (cv$movementRatio * cv$proposedDifference);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
-			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var37], prior[0]) + cv$accumulatedProbabilities);
-			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var50], prior[1]) + cv$accumulatedProbabilities);
+			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+				double cv$temp$2$var19 = prior[0];
+				cv$accumulatedProbabilities = (Math.log((output[i$var37]?cv$temp$2$var19:(1.0 - cv$temp$2$var19))) + cv$accumulatedProbabilities);
+			}
+			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+				double cv$temp$3$var22 = prior[1];
+				cv$accumulatedProbabilities = (Math.log((output[i$var50]?cv$temp$3$var22:(1.0 - cv$temp$3$var22))) + cv$accumulatedProbabilities);
+			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
@@ -210,10 +218,14 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 2; cv$loopIndex += 1)
 			prior[cv$loopIndex] = (prior[cv$loopIndex] - cv$proposedDifference);
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
-		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var37], prior[0]) + cv$accumulatedProbabilities);
-		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var50], prior[1]) + cv$accumulatedProbabilities);
+		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+			double cv$temp$2$var19 = prior[0];
+			cv$accumulatedProbabilities = (Math.log((output[i$var37]?cv$temp$2$var19:(1.0 - cv$temp$2$var19))) + cv$accumulatedProbabilities);
+		}
+		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+			double cv$temp$3$var22 = prior[1];
+			cv$accumulatedProbabilities = (Math.log((output[i$var50]?cv$temp$3$var22:(1.0 - cv$temp$3$var22))) + cv$accumulatedProbabilities);
+		}
 		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				prior[cv$loopIndex] = (prior[cv$loopIndex] + cv$proposedDifference);

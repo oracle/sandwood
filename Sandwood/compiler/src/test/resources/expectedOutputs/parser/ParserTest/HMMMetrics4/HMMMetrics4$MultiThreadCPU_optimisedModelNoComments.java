@@ -412,7 +412,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							if(fixedFlag$sample57) {
 								int var183 = st[sample$var196][0];
 								if(((0 <= var183) && (var183 < noStates))) {
-									cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var196][0]]);
+									double var230 = current_metric_valid_bias[server][st[sample$var196][0]];
+									cv$distributionAccumulator = Math.log((cv$sampleValue?var230:(1.0 - var230)));
 									cv$probabilityReached = 1.0;
 								}
 							} else {
@@ -420,7 +421,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$probabilitySample57Value5 = distribution$sample57[sample$var196][index$sample57$4];
 									int var183 = st[sample$var196][0];
 									if(((0 <= var183) && (var183 < noStates))) {
-										double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var196][0]]));
+										double var230 = current_metric_valid_bias[server][st[sample$var196][0]];
+										double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 										if((cv$weightedProbability < cv$distributionAccumulator))
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 										else {
@@ -438,7 +440,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							if(fixedFlag$sample76) {
 								int var183 = st[sample$var196][timeStep$var226];
 								if(((0 <= var183) && (var183 < noStates))) {
-									double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+									double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+									double cv$weightedProbability = Math.log((cv$sampleValue?var230:(1.0 - var230)));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -454,7 +457,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$probabilitySample76Value14 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][index$sample76$13];
 									int var183 = st[sample$var196][timeStep$var226];
 									if(((0 <= var183) && (var183 < noStates))) {
-										double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]));
+										double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+										double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
 										if((cv$weightedProbability < cv$distributionAccumulator))
 											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 										else {
@@ -727,7 +731,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int var119 = 0; var119 < noServers; var119 += 1) {
 				for(int var129 = 0; var129 < noStates; var129 += 1) {
 					double cv$sampleValue = current_metric_mean[var119][var129];
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY));
 				}
 			}
 			logProbability$var108 = cv$sampleAccumulator;
@@ -815,7 +819,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var196][server][timeStep$var226], current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+						double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+						double cv$distributionAccumulator = Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230)));
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 						logProbability$var231[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
 						logProbability$sample241[sample$var196][server][timeStep$var226] = cv$distributionAccumulator;
@@ -975,7 +980,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
-			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				if((((var129 == st[sample$var196][0]) && metric_valid_g[sample$var196][var119][0]) && (0 < length$metric[sample$var196][0]))) {
 					if(fixedFlag$sample57) {
@@ -1069,7 +1074,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		current_metric_mean[var119][var129] = cv$proposedValue;
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue <= (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 			if((((var129 == st[sample$var196][0]) && metric_valid_g[sample$var196][var119][0]) && (0 < length$metric[sample$var196][0]))) {
 				if(fixedFlag$sample57) {
@@ -1492,7 +1497,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;
 					int var183 = st[sample$var45][0];
 					if(((0 <= var183) && (var183 < noStates))) {
-						cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var45][server][0], current_metric_valid_bias[server][cv$valuePos]);
+						double cv$temp$4$var230 = current_metric_valid_bias[server][cv$valuePos];
+						cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample$var45][server][0]?cv$temp$4$var230:(1.0 - cv$temp$4$var230)));
 						cv$consumerDistributionProbabilityAccumulator = 0.0;
 					}
 					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1662,7 +1668,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								int var183 = st[sample$var45][1];
 								if(((0 <= var183) && (var183 < noStates))) {
-									cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var45][server][1], current_metric_valid_bias[server][cv$valuePos]);
+									double cv$temp$8$var230 = current_metric_valid_bias[server][cv$valuePos];
+									cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample$var45][server][1]?cv$temp$8$var230:(1.0 - cv$temp$8$var230)));
 									cv$consumerDistributionProbabilityAccumulator = 0.0;
 								}
 								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1748,7 +1755,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									int var183 = st[sample$var45][1];
 									if(((0 <= var183) && (var183 < noStates))) {
-										cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var45][server][1], current_metric_valid_bias[server][cv$valuePos]);
+										double cv$temp$9$var230 = current_metric_valid_bias[server][cv$valuePos];
+										cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample$var45][server][1]?cv$temp$9$var230:(1.0 - cv$temp$9$var230)));
 										cv$consumerDistributionProbabilityAccumulator = 0.0;
 									}
 									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
@@ -1844,7 +1852,8 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var183 = st[sample$var45][timeStep$var66];
 							if(((0 <= var183) && (var183 < noStates))) {
-								cv$accumulatedConsumerProbabilities = DistributionSampling.logProbabilityBernoulli(metric_valid_g[sample$var45][server][timeStep$var66], current_metric_valid_bias[server][index$sample76$35]);
+								double cv$temp$11$var230 = current_metric_valid_bias[server][index$sample76$35];
+								cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample$var45][server][timeStep$var66]?cv$temp$11$var230:(1.0 - cv$temp$11$var230)));
 								cv$consumerDistributionProbabilityAccumulator = 0.0;
 							}
 							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);

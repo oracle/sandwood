@@ -121,7 +121,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					boolean cv$sampleValue = output[var18];
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, prior));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?prior:(1.0 - prior))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -171,7 +171,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$sampleValue = prior;
 				{
 					{
-						double cv$weightedProbability = (Math.log(1.0) + (((a <= cv$sampleValue) && (cv$sampleValue <= b))?(-Math.log((b - a))):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((a <= cv$sampleValue) && (cv$sampleValue < b))?(-Math.log((b - a))):Double.NEGATIVE_INFINITY));
 						if((cv$weightedProbability < cv$distributionAccumulator))
 							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 						else {
@@ -246,7 +246,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$1$b = b;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$a <= cv$currentValue) && (cv$currentValue <= cv$temp$1$b))?(-Math.log((cv$temp$1$b - cv$temp$0$a))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$a <= cv$currentValue) && (cv$currentValue < cv$temp$1$b))?(-Math.log((cv$temp$1$b - cv$temp$0$a))):Double.NEGATIVE_INFINITY));
 					{
 						{
 							double traceTempVariable$prior$1_1 = cv$currentValue;
@@ -262,13 +262,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 													{
 														cv$temp$2$prior = traceTempVariable$prior$1_1;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[var18], cv$temp$2$prior)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[var18], cv$temp$2$prior)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + Math.log((output[var18]?cv$temp$2$prior:(1.0 - cv$temp$2$prior)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((output[var18]?cv$temp$2$prior:(1.0 - cv$temp$2$prior)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[var18], cv$temp$2$prior));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((output[var18]?cv$temp$2$prior:(1.0 - cv$temp$2$prior))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[var18], cv$temp$2$prior)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(output[var18], cv$temp$2$prior)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((output[var18]?cv$temp$2$prior:(1.0 - cv$temp$2$prior)))))) + 1)) + (Math.log(1.0) + Math.log((output[var18]?cv$temp$2$prior:(1.0 - cv$temp$2$prior)))));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}

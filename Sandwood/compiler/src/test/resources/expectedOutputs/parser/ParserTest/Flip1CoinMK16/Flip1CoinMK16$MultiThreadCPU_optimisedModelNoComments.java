@@ -131,7 +131,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
 			if(Double.isNaN(guard)) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flip, bias);
+				double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$bernoulli = cv$distributionAccumulator;
 				logProbability$sample16 = cv$distributionAccumulator;

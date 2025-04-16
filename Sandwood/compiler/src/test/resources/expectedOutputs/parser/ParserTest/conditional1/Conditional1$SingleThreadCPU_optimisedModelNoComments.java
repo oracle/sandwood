@@ -115,7 +115,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
 			if(!guard) {
-				double cv$distributionAccumulator = (((0.0 <= var14) && (var14 <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var13 = cv$distributionAccumulator;
 				logProbability$sample16 = cv$distributionAccumulator;
@@ -142,7 +142,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void logProbabilityValue$sample4() {
 		if(!fixedProbFlag$sample4) {
-			double cv$weightedProbability = DistributionSampling.logProbabilityBernoulli(guard, 0.5);
+			double cv$weightedProbability = -0.6931471805599453;
 			if((guard && !(value == 1.0)))
 				cv$weightedProbability = Double.NEGATIVE_INFINITY;
 			logProbability$bernoulli = cv$weightedProbability;
@@ -163,12 +163,12 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	private final void sample4() {
 		guard = false;
-		cv$var4$stateProbabilityGlobal[0] = DistributionSampling.logProbabilityBernoulli(false, 0.5);
+		cv$var4$stateProbabilityGlobal[0] = -0.6931471805599453;
 		guard = true;
 		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 		if((value == 1.0))
 			cv$accumulatedConsumerProbabilities = 0.0;
-		cv$var4$stateProbabilityGlobal[1] = (cv$accumulatedConsumerProbabilities + DistributionSampling.logProbabilityBernoulli(true, 0.5));
+		cv$var4$stateProbabilityGlobal[1] = (cv$accumulatedConsumerProbabilities - 0.6931471805599453);
 		double cv$logSum;
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];

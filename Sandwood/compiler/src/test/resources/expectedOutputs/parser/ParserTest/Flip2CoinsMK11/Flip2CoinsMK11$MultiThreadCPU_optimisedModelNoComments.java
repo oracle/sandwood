@@ -163,8 +163,10 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample49() {
 		if(!fixedProbFlag$sample49) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[0][var48], bias[0]));
+			for(int var48 = 0; var48 < length$flipsMeasured[0]; var48 += 1) {
+				double var37 = bias[0];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[0][var48]?var37:(1.0 - var37))));
+			}
 			logProbability$bernoulli1[0] = cv$sampleAccumulator;
 			logProbability$sample49[0] = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
@@ -185,8 +187,10 @@ class Flip2CoinsMK11$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$accumulator = 0.0;
 			for(int k = 1; k < coins; k += 1) {
 				double cv$sampleAccumulator = 0.0;
-				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1)
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[k][var75], bias[k]));
+				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+					double var64 = bias[k];
+					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[k][var75]?var64:(1.0 - var64))));
+				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli2[(k - 1)] = cv$sampleAccumulator;
 				logProbability$sample77[(k - 1)] = cv$sampleAccumulator;

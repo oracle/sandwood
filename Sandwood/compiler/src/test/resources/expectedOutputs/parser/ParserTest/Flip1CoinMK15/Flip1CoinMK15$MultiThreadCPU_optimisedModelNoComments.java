@@ -133,7 +133,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample50) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var46 = 0; var46 < samples; var46 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var46], bias));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var46]?bias:(1.0 - bias))));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var47 = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
@@ -188,11 +188,11 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			if(guard1) {
 				for(int var46 = 0; var46 < samples; var46 += 1)
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], b) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var46]?b:(1.0 - b))) + cv$accumulatedProbabilities);
 			} else {
 				double reduceVar$var33$16 = ((b / 2) + c[1]);
 				for(int var46 = 0; var46 < samples; var46 += 1)
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], reduceVar$var33$16) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$16:(1.0 - reduceVar$var33$16))) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -207,11 +207,11 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
 		if(guard1) {
 			for(int var46 = 0; var46 < samples; var46 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], cv$proposedValue) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 		} else {
 			double reduceVar$var33$16 = ((cv$proposedValue / 2) + c[1]);
 			for(int var46 = 0; var46 < samples; var46 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[var46], reduceVar$var33$16) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$16:(1.0 - reduceVar$var33$16))) + cv$accumulatedProbabilities);
 		}
 		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			b = cv$originalValue;

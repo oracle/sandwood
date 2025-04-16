@@ -211,7 +211,8 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int var46 = 0; var46 < samples; var46 += 1) {
 				double[] inner = bias[0];
 				inner[0] = q;
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(flips[var46], inner[b]));
+				double var34 = inner[b];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var46]?var34:(1.0 - var34))));
 			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var47 = cv$sampleAccumulator;

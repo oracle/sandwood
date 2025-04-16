@@ -223,7 +223,8 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample119) {
 			double cv$accumulator = 0.0;
 			for(int j = 0; j < samples; j += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], bias[(samples - st2[j])]);
+				double var116 = bias[(samples - st2[j])];
+				double cv$distributionAccumulator = Math.log((flips[j]?var116:(1.0 - var116)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var117[j] = cv$distributionAccumulator;
 				logProbability$sample119[j] = cv$distributionAccumulator;
@@ -405,13 +406,17 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						cv$accumulatedProbabilities = ((((0.0 <= st[index$i$5_4]) && (st[index$i$5_4] < 2))?Math.log(m[0][st[index$i$5_4]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
-			if((0 < samples))
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[0]) + cv$accumulatedProbabilities);
+			if((0 < samples)) {
+				double cv$temp$6$var116 = bias[0];
+				cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$6$var116:(1.0 - cv$temp$6$var116))) + cv$accumulatedProbabilities);
+			}
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
 				if((0 == (indirection[(i$var71 - 1)][i$var71] / i$var71))) {
 					int j = (indirection[(i$var71 - 1)][i$var71] / i$var71);
-					if(((0 <= j) && (j < samples)))
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j], bias[0]) + cv$accumulatedProbabilities);
+					if(((0 <= j) && (j < samples))) {
+						double cv$temp$7$var116 = bias[0];
+						cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$7$var116:(1.0 - cv$temp$7$var116))) + cv$accumulatedProbabilities);
+					}
 				}
 			}
 			cv$var53$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -431,13 +436,17 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$accumulatedProbabilities = ((((0.0 <= st[index$i$5_4]) && (st[index$i$5_4] < 2))?Math.log(m[1][st[index$i$5_4]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 		}
-		if((0 < samples))
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[0], bias[1]) + cv$accumulatedProbabilities);
+		if((0 < samples)) {
+			double cv$temp$6$var116 = bias[1];
+			cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$6$var116:(1.0 - cv$temp$6$var116))) + cv$accumulatedProbabilities);
+		}
 		for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
 			if((0 == (indirection[(i$var71 - 1)][i$var71] / i$var71))) {
 				int j = (indirection[(i$var71 - 1)][i$var71] / i$var71);
-				if(((0 <= j) && (j < samples)))
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j], bias[1]) + cv$accumulatedProbabilities);
+				if(((0 <= j) && (j < samples))) {
+					double cv$temp$7$var116 = bias[1];
+					cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$7$var116:(1.0 - cv$temp$7$var116))) + cv$accumulatedProbabilities);
+				}
 			}
 		}
 		cv$var53$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -485,8 +494,10 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			for(int index$i$6_2 = 1; index$i$6_2 < samples; index$i$6_2 += 1) {
 				if((i$var71 == (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2))) {
 					int j = (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2);
-					if(((0 <= j) && (j < samples)))
-						cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j], bias[0]) + cv$accumulatedProbabilities);
+					if(((0 <= j) && (j < samples))) {
+						double cv$temp$4$var116 = bias[0];
+						cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$4$var116:(1.0 - cv$temp$4$var116))) + cv$accumulatedProbabilities);
+					}
 				}
 			}
 			cv$var78$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -507,8 +518,10 @@ class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int index$i$6_2 = 1; index$i$6_2 < samples; index$i$6_2 += 1) {
 			if((i$var71 == (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2))) {
 				int j = (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2);
-				if(((0 <= j) && (j < samples)))
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[j], bias[1]) + cv$accumulatedProbabilities);
+				if(((0 <= j) && (j < samples))) {
+					double cv$temp$4$var116 = bias[1];
+					cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$4$var116:(1.0 - cv$temp$4$var116))) + cv$accumulatedProbabilities);
+				}
 			}
 		}
 		cv$var78$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;

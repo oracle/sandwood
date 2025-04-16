@@ -275,6 +275,8 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < samples; i += 1) {
+				double var24 = bias[i];
+				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -298,7 +300,7 @@ class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.interna
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[i], bias[i]);
+				double cv$distributionAccumulator = Math.log((flips[i]?var24:(1.0 - var24)));
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.

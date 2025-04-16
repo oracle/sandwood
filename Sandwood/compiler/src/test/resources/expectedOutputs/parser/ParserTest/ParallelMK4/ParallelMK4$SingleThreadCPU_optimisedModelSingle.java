@@ -261,7 +261,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY);
+					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
@@ -378,7 +378,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Substituted "cv$temp$0$var56" with its value "0.0".
 		// 
 		// Set the current value to the current state of the tree.
-		double cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		indirection1[i][j] = cv$proposedValue;
 		
 		// Substituted "k" with its value "i".
@@ -405,7 +405,7 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var56" with its value "0.0".
-		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and

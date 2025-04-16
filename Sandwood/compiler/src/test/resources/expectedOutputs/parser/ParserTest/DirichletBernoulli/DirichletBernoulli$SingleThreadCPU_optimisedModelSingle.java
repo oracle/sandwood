@@ -271,7 +271,9 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
+			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+				double var19 = prior[0];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -287,7 +289,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var37], prior[0]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var37]?var19:(1.0 - var19))));
+			}
 			logProbability$b1 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -349,7 +352,9 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
+			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+				double var22 = prior[1];
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -365,7 +370,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(output[i$var50], prior[1]));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var50]?var22:(1.0 - var22))));
+			}
 			logProbability$b2 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -500,7 +506,12 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Processing random variable 20.
 			// 
 			// Processing sample task 38 of consumer random variable b1.
-			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
+			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+				// Variable declaration of cv$temp$2$var19 moved.
+				// 
+				// Constructing a random variable input for use later.
+				double cv$temp$2$var19 = prior[0];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -513,15 +524,18 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$2$var19's comment
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var37], prior[0]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var37]?cv$temp$2$var19:(1.0 - cv$temp$2$var19))) + cv$accumulatedProbabilities);
+			}
 			
 			// Processing random variable 23.
 			// 
 			// Processing sample task 51 of consumer random variable b2.
-			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
+			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+				// Variable declaration of cv$temp$3$var22 moved.
+				// 
+				// Constructing a random variable input for use later.
+				double cv$temp$3$var22 = prior[1];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -534,10 +548,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$3$var22's comment
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var50], prior[1]) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var50]?cv$temp$3$var22:(1.0 - cv$temp$3$var22))) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
 			// in log space.
@@ -582,7 +594,12 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Processing random variable 20.
 		// 
 		// Processing sample task 38 of consumer random variable b1.
-		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
+		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+			// Variable declaration of cv$temp$2$var19 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$temp$2$var19 = prior[0];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -595,15 +612,18 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// cv$temp$2$var19's comment
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var37], prior[0]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var37]?cv$temp$2$var19:(1.0 - cv$temp$2$var19))) + cv$accumulatedProbabilities);
+		}
 		
 		// Processing random variable 23.
 		// 
 		// Processing sample task 51 of consumer random variable b2.
-		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
+		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+			// Variable declaration of cv$temp$3$var22 moved.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$temp$3$var22 = prior[1];
+			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
 			// 
@@ -616,10 +636,8 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// cv$temp$3$var22's comment
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(output[i$var50], prior[1]) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var50]?cv$temp$3$var22:(1.0 - cv$temp$3$var22))) + cv$accumulatedProbabilities);
+		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and

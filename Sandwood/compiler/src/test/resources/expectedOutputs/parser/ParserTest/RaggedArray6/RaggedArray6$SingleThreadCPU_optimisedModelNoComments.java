@@ -184,8 +184,10 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void logProbabilityValue$sample65() {
 		if(!fixedProbFlag$sample65) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var62], d[y]));
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				double var49 = d[y];
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var62]?var49:(1.0 - var49))));
+			}
 			logProbability$var50 = cv$sampleAccumulator;
 			logProbability$var63 = cv$sampleAccumulator;
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
@@ -204,14 +206,18 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		{
 			y = 0;
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityDirichlet(d, a[0], 2) + Math.log(b[0]));
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var62], d[0]) + cv$accumulatedProbabilities);
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				double cv$temp$4$var49 = d[0];
+				cv$accumulatedProbabilities = (Math.log((obs[var62]?cv$temp$4$var49:(1.0 - cv$temp$4$var49))) + cv$accumulatedProbabilities);
+			}
 			cv$var45$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		y = 1;
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityDirichlet(d, a[1], 3) + Math.log(b[1]));
-		for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var62], d[1]) + cv$accumulatedProbabilities);
+		for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+			double cv$temp$4$var49 = d[1];
+			cv$accumulatedProbabilities = (Math.log((obs[var62]?cv$temp$4$var49:(1.0 - cv$temp$4$var49))) + cv$accumulatedProbabilities);
+		}
 		cv$var45$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
 		double cv$lseMax = cv$var45$stateProbabilityGlobal[0];
@@ -268,8 +274,10 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((0 == y))
 				lengthCV$a$48_3 = 2;
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_3);
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var62], d[y]) + cv$accumulatedProbabilities);
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				double cv$temp$2$var49 = d[y];
+				cv$accumulatedProbabilities = (Math.log((obs[var62]?cv$temp$2$var49:(1.0 - cv$temp$2$var49))) + cv$accumulatedProbabilities);
+			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
@@ -283,8 +291,10 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if((0 == y))
 			lengthCV$a$48_3 = 2;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_3);
-		for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var62], d[y]) + cv$accumulatedProbabilities);
+		for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+			double cv$temp$2$var49 = d[y];
+			cv$accumulatedProbabilities = (Math.log((obs[var62]?cv$temp$2$var49:(1.0 - cv$temp$2$var49))) + cv$accumulatedProbabilities);
+		}
 		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);

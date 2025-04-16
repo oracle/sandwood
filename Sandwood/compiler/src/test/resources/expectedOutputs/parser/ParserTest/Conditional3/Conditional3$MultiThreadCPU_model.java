@@ -205,7 +205,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								double var12 = 0.5;
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((var11 <= cv$sampleValue) && (cv$sampleValue <= var12))?(-Math.log((var12 - var11))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + (((var11 <= cv$sampleValue) && (cv$sampleValue < var12))?(-Math.log((var12 - var11))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -432,7 +432,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double var2 = 0.5;
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, var2));
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var2:(1.0 - var2))));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -611,7 +611,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var11 <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var12))?(-Math.log((cv$temp$1$var12 - cv$temp$0$var11))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var11 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var12))?(-Math.log((cv$temp$1$var12 - cv$temp$0$var11))):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 17.
 					{
@@ -780,7 +780,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$currentValue, cv$temp$0$var2));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + Math.log((cv$currentValue?cv$temp$0$var2:(1.0 - cv$temp$0$var2))));
 					
 					// Processing conditional point17.
 					{
@@ -940,14 +940,14 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 																}
 																
 																// Record the probability of sample task 16 generating output with current configuration.
-																if(((Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 <= cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 <= cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 <= cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 <= cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 <= cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 16 with the current configuration.

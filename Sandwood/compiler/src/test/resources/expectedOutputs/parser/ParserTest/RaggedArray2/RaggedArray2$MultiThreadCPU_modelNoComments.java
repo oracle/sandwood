@@ -172,7 +172,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					boolean cv$sampleValue = obs[var95];
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(cv$sampleValue, p));
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?p:(1.0 - p))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -447,13 +447,13 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													{
 														cv$temp$4$p = p;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$4$p)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$4$p)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + Math.log((obs[var95]?cv$temp$4$p:(1.0 - cv$temp$4$p)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((obs[var95]?cv$temp$4$p:(1.0 - cv$temp$4$p)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$4$p));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((obs[var95]?cv$temp$4$p:(1.0 - cv$temp$4$p))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$4$p)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$4$p)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((obs[var95]?cv$temp$4$p:(1.0 - cv$temp$4$p)))))) + 1)) + (Math.log(1.0) + Math.log((obs[var95]?cv$temp$4$p:(1.0 - cv$temp$4$p)))));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
@@ -584,13 +584,13 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													{
 														cv$temp$2$p = p;
 													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$2$p)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$2$p)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													if(((Math.log(1.0) + Math.log((obs[var95]?cv$temp$2$p:(1.0 - cv$temp$2$p)))) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((obs[var95]?cv$temp$2$p:(1.0 - cv$temp$2$p)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 													else {
 														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$2$p));
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((obs[var95]?cv$temp$2$p:(1.0 - cv$temp$2$p))));
 														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$2$p)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBernoulli(obs[var95], cv$temp$2$p)));
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((obs[var95]?cv$temp$2$p:(1.0 - cv$temp$2$p)))))) + 1)) + (Math.log(1.0) + Math.log((obs[var95]?cv$temp$2$p:(1.0 - cv$temp$2$p)))));
 													}
 													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}

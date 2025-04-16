@@ -321,7 +321,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBernoulli(obs[var84], p));
+				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var84]?p:(1.0 - p))));
 			logProbability$var72 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -446,7 +446,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// inputs.
 				// 
 				// Substituted "cv$temp$2$p" with its value "p".
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(obs[var84], p) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var84]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 

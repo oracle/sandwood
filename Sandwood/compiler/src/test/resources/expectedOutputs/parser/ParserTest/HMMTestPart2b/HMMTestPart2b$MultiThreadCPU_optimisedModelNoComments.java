@@ -256,7 +256,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample86) {
 			double cv$accumulator = 0.0;
 			for(int j = 1; j < samples; j += 1) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBernoulli(flips[j], bias[st[j]]);
+				double var83 = bias[st[j]];
+				double cv$distributionAccumulator = Math.log((flips[j]?var83:(1.0 - var83)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var84[(j - 1)] = cv$distributionAccumulator;
 				logProbability$sample86[(j - 1)] = cv$distributionAccumulator;
@@ -309,7 +310,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			int index$i$2_2 = (i$var64 + 1);
 			if((index$i$2_2 < (samples - 1)))
 				cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$2_2 + 1)]) && (st[(index$i$2_2 + 1)] < 2))?Math.log(m[0][st[(index$i$2_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var64 + 1)], bias[0]) + cv$accumulatedProbabilities);
+			double cv$temp$4$var83 = bias[0];
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var64 + 1)]?cv$temp$4$var83:(1.0 - cv$temp$4$var83))) + cv$accumulatedProbabilities);
 			cv$var70$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		st[(i$var64 + 1)] = 1;
@@ -317,7 +319,8 @@ class HMMTestPart2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		int index$i$2_2 = (i$var64 + 1);
 		if((index$i$2_2 < (samples - 1)))
 			cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$2_2 + 1)]) && (st[(index$i$2_2 + 1)] < 2))?Math.log(m[1][st[(index$i$2_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-		cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBernoulli(flips[(i$var64 + 1)], bias[1]) + cv$accumulatedProbabilities);
+		double cv$temp$4$var83 = bias[1];
+		cv$accumulatedProbabilities = (Math.log((flips[(i$var64 + 1)]?cv$temp$4$var83:(1.0 - cv$temp$4$var83))) + cv$accumulatedProbabilities);
 		cv$var70$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
 		double cv$lseMax = cv$var70$stateProbabilityGlobal[0];

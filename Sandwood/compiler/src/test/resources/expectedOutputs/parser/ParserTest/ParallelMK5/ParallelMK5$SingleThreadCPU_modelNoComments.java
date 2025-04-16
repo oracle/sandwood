@@ -174,7 +174,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							{
 								double var56 = 0.0;
 								double var57 = 1.0;
-								double cv$weightedProbability = (Math.log(1.0) + (((var56 <= cv$sampleValue) && (cv$sampleValue <= var57))?(-Math.log((var57 - var56))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + (((var56 <= cv$sampleValue) && (cv$sampleValue < var57))?(-Math.log((var57 - var56))):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -307,7 +307,7 @@ class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$1$var57 = 1.0;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var56 <= cv$currentValue) && (cv$currentValue <= cv$temp$1$var57))?(-Math.log((cv$temp$1$var57 - cv$temp$0$var56))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var56 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var57))?(-Math.log((cv$temp$1$var57 - cv$temp$0$var56))):Double.NEGATIVE_INFINITY));
 					{
 						{
 							double traceTempVariable$var85$3_1 = cv$currentValue;
