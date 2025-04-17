@@ -18,10 +18,12 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$value;
 	private double logProbability$value2;
 	private double logProbability$var18;
+	private double logProbability$var19;
 	private double[] observedValue;
 	private boolean system$gibbsForward = true;
 	private double[] value;
 	private double[] value2;
+	private double var19;
 
 	public Conditional2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -110,16 +112,27 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value2;
 	}
 
+	@Override
+	public final double get$var19() {
+		return var19;
+	}
+
+	@Override
+	public final void set$var19(double cv$value) {
+		var19 = cv$value;
+		fixedProbFlag$sample21 = false;
+	}
+
 	private final void logProbabilityValue$sample21() {
 		if(!fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
 			if(!guard) {
-				double cv$sampleValue = value[0];
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= var19) && (var19 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$var18 = cv$distributionAccumulator;
 				logProbability$sample21 = cv$distributionAccumulator;
 			}
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
 			logProbability$value = (logProbability$value + cv$accumulator);
 			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -131,6 +144,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$accumulator = logProbability$sample21;
 				logProbability$var18 = logProbability$sample21;
 			}
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
 			logProbability$value = (logProbability$value + cv$accumulator);
 			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -205,8 +219,10 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(guard)
 			value[0] = 1.0;
 		else {
-			if(!fixedFlag$sample21)
-				value[0] = DistributionSampling.sampleUniform(RNG$);
+			if(!fixedFlag$sample21) {
+				var19 = DistributionSampling.sampleUniform(RNG$);
+				value[0] = var19;
+			}
 		}
 		if((!fixedFlag$sample4 || !fixedFlag$sample21))
 			value2[0] = value[0];
@@ -241,6 +257,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$var19 = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample21)

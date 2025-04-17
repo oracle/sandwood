@@ -1259,14 +1259,14 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										{
 											if((0 < noProducts)) {
 												double reduceVar$sum$10 = 0.0;
-												for(int cv$reduction2634Index = 0; cv$reduction2634Index < j$var38; cv$reduction2634Index += 1) {
+												for(int cv$reduction2637Index = 0; cv$reduction2637Index < j$var38; cv$reduction2637Index += 1) {
 													double k$var49 = reduceVar$sum$10;
-													double l$var50 = exped[cv$reduction2634Index];
+													double l$var50 = exped[cv$reduction2637Index];
 													reduceVar$sum$10 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2634Index = (j$var38 + 1); cv$reduction2634Index < noProducts; cv$reduction2634Index += 1) {
+												for(int cv$reduction2637Index = (j$var38 + 1); cv$reduction2637Index < noProducts; cv$reduction2637Index += 1) {
 													double k$var49 = reduceVar$sum$10;
-													double l$var50 = exped[cv$reduction2634Index];
+													double l$var50 = exped[cv$reduction2637Index];
 													reduceVar$sum$10 = (k$var49 + l$var50);
 												}
 												double cv$reduced46 = reduceVar$sum$10;
@@ -1282,14 +1282,14 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 																	{
 																		if((0 < noProducts)) {
 																			double reduceVar$denom$19 = 0.0;
-																			for(int cv$reduction2653Index = 0; cv$reduction2653Index < j$var116; cv$reduction2653Index += 1) {
+																			for(int cv$reduction2656Index = 0; cv$reduction2656Index < j$var116; cv$reduction2656Index += 1) {
 																				double k$var128 = reduceVar$denom$19;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2653Index];
+																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2656Index];
 																				reduceVar$denom$19 = (k$var128 + l$var129);
 																			}
-																			for(int cv$reduction2653Index = (j$var116 + 1); cv$reduction2653Index < noProducts; cv$reduction2653Index += 1) {
+																			for(int cv$reduction2656Index = (j$var116 + 1); cv$reduction2656Index < noProducts; cv$reduction2656Index += 1) {
 																				double k$var128 = reduceVar$denom$19;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2653Index];
+																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2656Index];
 																				reduceVar$denom$19 = (k$var128 + l$var129);
 																			}
 																			double cv$reduced128 = reduceVar$denom$19;
@@ -1362,14 +1362,14 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										{
 											if((0 < noProducts)) {
 												double reduceVar$sum$11 = 0.0;
-												for(int cv$reduction2682Index = 0; cv$reduction2682Index < j$var38; cv$reduction2682Index += 1) {
+												for(int cv$reduction2685Index = 0; cv$reduction2685Index < j$var38; cv$reduction2685Index += 1) {
 													double k$var49 = reduceVar$sum$11;
-													double l$var50 = exped[cv$reduction2682Index];
+													double l$var50 = exped[cv$reduction2685Index];
 													reduceVar$sum$11 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2682Index = (j$var38 + 1); cv$reduction2682Index < noProducts; cv$reduction2682Index += 1) {
+												for(int cv$reduction2685Index = (j$var38 + 1); cv$reduction2685Index < noProducts; cv$reduction2685Index += 1) {
 													double k$var49 = reduceVar$sum$11;
-													double l$var50 = exped[cv$reduction2682Index];
+													double l$var50 = exped[cv$reduction2685Index];
 													reduceVar$sum$11 = (k$var49 + l$var50);
 												}
 												double cv$reduced46 = reduceVar$sum$11;
@@ -1456,14 +1456,14 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 															{
 																if((0 < noProducts)) {
 																	double reduceVar$denom$20 = 0.0;
-																	for(int cv$reduction2728Index = 0; cv$reduction2728Index < j$var116; cv$reduction2728Index += 1) {
+																	for(int cv$reduction2731Index = 0; cv$reduction2731Index < j$var116; cv$reduction2731Index += 1) {
 																		double k$var128 = reduceVar$denom$20;
-																		double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2728Index];
+																		double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2731Index];
 																		reduceVar$denom$20 = (k$var128 + l$var129);
 																	}
-																	for(int cv$reduction2728Index = (j$var116 + 1); cv$reduction2728Index < noProducts; cv$reduction2728Index += 1) {
+																	for(int cv$reduction2731Index = (j$var116 + 1); cv$reduction2731Index < noProducts; cv$reduction2731Index += 1) {
 																		double k$var128 = reduceVar$denom$20;
-																		double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2728Index];
+																		double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction2731Index];
 																		reduceVar$denom$20 = (k$var128 + l$var129);
 																	}
 																	double cv$reduced128 = reduceVar$denom$20;
@@ -2457,8 +2457,8 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			int[] weekly_sales;
 			weekly_sales = Sales[t$var105];
 			int cv$multinomialSum148 = 0;
-			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < Sales[t$var105].length; cv$multinomialIndex148 += 1)
-				cv$multinomialSum148 = (Sales[t$var105][cv$multinomialIndex148] + cv$multinomialSum148);
+			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < weekly_sales.length; cv$multinomialIndex148 += 1)
+				cv$multinomialSum148 = (weekly_sales[cv$multinomialIndex148] + cv$multinomialSum148);
 			sales_sum[t$var105] = cv$multinomialSum148;
 		}
 	}

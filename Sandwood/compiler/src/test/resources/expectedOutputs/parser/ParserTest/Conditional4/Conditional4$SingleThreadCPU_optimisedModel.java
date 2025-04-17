@@ -22,10 +22,12 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$sample21;
 	private double logProbability$value;
 	private double logProbability$var18;
+	private double logProbability$var19;
 	private double logProbability$var24;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
 	private double value;
+	private double var19;
 
 	public Conditional4$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -40,16 +42,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for bias.
 	@Override
 	public final void set$bias(double[] cv$value) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
 		// Set bias
 		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on bias.
-		fixedProbFlag$sample21 = false;
-		
-		// Unset the fixed probability flag for sample 27 as it depends on bias.
-		fixedProbFlag$sample27 = false;
 	}
 
 	// Getter for fixedFlag$sample21.
@@ -178,6 +172,26 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return value;
 	}
 
+	// Getter for var19.
+	@Override
+	public final double get$var19() {
+		return var19;
+	}
+
+	// Setter for var19.
+	@Override
+	public final void set$var19(double cv$value) {
+		// Set flags for all the side effects of var19 including if probabilities need to
+		// be updated.
+		var19 = cv$value;
+		
+		// Unset the fixed probability flag for sample 21 as it depends on var19.
+		fixedProbFlag$sample21 = false;
+		
+		// Unset the fixed probability flag for sample 27 as it depends on var19.
+		fixedProbFlag$sample27 = false;
+	}
+
 	// Calculate the probability of the samples represented by sample21 using sampled
 	// values.
 	private final void logProbabilityValue$sample21() {
@@ -188,9 +202,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			if(!guard) {
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = bias[0];
-				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -198,6 +209,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -210,7 +223,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
+				// 
+				// The sample value to calculate the probability of generating
+				double cv$distributionAccumulator = (((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -230,6 +245,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the sample task probability
 				logProbability$sample21 = cv$distributionAccumulator;
 			}
+			
+			// Update the variable probability
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -255,6 +273,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulator = logProbability$sample21;
 				logProbability$var18 = logProbability$sample21;
 			}
+			
+			// Update the variable probability
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -489,17 +510,21 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// by sample task 21 drawn from Uniform 18. Inference was performed using Metropolis-Hastings.
 	private final void sample21() {
 		// The original value of the sample
-		double cv$originalValue = bias[0];
+		double cv$originalValue = var19;
 		
 		// Calculate a proposed variance.
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
+		// 
+		// The original value of the sample
+		double cv$var = ((var19 * var19) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		// 
+		// The original value of the sample
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var19);
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -523,6 +548,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Set the current value to the current state of the tree.
 		// 
+		// The original value of the sample
+		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
@@ -537,6 +564,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Substituted "cv$temp$0$var16" with its value "0.0".
 		// 
 		// Set the current value to the current state of the tree.
+		// 
+		// The original value of the sample
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
@@ -553,10 +582,15 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Constructing a random variable input for use later.
 		// 
 		// Set the current value to the current state of the tree.
-		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		// 
+		// The original value of the sample
+		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var19, 1.0) + (((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		
 		// Update Sample and intermediate values
 		// 
+		// Write out the new value of the sample.
+		var19 = cv$proposedValue;
+		
 		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[0] = cv$proposedValue;
 		
@@ -607,16 +641,18 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
-			// 
+			// Write out the new value of the sample.
+			var19 = cv$originalValue;
+			
 			// Guards to ensure that bias is only updated when there is a valid path.
 			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
+			// Write out the new value of the sample.
 			bias[0] = cv$originalValue;
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -672,7 +708,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// cv$temp$1$var22's comment
 		// Constructing a random variable input for use later.
-		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= bias[0]) && (bias[0] < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) - 0.6931471805599453);
+		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) - 0.6931471805599453);
 		
 		// Write out the new value of the sample.
 		// 
@@ -792,7 +828,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else
-			bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			bias[0] = var19;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -811,10 +847,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Method to allocate space for model inputs and outputs.
 	@Override
 	public final void allocator() {
-		// If bias has not been set already allocate space.
-		if((!fixedFlag$sample4 || !fixedFlag$sample21))
-			// Constructor for bias
-			bias = new double[1];
+		// Constructor for bias
+		bias = new double[1];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -828,8 +862,11 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21)
-				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample21) {
+				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+				bias[0] = var19;
+			}
 		}
 		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
@@ -843,8 +880,11 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21)
-				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample21) {
+				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+				bias[0] = var19;
+			}
 		}
 	}
 
@@ -857,8 +897,11 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21)
-				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample21) {
+				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+				bias[0] = var19;
+			}
 		}
 	}
 
@@ -903,6 +946,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$var19 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$sample21 = 0.0;
@@ -984,8 +1028,11 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21)
-				bias[0] = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample21) {
+				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+				bias[0] = var19;
+			}
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are
@@ -1009,6 +1056,10 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void setIntermediates() {
 		if(guard)
 			bias[0] = 0.5;
+		else {
+			if(fixedFlag$sample21)
+				bias[0] = var19;
+		}
 	}
 
 	@Override

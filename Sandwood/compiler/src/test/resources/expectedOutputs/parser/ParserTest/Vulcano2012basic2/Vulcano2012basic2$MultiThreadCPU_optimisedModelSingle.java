@@ -2173,11 +2173,13 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				cv$target2[cv$index2] = cv$source2[cv$index2];
 		}
 		for(int t$var105 = (T - 1); t$var105 >= 0; t$var105 -= 1) {
+			// Variable declaration of weekly_sales moved.
+			int[] weekly_sales = Sales[t$var105];
 			int cv$multinomialSum148 = 0;
 			
 			// Sum the number of samples in the multinomial output.
-			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < Sales[t$var105].length; cv$multinomialIndex148 += 1)
-				cv$multinomialSum148 = (Sales[t$var105][cv$multinomialIndex148] + cv$multinomialSum148);
+			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < weekly_sales.length; cv$multinomialIndex148 += 1)
+				cv$multinomialSum148 = (weekly_sales[cv$multinomialIndex148] + cv$multinomialSum148);
 			sales_sum[t$var105] = cv$multinomialSum148;
 		}
 	}

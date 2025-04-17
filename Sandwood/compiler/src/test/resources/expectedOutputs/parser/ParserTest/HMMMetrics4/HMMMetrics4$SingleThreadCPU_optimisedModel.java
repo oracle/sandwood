@@ -21,7 +21,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private boolean fixedFlag$sample162 = false;
 	private boolean fixedFlag$sample190 = false;
 	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample256 = false;
 	private boolean fixedFlag$sample33 = false;
 	private boolean fixedFlag$sample57 = false;
 	private boolean fixedFlag$sample76 = false;
@@ -63,6 +62,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$var21;
 	private double[][][] logProbability$var231;
 	private double[][][] logProbability$var244;
+	private double logProbability$var245;
 	private double logProbability$var33;
 	private double[] logProbability$var54;
 	private double[][] logProbability$var73;
@@ -78,6 +78,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private int[][] st;
 	private boolean system$gibbsForward = true;
 	private double[] v;
+	private double[][][] var245;
 
 	public HMMMetrics4$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -274,26 +275,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Substituted "fixedFlag$sample20" with its value "cv$value".
 		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
-	}
-
-	// Getter for fixedFlag$sample256.
-	@Override
-	public final boolean get$fixedFlag$sample256() {
-		return fixedFlag$sample256;
-	}
-
-	// Setter for fixedFlag$sample256.
-	@Override
-	public final void set$fixedFlag$sample256(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample256 including if probabilities
-		// need to be updated.
-		fixedFlag$sample256 = cv$value;
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample256" with its value "cv$value".
-		fixedProbFlag$sample256 = (cv$value && fixedProbFlag$sample256);
 	}
 
 	// Getter for fixedFlag$sample33.
@@ -834,7 +815,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// values.
 							// 
 							// The sample value to calculate the probability of generating
-							double cv$sampleValue = metric_g[sample$var196][server][timeStep$var226];
+							double cv$sampleValue = var245[sample$var196][server][timeStep$var226];
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							if(((0 == timeStep$var226) && (0 <= st[sample$var196][0]))) {
@@ -974,6 +955,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 			
 			// Update the variable probability
+			logProbability$var245 = (logProbability$var245 + cv$accumulator);
+			
+			// Update the variable probability
 			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			
 			// Add probability to model
@@ -982,7 +966,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample256 = ((((fixedFlag$sample256 && fixedFlag$sample57) && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
+			fixedProbFlag$sample256 = (((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
 		}
 		// Using cached values.
 		else {
@@ -1001,6 +985,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var245 = (logProbability$var245 + cv$accumulator);
 			
 			// Update the variable probability
 			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
@@ -1767,7 +1754,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Store the value of the function call, so the function call is only made once.
 							// 
 							// The sample value to calculate the probability of generating
-							double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][server][timeStep$var226] - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+							double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][server][timeStep$var226] - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
 							
 							// Add the probability of this instance of the random variable to the probability
 							// of all instances of the random variable.
@@ -1790,6 +1777,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 			
 			// Update the variable probability
+			logProbability$var245 = (logProbability$var245 + cv$accumulator);
+			
+			// Update the variable probability
 			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
 			
 			// Add probability to model
@@ -1798,7 +1788,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample256 = ((((fixedFlag$sample256 && fixedFlag$sample57) && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
+			fixedProbFlag$sample256 = (((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
 		}
 		// Using cached values.
 		else {
@@ -1817,6 +1807,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					}
 				}
 			}
+			
+			// Update the variable probability
+			logProbability$var245 = (logProbability$var245 + cv$accumulator);
 			
 			// Update the variable probability
 			logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
@@ -2161,7 +2154,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Constructing a random variable input for use later.
 							// 
 							// Set the current value to the current state of the tree.
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(cv$temp$3$var243))) - (Math.log(cv$temp$3$var243) * 0.5));
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(cv$temp$3$var243))) - (Math.log(cv$temp$3$var243) * 0.5));
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -2224,7 +2217,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(cv$temp$9$var243)))) - (Math.log(cv$temp$9$var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(cv$temp$9$var243)))) - (Math.log(cv$temp$9$var243) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2285,7 +2278,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(cv$temp$21$var243))) - (Math.log(cv$temp$21$var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(cv$temp$21$var243))) - (Math.log(cv$temp$21$var243) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2345,7 +2338,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									// Constructing a random variable input for use later.
 									// 
 									// Set the current value to the current state of the tree.
-									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(cv$temp$27$var243)))) - (Math.log(cv$temp$27$var243) * 0.5));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(cv$temp$27$var243)))) - (Math.log(cv$temp$27$var243) * 0.5));
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -2424,7 +2417,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Variable declaration of cv$temp$2$var241 moved.
 						// 
 						// Constructing a random variable input for use later.
-						cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(cv$temp$3$var243))) - (Math.log(cv$temp$3$var243) * 0.5));
+						cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(cv$temp$3$var243))) - (Math.log(cv$temp$3$var243) * 0.5));
 						
 						// Recorded the probability of reaching sample task 256 with the current configuration.
 						// 
@@ -2485,7 +2478,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Variable declaration of cv$temp$8$var241 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(cv$temp$9$var243)))) - (Math.log(cv$temp$9$var243) * 0.5));
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(cv$temp$9$var243)))) - (Math.log(cv$temp$9$var243) * 0.5));
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -2544,7 +2537,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Variable declaration of cv$temp$20$var241 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(cv$temp$21$var243))) - (Math.log(cv$temp$21$var243) * 0.5));
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(cv$temp$21$var243))) - (Math.log(cv$temp$21$var243) * 0.5));
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -2602,7 +2595,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Variable declaration of cv$temp$26$var241 moved.
 								// 
 								// Constructing a random variable input for use later.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(cv$temp$27$var243)))) - (Math.log(cv$temp$27$var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(cv$temp$27$var243)))) - (Math.log(cv$temp$27$var243) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2718,7 +2711,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Constructing a random variable input for use later.
 							// 
 							// Set the current value to the current state of the tree.
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -2781,7 +2774,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2835,7 +2828,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2888,7 +2881,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									// Constructing a random variable input for use later.
 									// 
 									// Set the current value to the current state of the tree.
-									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+									cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -2967,7 +2960,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Variable declaration of cv$temp$3$var243 moved.
 						// 
 						// Constructing a random variable input for use later.
-						cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+						cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 						
 						// Recorded the probability of reaching sample task 256 with the current configuration.
 						// 
@@ -3028,7 +3021,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Variable declaration of cv$temp$9$var243 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+							cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -3080,7 +3073,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Variable declaration of cv$temp$21$var243 moved.
 							// 
 							// Constructing a random variable input for use later.
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -3131,7 +3124,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Variable declaration of cv$temp$27$var243 moved.
 								// 
 								// Constructing a random variable input for use later.
-								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((metric_g[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -3488,9 +3481,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var633's comment
+			// cv$temp$1$$var654's comment
 			// 
-			// $var633's comment
+			// $var654's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -3512,9 +3505,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				if(((0 <= var32) && (var32 < noStates))) {
 					// Substituted "index$sample$3_2" with its value "sample$var45".
 					// 
-					// cv$temp$3$$var646's comment
+					// cv$temp$3$$var667's comment
 					// 
-					// $var646's comment
+					// $var667's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var72's comment
@@ -3654,7 +3647,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$6$var243))) - (Math.log(cv$temp$6$var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$6$var243))) - (Math.log(cv$temp$6$var243) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -3725,7 +3718,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// the output of Sample task 57.
 								// 
 								// Value of the variable at this index
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$14$var243))) - (Math.log(cv$temp$14$var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$14$var243))) - (Math.log(cv$temp$14$var243) * 0.5));
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -3784,9 +3777,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$22$$var811's comment
+					// cv$temp$22$$var880's comment
 					// 
-					// $var811's comment
+					// $var880's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$21$var72's comment
@@ -4005,9 +3998,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var897's comment
+						// cv$temp$1$$var966's comment
 						// 
-						// $var897's comment
+						// $var966's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var72's comment
@@ -4142,7 +4135,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 											// Constructing a random variable input for use later.
 											// 
 											// Value of the variable at this index
-											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$15$var243))) - (Math.log(cv$temp$15$var243) * 0.5));
+											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$15$var243))) - (Math.log(cv$temp$15$var243) * 0.5));
 											
 											// Recorded the probability of reaching sample task 256 with the current configuration.
 											// 
@@ -4220,7 +4213,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 											// the output of Sample task 76.
 											// 
 											// Value of the variable at this index
-											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$47$var243))) - (Math.log(cv$temp$47$var243) * 0.5));
+											cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$47$var243))) - (Math.log(cv$temp$47$var243) * 0.5));
 											
 											// Recorded the probability of reaching sample task 256 with the current configuration.
 											// 
@@ -4269,9 +4262,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var898's comment
+							// cv$temp$3$$var967's comment
 							// 
-							// $var898's comment
+							// $var967's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var72's comment
@@ -4406,7 +4399,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												// Constructing a random variable input for use later.
 												// 
 												// Value of the variable at this index
-												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$23$var243))) - (Math.log(cv$temp$23$var243) * 0.5));
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$23$var243))) - (Math.log(cv$temp$23$var243) * 0.5));
 												
 												// Recorded the probability of reaching sample task 256 with the current configuration.
 												// 
@@ -4490,7 +4483,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 												// the output of Sample task 76.
 												// 
 												// Value of the variable at this index
-												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$55$var243))) - (Math.log(cv$temp$55$var243) * 0.5));
+												cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(cv$temp$55$var243))) - (Math.log(cv$temp$55$var243) * 0.5));
 												
 												// Recorded the probability of reaching sample task 256 with the current configuration.
 												// 
@@ -4563,9 +4556,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var900's comment
+						// cv$temp$7$$var969's comment
 						// 
-						// $var900's comment
+						// $var969's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var72's comment
@@ -4669,7 +4662,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										// Variable declaration of cv$temp$38$var241 moved.
 										// 
 										// Constructing a random variable input for use later.
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][timeStep$var66] - current_metric_mean[server][index$sample76$35]) / Math.sqrt(cv$temp$39$var243))) - (Math.log(cv$temp$39$var243) * 0.5));
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][index$sample76$35]) / Math.sqrt(cv$temp$39$var243))) - (Math.log(cv$temp$39$var243) * 0.5));
 										
 										// Recorded the probability of reaching sample task 256 with the current configuration.
 										// 
@@ -4742,7 +4735,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										// 
 										// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 										// the output of Sample task 76.
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((metric_g[sample$var45][server][timeStep$var66] - current_metric_mean[server][index$sample76$35]) / Math.sqrt(cv$temp$71$var243))) - (Math.log(cv$temp$71$var243) * 0.5));
+										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][index$sample76$35]) / Math.sqrt(cv$temp$71$var243))) - (Math.log(cv$temp$71$var243) * 0.5));
 										
 										// Recorded the probability of reaching sample task 256 with the current configuration.
 										// 
@@ -4869,9 +4862,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$77$$var1400's comment
+					// cv$temp$77$$var1661's comment
 					// 
-					// $var1400's comment
+					// $var1661's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$76$var72's comment
@@ -5136,6 +5129,15 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				current_metric_valid_bias[var173] = new double[noStates];
 		}
 		
+		// Constructor for var245
+		var245 = new double[length$metric.length][][];
+		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+			double[][] subarray$0 = new double[length$metric[0].length][];
+			var245[sample$var196] = subarray$0;
+			for(int server = 0; server < length$metric[0].length; server += 1)
+				subarray$0[server] = new double[length$metric[sample$var196][0]];
+		}
+		
 		// Constructor for distribution$sample57
 		distribution$sample57 = new double[length$metric.length][];
 		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
@@ -5263,8 +5265,10 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double[] metric_inner = var211[server];
 				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-					if((var215[server][timeStep$var226] && !fixedFlag$sample256))
-						metric_inner[timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
+					if(var215[server][timeStep$var226]) {
+						var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
+						metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
+					}
 				}
 			}
 		}
@@ -5629,6 +5633,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					logProbability$var244[sample$var196][server][timeStep$var226] = 0.0;
 			}
 		}
+		logProbability$var245 = 0.0;
 		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample256) {
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
@@ -5811,6 +5816,16 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				int cv$length3 = cv$target3.length;
 				for(int cv$index3 = 0; cv$index3 < cv$length3; cv$index3 += 1)
 					cv$target3[cv$index3] = cv$source3[cv$index3];
+			}
+		}
+		for(int sample$var196 = (noSamples - 1); sample$var196 >= 0; sample$var196 -= 1) {
+			for(int server = (noServers - 1); server >= 0; server -= 1) {
+				for(int timeStep$var226 = (length$metric[sample$var196][0] - 1); timeStep$var226 >= 0; timeStep$var226 -= 1) {
+					if(metric_valid_g[sample$var196][server][timeStep$var226])
+						// metric_inner's comment
+						// Variable declaration of metric_inner moved.
+						var245[sample$var196][server][timeStep$var226] = metric_g[sample$var196][server][timeStep$var226];
+				}
 			}
 		}
 	}

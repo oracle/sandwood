@@ -24,6 +24,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private boolean system$gibbsForward = true;
 	private double[] value;
 	private double[] value2;
+	private double var19;
 
 	public Conditional2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -147,6 +148,23 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return value2;
 	}
 
+	// Getter for var19.
+	@Override
+	public final double get$var19() {
+		return var19;
+	}
+
+	// Setter for var19.
+	@Override
+	public final void set$var19(double cv$value) {
+		// Set flags for all the side effects of var19 including if probabilities need to
+		// be updated.
+		var19 = cv$value;
+		
+		// Unset the fixed probability flag for sample 21 as it depends on var19.
+		fixedProbFlag$sample21 = false;
+	}
+
 	// Calculate the probability of the samples represented by sample21 using sampled
 	// values.
 	private final void logProbabilityValue$sample21() {
@@ -156,10 +174,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if(!guard) {
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = value[0];
-				
+			if(!guard)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -175,8 +190,9 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			}
+				// 
+				// The sample value to calculate the probability of generating
+				cv$sampleAccumulator = (((0.0 <= var19) && (var19 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			logProbability$var18 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -187,6 +203,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var19 = cv$sampleAccumulator;
 			
+			// Add probability to constructed variables from the combined probability
+			// 
 			// Update the variable probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -195,6 +213,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$value = (logProbability$value + cv$sampleAccumulator);
 			
+			// Looking for a path between Sample 21 and consumer double[] 27.
+			// 
 			// Update the variable probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -227,11 +247,15 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			logProbability$var18 = logProbability$var19;
 			
+			// Add probability to constructed variables from the combined probability
+			// 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
 			logProbability$value = (logProbability$value + logProbability$var19);
 			
+			// Looking for a path between Sample 21 and consumer double[] 27.
+			// 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -523,8 +547,11 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			value[0] = 1.0;
 		else {
-			if(!fixedFlag$sample21)
-				value[0] = DistributionSampling.sampleUniform(RNG$);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample21) {
+				var19 = DistributionSampling.sampleUniform(RNG$);
+				value[0] = var19;
+			}
 		}
 		if((!fixedFlag$sample4 || !fixedFlag$sample21))
 			value2[0] = value[0];

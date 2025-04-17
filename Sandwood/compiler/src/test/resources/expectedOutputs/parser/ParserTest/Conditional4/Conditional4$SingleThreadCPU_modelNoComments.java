@@ -20,10 +20,12 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$sample21;
 	private double logProbability$value;
 	private double logProbability$var18;
+	private double logProbability$var19;
 	private double logProbability$var24;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
 	private double value;
+	private double var19;
 
 	public Conditional4$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -37,8 +39,6 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double[] cv$value) {
 		bias = cv$value;
-		fixedProbFlag$sample21 = false;
-		fixedProbFlag$sample27 = false;
 	}
 
 	@Override
@@ -122,6 +122,18 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		return value;
 	}
 
+	@Override
+	public final double get$var19() {
+		return var19;
+	}
+
+	@Override
+	public final void set$var19(double cv$value) {
+		var19 = cv$value;
+		fixedProbFlag$sample21 = false;
+		fixedProbFlag$sample27 = false;
+	}
+
 	private final void logProbabilityValue$sample21() {
 		if(!fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
@@ -130,7 +142,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = bias[0];
+					double cv$sampleValue = var19;
 					{
 						{
 							double var16 = 0.0;
@@ -158,7 +170,14 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				logProbability$var18 = cv$sampleAccumulator;
 				logProbability$sample21 = cv$sampleProbability;
 			}
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			boolean cv$guard$bias = false;
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
+			{
+				if(!cv$guard$bias) {
+					cv$guard$bias = true;
+					logProbability$bias = (logProbability$bias + cv$accumulator);
+				}
+			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -172,7 +191,14 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var18 = cv$rvAccumulator;
 			}
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			boolean cv$guard$bias = false;
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
+			{
+				if(!cv$guard$bias) {
+					cv$guard$bias = true;
+					logProbability$bias = (logProbability$bias + cv$accumulator);
+				}
+			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -284,7 +310,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			{
 				cv$numNumStates = Math.max(cv$numNumStates, 2);
 			}
-			double cv$originalValue = bias[0];
+			double cv$originalValue = var19;
 			double cv$originalProbability = 0.0;
 			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 			if((cv$var < (0.1 * 0.1)))
@@ -301,7 +327,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				else {
 					cv$currentValue = cv$proposedValue;
 					{
-						double var19 = cv$proposedValue;
+						var19 = cv$proposedValue;
 						{
 							{
 								bias[0] = cv$currentValue;
@@ -382,7 +408,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 			if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
-				double var19 = cv$originalValue;
+				var19 = cv$originalValue;
 				{
 					{
 						bias[0] = var19;
@@ -416,7 +442,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				{
 					if(!cv$currentValue) {
 						{
-							bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+							bias[0] = var19;
 						}
 					}
 				}
@@ -492,13 +518,13 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 															{
 																cv$temp$4$var17 = 0.5;
 															}
-															if(((Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															if(((Math.log(1.0) + (((cv$temp$3$var16 <= var19) && (var19 < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$3$var16 <= var19) && (var19 < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 															else {
 																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY));
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$3$var16 <= var19) && (var19 < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY));
 																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)));
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$3$var16 <= var19) && (var19 < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$3$var16 <= var19) && (var19 < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)));
 															}
 															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
@@ -622,7 +648,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			{
 				if(!guard) {
 					{
-						bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+						bias[0] = var19;
 					}
 				}
 			}
@@ -636,10 +662,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void allocator() {
-		if(!(fixedFlag$sample4 && fixedFlag$sample21)) {
-			{
-				bias = new double[1];
-			}
+		{
+			bias = new double[1];
 		}
 		allocateScratch();
 	}
@@ -652,7 +676,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			bias[0] = 0.5;
 		else {
 			if(!fixedFlag$sample21)
-				bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+				var19 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample21)
+				bias[0] = var19;
 		}
 		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
@@ -665,7 +691,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			bias[0] = 0.5;
 		else {
 			if(!fixedFlag$sample21)
-				bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+				var19 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample21)
+				bias[0] = var19;
 		}
 	}
 
@@ -677,7 +705,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			bias[0] = 0.5;
 		else {
 			if(!fixedFlag$sample21)
-				bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+				var19 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample21)
+				bias[0] = var19;
 		}
 	}
 
@@ -711,6 +741,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$var19 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$sample21 = 0.0;
@@ -758,7 +789,9 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			bias[0] = 0.5;
 		else {
 			if(!fixedFlag$sample21)
-				bias[0] = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+				var19 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample21)
+				bias[0] = var19;
 		}
 		logModelProbabilitiesVal();
 	}
@@ -772,6 +805,10 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void setIntermediates() {
 		if(guard)
 			bias[0] = 0.5;
+		else {
+			if(fixedFlag$sample21)
+				bias[0] = var19;
+		}
 	}
 
 	@Override

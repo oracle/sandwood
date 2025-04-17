@@ -18,10 +18,12 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$value;
 	private double logProbability$value2;
 	private double logProbability$var18;
+	private double logProbability$var19;
 	private double[] observedValue;
 	private boolean system$gibbsForward = true;
 	private double[] value;
 	private double[] value2;
+	private double var19;
 
 	public Conditional2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -110,6 +112,17 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value2;
 	}
 
+	@Override
+	public final double get$var19() {
+		return var19;
+	}
+
+	@Override
+	public final void set$var19(double cv$value) {
+		var19 = cv$value;
+		fixedProbFlag$sample21 = false;
+	}
+
 	private final void logProbabilityValue$sample21() {
 		if(!fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
@@ -118,7 +131,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = value[0];
+					double cv$sampleValue = var19;
 					{
 						{
 							double var16 = 0.0;
@@ -146,8 +159,15 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				logProbability$var18 = cv$sampleAccumulator;
 				logProbability$sample21 = cv$sampleProbability;
 			}
+			boolean cv$guard$value = false;
 			boolean cv$guard$value2 = false;
-			logProbability$value = (logProbability$value + cv$accumulator);
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
+			{
+				if(!cv$guard$value) {
+					cv$guard$value = true;
+					logProbability$value = (logProbability$value + cv$accumulator);
+				}
+			}
 			{
 				if((0 == 0)) {
 					if(!cv$guard$value2) {
@@ -168,8 +188,15 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var18 = cv$rvAccumulator;
 			}
+			boolean cv$guard$value = false;
 			boolean cv$guard$value2 = false;
-			logProbability$value = (logProbability$value + cv$accumulator);
+			logProbability$var19 = (logProbability$var19 + cv$accumulator);
+			{
+				if(!cv$guard$value) {
+					cv$guard$value = true;
+					logProbability$value = (logProbability$value + cv$accumulator);
+				}
+			}
 			{
 				if((0 == 0)) {
 					if(!cv$guard$value2) {
@@ -386,7 +413,9 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			value[0] = 1.0;
 		else {
 			if(!fixedFlag$sample21)
-				value[0] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample21)
+				value[0] = var19;
 		}
 		if(!(fixedFlag$sample4 && fixedFlag$sample21))
 			value2[0] = value[0];
@@ -396,12 +425,32 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!guard) {
+			if(!fixedFlag$sample21) {
+				boolean observationGuard$var19 = false;
+				{
+					observationGuard$var19 = true;
+				}
+				if(!observationGuard$var19)
+					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
+		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!guard) {
+			if(!fixedFlag$sample21) {
+				boolean observationGuard$var19 = false;
+				{
+					observationGuard$var19 = true;
+				}
+				if(!observationGuard$var19)
+					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
+		}
 	}
 
 	@Override
@@ -426,6 +475,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = 0.0;
 		logProbability$var18 = 0.0;
+		logProbability$var19 = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample21)

@@ -113,6 +113,35 @@ public class Conditional2 extends Model {
      */
     public final ComputedDoubleArray value2 = $value2;
 
+    private final ComputedDoubleInternal $var19 = new ComputedDoubleInternal(this, "var19", true, true, true) {
+        @Override
+        public double getValue() { return system$c.get$var19(); }
+
+        @Override
+        protected void setValueInternal(double value) {
+            system$c.set$var19(value);
+            intermediatesPrimed = false;
+        }
+
+        @Override
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
+
+        @Override
+        public void setFixed(boolean fixed) {
+            synchronized(model) {
+                system$c.set$fixedFlag$sample21(fixed);
+            }
+        }
+
+        @Override
+        public Immutability isFixed() {
+            if(system$c.get$fixedFlag$sample21())
+                return Immutability.FIXED;
+            else
+                return Immutability.FREE;
+        }
+    };
+
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -160,6 +189,7 @@ public class Conditional2 extends Model {
         $computedVariables.put("guard", $guard);
         $computedVariables.put("value", $value);
         $computedVariables.put("value2", $value2);
+        $computedVariables.put("var19", $var19);
 
         //Observed scalar fields
         $regularObservedValues.put("observedValue", $observedValue);
@@ -202,8 +232,11 @@ public class Conditional2 extends Model {
         //ComputedVariables
         if($guard.isSet())
             newCore.set$guard(oldCore.get$guard());
+        if($var19.isSet())
+            newCore.set$var19(oldCore.get$var19());
 
         //Set fixed flags
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
         newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
     }
 

@@ -56,12 +56,6 @@ interface HMMMetrics4$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Setter for fixedFlag$sample20.
 	public void set$fixedFlag$sample20(boolean cv$value);
 
-	// Getter for fixedFlag$sample256.
-	public boolean get$fixedFlag$sample256();
-
-	// Setter for fixedFlag$sample256.
-	public void set$fixedFlag$sample256(boolean cv$value);
-
 	// Getter for fixedFlag$sample33.
 	public boolean get$fixedFlag$sample33();
 
