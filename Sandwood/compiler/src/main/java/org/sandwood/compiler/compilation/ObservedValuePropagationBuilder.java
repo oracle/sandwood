@@ -269,7 +269,7 @@ public class ObservedValuePropagationBuilder {
                     throw new SandwoodModelException(
                             "Multiple variables linked to sample task. This could result in inconsistencies. "
                                     + "Relevant variables are " + s + ".",
-                                    sTask);
+                            sTask);
                 }
 
                 ingestTrace(t.values(), segmentedTraces);
@@ -307,7 +307,7 @@ public class ObservedValuePropagationBuilder {
                         Variable<?> start = th.peek().task.getOutput();
                         if(start.isObserved())
                             start = start.getObservation().source;
-                        IRTreeReturn<?> current = start.getForwardIR(compilationCtx);
+                        IRTreeReturn<?> current = start.instanceHandle().getForwardIR(compilationCtx);
                         processTask(th.size() - 1, th, current, info.backTraceInfo, compilationCtx);
                     });
                 }
@@ -335,7 +335,7 @@ public class ObservedValuePropagationBuilder {
                 // get Version
                 int outputDepth = end.getType().getDepth();
                 GetTask<A> gt = (GetTask<A>) source;
-                IRTreeReturn<ArrayVariable<A>> arrayTree = gt.array.getForwardIR(compilationCtx);
+                IRTreeReturn<ArrayVariable<A>> arrayTree = gt.array.instanceHandle().getForwardIR(compilationCtx);
 
                 IRTreeReturn<IntVariable> indexTree = gt.index.getForwardIR(compilationCtx);
                 if(outputDepth == 0) {
@@ -381,7 +381,7 @@ public class ObservedValuePropagationBuilder {
                 if((v.isIntermediate() || v.isSample()) && v.getType().getDepth() == 0)
                     saveIntermediate(v, current, compilationCtx);
                 if(index > 1) {
-                    d = traceHandle.get(index-1);
+                    d = traceHandle.get(index - 1);
                     RandomVariableConstructorTask<A, ?> rv = (RandomVariableConstructorTask<A, ?>) d.task;
                     IRTreeReturn<?> rvArg = rv.getInverseArg(current, d.argPos, compilationCtx);
                     // Starting at the -2 position as the value at -1 has already been calculated to generate rvArg.
@@ -404,7 +404,7 @@ public class ObservedValuePropagationBuilder {
                 Variable<?> output = task.getOutput();
                 int outputDepth = output.getType().getDepth();
                 GetTask<A> gt = (GetTask<A>) task;
-                IRTreeReturn<ArrayVariable<A>> arrayTree = gt.array.getForwardIR(compilationCtx);
+                IRTreeReturn<ArrayVariable<A>> arrayTree = gt.array.instanceHandle().getForwardIR(compilationCtx);
 
                 if(outputDepth == 0) {
                     // If the value was a scalar just assign it to the array.
@@ -441,12 +441,13 @@ public class ObservedValuePropagationBuilder {
 
                         // Get the tree for the array
                         IRTreeReturn<ArrayVariable<B>> arrayTree;
+                        ArrayVariable<B> array = pt.array.instanceHandle();
                         if(compilationCtx.initialized(pt.array)) {
-                            pt.array.markStopPoint();
-                            arrayTree = pt.array.getForwardIR(compilationCtx);
-                            pt.array.unmarkStopPoint();
+                            array.markStopPoint();
+                            arrayTree = array.getForwardIR(compilationCtx);
+                            array.unmarkStopPoint();
                         } else
-                            arrayTree = pt.array.getForwardIR(compilationCtx);
+                            arrayTree = array.getForwardIR(compilationCtx);
 
                         IRTreeReturn<IntVariable> indexTree = pt.index.getForwardIR(compilationCtx);
 
@@ -454,7 +455,7 @@ public class ObservedValuePropagationBuilder {
                         // array declare that array in scope so that it can be used in other code.
                         if(index != 0) {
                             Variable<B> value = pt.value.instanceHandle();
-                            if(value.getType().getDepth() != 0) {
+                            if(value.getType().getDepth() != 0 && index > 1) {
                                 if(!compilationCtx.initialized(value)) {
                                     compilationCtx.addTreeToScope(value.scope(),
                                             IRTree.initializeUnsetVariable(value.getUniqueVarDesc(), Tree.NoComment));
@@ -462,18 +463,21 @@ public class ObservedValuePropagationBuilder {
                                 }
                                 compilationCtx.addTreeToScope(pt.scope(), IRTree.store(value.getUniqueVarDesc(),
                                         IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
-                            }
 
-                            processTask(index - 1, traceHandle, IRTree.arrayGet(arrayTree, indexTree), backTraceInfo,
-                                    compilationCtx);
+                                processTask(index - 1, traceHandle, IRTree.load(value.getUniqueVarDesc()),
+                                        backTraceInfo, compilationCtx);
+                            } else {
+                                processTask(index - 1, traceHandle, IRTree.arrayGet(arrayTree, indexTree),
+                                        backTraceInfo, compilationCtx);
+                            }
                         }
 
                         compilationCtx.leaveScope(task.scope());
                         break;
 
-                        // Values are not propagated through scope conditions, instead we will have to infer these values
-                        // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
-                        // model probability of 0/-Infinity in normal/log space respectively.
+                    // Values are not propagated through scope conditions, instead we will have to infer these values
+                    // and hope that we do not have an inconsistent system. Inconsistency will be detectable by a
+                    // model probability of 0/-Infinity in normal/log space respectively.
                     case 3:
                         throw new CompilerException(
                                 "Values are not propagated through scope conditions, instead we will have to infer these values.");
@@ -516,91 +520,104 @@ public class ObservedValuePropagationBuilder {
                 TraceHandle t = traces.iterator().next();
                 Variable<?> output = t.peek().task.getOutput();
                 throw new SandwoodModelException("Multiple traces to observed variable " + output.getAlias()
-                + ". This could result in inconsistencies.", output.getObservation());
+                        + ". This could result in inconsistencies.", output.getObservation());
             }
 
             for(TraceHandle t:traces) {
                 Trace segment = new Trace();
                 int i = 0;
 
-                // Skip all the tasks before the sample variable.
+                // Skip all the tasks before the first fixed sample or intermediate variable.
                 DataflowTaskArgDesc d = t.get(i++);
                 ProducingDataflowTask<?> task = d.task;
                 Variable<?> output = task.getOutput();
-                while(!output.isFixed() || !(output.isSample() || output.isIntermediate())) {
+                while((!output.isFixed() || !(output.isSample() || effectiveIntermediate(output))) && i < t.size()) {
                     d = t.get(i++);
                     output = d.task.getOutput();
                 }
 
-                // If the sample came from a put into an array skip it and find the outermost point of the trace.
-                while(d.task.getType() == DFType.PUT && !output.isObserved()) {
-                    d = t.get(i++);
-                    output = d.task.getOutput();
-                }
-
-                if(output.isObserved())
-                    segmentedTraces.computeIfAbsent(output,
-                            k -> new VarTraces(TraceHandle.emptyTrace(), Collections.emptySet()));
-                else {
-                    Variable<?> result;
-                    // If the result is a get
-                    if(d.task.getType() == DFType.GET) {
-                        if(d.argPos == 0)
-                            result = ((GetTask<?>) d.task).array;
-                        else
-                            throw new CompilerException("Array indexes cannot be observed, this should have been "
-                                    + "detected and prevented from happening by reporting an "
-                                    + "error to the user before this point.");
-                    } else
-                        result = output;
-                    while(true) {
-
-                        // Add the value as this is where the trace segment ends
-                        segment.add(d);
-                        // If the output is observed, this is also the end of the trace so store the segment and stop.
-                        if(output.isObserved()) {
-                            int start = i - 1;
-                            VarTraces segments = segmentedTraces.computeIfAbsent(result,
-                                    k -> new VarTraces(t.subTrace(start), new HashSet<>()));
-                            segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
-                            break;
-                        }
-
-                        // Move along a segment
+                // If there is a fixed sample or intermediate variable
+                if(output.isFixed() && (output.isSample() || effectiveIntermediate(output))) {
+                    // If the sample came from a put into an array skip it and find the outermost point of the trace.
+                    while(d.task.getType() == DFType.PUT && !output.isObserved()) {
                         d = t.get(i++);
                         output = d.task.getOutput();
-                        // If the next intermediate has been found store the segment and start the next segment.
-                        if(output.isIntermediate()) {
-                            int start = i - 1;
-                            VarTraces segments = segmentedTraces.computeIfAbsent(result,
-                                    k -> new VarTraces(t.subTrace(start), new HashSet<>()));
-                            segment.add(d);
-                            segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
-                            segment.clear();
+                    }
 
-                            // If the value came from a put into an array skip it and find the outermost point of the
-                            // trace.
-                            while(d.task.getType() == DFType.PUT && !output.isObserved()) {
-                                d = t.get(i++);
-                                output = d.task.getOutput();
+                    if(output.isObserved())
+                        segmentedTraces.computeIfAbsent(output,
+                                k -> new VarTraces(TraceHandle.emptyTrace(), Collections.emptySet()));
+                    else {
+                        Variable<?> result;
+                        // If the result is a get
+                        if(d.task.getType() == DFType.GET) {
+                            if(d.argPos == 0)
+                                result = ((GetTask<?>) d.task).array;
+                            else
+                                throw new CompilerException("Array indexes cannot be observed, this should have been "
+                                        + "detected and prevented from happening by reporting an "
+                                        + "error to the user before this point.");
+                        } else
+                            result = output;
+                        while(true) {
+
+                            // Add the value as this is where the trace segment ends
+                            segment.add(d);
+                            // If the output is observed, this is also the end of the trace so store the segment and
+                            // stop.
+                            if(output.isObserved()) {
+                                int start = i - 1;
+                                VarTraces segments = segmentedTraces.computeIfAbsent(result,
+                                        k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                                segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
+                                break;
                             }
 
-                            // If the result is a get
-                            if(d.task.getType() == DFType.GET) {
-                                if(d.argPos == 0)
-                                    result = ((GetTask<?>) d.task).array;
-                                else
-                                    throw new CompilerException(
-                                            "Array indexes cannot be observed, this should have been "
-                                                    + "detected and prevented from happening by reporting an "
-                                                    + "error to the user before this point.");
-                            } else
+                            // Move along a segment
+                            d = t.get(i++);
+                            output = d.task.getOutput();
+                            // If the next intermediate has been found store the segment and start the next segment.
+                            // If the parent is a get this intermediate has already been accounted for.
+                            if(effectiveIntermediate(output) && d.task.getType() != DFType.GET) {
+                                // If the value came from a put into an array skip it and find the outermost point of
+                                // the trace.
+                                segment.add(d);
+
+                                if(!output.isObserved()) {
+                                    d = t.get(i++);
+                                    output = d.task.getOutput();
+                                    while(d.task.getType() == DFType.PUT && !output.isObserved()) {
+                                        segment.add(d);
+                                        d = t.get(i++);
+                                        output = d.task.getOutput();
+                                    }
+                                    // If the output of the put is the final observed value add it.
+                                    if(d.task.getType() == DFType.PUT) {
+                                        segment.add(d);
+                                    } else {
+                                        // Otherwise rewind to the last task ready for the next segment to be computed.
+                                        d = t.get(--i);
+                                        output = d.task.getOutput();
+                                    }
+                                }
+
+                                int start = i - 1;
+                                VarTraces segments = segmentedTraces.computeIfAbsent(result,
+                                        k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                                segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
+
+                                segment.clear();
                                 result = output;
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    private static boolean effectiveIntermediate(Variable<?> output) {
+        return output.isIntermediate() || output.getType().isArray();
     }
 
     /**

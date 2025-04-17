@@ -753,14 +753,6 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     }
 
     /**
-     * Set that this variable is fixed by an observation task.
-     */
-    @Override
-    public void setFixedByObservation(ObserveVariableTask<?> observation) {
-        fixedByObservations.add(observation);
-    }
-
-    /**
      * Set that this variable is fixed by a collection of observation tasks.
      */
     @Override

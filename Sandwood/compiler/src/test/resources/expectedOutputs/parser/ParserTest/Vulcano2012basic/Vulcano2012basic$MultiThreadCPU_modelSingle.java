@@ -1600,24 +1600,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												double reduceVar$sum$10 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction2580Index = 0; cv$reduction2580Index < j$var38; cv$reduction2580Index += 1) {
+												for(int cv$reduction2583Index = 0; cv$reduction2583Index < j$var38; cv$reduction2583Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2580Index];
+													double l$var50 = exped[cv$reduction2583Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$10 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2580Index = (j$var38 + 1); cv$reduction2580Index < noProducts; cv$reduction2580Index += 1) {
+												for(int cv$reduction2583Index = (j$var38 + 1); cv$reduction2583Index < noProducts; cv$reduction2583Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2580Index];
+													double l$var50 = exped[cv$reduction2583Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1648,24 +1648,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																			double reduceVar$denom$19 = 0.0;
 																			
 																			// Reduce for every value except a masked value which will be skipped.
-																			for(int cv$reduction2599Index = 0; cv$reduction2599Index < j$var123; cv$reduction2599Index += 1) {
+																			for(int cv$reduction2602Index = 0; cv$reduction2602Index < j$var123; cv$reduction2602Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$19;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2599Index];
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2602Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$19 = (k$var135 + l$var136);
 																			}
-																			for(int cv$reduction2599Index = (j$var123 + 1); cv$reduction2599Index < noProducts; cv$reduction2599Index += 1) {
+																			for(int cv$reduction2602Index = (j$var123 + 1); cv$reduction2602Index < noProducts; cv$reduction2602Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$19;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2599Index];
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2602Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
@@ -1773,24 +1773,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												double reduceVar$sum$11 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction2628Index = 0; cv$reduction2628Index < j$var38; cv$reduction2628Index += 1) {
+												for(int cv$reduction2631Index = 0; cv$reduction2631Index < j$var38; cv$reduction2631Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$11;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2628Index];
+													double l$var50 = exped[cv$reduction2631Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$11 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2628Index = (j$var38 + 1); cv$reduction2628Index < noProducts; cv$reduction2628Index += 1) {
+												for(int cv$reduction2631Index = (j$var38 + 1); cv$reduction2631Index < noProducts; cv$reduction2631Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$11;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2628Index];
+													double l$var50 = exped[cv$reduction2631Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1912,24 +1912,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																	double reduceVar$denom$20 = 0.0;
 																	
 																	// Reduce for every value except a masked value which will be skipped.
-																	for(int cv$reduction2674Index = 0; cv$reduction2674Index < j$var123; cv$reduction2674Index += 1) {
+																	for(int cv$reduction2677Index = 0; cv$reduction2677Index < j$var123; cv$reduction2677Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
 																		double k$var135 = reduceVar$denom$20;
 																		
 																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2674Index];
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2677Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
 																		// Copy the result of the reduction into the variable returned by the reduction.
 																		reduceVar$denom$20 = (k$var135 + l$var136);
 																	}
-																	for(int cv$reduction2674Index = (j$var123 + 1); cv$reduction2674Index < noProducts; cv$reduction2674Index += 1) {
+																	for(int cv$reduction2677Index = (j$var123 + 1); cv$reduction2677Index < noProducts; cv$reduction2677Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
 																		double k$var135 = reduceVar$denom$20;
 																		
 																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2674Index];
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2677Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 

@@ -338,11 +338,6 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
     boolean isFixedByObservation(ObserveVariableTask<?> observation);
 
     /**
-     * Set that this variable is fixed by an observation task.
-     */
-    void setFixedByObservation(ObserveVariableTask<?> observation);
-
-    /**
      * Set that this variable is fixed by a collection of observation tasks.
      */
     void setFixedByObservations(Collection<ObserveVariableTask<?>> observations);

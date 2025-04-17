@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -23,6 +22,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import org.sandwood.compiler.compilation.util.CompilationDesc;
+import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -414,10 +414,18 @@ public class TracesImplementation extends Traces {
                                     constraints.clear();
                                     constraints.addAll(pt.value.getFixingObservations());
                                     constraints.removeAll(pt.array.getFixingObservations());
+                                    constraints.removeAll(pt.scopeCondition.getFixingObservations());
                                     // If the value is fixed record it to propagate later.
                                     // Index variables are always deterministic for put tasks.
                                     if(!constraints.isEmpty())
                                         tracking.addPossibleObservations(pt.array, constraints);
+                                } else if(v == pt.scopeCondition && pt.array.isFixed()) {
+                                    constraints.clear();
+                                    constraints.addAll(os);
+                                    constraints.addAll(pt.array.getFixingObservations());
+                                    constraints.removeAll(pt.value.getFixingObservations());
+                                    if(!constraints.isEmpty())
+                                        tracking.addObservations(pt.value, constraints);
                                 }
                                 break;
                             }
@@ -460,11 +468,13 @@ public class TracesImplementation extends Traces {
                             default: {
                                 // Calculate the values to propagate
                                 Variable<?> output = p.getOutput();
-                                // If the putput is fixed look to see if an input can be fixed
-                                if(output.isFixed()) {
-                                    fixFreeInput(tracking, v, output.getFixingObservations(), p);
-                                } else {
-                                    fixOutput(tracking, constraints, v, p, output);
+                                if(!(output.getType() instanceof VariableType.RandomVariableType)) {
+                                    // If the output is fixed look to see if an input can be fixed
+                                    if(output.isFixed()) {
+                                        fixFreeInput(tracking, v, output.getFixingObservations(), p);
+                                    } else {
+                                        fixOutput(tracking, constraints, v, p, output);
+                                    }
                                 }
                                 break;
                             }
@@ -517,6 +527,13 @@ public class TracesImplementation extends Traces {
                         } else if(pt.scopeCondition.isDeterministic()) {
                             constraints.clear();
                             constraints.addAll(os);
+                            constraints.removeAll(pt.value.getFixingObservations());
+                            if(!constraints.isEmpty())
+                                tracking.addObservations(pt.value, constraints);
+                        } else if(pt.scopeCondition.isFixed()) {
+                            constraints.clear();
+                            constraints.addAll(os);
+                            constraints.addAll(pt.scopeCondition.getFixingObservations());
                             constraints.removeAll(pt.value.getFixingObservations());
                             if(!constraints.isEmpty())
                                 tracking.addObservations(pt.value, constraints);
@@ -702,8 +719,16 @@ public class TracesImplementation extends Traces {
                                         constraints.clear();
                                         constraints.addAll(os);
                                         constraints.removeAll(output.getFixingObservations());
+                                        constraints.removeAll(pt.scopeCondition.getFixingObservations());
                                         if(!constraints.isEmpty())
                                             tracking.addObservations(output, constraints);
+                                    } else if(v == pt.scopeCondition && pt.array.isFixed()) {
+                                        constraints.clear();
+                                        constraints.addAll(os);
+                                        constraints.addAll(pt.array.getFixingObservations());
+                                        constraints.removeAll(pt.value.getFixingObservations());
+                                        if(!constraints.isEmpty())
+                                            tracking.addObservations(pt.value, constraints);
                                     }
                                     break;
                                 }
@@ -714,46 +739,49 @@ public class TracesImplementation extends Traces {
                                 default: {
                                     // Calculate the values to propagate
                                     Variable<?> output = p.getOutput();
-                                    if(output.isFixed() && tracking.isPossibleObservation(output)) {
-                                        partialFixFreeInput(tracking, v, os, p);
-                                    } else {
-                                        // If all the inputs are fixed, propagate the union of the observations.
-                                        constraints.clear();
-                                        boolean fixedInputs = true;
-                                        boolean partiallyFixedInput = false;
-                                        for(Variable<?> input:p.getInputs())
-                                            if(!input.isDeterministic()) {
-                                                if(input.isFixed()) {
-                                                    constraints.addAll(v.getFixingObservations());
-                                                    if(v != input && tracking.isPossibleObservation(input))
-                                                        partiallyFixedInput = true;
-                                                } else {
-                                                    fixedInputs = false;
-                                                    break;
+                                    if(!(output.getType() instanceof VariableType.RandomVariableType)) {
+                                        if(output.isFixed() && tracking.isPossibleObservation(output)) {
+                                            partialFixFreeInput(tracking, v, os, p);
+                                        } else {
+                                            // If all the inputs are fixed, propagate the union of the observations.
+                                            constraints.clear();
+                                            boolean fixedInputs = true;
+                                            boolean partiallyFixedInput = false;
+                                            for(Variable<?> input:p.getInputs())
+                                                if(!input.isDeterministic()) {
+                                                    if(input.isFixed()) {
+                                                        constraints.addAll(v.getFixingObservations());
+                                                        if(v != input && tracking.isPossibleObservation(input))
+                                                            partiallyFixedInput = true;
+                                                    } else {
+                                                        fixedInputs = false;
+                                                        break;
+                                                    }
                                                 }
+                                            // All the inputs to this variable are fixed, so the value of the variable
+                                            // is known.
+                                            if(fixedInputs) {
+                                                constraints.removeAll(output.getFixingObservations());
+                                                if(partiallyFixedInput) {
+                                                    // If there are multiple possible outputs to update we have to give
+                                                    // up at this point.
+                                                    String outputName = getVarName(v);
+                                                    for(ObserveVariableTask<?> o:constraints) {
+                                                        String targetName = getVarName(o.target);
+                                                        tracking.compDesc.errors.add(new SandwoodModelException(
+                                                                "Unable to track the fixed values from variable \""
+                                                                        + outputName
+                                                                        + "\" fixed by the observation of \""
+                                                                        + targetName
+                                                                        + "\" as there are too many possible paths from the constructing function.",
+                                                                v.getLocation()));
+                                                    }
+                                                } else if(!constraints.isEmpty())
+                                                    tracking.addPossibleObservations(output, constraints);
                                             }
-                                        // All the inputs to this variable are fixed, so the value of the variable is
-                                        // known.
-                                        if(fixedInputs) {
-                                            constraints.removeAll(output.getFixingObservations());
-                                            if(partiallyFixedInput) {
-                                                // If there are multiple possible outputs to update we have to give up
-                                                // at this point.
-                                                String outputName = getVarName(v);
-                                                for(ObserveVariableTask<?> o:constraints) {
-                                                    String targetName = getVarName(o.target);
-                                                    tracking.compDesc.errors.add(new SandwoodModelException(
-                                                            "Unable to track the fixed values from variable \""
-                                                                    + outputName + "\" fixed by the observation of \""
-                                                                    + targetName
-                                                                    + "\" as there are too many possible paths from the constructing function.",
-                                                            v.getLocation()));
-                                                }
-                                            } else if(!constraints.isEmpty())
-                                                tracking.addPossibleObservations(output, constraints);
                                         }
-                                        break;
                                     }
+                                    break;
                                 }
                             }
                         }
@@ -807,6 +835,13 @@ public class TracesImplementation extends Traces {
                                 } else if(pt.scopeCondition.isDeterministic()) {
                                     constraints.clear();
                                     constraints.addAll(os);
+                                    constraints.removeAll(pt.value.getFixingObservations());
+                                    if(!constraints.isEmpty())
+                                        tracking.addObservations(pt.value, constraints);
+                                } else if(pt.scopeCondition.isFixed()) {
+                                    constraints.clear();
+                                    constraints.addAll(os);
+                                    constraints.addAll(pt.scopeCondition.getFixingObservations());
                                     constraints.removeAll(pt.value.getFixingObservations());
                                     if(!constraints.isEmpty())
                                         tracking.addObservations(pt.value, constraints);
@@ -1076,7 +1111,8 @@ public class TracesImplementation extends Traces {
                             deterministicVars.add(v);
                     }
                 } else {
-                    v.setIntermediate();
+                    if(!v.getType().isArray() || !((ArrayVariable<?>) v).isSubArray())
+                        v.setIntermediate();
                     if(v.isDeterministic())
                         deterministicVars.add(v);
                     else
@@ -1739,73 +1775,66 @@ public class TracesImplementation extends Traces {
         // Add it to the to sample trace
         s.toSample.add(d);
 
-        // Record its scopes
-        Scope sampleScope = d.task.scope();
+        // Record its scopes, and its scopes stopping at the first conditional as variables outside of this scope will
+        // be set by a put task with a scope condition including the guard, or a conditional assignment.
         Set<Scope> sampleScopes = new HashSet<>();
-        while(sampleScope != null) {
-            sampleScopes.add(sampleScope);
-            sampleScope = sampleScope.getEnclosingScope();
-        }
+        Set<Scope> innerScopes = new HashSet<>();
+        {
+            boolean collectInner = true;
+            Scope sampleScope = d.task.scope();
+            while(sampleScope != GlobalScope.scope) {
+                sampleScopes.add(sampleScope);
+                if(collectInner)
+                    innerScopes.add(sampleScope);
 
-        // And determine if it is only consumed by a single task.
-        Variable<?> output = d.task.getOutput();
-        boolean singleStream = singleStream(output);
-        boolean intermediateFound = output.isIntermediate();
+                switch(sampleScope.getScopeType()) {
+                    case IF:
+                    case ELSE:
+                        collectInner = false;
+                        break;
+                    default:
+                        break;
+                }
+
+                sampleScope = sampleScope.getEnclosingScope();
+            }
+
+            sampleScopes.add(sampleScope);
+            if(collectInner)
+                innerScopes.add(sampleScope);
+        }
 
         // Set the trace position ready to traverse the rest of the trace.
         int tracePos = 1;
-        // Traverse through until we leave the scope, reach an array operation,
-        // or the traces diverge.
-        while(tracePos < noElements && singleStream && !intermediateFound) {
-            // Get the element
-            d = consumerTrace.get(tracePos); // We know the first element is there as there is always a sample.
-            if(d.task.checkInversionError(d.argPos) != null || !sampleScopes.contains(d.task.scope())
-                    || usesSampledValue(d) || !output.isPrivate())
-                // Final test is used to ensure that we have
-                // not gone into some other part of the
-                // program. TODO This is a stop gap till we
-                // change to non private named variables.
+        // Traverse through until we leave the scope or the traces diverge.
+        // The value of d will always be the last task added to the sample trace.
+        while(tracePos < noElements) {
+            DataflowTaskArgDesc candidate = consumerTrace.get(tracePos);
+            if(constructableSampleVariable(candidate, sampleScopes, innerScopes)) {
+                s.toSample.add(candidate);
+                tracePos++;
+            } else
                 break;
-
-            // Store the trace element.
-            s.toSample.add(d);
-            // This value was consumed, so increment the position to the next value.
-            tracePos++;
-
-            // Test to see if the trace diverges at this point.
-            output = d.task.getOutput();
-            // Calculate if this is still a single stream.
-            singleStream = singleStream(output);
-            // Make sure we stop at the first intermediate in the trace.
-            intermediateFound = output.isIntermediate();
         }
 
         // Add any further put operations that store the value as long as this
-        // is still a single stream.
-        while(tracePos < noElements && singleStream && !intermediateFound) {
-            d = consumerTrace.get(tracePos); // We know the element is always there as the last element is the RV
-            // constructor.
-            DFType t = d.task.getType();
-            if(t != DFType.PUT || d.argPos != 2)
-                break;
-
-            // Store the trace element.
-            s.toSample.add(d);
-
-            // This value was consumed, so increment it to the next value.
-            tracePos++;
-
-            // Test to see if the trace diverges at this point.
-            output = d.task.getOutput();
-            singleStream = singleStream(output);
-            // Make sure we stop at the first intermediate in the trace.
-            intermediateFound = output.isIntermediate();
+        // is still a single stream and not moving out of a conditional guard of the sample.
+        if(d.task.getType() == DFType.PUT && d.argPos == 2) {
+            while(tracePos < noElements) {
+                DataflowTaskArgDesc candidate = consumerTrace.get(tracePos);
+                DFType t = candidate.task.getType();
+                Variable<?> output = candidate.task.getOutput();
+                if(t == DFType.PUT && d.argPos == 2 && !variableInScope(output, sampleScopes, innerScopes)) {
+                    s.toSample.add(candidate);
+                    tracePos++;
+                } else
+                    break;
+            }
         }
 
         // Get the last task in the to sample trace as this will generate the output
         // that the sample variable should be set to.
-        DataflowTask<?> task = s.toSample.peek().task;
-        Variable<?> v = task.getOutput();
+        Variable<?> v = s.toSample.peek().task.getOutput();
         // Mark the variable as a sample
         v.setSample();
         // Store in the SplitTrace object, and in the traces implementation.
@@ -1820,22 +1849,71 @@ public class TracesImplementation extends Traces {
         return s;
     }
 
-    private boolean singleStream(Variable<?> output) {
-        int consumers = 0;
-        for(DataflowTask<?> d:output.getConsumers()) {
-            boolean implicitGet = d.getType() == DFType.GET && ((GetTask<?>) d).isImplicit();
-            boolean putArray = d.getType() == DFType.PUT && ((PutTask<?>) d).array == output;
-            if(!implicitGet && !putArray)
-                consumers++;
-        }
-        return consumers == 1;
+    /**
+     * Method to test if this variable could be constructed from a sample value stored later in the graph.
+     * 
+     * @param d
+     * @param sampleScopes
+     * @param innerScopes
+     * @return
+     */
+    private boolean constructableSampleVariable(DataflowTaskArgDesc d, Set<Scope> sampleScopes,
+            Set<Scope> innerScopes) {
+        ProducingDataflowTask<?> task = d.task;
+        Variable<?> output = task.getOutput();
+        Variable<?> input = task.getInput(d.argPos);
+
+        boolean invertible = d.task.checkInversionError(d.argPos) == null;
+        boolean inputIntermediate = input.isIntermediate();
+        boolean inputSample = input.isSample();
+        boolean singleStream = singleStream(input);
+        boolean singleSample = !usesOtherSampledValue(d);
+        boolean varInScope = variableInScope(output, sampleScopes, innerScopes);
+
+        return invertible && !inputIntermediate && !inputSample && singleStream && singleSample && varInScope;
     }
 
-    private boolean usesSampledValue(DataflowTaskArgDesc d) {
+    /**
+     * A guard to test that the output is still in scope an if this passes through a scope that has the potential to not
+     * execute the value on the outside of this scope is fixed so cannot change as a result of whether the scope
+     * executed or not.
+     * 
+     * @param output
+     * @param sampleScopes
+     * @param innerScopes
+     * @return
+     */
+    private boolean variableInScope(Variable<?> output, Set<Scope> sampleScopes, Set<Scope> innerScopes) {
+        return ((sampleScopes.contains(output.scope()) && output.isFixed()) || innerScopes.contains(output.scope()));
+    }
+
+    private boolean singleStream(Variable<?> v) {
+        int consumers = 0;
+        for(DataflowTask<?> d:v.getConsumers()) {
+            switch(d.getType()) {
+                case GET:
+                    if(!((GetTask<?>) d).isImplicit())
+                        consumers++;
+                    break;
+                case OBSERVE_VARIABLE:
+                    break;
+                case PUT:
+                    if(((PutTask<?>) d).array != v)
+                        consumers++;
+                    break;
+                default:
+                    consumers++;
+                    break;
+            }
+        }
+        return consumers <= 1;
+    }
+
+    private boolean usesOtherSampledValue(DataflowTaskArgDesc d) {
         int size = d.task.getInputsCount();
         boolean isPut = d.task.getType() == DFType.PUT;
         for(int i = 0; i < size; i++) {
-            if((i != d.argPos || (isPut && d.argPos == 0)) && !d.task.getInput(i).isDeterministic())
+            if((i != d.argPos && !(isPut && i == 0)) && !d.task.getInput(i).isDeterministic())
                 return true;
         }
         return false;

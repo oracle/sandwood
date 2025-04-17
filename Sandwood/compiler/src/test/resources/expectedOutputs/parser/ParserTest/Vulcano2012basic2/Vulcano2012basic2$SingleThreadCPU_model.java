@@ -3392,8 +3392,8 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			int cv$multinomialSum148 = 0;
 			
 			// Sum the number of samples in the multinomial output.
-			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < Sales[t$var105].length; cv$multinomialIndex148 += 1)
-				cv$multinomialSum148 = (Sales[t$var105][cv$multinomialIndex148] + cv$multinomialSum148);
+			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < weekly_sales.length; cv$multinomialIndex148 += 1)
+				cv$multinomialSum148 = (weekly_sales[cv$multinomialIndex148] + cv$multinomialSum148);
 			sales_sum[t$var105] = cv$multinomialSum148;
 		}
 	}

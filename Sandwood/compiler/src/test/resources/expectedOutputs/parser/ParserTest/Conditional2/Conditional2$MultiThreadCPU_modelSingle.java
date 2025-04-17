@@ -24,6 +24,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private boolean system$gibbsForward = true;
 	private double[] value;
 	private double[] value2;
+	private double var19;
 
 	public Conditional2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -143,6 +144,23 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return value2;
 	}
 
+	// Getter for var19.
+	@Override
+	public final double get$var19() {
+		return var19;
+	}
+
+	// Setter for var19.
+	@Override
+	public final void set$var19(double cv$value) {
+		// Set flags for all the side effects of var19 including if probabilities need to
+		// be updated.
+		var19 = cv$value;
+		
+		// Unset the fixed probability flag for sample 21 as it depends on var19.
+		fixedProbFlag$sample21 = false;
+	}
+
 	// Calculate the probability of the samples represented by sample21 using sampled
 	// values.
 	private final void logProbabilityValue$sample21() {
@@ -163,7 +181,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				double cv$probabilityReached = 0.0;
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = value[0];
+					double cv$sampleValue = var19;
 					{
 						{
 							double var16 = 0.0;
@@ -208,14 +226,24 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the random variable instance probability
 			logProbability$var19 = cv$accumulator;
 			
+			// Guard to ensure that value is only updated once for this probability.
+			boolean cv$guard$value = false;
+			
 			// Guard to ensure that value2 is only updated once for this probability.
 			boolean cv$guard$value2 = false;
 			
-			// Update the variable probability
-			logProbability$value = (logProbability$value + cv$accumulator);
-			
 			// Add probability to constructed variables from the combined probability
-			// 
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$value) {
+					// Set the guard so the update is only applied once.
+					cv$guard$value = true;
+					
+					// Update the variable probability
+					logProbability$value = (logProbability$value + cv$accumulator);
+				}
+			}
+			
 			// Looking for a path between Sample 21 and consumer double[] 27.
 			{
 				if((0 == 0)) {
@@ -249,14 +277,24 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			logProbability$var18 = cv$rvAccumulator;
 			
+			// Guard to ensure that value is only updated once for this probability.
+			boolean cv$guard$value = false;
+			
 			// Guard to ensure that value2 is only updated once for this probability.
 			boolean cv$guard$value2 = false;
 			
-			// Update the variable probability
-			logProbability$value = (logProbability$value + cv$accumulator);
-			
 			// Add probability to constructed variables from the combined probability
-			// 
+			{
+				// If the probability of the variable has not already been updated
+				if(!cv$guard$value) {
+					// Set the guard so the update is only applied once.
+					cv$guard$value = true;
+					
+					// Update the variable probability
+					logProbability$value = (logProbability$value + cv$accumulator);
+				}
+			}
+			
 			// Looking for a path between Sample 21 and consumer double[] 27.
 			{
 				if((0 == 0)) {
@@ -627,7 +665,9 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			value[0] = 1.0;
 		else {
 			if(!fixedFlag$sample21)
-				value[0] = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!fixedFlag$sample21)
+				value[0] = var19;
 		}
 		if(!(fixedFlag$sample4 && fixedFlag$sample21))
 			value2[0] = value[0];
@@ -639,6 +679,18 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!guard) {
+			if(!fixedFlag$sample21) {
+				// Track if it is possible to reach an observed variable
+				boolean observationGuard$var19 = false;
+				{
+					// Observation reached
+					observationGuard$var19 = true;
+				}
+				if(!observationGuard$var19)
+					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
+		}
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -647,6 +699,18 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!guard) {
+			if(!fixedFlag$sample21) {
+				// Track if it is possible to reach an observed variable
+				boolean observationGuard$var19 = false;
+				{
+					// Observation reached
+					observationGuard$var19 = true;
+				}
+				if(!observationGuard$var19)
+					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
+		}
 	}
 
 	// Method to execute one round of Gibbs sampling.
