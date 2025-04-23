@@ -1,0 +1,21 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Flip1CoinMK20(int obs1, int obs2) {
+	
+	double bias = beta(1,1).sample();
+	Binomial binomial = binomial(bias, 100);
+	int count1 = binomial.sample();
+	int count2 = binomial.sample();
+	int total = count1 + count2;
+	
+	count1.observe(obs1);
+	count2.observe(obs2);
+}

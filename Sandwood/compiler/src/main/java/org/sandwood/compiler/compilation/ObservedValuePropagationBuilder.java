@@ -196,10 +196,16 @@ public class ObservedValuePropagationBuilder {
         // Set any observed variables required as input to the observation task.
         IRTreeVoid t1 = initialiseConstants(compilationCtx);
 
-        // Propagate back from the observation task to the intermediate variables in the model.
-        IRTreeVoid t2 = backPropagateObservedVariables(compilationCtx);
+        // Set to record the intermediates whose value has been fixed.
+        Set<Variable<?>> setIntermediates = new HashSet<>();
 
-        IRTreeVoid funcBody = IRTree.sequential(Tree.NoComment, t1, t2);
+        // Propagate back from the observation task to the intermediate variables in the model.
+        IRTreeVoid t2 = backPropagateObservedVariables(setIntermediates, compilationCtx);
+
+        // Set any intermediates that are fixed as their parents are fixed.
+        IRTreeVoid t3 = forwardPropagateObservedVariables(setIntermediates, compilationCtx);
+
+        IRTreeVoid funcBody = IRTree.sequential(Tree.NoComment, t1, t2, t3);
         compilationCtx.addFunction(AuxFunctionType.OBSERVATION_PROPAGATION, Visibility.PUBLIC, new ArgDesc[0], funcBody,
                 true, "Method to propagate observed values back into the model.");
     }
@@ -228,7 +234,8 @@ public class ObservedValuePropagationBuilder {
         return t1;
     }
 
-    private static IRTreeVoid backPropagateObservedVariables(CompilationContext compilationCtx) {
+    private static IRTreeVoid backPropagateObservedVariables(Set<Variable<?>> setIntermediates,
+            CompilationContext compilationCtx) {
         IRTreeVoid t2;
         // Set the phase
         compilationCtx.phase = CompilationPhase.MAIN_METHODS;
@@ -272,11 +279,11 @@ public class ObservedValuePropagationBuilder {
                             sTask);
                 }
 
-                ingestTrace(t.values(), segmentedTraces);
+                ingestTrace(t.values(), segmentedTraces, setIntermediates);
             }
         }
 
-        ingestTrace(compilationCtx.traces.getObservedConditionTraces().values(), segmentedTraces);
+        ingestTrace(compilationCtx.traces.getObservedConditionTraces().values(), segmentedTraces, setIntermediates);
 
         // Construct the code to populate the values.
         Set<VariableDependencyDesc> vdds = VariableDependencyDesc.getVariableDependencyDescs(segmentedTraces);
@@ -320,6 +327,25 @@ public class ObservedValuePropagationBuilder {
         t2 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
                 "Propagating values back from observations into the models intermediate variables.");
         return t2;
+    }
+
+    private static IRTreeVoid forwardPropagateObservedVariables(Set<Variable<?>> setIntermediates,
+            CompilationContext compilationCtx) {
+        IRTreeVoid t3;
+        PriorityQueue<Variable<?>> toFix = new PriorityQueue<>();
+        for(Variable<?> v:compilationCtx.traces.getAllVariables()) {
+            if(v.isIntermediate() && v.isFixed() && !setIntermediates.contains(v))
+                toFix.add(v);
+        }
+
+        compilationCtx.pushScope();
+        while(!toFix.isEmpty())
+            ForwardExecutionBuilder.constructForwardMethod(toFix.poll(), GuardStatus.NONE, false, compilationCtx);
+
+        t3 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
+                "Set any intermediates with fixed parent values.");
+        compilationCtx.popScope();
+        return t3;
     }
 
     // TODO Replace the deep copies here with shallow copies of just the references, and then reallocate the variables
@@ -514,7 +540,7 @@ public class ObservedValuePropagationBuilder {
      * @param segmentedTraces
      */
     private static void ingestTrace(Collection<Set<TraceHandle>> observedTraces,
-            Map<Variable<?>, VarTraces> segmentedTraces) {
+            Map<Variable<?>, VarTraces> segmentedTraces, Set<Variable<?>> setIntermediates) {
         for(Set<TraceHandle> traces:observedTraces) {
             if(multiplePaths(traces)) {
                 TraceHandle t = traces.iterator().next();
@@ -538,6 +564,7 @@ public class ObservedValuePropagationBuilder {
 
                 // If there is a fixed sample or intermediate variable
                 if(output.isFixed() && (output.isSample() || effectiveIntermediate(output))) {
+                    saveIntermediate(output, setIntermediates);
                     // If the sample came from a put into an array skip it and find the outermost point of the trace.
                     while(d.task.getType() == DFType.PUT && !output.isObserved()) {
                         d = t.get(i++);
@@ -579,6 +606,7 @@ public class ObservedValuePropagationBuilder {
                             // If the next intermediate has been found store the segment and start the next segment.
                             // If the parent is a get this intermediate has already been accounted for.
                             if(effectiveIntermediate(output) && d.task.getType() != DFType.GET) {
+                                saveIntermediate(output, setIntermediates);
                                 // If the value came from a put into an array skip it and find the outermost point of
                                 // the trace.
                                 segment.add(d);
@@ -614,6 +642,36 @@ public class ObservedValuePropagationBuilder {
                 }
             }
         }
+    }
+
+    private static void saveIntermediate(Variable<?> output, Set<Variable<?>> setIntermediates) {
+        if(output.getType().isArray()) {
+            ArrayVariable<?> a = (ArrayVariable<?>) output;
+            while(a.isSubArray()) {
+                ArrayVariable<?> outer = null;
+                while(outer == null) {
+                    // Look for the put task that set the value in the outer array. This will be an implicit put if the
+                    // array was constructed by a get.
+                    for(DataflowTask<?> d:a.getConsumers()) {
+                        if(d.getType() == DFType.PUT) {
+                            PutTask<?> pt = (PutTask<?>) d;
+                            if(pt.value == a) {
+                                outer = pt.getOutput();
+                                break;
+                            }
+                        }
+                    }
+
+                    // If we did not find the put move to the next state of the array
+                    if(outer == null)
+                        a = a.getChildInstance();
+                    else
+                        a = outer;
+                }
+            }
+            setIntermediates.add(a);
+        } else
+            setIntermediates.add(output);
     }
 
     private static boolean effectiveIntermediate(Variable<?> output) {
