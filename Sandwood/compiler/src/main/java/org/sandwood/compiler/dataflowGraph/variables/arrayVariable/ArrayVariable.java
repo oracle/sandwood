@@ -684,7 +684,12 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
     }
 
     public Set<PutTask<A>> getPuts(Scope scope, int destinationID) {
+        return getPuts(scope, destinationID, new HashSet<>());
+    }
+
+    private Set<PutTask<A>> getPuts(Scope scope, int destinationID, Set<ArrayVariable<?>> seenArrays) {
         Set<ArrayVariable<A>> possibleInstances = getPossibleInstances(scope, destinationID);
+        seenArrays.addAll(possibleInstances);
 
         Set<PutTask<A>> putTasks = new HashSet<>();
 
@@ -699,9 +704,10 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                         GetArrayTask<A> getTask = getOuterArrayDesc().getGetTask();
                         // For each put task (p1) that can set a value for this get, add the puts (p2)
                         // that could build up the value set by p1.
-                        for(PutTask<ArrayVariable<A>> pt:getTask.array.getPuts(scope, destinationID))
-                            if(pt.value.instanceHandle().getParent() != getTask)
-                                putTasks.addAll(((ArrayVariable<A>) pt.value).getPuts(scope, destinationID));
+                        for(PutTask<ArrayVariable<A>> pt:getTask.array.getPuts(scope, destinationID, seenArrays))
+                            if(!seenArrays.contains(pt.value))
+                                putTasks.addAll(
+                                        ((ArrayVariable<A>) pt.value).getPuts(scope, destinationID, seenArrays));
                     }
                     break;
                 }
@@ -709,9 +715,9 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
                     GetArrayTask<A> getTask = (GetArrayTask<A>) parent;
                     // For each put task (p1) that can set a value for this get, add the puts (p2)
                     // that could build up the value set by p1.
-                    for(PutTask<ArrayVariable<A>> pt:getTask.array.getPuts(scope, destinationID))
-                        if(pt.value.instanceHandle().getParent() != getTask)
-                            putTasks.addAll(((ArrayVariable<A>) pt.value).getPuts(scope, destinationID));
+                    for(PutTask<ArrayVariable<A>> pt:getTask.array.getPuts(scope, destinationID, seenArrays))
+                        if(!seenArrays.contains(pt.value))
+                            putTasks.addAll(((ArrayVariable<A>) pt.value).getPuts(scope, destinationID, seenArrays));
                     break;
                 }
                 case PUT: {
