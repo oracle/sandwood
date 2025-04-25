@@ -257,11 +257,9 @@ class Conditional2c$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						{
 							if(guard) {
 								{
-									if(guard) {
-										if((0 == 0)) {
-											if(!(value2[0] == 1.0))
-												cv$weightedProbability = Double.NEGATIVE_INFINITY;
-										}
+									if((0 == 0)) {
+										if(!(value2[0] == 1.0))
+											cv$weightedProbability = Double.NEGATIVE_INFINITY;
 									}
 								}
 							}
@@ -334,20 +332,18 @@ class Conditional2c$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										{
 											{
-												if(cv$currentValue) {
-													if((0 == 0)) {
-														if((value2[0] == 1.0)) {
-															if((Math.log(1.0) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log(1.0) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = Math.log(1.0);
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(1.0))) + 1)) + Math.log(1.0));
-															}
+												if((0 == 0)) {
+													if((value2[0] == 1.0)) {
+														if((Math.log(1.0) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log(1.0) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														else {
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedConsumerProbabilities = Math.log(1.0);
+															else
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(1.0))) + 1)) + Math.log(1.0));
 														}
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
+													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
 										}

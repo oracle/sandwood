@@ -557,6 +557,8 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set the current value to the current state of the tree.
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, cv$originalValue, 1.0) + (((0.0 <= cv$originalValue) && (cv$originalValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		
+		// Update Sample and intermediate values
+		// 
 		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[0] = cv$proposedValue;
 		

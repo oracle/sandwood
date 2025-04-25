@@ -606,7 +606,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						double cv$probabilityReached = 0.0;
 						double cv$sampleValue = metric_g[sample][timeStep$var136];
-						if((((0 == timeStep$var136) && metric_valid_g[sample][0]) && (0 <= st[sample][0]))) {
+						if(((0 == timeStep$var136) && (0 <= st[sample][0]))) {
 							if(fixedFlag$sample104) {
 								int var50 = st[sample][0];
 								if(((0 <= var50) && (var50 < noStates))) {
@@ -1522,7 +1522,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
 			for(int sample = 0; sample < noSamples; sample += 1) {
-				if((((var50 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+				if((((var50 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 					if(fixedFlag$sample104) {
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -1616,7 +1616,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		metric_mean[var50] = cv$proposedValue;
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
 		for(int sample = 0; sample < noSamples; sample += 1) {
-			if((((var50 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+			if((((var50 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 				if(fixedFlag$sample104) {
 					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -1719,7 +1719,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
 			for(int sample = 0; sample < noSamples; sample += 1) {
-				if((((var66 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+				if((((var66 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 					if(fixedFlag$sample104) {
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -1809,7 +1809,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		metric_var[var66] = cv$proposedValue;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
 		for(int sample = 0; sample < noSamples; sample += 1) {
-			if((((var66 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+			if((((var66 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 				if(fixedFlag$sample104) {
 					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;

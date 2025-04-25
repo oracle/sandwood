@@ -189,31 +189,29 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					if(!guard) {
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = bias[0];
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = bias[0];
+					{
 						{
-							{
-								double var16 = 0.0;
-								double var17 = 0.5;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((var16 <= cv$sampleValue) && (cv$sampleValue < var17))?(-Math.log((var17 - var16))):Double.NEGATIVE_INFINITY));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							double var16 = 0.0;
+							double var17 = 0.5;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (((var16 <= cv$sampleValue) && (cv$sampleValue < var17))?(-Math.log((var17 - var16))):Double.NEGATIVE_INFINITY));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -516,10 +514,8 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						
 						// Guards to ensure that bias is only updated when there is a valid path.
 						{
-							if(!guard) {
-								{
-									bias[0] = cv$currentValue;
-								}
+							{
+								bias[0] = cv$currentValue;
 							}
 						}
 					}
@@ -544,66 +540,64 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						// Looking for a path between Sample 21 and consumer Beta 24.
 						{
-							if(!guard) {
-								double traceTempVariable$var22$2_1 = cv$currentValue;
-								if((0 == 0)) {
-									// Processing sample task 27 of consumer random variable null.
+							double traceTempVariable$var22$2_1 = cv$currentValue;
+							if((0 == 0)) {
+								// Processing sample task 27 of consumer random variable null.
+								{
+									// Set an accumulator to sum the probabilities for each possible configuration of
+									// inputs.
+									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+									
+									// Set an accumulator to record the consumer distributions not seen. Initially set
+									// to 1 as seen values will be deducted from this value.
+									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									{
-										// Set an accumulator to sum the probabilities for each possible configuration of
-										// inputs.
-										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-										
-										// Set an accumulator to record the consumer distributions not seen. Initially set
-										// to 1 as seen values will be deducted from this value.
-										double cv$consumerDistributionProbabilityAccumulator = 1.0;
 										{
 											{
 												{
+													double cv$temp$2$var22;
 													{
-														double cv$temp$2$var22;
-														{
-															// Constructing a random variable input for use later.
-															double var22 = traceTempVariable$var22$2_1;
-															cv$temp$2$var22 = var22;
-														}
-														double cv$temp$3$var23;
-														{
-															cv$temp$3$var23 = 1.0;
-														}
-														
-														// Record the probability of sample task 27 generating output with current configuration.
-														if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-														else {
-															// If the second value is -infinity.
-															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23));
-															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)));
-														}
-														
-														// Recorded the probability of reaching sample task 27 with the current configuration.
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+														// Constructing a random variable input for use later.
+														double var22 = traceTempVariable$var22$2_1;
+														cv$temp$2$var22 = var22;
 													}
+													double cv$temp$3$var23;
+													{
+														cv$temp$3$var23 = 1.0;
+													}
+													
+													// Record the probability of sample task 27 generating output with current configuration.
+													if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+													else {
+														// If the second value is -infinity.
+														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23));
+														else
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$var22, cv$temp$3$var23)));
+													}
+													
+													// Recorded the probability of reaching sample task 27 with the current configuration.
+													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
 										}
-										
-										// A check to ensure rounding of floating point values can never result in a negative
-										// value.
-										cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-										
-										// Multiply (log space add) in the probability of the sample task to the overall probability
-										// for this configuration of the source random variable.
-										if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-										else {
-											// If the second value is -infinity.
-											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-											else
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-										}
+									}
+									
+									// A check to ensure rounding of floating point values can never result in a negative
+									// value.
+									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+									
+									// Multiply (log space add) in the probability of the sample task to the overall probability
+									// for this configuration of the source random variable.
+									if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+										cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+									else {
+										// If the second value is -infinity.
+										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+											cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+										else
+											cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 									}
 								}
 							}
@@ -648,10 +642,8 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				
 				// Guards to ensure that bias is only updated when there is a valid path.
 				{
-					if(!guard) {
-						{
-							bias[0] = var19;
-						}
+					{
+						bias[0] = var19;
 					}
 				}
 			}
@@ -727,130 +719,124 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								{
 									// Looking for a path between Put 22 and consumer Beta 24.
 									{
-										if(!cv$currentValue) {
-											if((0 == 0)) {
-												// Processing sample task 27 of consumer random variable null.
-												{
-													// Set an accumulator to sum the probabilities for each possible configuration of
-													// inputs.
-													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-													
-													// Set an accumulator to record the consumer distributions not seen. Initially set
-													// to 1 as seen values will be deducted from this value.
-													double cv$consumerDistributionProbabilityAccumulator = 1.0;
-													{
-														{
-															{
-																{
-																	{
-																		double cv$temp$1$var22;
-																		{
-																			// Constructing a random variable input for use later.
-																			double var22 = bias[0];
-																			cv$temp$1$var22 = var22;
-																		}
-																		double cv$temp$2$var23;
-																		{
-																			cv$temp$2$var23 = 1.0;
-																		}
-																		
-																		// Record the probability of sample task 27 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23));
-																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)));
-																		}
-																		
-																		// Recorded the probability of reaching sample task 27 with the current configuration.
-																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																	}
-																}
-															}
-														}
-													}
-													
-													// A check to ensure rounding of floating point values can never result in a negative
-													// value.
-													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-													
-													// Multiply (log space add) in the probability of the sample task to the overall probability
-													// for this configuration of the source random variable.
-													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-														else
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-													}
-												}
-											}
-										}
-									}
-									{
-										if(!cv$currentValue) {
-											// Processing sample task 21 of consumer random variable null.
+										if((0 == 0)) {
+											// Processing sample task 27 of consumer random variable null.
 											{
-												if(!cv$currentValue) {
-													// Set an accumulator to sum the probabilities for each possible configuration of
-													// inputs.
-													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-													
-													// Set an accumulator to record the consumer distributions not seen. Initially set
-													// to 1 as seen values will be deducted from this value.
-													double cv$consumerDistributionProbabilityAccumulator = 1.0;
+												// Set an accumulator to sum the probabilities for each possible configuration of
+												// inputs.
+												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+												
+												// Set an accumulator to record the consumer distributions not seen. Initially set
+												// to 1 as seen values will be deducted from this value.
+												double cv$consumerDistributionProbabilityAccumulator = 1.0;
+												{
 													{
 														{
 															{
 																{
-																	double cv$temp$3$var16;
+																	double cv$temp$1$var22;
 																	{
-																		cv$temp$3$var16 = 0.0;
+																		// Constructing a random variable input for use later.
+																		double var22 = bias[0];
+																		cv$temp$1$var22 = var22;
 																	}
-																	double cv$temp$4$var17;
+																	double cv$temp$2$var23;
 																	{
-																		cv$temp$4$var17 = 0.5;
+																		cv$temp$2$var23 = 1.0;
 																	}
 																	
-																	// Record the probability of sample task 21 generating output with current configuration.
-																	if(((Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	// Record the probability of sample task 27 generating output with current configuration.
+																	if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$var22, cv$temp$2$var23)));
 																	}
 																	
-																	// Recorded the probability of reaching sample task 21 with the current configuration.
+																	// Recorded the probability of reaching sample task 27 with the current configuration.
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
 															}
 														}
 													}
-													
-													// A check to ensure rounding of floating point values can never result in a negative
-													// value.
-													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-													
-													// Multiply (log space add) in the probability of the sample task to the overall probability
-													// for this configuration of the source random variable.
-													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-														else
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
+												
+												// A check to ensure rounding of floating point values can never result in a negative
+												// value.
+												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+												
+												// Multiply (log space add) in the probability of the sample task to the overall probability
+												// for this configuration of the source random variable.
+												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+												else {
+													// If the second value is -infinity.
+													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+													else
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
+											}
+										}
+									}
+									{
+										// Processing sample task 21 of consumer random variable null.
+										{
+											// Set an accumulator to sum the probabilities for each possible configuration of
+											// inputs.
+											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+											
+											// Set an accumulator to record the consumer distributions not seen. Initially set
+											// to 1 as seen values will be deducted from this value.
+											double cv$consumerDistributionProbabilityAccumulator = 1.0;
+											{
+												{
+													{
+														{
+															double cv$temp$3$var16;
+															{
+																cv$temp$3$var16 = 0.0;
+															}
+															double cv$temp$4$var17;
+															{
+																cv$temp$4$var17 = 0.5;
+															}
+															
+															// Record the probability of sample task 21 generating output with current configuration.
+															if(((Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+															else {
+																// If the second value is -infinity.
+																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY));
+																else
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$3$var16 <= bias[0]) && (bias[0] < cv$temp$4$var17))?(-Math.log((cv$temp$4$var17 - cv$temp$3$var16))):Double.NEGATIVE_INFINITY)));
+															}
+															
+															// Recorded the probability of reaching sample task 21 with the current configuration.
+															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+														}
 													}
 												}
+											}
+											
+											// A check to ensure rounding of floating point values can never result in a negative
+											// value.
+											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+											
+											// Multiply (log space add) in the probability of the sample task to the overall probability
+											// for this configuration of the source random variable.
+											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+											else {
+												// If the second value is -infinity.
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+												else
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 											}
 										}
 									}
@@ -866,68 +852,66 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								{
 									// Looking for a path between Put 16 and consumer Beta 24.
 									{
-										if(cv$currentValue) {
-											double traceTempVariable$var22$10_1 = 0.5;
-											if((0 == 0)) {
-												// Processing sample task 27 of consumer random variable null.
+										double traceTempVariable$var22$10_1 = 0.5;
+										if((0 == 0)) {
+											// Processing sample task 27 of consumer random variable null.
+											{
+												// Set an accumulator to sum the probabilities for each possible configuration of
+												// inputs.
+												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+												
+												// Set an accumulator to record the consumer distributions not seen. Initially set
+												// to 1 as seen values will be deducted from this value.
+												double cv$consumerDistributionProbabilityAccumulator = 1.0;
 												{
-													// Set an accumulator to sum the probabilities for each possible configuration of
-													// inputs.
-													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-													
-													// Set an accumulator to record the consumer distributions not seen. Initially set
-													// to 1 as seen values will be deducted from this value.
-													double cv$consumerDistributionProbabilityAccumulator = 1.0;
 													{
 														{
 															{
 																{
+																	double cv$temp$5$var22;
 																	{
-																		double cv$temp$5$var22;
-																		{
-																			// Constructing a random variable input for use later.
-																			double var22 = bias[0];
-																			cv$temp$5$var22 = var22;
-																		}
-																		double cv$temp$6$var23;
-																		{
-																			cv$temp$6$var23 = 1.0;
-																		}
-																		
-																		// Record the probability of sample task 27 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23));
-																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)));
-																		}
-																		
-																		// Recorded the probability of reaching sample task 27 with the current configuration.
-																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																		// Constructing a random variable input for use later.
+																		double var22 = bias[0];
+																		cv$temp$5$var22 = var22;
 																	}
+																	double cv$temp$6$var23;
+																	{
+																		cv$temp$6$var23 = 1.0;
+																	}
+																	
+																	// Record the probability of sample task 27 generating output with current configuration.
+																	if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23));
+																		else
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$5$var22, cv$temp$6$var23)));
+																	}
+																	
+																	// Recorded the probability of reaching sample task 27 with the current configuration.
+																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
 															}
 														}
 													}
-													
-													// A check to ensure rounding of floating point values can never result in a negative
-													// value.
-													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-													
-													// Multiply (log space add) in the probability of the sample task to the overall probability
-													// for this configuration of the source random variable.
-													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-														else
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-													}
+												}
+												
+												// A check to ensure rounding of floating point values can never result in a negative
+												// value.
+												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+												
+												// Multiply (log space add) in the probability of the sample task to the overall probability
+												// for this configuration of the source random variable.
+												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+												else {
+													// If the second value is -infinity.
+													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+													else
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 												}
 											}
 										}

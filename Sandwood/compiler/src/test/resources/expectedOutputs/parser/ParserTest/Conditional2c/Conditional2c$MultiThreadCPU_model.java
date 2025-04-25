@@ -397,13 +397,11 @@ class Conditional2c$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							if(guard) {
 								// Looking for a path between Put 22 and consumer double[] 29.
 								{
-									if(guard) {
-										if((0 == 0)) {
-											// If the observed value does not match the provided value the probability of generating
-											// this random variable is zero
-											if(!(value2[0] == 1.0))
-												cv$weightedProbability = Double.NEGATIVE_INFINITY;
-										}
+									if((0 == 0)) {
+										// If the observed value does not match the provided value the probability of generating
+										// this random variable is zero
+										if(!(value2[0] == 1.0))
+											cv$weightedProbability = Double.NEGATIVE_INFINITY;
 									}
 								}
 							}
@@ -539,25 +537,23 @@ class Conditional2c$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										{
 											// Looking for a path between Put 22 and consumer double[] 29.
 											{
-												if(cv$currentValue) {
-													if((0 == 0)) {
-														// Check observed variable is possible
-														if((value2[0] == 1.0)) {
-															// Record if the conditional is valid.
-															if((Math.log(1.0) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log(1.0) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = Math.log(1.0);
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(1.0))) + 1)) + Math.log(1.0));
-															}
+												if((0 == 0)) {
+													// Check observed variable is possible
+													if((value2[0] == 1.0)) {
+														// Record if the conditional is valid.
+														if((Math.log(1.0) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log(1.0) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedConsumerProbabilities = Math.log(1.0);
+															else
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(1.0))) + 1)) + Math.log(1.0));
 														}
-														
-														// Recorded the probability of reaching branch with the current configuration.
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
+													
+													// Recorded the probability of reaching branch with the current configuration.
+													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
 										}

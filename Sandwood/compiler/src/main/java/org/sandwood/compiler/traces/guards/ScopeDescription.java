@@ -176,7 +176,7 @@ class ScopeDescription {
      * A set containing all the scopes that have already been constructed at least once in this distribution description
      * so that if they are to be constructed again the names will need modifying to avoid collisions.
      */
-    public final Set<ForTask> existingScopes;
+    public final Set<Scope> existingScopes;
 
     /**
      * The comment if any that goes with this set of distributions.
@@ -208,7 +208,7 @@ class ScopeDescription {
      *                           its trace value valid at any one time.
      * @param compilationCtx     The compilation context for this compilation process.
      */
-    public ScopeDescription(Scope innerScope, DataflowTask<?> task, Set<ForTask> existingScopes,
+    public ScopeDescription(Scope innerScope, DataflowTask<?> task, Set<Scope> existingScopes,
             Set<Set<TraceHandle>> distributionTraces, CompilationContext compilationCtx) {
         this.innerScope = innerScope;
         probability = IRTree.constant(1.0);
@@ -221,7 +221,7 @@ class ScopeDescription {
         compilationCtx.touchScope(innerScope);
     }
 
-    public ScopeDescription insertScope(Scope innerScope, Set<ForTask> existingScopes,
+    public ScopeDescription insertScope(Scope innerScope, Set<Scope> existingScopes,
             CompilationContext compilationCtx) {
         return new ScopeDescription(innerScope, probability, Collections.unmodifiableSet(existingScopes),
                 constraintData, sampleDescriptions, compilationCtx, this);
@@ -250,22 +250,34 @@ class ScopeDescription {
                 new VariablePair<>(sampleTask.getOutput(), sampleValue));
 
         Substitutions substitutions = getSubstitutions(position);
-        Map<ForTask, IntVariable> sampleIndexes = new HashMap<>();
+        Map<Scope, IntVariable> scopes = new HashMap<>();
         Scope s = sampleTask.scope();
         while(s != null) {
-            if(s.getScopeType() == ScopeType.FOR) {
-                ForTask t = (ForTask) s;
-                IntVariable index = t.getIndex();
-                IntVariable altIndex = substitutions.get(index);
-                if(altIndex == null)
-                    sampleIndexes.put(t, index);
-                else
-                    sampleIndexes.put(t, altIndex);
+            switch(s.getScopeType()) {
+                case IF:
+                case ELSE: {
+                    scopes.put(s, null);
+                    break;
+                }
+                case FOR: {
+                    ForTask t = (ForTask) s;
+                    IntVariable index = t.getIndex();
+                    IntVariable altIndex = substitutions.get(index);
+                    scopes.put(t, altIndex);
+                    break;
+                }
+                case BLOCK:
+                case COMMENT:
+                case GLOBAL:
+                case REDUCE:
+                    break;
+                default:
+                    throw new CompilerException("Unexpected scope type " + s.getScopeType());
             }
             s = s.getEnclosingScope();
         }
 
-        DistSampleDesc<A> sampleDesc = new DistSampleDesc<>(sampleValue, sampleIndexes);
+        DistSampleDesc<A> sampleDesc = new DistSampleDesc<>(sampleValue, scopes);
 
         Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions = new HashMap<>(
                 this.sampleDescriptions);
@@ -288,7 +300,7 @@ class ScopeDescription {
      * @param probability The probability for this distribution
      * @param d           The distribution to base this distribution on.
      */
-    private ScopeDescription(Scope innerScope, IRTreeReturn<DoubleVariable> probability, Set<ForTask> existingScopes,
+    private ScopeDescription(Scope innerScope, IRTreeReturn<DoubleVariable> probability, Set<Scope> existingScopes,
             List<ConstraintData> constraintData,
             Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions,
             CompilationContext compilationCtx, ScopeDescription d) {

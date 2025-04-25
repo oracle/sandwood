@@ -11,15 +11,15 @@ package org.sandwood.compiler.traces.guards;
 import java.util.Collections;
 import java.util.Map;
 
-import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 
 public class DistSampleDesc<A extends Variable<A>> {
-    public final Map<ForTask, IntVariable> scopeSubstitutions;
+    public final Map<Scope, IntVariable> scopeSubstitutions;
     public final Variable<A> sampleValue;
 
-    DistSampleDesc(Variable<A> sampleValue, Map<ForTask, IntVariable> scopeSubstitutions) {
+    DistSampleDesc(Variable<A> sampleValue, Map<Scope, IntVariable> scopeSubstitutions) {
         this.scopeSubstitutions = Collections.unmodifiableMap(scopeSubstitutions);
         this.sampleValue = sampleValue;
     }
