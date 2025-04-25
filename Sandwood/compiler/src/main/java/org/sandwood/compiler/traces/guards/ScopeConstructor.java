@@ -52,6 +52,7 @@ import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
 import org.sandwood.compiler.dataflowGraph.scopes.BlockScope;
 import org.sandwood.compiler.dataflowGraph.scopes.CommentScope;
+import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
@@ -263,8 +264,8 @@ public class ScopeConstructor {
      * Factory method for constructing a DistributedAdditionalScopes under the assumption that the only already
      * constructed scopes are the ones that the task is located in.
      *
-     * @param task               The dataflow task that this scope constructor is generating scopes for. in the traces
-     *                           and is already constructed
+     * @param task               The dataflow task that consumes the distributed arguments and the output of which will
+     *                           act as the starting point for traces when we construct constraints.
      * @param targetScope        The scope that the resulting IRTrees should be written into.
      * @param distributionTraces The set of sets of traces that provide distributed arguments to the task. For any given
      *                           scope configuration holding the task only one of these sets will be satisfiable.
@@ -333,7 +334,7 @@ public class ScopeConstructor {
 
         // Set the already constructed scopes.
         Set<Scope> scopes = getTaskScopes(task);
-        Set<ForTask> forScopes = filterForTasks(scopes);
+        Set<Scope> controlScopes = filterScopes(scopes);
         List<DataflowTask<?>> ts = new ArrayList<>();
         ts.add(task);
         tasks = Collections.unmodifiableList(ts);
@@ -341,7 +342,8 @@ public class ScopeConstructor {
         // Construct the initial Distribution description.
         List<ScopeDescription> ds = new ArrayList<>();
         CommentScope commentScope = new CommentScope(targetScope, comment);
-        ScopeDescription d = new ScopeDescription(commentScope, task, forScopes, distributionTraces, compilationCtx);
+        ScopeDescription d = new ScopeDescription(commentScope, task, controlScopes, distributionTraces,
+                compilationCtx);
         // If the task is a distributed sample task add the task to set of know samples.
         if(task.isDistribution() && task.getType() == DFType.SAMPLE) {
             DistributionSampleTask<A, ?> sampleTask = (DistributionSampleTask<A, ?>) task;
@@ -362,11 +364,23 @@ public class ScopeConstructor {
         return scopes;
     }
 
-    private Set<ForTask> filterForTasks(Set<Scope> scopes) {
-        Set<ForTask> s = new HashSet<>();
+    private Set<Scope> filterScopes(Set<Scope> scopes) {
+        Set<Scope> s = new HashSet<>();
         for(Scope scope:scopes)
-            if(scope.getScopeType() == ScopeType.FOR)
-                s.add((ForTask) scope);
+            switch(scope.getScopeType()) {
+                case IF:
+                case ELSE:
+                case FOR:
+                    s.add(scope);
+                    break;
+                case BLOCK:
+                case COMMENT:
+                case GLOBAL:
+                case REDUCE:
+                    break;
+                default:
+                    throw new CompilerException("Unexpected scope type.");
+            }
         return s;
     }
 
@@ -633,21 +647,24 @@ public class ScopeConstructor {
         fixedScopes.removeAll(changeableScopes);
 
         // A map to hold the mapping from scopes enclosing the sample to the scopes created in this context.
-        Map<ForTask, IntVariable> subScopes = constructScopeSubstitutions(fixedScopes, d, position);
+        Map<Scope, IntVariable> subScopes = constructScopeSubstitutions(fixedScopes, d, position);
 
-        ScopeDescription knownScope = constructAdditionalScopes(filterForTasks(changeableScopes), subScopes, d,
-                position);
+        ScopeDescription knownScope = constructAdditionalScopes(changeableScopes, subScopes, d, position);
 
         // Construct a scope to test if this scope has already been used. Push the enclosing scope onto the stack.
 
         IRTreeReturn<BooleanVariable> guard = constant(true);
         for(DistSampleDesc<?> s:d.getExistingSamples(sampleTask)) {
             IRTreeReturn<BooleanVariable> subGuard = constant(true);
-            Map<ForTask, IntVariable> m = s.scopeSubstitutions;
-            for(ForTask k:m.keySet()) {
-                IntVariable iExisting = m.get(k);
-                IntVariable iNew = subScopes.get(k);
-                subGuard = and(subGuard, eq(iNew.getForwardIR(compilationCtx), iExisting.getForwardIR(compilationCtx)));
+            Map<Scope, IntVariable> m = s.scopeSubstitutions;
+            for(Scope scope:m.keySet()) {
+                if(scope.getScopeType() == ScopeType.FOR) {
+                    ForTask t = (ForTask) scope;
+                    IntVariable iExisting = m.get(t);
+                    IntVariable iNew = subScopes.get(t);
+                    subGuard = and(subGuard,
+                            eq(iNew.getForwardIR(compilationCtx), iExisting.getForwardIR(compilationCtx)));
+                }
             }
             guard = and(guard, negateBoolean(subGuard));
         }
@@ -980,8 +997,8 @@ public class ScopeConstructor {
                 for(ScopeDescription d:distributionScopes) {
                     d = d.constructConstraintSpace(trace, direction);
                     if(preTraces.isEmpty()) {
-                        Map<ForTask, IntVariable> startSubstitutions;
-                        Map<ForTask, IntVariable> endSubstitutions;
+                        Map<Scope, IntVariable> startSubstitutions;
+                        Map<Scope, IntVariable> endSubstitutions;
                         switch(direction) {
                             case FORWARDS: {
                                 startSubstitutions = constructScopeSubstitutions(startScopes, d, position - 1);
@@ -1024,7 +1041,7 @@ public class ScopeConstructor {
                             default:
                                 throw new CompilerException("Unexpected direction: " + direction);
                         }
-                        d = constructAdditionalScopes(filterForTasks(changeableScopes),
+                        d = constructAdditionalScopes(changeableScopes,
                                 constructScopeSubstitutions(fixedScopes, d, position), d, position);
 
                         // If the consumer is a distribution sample add a description for it to the scope description.
@@ -1087,25 +1104,56 @@ public class ScopeConstructor {
                 compilationCtx);
     }
 
-    private ScopeDescription constructAdditionalScopes(List<ForTask> scopes, Map<ForTask, IntVariable> substitutions,
+    private ScopeDescription constructAdditionalScopes(List<Scope> scopes, Map<Scope, IntVariable> substitutions,
             ScopeDescription d, int position) {
 
         Scope innerScope = d.innerScope;
-        Set<ForTask> existingScopes = new HashSet<>(d.existingScopes);
+        Set<Scope> existingScopes = new HashSet<>(d.existingScopes);
 
         d.applySubstitutions(compilationCtx);
 
-        for(ForTask t:scopes) {
-            ForTask newScope = ScopeUtils.constructForScope(innerScope, t, existingScopes.contains(t),
-                    Integer.toString(id.get().next()), compilationCtx);
-            existingScopes.add(t);
+        List<IntVariable> subedIndexes = new ArrayList<>();
+        for(Scope s:scopes) {
+            switch(s.getScopeType()) {
+                case IF: {
+                    IfScope ifScope = (IfScope) s;
+                    BooleanVariable guard = ifScope.guard;
+                    innerScope = new IfScope(innerScope, guard);
+                    substitutions.put(innerScope, null);
+                    break;
+                }
+                case ELSE: {
+                    ElseScope elseScope = (ElseScope) s;
+                    BooleanVariable guard = elseScope.ifScope.guard;
+                    innerScope = new IfScope(innerScope, guard).elseScope;
+                    substitutions.put(innerScope, null);
+                    break;
+                }
+                case FOR: {
+                    ForTask t = (ForTask) s;
+                    ForTask newScope = ScopeUtils.constructForScope(innerScope, t, existingScopes.contains(t),
+                            Integer.toString(id.get().next()), compilationCtx);
+                    existingScopes.add(t);
 
-            // Add in substitutes for the newly created scope
-            IntVariable newIndex = newScope.getIndex();
-            compilationCtx.addSubstitute(t.getIndex(), newIndex);
-            // Store the substitute for later
-            substitutions.put(t, newIndex);
-            innerScope = newScope;
+                    // Add in substitutes for the newly created scope
+                    IntVariable newIndex = newScope.getIndex();
+                    IntVariable index = t.getIndex();
+                    compilationCtx.addSubstitute(index, newIndex);
+                    subedIndexes.add(index);
+                    // Store the substitute for later
+                    substitutions.put(t, newIndex);
+                    innerScope = newScope;
+                    break;
+                }
+                case BLOCK:
+                case COMMENT:
+                case GLOBAL:
+                case REDUCE:
+                    break;
+                default:
+                    throw new CompilerException("Unexpected scope type.");
+            }
+
         }
 
         // Return the target scope, this scope will still have the same probability of reaching it. We use the
@@ -1114,8 +1162,8 @@ public class ScopeConstructor {
         // scopes are added in the calling method.
         compilationCtx.touchScope(innerScope);
 
-        for(ForTask t:scopes)
-            compilationCtx.removeSubstitute(t.getIndex());
+        for(IntVariable index:subedIndexes)
+            compilationCtx.removeSubstitute(index);
 
         d.removeSubstitutions(compilationCtx);
 
@@ -1128,12 +1176,15 @@ public class ScopeConstructor {
 
     // TODO work out what happens here if a substitution is not set because we are using the original variable.
     private static Substitutions constructSubstitutions(Substitutions originalSubstitutions,
-            Map<ForTask, IntVariable> substitutions) {
+            Map<Scope, IntVariable> substitutions) {
         HashMap<Variable<?>, VariablePair<?>> returnVarSubstitutions = new HashMap<>(
                 originalSubstitutions.varSubstitutions);
-        for(ForTask t:substitutions.keySet()) {
-            IntVariable index = t.getIndex();
-            returnVarSubstitutions.put(index, new VariablePair<>(index, substitutions.get(t)));
+        for(Scope s:substitutions.keySet()) {
+            if(s.getScopeType() == ScopeType.FOR) {
+                ForTask t = (ForTask) s;
+                IntVariable index = t.getIndex();
+                returnVarSubstitutions.put(index, new VariablePair<>(index, substitutions.get(t)));
+            }
         }
 
         return new Substitutions(returnVarSubstitutions);
@@ -1175,23 +1226,38 @@ public class ScopeConstructor {
     private <A extends Variable<A>> ScopeDescription addSampleDesc(SampleTask<A, ?> sampleTask, Variable<A> sampleValue,
             ScopeDescription d) {
 
-        Map<ForTask, IntVariable> taskScopes = new HashMap<>();
+        Map<Scope, IntVariable> taskScopes = new HashMap<>();
 
         // Get all the for loops and construct alternative indexes for them so that they can be safely substituted.
         Scope s = sampleTask.scope();
         Scope target = d.innerScope;
         d.applySubstitutions(compilationCtx);
         while(s != null) {
-            if(s.getScopeType() == ScopeType.FOR) {
-                ForTask t = (ForTask) s;
-                IntVariable index = t.getIndex();
-                VariableDescription<IntVariable> indexName = index.getVarDesc();
-                VariableDescription<IntVariable> newIndexName = VariableNames.indexName(indexName,
-                        Integer.toString(id.get().next()));
-                compilationCtx.addTreeToScope(target,
-                        initializeVariable(newIndexName, load(compilationCtx.getSubstitute(index)),
-                                "Copy of index so that its values can be safely substituted"));
-                taskScopes.put(t, Variable.namedVariable(newIndexName, target));
+            switch(s.getScopeType()) {
+                case IF:
+                case ELSE: {
+                    taskScopes.put(s, null);
+                    break;
+                }
+                case FOR: {
+                    ForTask t = (ForTask) s;
+                    IntVariable index = t.getIndex();
+                    VariableDescription<IntVariable> indexName = index.getVarDesc();
+                    VariableDescription<IntVariable> newIndexName = VariableNames.indexName(indexName,
+                            Integer.toString(id.get().next()));
+                    compilationCtx.addTreeToScope(target,
+                            initializeVariable(newIndexName, load(compilationCtx.getSubstitute(index)),
+                                    "Copy of index so that its values can be safely substituted"));
+                    taskScopes.put(t, Variable.namedVariable(newIndexName, target));
+                    break;
+                }
+                case BLOCK:
+                case COMMENT:
+                case GLOBAL:
+                case REDUCE:
+                    break;
+                default:
+                    throw new CompilerException("Unexpected Scope type " + s.getScopeType());
             }
             s = s.getEnclosingScope();
         }
@@ -1535,13 +1601,26 @@ public class ScopeConstructor {
         return guardedDesc;
     }
 
-    private Map<ForTask, IntVariable> constructScopeSubstitutions(Set<Scope> scopes, ScopeDescription d, int position) {
+    private Map<Scope, IntVariable> constructScopeSubstitutions(Set<Scope> scopes, ScopeDescription d, int position) {
         d.applySubstitutions(position, compilationCtx);
-        Map<ForTask, IntVariable> toReturn = new HashMap<>();
+        Map<Scope, IntVariable> toReturn = new HashMap<>();
         for(Scope scope:scopes)
-            if(scope.getScopeType() == ScopeType.FOR) {
-                ForTask t = (ForTask) scope;
-                toReturn.put(t, (IntVariable) compilationCtx.getSubstitute(t.getIndex()));
+            switch(scope.getScopeType()) {
+                case IF:
+                case ELSE:
+                    toReturn.put(scope, null);
+                    break;
+                case FOR:
+                    ForTask t = (ForTask) scope;
+                    toReturn.put(t, (IntVariable) compilationCtx.getSubstitute(t.getIndex()));
+                    break;
+                case BLOCK:
+                case COMMENT:
+                case GLOBAL:
+                case REDUCE:
+                    break;
+                default:
+                    throw new CompilerException("Unexpected scope type.");
             }
         d.removeSubstitutions(position, compilationCtx);
         return toReturn;

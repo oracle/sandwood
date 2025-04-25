@@ -504,6 +504,8 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// inputs.
 		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 		
+		// Processing observed variable value2
+		// 
 		// Looking for a path between Put 22 and consumer double[] 29.
 		// 
 		// Check observed variable is possible

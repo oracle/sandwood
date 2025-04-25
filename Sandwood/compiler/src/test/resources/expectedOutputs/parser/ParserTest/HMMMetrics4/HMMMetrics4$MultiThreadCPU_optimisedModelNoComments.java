@@ -515,7 +515,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 							double cv$probabilityReached = 0.0;
 							double cv$sampleValue = metric_g[sample$var196][server][timeStep$var226];
-							if((((0 == timeStep$var226) && metric_valid_g[sample$var196][server][0]) && (0 <= st[sample$var196][0]))) {
+							if(((0 == timeStep$var226) && (0 <= st[sample$var196][0]))) {
 								if(fixedFlag$sample57) {
 									int var129 = st[sample$var196][0];
 									if(((0 <= var129) && (var129 < noStates))) {
@@ -982,7 +982,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				if((((var129 == st[sample$var196][0]) && metric_valid_g[sample$var196][var119][0]) && (0 < length$metric[sample$var196][0]))) {
+				if((((var129 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var119][0])) {
 					if(fixedFlag$sample57) {
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -1076,7 +1076,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		current_metric_mean[var119][var129] = cv$proposedValue;
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			if((((var129 == st[sample$var196][0]) && metric_valid_g[sample$var196][var119][0]) && (0 < length$metric[sample$var196][0]))) {
+			if((((var129 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var119][0])) {
 				if(fixedFlag$sample57) {
 					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -1179,7 +1179,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				if((((var156 == st[sample$var196][0]) && metric_valid_g[sample$var196][var146][0]) && (0 < length$metric[sample$var196][0]))) {
+				if((((var156 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var146][0])) {
 					if(fixedFlag$sample57) {
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -1269,7 +1269,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		current_metric_var[var146][var156] = cv$proposedValue;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			if((((var156 == st[sample$var196][0]) && metric_valid_g[sample$var196][var146][0]) && (0 < length$metric[sample$var196][0]))) {
+			if((((var156 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var146][0])) {
 				if(fixedFlag$sample57) {
 					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;

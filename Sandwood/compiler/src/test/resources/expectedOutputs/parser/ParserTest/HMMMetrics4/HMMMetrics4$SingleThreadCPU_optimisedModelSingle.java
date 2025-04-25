@@ -851,12 +851,10 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							double cv$sampleValue = metric_g[sample$var196][server][timeStep$var226];
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if((((0 == timeStep$var226) && metric_valid_g[sample$var196][server][0]) && (0 <= st[sample$var196][0]))) {
+							if(((0 == timeStep$var226) && (0 <= st[sample$var196][0]))) {
 								// Enumerating the possible arguments for Gaussian 244.
 								if(fixedFlag$sample57) {
 									int var129 = st[sample$var196][0];
-									
-									// Substituted "timeStep$var226" with its value "0".
 									if(((0 <= var129) && (var129 < noStates))) {
 										// Substituted "timeStep$var226" with its value "0".
 										double var243 = current_metric_var[server][st[sample$var196][0]];
@@ -879,8 +877,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										// Substituted "sample$var45" with its value "sample$var196".
 										double cv$probabilitySample57Value5 = distribution$sample57[sample$var196][index$sample57$4];
 										int var129 = st[sample$var196][0];
-										
-										// Substituted "timeStep$var226" with its value "0".
 										if(((0 <= var129) && (var129 < noStates))) {
 											// Substituted "timeStep$var226" with its value "0".
 											double var243 = current_metric_var[server][st[sample$var196][0]];
@@ -2158,7 +2154,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Looking for a path between Sample 134 and consumer Gaussian 244.
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((((var129 == st[sample$var196][0]) && metric_valid_g[sample$var196][var119][0]) && (0 < length$metric[sample$var196][0]))) {
+				if((((var129 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var119][0])) {
 					if(fixedFlag$sample57) {
 						// Processing sample task 256 of consumer random variable null.
 						// 
@@ -2423,7 +2419,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Looking for a path between Sample 134 and consumer Gaussian 244.
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((((var129 == st[sample$var196][0]) && metric_valid_g[sample$var196][var119][0]) && (0 < length$metric[sample$var196][0]))) {
+			if((((var129 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var119][0])) {
 				if(fixedFlag$sample57) {
 					// Processing sample task 256 of consumer random variable null.
 					// 
@@ -2715,7 +2711,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Looking for a path between Sample 162 and consumer Gaussian 244.
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((((var156 == st[sample$var196][0]) && metric_valid_g[sample$var196][var146][0]) && (0 < length$metric[sample$var196][0]))) {
+				if((((var156 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var146][0])) {
 					if(fixedFlag$sample57) {
 						// Processing sample task 256 of consumer random variable null.
 						// 
@@ -2966,7 +2962,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Looking for a path between Sample 162 and consumer Gaussian 244.
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((((var156 == st[sample$var196][0]) && metric_valid_g[sample$var196][var146][0]) && (0 < length$metric[sample$var196][0]))) {
+			if((((var156 == st[sample$var196][0]) && (0 < length$metric[sample$var196][0])) && metric_valid_g[sample$var196][var146][0])) {
 				if(fixedFlag$sample57) {
 					// Processing sample task 256 of consumer random variable null.
 					// 
@@ -3665,8 +3661,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((0 <= st[sample$var45][0])) {
 							int var129 = st[sample$var45][0];
-							
-							// Substituted "sample$var196" with its value "sample$var45".
 							if(((0 <= var129) && (var129 < noStates))) {
 								// Variable declaration of cv$temp$6$var243 moved.
 								// 
@@ -3732,8 +3726,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((0 <= st[sample$var45][0])) {
 							int var129 = st[sample$var45][0];
-							
-							// Substituted "sample$var196" with its value "sample$var45".
 							if(((0 <= var129) && (var129 < noStates))) {
 								// Variable declaration of cv$temp$14$var243 moved.
 								// 
@@ -4155,8 +4147,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									if((0 <= st[sample$var45][1])) {
 										// Substituted "timeStep$var226" with its value "1".
 										int var129 = st[sample$var45][1];
-										
-										// Substituted "sample$var196" with its value "sample$var45".
 										if(((0 <= var129) && (var129 < noStates))) {
 											// Variable declaration of cv$temp$15$var243 moved.
 											// 
@@ -4229,8 +4219,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 									if((0 <= st[sample$var45][1])) {
 										// Substituted "timeStep$var226" with its value "1".
 										int var129 = st[sample$var45][1];
-										
-										// Substituted "sample$var196" with its value "sample$var45".
 										if(((0 <= var129) && (var129 < noStates))) {
 											// Variable declaration of cv$temp$47$var243 moved.
 											// 
@@ -4423,8 +4411,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										if((0 <= st[sample$var45][1])) {
 											// Substituted "timeStep$var226" with its value "1".
 											int var129 = st[sample$var45][1];
-											
-											// Substituted "sample$var196" with its value "sample$var45".
 											if(((0 <= var129) && (var129 < noStates))) {
 												// Variable declaration of cv$temp$23$var243 moved.
 												// 
@@ -4497,8 +4483,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 										if((0 <= st[sample$var45][1])) {
 											// Substituted "timeStep$var226" with its value "1".
 											int var129 = st[sample$var45][1];
-											
-											// Substituted "sample$var196" with its value "sample$var45".
 											if(((0 <= var129) && (var129 < noStates))) {
 												// Variable declaration of cv$temp$55$var243 moved.
 												// 
@@ -4696,8 +4680,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constraints moved from conditionals in inner loops/scopes/etc.
 								if((0 <= st[sample$var45][timeStep$var66])) {
 									int var129 = st[sample$var45][timeStep$var66];
-									
-									// Substituted "sample$var196" with its value "sample$var45".
 									if(((0 <= var129) && (var129 < noStates))) {
 										// Variable declaration of cv$temp$39$var243 moved.
 										// 
@@ -4759,8 +4741,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 								// Constraints moved from conditionals in inner loops/scopes/etc.
 								if((0 <= st[sample$var45][timeStep$var66])) {
 									int var129 = st[sample$var45][timeStep$var66];
-									
-									// Substituted "sample$var196" with its value "sample$var45".
 									if(((0 <= var129) && (var129 < noStates))) {
 										// Variable declaration of cv$temp$71$var243 moved.
 										// 

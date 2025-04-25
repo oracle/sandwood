@@ -157,7 +157,7 @@ public class TraceArrayRestrictions {
          * Set of all the loops that have already been constructed, so if created again will have to be duplicates. This
          * exists purely to make the generated code easier to read, we could just make all new loops duplicates.
          */
-        final Set<ForTask> existingScopes;
+        final Set<Scope> existingScopes;
 
         /**
          * A set to record all put tasks that substitutions should be saved at.
@@ -183,8 +183,8 @@ public class TraceArrayRestrictions {
          * @param globalID
          */
 
-        public RestrictionsData(TraceHandle trace, Map<ForTask, IntVariable> existingStartScopes,
-                Map<ForTask, IntVariable> existingEndScopes, Set<ForTask> existingScopes, int globalID,
+        public RestrictionsData(TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
+                Map<Scope, IntVariable> existingEndScopes, Set<Scope> existingScopes, int globalID,
                 Values arrayValues) {
             this.trace = trace;
             this.existingStartScopes = Collections.unmodifiableMap(existingStartScopes);
@@ -220,10 +220,9 @@ public class TraceArrayRestrictions {
      * @return A new distribution description that represents the original distribution with the constraints of the
      *         trace added.
      */
-    public static ScopeDescription constructRestriction(TraceHandle trace,
-            Map<ForTask, IntVariable> existingStartScopes, Map<ForTask, IntVariable> existingEndScopes,
-            ScopeDescription target, int globalID, Values arrayValues, int position,
-            CompilationContext compilationCtx) {
+    public static ScopeDescription constructRestriction(TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
+            Map<Scope, IntVariable> existingEndScopes, ScopeDescription target, int globalID, Values arrayValues,
+            int position, CompilationContext compilationCtx) {
         Set<TraceHandle> rawTraces = new HashSet<>();
         rawTraces.add(trace);
         return constructRestriction(trace, rawTraces, existingStartScopes, existingEndScopes, target, globalID,
@@ -231,7 +230,7 @@ public class TraceArrayRestrictions {
     }
 
     public static ScopeDescription constructRestriction(TraceHandle trace, Set<TraceHandle> rawTraces,
-            Map<ForTask, IntVariable> existingStartScopes, Map<ForTask, IntVariable> existingEndScopes,
+            Map<Scope, IntVariable> existingStartScopes, Map<Scope, IntVariable> existingEndScopes,
             ScopeDescription target, int globalID, Values arrayValues, int position,
             CompilationContext compilationCtx) {
         RestrictionsData data = new RestrictionsData(trace, existingStartScopes, existingEndScopes,

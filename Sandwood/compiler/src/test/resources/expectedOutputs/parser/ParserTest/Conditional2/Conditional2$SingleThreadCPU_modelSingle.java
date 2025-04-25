@@ -162,31 +162,29 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					if(!guard) {
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = value[0];
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = value[0];
+					{
 						{
-							{
-								double var16 = 0.0;
-								double var17 = 1.0;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((var16 <= cv$sampleValue) && (cv$sampleValue < var17))?(-Math.log((var17 - var16))):Double.NEGATIVE_INFINITY));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							double var16 = 0.0;
+							double var17 = 1.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (((var16 <= cv$sampleValue) && (cv$sampleValue < var17))?(-Math.log((var17 - var16))):Double.NEGATIVE_INFINITY));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -220,16 +218,14 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Looking for a path between Sample 21 and consumer double[] 27.
 			{
-				if(!guard) {
-					if((0 == 0)) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$value2) {
-							// Set the guard so the update is only applied once.
-							cv$guard$value2 = true;
-							
-							// Update the variable probability
-							logProbability$value2 = (logProbability$value2 + cv$accumulator);
-						}
+				if((0 == 0)) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$value2) {
+						// Set the guard so the update is only applied once.
+						cv$guard$value2 = true;
+						
+						// Update the variable probability
+						logProbability$value2 = (logProbability$value2 + cv$accumulator);
 					}
 				}
 			}
@@ -263,16 +259,14 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Looking for a path between Sample 21 and consumer double[] 27.
 			{
-				if(!guard) {
-					if((0 == 0)) {
-						// If the probability of the variable has not already been updated
-						if(!cv$guard$value2) {
-							// Set the guard so the update is only applied once.
-							cv$guard$value2 = true;
-							
-							// Update the variable probability
-							logProbability$value2 = (logProbability$value2 + cv$accumulator);
-						}
+				if((0 == 0)) {
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$value2) {
+						// Set the guard so the update is only applied once.
+						cv$guard$value2 = true;
+						
+						// Update the variable probability
+						logProbability$value2 = (logProbability$value2 + cv$accumulator);
 					}
 				}
 			}
@@ -313,13 +307,11 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							if(guard) {
 								// Looking for a path between Put 16 and consumer double[] 27.
 								{
-									if(guard) {
-										if((0 == 0)) {
-											// If the observed value does not match the provided value the probability of generating
-											// this random variable is zero
-											if(!(value2[0] == 1.0))
-												cv$weightedProbability = Double.NEGATIVE_INFINITY;
-										}
+									if((0 == 0)) {
+										// If the observed value does not match the provided value the probability of generating
+										// this random variable is zero
+										if(!(value2[0] == 1.0))
+											cv$weightedProbability = Double.NEGATIVE_INFINITY;
 									}
 								}
 							}
@@ -488,25 +480,23 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 										{
 											// Looking for a path between Put 16 and consumer double[] 27.
 											{
-												if(cv$currentValue) {
-													if((0 == 0)) {
-														// Check observed variable is possible
-														if((value2[0] == 1.0)) {
-															// Record if the conditional is valid.
-															if((Math.log(1.0) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log(1.0) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = Math.log(1.0);
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(1.0))) + 1)) + Math.log(1.0));
-															}
+												if((0 == 0)) {
+													// Check observed variable is possible
+													if((value2[0] == 1.0)) {
+														// Record if the conditional is valid.
+														if((Math.log(1.0) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log(1.0) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedConsumerProbabilities = Math.log(1.0);
+															else
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(1.0))) + 1)) + Math.log(1.0));
 														}
-														
-														// Recorded the probability of reaching branch with the current configuration.
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
+													
+													// Recorded the probability of reaching branch with the current configuration.
+													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
 										}

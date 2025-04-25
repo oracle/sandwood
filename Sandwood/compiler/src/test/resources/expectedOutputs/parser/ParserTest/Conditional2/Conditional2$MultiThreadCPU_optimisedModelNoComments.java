@@ -121,8 +121,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				logProbability$sample21 = cv$distributionAccumulator;
 			}
 			logProbability$value = (logProbability$value + cv$accumulator);
-			if(!guard)
-				logProbability$value2 = (logProbability$value2 + cv$accumulator);
+			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample21 = fixedFlag$sample21;
@@ -133,8 +132,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				logProbability$var18 = logProbability$sample21;
 			}
 			logProbability$value = (logProbability$value + cv$accumulator);
-			if(!guard)
-				logProbability$value2 = (logProbability$value2 + cv$accumulator);
+			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}

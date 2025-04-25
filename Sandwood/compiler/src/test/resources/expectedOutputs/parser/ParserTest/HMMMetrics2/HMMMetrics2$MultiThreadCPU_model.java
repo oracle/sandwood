@@ -1245,47 +1245,126 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// Look for paths between the variable and the sample task 157 including any distribution
 						// values.
 						{
-							if(metric_valid_g[sample][timeStep$var136]) {
-								// The sample value to calculate the probability of generating
-								double cv$sampleValue = metric_g[sample][timeStep$var136];
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample104) {
-									for(int index$sample$2_1 = 0; index$sample$2_1 < noSamples; index$sample$2_1 += 1) {
-										if((index$sample$2_1 == sample)) {
-											if((0 == timeStep$var136)) {
-												if(metric_valid_g[sample][timeStep$var136]) {
+							// The sample value to calculate the probability of generating
+							double cv$sampleValue = metric_g[sample][timeStep$var136];
+							
+							// Enumerating the possible arguments for Gaussian 150.
+							if(fixedFlag$sample104) {
+								for(int index$sample$2_1 = 0; index$sample$2_1 < noSamples; index$sample$2_1 += 1) {
+									if((index$sample$2_1 == sample)) {
+										if((0 == timeStep$var136)) {
+											for(int var50 = 0; var50 < noStates; var50 += 1) {
+												if((var50 == st[sample][timeStep$var136])) {
+													for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
+														if((index$sample$10_1 == sample)) {
+															if((0 == timeStep$var136)) {
+																for(int var66 = 0; var66 < noStates; var66 += 1) {
+																	if((var66 == st[sample][timeStep$var136])) {
+																		{
+																			double var148 = metric_mean[st[sample][timeStep$var136]];
+																			double var149 = metric_var[st[sample][timeStep$var136]];
+																			
+																			// Store the value of the function call, so the function call is only made once.
+																			double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																			
+																			// Add the probability of this sample task to the distribution accumulator.
+																			if((cv$weightedProbability < cv$distributionAccumulator))
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																					cv$distributionAccumulator = cv$weightedProbability;
+																				else
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																			}
+																			
+																			// Add the probability of this distribution configuration to the accumulator.
+																			cv$probabilityReached = (cv$probabilityReached + 1.0);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$sample$3 = 0; index$sample$3 < noSamples; index$sample$3 += 1) {
+									if(true) {
+										// Enumerating the possible outputs of Categorical 101.
+										for(int index$sample104$4 = 0; index$sample104$4 < noStates; index$sample104$4 += 1) {
+											int distributionTempVariable$var102$6 = index$sample104$4;
+											
+											// Update the probability of sampling this value from the distribution value.
+											double cv$probabilitySample104Value5 = (1.0 * distribution$sample104[((index$sample$3 - 0) / 1)][index$sample104$4]);
+											if((index$sample$3 == sample)) {
+												if((0 == timeStep$var136)) {
 													for(int var50 = 0; var50 < noStates; var50 += 1) {
-														if(metric_valid_g[sample][timeStep$var136]) {
-															if((var50 == st[sample][timeStep$var136])) {
-																for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
-																	if((index$sample$10_1 == sample)) {
-																		if((0 == timeStep$var136)) {
-																			if(metric_valid_g[sample][timeStep$var136]) {
+														if((var50 == st[sample][timeStep$var136])) {
+															if((index$sample$3 == sample)) {
+																if((0 == timeStep$var136)) {
+																	for(int var66 = 0; var66 < noStates; var66 += 1) {
+																		if((var66 == st[sample][timeStep$var136])) {
+																			{
+																				double var148 = metric_mean[st[sample][timeStep$var136]];
+																				double var149 = metric_var[st[sample][timeStep$var136]];
+																				
+																				// Store the value of the function call, so the function call is only made once.
+																				double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																				
+																				// Add the probability of this sample task to the distribution accumulator.
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					// If the second value is -infinity.
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				
+																				// Add the probability of this distribution configuration to the accumulator.
+																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value5);
+																			}
+																		}
+																	}
+																}
+															}
+															for(int index$sample$12 = 0; index$sample$12 < noSamples; index$sample$12 += 1) {
+																if(!(index$sample$12 == index$sample$3)) {
+																	// Enumerating the possible outputs of Categorical 101.
+																	for(int index$sample104$13 = 0; index$sample104$13 < noStates; index$sample104$13 += 1) {
+																		int distributionTempVariable$var102$15 = index$sample104$13;
+																		
+																		// Update the probability of sampling this value from the distribution value.
+																		double cv$probabilitySample104Value14 = (cv$probabilitySample104Value5 * distribution$sample104[((index$sample$12 - 0) / 1)][index$sample104$13]);
+																		if((index$sample$12 == sample)) {
+																			if((0 == timeStep$var136)) {
 																				for(int var66 = 0; var66 < noStates; var66 += 1) {
-																					if(metric_valid_g[sample][timeStep$var136]) {
-																						if((var66 == st[sample][timeStep$var136])) {
-																							{
-																								double var148 = metric_mean[st[sample][timeStep$var136]];
-																								double var149 = metric_var[st[sample][timeStep$var136]];
-																								
-																								// Store the value of the function call, so the function call is only made once.
-																								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																								
-																								// Add the probability of this sample task to the distribution accumulator.
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									// If the second value is -infinity.
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								
-																								// Add the probability of this distribution configuration to the accumulator.
-																								cv$probabilityReached = (cv$probabilityReached + 1.0);
+																					if((var66 == st[sample][timeStep$var136])) {
+																						{
+																							double var148 = metric_mean[st[sample][timeStep$var136]];
+																							double var149 = metric_var[st[sample][timeStep$var136]];
+																							
+																							// Store the value of the function call, so the function call is only made once.
+																							double cv$weightedProbability = (Math.log(cv$probabilitySample104Value14) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																							
+																							// Add the probability of this sample task to the distribution accumulator.
+																							if((cv$weightedProbability < cv$distributionAccumulator))
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																									cv$distributionAccumulator = cv$weightedProbability;
+																								else
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 																							}
+																							
+																							// Add the probability of this distribution configuration to the accumulator.
+																							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value14);
 																						}
 																					}
 																				}
@@ -1300,33 +1379,166 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											}
 										}
 									}
-								} else {
-									for(int index$sample$3 = 0; index$sample$3 < noSamples; index$sample$3 += 1) {
-										if(true) {
-											// Enumerating the possible outputs of Categorical 101.
-											for(int index$sample104$4 = 0; index$sample104$4 < noStates; index$sample104$4 += 1) {
-												int distributionTempVariable$var102$6 = index$sample104$4;
-												
-												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample104Value5 = (1.0 * distribution$sample104[((index$sample$3 - 0) / 1)][index$sample104$4]);
-												if((index$sample$3 == sample)) {
-													if((0 == timeStep$var136)) {
-														if(metric_valid_g[sample][timeStep$var136]) {
-															for(int var50 = 0; var50 < noStates; var50 += 1) {
-																if(metric_valid_g[sample][timeStep$var136]) {
-																	if((var50 == st[sample][timeStep$var136])) {
-																		if((index$sample$3 == sample)) {
-																			if((0 == timeStep$var136)) {
-																				if(metric_valid_g[sample][timeStep$var136]) {
-																					for(int var66 = 0; var66 < noStates; var66 += 1) {
-																						if(metric_valid_g[sample][timeStep$var136]) {
+								}
+							}
+							
+							// Enumerating the possible arguments for Gaussian 150.
+							if(fixedFlag$sample104) {
+								for(int index$sample$20_1 = 0; index$sample$20_1 < noSamples; index$sample$20_1 += 1) {
+									if((index$sample$20_1 == sample)) {
+										if((0 == timeStep$var136)) {
+											for(int var50 = 0; var50 < noStates; var50 += 1) {
+												if((var50 == st[sample][timeStep$var136])) {
+													if(fixedFlag$sample123) {
+														for(int index$sample$28_1 = 0; index$sample$28_1 < noSamples; index$sample$28_1 += 1) {
+															for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$28_1]; timeStep$var113 += 1) {
+																if((index$sample$28_1 == sample)) {
+																	if((timeStep$var113 == timeStep$var136)) {
+																		for(int var66 = 0; var66 < noStates; var66 += 1) {
+																			if((var66 == st[sample][timeStep$var136])) {
+																				{
+																					double var148 = metric_mean[st[sample][timeStep$var136]];
+																					double var149 = metric_var[st[sample][timeStep$var136]];
+																					
+																					// Store the value of the function call, so the function call is only made once.
+																					double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																					
+																					// Add the probability of this sample task to the distribution accumulator.
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					
+																					// Add the probability of this distribution configuration to the accumulator.
+																					cv$probabilityReached = (cv$probabilityReached + 1.0);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													} else {
+														for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
+															for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29]; timeStep$var113 += 1) {
+																if(true) {
+																	// Enumerating the possible outputs of Categorical 120.
+																	for(int index$sample123$31 = 0; index$sample123$31 < noStates; index$sample123$31 += 1) {
+																		int distributionTempVariable$var121$33 = index$sample123$31;
+																		
+																		// Update the probability of sampling this value from the distribution value.
+																		double cv$probabilitySample123Value32 = (1.0 * distribution$sample123[((index$sample$29 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$31]);
+																		if((index$sample$29 == sample)) {
+																			if((timeStep$var113 == timeStep$var136)) {
+																				for(int var66 = 0; var66 < noStates; var66 += 1) {
+																					if((var66 == st[sample][timeStep$var136])) {
+																						{
+																							double var148 = metric_mean[st[sample][timeStep$var136]];
+																							double var149 = metric_var[st[sample][timeStep$var136]];
+																							
+																							// Store the value of the function call, so the function call is only made once.
+																							double cv$weightedProbability = (Math.log(cv$probabilitySample123Value32) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																							
+																							// Add the probability of this sample task to the distribution accumulator.
+																							if((cv$weightedProbability < cv$distributionAccumulator))
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																									cv$distributionAccumulator = cv$weightedProbability;
+																								else
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																							}
+																							
+																							// Add the probability of this distribution configuration to the accumulator.
+																							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value32);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
+									if(true) {
+										// Enumerating the possible outputs of Categorical 101.
+										for(int index$sample104$22 = 0; index$sample104$22 < noStates; index$sample104$22 += 1) {
+											int distributionTempVariable$var102$24 = index$sample104$22;
+											
+											// Update the probability of sampling this value from the distribution value.
+											double cv$probabilitySample104Value23 = (1.0 * distribution$sample104[((index$sample$21 - 0) / 1)][index$sample104$22]);
+											if((index$sample$21 == sample)) {
+												if((0 == timeStep$var136)) {
+													for(int var50 = 0; var50 < noStates; var50 += 1) {
+														if((var50 == st[sample][timeStep$var136])) {
+															if(fixedFlag$sample123) {
+																for(int index$sample$35_1 = 0; index$sample$35_1 < noSamples; index$sample$35_1 += 1) {
+																	for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$35_1]; timeStep$var113 += 1) {
+																		if((index$sample$35_1 == sample)) {
+																			if((timeStep$var113 == timeStep$var136)) {
+																				for(int var66 = 0; var66 < noStates; var66 += 1) {
+																					if((var66 == st[sample][timeStep$var136])) {
+																						{
+																							double var148 = metric_mean[st[sample][timeStep$var136]];
+																							double var149 = metric_var[st[sample][timeStep$var136]];
+																							
+																							// Store the value of the function call, so the function call is only made once.
+																							double cv$weightedProbability = (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																							
+																							// Add the probability of this sample task to the distribution accumulator.
+																							if((cv$weightedProbability < cv$distributionAccumulator))
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																									cv$distributionAccumulator = cv$weightedProbability;
+																								else
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																							}
+																							
+																							// Add the probability of this distribution configuration to the accumulator.
+																							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value23);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															} else {
+																for(int index$sample$36 = 0; index$sample$36 < noSamples; index$sample$36 += 1) {
+																	for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$36]; timeStep$var113 += 1) {
+																		if(true) {
+																			// Enumerating the possible outputs of Categorical 120.
+																			for(int index$sample123$38 = 0; index$sample123$38 < noStates; index$sample123$38 += 1) {
+																				int distributionTempVariable$var121$40 = index$sample123$38;
+																				
+																				// Update the probability of sampling this value from the distribution value.
+																				double cv$probabilitySample123Value39 = (cv$probabilitySample104Value23 * distribution$sample123[((index$sample$36 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$38]);
+																				if((index$sample$36 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
 																							if((var66 == st[sample][timeStep$var136])) {
 																								{
 																									double var148 = metric_mean[st[sample][timeStep$var136]];
 																									double var149 = metric_var[st[sample][timeStep$var136]];
 																									
 																									// Store the value of the function call, so the function call is only made once.
-																									double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																									double cv$weightedProbability = (Math.log(cv$probabilitySample123Value39) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
 																									
 																									// Add the probability of this sample task to the distribution accumulator.
 																									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1340,51 +1552,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																									}
 																									
 																									// Add the probability of this distribution configuration to the accumulator.
-																									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value5);
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																		for(int index$sample$12 = 0; index$sample$12 < noSamples; index$sample$12 += 1) {
-																			if(!(index$sample$12 == index$sample$3)) {
-																				// Enumerating the possible outputs of Categorical 101.
-																				for(int index$sample104$13 = 0; index$sample104$13 < noStates; index$sample104$13 += 1) {
-																					int distributionTempVariable$var102$15 = index$sample104$13;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample104Value14 = (cv$probabilitySample104Value5 * distribution$sample104[((index$sample$12 - 0) / 1)][index$sample104$13]);
-																					if((index$sample$12 == sample)) {
-																						if((0 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var66 = 0; var66 < noStates; var66 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var66 == st[sample][timeStep$var136])) {
-																											{
-																												double var148 = metric_mean[st[sample][timeStep$var136]];
-																												double var149 = metric_var[st[sample][timeStep$var136]];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value14) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value14);
-																											}
-																										}
-																									}
+																									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value39);
 																								}
 																							}
 																						}
@@ -1402,48 +1570,278 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 										}
 									}
 								}
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample104) {
-									for(int index$sample$20_1 = 0; index$sample$20_1 < noSamples; index$sample$20_1 += 1) {
-										if((index$sample$20_1 == sample)) {
-											if((0 == timeStep$var136)) {
-												if(metric_valid_g[sample][timeStep$var136]) {
-													for(int var50 = 0; var50 < noStates; var50 += 1) {
-														if(metric_valid_g[sample][timeStep$var136]) {
+							}
+							
+							// Enumerating the possible arguments for Gaussian 150.
+							if(fixedFlag$sample123) {
+								for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
+									for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
+										if((index$sample$46_1 == sample)) {
+											if((timeStep$var113 == timeStep$var136)) {
+												for(int var50 = 0; var50 < noStates; var50 += 1) {
+													if((var50 == st[sample][timeStep$var136])) {
+														for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
+															for(int index$timeStep$55_2 = 1; index$timeStep$55_2 < length$metric[index$sample$55_1]; index$timeStep$55_2 += 1) {
+																if((index$sample$55_1 == sample)) {
+																	if((index$timeStep$55_2 == timeStep$var136)) {
+																		for(int var66 = 0; var66 < noStates; var66 += 1) {
+																			if((var66 == st[sample][timeStep$var136])) {
+																				{
+																					double var148 = metric_mean[st[sample][timeStep$var136]];
+																					double var149 = metric_var[st[sample][timeStep$var136]];
+																					
+																					// Store the value of the function call, so the function call is only made once.
+																					double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																					
+																					// Add the probability of this sample task to the distribution accumulator.
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					
+																					// Add the probability of this distribution configuration to the accumulator.
+																					cv$probabilityReached = (cv$probabilityReached + 1.0);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
+									for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
+										if(true) {
+											// Enumerating the possible outputs of Categorical 120.
+											for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
+												int distributionTempVariable$var121$51 = index$sample123$49;
+												
+												// Update the probability of sampling this value from the distribution value.
+												double cv$probabilitySample123Value50 = (1.0 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
+												if((index$sample$47 == sample)) {
+													if((timeStep$var113 == timeStep$var136)) {
+														for(int var50 = 0; var50 < noStates; var50 += 1) {
 															if((var50 == st[sample][timeStep$var136])) {
-																if(fixedFlag$sample123) {
-																	for(int index$sample$28_1 = 0; index$sample$28_1 < noSamples; index$sample$28_1 += 1) {
-																		for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$28_1]; timeStep$var113 += 1) {
-																			if((index$sample$28_1 == sample)) {
-																				if((timeStep$var113 == timeStep$var136)) {
-																					if(metric_valid_g[sample][timeStep$var136]) {
+																if((index$sample$47 == sample)) {
+																	if((timeStep$var113 == timeStep$var136)) {
+																		for(int var66 = 0; var66 < noStates; var66 += 1) {
+																			if((var66 == st[sample][timeStep$var136])) {
+																				{
+																					double var148 = metric_mean[st[sample][timeStep$var136]];
+																					double var149 = metric_var[st[sample][timeStep$var136]];
+																					
+																					// Store the value of the function call, so the function call is only made once.
+																					double cv$weightedProbability = (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																					
+																					// Add the probability of this sample task to the distribution accumulator.
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					
+																					// Add the probability of this distribution configuration to the accumulator.
+																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value50);
+																				}
+																			}
+																		}
+																	}
+																}
+																for(int index$sample$57 = 0; index$sample$57 < noSamples; index$sample$57 += 1) {
+																	for(int index$timeStep$58 = 1; index$timeStep$58 < length$metric[index$sample$57]; index$timeStep$58 += 1) {
+																		if(!((index$sample$57 == index$sample$47) && (index$timeStep$58 == timeStep$var113))) {
+																			// Enumerating the possible outputs of Categorical 120.
+																			for(int index$sample123$59 = 0; index$sample123$59 < noStates; index$sample123$59 += 1) {
+																				int distributionTempVariable$var121$61 = index$sample123$59;
+																				
+																				// Update the probability of sampling this value from the distribution value.
+																				double cv$probabilitySample123Value60 = (cv$probabilitySample123Value50 * distribution$sample123[((index$sample$57 - 0) / 1)][((index$timeStep$58 - 1) / 1)][index$sample123$59]);
+																				if((index$sample$57 == sample)) {
+																					if((index$timeStep$58 == timeStep$var136)) {
 																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + 1.0);
+																							if((var66 == st[sample][timeStep$var136])) {
+																								{
+																									double var148 = metric_mean[st[sample][timeStep$var136]];
+																									double var149 = metric_var[st[sample][timeStep$var136]];
+																									
+																									// Store the value of the function call, so the function call is only made once.
+																									double cv$weightedProbability = (Math.log(cv$probabilitySample123Value60) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																									
+																									// Add the probability of this sample task to the distribution accumulator.
+																									if((cv$weightedProbability < cv$distributionAccumulator))
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																											cv$distributionAccumulator = cv$weightedProbability;
+																										else
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 																									}
+																									
+																									// Add the probability of this distribution configuration to the accumulator.
+																									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value60);
 																								}
 																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							// Enumerating the possible arguments for Gaussian 150.
+							if(fixedFlag$sample123) {
+								for(int index$sample$66_1 = 0; index$sample$66_1 < noSamples; index$sample$66_1 += 1) {
+									for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$66_1]; timeStep$var113 += 1) {
+										if((index$sample$66_1 == sample)) {
+											if((timeStep$var113 == timeStep$var136)) {
+												for(int var50 = 0; var50 < noStates; var50 += 1) {
+													if((var50 == st[sample][timeStep$var136])) {
+														if(fixedFlag$sample104) {
+															for(int index$sample$75_1 = 0; index$sample$75_1 < noSamples; index$sample$75_1 += 1) {
+																if((index$sample$75_1 == sample)) {
+																	if((0 == timeStep$var136)) {
+																		for(int var66 = 0; var66 < noStates; var66 += 1) {
+																			if((var66 == st[sample][timeStep$var136])) {
+																				{
+																					double var148 = metric_mean[st[sample][timeStep$var136]];
+																					double var149 = metric_var[st[sample][timeStep$var136]];
+																					
+																					// Store the value of the function call, so the function call is only made once.
+																					double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																					
+																					// Add the probability of this sample task to the distribution accumulator.
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					
+																					// Add the probability of this distribution configuration to the accumulator.
+																					cv$probabilityReached = (cv$probabilityReached + 1.0);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														} else {
+															for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
+																if(true) {
+																	// Enumerating the possible outputs of Categorical 101.
+																	for(int index$sample104$77 = 0; index$sample104$77 < noStates; index$sample104$77 += 1) {
+																		int distributionTempVariable$var102$79 = index$sample104$77;
+																		
+																		// Update the probability of sampling this value from the distribution value.
+																		double cv$probabilitySample104Value78 = (1.0 * distribution$sample104[((index$sample$76 - 0) / 1)][index$sample104$77]);
+																		if((index$sample$76 == sample)) {
+																			if((0 == timeStep$var136)) {
+																				for(int var66 = 0; var66 < noStates; var66 += 1) {
+																					if((var66 == st[sample][timeStep$var136])) {
+																						{
+																							double var148 = metric_mean[st[sample][timeStep$var136]];
+																							double var149 = metric_var[st[sample][timeStep$var136]];
+																							
+																							// Store the value of the function call, so the function call is only made once.
+																							double cv$weightedProbability = (Math.log(cv$probabilitySample104Value78) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																							
+																							// Add the probability of this sample task to the distribution accumulator.
+																							if((cv$weightedProbability < cv$distributionAccumulator))
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																									cv$distributionAccumulator = cv$weightedProbability;
+																								else
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																							}
+																							
+																							// Add the probability of this distribution configuration to the accumulator.
+																							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value78);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$sample$67 = 0; index$sample$67 < noSamples; index$sample$67 += 1) {
+									for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$67]; timeStep$var113 += 1) {
+										if(true) {
+											// Enumerating the possible outputs of Categorical 120.
+											for(int index$sample123$69 = 0; index$sample123$69 < noStates; index$sample123$69 += 1) {
+												int distributionTempVariable$var121$71 = index$sample123$69;
+												
+												// Update the probability of sampling this value from the distribution value.
+												double cv$probabilitySample123Value70 = (1.0 * distribution$sample123[((index$sample$67 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$69]);
+												if((index$sample$67 == sample)) {
+													if((timeStep$var113 == timeStep$var136)) {
+														for(int var50 = 0; var50 < noStates; var50 += 1) {
+															if((var50 == st[sample][timeStep$var136])) {
+																if(fixedFlag$sample104) {
+																	for(int index$sample$81_1 = 0; index$sample$81_1 < noSamples; index$sample$81_1 += 1) {
+																		if((index$sample$81_1 == sample)) {
+																			if((0 == timeStep$var136)) {
+																				for(int var66 = 0; var66 < noStates; var66 += 1) {
+																					if((var66 == st[sample][timeStep$var136])) {
+																						{
+																							double var148 = metric_mean[st[sample][timeStep$var136]];
+																							double var149 = metric_var[st[sample][timeStep$var136]];
+																							
+																							// Store the value of the function call, so the function call is only made once.
+																							double cv$weightedProbability = (Math.log(cv$probabilitySample123Value70) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																							
+																							// Add the probability of this sample task to the distribution accumulator.
+																							if((cv$weightedProbability < cv$distributionAccumulator))
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																									cv$distributionAccumulator = cv$weightedProbability;
+																								else
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																							}
+																							
+																							// Add the probability of this distribution configuration to the accumulator.
+																							cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value70);
 																						}
 																					}
 																				}
@@ -1451,526 +1849,38 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		}
 																	}
 																} else {
-																	for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
-																		for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29]; timeStep$var113 += 1) {
-																			if(true) {
-																				// Enumerating the possible outputs of Categorical 120.
-																				for(int index$sample123$31 = 0; index$sample123$31 < noStates; index$sample123$31 += 1) {
-																					int distributionTempVariable$var121$33 = index$sample123$31;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample123Value32 = (1.0 * distribution$sample123[((index$sample$29 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$31]);
-																					if((index$sample$29 == sample)) {
-																						if((timeStep$var113 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var66 = 0; var66 < noStates; var66 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var66 == st[sample][timeStep$var136])) {
-																											{
-																												double var148 = metric_mean[st[sample][timeStep$var136]];
-																												double var149 = metric_var[st[sample][timeStep$var136]];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample123Value32) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value32);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
-										if(true) {
-											// Enumerating the possible outputs of Categorical 101.
-											for(int index$sample104$22 = 0; index$sample104$22 < noStates; index$sample104$22 += 1) {
-												int distributionTempVariable$var102$24 = index$sample104$22;
-												
-												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample104Value23 = (1.0 * distribution$sample104[((index$sample$21 - 0) / 1)][index$sample104$22]);
-												if((index$sample$21 == sample)) {
-													if((0 == timeStep$var136)) {
-														if(metric_valid_g[sample][timeStep$var136]) {
-															for(int var50 = 0; var50 < noStates; var50 += 1) {
-																if(metric_valid_g[sample][timeStep$var136]) {
-																	if((var50 == st[sample][timeStep$var136])) {
-																		if(fixedFlag$sample123) {
-																			for(int index$sample$35_1 = 0; index$sample$35_1 < noSamples; index$sample$35_1 += 1) {
-																				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$35_1]; timeStep$var113 += 1) {
-																					if((index$sample$35_1 == sample)) {
-																						if((timeStep$var113 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var66 = 0; var66 < noStates; var66 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var66 == st[sample][timeStep$var136])) {
-																											{
-																												double var148 = metric_mean[st[sample][timeStep$var136]];
-																												double var149 = metric_var[st[sample][timeStep$var136]];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value23);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		} else {
-																			for(int index$sample$36 = 0; index$sample$36 < noSamples; index$sample$36 += 1) {
-																				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$36]; timeStep$var113 += 1) {
-																					if(true) {
-																						// Enumerating the possible outputs of Categorical 120.
-																						for(int index$sample123$38 = 0; index$sample123$38 < noStates; index$sample123$38 += 1) {
-																							int distributionTempVariable$var121$40 = index$sample123$38;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample123Value39 = (cv$probabilitySample104Value23 * distribution$sample123[((index$sample$36 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$38]);
-																							if((index$sample$36 == sample)) {
-																								if((timeStep$var113 == timeStep$var136)) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										for(int var66 = 0; var66 < noStates; var66 += 1) {
-																											if(metric_valid_g[sample][timeStep$var136]) {
-																												if((var66 == st[sample][timeStep$var136])) {
-																													{
-																														double var148 = metric_mean[st[sample][timeStep$var136]];
-																														double var149 = metric_var[st[sample][timeStep$var136]];
-																														
-																														// Store the value of the function call, so the function call is only made once.
-																														double cv$weightedProbability = (Math.log(cv$probabilitySample123Value39) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																														
-																														// Add the probability of this sample task to the distribution accumulator.
-																														if((cv$weightedProbability < cv$distributionAccumulator))
-																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																																cv$distributionAccumulator = cv$weightedProbability;
-																															else
-																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																														}
-																														
-																														// Add the probability of this distribution configuration to the accumulator.
-																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value39);
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample123) {
-									for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
-											if((index$sample$46_1 == sample)) {
-												if((timeStep$var113 == timeStep$var136)) {
-													if(metric_valid_g[sample][timeStep$var136]) {
-														for(int var50 = 0; var50 < noStates; var50 += 1) {
-															if(metric_valid_g[sample][timeStep$var136]) {
-																if((var50 == st[sample][timeStep$var136])) {
-																	for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
-																		for(int index$timeStep$55_2 = 1; index$timeStep$55_2 < length$metric[index$sample$55_1]; index$timeStep$55_2 += 1) {
-																			if((index$sample$55_1 == sample)) {
-																				if((index$timeStep$55_2 == timeStep$var136)) {
-																					if(metric_valid_g[sample][timeStep$var136]) {
+																	for(int index$sample$82 = 0; index$sample$82 < noSamples; index$sample$82 += 1) {
+																		if(true) {
+																			// Enumerating the possible outputs of Categorical 101.
+																			for(int index$sample104$83 = 0; index$sample104$83 < noStates; index$sample104$83 += 1) {
+																				int distributionTempVariable$var102$85 = index$sample104$83;
+																				
+																				// Update the probability of sampling this value from the distribution value.
+																				double cv$probabilitySample104Value84 = (cv$probabilitySample123Value70 * distribution$sample104[((index$sample$82 - 0) / 1)][index$sample104$83]);
+																				if((index$sample$82 == sample)) {
+																					if((0 == timeStep$var136)) {
 																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + 1.0);
+																							if((var66 == st[sample][timeStep$var136])) {
+																								{
+																									double var148 = metric_mean[st[sample][timeStep$var136]];
+																									double var149 = metric_var[st[sample][timeStep$var136]];
+																									
+																									// Store the value of the function call, so the function call is only made once.
+																									double cv$weightedProbability = (Math.log(cv$probabilitySample104Value84) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+																									
+																									// Add the probability of this sample task to the distribution accumulator.
+																									if((cv$weightedProbability < cv$distributionAccumulator))
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																											cv$distributionAccumulator = cv$weightedProbability;
+																										else
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
-											if(true) {
-												// Enumerating the possible outputs of Categorical 120.
-												for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
-													int distributionTempVariable$var121$51 = index$sample123$49;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample123Value50 = (1.0 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
-													if((index$sample$47 == sample)) {
-														if((timeStep$var113 == timeStep$var136)) {
-															if(metric_valid_g[sample][timeStep$var136]) {
-																for(int var50 = 0; var50 < noStates; var50 += 1) {
-																	if(metric_valid_g[sample][timeStep$var136]) {
-																		if((var50 == st[sample][timeStep$var136])) {
-																			if((index$sample$47 == sample)) {
-																				if((timeStep$var113 == timeStep$var136)) {
-																					if(metric_valid_g[sample][timeStep$var136]) {
-																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value50);
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																			for(int index$sample$57 = 0; index$sample$57 < noSamples; index$sample$57 += 1) {
-																				for(int index$timeStep$58 = 1; index$timeStep$58 < length$metric[index$sample$57]; index$timeStep$58 += 1) {
-																					if(!((index$sample$57 == index$sample$47) && (index$timeStep$58 == timeStep$var113))) {
-																						// Enumerating the possible outputs of Categorical 120.
-																						for(int index$sample123$59 = 0; index$sample123$59 < noStates; index$sample123$59 += 1) {
-																							int distributionTempVariable$var121$61 = index$sample123$59;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample123Value60 = (cv$probabilitySample123Value50 * distribution$sample123[((index$sample$57 - 0) / 1)][((index$timeStep$58 - 1) / 1)][index$sample123$59]);
-																							if((index$sample$57 == sample)) {
-																								if((index$timeStep$58 == timeStep$var136)) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										for(int var66 = 0; var66 < noStates; var66 += 1) {
-																											if(metric_valid_g[sample][timeStep$var136]) {
-																												if((var66 == st[sample][timeStep$var136])) {
-																													{
-																														double var148 = metric_mean[st[sample][timeStep$var136]];
-																														double var149 = metric_var[st[sample][timeStep$var136]];
-																														
-																														// Store the value of the function call, so the function call is only made once.
-																														double cv$weightedProbability = (Math.log(cv$probabilitySample123Value60) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																														
-																														// Add the probability of this sample task to the distribution accumulator.
-																														if((cv$weightedProbability < cv$distributionAccumulator))
-																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																																cv$distributionAccumulator = cv$weightedProbability;
-																															else
-																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																														}
-																														
-																														// Add the probability of this distribution configuration to the accumulator.
-																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value60);
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample123) {
-									for(int index$sample$66_1 = 0; index$sample$66_1 < noSamples; index$sample$66_1 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$66_1]; timeStep$var113 += 1) {
-											if((index$sample$66_1 == sample)) {
-												if((timeStep$var113 == timeStep$var136)) {
-													if(metric_valid_g[sample][timeStep$var136]) {
-														for(int var50 = 0; var50 < noStates; var50 += 1) {
-															if(metric_valid_g[sample][timeStep$var136]) {
-																if((var50 == st[sample][timeStep$var136])) {
-																	if(fixedFlag$sample104) {
-																		for(int index$sample$75_1 = 0; index$sample$75_1 < noSamples; index$sample$75_1 += 1) {
-																			if((index$sample$75_1 == sample)) {
-																				if((0 == timeStep$var136)) {
-																					if(metric_valid_g[sample][timeStep$var136]) {
-																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + 1.0);
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	} else {
-																		for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
-																			if(true) {
-																				// Enumerating the possible outputs of Categorical 101.
-																				for(int index$sample104$77 = 0; index$sample104$77 < noStates; index$sample104$77 += 1) {
-																					int distributionTempVariable$var102$79 = index$sample104$77;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample104Value78 = (1.0 * distribution$sample104[((index$sample$76 - 0) / 1)][index$sample104$77]);
-																					if((index$sample$76 == sample)) {
-																						if((0 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var66 = 0; var66 < noStates; var66 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var66 == st[sample][timeStep$var136])) {
-																											{
-																												double var148 = metric_mean[st[sample][timeStep$var136]];
-																												double var149 = metric_var[st[sample][timeStep$var136]];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value78) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value78);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$67 = 0; index$sample$67 < noSamples; index$sample$67 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$67]; timeStep$var113 += 1) {
-											if(true) {
-												// Enumerating the possible outputs of Categorical 120.
-												for(int index$sample123$69 = 0; index$sample123$69 < noStates; index$sample123$69 += 1) {
-													int distributionTempVariable$var121$71 = index$sample123$69;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample123Value70 = (1.0 * distribution$sample123[((index$sample$67 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$69]);
-													if((index$sample$67 == sample)) {
-														if((timeStep$var113 == timeStep$var136)) {
-															if(metric_valid_g[sample][timeStep$var136]) {
-																for(int var50 = 0; var50 < noStates; var50 += 1) {
-																	if(metric_valid_g[sample][timeStep$var136]) {
-																		if((var50 == st[sample][timeStep$var136])) {
-																			if(fixedFlag$sample104) {
-																				for(int index$sample$81_1 = 0; index$sample$81_1 < noSamples; index$sample$81_1 += 1) {
-																					if((index$sample$81_1 == sample)) {
-																						if((0 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var66 = 0; var66 < noStates; var66 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var66 == st[sample][timeStep$var136])) {
-																											{
-																												double var148 = metric_mean[st[sample][timeStep$var136]];
-																												double var149 = metric_var[st[sample][timeStep$var136]];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample123Value70) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value70);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			} else {
-																				for(int index$sample$82 = 0; index$sample$82 < noSamples; index$sample$82 += 1) {
-																					if(true) {
-																						// Enumerating the possible outputs of Categorical 101.
-																						for(int index$sample104$83 = 0; index$sample104$83 < noStates; index$sample104$83 += 1) {
-																							int distributionTempVariable$var102$85 = index$sample104$83;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample104Value84 = (cv$probabilitySample123Value70 * distribution$sample104[((index$sample$82 - 0) / 1)][index$sample104$83]);
-																							if((index$sample$82 == sample)) {
-																								if((0 == timeStep$var136)) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										for(int var66 = 0; var66 < noStates; var66 += 1) {
-																											if(metric_valid_g[sample][timeStep$var136]) {
-																												if((var66 == st[sample][timeStep$var136])) {
-																													{
-																														double var148 = metric_mean[st[sample][timeStep$var136]];
-																														double var149 = metric_var[st[sample][timeStep$var136]];
-																														
-																														// Store the value of the function call, so the function call is only made once.
-																														double cv$weightedProbability = (Math.log(cv$probabilitySample104Value84) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-																														
-																														// Add the probability of this sample task to the distribution accumulator.
-																														if((cv$weightedProbability < cv$distributionAccumulator))
-																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																																cv$distributionAccumulator = cv$weightedProbability;
-																															else
-																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																														}
-																														
-																														// Add the probability of this distribution configuration to the accumulator.
-																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value84);
-																													}
-																												}
-																											}
-																										}
-																									}
+																									
+																									// Add the probability of this distribution configuration to the accumulator.
+																									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value84);
 																								}
 																							}
 																						}
@@ -2452,31 +2362,29 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// An accumulator for the distributed probability space covered.
 						double cv$probabilityReached = 0.0;
 						{
-							if(metric_valid_g[sample][timeStep$var136]) {
-								// The sample value to calculate the probability of generating
-								double cv$sampleValue = metric_g[sample][timeStep$var136];
+							// The sample value to calculate the probability of generating
+							double cv$sampleValue = metric_g[sample][timeStep$var136];
+							{
 								{
-									{
-										double var148 = metric_mean[st[sample][timeStep$var136]];
-										double var149 = metric_var[st[sample][timeStep$var136]];
-										
-										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
-										
-										// Add the probability of this sample task to the distribution accumulator.
-										if((cv$weightedProbability < cv$distributionAccumulator))
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-										else {
-											// If the second value is -infinity.
-											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-												cv$distributionAccumulator = cv$weightedProbability;
-											else
-												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-										}
-										
-										// Add the probability of this distribution configuration to the accumulator.
-										cv$probabilityReached = (cv$probabilityReached + 1.0);
+									double var148 = metric_mean[st[sample][timeStep$var136]];
+									double var149 = metric_var[st[sample][timeStep$var136]];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
 								}
 							}
 						}
@@ -3119,16 +3027,16 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					{
 						cv$temp$0$initialStateDistribution = initialStateDistribution;
 					}
-					int cv$temp$1$$var2593;
+					int cv$temp$1$$var2617;
 					{
 						// Constructing a random variable input for use later.
-						int $var2593 = noStates;
-						cv$temp$1$$var2593 = $var2593;
+						int $var2617 = noStates;
+						cv$temp$1$$var2617 = $var2617;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2593))?Math.log(cv$temp$0$initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2617))?Math.log(cv$temp$0$initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 120.
 					{
@@ -3168,22 +3076,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			double[] var119 = m[traceTempVariable$var118$3_1];
 																			cv$temp$2$var119 = var119;
 																		}
-																		int cv$temp$3$$var2606;
+																		int cv$temp$3$$var2630;
 																		{
 																			// Constructing a random variable input for use later.
-																			int $var2606 = noStates;
-																			cv$temp$3$$var2606 = $var2606;
+																			int $var2630 = noStates;
+																			cv$temp$3$$var2630 = $var2630;
 																		}
 																		
 																		// Record the probability of sample task 123 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2606))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2606))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2630))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2630))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2606))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2630))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2606))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2606))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2630))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$sample$3_2][timeStep$var113]) && (st[index$sample$3_2][timeStep$var113] < cv$temp$3$$var2630))?Math.log(cv$temp$2$var119[st[index$sample$3_2][timeStep$var113]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 123 with the current configuration.
@@ -3333,229 +3241,199 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													
 													// Processing sample task 157 of consumer random variable null.
 													{
-														if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-															// Set an accumulator to sum the probabilities for each possible configuration of
-															// inputs.
-															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-															
-															// Set an accumulator to record the consumer distributions not seen. Initially set
-															// to 1 as seen values will be deducted from this value.
-															double cv$consumerDistributionProbabilityAccumulator = 1.0;
-															{
-																// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																// the output of Sample task 104.
-																for(int var50 = 0; var50 < noStates; var50 += 1) {
-																	if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																		if((var50 == st[index$sample$15_2][timeStep$var136])) {
-																			int traceTempVariable$currentState$20_1 = cv$currentValue;
-																			if((index$sample$2 == index$sample$15_2)) {
-																				if((0 == timeStep$var136)) {
-																					if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
+														// Set an accumulator to sum the probabilities for each possible configuration of
+														// inputs.
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														
+														// Set an accumulator to record the consumer distributions not seen. Initially set
+														// to 1 as seen values will be deducted from this value.
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
+														{
+															// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+															// the output of Sample task 104.
+															for(int var50 = 0; var50 < noStates; var50 += 1) {
+																if((var50 == st[index$sample$15_2][timeStep$var136])) {
+																	int traceTempVariable$currentState$20_1 = cv$currentValue;
+																	if((index$sample$2 == index$sample$15_2)) {
+																		if((0 == timeStep$var136)) {
+																			for(int var66 = 0; var66 < noStates; var66 += 1) {
+																				if((var66 == st[index$sample$15_2][timeStep$var136])) {
+																					{
+																						{
+																							double cv$temp$5$var148;
+																							{
+																								// Constructing a random variable input for use later.
+																								double var148 = metric_mean[traceTempVariable$currentState$20_1];
+																								cv$temp$5$var148 = var148;
+																							}
+																							double cv$temp$6$var149;
+																							{
+																								// Constructing a random variable input for use later.
+																								double var149 = metric_var[traceTempVariable$currentState$20_1];
+																								cv$temp$6$var149 = var149;
+																							}
+																							
+																							// Record the probability of sample task 157 generating output with current configuration.
+																							if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149))));
+																								else
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))));
+																							}
+																							
+																							// Recorded the probability of reaching sample task 157 with the current configuration.
+																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																	for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
+																		if(!(index$sample$21 == index$sample$2)) {
+																			// Enumerating the possible outputs of Categorical 101.
+																			for(int index$sample104$22 = 0; index$sample104$22 < noStates; index$sample104$22 += 1) {
+																				int distributionTempVariable$var102$24 = index$sample104$22;
+																				
+																				// Update the probability of sampling this value from the distribution value.
+																				double cv$probabilitySample104Value23 = (1.0 * distribution$sample104[((index$sample$21 - 0) / 1)][index$sample104$22]);
+																				int traceTempVariable$currentState$25_1 = cv$currentValue;
+																				if((index$sample$21 == index$sample$15_2)) {
+																					if((0 == timeStep$var136)) {
 																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																								if((var66 == st[index$sample$15_2][timeStep$var136])) {
+																							if((var66 == st[index$sample$15_2][timeStep$var136])) {
+																								{
 																									{
+																										double cv$temp$7$var148;
 																										{
-																											if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																												double cv$temp$5$var148;
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[traceTempVariable$currentState$25_1];
+																											cv$temp$7$var148 = var148;
+																										}
+																										double cv$temp$8$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[traceTempVariable$currentState$25_1];
+																											cv$temp$8$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value23);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+															
+															// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+															// the output of Sample task 104.
+															for(int var50 = 0; var50 < noStates; var50 += 1) {
+																if((var50 == st[index$sample$15_2][timeStep$var136])) {
+																	if(fixedFlag$sample123) {
+																		for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29_1]; timeStep$var113 += 1) {
+																				if((index$sample$29_1 == index$sample$15_2)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[index$sample$15_2][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$9$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[traceTempVariable$currentState$15_1];
+																											cv$temp$9$var148 = var148;
+																										}
+																										double cv$temp$10$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[traceTempVariable$currentState$15_1];
+																											cv$temp$10$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	} else {
+																		for(int index$sample$30 = 0; index$sample$30 < noSamples; index$sample$30 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$30]; timeStep$var113 += 1) {
+																				if(true) {
+																					// Enumerating the possible outputs of Categorical 120.
+																					for(int index$sample123$32 = 0; index$sample123$32 < noStates; index$sample123$32 += 1) {
+																						int distributionTempVariable$var121$34 = index$sample123$32;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample123Value33 = (1.0 * distribution$sample123[((index$sample$30 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$32]);
+																						if((index$sample$30 == index$sample$15_2)) {
+																							if((timeStep$var113 == timeStep$var136)) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[index$sample$15_2][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$11$var148;
 																												{
 																													// Constructing a random variable input for use later.
-																													double var148 = metric_mean[traceTempVariable$currentState$20_1];
-																													cv$temp$5$var148 = var148;
+																													double var148 = metric_mean[traceTempVariable$currentState$15_1];
+																													cv$temp$11$var148 = var148;
 																												}
-																												double cv$temp$6$var149;
+																												double cv$temp$12$var149;
 																												{
 																													// Constructing a random variable input for use later.
-																													double var149 = metric_var[traceTempVariable$currentState$20_1];
-																													cv$temp$6$var149 = var149;
+																													double var149 = metric_var[traceTempVariable$currentState$15_1];
+																													cv$temp$12$var149 = var149;
 																												}
 																												
 																												// Record the probability of sample task 157 generating output with current configuration.
-																												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												if(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													// If the second value is -infinity.
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149))));
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149))));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$5$var148) / Math.sqrt(cv$temp$6$var149))) - (0.5 * Math.log(cv$temp$6$var149)))));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))));
 																												}
 																												
 																												// Recorded the probability of reaching sample task 157 with the current configuration.
-																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																			for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
-																				if(!(index$sample$21 == index$sample$2)) {
-																					// Enumerating the possible outputs of Categorical 101.
-																					for(int index$sample104$22 = 0; index$sample104$22 < noStates; index$sample104$22 += 1) {
-																						int distributionTempVariable$var102$24 = index$sample104$22;
-																						
-																						// Update the probability of sampling this value from the distribution value.
-																						double cv$probabilitySample104Value23 = (1.0 * distribution$sample104[((index$sample$21 - 0) / 1)][index$sample104$22]);
-																						int traceTempVariable$currentState$25_1 = cv$currentValue;
-																						if((index$sample$21 == index$sample$15_2)) {
-																							if((0 == timeStep$var136)) {
-																								if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																											if((var66 == st[index$sample$15_2][timeStep$var136])) {
-																												{
-																													{
-																														if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																															double cv$temp$7$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[traceTempVariable$currentState$25_1];
-																																cv$temp$7$var148 = var148;
-																															}
-																															double cv$temp$8$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[traceTempVariable$currentState$25_1];
-																																cv$temp$8$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value23) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$7$var148) / Math.sqrt(cv$temp$8$var149))) - (0.5 * Math.log(cv$temp$8$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value23);
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-																
-																// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																// the output of Sample task 104.
-																for(int var50 = 0; var50 < noStates; var50 += 1) {
-																	if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																		if((var50 == st[index$sample$15_2][timeStep$var136])) {
-																			if(fixedFlag$sample123) {
-																				for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29_1]; timeStep$var113 += 1) {
-																						if((index$sample$29_1 == index$sample$15_2)) {
-																							if((timeStep$var113 == timeStep$var136)) {
-																								if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																											if((var66 == st[index$sample$15_2][timeStep$var136])) {
-																												{
-																													{
-																														if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																															double cv$temp$9$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[traceTempVariable$currentState$15_1];
-																																cv$temp$9$var148 = var148;
-																															}
-																															double cv$temp$10$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[traceTempVariable$currentState$15_1];
-																																cv$temp$10$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$9$var148) / Math.sqrt(cv$temp$10$var149))) - (0.5 * Math.log(cv$temp$10$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			} else {
-																				for(int index$sample$30 = 0; index$sample$30 < noSamples; index$sample$30 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$30]; timeStep$var113 += 1) {
-																						if(true) {
-																							// Enumerating the possible outputs of Categorical 120.
-																							for(int index$sample123$32 = 0; index$sample123$32 < noStates; index$sample123$32 += 1) {
-																								int distributionTempVariable$var121$34 = index$sample123$32;
-																								
-																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample123Value33 = (1.0 * distribution$sample123[((index$sample$30 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$32]);
-																								if((index$sample$30 == index$sample$15_2)) {
-																									if((timeStep$var113 == timeStep$var136)) {
-																										if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																													if((var66 == st[index$sample$15_2][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[index$sample$15_2][timeStep$var136]) {
-																																	double cv$temp$11$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[traceTempVariable$currentState$15_1];
-																																		cv$temp$11$var148 = var148;
-																																	}
-																																	double cv$temp$12$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[traceTempVariable$currentState$15_1];
-																																		cv$temp$12$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$15_2][timeStep$var136] - cv$temp$11$var148) / Math.sqrt(cv$temp$12$var149))) - (0.5 * Math.log(cv$temp$12$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value33);
-																																}
-																															}
-																														}
-																													}
-																												}
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value33);
 																											}
 																										}
 																									}
@@ -3569,22 +3447,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																	}
 																}
 															}
-															
-															// A check to ensure rounding of floating point values can never result in a negative
-															// value.
-															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-															
-															// Multiply (log space add) in the probability of the sample task to the overall probability
-															// for this configuration of the source random variable.
-															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																else
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-															}
+														}
+														
+														// A check to ensure rounding of floating point values can never result in a negative
+														// value.
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														
+														// Multiply (log space add) in the probability of the sample task to the overall probability
+														// for this configuration of the source random variable.
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
@@ -3605,241 +3483,207 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													
 													// Processing sample task 157 of consumer random variable null.
 													{
-														if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-															// Set an accumulator to sum the probabilities for each possible configuration of
-															// inputs.
-															double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-															
-															// Set an accumulator to record the consumer distributions not seen. Initially set
-															// to 1 as seen values will be deducted from this value.
-															double cv$consumerDistributionProbabilityAccumulator = 1.0;
-															{
-																// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																// the output of Sample task 104.
-																int traceTempVariable$currentState$38_1 = cv$currentValue;
-																if((index$sample$2 == index$sample$16_2)) {
-																	if((0 == timeStep$var136)) {
-																		if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																			for(int var50 = 0; var50 < noStates; var50 += 1) {
-																				if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
+														// Set an accumulator to sum the probabilities for each possible configuration of
+														// inputs.
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														
+														// Set an accumulator to record the consumer distributions not seen. Initially set
+														// to 1 as seen values will be deducted from this value.
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
+														{
+															// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+															// the output of Sample task 104.
+															int traceTempVariable$currentState$38_1 = cv$currentValue;
+															if((index$sample$2 == index$sample$16_2)) {
+																if((0 == timeStep$var136)) {
+																	for(int var50 = 0; var50 < noStates; var50 += 1) {
+																		if((var50 == st[index$sample$16_2][timeStep$var136])) {
+																			for(int var66 = 0; var66 < noStates; var66 += 1) {
+																				if((var66 == st[index$sample$16_2][timeStep$var136])) {
+																					{
+																						{
+																							double cv$temp$13$var148;
+																							{
+																								// Constructing a random variable input for use later.
+																								double var148 = metric_mean[traceTempVariable$currentState$38_1];
+																								cv$temp$13$var148 = var148;
+																							}
+																							double cv$temp$14$var149;
+																							{
+																								// Constructing a random variable input for use later.
+																								double var149 = metric_var[traceTempVariable$currentState$38_1];
+																								cv$temp$14$var149 = var149;
+																							}
+																							
+																							// Record the probability of sample task 157 generating output with current configuration.
+																							if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149))));
+																								else
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))));
+																							}
+																							
+																							// Recorded the probability of reaching sample task 157 with the current configuration.
+																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+															for(int index$sample$39 = 0; index$sample$39 < noSamples; index$sample$39 += 1) {
+																if(!(index$sample$39 == index$sample$2)) {
+																	// Enumerating the possible outputs of Categorical 101.
+																	for(int index$sample104$40 = 0; index$sample104$40 < noStates; index$sample104$40 += 1) {
+																		int distributionTempVariable$var102$42 = index$sample104$40;
+																		
+																		// Update the probability of sampling this value from the distribution value.
+																		double cv$probabilitySample104Value41 = (1.0 * distribution$sample104[((index$sample$39 - 0) / 1)][index$sample104$40]);
+																		int traceTempVariable$currentState$43_1 = cv$currentValue;
+																		if((index$sample$39 == index$sample$16_2)) {
+																			if((0 == timeStep$var136)) {
+																				for(int var50 = 0; var50 < noStates; var50 += 1) {
 																					if((var50 == st[index$sample$16_2][timeStep$var136])) {
 																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																								if((var66 == st[index$sample$16_2][timeStep$var136])) {
+																							if((var66 == st[index$sample$16_2][timeStep$var136])) {
+																								{
 																									{
+																										double cv$temp$15$var148;
 																										{
-																											if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																												double cv$temp$13$var148;
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[traceTempVariable$currentState$43_1];
+																											cv$temp$15$var148 = var148;
+																										}
+																										double cv$temp$16$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[traceTempVariable$currentState$43_1];
+																											cv$temp$16$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value41);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+															
+															// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+															// the output of Sample task 104.
+															if(fixedFlag$sample123) {
+																for(int index$sample$48_1 = 0; index$sample$48_1 < noSamples; index$sample$48_1 += 1) {
+																	for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$48_1]; timeStep$var113 += 1) {
+																		if((index$sample$48_1 == index$sample$16_2)) {
+																			if((timeStep$var113 == timeStep$var136)) {
+																				for(int var50 = 0; var50 < noStates; var50 += 1) {
+																					if((var50 == st[index$sample$16_2][timeStep$var136])) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[index$sample$16_2][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$17$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[traceTempVariable$currentState$16_1];
+																											cv$temp$17$var148 = var148;
+																										}
+																										double cv$temp$18$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[traceTempVariable$currentState$16_1];
+																											cv$temp$18$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															} else {
+																for(int index$sample$49 = 0; index$sample$49 < noSamples; index$sample$49 += 1) {
+																	for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$49]; timeStep$var113 += 1) {
+																		if(true) {
+																			// Enumerating the possible outputs of Categorical 120.
+																			for(int index$sample123$51 = 0; index$sample123$51 < noStates; index$sample123$51 += 1) {
+																				int distributionTempVariable$var121$53 = index$sample123$51;
+																				
+																				// Update the probability of sampling this value from the distribution value.
+																				double cv$probabilitySample123Value52 = (1.0 * distribution$sample123[((index$sample$49 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$51]);
+																				if((index$sample$49 == index$sample$16_2)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$16_2][timeStep$var136])) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[index$sample$16_2][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$19$var148;
 																												{
 																													// Constructing a random variable input for use later.
-																													double var148 = metric_mean[traceTempVariable$currentState$38_1];
-																													cv$temp$13$var148 = var148;
+																													double var148 = metric_mean[traceTempVariable$currentState$16_1];
+																													cv$temp$19$var148 = var148;
 																												}
-																												double cv$temp$14$var149;
+																												double cv$temp$20$var149;
 																												{
 																													// Constructing a random variable input for use later.
-																													double var149 = metric_var[traceTempVariable$currentState$38_1];
-																													cv$temp$14$var149 = var149;
+																													double var149 = metric_var[traceTempVariable$currentState$16_1];
+																													cv$temp$20$var149 = var149;
 																												}
 																												
 																												// Record the probability of sample task 157 generating output with current configuration.
-																												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												if(((Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													// If the second value is -infinity.
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149))));
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149))));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$13$var148) / Math.sqrt(cv$temp$14$var149))) - (0.5 * Math.log(cv$temp$14$var149)))));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))));
 																												}
 																												
 																												// Recorded the probability of reaching sample task 157 with the current configuration.
-																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-																for(int index$sample$39 = 0; index$sample$39 < noSamples; index$sample$39 += 1) {
-																	if(!(index$sample$39 == index$sample$2)) {
-																		// Enumerating the possible outputs of Categorical 101.
-																		for(int index$sample104$40 = 0; index$sample104$40 < noStates; index$sample104$40 += 1) {
-																			int distributionTempVariable$var102$42 = index$sample104$40;
-																			
-																			// Update the probability of sampling this value from the distribution value.
-																			double cv$probabilitySample104Value41 = (1.0 * distribution$sample104[((index$sample$39 - 0) / 1)][index$sample104$40]);
-																			int traceTempVariable$currentState$43_1 = cv$currentValue;
-																			if((index$sample$39 == index$sample$16_2)) {
-																				if((0 == timeStep$var136)) {
-																					if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																						for(int var50 = 0; var50 < noStates; var50 += 1) {
-																							if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																								if((var50 == st[index$sample$16_2][timeStep$var136])) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																											if((var66 == st[index$sample$16_2][timeStep$var136])) {
-																												{
-																													{
-																														if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																															double cv$temp$15$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[traceTempVariable$currentState$43_1];
-																																cv$temp$15$var148 = var148;
-																															}
-																															double cv$temp$16$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[traceTempVariable$currentState$43_1];
-																																cv$temp$16$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$15$var148) / Math.sqrt(cv$temp$16$var149))) - (0.5 * Math.log(cv$temp$16$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value41);
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-																
-																// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																// the output of Sample task 104.
-																if(fixedFlag$sample123) {
-																	for(int index$sample$48_1 = 0; index$sample$48_1 < noSamples; index$sample$48_1 += 1) {
-																		for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$48_1]; timeStep$var113 += 1) {
-																			if((index$sample$48_1 == index$sample$16_2)) {
-																				if((timeStep$var113 == timeStep$var136)) {
-																					if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																						for(int var50 = 0; var50 < noStates; var50 += 1) {
-																							if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																								if((var50 == st[index$sample$16_2][timeStep$var136])) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																											if((var66 == st[index$sample$16_2][timeStep$var136])) {
-																												{
-																													{
-																														if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																															double cv$temp$17$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[traceTempVariable$currentState$16_1];
-																																cv$temp$17$var148 = var148;
-																															}
-																															double cv$temp$18$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[traceTempVariable$currentState$16_1];
-																																cv$temp$18$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$17$var148) / Math.sqrt(cv$temp$18$var149))) - (0.5 * Math.log(cv$temp$18$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																} else {
-																	for(int index$sample$49 = 0; index$sample$49 < noSamples; index$sample$49 += 1) {
-																		for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$49]; timeStep$var113 += 1) {
-																			if(true) {
-																				// Enumerating the possible outputs of Categorical 120.
-																				for(int index$sample123$51 = 0; index$sample123$51 < noStates; index$sample123$51 += 1) {
-																					int distributionTempVariable$var121$53 = index$sample123$51;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample123Value52 = (1.0 * distribution$sample123[((index$sample$49 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$51]);
-																					if((index$sample$49 == index$sample$16_2)) {
-																						if((timeStep$var113 == timeStep$var136)) {
-																							if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																								for(int var50 = 0; var50 < noStates; var50 += 1) {
-																									if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																										if((var50 == st[index$sample$16_2][timeStep$var136])) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																													if((var66 == st[index$sample$16_2][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[index$sample$16_2][timeStep$var136]) {
-																																	double cv$temp$19$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[traceTempVariable$currentState$16_1];
-																																		cv$temp$19$var148 = var148;
-																																	}
-																																	double cv$temp$20$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[traceTempVariable$currentState$16_1];
-																																		cv$temp$20$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value52) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$16_2][timeStep$var136] - cv$temp$19$var148) / Math.sqrt(cv$temp$20$var149))) - (0.5 * Math.log(cv$temp$20$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value52);
-																																}
-																															}
-																														}
-																													}
-																												}
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value52);
 																											}
 																										}
 																									}
@@ -3853,22 +3697,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																	}
 																}
 															}
-															
-															// A check to ensure rounding of floating point values can never result in a negative
-															// value.
-															cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-															
-															// Multiply (log space add) in the probability of the sample task to the overall probability
-															// for this configuration of the source random variable.
-															if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																else
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-															}
+														}
+														
+														// A check to ensure rounding of floating point values can never result in a negative
+														// value.
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														
+														// Multiply (log space add) in the probability of the sample task to the overall probability
+														// for this configuration of the source random variable.
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
@@ -3939,11 +3783,11 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																double[] var119 = m[traceTempVariable$var118$67_1];
 																cv$temp$21$var119 = var119;
 															}
-															int cv$temp$22$$var2741;
+															int cv$temp$22$$var2765;
 															{
 																// Constructing a random variable input for use later.
-																int $var2741 = noStates;
-																cv$temp$22$$var2741 = $var2741;
+																int $var2765 = noStates;
+																cv$temp$22$$var2765 = $var2765;
 															}
 															
 															// The probability of reaching the consumer with this set of consumer arguments
@@ -3953,7 +3797,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 															cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 															
 															// Add the current distribution to the distribution accumulator.
-															DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$21$var119, cv$temp$22$$var2741);
+															DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$21$var119, cv$temp$22$$var2765);
 														}
 													}
 												}
@@ -4196,16 +4040,16 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
 											cv$temp$0$var119 = var119;
 										}
-										int cv$temp$1$$var2827;
+										int cv$temp$1$$var2851;
 										{
 											// Constructing a random variable input for use later.
-											int $var2827 = noStates;
-											cv$temp$1$$var2827 = $var2827;
+											int $var2851 = noStates;
+											cv$temp$1$$var2851 = $var2851;
 										}
 										
 										// An accumulator to allow the value for each distribution to be constructed before
 										// it is added to the index probabilities.
-										double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2827))?Math.log(cv$temp$0$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
+										double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2851))?Math.log(cv$temp$0$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
 										
 										// Processing random variable 120.
 										{
@@ -4330,61 +4174,51 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		
 																		// Processing sample task 157 of consumer random variable null.
 																		{
-																			if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																				// Set an accumulator to sum the probabilities for each possible configuration of
-																				// inputs.
-																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																				
-																				// Set an accumulator to record the consumer distributions not seen. Initially set
-																				// to 1 as seen values will be deducted from this value.
-																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																				{
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 123.
-																					for(int var50 = 0; var50 < noStates; var50 += 1) {
-																						if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																							if((var50 == st[index$sample$69_2][timeStep$var136])) {
-																								for(int index$sample$86_1 = 0; index$sample$86_1 < noSamples; index$sample$86_1 += 1) {
-																									if((index$sample$86_1 == index$sample$69_2)) {
-																										if((0 == timeStep$var136)) {
-																											if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																												for(int var66 = 0; var66 < noStates; var66 += 1) {
-																													if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																														if((var66 == st[index$sample$69_2][timeStep$var136])) {
-																															{
-																																{
-																																	if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																																		double cv$temp$12$var148;
-																																		{
-																																			// Constructing a random variable input for use later.
-																																			double var148 = metric_mean[traceTempVariable$currentState$69_1];
-																																			cv$temp$12$var148 = var148;
-																																		}
-																																		double cv$temp$13$var149;
-																																		{
-																																			// Constructing a random variable input for use later.
-																																			double var149 = metric_var[traceTempVariable$currentState$69_1];
-																																			cv$temp$13$var149 = var149;
-																																		}
-																																		
-																																		// Record the probability of sample task 157 generating output with current configuration.
-																																		if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) < cv$accumulatedConsumerProbabilities))
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																		else {
-																																			// If the second value is -infinity.
-																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149))));
-																																			else
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))));
-																																		}
-																																		
-																																		// Recorded the probability of reaching sample task 157 with the current configuration.
-																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																	}
-																																}
-																															}
-																														}
+																			// Set an accumulator to sum the probabilities for each possible configuration of
+																			// inputs.
+																			double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																			
+																			// Set an accumulator to record the consumer distributions not seen. Initially set
+																			// to 1 as seen values will be deducted from this value.
+																			double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																			{
+																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																				// the output of Sample task 123.
+																				for(int var50 = 0; var50 < noStates; var50 += 1) {
+																					if((var50 == st[index$sample$69_2][timeStep$var136])) {
+																						for(int index$sample$86_1 = 0; index$sample$86_1 < noSamples; index$sample$86_1 += 1) {
+																							if((index$sample$86_1 == index$sample$69_2)) {
+																								if((0 == timeStep$var136)) {
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == st[index$sample$69_2][timeStep$var136])) {
+																											{
+																												{
+																													double cv$temp$12$var148;
+																													{
+																														// Constructing a random variable input for use later.
+																														double var148 = metric_mean[traceTempVariable$currentState$69_1];
+																														cv$temp$12$var148 = var148;
 																													}
+																													double cv$temp$13$var149;
+																													{
+																														// Constructing a random variable input for use later.
+																														double var149 = metric_var[traceTempVariable$currentState$69_1];
+																														cv$temp$13$var149 = var149;
+																													}
+																													
+																													// Record the probability of sample task 157 generating output with current configuration.
+																													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) < cv$accumulatedConsumerProbabilities))
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																													else {
+																														// If the second value is -infinity.
+																														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149))));
+																														else
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))));
+																													}
+																													
+																													// Recorded the probability of reaching sample task 157 with the current configuration.
+																													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																												}
 																											}
 																										}
@@ -4393,107 +4227,93 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																							}
 																						}
 																					}
-																					
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 123.
-																					for(int var50 = 0; var50 < noStates; var50 += 1) {
-																						if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																							if((var50 == st[index$sample$69_2][timeStep$var136])) {
-																								int traceTempVariable$currentState$89_1 = cv$currentValue;
-																								if((index$sample$23 == index$sample$69_2)) {
-																									if((index$timeStep$22 == timeStep$var136)) {
-																										if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
+																				}
+																				
+																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																				// the output of Sample task 123.
+																				for(int var50 = 0; var50 < noStates; var50 += 1) {
+																					if((var50 == st[index$sample$69_2][timeStep$var136])) {
+																						int traceTempVariable$currentState$89_1 = cv$currentValue;
+																						if((index$sample$23 == index$sample$69_2)) {
+																							if((index$timeStep$22 == timeStep$var136)) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[index$sample$69_2][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$14$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[traceTempVariable$currentState$89_1];
+																													cv$temp$14$var148 = var148;
+																												}
+																												double cv$temp$15$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[traceTempVariable$currentState$89_1];
+																													cv$temp$15$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																						for(int index$sample$90 = 0; index$sample$90 < noSamples; index$sample$90 += 1) {
+																							for(int index$timeStep$91 = 1; index$timeStep$91 < length$metric[index$sample$90]; index$timeStep$91 += 1) {
+																								if(!((index$sample$90 == index$sample$23) && (index$timeStep$91 == index$timeStep$22))) {
+																									// Enumerating the possible outputs of Categorical 120.
+																									for(int index$sample123$92 = 0; index$sample123$92 < noStates; index$sample123$92 += 1) {
+																										int distributionTempVariable$var121$94 = index$sample123$92;
+																										
+																										// Update the probability of sampling this value from the distribution value.
+																										double cv$probabilitySample123Value93 = (1.0 * distribution$sample123[((index$sample$90 - 0) / 1)][((index$timeStep$91 - 1) / 1)][index$sample123$92]);
+																										int traceTempVariable$currentState$95_1 = cv$currentValue;
+																										if((index$sample$90 == index$sample$69_2)) {
+																											if((index$timeStep$91 == timeStep$var136)) {
+																												for(int var66 = 0; var66 < noStates; var66 += 1) {
 																													if((var66 == st[index$sample$69_2][timeStep$var136])) {
 																														{
 																															{
-																																if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																																	double cv$temp$14$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[traceTempVariable$currentState$89_1];
-																																		cv$temp$14$var148 = var148;
-																																	}
-																																	double cv$temp$15$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[traceTempVariable$currentState$89_1];
-																																		cv$temp$15$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																																double cv$temp$16$var148;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var148 = metric_mean[traceTempVariable$currentState$95_1];
+																																	cv$temp$16$var148 = var148;
 																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																								for(int index$sample$90 = 0; index$sample$90 < noSamples; index$sample$90 += 1) {
-																									for(int index$timeStep$91 = 1; index$timeStep$91 < length$metric[index$sample$90]; index$timeStep$91 += 1) {
-																										if(!((index$sample$90 == index$sample$23) && (index$timeStep$91 == index$timeStep$22))) {
-																											// Enumerating the possible outputs of Categorical 120.
-																											for(int index$sample123$92 = 0; index$sample123$92 < noStates; index$sample123$92 += 1) {
-																												int distributionTempVariable$var121$94 = index$sample123$92;
-																												
-																												// Update the probability of sampling this value from the distribution value.
-																												double cv$probabilitySample123Value93 = (1.0 * distribution$sample123[((index$sample$90 - 0) / 1)][((index$timeStep$91 - 1) / 1)][index$sample123$92]);
-																												int traceTempVariable$currentState$95_1 = cv$currentValue;
-																												if((index$sample$90 == index$sample$69_2)) {
-																													if((index$timeStep$91 == timeStep$var136)) {
-																														if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																															for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																																	if((var66 == st[index$sample$69_2][timeStep$var136])) {
-																																		{
-																																			{
-																																				if(metric_valid_g[index$sample$69_2][timeStep$var136]) {
-																																					double cv$temp$16$var148;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var148 = metric_mean[traceTempVariable$currentState$95_1];
-																																						cv$temp$16$var148 = var148;
-																																					}
-																																					double cv$temp$17$var149;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var149 = metric_var[traceTempVariable$currentState$95_1];
-																																						cv$temp$17$var149 = var149;
-																																					}
-																																					
-																																					// Record the probability of sample task 157 generating output with current configuration.
-																																					if(((Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) < cv$accumulatedConsumerProbabilities))
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																					else {
-																																						// If the second value is -infinity.
-																																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149))));
-																																						else
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))));
-																																					}
-																																					
-																																					// Recorded the probability of reaching sample task 157 with the current configuration.
-																																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value93);
-																																				}
-																																			}
-																																		}
-																																	}
+																																double cv$temp$17$var149;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var149 = metric_var[traceTempVariable$currentState$95_1];
+																																	cv$temp$17$var149 = var149;
 																																}
+																																
+																																// Record the probability of sample task 157 generating output with current configuration.
+																																if(((Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																else {
+																																	// If the second value is -infinity.
+																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149))));
+																																	else
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value93) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$69_2][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))));
+																																}
+																																
+																																// Recorded the probability of reaching sample task 157 with the current configuration.
+																																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value93);
 																															}
 																														}
 																													}
@@ -4506,22 +4326,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																						}
 																					}
 																				}
-																				
-																				// A check to ensure rounding of floating point values can never result in a negative
-																				// value.
-																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																				
-																				// Multiply (log space add) in the probability of the sample task to the overall probability
-																				// for this configuration of the source random variable.
-																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																				else {
-																					// If the second value is -infinity.
-																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																					else
-																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																				}
+																			}
+																			
+																			// A check to ensure rounding of floating point values can never result in a negative
+																			// value.
+																			cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																			
+																			// Multiply (log space add) in the probability of the sample task to the overall probability
+																			// for this configuration of the source random variable.
+																			if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																				else
+																					cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																			}
 																		}
 																	}
@@ -4542,61 +4362,51 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		
 																		// Processing sample task 157 of consumer random variable null.
 																		{
-																			if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																				// Set an accumulator to sum the probabilities for each possible configuration of
-																				// inputs.
-																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																				
-																				// Set an accumulator to record the consumer distributions not seen. Initially set
-																				// to 1 as seen values will be deducted from this value.
-																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																				{
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 123.
-																					for(int index$sample$157_1 = 0; index$sample$157_1 < noSamples; index$sample$157_1 += 1) {
-																						if((index$sample$157_1 == index$sample$73_2)) {
-																							if((0 == timeStep$var136)) {
-																								if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																									for(int var50 = 0; var50 < noStates; var50 += 1) {
-																										if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																											if((var50 == st[index$sample$73_2][timeStep$var136])) {
-																												for(int var66 = 0; var66 < noStates; var66 += 1) {
-																													if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																														if((var66 == st[index$sample$73_2][timeStep$var136])) {
-																															{
-																																{
-																																	if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																																		double cv$temp$44$var148;
-																																		{
-																																			// Constructing a random variable input for use later.
-																																			double var148 = metric_mean[traceTempVariable$currentState$73_1];
-																																			cv$temp$44$var148 = var148;
-																																		}
-																																		double cv$temp$45$var149;
-																																		{
-																																			// Constructing a random variable input for use later.
-																																			double var149 = metric_var[traceTempVariable$currentState$73_1];
-																																			cv$temp$45$var149 = var149;
-																																		}
-																																		
-																																		// Record the probability of sample task 157 generating output with current configuration.
-																																		if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))) < cv$accumulatedConsumerProbabilities))
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																		else {
-																																			// If the second value is -infinity.
-																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149))));
-																																			else
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))));
-																																		}
-																																		
-																																		// Recorded the probability of reaching sample task 157 with the current configuration.
-																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																	}
-																																}
-																															}
-																														}
+																			// Set an accumulator to sum the probabilities for each possible configuration of
+																			// inputs.
+																			double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																			
+																			// Set an accumulator to record the consumer distributions not seen. Initially set
+																			// to 1 as seen values will be deducted from this value.
+																			double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																			{
+																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																				// the output of Sample task 123.
+																				for(int index$sample$157_1 = 0; index$sample$157_1 < noSamples; index$sample$157_1 += 1) {
+																					if((index$sample$157_1 == index$sample$73_2)) {
+																						if((0 == timeStep$var136)) {
+																							for(int var50 = 0; var50 < noStates; var50 += 1) {
+																								if((var50 == st[index$sample$73_2][timeStep$var136])) {
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == st[index$sample$73_2][timeStep$var136])) {
+																											{
+																												{
+																													double cv$temp$44$var148;
+																													{
+																														// Constructing a random variable input for use later.
+																														double var148 = metric_mean[traceTempVariable$currentState$73_1];
+																														cv$temp$44$var148 = var148;
 																													}
+																													double cv$temp$45$var149;
+																													{
+																														// Constructing a random variable input for use later.
+																														double var149 = metric_var[traceTempVariable$currentState$73_1];
+																														cv$temp$45$var149 = var149;
+																													}
+																													
+																													// Record the probability of sample task 157 generating output with current configuration.
+																													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))) < cv$accumulatedConsumerProbabilities))
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																													else {
+																														// If the second value is -infinity.
+																														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149))));
+																														else
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$44$var148) / Math.sqrt(cv$temp$45$var149))) - (0.5 * Math.log(cv$temp$45$var149)))));
+																													}
+																													
+																													// Recorded the probability of reaching sample task 157 with the current configuration.
+																													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																												}
 																											}
 																										}
@@ -4605,113 +4415,97 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																							}
 																						}
 																					}
-																					
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 123.
-																					int traceTempVariable$currentState$160_1 = cv$currentValue;
-																					if((index$sample$23 == index$sample$73_2)) {
-																						if((index$timeStep$22 == timeStep$var136)) {
-																							if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																								for(int var50 = 0; var50 < noStates; var50 += 1) {
-																									if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																										if((var50 == st[index$sample$73_2][timeStep$var136])) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
+																				}
+																				
+																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																				// the output of Sample task 123.
+																				int traceTempVariable$currentState$160_1 = cv$currentValue;
+																				if((index$sample$23 == index$sample$73_2)) {
+																					if((index$timeStep$22 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$73_2][timeStep$var136])) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[index$sample$73_2][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$46$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[traceTempVariable$currentState$160_1];
+																													cv$temp$46$var148 = var148;
+																												}
+																												double cv$temp$47$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[traceTempVariable$currentState$160_1];
+																													cv$temp$47$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																				for(int index$sample$161 = 0; index$sample$161 < noSamples; index$sample$161 += 1) {
+																					for(int index$timeStep$162 = 1; index$timeStep$162 < length$metric[index$sample$161]; index$timeStep$162 += 1) {
+																						if(!((index$sample$161 == index$sample$23) && (index$timeStep$162 == index$timeStep$22))) {
+																							// Enumerating the possible outputs of Categorical 120.
+																							for(int index$sample123$163 = 0; index$sample123$163 < noStates; index$sample123$163 += 1) {
+																								int distributionTempVariable$var121$165 = index$sample123$163;
+																								
+																								// Update the probability of sampling this value from the distribution value.
+																								double cv$probabilitySample123Value164 = (1.0 * distribution$sample123[((index$sample$161 - 0) / 1)][((index$timeStep$162 - 1) / 1)][index$sample123$163]);
+																								int traceTempVariable$currentState$166_1 = cv$currentValue;
+																								if((index$sample$161 == index$sample$73_2)) {
+																									if((index$timeStep$162 == timeStep$var136)) {
+																										for(int var50 = 0; var50 < noStates; var50 += 1) {
+																											if((var50 == st[index$sample$73_2][timeStep$var136])) {
+																												for(int var66 = 0; var66 < noStates; var66 += 1) {
 																													if((var66 == st[index$sample$73_2][timeStep$var136])) {
 																														{
 																															{
-																																if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																																	double cv$temp$46$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[traceTempVariable$currentState$160_1];
-																																		cv$temp$46$var148 = var148;
-																																	}
-																																	double cv$temp$47$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[traceTempVariable$currentState$160_1];
-																																		cv$temp$47$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$46$var148) / Math.sqrt(cv$temp$47$var149))) - (0.5 * Math.log(cv$temp$47$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																																double cv$temp$48$var148;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var148 = metric_mean[traceTempVariable$currentState$166_1];
+																																	cv$temp$48$var148 = var148;
 																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					for(int index$sample$161 = 0; index$sample$161 < noSamples; index$sample$161 += 1) {
-																						for(int index$timeStep$162 = 1; index$timeStep$162 < length$metric[index$sample$161]; index$timeStep$162 += 1) {
-																							if(!((index$sample$161 == index$sample$23) && (index$timeStep$162 == index$timeStep$22))) {
-																								// Enumerating the possible outputs of Categorical 120.
-																								for(int index$sample123$163 = 0; index$sample123$163 < noStates; index$sample123$163 += 1) {
-																									int distributionTempVariable$var121$165 = index$sample123$163;
-																									
-																									// Update the probability of sampling this value from the distribution value.
-																									double cv$probabilitySample123Value164 = (1.0 * distribution$sample123[((index$sample$161 - 0) / 1)][((index$timeStep$162 - 1) / 1)][index$sample123$163]);
-																									int traceTempVariable$currentState$166_1 = cv$currentValue;
-																									if((index$sample$161 == index$sample$73_2)) {
-																										if((index$timeStep$162 == timeStep$var136)) {
-																											if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																												for(int var50 = 0; var50 < noStates; var50 += 1) {
-																													if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																														if((var50 == st[index$sample$73_2][timeStep$var136])) {
-																															for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																																	if((var66 == st[index$sample$73_2][timeStep$var136])) {
-																																		{
-																																			{
-																																				if(metric_valid_g[index$sample$73_2][timeStep$var136]) {
-																																					double cv$temp$48$var148;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var148 = metric_mean[traceTempVariable$currentState$166_1];
-																																						cv$temp$48$var148 = var148;
-																																					}
-																																					double cv$temp$49$var149;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var149 = metric_var[traceTempVariable$currentState$166_1];
-																																						cv$temp$49$var149 = var149;
-																																					}
-																																					
-																																					// Record the probability of sample task 157 generating output with current configuration.
-																																					if(((Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))) < cv$accumulatedConsumerProbabilities))
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																					else {
-																																						// If the second value is -infinity.
-																																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149))));
-																																						else
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))));
-																																					}
-																																					
-																																					// Recorded the probability of reaching sample task 157 with the current configuration.
-																																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value164);
-																																				}
-																																			}
-																																		}
-																																	}
+																																double cv$temp$49$var149;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var149 = metric_var[traceTempVariable$currentState$166_1];
+																																	cv$temp$49$var149 = var149;
 																																}
+																																
+																																// Record the probability of sample task 157 generating output with current configuration.
+																																if(((Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																else {
+																																	// If the second value is -infinity.
+																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149))));
+																																	else
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value164) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$73_2][timeStep$var136] - cv$temp$48$var148) / Math.sqrt(cv$temp$49$var149))) - (0.5 * Math.log(cv$temp$49$var149)))));
+																																}
+																																
+																																// Recorded the probability of reaching sample task 157 with the current configuration.
+																																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value164);
 																															}
 																														}
 																													}
@@ -4724,22 +4518,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																						}
 																					}
 																				}
-																				
-																				// A check to ensure rounding of floating point values can never result in a negative
-																				// value.
-																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																				
-																				// Multiply (log space add) in the probability of the sample task to the overall probability
-																				// for this configuration of the source random variable.
-																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																				else {
-																					// If the second value is -infinity.
-																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																					else
-																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																				}
+																			}
+																			
+																			// A check to ensure rounding of floating point values can never result in a negative
+																			// value.
+																			cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																			
+																			// Multiply (log space add) in the probability of the sample task to the overall probability
+																			// for this configuration of the source random variable.
+																			if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																				else
+																					cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																			}
 																		}
 																	}
@@ -4788,16 +4582,16 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
 													cv$temp$2$var119 = var119;
 												}
-												int cv$temp$3$$var2828;
+												int cv$temp$3$$var2852;
 												{
 													// Constructing a random variable input for use later.
-													int $var2828 = noStates;
-													cv$temp$3$$var2828 = $var2828;
+													int $var2852 = noStates;
+													cv$temp$3$$var2852 = $var2852;
 												}
 												
 												// An accumulator to allow the value for each distribution to be constructed before
 												// it is added to the index probabilities.
-												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample104Value27) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var2828))?Math.log(cv$temp$2$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample104Value27) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var2852))?Math.log(cv$temp$2$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												
 												// Processing random variable 120.
 												{
@@ -4922,226 +4716,98 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				
 																				// Processing sample task 157 of consumer random variable null.
 																				{
-																					if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																						// Set an accumulator to sum the probabilities for each possible configuration of
-																						// inputs.
-																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																						
-																						// Set an accumulator to record the consumer distributions not seen. Initially set
-																						// to 1 as seen values will be deducted from this value.
-																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																						{
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							for(int var50 = 0; var50 < noStates; var50 += 1) {
-																								if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																									if((var50 == st[index$sample$70_2][timeStep$var136])) {
-																										int traceTempVariable$currentState$99_1 = distributionTempVariable$var102$28;
-																										if((index$sample$25 == index$sample$70_2)) {
-																											if((0 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$70_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																			double cv$temp$18$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$99_1];
-																																				cv$temp$18$var148 = var148;
-																																			}
-																																			double cv$temp$19$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$99_1];
-																																				cv$temp$19$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																		}
-																																	}
-																																}
-																															}
+																					// Set an accumulator to sum the probabilities for each possible configuration of
+																					// inputs.
+																					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																					
+																					// Set an accumulator to record the consumer distributions not seen. Initially set
+																					// to 1 as seen values will be deducted from this value.
+																					double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																					{
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$70_2][timeStep$var136])) {
+																								int traceTempVariable$currentState$99_1 = distributionTempVariable$var102$28;
+																								if((index$sample$25 == index$sample$70_2)) {
+																									if((0 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$70_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$18$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$99_1];
+																															cv$temp$18$var148 = var148;
 																														}
-																													}
-																												}
-																											}
-																										}
-																										for(int index$sample$100 = 0; index$sample$100 < noSamples; index$sample$100 += 1) {
-																											if(!(index$sample$100 == index$sample$25)) {
-																												// Enumerating the possible outputs of Categorical 101.
-																												for(int index$sample104$101 = 0; index$sample104$101 < noStates; index$sample104$101 += 1) {
-																													int distributionTempVariable$var102$103 = index$sample104$101;
-																													
-																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample104Value102 = (1.0 * distribution$sample104[((index$sample$100 - 0) / 1)][index$sample104$101]);
-																													int traceTempVariable$currentState$104_1 = distributionTempVariable$var102$28;
-																													if((index$sample$100 == index$sample$70_2)) {
-																														if((0 == timeStep$var136)) {
-																															if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																	if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																		if((var66 == st[index$sample$70_2][timeStep$var136])) {
-																																			{
-																																				{
-																																					if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																						double cv$temp$20$var148;
-																																						{
-																																							// Constructing a random variable input for use later.
-																																							double var148 = metric_mean[traceTempVariable$currentState$104_1];
-																																							cv$temp$20$var148 = var148;
-																																						}
-																																						double cv$temp$21$var149;
-																																						{
-																																							// Constructing a random variable input for use later.
-																																							double var149 = metric_var[traceTempVariable$currentState$104_1];
-																																							cv$temp$21$var149 = var149;
-																																						}
-																																						
-																																						// Record the probability of sample task 157 generating output with current configuration.
-																																						if(((Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																						else {
-																																							// If the second value is -infinity.
-																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149))));
-																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))));
-																																						}
-																																						
-																																						// Recorded the probability of reaching sample task 157 with the current configuration.
-																																						cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value102);
-																																					}
-																																				}
-																																			}
-																																		}
-																																	}
-																																}
-																															}
+																														double cv$temp$19$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$99_1];
+																															cv$temp$19$var149 = var149;
 																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							for(int var50 = 0; var50 < noStates; var50 += 1) {
-																								if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																									if((var50 == st[index$sample$70_2][timeStep$var136])) {
-																										int traceTempVariable$currentState$108_1 = cv$currentValue;
-																										if((index$sample$23 == index$sample$70_2)) {
-																											if((index$timeStep$22 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$70_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																			double cv$temp$22$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$108_1];
-																																				cv$temp$22$var148 = var148;
-																																			}
-																																			double cv$temp$23$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$108_1];
-																																				cv$temp$23$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																										for(int index$sample$109 = 0; index$sample$109 < noSamples; index$sample$109 += 1) {
-																											for(int index$timeStep$110 = 1; index$timeStep$110 < length$metric[index$sample$109]; index$timeStep$110 += 1) {
-																												if(!((index$sample$109 == index$sample$23) && (index$timeStep$110 == index$timeStep$22))) {
-																													// Enumerating the possible outputs of Categorical 120.
-																													for(int index$sample123$111 = 0; index$sample123$111 < noStates; index$sample123$111 += 1) {
-																														int distributionTempVariable$var121$113 = index$sample123$111;
 																														
-																														// Update the probability of sampling this value from the distribution value.
-																														double cv$probabilitySample123Value112 = (1.0 * distribution$sample123[((index$sample$109 - 0) / 1)][((index$timeStep$110 - 1) / 1)][index$sample123$111]);
-																														int traceTempVariable$currentState$114_1 = cv$currentValue;
-																														if((index$sample$109 == index$sample$70_2)) {
-																															if((index$timeStep$110 == timeStep$var136)) {
-																																if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																	for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																		if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																			if((var66 == st[index$sample$70_2][timeStep$var136])) {
-																																				{
-																																					{
-																																						if(metric_valid_g[index$sample$70_2][timeStep$var136]) {
-																																							double cv$temp$24$var148;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var148 = metric_mean[traceTempVariable$currentState$114_1];
-																																								cv$temp$24$var148 = var148;
-																																							}
-																																							double cv$temp$25$var149;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var149 = metric_var[traceTempVariable$currentState$114_1];
-																																								cv$temp$25$var149 = var149;
-																																							}
-																																							
-																																							// Record the probability of sample task 157 generating output with current configuration.
-																																							if(((Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) < cv$accumulatedConsumerProbabilities))
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																							else {
-																																								// If the second value is -infinity.
-																																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149))));
-																																								else
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))));
-																																							}
-																																							
-																																							// Recorded the probability of reaching sample task 157 with the current configuration.
-																																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value112);
-																																						}
-																																					}
-																																				}
-																																			}
-																																		}
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																								for(int index$sample$100 = 0; index$sample$100 < noSamples; index$sample$100 += 1) {
+																									if(!(index$sample$100 == index$sample$25)) {
+																										// Enumerating the possible outputs of Categorical 101.
+																										for(int index$sample104$101 = 0; index$sample104$101 < noStates; index$sample104$101 += 1) {
+																											int distributionTempVariable$var102$103 = index$sample104$101;
+																											
+																											// Update the probability of sampling this value from the distribution value.
+																											double cv$probabilitySample104Value102 = (1.0 * distribution$sample104[((index$sample$100 - 0) / 1)][index$sample104$101]);
+																											int traceTempVariable$currentState$104_1 = distributionTempVariable$var102$28;
+																											if((index$sample$100 == index$sample$70_2)) {
+																												if((0 == timeStep$var136)) {
+																													for(int var66 = 0; var66 < noStates; var66 += 1) {
+																														if((var66 == st[index$sample$70_2][timeStep$var136])) {
+																															{
+																																{
+																																	double cv$temp$20$var148;
+																																	{
+																																		// Constructing a random variable input for use later.
+																																		double var148 = metric_mean[traceTempVariable$currentState$104_1];
+																																		cv$temp$20$var148 = var148;
 																																	}
+																																	double cv$temp$21$var149;
+																																	{
+																																		// Constructing a random variable input for use later.
+																																		double var149 = metric_var[traceTempVariable$currentState$104_1];
+																																		cv$temp$21$var149 = var149;
+																																	}
+																																	
+																																	// Record the probability of sample task 157 generating output with current configuration.
+																																	if(((Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) < cv$accumulatedConsumerProbabilities))
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																	else {
+																																		// If the second value is -infinity.
+																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149))));
+																																		else
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value102) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))));
+																																	}
+																																	
+																																	// Recorded the probability of reaching sample task 157 with the current configuration.
+																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value102);
 																																}
 																															}
 																														}
@@ -5154,21 +4820,119 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																							}
 																						}
 																						
-																						// A check to ensure rounding of floating point values can never result in a negative
-																						// value.
-																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																						
-																						// Multiply (log space add) in the probability of the sample task to the overall probability
-																						// for this configuration of the source random variable.
-																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																						else {
-																							// If the second value is -infinity.
-																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																							else
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$70_2][timeStep$var136])) {
+																								int traceTempVariable$currentState$108_1 = cv$currentValue;
+																								if((index$sample$23 == index$sample$70_2)) {
+																									if((index$timeStep$22 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$70_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$22$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$108_1];
+																															cv$temp$22$var148 = var148;
+																														}
+																														double cv$temp$23$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$108_1];
+																															cv$temp$23$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																								for(int index$sample$109 = 0; index$sample$109 < noSamples; index$sample$109 += 1) {
+																									for(int index$timeStep$110 = 1; index$timeStep$110 < length$metric[index$sample$109]; index$timeStep$110 += 1) {
+																										if(!((index$sample$109 == index$sample$23) && (index$timeStep$110 == index$timeStep$22))) {
+																											// Enumerating the possible outputs of Categorical 120.
+																											for(int index$sample123$111 = 0; index$sample123$111 < noStates; index$sample123$111 += 1) {
+																												int distributionTempVariable$var121$113 = index$sample123$111;
+																												
+																												// Update the probability of sampling this value from the distribution value.
+																												double cv$probabilitySample123Value112 = (1.0 * distribution$sample123[((index$sample$109 - 0) / 1)][((index$timeStep$110 - 1) / 1)][index$sample123$111]);
+																												int traceTempVariable$currentState$114_1 = cv$currentValue;
+																												if((index$sample$109 == index$sample$70_2)) {
+																													if((index$timeStep$110 == timeStep$var136)) {
+																														for(int var66 = 0; var66 < noStates; var66 += 1) {
+																															if((var66 == st[index$sample$70_2][timeStep$var136])) {
+																																{
+																																	{
+																																		double cv$temp$24$var148;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var148 = metric_mean[traceTempVariable$currentState$114_1];
+																																			cv$temp$24$var148 = var148;
+																																		}
+																																		double cv$temp$25$var149;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var149 = metric_var[traceTempVariable$currentState$114_1];
+																																			cv$temp$25$var149 = var149;
+																																		}
+																																		
+																																		// Record the probability of sample task 157 generating output with current configuration.
+																																		if(((Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) < cv$accumulatedConsumerProbabilities))
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																		else {
+																																			// If the second value is -infinity.
+																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																				cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149))));
+																																			else
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value112) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$70_2][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))));
+																																		}
+																																		
+																																		// Recorded the probability of reaching sample task 157 with the current configuration.
+																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value112);
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
 																						}
+																					}
+																					
+																					// A check to ensure rounding of floating point values can never result in a negative
+																					// value.
+																					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																					
+																					// Multiply (log space add) in the probability of the sample task to the overall probability
+																					// for this configuration of the source random variable.
+																					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																						else
+																							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																					}
 																				}
 																			}
@@ -5189,58 +4953,102 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				
 																				// Processing sample task 157 of consumer random variable null.
 																				{
-																					if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																						// Set an accumulator to sum the probabilities for each possible configuration of
-																						// inputs.
-																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																						
-																						// Set an accumulator to record the consumer distributions not seen. Initially set
-																						// to 1 as seen values will be deducted from this value.
-																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																						{
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							int traceTempVariable$currentState$171_1 = distributionTempVariable$var102$28;
-																							if((index$sample$25 == index$sample$74_2)) {
-																								if((0 == timeStep$var136)) {
-																									if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																										for(int var50 = 0; var50 < noStates; var50 += 1) {
-																											if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
+																					// Set an accumulator to sum the probabilities for each possible configuration of
+																					// inputs.
+																					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																					
+																					// Set an accumulator to record the consumer distributions not seen. Initially set
+																					// to 1 as seen values will be deducted from this value.
+																					double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																					{
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						int traceTempVariable$currentState$171_1 = distributionTempVariable$var102$28;
+																						if((index$sample$25 == index$sample$74_2)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[index$sample$74_2][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$74_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$50$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$171_1];
+																															cv$temp$50$var148 = var148;
+																														}
+																														double cv$temp$51$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$171_1];
+																															cv$temp$51$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																						for(int index$sample$172 = 0; index$sample$172 < noSamples; index$sample$172 += 1) {
+																							if(!(index$sample$172 == index$sample$25)) {
+																								// Enumerating the possible outputs of Categorical 101.
+																								for(int index$sample104$173 = 0; index$sample104$173 < noStates; index$sample104$173 += 1) {
+																									int distributionTempVariable$var102$175 = index$sample104$173;
+																									
+																									// Update the probability of sampling this value from the distribution value.
+																									double cv$probabilitySample104Value174 = (1.0 * distribution$sample104[((index$sample$172 - 0) / 1)][index$sample104$173]);
+																									int traceTempVariable$currentState$176_1 = distributionTempVariable$var102$28;
+																									if((index$sample$172 == index$sample$74_2)) {
+																										if((0 == timeStep$var136)) {
+																											for(int var50 = 0; var50 < noStates; var50 += 1) {
 																												if((var50 == st[index$sample$74_2][timeStep$var136])) {
 																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$74_2][timeStep$var136])) {
+																														if((var66 == st[index$sample$74_2][timeStep$var136])) {
+																															{
 																																{
+																																	double cv$temp$52$var148;
 																																	{
-																																		if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																			double cv$temp$50$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$171_1];
-																																				cv$temp$50$var148 = var148;
-																																			}
-																																			double cv$temp$51$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$171_1];
-																																				cv$temp$51$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$50$var148) / Math.sqrt(cv$temp$51$var149))) - (0.5 * Math.log(cv$temp$51$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																		}
+																																		// Constructing a random variable input for use later.
+																																		double var148 = metric_mean[traceTempVariable$currentState$176_1];
+																																		cv$temp$52$var148 = var148;
 																																	}
+																																	double cv$temp$53$var149;
+																																	{
+																																		// Constructing a random variable input for use later.
+																																		double var149 = metric_var[traceTempVariable$currentState$176_1];
+																																		cv$temp$53$var149 = var149;
+																																	}
+																																	
+																																	// Record the probability of sample task 157 generating output with current configuration.
+																																	if(((Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))) < cv$accumulatedConsumerProbabilities))
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																	else {
+																																		// If the second value is -infinity.
+																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149))));
+																																		else
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))));
+																																	}
+																																	
+																																	// Recorded the probability of reaching sample task 157 with the current configuration.
+																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value174);
 																																}
 																															}
 																														}
@@ -5251,175 +5059,97 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																									}
 																								}
 																							}
-																							for(int index$sample$172 = 0; index$sample$172 < noSamples; index$sample$172 += 1) {
-																								if(!(index$sample$172 == index$sample$25)) {
-																									// Enumerating the possible outputs of Categorical 101.
-																									for(int index$sample104$173 = 0; index$sample104$173 < noStates; index$sample104$173 += 1) {
-																										int distributionTempVariable$var102$175 = index$sample104$173;
+																						}
+																						
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						int traceTempVariable$currentState$181_1 = cv$currentValue;
+																						if((index$sample$23 == index$sample$74_2)) {
+																							if((index$timeStep$22 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[index$sample$74_2][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$74_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$54$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$181_1];
+																															cv$temp$54$var148 = var148;
+																														}
+																														double cv$temp$55$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$181_1];
+																															cv$temp$55$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																						for(int index$sample$182 = 0; index$sample$182 < noSamples; index$sample$182 += 1) {
+																							for(int index$timeStep$183 = 1; index$timeStep$183 < length$metric[index$sample$182]; index$timeStep$183 += 1) {
+																								if(!((index$sample$182 == index$sample$23) && (index$timeStep$183 == index$timeStep$22))) {
+																									// Enumerating the possible outputs of Categorical 120.
+																									for(int index$sample123$184 = 0; index$sample123$184 < noStates; index$sample123$184 += 1) {
+																										int distributionTempVariable$var121$186 = index$sample123$184;
 																										
 																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample104Value174 = (1.0 * distribution$sample104[((index$sample$172 - 0) / 1)][index$sample104$173]);
-																										int traceTempVariable$currentState$176_1 = distributionTempVariable$var102$28;
-																										if((index$sample$172 == index$sample$74_2)) {
-																											if((0 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																													for(int var50 = 0; var50 < noStates; var50 += 1) {
-																														if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																															if((var50 == st[index$sample$74_2][timeStep$var136])) {
-																																for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																	if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																		if((var66 == st[index$sample$74_2][timeStep$var136])) {
-																																			{
-																																				{
-																																					if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																						double cv$temp$52$var148;
-																																						{
-																																							// Constructing a random variable input for use later.
-																																							double var148 = metric_mean[traceTempVariable$currentState$176_1];
-																																							cv$temp$52$var148 = var148;
-																																						}
-																																						double cv$temp$53$var149;
-																																						{
-																																							// Constructing a random variable input for use later.
-																																							double var149 = metric_var[traceTempVariable$currentState$176_1];
-																																							cv$temp$53$var149 = var149;
-																																						}
-																																						
-																																						// Record the probability of sample task 157 generating output with current configuration.
-																																						if(((Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																						else {
-																																							// If the second value is -infinity.
-																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149))));
-																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value174) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$52$var148) / Math.sqrt(cv$temp$53$var149))) - (0.5 * Math.log(cv$temp$53$var149)))));
-																																						}
-																																						
-																																						// Recorded the probability of reaching sample task 157 with the current configuration.
-																																						cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value174);
-																																					}
-																																				}
-																																			}
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							int traceTempVariable$currentState$181_1 = cv$currentValue;
-																							if((index$sample$23 == index$sample$74_2)) {
-																								if((index$timeStep$22 == timeStep$var136)) {
-																									if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																										for(int var50 = 0; var50 < noStates; var50 += 1) {
-																											if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																												if((var50 == st[index$sample$74_2][timeStep$var136])) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
+																										double cv$probabilitySample123Value185 = (1.0 * distribution$sample123[((index$sample$182 - 0) / 1)][((index$timeStep$183 - 1) / 1)][index$sample123$184]);
+																										int traceTempVariable$currentState$187_1 = cv$currentValue;
+																										if((index$sample$182 == index$sample$74_2)) {
+																											if((index$timeStep$183 == timeStep$var136)) {
+																												for(int var50 = 0; var50 < noStates; var50 += 1) {
+																													if((var50 == st[index$sample$74_2][timeStep$var136])) {
+																														for(int var66 = 0; var66 < noStates; var66 += 1) {
 																															if((var66 == st[index$sample$74_2][timeStep$var136])) {
 																																{
 																																	{
-																																		if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																			double cv$temp$54$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$181_1];
-																																				cv$temp$54$var148 = var148;
-																																			}
-																																			double cv$temp$55$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$181_1];
-																																				cv$temp$55$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$54$var148) / Math.sqrt(cv$temp$55$var149))) - (0.5 * Math.log(cv$temp$55$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																																		double cv$temp$56$var148;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var148 = metric_mean[traceTempVariable$currentState$187_1];
+																																			cv$temp$56$var148 = var148;
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							for(int index$sample$182 = 0; index$sample$182 < noSamples; index$sample$182 += 1) {
-																								for(int index$timeStep$183 = 1; index$timeStep$183 < length$metric[index$sample$182]; index$timeStep$183 += 1) {
-																									if(!((index$sample$182 == index$sample$23) && (index$timeStep$183 == index$timeStep$22))) {
-																										// Enumerating the possible outputs of Categorical 120.
-																										for(int index$sample123$184 = 0; index$sample123$184 < noStates; index$sample123$184 += 1) {
-																											int distributionTempVariable$var121$186 = index$sample123$184;
-																											
-																											// Update the probability of sampling this value from the distribution value.
-																											double cv$probabilitySample123Value185 = (1.0 * distribution$sample123[((index$sample$182 - 0) / 1)][((index$timeStep$183 - 1) / 1)][index$sample123$184]);
-																											int traceTempVariable$currentState$187_1 = cv$currentValue;
-																											if((index$sample$182 == index$sample$74_2)) {
-																												if((index$timeStep$183 == timeStep$var136)) {
-																													if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																														for(int var50 = 0; var50 < noStates; var50 += 1) {
-																															if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																if((var50 == st[index$sample$74_2][timeStep$var136])) {
-																																	for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																		if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																			if((var66 == st[index$sample$74_2][timeStep$var136])) {
-																																				{
-																																					{
-																																						if(metric_valid_g[index$sample$74_2][timeStep$var136]) {
-																																							double cv$temp$56$var148;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var148 = metric_mean[traceTempVariable$currentState$187_1];
-																																								cv$temp$56$var148 = var148;
-																																							}
-																																							double cv$temp$57$var149;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var149 = metric_var[traceTempVariable$currentState$187_1];
-																																								cv$temp$57$var149 = var149;
-																																							}
-																																							
-																																							// Record the probability of sample task 157 generating output with current configuration.
-																																							if(((Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))) < cv$accumulatedConsumerProbabilities))
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																							else {
-																																								// If the second value is -infinity.
-																																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149))));
-																																								else
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))));
-																																							}
-																																							
-																																							// Recorded the probability of reaching sample task 157 with the current configuration.
-																																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value185);
-																																						}
-																																					}
-																																				}
-																																			}
+																																		double cv$temp$57$var149;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var149 = metric_var[traceTempVariable$currentState$187_1];
+																																			cv$temp$57$var149 = var149;
 																																		}
+																																		
+																																		// Record the probability of sample task 157 generating output with current configuration.
+																																		if(((Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))) < cv$accumulatedConsumerProbabilities))
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																		else {
+																																			// If the second value is -infinity.
+																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																				cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149))));
+																																			else
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value185) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$74_2][timeStep$var136] - cv$temp$56$var148) / Math.sqrt(cv$temp$57$var149))) - (0.5 * Math.log(cv$temp$57$var149)))));
+																																		}
+																																		
+																																		// Recorded the probability of reaching sample task 157 with the current configuration.
+																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value185);
 																																	}
 																																}
 																															}
@@ -5432,22 +5162,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																								}
 																							}
 																						}
-																						
-																						// A check to ensure rounding of floating point values can never result in a negative
-																						// value.
-																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																						
-																						// Multiply (log space add) in the probability of the sample task to the overall probability
-																						// for this configuration of the source random variable.
-																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																						else {
-																							// If the second value is -infinity.
-																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																							else
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																						}
+																					}
+																					
+																					// A check to ensure rounding of floating point values can never result in a negative
+																					// value.
+																					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																					
+																					// Multiply (log space add) in the probability of the sample task to the overall probability
+																					// for this configuration of the source random variable.
+																					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																						else
+																							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																					}
 																				}
 																			}
@@ -5493,16 +5223,16 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double[] var119 = m[traceTempVariable$var118$32_1];
 									cv$temp$4$var119 = var119;
 								}
-								int cv$temp$5$$var2829;
+								int cv$temp$5$$var2853;
 								{
 									// Constructing a random variable input for use later.
-									int $var2829 = noStates;
-									cv$temp$5$$var2829 = $var2829;
+									int $var2853 = noStates;
+									cv$temp$5$$var2853 = $var2853;
 								}
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var2829))?Math.log(cv$temp$4$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var2853))?Math.log(cv$temp$4$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 120.
 								{
@@ -5627,118 +5357,52 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																
 																// Processing sample task 157 of consumer random variable null.
 																{
-																	if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																		// Set an accumulator to sum the probabilities for each possible configuration of
-																		// inputs.
-																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																		
-																		// Set an accumulator to record the consumer distributions not seen. Initially set
-																		// to 1 as seen values will be deducted from this value.
-																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																		{
-																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																			// the output of Sample task 123.
-																			for(int var50 = 0; var50 < noStates; var50 += 1) {
-																				if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																					if((var50 == st[index$sample$71_2][timeStep$var136])) {
-																						if(fixedFlag$sample104) {
-																							for(int index$sample$118_1 = 0; index$sample$118_1 < noSamples; index$sample$118_1 += 1) {
-																								if((index$sample$118_1 == index$sample$71_2)) {
-																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																													if((var66 == st[index$sample$71_2][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																																	double cv$temp$26$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[traceTempVariable$currentState$71_1];
-																																		cv$temp$26$var148 = var148;
-																																	}
-																																	double cv$temp$27$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[traceTempVariable$currentState$71_1];
-																																		cv$temp$27$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																}
-																															}
-																														}
-																													}
+																	// Set an accumulator to sum the probabilities for each possible configuration of
+																	// inputs.
+																	double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																	
+																	// Set an accumulator to record the consumer distributions not seen. Initially set
+																	// to 1 as seen values will be deducted from this value.
+																	double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																	{
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 123.
+																		for(int var50 = 0; var50 < noStates; var50 += 1) {
+																			if((var50 == st[index$sample$71_2][timeStep$var136])) {
+																				if(fixedFlag$sample104) {
+																					for(int index$sample$118_1 = 0; index$sample$118_1 < noSamples; index$sample$118_1 += 1) {
+																						if((index$sample$118_1 == index$sample$71_2)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[index$sample$71_2][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$26$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[traceTempVariable$currentState$71_1];
+																													cv$temp$26$var148 = var148;
 																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						} else {
-																							for(int index$sample$119 = 0; index$sample$119 < noSamples; index$sample$119 += 1) {
-																								if(true) {
-																									// Enumerating the possible outputs of Categorical 101.
-																									for(int index$sample104$120 = 0; index$sample104$120 < noStates; index$sample104$120 += 1) {
-																										int distributionTempVariable$var102$122 = index$sample104$120;
-																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample104Value121 = (1.0 * distribution$sample104[((index$sample$119 - 0) / 1)][index$sample104$120]);
-																										if((index$sample$119 == index$sample$71_2)) {
-																											if((0 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$71_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																																			double cv$temp$28$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$71_1];
-																																				cv$temp$28$var148 = var148;
-																																			}
-																																			double cv$temp$29$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$71_1];
-																																				cv$temp$29$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value121);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
+																												double cv$temp$27$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[traceTempVariable$currentState$71_1];
+																													cv$temp$27$var149 = var149;
 																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																											}
 																										}
 																									}
@@ -5746,109 +5410,47 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																							}
 																						}
 																					}
-																				}
-																			}
-																			
-																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																			// the output of Sample task 123.
-																			for(int var50 = 0; var50 < noStates; var50 += 1) {
-																				if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																					if((var50 == st[index$sample$71_2][timeStep$var136])) {
-																						int traceTempVariable$currentState$127_1 = cv$currentValue;
-																						if((index$sample$23 == index$sample$71_2)) {
-																							if((index$timeStep$22 == timeStep$var136)) {
-																								if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
+																				} else {
+																					for(int index$sample$119 = 0; index$sample$119 < noSamples; index$sample$119 += 1) {
+																						if(true) {
+																							// Enumerating the possible outputs of Categorical 101.
+																							for(int index$sample104$120 = 0; index$sample104$120 < noStates; index$sample104$120 += 1) {
+																								int distributionTempVariable$var102$122 = index$sample104$120;
+																								
+																								// Update the probability of sampling this value from the distribution value.
+																								double cv$probabilitySample104Value121 = (1.0 * distribution$sample104[((index$sample$119 - 0) / 1)][index$sample104$120]);
+																								if((index$sample$119 == index$sample$71_2)) {
+																									if((0 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
 																											if((var66 == st[index$sample$71_2][timeStep$var136])) {
 																												{
 																													{
-																														if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																															double cv$temp$30$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[traceTempVariable$currentState$127_1];
-																																cv$temp$30$var148 = var148;
-																															}
-																															double cv$temp$31$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[traceTempVariable$currentState$127_1];
-																																cv$temp$31$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																														double cv$temp$28$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$71_1];
+																															cv$temp$28$var148 = var148;
 																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																						for(int index$sample$128 = 0; index$sample$128 < noSamples; index$sample$128 += 1) {
-																							for(int index$timeStep$129 = 1; index$timeStep$129 < length$metric[index$sample$128]; index$timeStep$129 += 1) {
-																								if(!((index$sample$128 == index$sample$23) && (index$timeStep$129 == index$timeStep$22))) {
-																									// Enumerating the possible outputs of Categorical 120.
-																									for(int index$sample123$130 = 0; index$sample123$130 < noStates; index$sample123$130 += 1) {
-																										int distributionTempVariable$var121$132 = index$sample123$130;
-																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample123Value131 = (1.0 * distribution$sample123[((index$sample$128 - 0) / 1)][((index$timeStep$129 - 1) / 1)][index$sample123$130]);
-																										int traceTempVariable$currentState$133_1 = cv$currentValue;
-																										if((index$sample$128 == index$sample$71_2)) {
-																											if((index$timeStep$129 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$71_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$71_2][timeStep$var136]) {
-																																			double cv$temp$32$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$133_1];
-																																				cv$temp$32$var148 = var148;
-																																			}
-																																			double cv$temp$33$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$133_1];
-																																				cv$temp$33$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value131);
-																																		}
-																																	}
-																																}
-																															}
+																														double cv$temp$29$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$71_1];
+																															cv$temp$29$var149 = var149;
 																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value121) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value121);
 																													}
 																												}
 																											}
@@ -5862,21 +5464,119 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			}
 																		}
 																		
-																		// A check to ensure rounding of floating point values can never result in a negative
-																		// value.
-																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																		
-																		// Multiply (log space add) in the probability of the sample task to the overall probability
-																		// for this configuration of the source random variable.
-																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																			else
-																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 123.
+																		for(int var50 = 0; var50 < noStates; var50 += 1) {
+																			if((var50 == st[index$sample$71_2][timeStep$var136])) {
+																				int traceTempVariable$currentState$127_1 = cv$currentValue;
+																				if((index$sample$23 == index$sample$71_2)) {
+																					if((index$timeStep$22 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[index$sample$71_2][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$30$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[traceTempVariable$currentState$127_1];
+																											cv$temp$30$var148 = var148;
+																										}
+																										double cv$temp$31$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[traceTempVariable$currentState$127_1];
+																											cv$temp$31$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$30$var148) / Math.sqrt(cv$temp$31$var149))) - (0.5 * Math.log(cv$temp$31$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																				for(int index$sample$128 = 0; index$sample$128 < noSamples; index$sample$128 += 1) {
+																					for(int index$timeStep$129 = 1; index$timeStep$129 < length$metric[index$sample$128]; index$timeStep$129 += 1) {
+																						if(!((index$sample$128 == index$sample$23) && (index$timeStep$129 == index$timeStep$22))) {
+																							// Enumerating the possible outputs of Categorical 120.
+																							for(int index$sample123$130 = 0; index$sample123$130 < noStates; index$sample123$130 += 1) {
+																								int distributionTempVariable$var121$132 = index$sample123$130;
+																								
+																								// Update the probability of sampling this value from the distribution value.
+																								double cv$probabilitySample123Value131 = (1.0 * distribution$sample123[((index$sample$128 - 0) / 1)][((index$timeStep$129 - 1) / 1)][index$sample123$130]);
+																								int traceTempVariable$currentState$133_1 = cv$currentValue;
+																								if((index$sample$128 == index$sample$71_2)) {
+																									if((index$timeStep$129 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$71_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$32$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$133_1];
+																															cv$temp$32$var148 = var148;
+																														}
+																														double cv$temp$33$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$133_1];
+																															cv$temp$33$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value131) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$71_2][timeStep$var136] - cv$temp$32$var148) / Math.sqrt(cv$temp$33$var149))) - (0.5 * Math.log(cv$temp$33$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value131);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
 																		}
+																	}
+																	
+																	// A check to ensure rounding of floating point values can never result in a negative
+																	// value.
+																	cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																	
+																	// Multiply (log space add) in the probability of the sample task to the overall probability
+																	// for this configuration of the source random variable.
+																	if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																		else
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																	}
 																}
 															}
@@ -5897,124 +5597,52 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																
 																// Processing sample task 157 of consumer random variable null.
 																{
-																	if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																		// Set an accumulator to sum the probabilities for each possible configuration of
-																		// inputs.
-																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																		
-																		// Set an accumulator to record the consumer distributions not seen. Initially set
-																		// to 1 as seen values will be deducted from this value.
-																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																		{
-																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																			// the output of Sample task 123.
-																			if(fixedFlag$sample104) {
-																				for(int index$sample$192_1 = 0; index$sample$192_1 < noSamples; index$sample$192_1 += 1) {
-																					if((index$sample$192_1 == index$sample$75_2)) {
-																						if((0 == timeStep$var136)) {
-																							if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																								for(int var50 = 0; var50 < noStates; var50 += 1) {
-																									if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																										if((var50 == st[index$sample$75_2][timeStep$var136])) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																													if((var66 == st[index$sample$75_2][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																																	double cv$temp$58$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[traceTempVariable$currentState$75_1];
-																																		cv$temp$58$var148 = var148;
-																																	}
-																																	double cv$temp$59$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[traceTempVariable$currentState$75_1];
-																																		cv$temp$59$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																}
-																															}
-																														}
-																													}
+																	// Set an accumulator to sum the probabilities for each possible configuration of
+																	// inputs.
+																	double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																	
+																	// Set an accumulator to record the consumer distributions not seen. Initially set
+																	// to 1 as seen values will be deducted from this value.
+																	double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																	{
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 123.
+																		if(fixedFlag$sample104) {
+																			for(int index$sample$192_1 = 0; index$sample$192_1 < noSamples; index$sample$192_1 += 1) {
+																				if((index$sample$192_1 == index$sample$75_2)) {
+																					if((0 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$75_2][timeStep$var136])) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[index$sample$75_2][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$58$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[traceTempVariable$currentState$75_1];
+																													cv$temp$58$var148 = var148;
 																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			} else {
-																				for(int index$sample$193 = 0; index$sample$193 < noSamples; index$sample$193 += 1) {
-																					if(true) {
-																						// Enumerating the possible outputs of Categorical 101.
-																						for(int index$sample104$194 = 0; index$sample104$194 < noStates; index$sample104$194 += 1) {
-																							int distributionTempVariable$var102$196 = index$sample104$194;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample104Value195 = (1.0 * distribution$sample104[((index$sample$193 - 0) / 1)][index$sample104$194]);
-																							if((index$sample$193 == index$sample$75_2)) {
-																								if((0 == timeStep$var136)) {
-																									if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																										for(int var50 = 0; var50 < noStates; var50 += 1) {
-																											if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																												if((var50 == st[index$sample$75_2][timeStep$var136])) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$75_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																																			double cv$temp$60$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$75_1];
-																																				cv$temp$60$var148 = var148;
-																																			}
-																																			double cv$temp$61$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$75_1];
-																																				cv$temp$61$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value195);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
+																												double cv$temp$59$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[traceTempVariable$currentState$75_1];
+																													cv$temp$59$var149 = var149;
 																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$58$var148) / Math.sqrt(cv$temp$59$var149))) - (0.5 * Math.log(cv$temp$59$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																											}
 																										}
 																									}
@@ -6024,113 +5652,49 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																					}
 																				}
 																			}
-																			
-																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																			// the output of Sample task 123.
-																			int traceTempVariable$currentState$202_1 = cv$currentValue;
-																			if((index$sample$23 == index$sample$75_2)) {
-																				if((index$timeStep$22 == timeStep$var136)) {
-																					if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																						for(int var50 = 0; var50 < noStates; var50 += 1) {
-																							if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																								if((var50 == st[index$sample$75_2][timeStep$var136])) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
+																		} else {
+																			for(int index$sample$193 = 0; index$sample$193 < noSamples; index$sample$193 += 1) {
+																				if(true) {
+																					// Enumerating the possible outputs of Categorical 101.
+																					for(int index$sample104$194 = 0; index$sample104$194 < noStates; index$sample104$194 += 1) {
+																						int distributionTempVariable$var102$196 = index$sample104$194;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample104Value195 = (1.0 * distribution$sample104[((index$sample$193 - 0) / 1)][index$sample104$194]);
+																						if((index$sample$193 == index$sample$75_2)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[index$sample$75_2][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
 																											if((var66 == st[index$sample$75_2][timeStep$var136])) {
 																												{
 																													{
-																														if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																															double cv$temp$62$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[traceTempVariable$currentState$202_1];
-																																cv$temp$62$var148 = var148;
-																															}
-																															double cv$temp$63$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[traceTempVariable$currentState$202_1];
-																																cv$temp$63$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																														double cv$temp$60$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$75_1];
+																															cv$temp$60$var148 = var148;
 																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																			for(int index$sample$203 = 0; index$sample$203 < noSamples; index$sample$203 += 1) {
-																				for(int index$timeStep$204 = 1; index$timeStep$204 < length$metric[index$sample$203]; index$timeStep$204 += 1) {
-																					if(!((index$sample$203 == index$sample$23) && (index$timeStep$204 == index$timeStep$22))) {
-																						// Enumerating the possible outputs of Categorical 120.
-																						for(int index$sample123$205 = 0; index$sample123$205 < noStates; index$sample123$205 += 1) {
-																							int distributionTempVariable$var121$207 = index$sample123$205;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample123Value206 = (1.0 * distribution$sample123[((index$sample$203 - 0) / 1)][((index$timeStep$204 - 1) / 1)][index$sample123$205]);
-																							int traceTempVariable$currentState$208_1 = cv$currentValue;
-																							if((index$sample$203 == index$sample$75_2)) {
-																								if((index$timeStep$204 == timeStep$var136)) {
-																									if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																										for(int var50 = 0; var50 < noStates; var50 += 1) {
-																											if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																												if((var50 == st[index$sample$75_2][timeStep$var136])) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$75_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$75_2][timeStep$var136]) {
-																																			double cv$temp$64$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$208_1];
-																																				cv$temp$64$var148 = var148;
-																																			}
-																																			double cv$temp$65$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$208_1];
-																																				cv$temp$65$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value206);
-																																		}
-																																	}
-																																}
-																															}
+																														double cv$temp$61$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$75_1];
+																															cv$temp$61$var149 = var149;
 																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value195) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$60$var148) / Math.sqrt(cv$temp$61$var149))) - (0.5 * Math.log(cv$temp$61$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value195);
 																													}
 																												}
 																											}
@@ -6144,21 +5708,123 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			}
 																		}
 																		
-																		// A check to ensure rounding of floating point values can never result in a negative
-																		// value.
-																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																		
-																		// Multiply (log space add) in the probability of the sample task to the overall probability
-																		// for this configuration of the source random variable.
-																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																			else
-																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 123.
+																		int traceTempVariable$currentState$202_1 = cv$currentValue;
+																		if((index$sample$23 == index$sample$75_2)) {
+																			if((index$timeStep$22 == timeStep$var136)) {
+																				for(int var50 = 0; var50 < noStates; var50 += 1) {
+																					if((var50 == st[index$sample$75_2][timeStep$var136])) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[index$sample$75_2][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$62$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[traceTempVariable$currentState$202_1];
+																											cv$temp$62$var148 = var148;
+																										}
+																										double cv$temp$63$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[traceTempVariable$currentState$202_1];
+																											cv$temp$63$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$62$var148) / Math.sqrt(cv$temp$63$var149))) - (0.5 * Math.log(cv$temp$63$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
 																		}
+																		for(int index$sample$203 = 0; index$sample$203 < noSamples; index$sample$203 += 1) {
+																			for(int index$timeStep$204 = 1; index$timeStep$204 < length$metric[index$sample$203]; index$timeStep$204 += 1) {
+																				if(!((index$sample$203 == index$sample$23) && (index$timeStep$204 == index$timeStep$22))) {
+																					// Enumerating the possible outputs of Categorical 120.
+																					for(int index$sample123$205 = 0; index$sample123$205 < noStates; index$sample123$205 += 1) {
+																						int distributionTempVariable$var121$207 = index$sample123$205;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample123Value206 = (1.0 * distribution$sample123[((index$sample$203 - 0) / 1)][((index$timeStep$204 - 1) / 1)][index$sample123$205]);
+																						int traceTempVariable$currentState$208_1 = cv$currentValue;
+																						if((index$sample$203 == index$sample$75_2)) {
+																							if((index$timeStep$204 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[index$sample$75_2][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$75_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$64$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$208_1];
+																															cv$temp$64$var148 = var148;
+																														}
+																														double cv$temp$65$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$208_1];
+																															cv$temp$65$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value206) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$75_2][timeStep$var136] - cv$temp$64$var148) / Math.sqrt(cv$temp$65$var149))) - (0.5 * Math.log(cv$temp$65$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value206);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																	
+																	// A check to ensure rounding of floating point values can never result in a negative
+																	// value.
+																	cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																	
+																	// Multiply (log space add) in the probability of the sample task to the overall probability
+																	// for this configuration of the source random variable.
+																	if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																		else
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																	}
 																}
 															}
@@ -6207,16 +5873,16 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													double[] var119 = m[traceTempVariable$var118$38_1];
 													cv$temp$6$var119 = var119;
 												}
-												int cv$temp$7$$var2830;
+												int cv$temp$7$$var2854;
 												{
 													// Constructing a random variable input for use later.
-													int $var2830 = noStates;
-													cv$temp$7$$var2830 = $var2830;
+													int $var2854 = noStates;
+													cv$temp$7$$var2854 = $var2854;
 												}
 												
 												// An accumulator to allow the value for each distribution to be constructed before
 												// it is added to the index probabilities.
-												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample123Value36) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$7$$var2830))?Math.log(cv$temp$6$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample123Value36) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$7$$var2854))?Math.log(cv$temp$6$var119[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												
 												// Processing random variable 120.
 												{
@@ -6341,273 +6007,100 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				
 																				// Processing sample task 157 of consumer random variable null.
 																				{
-																					if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																						// Set an accumulator to sum the probabilities for each possible configuration of
-																						// inputs.
-																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																						
-																						// Set an accumulator to record the consumer distributions not seen. Initially set
-																						// to 1 as seen values will be deducted from this value.
-																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																						{
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							for(int var50 = 0; var50 < noStates; var50 += 1) {
-																								if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																									if((var50 == st[index$sample$72_2][timeStep$var136])) {
-																										if(fixedFlag$sample104) {
-																											for(int index$sample$137_1 = 0; index$sample$137_1 < noSamples; index$sample$137_1 += 1) {
-																												if((index$sample$137_1 == index$sample$72_2)) {
+																					// Set an accumulator to sum the probabilities for each possible configuration of
+																					// inputs.
+																					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																					
+																					// Set an accumulator to record the consumer distributions not seen. Initially set
+																					// to 1 as seen values will be deducted from this value.
+																					double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																					{
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$72_2][timeStep$var136])) {
+																								if(fixedFlag$sample104) {
+																									for(int index$sample$137_1 = 0; index$sample$137_1 < noSamples; index$sample$137_1 += 1) {
+																										if((index$sample$137_1 == index$sample$72_2)) {
+																											if((0 == timeStep$var136)) {
+																												for(int var66 = 0; var66 < noStates; var66 += 1) {
+																													if((var66 == st[index$sample$72_2][timeStep$var136])) {
+																														{
+																															{
+																																double cv$temp$34$var148;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var148 = metric_mean[traceTempVariable$currentState$72_1];
+																																	cv$temp$34$var148 = var148;
+																																}
+																																double cv$temp$35$var149;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var149 = metric_var[traceTempVariable$currentState$72_1];
+																																	cv$temp$35$var149 = var149;
+																																}
+																																
+																																// Record the probability of sample task 157 generating output with current configuration.
+																																if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																else {
+																																	// If the second value is -infinity.
+																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149))));
+																																	else
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))));
+																																}
+																																
+																																// Recorded the probability of reaching sample task 157 with the current configuration.
+																																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								} else {
+																									for(int index$sample$138 = 0; index$sample$138 < noSamples; index$sample$138 += 1) {
+																										if(true) {
+																											// Enumerating the possible outputs of Categorical 101.
+																											for(int index$sample104$139 = 0; index$sample104$139 < noStates; index$sample104$139 += 1) {
+																												int distributionTempVariable$var102$141 = index$sample104$139;
+																												
+																												// Update the probability of sampling this value from the distribution value.
+																												double cv$probabilitySample104Value140 = (1.0 * distribution$sample104[((index$sample$138 - 0) / 1)][index$sample104$139]);
+																												if((index$sample$138 == index$sample$72_2)) {
 																													if((0 == timeStep$var136)) {
-																														if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																															for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																	if((var66 == st[index$sample$72_2][timeStep$var136])) {
+																														for(int var66 = 0; var66 < noStates; var66 += 1) {
+																															if((var66 == st[index$sample$72_2][timeStep$var136])) {
+																																{
+																																	{
+																																		double cv$temp$36$var148;
 																																		{
-																																			{
-																																				if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																					double cv$temp$34$var148;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var148 = metric_mean[traceTempVariable$currentState$72_1];
-																																						cv$temp$34$var148 = var148;
-																																					}
-																																					double cv$temp$35$var149;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var149 = metric_var[traceTempVariable$currentState$72_1];
-																																						cv$temp$35$var149 = var149;
-																																					}
-																																					
-																																					// Record the probability of sample task 157 generating output with current configuration.
-																																					if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))) < cv$accumulatedConsumerProbabilities))
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																					else {
-																																						// If the second value is -infinity.
-																																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149))));
-																																						else
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$34$var148) / Math.sqrt(cv$temp$35$var149))) - (0.5 * Math.log(cv$temp$35$var149)))));
-																																					}
-																																					
-																																					// Recorded the probability of reaching sample task 157 with the current configuration.
-																																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																				}
-																																			}
+																																			// Constructing a random variable input for use later.
+																																			double var148 = metric_mean[traceTempVariable$currentState$72_1];
+																																			cv$temp$36$var148 = var148;
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										} else {
-																											for(int index$sample$138 = 0; index$sample$138 < noSamples; index$sample$138 += 1) {
-																												if(true) {
-																													// Enumerating the possible outputs of Categorical 101.
-																													for(int index$sample104$139 = 0; index$sample104$139 < noStates; index$sample104$139 += 1) {
-																														int distributionTempVariable$var102$141 = index$sample104$139;
-																														
-																														// Update the probability of sampling this value from the distribution value.
-																														double cv$probabilitySample104Value140 = (1.0 * distribution$sample104[((index$sample$138 - 0) / 1)][index$sample104$139]);
-																														if((index$sample$138 == index$sample$72_2)) {
-																															if((0 == timeStep$var136)) {
-																																if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																	for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																		if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																			if((var66 == st[index$sample$72_2][timeStep$var136])) {
-																																				{
-																																					{
-																																						if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																							double cv$temp$36$var148;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var148 = metric_mean[traceTempVariable$currentState$72_1];
-																																								cv$temp$36$var148 = var148;
-																																							}
-																																							double cv$temp$37$var149;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var149 = metric_var[traceTempVariable$currentState$72_1];
-																																								cv$temp$37$var149 = var149;
-																																							}
-																																							
-																																							// Record the probability of sample task 157 generating output with current configuration.
-																																							if(((Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))) < cv$accumulatedConsumerProbabilities))
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																							else {
-																																								// If the second value is -infinity.
-																																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149))));
-																																								else
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))));
-																																							}
-																																							
-																																							// Recorded the probability of reaching sample task 157 with the current configuration.
-																																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value140);
-																																						}
-																																					}
-																																				}
-																																			}
+																																		double cv$temp$37$var149;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var149 = metric_var[traceTempVariable$currentState$72_1];
+																																			cv$temp$37$var149 = var149;
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							for(int var50 = 0; var50 < noStates; var50 += 1) {
-																								if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																									if((var50 == st[index$sample$72_2][timeStep$var136])) {
-																										int traceTempVariable$currentState$146_1 = distributionTempVariable$var121$37;
-																										if((index$sample$23 == index$sample$72_2)) {
-																											if((index$timeStep$22 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$72_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																			double cv$temp$38$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$146_1];
-																																				cv$temp$38$var148 = var148;
-																																			}
-																																			double cv$temp$39$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$146_1];
-																																				cv$temp$39$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																																		
+																																		// Record the probability of sample task 157 generating output with current configuration.
+																																		if(((Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))) < cv$accumulatedConsumerProbabilities))
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																		else {
+																																			// If the second value is -infinity.
+																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																				cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149))));
+																																			else
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value140) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$36$var148) / Math.sqrt(cv$temp$37$var149))) - (0.5 * Math.log(cv$temp$37$var149)))));
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																										int traceTempVariable$currentState$147_1 = distributionTempVariable$var121$37;
-																										if((index$sample$33 == index$sample$72_2)) {
-																											if((index$timeStep$34 == timeStep$var136)) {
-																												if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$72_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																			double cv$temp$40$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$147_1];
-																																				cv$temp$40$var148 = var148;
-																																			}
-																																			double cv$temp$41$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$147_1];
-																																				cv$temp$41$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																										for(int index$sample$148 = 0; index$sample$148 < noSamples; index$sample$148 += 1) {
-																											for(int index$timeStep$149 = 1; index$timeStep$149 < length$metric[index$sample$148]; index$timeStep$149 += 1) {
-																												if((!((index$sample$148 == index$sample$23) && (index$timeStep$149 == index$timeStep$22)) && !((index$sample$148 == index$sample$33) && (index$timeStep$149 == index$timeStep$34)))) {
-																													// Enumerating the possible outputs of Categorical 120.
-																													for(int index$sample123$150 = 0; index$sample123$150 < noStates; index$sample123$150 += 1) {
-																														int distributionTempVariable$var121$152 = index$sample123$150;
-																														
-																														// Update the probability of sampling this value from the distribution value.
-																														double cv$probabilitySample123Value151 = (1.0 * distribution$sample123[((index$sample$148 - 0) / 1)][((index$timeStep$149 - 1) / 1)][index$sample123$150]);
-																														int traceTempVariable$currentState$153_1 = distributionTempVariable$var121$37;
-																														if((index$sample$148 == index$sample$72_2)) {
-																															if((index$timeStep$149 == timeStep$var136)) {
-																																if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																	for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																		if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																			if((var66 == st[index$sample$72_2][timeStep$var136])) {
-																																				{
-																																					{
-																																						if(metric_valid_g[index$sample$72_2][timeStep$var136]) {
-																																							double cv$temp$42$var148;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var148 = metric_mean[traceTempVariable$currentState$153_1];
-																																								cv$temp$42$var148 = var148;
-																																							}
-																																							double cv$temp$43$var149;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var149 = metric_var[traceTempVariable$currentState$153_1];
-																																								cv$temp$43$var149 = var149;
-																																							}
-																																							
-																																							// Record the probability of sample task 157 generating output with current configuration.
-																																							if(((Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))) < cv$accumulatedConsumerProbabilities))
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																							else {
-																																								// If the second value is -infinity.
-																																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149))));
-																																								else
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))));
-																																							}
-																																							
-																																							// Recorded the probability of reaching sample task 157 with the current configuration.
-																																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value151);
-																																						}
-																																					}
-																																				}
-																																			}
-																																		}
+																																		
+																																		// Recorded the probability of reaching sample task 157 with the current configuration.
+																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value140);
 																																	}
 																																}
 																															}
@@ -6621,21 +6114,158 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																							}
 																						}
 																						
-																						// A check to ensure rounding of floating point values can never result in a negative
-																						// value.
-																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																						
-																						// Multiply (log space add) in the probability of the sample task to the overall probability
-																						// for this configuration of the source random variable.
-																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																						else {
-																							// If the second value is -infinity.
-																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																							else
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[index$sample$72_2][timeStep$var136])) {
+																								int traceTempVariable$currentState$146_1 = distributionTempVariable$var121$37;
+																								if((index$sample$23 == index$sample$72_2)) {
+																									if((index$timeStep$22 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$72_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$38$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$146_1];
+																															cv$temp$38$var148 = var148;
+																														}
+																														double cv$temp$39$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$146_1];
+																															cv$temp$39$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$38$var148) / Math.sqrt(cv$temp$39$var149))) - (0.5 * Math.log(cv$temp$39$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																								int traceTempVariable$currentState$147_1 = distributionTempVariable$var121$37;
+																								if((index$sample$33 == index$sample$72_2)) {
+																									if((index$timeStep$34 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$72_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$40$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$147_1];
+																															cv$temp$40$var148 = var148;
+																														}
+																														double cv$temp$41$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$147_1];
+																															cv$temp$41$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$40$var148) / Math.sqrt(cv$temp$41$var149))) - (0.5 * Math.log(cv$temp$41$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																								for(int index$sample$148 = 0; index$sample$148 < noSamples; index$sample$148 += 1) {
+																									for(int index$timeStep$149 = 1; index$timeStep$149 < length$metric[index$sample$148]; index$timeStep$149 += 1) {
+																										if((!((index$sample$148 == index$sample$23) && (index$timeStep$149 == index$timeStep$22)) && !((index$sample$148 == index$sample$33) && (index$timeStep$149 == index$timeStep$34)))) {
+																											// Enumerating the possible outputs of Categorical 120.
+																											for(int index$sample123$150 = 0; index$sample123$150 < noStates; index$sample123$150 += 1) {
+																												int distributionTempVariable$var121$152 = index$sample123$150;
+																												
+																												// Update the probability of sampling this value from the distribution value.
+																												double cv$probabilitySample123Value151 = (1.0 * distribution$sample123[((index$sample$148 - 0) / 1)][((index$timeStep$149 - 1) / 1)][index$sample123$150]);
+																												int traceTempVariable$currentState$153_1 = distributionTempVariable$var121$37;
+																												if((index$sample$148 == index$sample$72_2)) {
+																													if((index$timeStep$149 == timeStep$var136)) {
+																														for(int var66 = 0; var66 < noStates; var66 += 1) {
+																															if((var66 == st[index$sample$72_2][timeStep$var136])) {
+																																{
+																																	{
+																																		double cv$temp$42$var148;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var148 = metric_mean[traceTempVariable$currentState$153_1];
+																																			cv$temp$42$var148 = var148;
+																																		}
+																																		double cv$temp$43$var149;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var149 = metric_var[traceTempVariable$currentState$153_1];
+																																			cv$temp$43$var149 = var149;
+																																		}
+																																		
+																																		// Record the probability of sample task 157 generating output with current configuration.
+																																		if(((Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))) < cv$accumulatedConsumerProbabilities))
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																		else {
+																																			// If the second value is -infinity.
+																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																				cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149))));
+																																			else
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value151) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$72_2][timeStep$var136] - cv$temp$42$var148) / Math.sqrt(cv$temp$43$var149))) - (0.5 * Math.log(cv$temp$43$var149)))));
+																																		}
+																																		
+																																		// Recorded the probability of reaching sample task 157 with the current configuration.
+																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value151);
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
 																						}
+																					}
+																					
+																					// A check to ensure rounding of floating point values can never result in a negative
+																					// value.
+																					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																					
+																					// Multiply (log space add) in the probability of the sample task to the overall probability
+																					// for this configuration of the source random variable.
+																					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																						else
+																							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																					}
 																				}
 																			}
@@ -6656,291 +6286,104 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				
 																				// Processing sample task 157 of consumer random variable null.
 																				{
-																					if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																						// Set an accumulator to sum the probabilities for each possible configuration of
-																						// inputs.
-																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																						
-																						// Set an accumulator to record the consumer distributions not seen. Initially set
-																						// to 1 as seen values will be deducted from this value.
-																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																						{
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							if(fixedFlag$sample104) {
-																								for(int index$sample$213_1 = 0; index$sample$213_1 < noSamples; index$sample$213_1 += 1) {
-																									if((index$sample$213_1 == index$sample$76_2)) {
-																										if((0 == timeStep$var136)) {
-																											if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
+																					// Set an accumulator to sum the probabilities for each possible configuration of
+																					// inputs.
+																					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																					
+																					// Set an accumulator to record the consumer distributions not seen. Initially set
+																					// to 1 as seen values will be deducted from this value.
+																					double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																					{
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						if(fixedFlag$sample104) {
+																							for(int index$sample$213_1 = 0; index$sample$213_1 < noSamples; index$sample$213_1 += 1) {
+																								if((index$sample$213_1 == index$sample$76_2)) {
+																									if((0 == timeStep$var136)) {
+																										for(int var50 = 0; var50 < noStates; var50 += 1) {
+																											if((var50 == st[index$sample$76_2][timeStep$var136])) {
+																												for(int var66 = 0; var66 < noStates; var66 += 1) {
+																													if((var66 == st[index$sample$76_2][timeStep$var136])) {
+																														{
+																															{
+																																double cv$temp$66$var148;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var148 = metric_mean[traceTempVariable$currentState$76_1];
+																																	cv$temp$66$var148 = var148;
+																																}
+																																double cv$temp$67$var149;
+																																{
+																																	// Constructing a random variable input for use later.
+																																	double var149 = metric_var[traceTempVariable$currentState$76_1];
+																																	cv$temp$67$var149 = var149;
+																																}
+																																
+																																// Record the probability of sample task 157 generating output with current configuration.
+																																if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																else {
+																																	// If the second value is -infinity.
+																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149))));
+																																	else
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))));
+																																}
+																																
+																																// Recorded the probability of reaching sample task 157 with the current configuration.
+																																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						} else {
+																							for(int index$sample$214 = 0; index$sample$214 < noSamples; index$sample$214 += 1) {
+																								if(true) {
+																									// Enumerating the possible outputs of Categorical 101.
+																									for(int index$sample104$215 = 0; index$sample104$215 < noStates; index$sample104$215 += 1) {
+																										int distributionTempVariable$var102$217 = index$sample104$215;
+																										
+																										// Update the probability of sampling this value from the distribution value.
+																										double cv$probabilitySample104Value216 = (1.0 * distribution$sample104[((index$sample$214 - 0) / 1)][index$sample104$215]);
+																										if((index$sample$214 == index$sample$76_2)) {
+																											if((0 == timeStep$var136)) {
 																												for(int var50 = 0; var50 < noStates; var50 += 1) {
-																													if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																														if((var50 == st[index$sample$76_2][timeStep$var136])) {
-																															for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																	if((var66 == st[index$sample$76_2][timeStep$var136])) {
+																													if((var50 == st[index$sample$76_2][timeStep$var136])) {
+																														for(int var66 = 0; var66 < noStates; var66 += 1) {
+																															if((var66 == st[index$sample$76_2][timeStep$var136])) {
+																																{
+																																	{
+																																		double cv$temp$68$var148;
 																																		{
-																																			{
-																																				if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																					double cv$temp$66$var148;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var148 = metric_mean[traceTempVariable$currentState$76_1];
-																																						cv$temp$66$var148 = var148;
-																																					}
-																																					double cv$temp$67$var149;
-																																					{
-																																						// Constructing a random variable input for use later.
-																																						double var149 = metric_var[traceTempVariable$currentState$76_1];
-																																						cv$temp$67$var149 = var149;
-																																					}
-																																					
-																																					// Record the probability of sample task 157 generating output with current configuration.
-																																					if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))) < cv$accumulatedConsumerProbabilities))
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																					else {
-																																						// If the second value is -infinity.
-																																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149))));
-																																						else
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$66$var148) / Math.sqrt(cv$temp$67$var149))) - (0.5 * Math.log(cv$temp$67$var149)))));
-																																					}
-																																					
-																																					// Recorded the probability of reaching sample task 157 with the current configuration.
-																																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																				}
-																																			}
+																																			// Constructing a random variable input for use later.
+																																			double var148 = metric_mean[traceTempVariable$currentState$76_1];
+																																			cv$temp$68$var148 = var148;
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							} else {
-																								for(int index$sample$214 = 0; index$sample$214 < noSamples; index$sample$214 += 1) {
-																									if(true) {
-																										// Enumerating the possible outputs of Categorical 101.
-																										for(int index$sample104$215 = 0; index$sample104$215 < noStates; index$sample104$215 += 1) {
-																											int distributionTempVariable$var102$217 = index$sample104$215;
-																											
-																											// Update the probability of sampling this value from the distribution value.
-																											double cv$probabilitySample104Value216 = (1.0 * distribution$sample104[((index$sample$214 - 0) / 1)][index$sample104$215]);
-																											if((index$sample$214 == index$sample$76_2)) {
-																												if((0 == timeStep$var136)) {
-																													if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																														for(int var50 = 0; var50 < noStates; var50 += 1) {
-																															if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																if((var50 == st[index$sample$76_2][timeStep$var136])) {
-																																	for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																		if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																			if((var66 == st[index$sample$76_2][timeStep$var136])) {
-																																				{
-																																					{
-																																						if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																							double cv$temp$68$var148;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var148 = metric_mean[traceTempVariable$currentState$76_1];
-																																								cv$temp$68$var148 = var148;
-																																							}
-																																							double cv$temp$69$var149;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var149 = metric_var[traceTempVariable$currentState$76_1];
-																																								cv$temp$69$var149 = var149;
-																																							}
-																																							
-																																							// Record the probability of sample task 157 generating output with current configuration.
-																																							if(((Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))) < cv$accumulatedConsumerProbabilities))
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																							else {
-																																								// If the second value is -infinity.
-																																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149))));
-																																								else
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))));
-																																							}
-																																							
-																																							// Recorded the probability of reaching sample task 157 with the current configuration.
-																																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value216);
-																																						}
-																																					}
-																																				}
-																																			}
+																																		double cv$temp$69$var149;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var149 = metric_var[traceTempVariable$currentState$76_1];
+																																			cv$temp$69$var149 = var149;
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							
-																							// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																							// the output of Sample task 123.
-																							int traceTempVariable$currentState$223_1 = distributionTempVariable$var121$37;
-																							if((index$sample$23 == index$sample$76_2)) {
-																								if((index$timeStep$22 == timeStep$var136)) {
-																									if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																										for(int var50 = 0; var50 < noStates; var50 += 1) {
-																											if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																												if((var50 == st[index$sample$76_2][timeStep$var136])) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$76_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																			double cv$temp$70$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$223_1];
-																																				cv$temp$70$var148 = var148;
-																																			}
-																																			double cv$temp$71$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$223_1];
-																																				cv$temp$71$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																																		
+																																		// Record the probability of sample task 157 generating output with current configuration.
+																																		if(((Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))) < cv$accumulatedConsumerProbabilities))
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																		else {
+																																			// If the second value is -infinity.
+																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																				cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149))));
+																																			else
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value216) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$68$var148) / Math.sqrt(cv$temp$69$var149))) - (0.5 * Math.log(cv$temp$69$var149)))));
 																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							int traceTempVariable$currentState$224_1 = distributionTempVariable$var121$37;
-																							if((index$sample$33 == index$sample$76_2)) {
-																								if((index$timeStep$34 == timeStep$var136)) {
-																									if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																										for(int var50 = 0; var50 < noStates; var50 += 1) {
-																											if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																												if((var50 == st[index$sample$76_2][timeStep$var136])) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																															if((var66 == st[index$sample$76_2][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																			double cv$temp$72$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[traceTempVariable$currentState$224_1];
-																																				cv$temp$72$var148 = var148;
-																																			}
-																																			double cv$temp$73$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[traceTempVariable$currentState$224_1];
-																																				cv$temp$73$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																							for(int index$sample$225 = 0; index$sample$225 < noSamples; index$sample$225 += 1) {
-																								for(int index$timeStep$226 = 1; index$timeStep$226 < length$metric[index$sample$225]; index$timeStep$226 += 1) {
-																									if((!((index$sample$225 == index$sample$23) && (index$timeStep$226 == index$timeStep$22)) && !((index$sample$225 == index$sample$33) && (index$timeStep$226 == index$timeStep$34)))) {
-																										// Enumerating the possible outputs of Categorical 120.
-																										for(int index$sample123$227 = 0; index$sample123$227 < noStates; index$sample123$227 += 1) {
-																											int distributionTempVariable$var121$229 = index$sample123$227;
-																											
-																											// Update the probability of sampling this value from the distribution value.
-																											double cv$probabilitySample123Value228 = (1.0 * distribution$sample123[((index$sample$225 - 0) / 1)][((index$timeStep$226 - 1) / 1)][index$sample123$227]);
-																											int traceTempVariable$currentState$230_1 = distributionTempVariable$var121$37;
-																											if((index$sample$225 == index$sample$76_2)) {
-																												if((index$timeStep$226 == timeStep$var136)) {
-																													if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																														for(int var50 = 0; var50 < noStates; var50 += 1) {
-																															if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																if((var50 == st[index$sample$76_2][timeStep$var136])) {
-																																	for(int var66 = 0; var66 < noStates; var66 += 1) {
-																																		if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																			if((var66 == st[index$sample$76_2][timeStep$var136])) {
-																																				{
-																																					{
-																																						if(metric_valid_g[index$sample$76_2][timeStep$var136]) {
-																																							double cv$temp$74$var148;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var148 = metric_mean[traceTempVariable$currentState$230_1];
-																																								cv$temp$74$var148 = var148;
-																																							}
-																																							double cv$temp$75$var149;
-																																							{
-																																								// Constructing a random variable input for use later.
-																																								double var149 = metric_var[traceTempVariable$currentState$230_1];
-																																								cv$temp$75$var149 = var149;
-																																							}
-																																							
-																																							// Record the probability of sample task 157 generating output with current configuration.
-																																							if(((Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))) < cv$accumulatedConsumerProbabilities))
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																							else {
-																																								// If the second value is -infinity.
-																																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149))));
-																																								else
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))));
-																																							}
-																																							
-																																							// Recorded the probability of reaching sample task 157 with the current configuration.
-																																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value228);
-																																						}
-																																					}
-																																				}
-																																			}
-																																		}
+																																		
+																																		// Recorded the probability of reaching sample task 157 with the current configuration.
+																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value216);
 																																	}
 																																}
 																															}
@@ -6954,21 +6397,166 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																							}
 																						}
 																						
-																						// A check to ensure rounding of floating point values can never result in a negative
-																						// value.
-																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																						
-																						// Multiply (log space add) in the probability of the sample task to the overall probability
-																						// for this configuration of the source random variable.
-																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																						else {
-																							// If the second value is -infinity.
-																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																							else
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																						// the output of Sample task 123.
+																						int traceTempVariable$currentState$223_1 = distributionTempVariable$var121$37;
+																						if((index$sample$23 == index$sample$76_2)) {
+																							if((index$timeStep$22 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[index$sample$76_2][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$76_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$70$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$223_1];
+																															cv$temp$70$var148 = var148;
+																														}
+																														double cv$temp$71$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$223_1];
+																															cv$temp$71$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$70$var148) / Math.sqrt(cv$temp$71$var149))) - (0.5 * Math.log(cv$temp$71$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
 																						}
+																						int traceTempVariable$currentState$224_1 = distributionTempVariable$var121$37;
+																						if((index$sample$33 == index$sample$76_2)) {
+																							if((index$timeStep$34 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[index$sample$76_2][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[index$sample$76_2][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$72$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[traceTempVariable$currentState$224_1];
+																															cv$temp$72$var148 = var148;
+																														}
+																														double cv$temp$73$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[traceTempVariable$currentState$224_1];
+																															cv$temp$73$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$72$var148) / Math.sqrt(cv$temp$73$var149))) - (0.5 * Math.log(cv$temp$73$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																						for(int index$sample$225 = 0; index$sample$225 < noSamples; index$sample$225 += 1) {
+																							for(int index$timeStep$226 = 1; index$timeStep$226 < length$metric[index$sample$225]; index$timeStep$226 += 1) {
+																								if((!((index$sample$225 == index$sample$23) && (index$timeStep$226 == index$timeStep$22)) && !((index$sample$225 == index$sample$33) && (index$timeStep$226 == index$timeStep$34)))) {
+																									// Enumerating the possible outputs of Categorical 120.
+																									for(int index$sample123$227 = 0; index$sample123$227 < noStates; index$sample123$227 += 1) {
+																										int distributionTempVariable$var121$229 = index$sample123$227;
+																										
+																										// Update the probability of sampling this value from the distribution value.
+																										double cv$probabilitySample123Value228 = (1.0 * distribution$sample123[((index$sample$225 - 0) / 1)][((index$timeStep$226 - 1) / 1)][index$sample123$227]);
+																										int traceTempVariable$currentState$230_1 = distributionTempVariable$var121$37;
+																										if((index$sample$225 == index$sample$76_2)) {
+																											if((index$timeStep$226 == timeStep$var136)) {
+																												for(int var50 = 0; var50 < noStates; var50 += 1) {
+																													if((var50 == st[index$sample$76_2][timeStep$var136])) {
+																														for(int var66 = 0; var66 < noStates; var66 += 1) {
+																															if((var66 == st[index$sample$76_2][timeStep$var136])) {
+																																{
+																																	{
+																																		double cv$temp$74$var148;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var148 = metric_mean[traceTempVariable$currentState$230_1];
+																																			cv$temp$74$var148 = var148;
+																																		}
+																																		double cv$temp$75$var149;
+																																		{
+																																			// Constructing a random variable input for use later.
+																																			double var149 = metric_var[traceTempVariable$currentState$230_1];
+																																			cv$temp$75$var149 = var149;
+																																		}
+																																		
+																																		// Record the probability of sample task 157 generating output with current configuration.
+																																		if(((Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))) < cv$accumulatedConsumerProbabilities))
+																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																		else {
+																																			// If the second value is -infinity.
+																																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																				cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149))));
+																																			else
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value228) + (DistributionSampling.logProbabilityGaussian(((metric_g[index$sample$76_2][timeStep$var136] - cv$temp$74$var148) / Math.sqrt(cv$temp$75$var149))) - (0.5 * Math.log(cv$temp$75$var149)))));
+																																		}
+																																		
+																																		// Recorded the probability of reaching sample task 157 with the current configuration.
+																																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value228);
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																					
+																					// A check to ensure rounding of floating point values can never result in a negative
+																					// value.
+																					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																					
+																					// Multiply (log space add) in the probability of the sample task to the overall probability
+																					// for this configuration of the source random variable.
+																					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																						else
+																							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																					}
 																				}
 																			}
@@ -7112,11 +6700,11 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 															double[] var119 = m[traceTempVariable$var118$269_1];
 															cv$temp$76$var119 = var119;
 														}
-														int cv$temp$77$$var3216;
+														int cv$temp$77$$var3240;
 														{
 															// Constructing a random variable input for use later.
-															int $var3216 = noStates;
-															cv$temp$77$$var3216 = $var3216;
+															int $var3240 = noStates;
+															cv$temp$77$$var3240 = $var3240;
 														}
 														
 														// The probability of reaching the consumer with this set of consumer arguments
@@ -7126,7 +6714,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 														cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 														
 														// Add the current distribution to the distribution accumulator.
-														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$76$var119, cv$temp$77$$var3216);
+														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$76$var119, cv$temp$77$$var3240);
 													}
 												}
 											}
@@ -7761,17 +7349,201 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						{
 							for(int sample = 0; sample < noSamples; sample += 1) {
 								for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-									if(fixedFlag$sample104) {
-										for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
-											if((index$sample$4_1 == sample)) {
-												if((0 == timeStep$var136)) {
-													if(metric_valid_g[sample][timeStep$var136]) {
+									if(metric_valid_g[sample][timeStep$var136]) {
+										if(fixedFlag$sample104) {
+											for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
+												if((index$sample$4_1 == sample)) {
+													if((0 == timeStep$var136)) {
 														double traceTempVariable$var148$10_1 = cv$currentValue;
-														if(metric_valid_g[sample][timeStep$var136]) {
-															if((var50 == st[sample][timeStep$var136])) {
-																// Processing sample task 157 of consumer random variable null.
+														if((var50 == st[sample][timeStep$var136])) {
+															// Processing sample task 157 of consumer random variable null.
+															{
+																// Set an accumulator to sum the probabilities for each possible configuration of
+																// inputs.
+																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																
+																// Set an accumulator to record the consumer distributions not seen. Initially set
+																// to 1 as seen values will be deducted from this value.
+																double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																{
-																	if(metric_valid_g[sample][timeStep$var136]) {
+																	// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																	// the output of Sample task 52.
+																	for(int index$sample$27_1 = 0; index$sample$27_1 < noSamples; index$sample$27_1 += 1) {
+																		if((index$sample$27_1 == sample)) {
+																			if((0 == timeStep$var136)) {
+																				for(int var66 = 0; var66 < noStates; var66 += 1) {
+																					if((var66 == st[sample][timeStep$var136])) {
+																						{
+																							{
+																								double cv$temp$2$var148;
+																								{
+																									// Constructing a random variable input for use later.
+																									double var148 = traceTempVariable$var148$10_1;
+																									cv$temp$2$var148 = var148;
+																								}
+																								double cv$temp$3$var149;
+																								{
+																									// Constructing a random variable input for use later.
+																									double var149 = metric_var[st[sample][timeStep$var136]];
+																									cv$temp$3$var149 = var149;
+																								}
+																								
+																								// Record the probability of sample task 157 generating output with current configuration.
+																								if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) < cv$accumulatedConsumerProbabilities))
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																								else {
+																									// If the second value is -infinity.
+																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149))));
+																									else
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))));
+																								}
+																								
+																								// Recorded the probability of reaching sample task 157 with the current configuration.
+																								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																	
+																	// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																	// the output of Sample task 52.
+																	if(fixedFlag$sample123) {
+																		for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29_1]; timeStep$var113 += 1) {
+																				if((index$sample$29_1 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$4$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = traceTempVariable$var148$10_1;
+																											cv$temp$4$var148 = var148;
+																										}
+																										double cv$temp$5$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[st[sample][timeStep$var136]];
+																											cv$temp$5$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	} else {
+																		for(int index$sample$30 = 0; index$sample$30 < noSamples; index$sample$30 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$30]; timeStep$var113 += 1) {
+																				if(true) {
+																					// Enumerating the possible outputs of Categorical 120.
+																					for(int index$sample123$32 = 0; index$sample123$32 < noStates; index$sample123$32 += 1) {
+																						int distributionTempVariable$var121$34 = index$sample123$32;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample123Value33 = (1.0 * distribution$sample123[((index$sample$30 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$32]);
+																						if((index$sample$30 == sample)) {
+																							if((timeStep$var113 == timeStep$var136)) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$6$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = traceTempVariable$var148$10_1;
+																													cv$temp$6$var148 = var148;
+																												}
+																												double cv$temp$7$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[st[sample][timeStep$var136]];
+																													cv$temp$7$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value33);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+																
+																// A check to ensure rounding of floating point values can never result in a negative
+																// value.
+																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																
+																// Multiply (log space add) in the probability of the sample task to the overall probability
+																// for this configuration of the source random variable.
+																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																	else
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																}
+															}
+														}
+													}
+												}
+											}
+										} else {
+											for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
+												if(true) {
+													// Enumerating the possible outputs of Categorical 101.
+													for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+														int distributionTempVariable$var102$8 = index$sample104$6;
+														
+														// Update the probability of sampling this value from the distribution value.
+														double cv$probabilitySample104Value7 = (1.0 * distribution$sample104[((index$sample$5 - 0) / 1)][index$sample104$6]);
+														if((index$sample$5 == sample)) {
+															if((0 == timeStep$var136)) {
+																double traceTempVariable$var148$11_1 = cv$currentValue;
+																if((var50 == st[sample][timeStep$var136])) {
+																	// Processing sample task 157 of consumer random variable null.
+																	{
 																		// Set an accumulator to sum the probabilities for each possible configuration of
 																		// inputs.
 																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -7782,43 +7554,84 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		{
 																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																			// the output of Sample task 52.
-																			for(int index$sample$27_1 = 0; index$sample$27_1 < noSamples; index$sample$27_1 += 1) {
-																				if((index$sample$27_1 == sample)) {
-																					if((0 == timeStep$var136)) {
-																						if(metric_valid_g[sample][timeStep$var136]) {
-																							for(int var66 = 0; var66 < noStates; var66 += 1) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
+																			if((index$sample$5 == sample)) {
+																				if((0 == timeStep$var136)) {
+																					for(int var66 = 0; var66 < noStates; var66 += 1) {
+																						if((var66 == st[sample][timeStep$var136])) {
+																							{
+																								{
+																									double cv$temp$8$var148;
+																									{
+																										// Constructing a random variable input for use later.
+																										double var148 = traceTempVariable$var148$11_1;
+																										cv$temp$8$var148 = var148;
+																									}
+																									double cv$temp$9$var149;
+																									{
+																										// Constructing a random variable input for use later.
+																										double var149 = metric_var[st[sample][timeStep$var136]];
+																										cv$temp$9$var149 = var149;
+																									}
+																									
+																									// Record the probability of sample task 157 generating output with current configuration.
+																									if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149))));
+																										else
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))));
+																									}
+																									
+																									// Recorded the probability of reaching sample task 157 with the current configuration.
+																									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																			for(int index$sample$39 = 0; index$sample$39 < noSamples; index$sample$39 += 1) {
+																				if(!(index$sample$39 == index$sample$5)) {
+																					// Enumerating the possible outputs of Categorical 101.
+																					for(int index$sample104$40 = 0; index$sample104$40 < noStates; index$sample104$40 += 1) {
+																						int distributionTempVariable$var102$42 = index$sample104$40;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample104Value41 = (cv$probabilitySample104Value7 * distribution$sample104[((index$sample$39 - 0) / 1)][index$sample104$40]);
+																						if((index$sample$39 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
 																									if((var66 == st[sample][timeStep$var136])) {
 																										{
 																											{
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													double cv$temp$2$var148;
-																													{
-																														// Constructing a random variable input for use later.
-																														double var148 = traceTempVariable$var148$10_1;
-																														cv$temp$2$var148 = var148;
-																													}
-																													double cv$temp$3$var149;
-																													{
-																														// Constructing a random variable input for use later.
-																														double var149 = metric_var[st[sample][timeStep$var136]];
-																														cv$temp$3$var149 = var149;
-																													}
-																													
-																													// Record the probability of sample task 157 generating output with current configuration.
-																													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) < cv$accumulatedConsumerProbabilities))
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																													else {
-																														// If the second value is -infinity.
-																														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149))));
-																														else
-																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))));
-																													}
-																													
-																													// Recorded the probability of reaching sample task 157 with the current configuration.
-																													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																												double cv$temp$10$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = traceTempVariable$var148$11_1;
+																													cv$temp$10$var148 = var148;
 																												}
+																												double cv$temp$11$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[st[sample][timeStep$var136]];
+																													cv$temp$11$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value41);
 																											}
 																										}
 																									}
@@ -7832,46 +7645,40 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																			// the output of Sample task 52.
 																			if(fixedFlag$sample123) {
-																				for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29_1]; timeStep$var113 += 1) {
-																						if((index$sample$29_1 == sample)) {
+																				for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
+																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
+																						if((index$sample$46_1 == sample)) {
 																							if((timeStep$var113 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											if((var66 == st[sample][timeStep$var136])) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$12$var148;
 																												{
-																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$4$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = traceTempVariable$var148$10_1;
-																																cv$temp$4$var148 = var148;
-																															}
-																															double cv$temp$5$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[st[sample][timeStep$var136]];
-																																cv$temp$5$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																														}
-																													}
+																													// Constructing a random variable input for use later.
+																													double var148 = traceTempVariable$var148$11_1;
+																													cv$temp$12$var148 = var148;
 																												}
+																												double cv$temp$13$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[st[sample][timeStep$var136]];
+																													cv$temp$13$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
 																											}
 																										}
 																									}
@@ -7881,53 +7688,47 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																					}
 																				}
 																			} else {
-																				for(int index$sample$30 = 0; index$sample$30 < noSamples; index$sample$30 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$30]; timeStep$var113 += 1) {
+																				for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
+																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 120.
-																							for(int index$sample123$32 = 0; index$sample123$32 < noStates; index$sample123$32 += 1) {
-																								int distributionTempVariable$var121$34 = index$sample123$32;
+																							for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
+																								int distributionTempVariable$var121$51 = index$sample123$49;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample123Value33 = (1.0 * distribution$sample123[((index$sample$30 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$32]);
-																								if((index$sample$30 == sample)) {
+																								double cv$probabilitySample123Value50 = (cv$probabilitySample104Value7 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
+																								if((index$sample$47 == sample)) {
 																									if((timeStep$var113 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var66 == st[sample][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[sample][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$14$var148;
 																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$6$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = traceTempVariable$var148$10_1;
-																																		cv$temp$6$var148 = var148;
-																																	}
-																																	double cv$temp$7$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[st[sample][timeStep$var136]];
-																																		cv$temp$7$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value33);
-																																}
-																															}
+																															// Constructing a random variable input for use later.
+																															double var148 = traceTempVariable$var148$11_1;
+																															cv$temp$14$var148 = var148;
 																														}
+																														double cv$temp$15$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[st[sample][timeStep$var136]];
+																															cv$temp$15$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value50);
 																													}
 																												}
 																											}
@@ -7964,263 +7765,184 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												}
 											}
 										}
-									} else {
-										for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
-											if(true) {
-												// Enumerating the possible outputs of Categorical 101.
-												for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
-													int distributionTempVariable$var102$8 = index$sample104$6;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample104Value7 = (1.0 * distribution$sample104[((index$sample$5 - 0) / 1)][index$sample104$6]);
-													if((index$sample$5 == sample)) {
-														if((0 == timeStep$var136)) {
-															if(metric_valid_g[sample][timeStep$var136]) {
-																double traceTempVariable$var148$11_1 = cv$currentValue;
-																if(metric_valid_g[sample][timeStep$var136]) {
-																	if((var50 == st[sample][timeStep$var136])) {
-																		// Processing sample task 157 of consumer random variable null.
-																		{
-																			if(metric_valid_g[sample][timeStep$var136]) {
-																				// Set an accumulator to sum the probabilities for each possible configuration of
-																				// inputs.
-																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																				
-																				// Set an accumulator to record the consumer distributions not seen. Initially set
-																				// to 1 as seen values will be deducted from this value.
-																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																				{
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 52.
-																					if((index$sample$5 == sample)) {
-																						if((0 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var66 = 0; var66 < noStates; var66 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var66 == st[sample][timeStep$var136])) {
-																											{
-																												{
-																													if(metric_valid_g[sample][timeStep$var136]) {
-																														double cv$temp$8$var148;
-																														{
-																															// Constructing a random variable input for use later.
-																															double var148 = traceTempVariable$var148$11_1;
-																															cv$temp$8$var148 = var148;
-																														}
-																														double cv$temp$9$var149;
-																														{
-																															// Constructing a random variable input for use later.
-																															double var149 = metric_var[st[sample][timeStep$var136]];
-																															cv$temp$9$var149 = var149;
-																														}
-																														
-																														// Record the probability of sample task 157 generating output with current configuration.
-																														if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) < cv$accumulatedConsumerProbabilities))
-																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149))));
-																															else
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))));
-																														}
-																														
-																														// Recorded the probability of reaching sample task 157 with the current configuration.
-																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
-																													}
-																												}
-																											}
+									}
+								}
+							}
+							for(int sample = 0; sample < noSamples; sample += 1) {
+								for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+									if(metric_valid_g[sample][timeStep$var136]) {
+										if(fixedFlag$sample123) {
+											for(int index$sample$14_1 = 0; index$sample$14_1 < noSamples; index$sample$14_1 += 1) {
+												for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$14_1]; timeStep$var113 += 1) {
+													if((index$sample$14_1 == sample)) {
+														if((timeStep$var113 == timeStep$var136)) {
+															double traceTempVariable$var148$21_1 = cv$currentValue;
+															if((var50 == st[sample][timeStep$var136])) {
+																// Processing sample task 157 of consumer random variable null.
+																{
+																	// Set an accumulator to sum the probabilities for each possible configuration of
+																	// inputs.
+																	double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																	
+																	// Set an accumulator to record the consumer distributions not seen. Initially set
+																	// to 1 as seen values will be deducted from this value.
+																	double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																	{
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 52.
+																		if(fixedFlag$sample104) {
+																			for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
+																				if((index$sample$55_1 == sample)) {
+																					if((0 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$16$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = traceTempVariable$var148$21_1;
+																											cv$temp$16$var148 = var148;
 																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					for(int index$sample$39 = 0; index$sample$39 < noSamples; index$sample$39 += 1) {
-																						if(!(index$sample$39 == index$sample$5)) {
-																							// Enumerating the possible outputs of Categorical 101.
-																							for(int index$sample104$40 = 0; index$sample104$40 < noStates; index$sample104$40 += 1) {
-																								int distributionTempVariable$var102$42 = index$sample104$40;
-																								
-																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample104Value41 = (cv$probabilitySample104Value7 * distribution$sample104[((index$sample$39 - 0) / 1)][index$sample104$40]);
-																								if((index$sample$39 == sample)) {
-																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var66 == st[sample][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$10$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = traceTempVariable$var148$11_1;
-																																		cv$temp$10$var148 = var148;
-																																	}
-																																	double cv$temp$11$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[st[sample][timeStep$var136]];
-																																		cv$temp$11$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value41);
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
+																										double cv$temp$17$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[st[sample][timeStep$var136]];
+																											cv$temp$17$var149 = var149;
 																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 52.
-																					if(fixedFlag$sample123) {
-																						for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
-																							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
-																								if((index$sample$46_1 == sample)) {
-																									if((timeStep$var113 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var66 == st[sample][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$12$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = traceTempVariable$var148$11_1;
-																																		cv$temp$12$var148 = var148;
-																																	}
-																																	double cv$temp$13$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[st[sample][timeStep$var136]];
-																																		cv$temp$13$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					} else {
-																						for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
-																							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
-																								if(true) {
-																									// Enumerating the possible outputs of Categorical 120.
-																									for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
-																										int distributionTempVariable$var121$51 = index$sample123$49;
 																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample123Value50 = (cv$probabilitySample104Value7 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
-																										if((index$sample$47 == sample)) {
-																											if((timeStep$var113 == timeStep$var136)) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															if((var66 == st[sample][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[sample][timeStep$var136]) {
-																																			double cv$temp$14$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = traceTempVariable$var148$11_1;
-																																				cv$temp$14$var148 = var148;
-																																			}
-																																			double cv$temp$15$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[st[sample][timeStep$var136]];
-																																				cv$temp$15$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value50);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))));
 																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																									}
 																								}
 																							}
 																						}
 																					}
 																				}
-																				
-																				// A check to ensure rounding of floating point values can never result in a negative
-																				// value.
-																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																				
-																				// Multiply (log space add) in the probability of the sample task to the overall probability
-																				// for this configuration of the source random variable.
-																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																				else {
-																					// If the second value is -infinity.
-																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																					else
-																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																			}
+																		} else {
+																			for(int index$sample$56 = 0; index$sample$56 < noSamples; index$sample$56 += 1) {
+																				if(true) {
+																					// Enumerating the possible outputs of Categorical 101.
+																					for(int index$sample104$57 = 0; index$sample104$57 < noStates; index$sample104$57 += 1) {
+																						int distributionTempVariable$var102$59 = index$sample104$57;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample104Value58 = (1.0 * distribution$sample104[((index$sample$56 - 0) / 1)][index$sample104$57]);
+																						if((index$sample$56 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$18$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = traceTempVariable$var148$21_1;
+																													cv$temp$18$var148 = var148;
+																												}
+																												double cv$temp$19$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[st[sample][timeStep$var136]];
+																													cv$temp$19$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value58);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
 																				}
 																			}
 																		}
+																		
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 52.
+																		for(int index$sample$63_1 = 0; index$sample$63_1 < noSamples; index$sample$63_1 += 1) {
+																			for(int index$timeStep$63_2 = 1; index$timeStep$63_2 < length$metric[index$sample$63_1]; index$timeStep$63_2 += 1) {
+																				if((index$sample$63_1 == sample)) {
+																					if((index$timeStep$63_2 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$20$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = traceTempVariable$var148$21_1;
+																											cv$temp$20$var148 = var148;
+																										}
+																										double cv$temp$21$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[st[sample][timeStep$var136]];
+																											cv$temp$21$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																	
+																	// A check to ensure rounding of floating point values can never result in a negative
+																	// value.
+																	cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																	
+																	// Multiply (log space add) in the probability of the sample task to the overall probability
+																	// for this configuration of the source random variable.
+																	if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																		else
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																	}
 																}
 															}
@@ -8228,24 +7950,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													}
 												}
 											}
-										}
-									}
-								}
-							}
-							for(int sample = 0; sample < noSamples; sample += 1) {
-								for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-									if(fixedFlag$sample123) {
-										for(int index$sample$14_1 = 0; index$sample$14_1 < noSamples; index$sample$14_1 += 1) {
-											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$14_1]; timeStep$var113 += 1) {
-												if((index$sample$14_1 == sample)) {
-													if((timeStep$var113 == timeStep$var136)) {
-														if(metric_valid_g[sample][timeStep$var136]) {
-															double traceTempVariable$var148$21_1 = cv$currentValue;
-															if(metric_valid_g[sample][timeStep$var136]) {
-																if((var50 == st[sample][timeStep$var136])) {
-																	// Processing sample task 157 of consumer random variable null.
-																	{
-																		if(metric_valid_g[sample][timeStep$var136]) {
+										} else {
+											for(int index$sample$15 = 0; index$sample$15 < noSamples; index$sample$15 += 1) {
+												for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$15]; timeStep$var113 += 1) {
+													if(true) {
+														// Enumerating the possible outputs of Categorical 120.
+														for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
+															int distributionTempVariable$var121$19 = index$sample123$17;
+															
+															// Update the probability of sampling this value from the distribution value.
+															double cv$probabilitySample123Value18 = (1.0 * distribution$sample123[((index$sample$15 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$17]);
+															if((index$sample$15 == sample)) {
+																if((timeStep$var113 == timeStep$var136)) {
+																	double traceTempVariable$var148$22_1 = cv$currentValue;
+																	if((var50 == st[sample][timeStep$var136])) {
+																		// Processing sample task 157 of consumer random variable null.
+																		{
 																			// Set an accumulator to sum the probabilities for each possible configuration of
 																			// inputs.
 																			double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -8257,45 +7977,39 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																				// the output of Sample task 52.
 																				if(fixedFlag$sample104) {
-																					for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
-																						if((index$sample$55_1 == sample)) {
+																					for(int index$sample$65_1 = 0; index$sample$65_1 < noSamples; index$sample$65_1 += 1) {
+																						if((index$sample$65_1 == sample)) {
 																							if((0 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											if((var66 == st[sample][timeStep$var136])) {
+																								for(int var66 = 0; var66 < noStates; var66 += 1) {
+																									if((var66 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$22$var148;
 																												{
-																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$16$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = traceTempVariable$var148$21_1;
-																																cv$temp$16$var148 = var148;
-																															}
-																															double cv$temp$17$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[st[sample][timeStep$var136]];
-																																cv$temp$17$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																														}
-																													}
+																													// Constructing a random variable input for use later.
+																													double var148 = traceTempVariable$var148$22_1;
+																													cv$temp$22$var148 = var148;
 																												}
+																												double cv$temp$23$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = metric_var[st[sample][timeStep$var136]];
+																													cv$temp$23$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
 																											}
 																										}
 																									}
@@ -8304,52 +8018,46 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																						}
 																					}
 																				} else {
-																					for(int index$sample$56 = 0; index$sample$56 < noSamples; index$sample$56 += 1) {
+																					for(int index$sample$66 = 0; index$sample$66 < noSamples; index$sample$66 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 101.
-																							for(int index$sample104$57 = 0; index$sample104$57 < noStates; index$sample104$57 += 1) {
-																								int distributionTempVariable$var102$59 = index$sample104$57;
+																							for(int index$sample104$67 = 0; index$sample104$67 < noStates; index$sample104$67 += 1) {
+																								int distributionTempVariable$var102$69 = index$sample104$67;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample104Value58 = (1.0 * distribution$sample104[((index$sample$56 - 0) / 1)][index$sample104$57]);
-																								if((index$sample$56 == sample)) {
+																								double cv$probabilitySample104Value68 = (cv$probabilitySample123Value18 * distribution$sample104[((index$sample$66 - 0) / 1)][index$sample104$67]);
+																								if((index$sample$66 == sample)) {
 																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var66 == st[sample][timeStep$var136])) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
+																											if((var66 == st[sample][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$24$var148;
 																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$18$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = traceTempVariable$var148$21_1;
-																																		cv$temp$18$var148 = var148;
-																																	}
-																																	double cv$temp$19$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[st[sample][timeStep$var136]];
-																																		cv$temp$19$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value58);
-																																}
-																															}
+																															// Constructing a random variable input for use later.
+																															double var148 = traceTempVariable$var148$22_1;
+																															cv$temp$24$var148 = var148;
 																														}
+																														double cv$temp$25$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[st[sample][timeStep$var136]];
+																															cv$temp$25$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value68);
 																													}
 																												}
 																											}
@@ -8363,44 +8071,85 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				
 																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																				// the output of Sample task 52.
-																				for(int index$sample$63_1 = 0; index$sample$63_1 < noSamples; index$sample$63_1 += 1) {
-																					for(int index$timeStep$63_2 = 1; index$timeStep$63_2 < length$metric[index$sample$63_1]; index$timeStep$63_2 += 1) {
-																						if((index$sample$63_1 == sample)) {
-																							if((index$timeStep$63_2 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
+																				if((index$sample$15 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$26$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = traceTempVariable$var148$22_1;
+																											cv$temp$26$var148 = var148;
+																										}
+																										double cv$temp$27$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = metric_var[st[sample][timeStep$var136]];
+																											cv$temp$27$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																				for(int index$sample$74 = 0; index$sample$74 < noSamples; index$sample$74 += 1) {
+																					for(int index$timeStep$75 = 1; index$timeStep$75 < length$metric[index$sample$74]; index$timeStep$75 += 1) {
+																						if(!((index$sample$74 == index$sample$15) && (index$timeStep$75 == timeStep$var113))) {
+																							// Enumerating the possible outputs of Categorical 120.
+																							for(int index$sample123$76 = 0; index$sample123$76 < noStates; index$sample123$76 += 1) {
+																								int distributionTempVariable$var121$78 = index$sample123$76;
+																								
+																								// Update the probability of sampling this value from the distribution value.
+																								double cv$probabilitySample123Value77 = (cv$probabilitySample123Value18 * distribution$sample123[((index$sample$74 - 0) / 1)][((index$timeStep$75 - 1) / 1)][index$sample123$76]);
+																								if((index$sample$74 == sample)) {
+																									if((index$timeStep$75 == timeStep$var136)) {
+																										for(int var66 = 0; var66 < noStates; var66 += 1) {
 																											if((var66 == st[sample][timeStep$var136])) {
 																												{
 																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$20$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = traceTempVariable$var148$21_1;
-																																cv$temp$20$var148 = var148;
-																															}
-																															double cv$temp$21$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[st[sample][timeStep$var136]];
-																																cv$temp$21$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																														double cv$temp$28$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = traceTempVariable$var148$22_1;
+																															cv$temp$28$var148 = var148;
 																														}
+																														double cv$temp$29$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = metric_var[st[sample][timeStep$var136]];
+																															cv$temp$29$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value77);
 																													}
 																												}
 																											}
@@ -8427,271 +8176,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																					cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 																				else
 																					cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									} else {
-										for(int index$sample$15 = 0; index$sample$15 < noSamples; index$sample$15 += 1) {
-											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$15]; timeStep$var113 += 1) {
-												if(true) {
-													// Enumerating the possible outputs of Categorical 120.
-													for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
-														int distributionTempVariable$var121$19 = index$sample123$17;
-														
-														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample123Value18 = (1.0 * distribution$sample123[((index$sample$15 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$17]);
-														if((index$sample$15 == sample)) {
-															if((timeStep$var113 == timeStep$var136)) {
-																if(metric_valid_g[sample][timeStep$var136]) {
-																	double traceTempVariable$var148$22_1 = cv$currentValue;
-																	if(metric_valid_g[sample][timeStep$var136]) {
-																		if((var50 == st[sample][timeStep$var136])) {
-																			// Processing sample task 157 of consumer random variable null.
-																			{
-																				if(metric_valid_g[sample][timeStep$var136]) {
-																					// Set an accumulator to sum the probabilities for each possible configuration of
-																					// inputs.
-																					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																					
-																					// Set an accumulator to record the consumer distributions not seen. Initially set
-																					// to 1 as seen values will be deducted from this value.
-																					double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																					{
-																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																						// the output of Sample task 52.
-																						if(fixedFlag$sample104) {
-																							for(int index$sample$65_1 = 0; index$sample$65_1 < noSamples; index$sample$65_1 += 1) {
-																								if((index$sample$65_1 == sample)) {
-																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var66 == st[sample][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$22$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = traceTempVariable$var148$22_1;
-																																		cv$temp$22$var148 = var148;
-																																	}
-																																	double cv$temp$23$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = metric_var[st[sample][timeStep$var136]];
-																																		cv$temp$23$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						} else {
-																							for(int index$sample$66 = 0; index$sample$66 < noSamples; index$sample$66 += 1) {
-																								if(true) {
-																									// Enumerating the possible outputs of Categorical 101.
-																									for(int index$sample104$67 = 0; index$sample104$67 < noStates; index$sample104$67 += 1) {
-																										int distributionTempVariable$var102$69 = index$sample104$67;
-																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample104Value68 = (cv$probabilitySample123Value18 * distribution$sample104[((index$sample$66 - 0) / 1)][index$sample104$67]);
-																										if((index$sample$66 == sample)) {
-																											if((0 == timeStep$var136)) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															if((var66 == st[sample][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[sample][timeStep$var136]) {
-																																			double cv$temp$24$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = traceTempVariable$var148$22_1;
-																																				cv$temp$24$var148 = var148;
-																																			}
-																																			double cv$temp$25$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[st[sample][timeStep$var136]];
-																																				cv$temp$25$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value68);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																						
-																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																						// the output of Sample task 52.
-																						if((index$sample$15 == sample)) {
-																							if((timeStep$var113 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											if((var66 == st[sample][timeStep$var136])) {
-																												{
-																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$26$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = traceTempVariable$var148$22_1;
-																																cv$temp$26$var148 = var148;
-																															}
-																															double cv$temp$27$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = metric_var[st[sample][timeStep$var136]];
-																																cv$temp$27$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																						for(int index$sample$74 = 0; index$sample$74 < noSamples; index$sample$74 += 1) {
-																							for(int index$timeStep$75 = 1; index$timeStep$75 < length$metric[index$sample$74]; index$timeStep$75 += 1) {
-																								if(!((index$sample$74 == index$sample$15) && (index$timeStep$75 == timeStep$var113))) {
-																									// Enumerating the possible outputs of Categorical 120.
-																									for(int index$sample123$76 = 0; index$sample123$76 < noStates; index$sample123$76 += 1) {
-																										int distributionTempVariable$var121$78 = index$sample123$76;
-																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample123Value77 = (cv$probabilitySample123Value18 * distribution$sample123[((index$sample$74 - 0) / 1)][((index$timeStep$75 - 1) / 1)][index$sample123$76]);
-																										if((index$sample$74 == sample)) {
-																											if((index$timeStep$75 == timeStep$var136)) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													for(int var66 = 0; var66 < noStates; var66 += 1) {
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															if((var66 == st[sample][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[sample][timeStep$var136]) {
-																																			double cv$temp$28$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = traceTempVariable$var148$22_1;
-																																				cv$temp$28$var148 = var148;
-																																			}
-																																			double cv$temp$29$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = metric_var[st[sample][timeStep$var136]];
-																																				cv$temp$29$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value77);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					
-																					// A check to ensure rounding of floating point values can never result in a negative
-																					// value.
-																					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																					
-																					// Multiply (log space add) in the probability of the sample task to the overall probability
-																					// for this configuration of the source random variable.
-																					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																					else {
-																						// If the second value is -infinity.
-																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																						else
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																					}
-																				}
 																			}
 																		}
 																	}
@@ -8838,17 +8322,201 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						{
 							for(int sample = 0; sample < noSamples; sample += 1) {
 								for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-									if(fixedFlag$sample104) {
-										for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
-											if((index$sample$4_1 == sample)) {
-												if((0 == timeStep$var136)) {
-													if(metric_valid_g[sample][timeStep$var136]) {
+									if(metric_valid_g[sample][timeStep$var136]) {
+										if(fixedFlag$sample104) {
+											for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
+												if((index$sample$4_1 == sample)) {
+													if((0 == timeStep$var136)) {
 														double traceTempVariable$var149$10_1 = cv$currentValue;
-														if(metric_valid_g[sample][timeStep$var136]) {
-															if((var66 == st[sample][timeStep$var136])) {
-																// Processing sample task 157 of consumer random variable null.
+														if((var66 == st[sample][timeStep$var136])) {
+															// Processing sample task 157 of consumer random variable null.
+															{
+																// Set an accumulator to sum the probabilities for each possible configuration of
+																// inputs.
+																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																
+																// Set an accumulator to record the consumer distributions not seen. Initially set
+																// to 1 as seen values will be deducted from this value.
+																double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																{
-																	if(metric_valid_g[sample][timeStep$var136]) {
+																	// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																	// the output of Sample task 68.
+																	for(int index$sample$27_1 = 0; index$sample$27_1 < noSamples; index$sample$27_1 += 1) {
+																		if((index$sample$27_1 == sample)) {
+																			if((0 == timeStep$var136)) {
+																				for(int var50 = 0; var50 < noStates; var50 += 1) {
+																					if((var50 == st[sample][timeStep$var136])) {
+																						{
+																							{
+																								double cv$temp$2$var148;
+																								{
+																									// Constructing a random variable input for use later.
+																									double var148 = metric_mean[st[sample][timeStep$var136]];
+																									cv$temp$2$var148 = var148;
+																								}
+																								double cv$temp$3$var149;
+																								{
+																									// Constructing a random variable input for use later.
+																									double var149 = traceTempVariable$var149$10_1;
+																									cv$temp$3$var149 = var149;
+																								}
+																								
+																								// Record the probability of sample task 157 generating output with current configuration.
+																								if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) < cv$accumulatedConsumerProbabilities))
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																								else {
+																									// If the second value is -infinity.
+																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149))));
+																									else
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))));
+																								}
+																								
+																								// Recorded the probability of reaching sample task 157 with the current configuration.
+																								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																	
+																	// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																	// the output of Sample task 68.
+																	if(fixedFlag$sample123) {
+																		for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29_1]; timeStep$var113 += 1) {
+																				if((index$sample$29_1 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$4$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[st[sample][timeStep$var136]];
+																											cv$temp$4$var148 = var148;
+																										}
+																										double cv$temp$5$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = traceTempVariable$var149$10_1;
+																											cv$temp$5$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	} else {
+																		for(int index$sample$30 = 0; index$sample$30 < noSamples; index$sample$30 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$30]; timeStep$var113 += 1) {
+																				if(true) {
+																					// Enumerating the possible outputs of Categorical 120.
+																					for(int index$sample123$32 = 0; index$sample123$32 < noStates; index$sample123$32 += 1) {
+																						int distributionTempVariable$var121$34 = index$sample123$32;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample123Value33 = (1.0 * distribution$sample123[((index$sample$30 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$32]);
+																						if((index$sample$30 == sample)) {
+																							if((timeStep$var113 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$6$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[st[sample][timeStep$var136]];
+																													cv$temp$6$var148 = var148;
+																												}
+																												double cv$temp$7$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = traceTempVariable$var149$10_1;
+																													cv$temp$7$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value33);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+																
+																// A check to ensure rounding of floating point values can never result in a negative
+																// value.
+																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																
+																// Multiply (log space add) in the probability of the sample task to the overall probability
+																// for this configuration of the source random variable.
+																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																	else
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																}
+															}
+														}
+													}
+												}
+											}
+										} else {
+											for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
+												if(true) {
+													// Enumerating the possible outputs of Categorical 101.
+													for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+														int distributionTempVariable$var102$8 = index$sample104$6;
+														
+														// Update the probability of sampling this value from the distribution value.
+														double cv$probabilitySample104Value7 = (1.0 * distribution$sample104[((index$sample$5 - 0) / 1)][index$sample104$6]);
+														if((index$sample$5 == sample)) {
+															if((0 == timeStep$var136)) {
+																double traceTempVariable$var149$11_1 = cv$currentValue;
+																if((var66 == st[sample][timeStep$var136])) {
+																	// Processing sample task 157 of consumer random variable null.
+																	{
 																		// Set an accumulator to sum the probabilities for each possible configuration of
 																		// inputs.
 																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -8859,43 +8527,84 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																		{
 																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																			// the output of Sample task 68.
-																			for(int index$sample$27_1 = 0; index$sample$27_1 < noSamples; index$sample$27_1 += 1) {
-																				if((index$sample$27_1 == sample)) {
-																					if((0 == timeStep$var136)) {
-																						if(metric_valid_g[sample][timeStep$var136]) {
-																							for(int var50 = 0; var50 < noStates; var50 += 1) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
+																			if((index$sample$5 == sample)) {
+																				if((0 == timeStep$var136)) {
+																					for(int var50 = 0; var50 < noStates; var50 += 1) {
+																						if((var50 == st[sample][timeStep$var136])) {
+																							{
+																								{
+																									double cv$temp$8$var148;
+																									{
+																										// Constructing a random variable input for use later.
+																										double var148 = metric_mean[st[sample][timeStep$var136]];
+																										cv$temp$8$var148 = var148;
+																									}
+																									double cv$temp$9$var149;
+																									{
+																										// Constructing a random variable input for use later.
+																										double var149 = traceTempVariable$var149$11_1;
+																										cv$temp$9$var149 = var149;
+																									}
+																									
+																									// Record the probability of sample task 157 generating output with current configuration.
+																									if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149))));
+																										else
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))));
+																									}
+																									
+																									// Recorded the probability of reaching sample task 157 with the current configuration.
+																									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																			for(int index$sample$39 = 0; index$sample$39 < noSamples; index$sample$39 += 1) {
+																				if(!(index$sample$39 == index$sample$5)) {
+																					// Enumerating the possible outputs of Categorical 101.
+																					for(int index$sample104$40 = 0; index$sample104$40 < noStates; index$sample104$40 += 1) {
+																						int distributionTempVariable$var102$42 = index$sample104$40;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample104Value41 = (cv$probabilitySample104Value7 * distribution$sample104[((index$sample$39 - 0) / 1)][index$sample104$40]);
+																						if((index$sample$39 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
 																									if((var50 == st[sample][timeStep$var136])) {
 																										{
 																											{
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													double cv$temp$2$var148;
-																													{
-																														// Constructing a random variable input for use later.
-																														double var148 = metric_mean[st[sample][timeStep$var136]];
-																														cv$temp$2$var148 = var148;
-																													}
-																													double cv$temp$3$var149;
-																													{
-																														// Constructing a random variable input for use later.
-																														double var149 = traceTempVariable$var149$10_1;
-																														cv$temp$3$var149 = var149;
-																													}
-																													
-																													// Record the probability of sample task 157 generating output with current configuration.
-																													if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) < cv$accumulatedConsumerProbabilities))
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																													else {
-																														// If the second value is -infinity.
-																														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149))));
-																														else
-																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$2$var148) / Math.sqrt(cv$temp$3$var149))) - (0.5 * Math.log(cv$temp$3$var149)))));
-																													}
-																													
-																													// Recorded the probability of reaching sample task 157 with the current configuration.
-																													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																												double cv$temp$10$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[st[sample][timeStep$var136]];
+																													cv$temp$10$var148 = var148;
 																												}
+																												double cv$temp$11$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = traceTempVariable$var149$11_1;
+																													cv$temp$11$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value41);
 																											}
 																										}
 																									}
@@ -8909,46 +8618,40 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																			// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																			// the output of Sample task 68.
 																			if(fixedFlag$sample123) {
-																				for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29_1]; timeStep$var113 += 1) {
-																						if((index$sample$29_1 == sample)) {
+																				for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
+																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
+																						if((index$sample$46_1 == sample)) {
 																							if((timeStep$var113 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var50 = 0; var50 < noStates; var50 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											if((var50 == st[sample][timeStep$var136])) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$12$var148;
 																												{
-																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$4$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[st[sample][timeStep$var136]];
-																																cv$temp$4$var148 = var148;
-																															}
-																															double cv$temp$5$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = traceTempVariable$var149$10_1;
-																																cv$temp$5$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$4$var148) / Math.sqrt(cv$temp$5$var149))) - (0.5 * Math.log(cv$temp$5$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																														}
-																													}
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[st[sample][timeStep$var136]];
+																													cv$temp$12$var148 = var148;
 																												}
+																												double cv$temp$13$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = traceTempVariable$var149$11_1;
+																													cv$temp$13$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
 																											}
 																										}
 																									}
@@ -8958,53 +8661,47 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																					}
 																				}
 																			} else {
-																				for(int index$sample$30 = 0; index$sample$30 < noSamples; index$sample$30 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$30]; timeStep$var113 += 1) {
+																				for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
+																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 120.
-																							for(int index$sample123$32 = 0; index$sample123$32 < noStates; index$sample123$32 += 1) {
-																								int distributionTempVariable$var121$34 = index$sample123$32;
+																							for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
+																								int distributionTempVariable$var121$51 = index$sample123$49;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample123Value33 = (1.0 * distribution$sample123[((index$sample$30 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$32]);
-																								if((index$sample$30 == sample)) {
+																								double cv$probabilitySample123Value50 = (cv$probabilitySample104Value7 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
+																								if((index$sample$47 == sample)) {
 																									if((timeStep$var113 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var50 = 0; var50 < noStates; var50 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var50 == st[sample][timeStep$var136])) {
+																										for(int var50 = 0; var50 < noStates; var50 += 1) {
+																											if((var50 == st[sample][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$14$var148;
 																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$6$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[st[sample][timeStep$var136]];
-																																		cv$temp$6$var148 = var148;
-																																	}
-																																	double cv$temp$7$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = traceTempVariable$var149$10_1;
-																																		cv$temp$7$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value33) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$6$var148) / Math.sqrt(cv$temp$7$var149))) - (0.5 * Math.log(cv$temp$7$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value33);
-																																}
-																															}
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[st[sample][timeStep$var136]];
+																															cv$temp$14$var148 = var148;
 																														}
+																														double cv$temp$15$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = traceTempVariable$var149$11_1;
+																															cv$temp$15$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value50);
 																													}
 																												}
 																											}
@@ -9041,263 +8738,184 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												}
 											}
 										}
-									} else {
-										for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
-											if(true) {
-												// Enumerating the possible outputs of Categorical 101.
-												for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
-													int distributionTempVariable$var102$8 = index$sample104$6;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample104Value7 = (1.0 * distribution$sample104[((index$sample$5 - 0) / 1)][index$sample104$6]);
-													if((index$sample$5 == sample)) {
-														if((0 == timeStep$var136)) {
-															if(metric_valid_g[sample][timeStep$var136]) {
-																double traceTempVariable$var149$11_1 = cv$currentValue;
-																if(metric_valid_g[sample][timeStep$var136]) {
-																	if((var66 == st[sample][timeStep$var136])) {
-																		// Processing sample task 157 of consumer random variable null.
-																		{
-																			if(metric_valid_g[sample][timeStep$var136]) {
-																				// Set an accumulator to sum the probabilities for each possible configuration of
-																				// inputs.
-																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																				
-																				// Set an accumulator to record the consumer distributions not seen. Initially set
-																				// to 1 as seen values will be deducted from this value.
-																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																				{
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 68.
-																					if((index$sample$5 == sample)) {
-																						if((0 == timeStep$var136)) {
-																							if(metric_valid_g[sample][timeStep$var136]) {
-																								for(int var50 = 0; var50 < noStates; var50 += 1) {
-																									if(metric_valid_g[sample][timeStep$var136]) {
-																										if((var50 == st[sample][timeStep$var136])) {
-																											{
-																												{
-																													if(metric_valid_g[sample][timeStep$var136]) {
-																														double cv$temp$8$var148;
-																														{
-																															// Constructing a random variable input for use later.
-																															double var148 = metric_mean[st[sample][timeStep$var136]];
-																															cv$temp$8$var148 = var148;
-																														}
-																														double cv$temp$9$var149;
-																														{
-																															// Constructing a random variable input for use later.
-																															double var149 = traceTempVariable$var149$11_1;
-																															cv$temp$9$var149 = var149;
-																														}
-																														
-																														// Record the probability of sample task 157 generating output with current configuration.
-																														if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) < cv$accumulatedConsumerProbabilities))
-																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149))));
-																															else
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$8$var148) / Math.sqrt(cv$temp$9$var149))) - (0.5 * Math.log(cv$temp$9$var149)))));
-																														}
-																														
-																														// Recorded the probability of reaching sample task 157 with the current configuration.
-																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
-																													}
-																												}
-																											}
+									}
+								}
+							}
+							for(int sample = 0; sample < noSamples; sample += 1) {
+								for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+									if(metric_valid_g[sample][timeStep$var136]) {
+										if(fixedFlag$sample123) {
+											for(int index$sample$14_1 = 0; index$sample$14_1 < noSamples; index$sample$14_1 += 1) {
+												for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$14_1]; timeStep$var113 += 1) {
+													if((index$sample$14_1 == sample)) {
+														if((timeStep$var113 == timeStep$var136)) {
+															double traceTempVariable$var149$21_1 = cv$currentValue;
+															if((var66 == st[sample][timeStep$var136])) {
+																// Processing sample task 157 of consumer random variable null.
+																{
+																	// Set an accumulator to sum the probabilities for each possible configuration of
+																	// inputs.
+																	double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																	
+																	// Set an accumulator to record the consumer distributions not seen. Initially set
+																	// to 1 as seen values will be deducted from this value.
+																	double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																	{
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 68.
+																		if(fixedFlag$sample104) {
+																			for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
+																				if((index$sample$55_1 == sample)) {
+																					if((0 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$16$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[st[sample][timeStep$var136]];
+																											cv$temp$16$var148 = var148;
 																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					for(int index$sample$39 = 0; index$sample$39 < noSamples; index$sample$39 += 1) {
-																						if(!(index$sample$39 == index$sample$5)) {
-																							// Enumerating the possible outputs of Categorical 101.
-																							for(int index$sample104$40 = 0; index$sample104$40 < noStates; index$sample104$40 += 1) {
-																								int distributionTempVariable$var102$42 = index$sample104$40;
-																								
-																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample104Value41 = (cv$probabilitySample104Value7 * distribution$sample104[((index$sample$39 - 0) / 1)][index$sample104$40]);
-																								if((index$sample$39 == sample)) {
-																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var50 = 0; var50 < noStates; var50 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var50 == st[sample][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$10$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[st[sample][timeStep$var136]];
-																																		cv$temp$10$var148 = var148;
-																																	}
-																																	double cv$temp$11$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = traceTempVariable$var149$11_1;
-																																		cv$temp$11$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value41) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$10$var148) / Math.sqrt(cv$temp$11$var149))) - (0.5 * Math.log(cv$temp$11$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value41);
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
+																										double cv$temp$17$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = traceTempVariable$var149$21_1;
+																											cv$temp$17$var149 = var149;
 																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					
-																					// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																					// the output of Sample task 68.
-																					if(fixedFlag$sample123) {
-																						for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
-																							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
-																								if((index$sample$46_1 == sample)) {
-																									if((timeStep$var113 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var50 = 0; var50 < noStates; var50 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var50 == st[sample][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$12$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[st[sample][timeStep$var136]];
-																																		cv$temp$12$var148 = var148;
-																																	}
-																																	double cv$temp$13$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = traceTempVariable$var149$11_1;
-																																		cv$temp$13$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value7) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$12$var148) / Math.sqrt(cv$temp$13$var149))) - (0.5 * Math.log(cv$temp$13$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value7);
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					} else {
-																						for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
-																							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
-																								if(true) {
-																									// Enumerating the possible outputs of Categorical 120.
-																									for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
-																										int distributionTempVariable$var121$51 = index$sample123$49;
 																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample123Value50 = (cv$probabilitySample104Value7 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
-																										if((index$sample$47 == sample)) {
-																											if((timeStep$var113 == timeStep$var136)) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													for(int var50 = 0; var50 < noStates; var50 += 1) {
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															if((var50 == st[sample][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[sample][timeStep$var136]) {
-																																			double cv$temp$14$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[st[sample][timeStep$var136]];
-																																				cv$temp$14$var148 = var148;
-																																			}
-																																			double cv$temp$15$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = traceTempVariable$var149$11_1;
-																																				cv$temp$15$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value50) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$14$var148) / Math.sqrt(cv$temp$15$var149))) - (0.5 * Math.log(cv$temp$15$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value50);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))));
 																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																									}
 																								}
 																							}
 																						}
 																					}
 																				}
-																				
-																				// A check to ensure rounding of floating point values can never result in a negative
-																				// value.
-																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																				
-																				// Multiply (log space add) in the probability of the sample task to the overall probability
-																				// for this configuration of the source random variable.
-																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																				else {
-																					// If the second value is -infinity.
-																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																					else
-																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																			}
+																		} else {
+																			for(int index$sample$56 = 0; index$sample$56 < noSamples; index$sample$56 += 1) {
+																				if(true) {
+																					// Enumerating the possible outputs of Categorical 101.
+																					for(int index$sample104$57 = 0; index$sample104$57 < noStates; index$sample104$57 += 1) {
+																						int distributionTempVariable$var102$59 = index$sample104$57;
+																						
+																						// Update the probability of sampling this value from the distribution value.
+																						double cv$probabilitySample104Value58 = (1.0 * distribution$sample104[((index$sample$56 - 0) / 1)][index$sample104$57]);
+																						if((index$sample$56 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$18$var148;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[st[sample][timeStep$var136]];
+																													cv$temp$18$var148 = var148;
+																												}
+																												double cv$temp$19$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = traceTempVariable$var149$21_1;
+																													cv$temp$19$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value58);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
 																				}
 																			}
 																		}
+																		
+																		// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
+																		// the output of Sample task 68.
+																		for(int index$sample$63_1 = 0; index$sample$63_1 < noSamples; index$sample$63_1 += 1) {
+																			for(int index$timeStep$63_2 = 1; index$timeStep$63_2 < length$metric[index$sample$63_1]; index$timeStep$63_2 += 1) {
+																				if((index$sample$63_1 == sample)) {
+																					if((index$timeStep$63_2 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$20$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[st[sample][timeStep$var136]];
+																											cv$temp$20$var148 = var148;
+																										}
+																										double cv$temp$21$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = traceTempVariable$var149$21_1;
+																											cv$temp$21$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																	
+																	// A check to ensure rounding of floating point values can never result in a negative
+																	// value.
+																	cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																	
+																	// Multiply (log space add) in the probability of the sample task to the overall probability
+																	// for this configuration of the source random variable.
+																	if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																		else
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 																	}
 																}
 															}
@@ -9305,24 +8923,22 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													}
 												}
 											}
-										}
-									}
-								}
-							}
-							for(int sample = 0; sample < noSamples; sample += 1) {
-								for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-									if(fixedFlag$sample123) {
-										for(int index$sample$14_1 = 0; index$sample$14_1 < noSamples; index$sample$14_1 += 1) {
-											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$14_1]; timeStep$var113 += 1) {
-												if((index$sample$14_1 == sample)) {
-													if((timeStep$var113 == timeStep$var136)) {
-														if(metric_valid_g[sample][timeStep$var136]) {
-															double traceTempVariable$var149$21_1 = cv$currentValue;
-															if(metric_valid_g[sample][timeStep$var136]) {
-																if((var66 == st[sample][timeStep$var136])) {
-																	// Processing sample task 157 of consumer random variable null.
-																	{
-																		if(metric_valid_g[sample][timeStep$var136]) {
+										} else {
+											for(int index$sample$15 = 0; index$sample$15 < noSamples; index$sample$15 += 1) {
+												for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$15]; timeStep$var113 += 1) {
+													if(true) {
+														// Enumerating the possible outputs of Categorical 120.
+														for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
+															int distributionTempVariable$var121$19 = index$sample123$17;
+															
+															// Update the probability of sampling this value from the distribution value.
+															double cv$probabilitySample123Value18 = (1.0 * distribution$sample123[((index$sample$15 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$17]);
+															if((index$sample$15 == sample)) {
+																if((timeStep$var113 == timeStep$var136)) {
+																	double traceTempVariable$var149$22_1 = cv$currentValue;
+																	if((var66 == st[sample][timeStep$var136])) {
+																		// Processing sample task 157 of consumer random variable null.
+																		{
 																			// Set an accumulator to sum the probabilities for each possible configuration of
 																			// inputs.
 																			double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -9334,45 +8950,39 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																				// the output of Sample task 68.
 																				if(fixedFlag$sample104) {
-																					for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
-																						if((index$sample$55_1 == sample)) {
+																					for(int index$sample$65_1 = 0; index$sample$65_1 < noSamples; index$sample$65_1 += 1) {
+																						if((index$sample$65_1 == sample)) {
 																							if((0 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var50 = 0; var50 < noStates; var50 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											if((var50 == st[sample][timeStep$var136])) {
+																								for(int var50 = 0; var50 < noStates; var50 += 1) {
+																									if((var50 == st[sample][timeStep$var136])) {
+																										{
+																											{
+																												double cv$temp$22$var148;
 																												{
-																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$16$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[st[sample][timeStep$var136]];
-																																cv$temp$16$var148 = var148;
-																															}
-																															double cv$temp$17$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = traceTempVariable$var149$21_1;
-																																cv$temp$17$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$16$var148) / Math.sqrt(cv$temp$17$var149))) - (0.5 * Math.log(cv$temp$17$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																														}
-																													}
+																													// Constructing a random variable input for use later.
+																													double var148 = metric_mean[st[sample][timeStep$var136]];
+																													cv$temp$22$var148 = var148;
 																												}
+																												double cv$temp$23$var149;
+																												{
+																													// Constructing a random variable input for use later.
+																													double var149 = traceTempVariable$var149$22_1;
+																													cv$temp$23$var149 = var149;
+																												}
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149))));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
 																											}
 																										}
 																									}
@@ -9381,52 +8991,46 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																						}
 																					}
 																				} else {
-																					for(int index$sample$56 = 0; index$sample$56 < noSamples; index$sample$56 += 1) {
+																					for(int index$sample$66 = 0; index$sample$66 < noSamples; index$sample$66 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 101.
-																							for(int index$sample104$57 = 0; index$sample104$57 < noStates; index$sample104$57 += 1) {
-																								int distributionTempVariable$var102$59 = index$sample104$57;
+																							for(int index$sample104$67 = 0; index$sample104$67 < noStates; index$sample104$67 += 1) {
+																								int distributionTempVariable$var102$69 = index$sample104$67;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample104Value58 = (1.0 * distribution$sample104[((index$sample$56 - 0) / 1)][index$sample104$57]);
-																								if((index$sample$56 == sample)) {
+																								double cv$probabilitySample104Value68 = (cv$probabilitySample123Value18 * distribution$sample104[((index$sample$66 - 0) / 1)][index$sample104$67]);
+																								if((index$sample$66 == sample)) {
 																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var50 = 0; var50 < noStates; var50 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var50 == st[sample][timeStep$var136])) {
+																										for(int var50 = 0; var50 < noStates; var50 += 1) {
+																											if((var50 == st[sample][timeStep$var136])) {
+																												{
+																													{
+																														double cv$temp$24$var148;
 																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$18$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[st[sample][timeStep$var136]];
-																																		cv$temp$18$var148 = var148;
-																																	}
-																																	double cv$temp$19$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = traceTempVariable$var149$21_1;
-																																		cv$temp$19$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value58) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$18$var148) / Math.sqrt(cv$temp$19$var149))) - (0.5 * Math.log(cv$temp$19$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value58);
-																																}
-																															}
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[st[sample][timeStep$var136]];
+																															cv$temp$24$var148 = var148;
 																														}
+																														double cv$temp$25$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = traceTempVariable$var149$22_1;
+																															cv$temp$25$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value68);
 																													}
 																												}
 																											}
@@ -9440,44 +9044,85 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																				
 																				// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
 																				// the output of Sample task 68.
-																				for(int index$sample$63_1 = 0; index$sample$63_1 < noSamples; index$sample$63_1 += 1) {
-																					for(int index$timeStep$63_2 = 1; index$timeStep$63_2 < length$metric[index$sample$63_1]; index$timeStep$63_2 += 1) {
-																						if((index$sample$63_1 == sample)) {
-																							if((index$timeStep$63_2 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var50 = 0; var50 < noStates; var50 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
+																				if((index$sample$15 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						for(int var50 = 0; var50 < noStates; var50 += 1) {
+																							if((var50 == st[sample][timeStep$var136])) {
+																								{
+																									{
+																										double cv$temp$26$var148;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var148 = metric_mean[st[sample][timeStep$var136]];
+																											cv$temp$26$var148 = var148;
+																										}
+																										double cv$temp$27$var149;
+																										{
+																											// Constructing a random variable input for use later.
+																											double var149 = traceTempVariable$var149$22_1;
+																											cv$temp$27$var149 = var149;
+																										}
+																										
+																										// Record the probability of sample task 157 generating output with current configuration.
+																										if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) < cv$accumulatedConsumerProbabilities))
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149))));
+																											else
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))));
+																										}
+																										
+																										// Recorded the probability of reaching sample task 157 with the current configuration.
+																										cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																				for(int index$sample$74 = 0; index$sample$74 < noSamples; index$sample$74 += 1) {
+																					for(int index$timeStep$75 = 1; index$timeStep$75 < length$metric[index$sample$74]; index$timeStep$75 += 1) {
+																						if(!((index$sample$74 == index$sample$15) && (index$timeStep$75 == timeStep$var113))) {
+																							// Enumerating the possible outputs of Categorical 120.
+																							for(int index$sample123$76 = 0; index$sample123$76 < noStates; index$sample123$76 += 1) {
+																								int distributionTempVariable$var121$78 = index$sample123$76;
+																								
+																								// Update the probability of sampling this value from the distribution value.
+																								double cv$probabilitySample123Value77 = (cv$probabilitySample123Value18 * distribution$sample123[((index$sample$74 - 0) / 1)][((index$timeStep$75 - 1) / 1)][index$sample123$76]);
+																								if((index$sample$74 == sample)) {
+																									if((index$timeStep$75 == timeStep$var136)) {
+																										for(int var50 = 0; var50 < noStates; var50 += 1) {
 																											if((var50 == st[sample][timeStep$var136])) {
 																												{
 																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$20$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[st[sample][timeStep$var136]];
-																																cv$temp$20$var148 = var148;
-																															}
-																															double cv$temp$21$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = traceTempVariable$var149$21_1;
-																																cv$temp$21$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$20$var148) / Math.sqrt(cv$temp$21$var149))) - (0.5 * Math.log(cv$temp$21$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																														double cv$temp$28$var148;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var148 = metric_mean[st[sample][timeStep$var136]];
+																															cv$temp$28$var148 = var148;
 																														}
+																														double cv$temp$29$var149;
+																														{
+																															// Constructing a random variable input for use later.
+																															double var149 = traceTempVariable$var149$22_1;
+																															cv$temp$29$var149 = var149;
+																														}
+																														
+																														// Record the probability of sample task 157 generating output with current configuration.
+																														if(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149))));
+																															else
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))));
+																														}
+																														
+																														// Recorded the probability of reaching sample task 157 with the current configuration.
+																														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value77);
 																													}
 																												}
 																											}
@@ -9504,271 +9149,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																					cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 																				else
 																					cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									} else {
-										for(int index$sample$15 = 0; index$sample$15 < noSamples; index$sample$15 += 1) {
-											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$15]; timeStep$var113 += 1) {
-												if(true) {
-													// Enumerating the possible outputs of Categorical 120.
-													for(int index$sample123$17 = 0; index$sample123$17 < noStates; index$sample123$17 += 1) {
-														int distributionTempVariable$var121$19 = index$sample123$17;
-														
-														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample123Value18 = (1.0 * distribution$sample123[((index$sample$15 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$17]);
-														if((index$sample$15 == sample)) {
-															if((timeStep$var113 == timeStep$var136)) {
-																if(metric_valid_g[sample][timeStep$var136]) {
-																	double traceTempVariable$var149$22_1 = cv$currentValue;
-																	if(metric_valid_g[sample][timeStep$var136]) {
-																		if((var66 == st[sample][timeStep$var136])) {
-																			// Processing sample task 157 of consumer random variable null.
-																			{
-																				if(metric_valid_g[sample][timeStep$var136]) {
-																					// Set an accumulator to sum the probabilities for each possible configuration of
-																					// inputs.
-																					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																					
-																					// Set an accumulator to record the consumer distributions not seen. Initially set
-																					// to 1 as seen values will be deducted from this value.
-																					double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																					{
-																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																						// the output of Sample task 68.
-																						if(fixedFlag$sample104) {
-																							for(int index$sample$65_1 = 0; index$sample$65_1 < noSamples; index$sample$65_1 += 1) {
-																								if((index$sample$65_1 == sample)) {
-																									if((0 == timeStep$var136)) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											for(int var50 = 0; var50 < noStates; var50 += 1) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													if((var50 == st[sample][timeStep$var136])) {
-																														{
-																															{
-																																if(metric_valid_g[sample][timeStep$var136]) {
-																																	double cv$temp$22$var148;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var148 = metric_mean[st[sample][timeStep$var136]];
-																																		cv$temp$22$var148 = var148;
-																																	}
-																																	double cv$temp$23$var149;
-																																	{
-																																		// Constructing a random variable input for use later.
-																																		double var149 = traceTempVariable$var149$22_1;
-																																		cv$temp$23$var149 = var149;
-																																	}
-																																	
-																																	// Record the probability of sample task 157 generating output with current configuration.
-																																	if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) < cv$accumulatedConsumerProbabilities))
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																	else {
-																																		// If the second value is -infinity.
-																																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																			cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149))));
-																																		else
-																																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$22$var148) / Math.sqrt(cv$temp$23$var149))) - (0.5 * Math.log(cv$temp$23$var149)))));
-																																	}
-																																	
-																																	// Recorded the probability of reaching sample task 157 with the current configuration.
-																																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						} else {
-																							for(int index$sample$66 = 0; index$sample$66 < noSamples; index$sample$66 += 1) {
-																								if(true) {
-																									// Enumerating the possible outputs of Categorical 101.
-																									for(int index$sample104$67 = 0; index$sample104$67 < noStates; index$sample104$67 += 1) {
-																										int distributionTempVariable$var102$69 = index$sample104$67;
-																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample104Value68 = (cv$probabilitySample123Value18 * distribution$sample104[((index$sample$66 - 0) / 1)][index$sample104$67]);
-																										if((index$sample$66 == sample)) {
-																											if((0 == timeStep$var136)) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													for(int var50 = 0; var50 < noStates; var50 += 1) {
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															if((var50 == st[sample][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[sample][timeStep$var136]) {
-																																			double cv$temp$24$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[st[sample][timeStep$var136]];
-																																				cv$temp$24$var148 = var148;
-																																			}
-																																			double cv$temp$25$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = traceTempVariable$var149$22_1;
-																																				cv$temp$25$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))))) + 1)) + (Math.log(cv$probabilitySample104Value68) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$24$var148) / Math.sqrt(cv$temp$25$var149))) - (0.5 * Math.log(cv$temp$25$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample104Value68);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																						
-																						// Enumerating the possible arguments for the variable Gaussian 150 which is consuming
-																						// the output of Sample task 68.
-																						if((index$sample$15 == sample)) {
-																							if((timeStep$var113 == timeStep$var136)) {
-																								if(metric_valid_g[sample][timeStep$var136]) {
-																									for(int var50 = 0; var50 < noStates; var50 += 1) {
-																										if(metric_valid_g[sample][timeStep$var136]) {
-																											if((var50 == st[sample][timeStep$var136])) {
-																												{
-																													{
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															double cv$temp$26$var148;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var148 = metric_mean[st[sample][timeStep$var136]];
-																																cv$temp$26$var148 = var148;
-																															}
-																															double cv$temp$27$var149;
-																															{
-																																// Constructing a random variable input for use later.
-																																double var149 = traceTempVariable$var149$22_1;
-																																cv$temp$27$var149 = var149;
-																															}
-																															
-																															// Record the probability of sample task 157 generating output with current configuration.
-																															if(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) < cv$accumulatedConsumerProbabilities))
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																															else {
-																																// If the second value is -infinity.
-																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149))));
-																																else
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value18) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$26$var148) / Math.sqrt(cv$temp$27$var149))) - (0.5 * Math.log(cv$temp$27$var149)))));
-																															}
-																															
-																															// Recorded the probability of reaching sample task 157 with the current configuration.
-																															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value18);
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																						for(int index$sample$74 = 0; index$sample$74 < noSamples; index$sample$74 += 1) {
-																							for(int index$timeStep$75 = 1; index$timeStep$75 < length$metric[index$sample$74]; index$timeStep$75 += 1) {
-																								if(!((index$sample$74 == index$sample$15) && (index$timeStep$75 == timeStep$var113))) {
-																									// Enumerating the possible outputs of Categorical 120.
-																									for(int index$sample123$76 = 0; index$sample123$76 < noStates; index$sample123$76 += 1) {
-																										int distributionTempVariable$var121$78 = index$sample123$76;
-																										
-																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample123Value77 = (cv$probabilitySample123Value18 * distribution$sample123[((index$sample$74 - 0) / 1)][((index$timeStep$75 - 1) / 1)][index$sample123$76]);
-																										if((index$sample$74 == sample)) {
-																											if((index$timeStep$75 == timeStep$var136)) {
-																												if(metric_valid_g[sample][timeStep$var136]) {
-																													for(int var50 = 0; var50 < noStates; var50 += 1) {
-																														if(metric_valid_g[sample][timeStep$var136]) {
-																															if((var50 == st[sample][timeStep$var136])) {
-																																{
-																																	{
-																																		if(metric_valid_g[sample][timeStep$var136]) {
-																																			double cv$temp$28$var148;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var148 = metric_mean[st[sample][timeStep$var136]];
-																																				cv$temp$28$var148 = var148;
-																																			}
-																																			double cv$temp$29$var149;
-																																			{
-																																				// Constructing a random variable input for use later.
-																																				double var149 = traceTempVariable$var149$22_1;
-																																				cv$temp$29$var149 = var149;
-																																			}
-																																			
-																																			// Record the probability of sample task 157 generating output with current configuration.
-																																			if(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																																			else {
-																																				// If the second value is -infinity.
-																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149))));
-																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))))) + 1)) + (Math.log(cv$probabilitySample123Value77) + (DistributionSampling.logProbabilityGaussian(((metric_g[sample][timeStep$var136] - cv$temp$28$var148) / Math.sqrt(cv$temp$29$var149))) - (0.5 * Math.log(cv$temp$29$var149)))));
-																																			}
-																																			
-																																			// Recorded the probability of reaching sample task 157 with the current configuration.
-																																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample123Value77);
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																					
-																					// A check to ensure rounding of floating point values can never result in a negative
-																					// value.
-																					cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																					
-																					// Multiply (log space add) in the probability of the sample task to the overall probability
-																					// for this configuration of the source random variable.
-																					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																					else {
-																						// If the second value is -infinity.
-																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																						else
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																					}
-																				}
 																			}
 																		}
 																	}

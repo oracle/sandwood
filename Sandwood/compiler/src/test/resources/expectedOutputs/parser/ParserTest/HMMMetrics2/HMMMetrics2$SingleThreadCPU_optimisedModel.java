@@ -1072,13 +1072,14 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// An accumulator for the distributed probability space covered.
 						double cv$probabilityReached = 0.0;
 						
+						// Look for paths between the variable and the sample task 157 including any distribution
+						// values.
+						// 
 						// The sample value to calculate the probability of generating
 						double cv$sampleValue = metric_g[sample][timeStep$var136];
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((((0 == timeStep$var136) && metric_valid_g[sample][0]) && (0 <= st[sample][0]))) {
-							// Enumerating the possible arguments for Gaussian 150.
-							// 
+						if(((0 == timeStep$var136) && (0 <= st[sample][0]))) {
 							// Enumerating the possible arguments for Gaussian 150.
 							if(fixedFlag$sample104) {
 								int var50 = st[sample][0];
@@ -2098,9 +2099,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var832's comment
+			// cv$temp$1$$var844's comment
 			// 
-			// $var832's comment
+			// $var844's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -2122,9 +2123,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				if(((0 <= var31) && (var31 < noStates))) {
 					// Substituted "index$sample$3_2" with its value "sample".
 					// 
-					// cv$temp$3$$var845's comment
+					// cv$temp$3$$var857's comment
 					// 
-					// $var845's comment
+					// $var857's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var119's comment
@@ -2390,9 +2391,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$22$$var980's comment
+					// cv$temp$22$$var992's comment
 					// 
-					// $var980's comment
+					// $var992's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$21$var119's comment
@@ -2611,9 +2612,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var1066's comment
+						// cv$temp$1$$var1078's comment
 						// 
-						// $var1066's comment
+						// $var1078's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var119's comment
@@ -2865,9 +2866,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var1067's comment
+							// cv$temp$3$$var1079's comment
 							// 
-							// $var1067's comment
+							// $var1079's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var119's comment
@@ -3149,9 +3150,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var1069's comment
+						// cv$temp$7$$var1081's comment
 						// 
-						// $var1069's comment
+						// $var1081's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var119's comment
@@ -3455,9 +3456,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$77$$var1455's comment
+					// cv$temp$77$$var1467's comment
 					// 
-					// $var1455's comment
+					// $var1467's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$76$var119's comment
@@ -3796,7 +3797,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Looking for a path between Sample 52 and consumer Gaussian 150.
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((((var50 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+				if((((var50 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 					if(fixedFlag$sample104) {
 						// Processing sample task 157 of consumer random variable null.
 						// 
@@ -4052,7 +4053,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Looking for a path between Sample 52 and consumer Gaussian 150.
 		for(int sample = 0; sample < noSamples; sample += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((((var50 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+			if((((var50 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 				if(fixedFlag$sample104) {
 					// Processing sample task 157 of consumer random variable null.
 					// 
@@ -4333,7 +4334,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Looking for a path between Sample 68 and consumer Gaussian 150.
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((((var66 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+				if((((var66 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 					if(fixedFlag$sample104) {
 						// Processing sample task 157 of consumer random variable null.
 						// 
@@ -4579,7 +4580,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Looking for a path between Sample 68 and consumer Gaussian 150.
 		for(int sample = 0; sample < noSamples; sample += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((((var66 == st[sample][0]) && metric_valid_g[sample][0]) && (0 < length$metric[sample]))) {
+			if((((var66 == st[sample][0]) && (0 < length$metric[sample])) && metric_valid_g[sample][0])) {
 				if(fixedFlag$sample104) {
 					// Processing sample task 157 of consumer random variable null.
 					// 

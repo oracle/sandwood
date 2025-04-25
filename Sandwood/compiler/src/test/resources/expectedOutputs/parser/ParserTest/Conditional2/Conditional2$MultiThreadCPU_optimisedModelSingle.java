@@ -195,15 +195,13 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$value = (logProbability$value + cv$sampleAccumulator);
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
-				// Update the variable probability
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$value2 = (logProbability$value2 + cv$sampleAccumulator);
+			// Update the variable probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$value2 = (logProbability$value2 + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -234,12 +232,10 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Variable declaration of cv$accumulator moved.
 			logProbability$value = (logProbability$value + logProbability$var19);
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
-				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$value2 = (logProbability$value2 + logProbability$var19);
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$value2 = (logProbability$value2 + logProbability$var19);
 			
 			// Add probability to model
 			// 
@@ -404,6 +400,8 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// inputs.
 		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 		
+		// Processing observed variable value2
+		// 
 		// Looking for a path between Put 16 and consumer double[] 27.
 		// 
 		// Check observed variable is possible

@@ -203,10 +203,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Update the variable probability
 			logProbability$value = (logProbability$value + cv$accumulator);
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
-				// Update the variable probability
-				logProbability$value2 = (logProbability$value2 + cv$accumulator);
+			// Update the variable probability
+			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -229,10 +227,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Update the variable probability
 			logProbability$value = (logProbability$value + cv$accumulator);
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
-				// Update the variable probability
-				logProbability$value2 = (logProbability$value2 + cv$accumulator);
+			// Update the variable probability
+			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -393,6 +389,8 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// inputs.
 		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 		
+		// Processing observed variable value2
+		// 
 		// Looking for a path between Put 16 and consumer double[] 27.
 		// 
 		// Check observed variable is possible
