@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -48,13 +48,52 @@ public class ArrayReadFrequency {
                 Stack<TransTreeReturn<IntVariable>> indexes, IfElseDesc ifElse) {}
 
         private record IfElseDesc(TreeID ifElseID, Boolean inIf, IfElseDesc parent) {
-            public boolean contains(IfElseDesc target) {
-                IfElseDesc d = this;
-                do {
-                    if(d == target)
+
+            /**
+             * A method to test if this is a sub branch of or the same branch as the provided branch.
+             */
+            public boolean isSubBranch(IfElseDesc target) {
+                if(this.equals(target))
+                    return true;
+                if(parent == null)
+                    return false;
+                else
+                    return parent.isSubBranch(target);
+            }
+
+            /**
+             * A test to see if 2 descriptions are in different branches of the same if else node.
+             * 
+             * @param target
+             * @return
+             */
+            public boolean inDifferentBranch(IfElseDesc target) {
+                Stack<IfElseDesc> thisIfElse = new Stack<>();
+                IfElseDesc i = this;
+                while(i != null) {
+                    thisIfElse.push(i);
+                    i = i.parent();
+                }
+
+                Stack<IfElseDesc> targetIfElse = new Stack<>();
+                IfElseDesc t = target;
+                while(t != null) {
+                    targetIfElse.push(t);
+                    t = t.parent();
+                }
+
+                while(!thisIfElse.isEmpty() && !targetIfElse.isEmpty()) {
+                    i = thisIfElse.pop();
+                    t = targetIfElse.pop();
+
+                    if(i.ifElseID != t.ifElseID)
+                        return false;
+
+                    if(i.inIf != t.inIf)
                         return true;
-                    d = d.parent;
-                } while(d != null);
+
+                }
+
                 return false;
             }
         }
@@ -120,6 +159,7 @@ public class ArrayReadFrequency {
                     visit(put.array);
                     indexes.push(put.index);
                     inPut = false;
+                    arrayIndexes.pop();
 
                     updatePutState(put, indexes);
 
@@ -153,8 +193,8 @@ public class ArrayReadFrequency {
 
                     // Remove candidates that depend on variables that are moving out of scope.
                     for(int i = declaredVariables.size() - 1; i >= numDeclared; i--) {
-                        arrayDesces = writeDependencies.get(declaredVariables.remove(i));
-                        removeCandidate(arrayDesces);
+                        VariableDescription<?> var = declaredVariables.remove(i);
+                        removeDeclaredVariable(var);
                     }
 
                     break;
@@ -172,8 +212,8 @@ public class ArrayReadFrequency {
 
                     // Remove candidates that depend on variables that are moving out of scope.
                     for(int i = declaredVariables.size() - 1; i >= numDeclared; i--) {
-                        Set<ArraySetDescription> arrayDesces = writeDependencies.get(declaredVariables.remove(i));
-                        removeCandidate(arrayDesces);
+                        VariableDescription<?> var = declaredVariables.remove(i);
+                        removeDeclaredVariable(var);
                     }
 
                     d = new IfElseDesc(ifElse.id, false, ifElseDesces.peek());
@@ -184,8 +224,8 @@ public class ArrayReadFrequency {
 
                     // Remove candidates that depend on variables that are moving out of scope.
                     for(int i = declaredVariables.size() - 1; i >= numDeclared; i--) {
-                        Set<ArraySetDescription> arrayDesces = writeDependencies.get(declaredVariables.remove(i));
-                        removeCandidate(arrayDesces);
+                        VariableDescription<?> var = declaredVariables.remove(i);
+                        removeDeclaredVariable(var);
                     }
 
                     // Look for arrays that can be merged into a single candidate over riding the preceding ones.
@@ -219,12 +259,23 @@ public class ArrayReadFrequency {
                         arrayName.push(l.varDesc);
                     } else {
                         Set<ArraySetDescription> arrayDesces = readDependencies.get(l.varDesc);
-                        removeCandidate(arrayDesces);
+                        if(arrayDesces != null) {
+                            for(ArraySetDescription ad:arrayDesces) {
+                                // Check this array set description refers to arrays visible from this if branch.
+                                if(!ifElseDesces.peek().inDifferentBranch(ad.ifElse)) {
+                                    Map<Stack<TransTreeReturn<IntVariable>>, CandidateDescription> m = candidates
+                                            .get(ad.arrayName);
+                                    if(m != null)
+                                        m.remove(ad.indexes);
+                                }
+                            }
+                        }
                     }
                     break;
                 }
                 case STORE: {
                     TransStore<?> s = (TransStore<?>) tree;
+                    visit(s.value);
                     Set<ArraySetDescription> arrayDesces = writeDependencies.get(s.varDesc);
                     removeCandidate(arrayDesces);
                     break;
@@ -237,8 +288,8 @@ public class ArrayReadFrequency {
 
                     // Remove candidates that depend on variables that are moving out of scope.
                     for(int i = declaredVariables.size() - 1; i >= numDeclared; i--) {
-                        Set<ArraySetDescription> arrayDesces = writeDependencies.get(declaredVariables.remove(i));
-                        removeCandidate(arrayDesces);
+                        VariableDescription<?> var = declaredVariables.remove(i);
+                        removeDeclaredVariable(var);
                     }
 
                     break;
@@ -247,16 +298,13 @@ public class ArrayReadFrequency {
                 case INITIALIZE: {
                     TransInitialize<?> ti = (TransInitialize<?>) tree;
                     declaredVariables.add(ti.varDesc);
-
-                    tree.traverseTree(this);
+                    visit(ti.value);
                     break;
                 }
 
                 case INITIALIZE_UNSET: {
                     TransInitializeUnset<?> ti = (TransInitializeUnset<?>) tree;
                     declaredVariables.add(ti.varDesc);
-
-                    tree.traverseTree(this);
                     break;
                 }
 
@@ -266,11 +314,41 @@ public class ArrayReadFrequency {
             }
         }
 
+        private void removeDeclaredVariable(VariableDescription<?> var) {
+            Map<VariableDescription<?>, Set<ArraySetDescription>> ifs = ifElseBranchCandidate.get(ifElseDesces.peek());
+            if(ifs != null)
+                ifs.remove(var);
+            removeDeclaredArrayDescs(var, readDependencies);
+            removeDeclaredArrayDescs(var, writeDependencies);
+        }
+
+        private void removeDeclaredArrayDescs(VariableDescription<?> var,
+                Map<VariableDescription<?>, Set<ArraySetDescription>> recorded) {
+            Set<ArraySetDescription> arrayDesces = recorded.remove(var);
+            if(arrayDesces != null) {
+                for(ArraySetDescription arrayDesc:arrayDesces) {
+                    if(arrayDesc.arrayName.equals(var)) {
+                        Map<Stack<TransTreeReturn<IntVariable>>, CandidateDescription> m = candidates
+                                .get(arrayDesc.arrayName);
+                        if(m != null) {
+                            CandidateDescription c = m.get(arrayDesc.indexes);
+                            if(c != null) {
+                                Set<ArraySetDescription> fors = forLoopDependencies.get(c.outerLoop());
+                                if(fors != null)
+                                    fors.remove(arrayDesc);
+                            }
+                        }
+                    }
+                }
+            }
+            removeCandidate(arrayDesces);
+        }
+
         private void removeCandidate(Set<ArraySetDescription> arrayDesces) {
             if(arrayDesces != null) {
                 for(ArraySetDescription ad:arrayDesces) {
                     // Check this array set description refers to arrays visible from this if branch.
-                    if(ifElseDesces.peek().contains(ad.ifElse) || ad.ifElse.contains(ifElseDesces.peek())) {
+                    if(ad.ifElse.isSubBranch(ifElseDesces.peek())) {
                         Map<Stack<TransTreeReturn<IntVariable>>, CandidateDescription> m = candidates.get(ad.arrayName);
                         if(m != null)
                             m.remove(ad.indexes);
@@ -370,7 +448,7 @@ public class ArrayReadFrequency {
                     }
                 }
             }
-            
+
             for(Stack<TransTreeReturn<IntVariable>> indexes:toRemove)
                 m.remove(indexes);
         }
@@ -380,7 +458,7 @@ public class ArrayReadFrequency {
             // TODO weaken this.
             if(candidate.outerLoop != current.outerLoop)
                 return false;
-            if(!candidate.ifElse.contains(ifElseDesces.peek()))
+            if(!candidate.ifElse.isSubBranch(ifElseDesces.peek()))
                 return false;
 
             // Test the indexes are equivalent
