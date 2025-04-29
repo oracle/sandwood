@@ -741,20 +741,20 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
-		// Looking for a path between Put 16 and consumer Beta 24.
-		// 
-		// Processing sample task 27 of consumer random variable null.
-		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
+		// Processing sample task 27 of consumer random variable null.
+		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
 		// Substituted "cv$temp$6$var23" with its value "1.0".
 		// 
 		// cv$temp$5$var22's comment
+		// Variable declaration of cv$temp$5$var22 moved.
+		// 
 		// Constructing a random variable input for use later.
-		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, bias[0], 1.0) - 0.6931471805599453);
+		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 

@@ -468,7 +468,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 															{
 																double cv$temp$1$bias;
 																{
-																	cv$temp$1$bias = bias;
+																	cv$temp$1$bias = traceTempVariable$bias$3_1;
 																}
 																double cv$temp$2$var16;
 																{
@@ -513,7 +513,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 															{
 																double cv$temp$3$bias;
 																{
-																	cv$temp$3$bias = bias;
+																	cv$temp$3$bias = traceTempVariable$bias$6_1;
 																}
 																double cv$temp$4$var16;
 																{

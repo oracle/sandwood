@@ -653,12 +653,14 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
+		// Processing sample task 20 of consumer random variable null.
+		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
 		// Substituted "cv$temp$4$var16" with its value "1.0".
 		// 
-		// Substituted "bias" with its value "var14".
+		// Substituted "cv$temp$3$bias" with its value "var14".
 		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, var14, 1.0)) - 0.6931471805599453);
 		
 		// Write out the new value of the sample.
@@ -681,21 +683,28 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
+		// Variable declaration of cv$accumulatedProbabilities moved.
+		// Declaration comment was:
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
 		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
-		// Processing sample task 20 of consumer random variable null.
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Substituted "cv$temp$0$var2" with its value "0.5".
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
+		// Processing sample task 20 of consumer random variable null.
+		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
 		// Substituted "cv$temp$2$var16" with its value "1.0".
 		// 
-		// Substituted "bias" with its value "0.5".
+		// Substituted "cv$temp$1$bias" with its value "0.5".
 		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
 		
 		// This value is not used before it is set again, so removing the value declaration.

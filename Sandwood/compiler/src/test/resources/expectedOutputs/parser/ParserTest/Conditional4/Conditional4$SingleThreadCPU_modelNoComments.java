@@ -563,7 +563,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 																{
 																	double cv$temp$5$var22;
 																	{
-																		double var22 = bias[0];
+																		double var22 = traceTempVariable$var22$10_1;
 																		cv$temp$5$var22 = var22;
 																	}
 																	double cv$temp$6$var23;
