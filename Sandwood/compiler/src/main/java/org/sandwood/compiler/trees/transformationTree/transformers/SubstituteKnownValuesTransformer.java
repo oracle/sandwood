@@ -522,11 +522,6 @@ public class SubstituteKnownValuesTransformer extends Transformer {
     private final Stack<Stack<IntVariable>> arrayIndexes;
 
     /**
-     * A mapping of for loop ids to the corresponding trees.
-     */
-    private final Map<TreeID, TransFor> forLoopLookup = new HashMap<>();
-
-    /**
      * Constructor.
      * 
      * @param knownValues The values that are known from the calling class.
@@ -1146,7 +1141,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
         // Return null if this initialisation is not in a sequential tree.
         if(parents.isEmpty())
             return null;
-        
+
         TransSequential ts = parents.peek();
         List<TransTreeVoid> trees = ts.getTrees();
         // A flag to say if we have passed the point that the variable is currently
