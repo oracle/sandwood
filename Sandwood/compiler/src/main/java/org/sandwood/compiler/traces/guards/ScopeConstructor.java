@@ -751,7 +751,7 @@ public class ScopeConstructor {
      * @param treeBuilder A lambda to build a tree inside each conditional location.
      */
     public void addTree(TreeBuilder treeBuilder) {
-        int position = noConstraints() - 1;
+        int position = getConstraintCount() - 1;
         for(ScopeDescription d:distributionScopes)
             addTree(d, position, treeBuilder);
     }
@@ -770,7 +770,7 @@ public class ScopeConstructor {
             addTree(d, position, treeBuilder);
     }
 
-    private int noConstraints() {
+    public int getConstraintCount() {
         return tasks.size();
     }
 
@@ -783,7 +783,7 @@ public class ScopeConstructor {
         List<ScopeDescription> toProcess = new ArrayList<>(distributionScopes);
         List<ScopeDescription> processed = new ArrayList<>();
 
-        for(int position = 0; position < noConstraints(); position++) {
+        for(int position = 0; position < getConstraintCount(); position++) {
             for(ScopeDescription d:toProcess)
                 processed.addAll(applyDistributedArguments(d, position));
 
@@ -898,16 +898,16 @@ public class ScopeConstructor {
         TraceDesc traceDesc = constructTraceDescription(traces);
         // Ensure the scope constructors are linked.
         if(direction == FORWARDS) {
-            if(traceDesc.origin != tasks.get(noConstraints() - 1))
+            if(traceDesc.origin != tasks.get(getConstraintCount() - 1))
                 throw new CompilerException("Traces: " + traces + " start at " + traceDesc.origin
                         + " they should start at the position of the proceeding Scope Constructor: "
-                        + tasks.get(noConstraints() - 1));
+                        + tasks.get(getConstraintCount() - 1));
         } else {
             // Ensure the scope constructors are linked.
-            if(traceDesc.consumer != tasks.get(noConstraints() - 1))
+            if(traceDesc.consumer != tasks.get(getConstraintCount() - 1))
                 throw new CompilerException("Traces: " + traces + " end at " + traceDesc.consumer
                         + " they should end at the position of the proceeding Scope Constructor: "
-                        + tasks.get(noConstraints() - 1));
+                        + tasks.get(getConstraintCount() - 1));
         }
 
         Map<TraceHandle, Set<TraceHandle>> simplifiedTraces = simplifyTraces(traces);
@@ -950,7 +950,7 @@ public class ScopeConstructor {
             Map<TraceHandle, Map<Set<TraceHandle>, Set<Set<TraceHandle>>>> traceGroups,
             Map<TraceHandle, Set<TraceHandle>> simplifyTraces, GuardDesc guardDesc, Values arrayValues,
             Direction direction) {
-        int position = noConstraints() - 1;
+        int position = getConstraintCount() - 1;
 
         // Get the scopes at the start and end of the trace.
         Set<Scope> startScopes;
@@ -1499,7 +1499,7 @@ public class ScopeConstructor {
                 .globalGuardName(guardDesc.varDesc,
                         VariableType.getType(VariableType.BooleanVariable, guardDesc.scopes.size()));
         // Get the parallel scope, null if this code is not executed in parallel.
-        ParForTask parallelScope = getParallelScope(tasks.get(noConstraints() - 1).scope());
+        ParForTask parallelScope = getParallelScope(tasks.get(getConstraintCount() - 1).scope());
         allocateGlobalState(guardDesc.scopes, globalGuardName, parallelScope);
 
         addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(
@@ -1509,7 +1509,7 @@ public class ScopeConstructor {
 
         ScopeConstructor sc = addConstraintsInternal(constraintTraces, Traces.noDistributionTraces, NO_GUARDS,
                 IGNORE_VALUES, direction);
-        sc.addTree(noConstraints() - 1, (TreeBuilderInfo info) -> {
+        sc.addTree(getConstraintCount() - 1, (TreeBuilderInfo info) -> {
             // Construct all the indexes
             List<IRTreeReturn<IntVariable>> indexes = constructGuardScopes(guardDesc.scopes);
 

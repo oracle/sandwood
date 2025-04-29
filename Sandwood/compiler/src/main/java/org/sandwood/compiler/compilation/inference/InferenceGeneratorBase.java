@@ -243,7 +243,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                             .get(sinkTask);
                     if(sink.isObserved()) {
 
-                        c.addTree(1, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
+                        c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
                         // Handle observed outputs.
                         for(DataflowTaskArgDesc d:sinkToConditional.keySet()) {
                             ScalarVariable<?> input = (ScalarVariable<?>) d.task.getInput(d.argPos);
@@ -254,10 +254,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                             } else {
                                 // Input will need to be inverted for a calculation with the source random variable
                                 // There currently can only be one random variable in this scenario.
-                                throw new MissingFeatureException("This code is part of the feature to observe outputs from conditionals. It is not yet fully implemented.");
+                                throw new MissingFeatureException(
+                                        "This code is part of the feature to observe outputs from conditionals. It is not yet fully implemented.");
                             }
                         }
-                        c.addTree(1, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
+                        c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
                     } else {
                         for(DataflowTaskArgDesc branchPointDesc:sinkToConditional.keySet()) {
                             // Handle RV consumer
@@ -590,7 +591,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 "Processing sample task " + s.id() + " of consumer random variable " + consumer.getAlias() + ".")
                 .addConstraint(th);
 
-        c.addTree(2, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
 
         ScopeConstructor dConsumerAllArgs = c.applyAllDistributedArguments();
 
@@ -602,7 +603,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              */
             getInverseIR(h, consumer, funcData, dConsumerAllArgs, compilationCtx);
 
-        c.addTree(2, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
     }
 
     private void processObservedDeterministicConditional(Variable<?> sink, Set<TraceHandle> observationTraces,
@@ -655,7 +656,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 "Processing sample task " + s.id() + " of consumer random variable " + consumer.getAlias() + ".")
                 .addConstraint(th);
 
-        c.addTree(2, (TreeBuilderInfo info) -> getPerDistributedSampleStartIR(funcData, s, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleStartIR(funcData, s, info, compilationCtx));
 
         ScopeConstructor dConsumerAllArgs = c.applyDistributedArguments(1).applyDistributedArguments(2);
 
@@ -670,7 +671,10 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 IRTree.store(reachedSourceName, IRTree.addDD(IRTree.load(reachedSourceName), info.probability),
                         "Add the probability of this argument configuration.")));
 
-        dConsumerAllArgs.addTree(1, (TreeBuilderInfo info) -> {
+        int constraintCount = c.getConstraintCount();
+        // Add a tree using the substitutions before the distributions used by the consuming random variable are
+        // applied.
+        dConsumerAllArgs.addTree(constraintCount - 2, (TreeBuilderInfo info) -> {
             /*
              * Construct the arguments for the consumer random variable. If we could apply the distributions before the
              * sample task is fixed this could be moved further out and run only once. However, as in the future the may
@@ -678,11 +682,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              * the optimisation phase can move shared values out where appropriate.
              */
             getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
-            info.changeSubstitutions(2, compilationCtx);
+            info.changeSubstitutions(constraintCount - 1, compilationCtx);
             getDistributionSampleIR(s, IRTree.load(reachedSourceName), funcData, info, compilationCtx);
         });
 
-        c.addTree(2, (TreeBuilderInfo info) -> getPerDistributedSampleEndIR(funcData, s, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleEndIR(funcData, s, info, compilationCtx));
     }
 
     private TraceHandle getTraceRVToSample(SampleTask<?, ?> s, RandomVariable<?, ?> rv) {
@@ -784,7 +788,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         @SuppressWarnings("unchecked")
         SampleTask<X, ?> sTask = (SampleTask<X, ?>) traceHandle.get(0).task;
 
-        sc.addTree(1, (TreeBuilderInfo info) -> {
+        int constraintCount = sc.getConstraintCount();
+        // Add a tree using the substitutions used for the source random variable.
+        sc.addTree(constraintCount - 3, (TreeBuilderInfo info) -> {
 
             /*
              * Construct the arguments for the consumer random variable. If we could apply the distributions before the
@@ -794,7 +800,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              */
             getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
 
-            info.changeSubstitutions(3, compilationCtx);
+            info.changeSubstitutions(constraintCount - 1, compilationCtx);
             Trace trace = traceHandle.getTrace();
 
             DataflowTaskArgDesc d = trace.pop();

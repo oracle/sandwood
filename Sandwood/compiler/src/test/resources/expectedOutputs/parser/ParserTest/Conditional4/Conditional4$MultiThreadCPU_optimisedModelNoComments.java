@@ -214,7 +214,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		guard = false;
 		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) - 0.6931471805599453);
 		guard = true;
-		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, bias[0], 1.0) - 0.6931471805599453);
+		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
 		double cv$logSum;
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];
