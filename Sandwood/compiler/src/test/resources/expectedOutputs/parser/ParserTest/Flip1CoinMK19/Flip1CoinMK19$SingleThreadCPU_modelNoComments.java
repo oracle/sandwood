@@ -437,7 +437,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		double[] var28 = bias[0];
 		if(!fixedFlag$sample16)
 			var28[1] = t;
-		inner[0] = q;
 		for(int var46 = 0; var46 < samples; var46 += 1)
 			flips[var46] = DistributionSampling.sampleBernoulli(RNG$, inner[b]);
 	}
@@ -446,12 +445,28 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
 	}
 
 	@Override
@@ -524,6 +539,14 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
 		logModelProbabilitiesVal();
 	}
 
@@ -537,7 +560,14 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		double[] inner = bias[0];
+		if(fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(fixedFlag$sample16)
+			var28[1] = t;
+	}
 
 	@Override
 	public String modelCode() {
