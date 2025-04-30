@@ -26,6 +26,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask.TraceCallback;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
@@ -1292,23 +1293,40 @@ public interface Variable<A extends Variable<A>> extends Comparable<Variable<?>>
      * @return
      */
     static Set<Variable<?>> collectInputVariable(Set<Variable<?>> vars, DFType... sTypes) {
-        Set<Variable<?>> variables = new HashSet<>();
-        List<Variable<?>> toProcess = new ArrayList<>(vars);
+        Map<Variable<?>, Integer> variables = new HashMap<>();
+        List<UsedVariable> toProcess = new ArrayList<>();
+        for(Variable<?> v:vars)
+            toProcess.add(new UsedVariable(v, v.getId()));
         Set<DFType> stopTypes = new HashSet<>();
         stopTypes.addAll(Arrays.asList(sTypes));
 
         while(!toProcess.isEmpty()) {
-            Variable<?> v = toProcess.remove(0);
-            if(!variables.contains(v)) {
-                variables.add(v);
-                if(!stopTypes.contains(v.getParent().getType()))
-                    toProcess.addAll(v.getParent().getInputs());
+            UsedVariable u = toProcess.remove(0);
+            if(!variables.containsKey(u.v) || variables.get(u.v) < u.usedId) {
+                variables.put(u.v, u.usedId);
+                ProducingDataflowTask<?> parent = u.v.getParent();
+                if(!stopTypes.contains(parent.getType())) {
+                    for(Variable<?> input:parent.getInputs()) {
+                        if(u.v.getType().isArray()) {
+                            toProcess.add(new UsedVariable(input, u.usedId));
+                            ArrayVariable<?> a = (ArrayVariable<?>) u.v;
+                            for(PutTask<?> pt:a.getPuts(a.scope(), u.usedId))
+                                toProcess.add(new UsedVariable(pt.getOutput(), u.usedId));
+                        } else {
+                            int pId = parent.id();
+                            toProcess.add(new UsedVariable(input, pId));
+                        }
+                    }
+                }
             }
         }
 
-        variables.removeAll(vars);
-        return variables;
+        for(Variable<?> v:vars)
+            variables.remove(v);
+        return new HashSet<>(variables.keySet());
     }
+
+    record UsedVariable(Variable<?> v, int usedId) {}
 
     /**
      * Method to construct a string representing the graph. This is just used for testing to confirm nothing has changed

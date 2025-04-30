@@ -9649,7 +9649,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									// generator.
 									for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
 										metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
-										if(metric_valid_g[sample][timeStep$var136]) {
+										if(metric_valid_1d[timeStep$var136]) {
 											var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
 											metric_1d[timeStep$var136] = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
 										}

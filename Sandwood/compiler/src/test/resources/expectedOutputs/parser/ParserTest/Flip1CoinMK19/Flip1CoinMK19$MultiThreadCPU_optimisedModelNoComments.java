@@ -273,9 +273,10 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedFlag$sample16)
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
 		if(!fixedFlag$sample16)
 			bias[0][1] = t;
-		inner[0] = q;
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1)
@@ -288,12 +289,24 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample10)
+			bias[0][0] = q;
+		if(!fixedFlag$sample16)
+			bias[0][1] = t;
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample10)
+			bias[0][0] = q;
+		if(!fixedFlag$sample16)
+			bias[0][1] = t;
 	}
 
 	@Override
@@ -366,6 +379,12 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample10)
+			bias[0][0] = q;
+		if(!fixedFlag$sample16)
+			bias[0][1] = t;
 		logModelProbabilitiesVal();
 	}
 
@@ -377,7 +396,12 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		if(fixedFlag$sample10)
+			bias[0][0] = q;
+		if(fixedFlag$sample16)
+			bias[0][1] = t;
+	}
 
 	@Override
 	public String modelCode() {
