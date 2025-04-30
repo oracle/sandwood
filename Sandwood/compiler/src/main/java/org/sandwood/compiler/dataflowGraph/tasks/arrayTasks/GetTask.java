@@ -37,7 +37,7 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
     public GetTask(ArrayVariable<A> array, IntVariable index, Location location) {
         this(array, index, false, location);
     }
-    
+
     protected GetTask(ArrayVariable<A> array, IntVariable index, boolean implicit, Location location) {
         super(DFType.GET, array.getElementType(), location, array.getCurrentInstance(), index);
         this.array = array.getCurrentInstance();
@@ -55,6 +55,8 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
     public IRTreeReturn<A> getForwardIRinternal(CompilationContext compilationCtx) {
         if(compilationCtx.initialized(output))
             return load(output);
+        else if(compilationCtx.initialized(array))
+            return arrayGet(load(array), index.getForwardIR(compilationCtx));
         else
             return arrayGet(array.getForwardIR(compilationCtx), index.getForwardIR(compilationCtx));
     }
@@ -175,7 +177,7 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
         index.constructTrace(desc);
         desc.trace.pop();
     }
-    
+
     public boolean isImplicit() {
         return implicit;
     }

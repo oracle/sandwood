@@ -700,7 +700,6 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		double[] var28 = bias[0];
 		if(!fixedFlag$sample16)
 			var28[1] = t;
-		inner[0] = q;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, samples, 1,
@@ -720,6 +719,14 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -728,6 +735,14 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -850,6 +865,14 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample10)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample16)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] inner = bias[0];
+		if(!fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(!fixedFlag$sample16)
+			var28[1] = t;
 		
 		// Calculate the probabilities for every sample task in the model. These values are
 		// then used to calculate the probabilities of random variables and the model as a
@@ -873,7 +896,14 @@ class Flip1CoinMK19$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// through the model. Any non-fixed sample values may be sampled to random variables
 	// as part of this process.
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		double[] inner = bias[0];
+		if(fixedFlag$sample10)
+			inner[0] = q;
+		double[] var28 = bias[0];
+		if(fixedFlag$sample16)
+			var28[1] = t;
+	}
 
 	@Override
 	public String modelCode() {
