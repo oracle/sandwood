@@ -5357,7 +5357,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
 						int sample$var196 = index$sample$var196;
 						int threadID$sample$var196 = threadID$index$sample$var196;
-						boolean[][] var215 = metric_valid_g[sample$var196];
 						double[][] var211 = metric_g[sample$var196];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -5380,7 +5379,7 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													// generator.
 													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
 														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-														if(var215[server][timeStep$var226]) {
+														if(metric_valid_inner[timeStep$var226]) {
 															var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
 															metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
 														}
