@@ -311,6 +311,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var27 = 0; var27 < states; var27 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -349,6 +352,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -382,6 +388,12 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var27 = 0; var27 < states; var27 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var28;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -412,6 +424,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var43 = 0; var43 < states; var43 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -453,6 +468,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -486,6 +504,12 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var43 = 0; var43 < states; var43 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var44;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -615,6 +639,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -658,6 +685,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -690,10 +720,16 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample71[((i$var64 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var69[((i$var64 - 1) / 1)] = cv$rvAccumulator;
 			}
@@ -720,6 +756,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < samples; j += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -763,6 +802,9 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -791,10 +833,16 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < samples; j += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample87[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var85[((j - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -1712,30 +1760,30 @@ class HMMTestPart3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1)
-			logProbability$var69[((i$var64 - 1) / 1)] = 0.0;
+			logProbability$var69[((i$var64 - 1) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample71) {
 			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1)
-				logProbability$sample71[((i$var64 - 1) / 1)] = 0.0;
+				logProbability$sample71[((i$var64 - 1) / 1)] = Double.NaN;
 		}
 		for(int j = 0; j < samples; j += 1)
-			logProbability$var85[((j - 0) / 1)] = 0.0;
+			logProbability$var85[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < samples; j += 1)
-				logProbability$sample87[((j - 0) / 1)] = 0.0;
+				logProbability$sample87[((j - 0) / 1)] = Double.NaN;
 		}
 	}
 

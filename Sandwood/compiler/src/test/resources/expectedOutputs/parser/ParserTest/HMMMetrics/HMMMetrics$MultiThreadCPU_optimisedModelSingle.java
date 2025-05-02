@@ -807,6 +807,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -939,18 +942,25 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 			}
-			logProbability$var178 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var179 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var178 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var179 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -982,7 +992,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var178 = logProbability$var179;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var178 = logProbability$var179;
 			
 			// Update the variable probability
 			// 
@@ -1008,6 +1024,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -1140,18 +1159,25 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 			}
-			logProbability$var183 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var184 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var183 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var184 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -1183,7 +1209,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var183 = logProbability$var184;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var183 = logProbability$var184;
 			
 			// Update the variable probability
 			// 
@@ -1209,6 +1241,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -1341,18 +1376,25 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 			}
-			logProbability$var188 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var189 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var188 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var189 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -1384,7 +1426,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var188 = logProbability$var189;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var188 = logProbability$var189;
 			
 			// Update the variable probability
 			// 
@@ -1534,6 +1582,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Generating probabilities for sample task
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
+				
+				// A guard to check if the sample value is ever reached.
+				boolean cv$sampleReached = false;
 				for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -1623,18 +1674,25 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 						// Scale the probability relative to the observed distribution space.
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				}
-				logProbability$var55 = cv$sampleAccumulator;
 				
-				// Store the random variable instance probability
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$var56 = cv$sampleAccumulator;
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(cv$sampleReached) {
+					logProbability$var55 = cv$sampleAccumulator;
+					
+					// Store the random variable instance probability
+					// 
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					// 
+					// Accumulator for probabilities of instances of the random variable
+					logProbability$var56 = cv$sampleAccumulator;
+				}
 				
 				// Update the variable probability
 				// 
@@ -1669,7 +1727,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var55 = logProbability$var56;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((1 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var55 = logProbability$var56;
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample57)
@@ -1700,7 +1764,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var111 = 0; var111 < noStates; var111 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var111 = 0; var111 < noStates; var111 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -1717,10 +1787,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((pageFaultsMean[var111] - 814.0) / 579.2667779184303))) - 6.361763127793193);
-			logProbability$var100 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var112 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var100 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var112 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -1755,7 +1830,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var100 = logProbability$var112;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var100 = logProbability$var112;
 			
 			// Update the variable probability
 			// 
@@ -1784,7 +1865,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var128 = 0; var128 < noStates; var128 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var128 = 0; var128 < noStates; var128 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -1801,10 +1888,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(cpuVar[var128], 5.0, 0.5));
-			logProbability$var117 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var129 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var117 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var129 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -1839,7 +1931,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var117 = logProbability$var129;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var117 = logProbability$var129;
 			
 			// Update the variable probability
 			// 
@@ -1868,7 +1966,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var145 = 0; var145 < noStates; var145 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var145 = 0; var145 < noStates; var145 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -1885,10 +1989,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(memVar[var145], 5.0, 0.5));
-			logProbability$var134 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var146 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var134 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var146 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -1923,7 +2032,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var134 = logProbability$var146;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var134 = logProbability$var146;
 			
 			// Update the variable probability
 			// 
@@ -1952,7 +2067,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var162 = 0; var162 < noStates; var162 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var162 = 0; var162 < noStates; var162 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -1969,10 +2090,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(pageFaultsVar[var162], 5.0, 0.5));
-			logProbability$var151 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var163 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var151 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var163 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2007,7 +2133,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var151 = logProbability$var163;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var151 = logProbability$var163;
 			
 			// Update the variable probability
 			// 
@@ -2036,8 +2168,14 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
 				double var177 = cpuVar[st[i$var174]];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -2056,15 +2194,19 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((cpu[i$var174] - cpuMean[st[i$var174]]) / Math.sqrt(var177)))) - (Math.log(var177) * 0.5));
 			}
-			logProbability$var178 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var179 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var178 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var179 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2096,7 +2238,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var178 = logProbability$var179;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var178 = logProbability$var179;
 			
 			// Update the variable probability
 			// 
@@ -2122,8 +2270,14 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
 				double var182 = memVar[st[i$var174]];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -2142,15 +2296,19 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((mem[i$var174] - memMean[st[i$var174]]) / Math.sqrt(var182)))) - (Math.log(var182) * 0.5));
 			}
-			logProbability$var183 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var184 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var183 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var184 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2182,7 +2340,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var183 = logProbability$var184;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var183 = logProbability$var184;
 			
 			// Update the variable probability
 			// 
@@ -2208,8 +2372,14 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
 				double var187 = pageFaultsVar[st[i$var174]];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -2228,15 +2398,19 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((pageFaults[i$var174] - pageFaultsMean[st[i$var174]]) / Math.sqrt(var187)))) - (Math.log(var187) * 0.5));
 			}
-			logProbability$var188 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var189 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var188 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var189 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2268,7 +2442,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var188 = logProbability$var189;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var188 = logProbability$var189;
 			
 			// Update the variable probability
 			// 
@@ -2294,7 +2474,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var29 = 0; var29 < noStates; var29 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var29 = 0; var29 < noStates; var29 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -2311,10 +2497,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var29], v, noStates));
-			logProbability$var18 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var30 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var18 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var30 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2349,7 +2540,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var18 = logProbability$var30;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var18 = logProbability$var30;
 			
 			// Update the variable probability
 			// 
@@ -2590,9 +2787,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
 				// The sample value to calculate the probability of generating
 				int cv$sampleValue = st[i$var50];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -2609,15 +2812,19 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[st[(i$var50 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var55 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var56 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var55 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var56 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2652,7 +2859,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var55 = logProbability$var56;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((1 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var55 = logProbability$var56;
 			
 			// Update the variable probability
 			// 
@@ -2681,7 +2894,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var75 = 0; var75 < noStates; var75 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var75 = 0; var75 < noStates; var75 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -2698,10 +2917,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((cpuMean[var75] - 16.0) / 2.932575659723036))) - 1.075881101629731);
-			logProbability$var64 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var76 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var64 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var76 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2736,7 +2960,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var64 = logProbability$var76;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var64 = logProbability$var76;
 			
 			// Update the variable probability
 			// 
@@ -2765,7 +2995,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var93 = 0; var93 < noStates; var93 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var93 = 0; var93 < noStates; var93 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -2782,10 +3018,15 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((memMean[var93] - 94.0)));
-			logProbability$var82 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var94 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var82 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var94 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -2820,7 +3061,13 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var82 = logProbability$var94;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noStates))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var82 = logProbability$var94;
 			
 			// Update the variable probability
 			// 
@@ -5112,9 +5359,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var2707's comment
+			// cv$temp$1$$var2710's comment
 			// 
-			// $var2707's comment
+			// $var2710's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -5136,9 +5383,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 				if(((0 <= var29) && (var29 < noStates))) {
 					// Substituted "i$var50" with its value "1".
 					// 
-					// cv$temp$3$$var2718's comment
+					// cv$temp$3$$var2721's comment
 					// 
-					// $var2718's comment
+					// $var2721's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var54's comment
@@ -5646,9 +5893,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$53$$var2981's comment
+					// cv$temp$53$$var2984's comment
 					// 
-					// $var2981's comment
+					// $var2984's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$52$var54's comment
@@ -5870,9 +6117,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var3040's comment
+						// cv$temp$1$$var3043's comment
 						// 
-						// $var3040's comment
+						// $var3043's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var54's comment
@@ -6386,9 +6633,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var3041's comment
+							// cv$temp$3$$var3044's comment
 							// 
-							// $var3041's comment
+							// $var3044's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var54's comment
@@ -6926,9 +7173,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var3043's comment
+						// cv$temp$7$$var3046's comment
 						// 
-						// $var3043's comment
+						// $var3046's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var54's comment
@@ -7448,9 +7695,9 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$201$$var3734's comment
+					// cv$temp$201$$var3737's comment
 					// 
-					// $var3734's comment
+					// $var3737's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$200$var54's comment
@@ -9468,56 +9715,56 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
+		logProbability$var18 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample30)
-			logProbability$var30 = 0.0;
+			logProbability$var30 = Double.NaN;
 		logProbability$var34 = 0.0;
 		if(!fixedProbFlag$sample36)
-			logProbability$initialStateDistribution = 0.0;
+			logProbability$initialStateDistribution = Double.NaN;
 		logProbability$var37 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$var38 = 0.0;
-		logProbability$var55 = 0.0;
+			logProbability$var38 = Double.NaN;
+		logProbability$var55 = Double.NaN;
 		if(!fixedProbFlag$sample57)
-			logProbability$var56 = 0.0;
-		logProbability$var64 = 0.0;
+			logProbability$var56 = Double.NaN;
+		logProbability$var64 = Double.NaN;
 		logProbability$cpuMean = 0.0;
 		if(!fixedProbFlag$sample77)
-			logProbability$var76 = 0.0;
-		logProbability$var82 = 0.0;
+			logProbability$var76 = Double.NaN;
+		logProbability$var82 = Double.NaN;
 		logProbability$memMean = 0.0;
 		if(!fixedProbFlag$sample95)
-			logProbability$var94 = 0.0;
-		logProbability$var100 = 0.0;
+			logProbability$var94 = Double.NaN;
+		logProbability$var100 = Double.NaN;
 		logProbability$pageFaultsMean = 0.0;
 		if(!fixedProbFlag$sample113)
-			logProbability$var112 = 0.0;
-		logProbability$var117 = 0.0;
+			logProbability$var112 = Double.NaN;
+		logProbability$var117 = Double.NaN;
 		logProbability$cpuVar = 0.0;
 		if(!fixedProbFlag$sample130)
-			logProbability$var129 = 0.0;
-		logProbability$var134 = 0.0;
+			logProbability$var129 = Double.NaN;
+		logProbability$var134 = Double.NaN;
 		logProbability$memVar = 0.0;
 		if(!fixedProbFlag$sample147)
-			logProbability$var146 = 0.0;
-		logProbability$var151 = 0.0;
+			logProbability$var146 = Double.NaN;
+		logProbability$var151 = Double.NaN;
 		logProbability$pageFaultsVar = 0.0;
 		if(!fixedProbFlag$sample164)
-			logProbability$var163 = 0.0;
-		logProbability$var178 = 0.0;
+			logProbability$var163 = Double.NaN;
+		logProbability$var178 = Double.NaN;
 		logProbability$cpu = 0.0;
 		if(!fixedProbFlag$sample180)
-			logProbability$var179 = 0.0;
-		logProbability$var183 = 0.0;
+			logProbability$var179 = Double.NaN;
+		logProbability$var183 = Double.NaN;
 		logProbability$mem = 0.0;
 		if(!fixedProbFlag$sample185)
-			logProbability$var184 = 0.0;
-		logProbability$var188 = 0.0;
+			logProbability$var184 = Double.NaN;
+		logProbability$var188 = Double.NaN;
 		logProbability$pageFaults = 0.0;
 		if(!fixedProbFlag$sample190)
-			logProbability$var189 = 0.0;
+			logProbability$var189 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

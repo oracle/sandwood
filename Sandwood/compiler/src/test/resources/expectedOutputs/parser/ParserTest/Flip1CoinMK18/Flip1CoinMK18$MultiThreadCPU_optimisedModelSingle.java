@@ -250,8 +250,14 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var96 = 0; var96 < samples; var96 += 1) {
 				double var84 = bias[a][b][c];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -270,10 +276,14 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var96]?var84:(1.0 - var84))));
 			}
-			logProbability$bernoulli = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var97 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var97 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -305,7 +315,13 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$var97;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$bernoulli = logProbability$var97;
 			
 			// Update the variable probability
 			// 
@@ -1363,14 +1379,14 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$var10 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$q = 0.0;
+			logProbability$q = Double.NaN;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$t = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$t = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample103)
-			logProbability$var97 = 0.0;
+			logProbability$var97 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

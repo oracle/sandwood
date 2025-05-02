@@ -159,6 +159,7 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample100) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var95 = 0; var95 < length$obs_measured; var95 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -184,6 +185,7 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -196,6 +198,9 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var96;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -767,14 +772,14 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$var76 = 0.0;
 		if(!fixedProbFlag$sample81)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var79 = 0.0;
 		if(!fixedProbFlag$sample84)
-			logProbability$i = 0.0;
-		logProbability$var83 = 0.0;
+			logProbability$i = Double.NaN;
+		logProbability$var83 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample100)
-			logProbability$var96 = 0.0;
+			logProbability$var96 = Double.NaN;
 	}
 
 	@Override

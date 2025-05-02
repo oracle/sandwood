@@ -223,6 +223,9 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var95 = 0; var95 < length$obs_measured; var95 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -261,6 +264,9 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -290,6 +296,12 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var96;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -559,14 +571,14 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$c = c;
 					}
-					int cv$temp$1$$var295;
+					int cv$temp$1$$var297;
 					{
-						cv$temp$1$$var295 = 2;
+						cv$temp$1$$var297 = 2;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var295))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var297))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 79.
 					{
@@ -592,7 +604,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													double[] var78 = a[traceTempVariable$y$2_1];
 													cv$temp$2$var78 = var78;
 												}
-												int cv$temp$3$$var297;
+												int cv$temp$3$$var299;
 												{
 													// Allocate a local variable to hold the length of the array.
 													int lengthCV$a$82_8 = -1;
@@ -612,19 +624,19 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													}
 													
 													// Constructing a random variable input for use later.
-													int $var297 = lengthCV$a$82_8;
-													cv$temp$3$$var297 = $var297;
+													int $var299 = lengthCV$a$82_8;
+													cv$temp$3$$var299 = $var299;
 												}
 												
 												// Record the probability of sample task 84 generating output with current configuration.
-												if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var297))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var297))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var297))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var297))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var297))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
 												}
 												
 												// Recorded the probability of reaching sample task 84 with the current configuration.
@@ -860,7 +872,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var78 = a[y];
 						cv$temp$0$var78 = var78;
 					}
-					int cv$temp$1$$var319;
+					int cv$temp$1$$var321;
 					{
 						// Allocate a local variable to hold the length of the array.
 						int lengthCV$a$82_10 = -1;
@@ -880,13 +892,13 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 						
 						// Constructing a random variable input for use later.
-						int $var319 = lengthCV$a$82_10;
-						cv$temp$1$$var319 = $var319;
+						int $var321 = lengthCV$a$82_10;
+						cv$temp$1$$var321 = $var321;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var319))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var321))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 83.
 					{
@@ -1250,14 +1262,14 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var76 = 0.0;
 		if(!fixedProbFlag$sample81)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var79 = 0.0;
 		if(!fixedProbFlag$sample84)
-			logProbability$i = 0.0;
-		logProbability$var83 = 0.0;
+			logProbability$i = Double.NaN;
+		logProbability$var83 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample100)
-			logProbability$var96 = 0.0;
+			logProbability$var96 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

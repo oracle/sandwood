@@ -1234,27 +1234,27 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
+		logProbability$var18 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample30)
-			logProbability$var30 = 0.0;
-		logProbability$var34 = 0.0;
+			logProbability$var30 = Double.NaN;
+		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$var46 = 0.0;
+			logProbability$var46 = Double.NaN;
 		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-			logProbability$var60[i$var58] = 0.0;
+			logProbability$var60[i$var58] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample62) {
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-				logProbability$sample62[i$var58] = 0.0;
+				logProbability$sample62[i$var58] = Double.NaN;
 		}
 		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
-			logProbability$var84[j$var73] = 0.0;
+			logProbability$var84[j$var73] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
-				logProbability$sample87[j$var73] = 0.0;
+				logProbability$sample87[j$var73] = Double.NaN;
 		}
 	}
 

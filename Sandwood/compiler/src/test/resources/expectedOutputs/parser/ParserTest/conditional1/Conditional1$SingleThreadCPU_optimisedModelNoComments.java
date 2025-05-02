@@ -47,6 +47,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$fixedFlag$sample4(boolean cv$value) {
 		fixedFlag$sample4 = cv$value;
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
+		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 	}
 
 	@Override
@@ -58,6 +59,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$guard(boolean cv$value) {
 		guard = cv$value;
 		fixedProbFlag$sample4 = false;
+		fixedProbFlag$sample16 = false;
 	}
 
 	@Override
@@ -124,7 +126,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample16 = fixedFlag$sample16;
+			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
 		} else {
 			double cv$accumulator = 0.0;
 			if(!guard) {
@@ -238,12 +240,12 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var13 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = 0.0;
+			logProbability$sample16 = Double.NaN;
 	}
 
 	@Override

@@ -153,7 +153,13 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < coins; i += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i = 0; i < coins; i += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -170,15 +176,20 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[i], 1.0, 1.0));
-			logProbability$var17 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var18 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var17 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var18 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -213,7 +224,13 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var17 = logProbability$var18;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < coins))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var17 = logProbability$var18;
 			
 			// Update the variable probability
 			// 
@@ -242,9 +259,15 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < coins; j += 1) {
 				for(int var46 = 0; var46 < shape[j]; var46 += 1) {
 					double var35 = bias[(coins - (j + 1))];
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
@@ -264,15 +287,19 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var46]?var35:(1.0 - var35))));
 				}
 			}
-			logProbability$bernoulli = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var47 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var47 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -304,7 +331,15 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$var47;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int j = 0; j < coins; j += 1) {
+				if((0 < shape[j]))
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
+			if(cv$sampleReached)
+				logProbability$bernoulli = logProbability$var47;
 			
 			// Update the variable probability
 			// 
@@ -450,14 +485,14 @@ class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = 0.0;
+		logProbability$var17 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample18)
-			logProbability$var18 = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$var18 = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$var47 = 0.0;
+			logProbability$var47 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

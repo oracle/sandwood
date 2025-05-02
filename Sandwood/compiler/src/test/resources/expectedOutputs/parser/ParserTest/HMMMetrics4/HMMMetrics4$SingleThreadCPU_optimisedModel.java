@@ -5576,44 +5576,44 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$initialStateDistribution = 0.0;
-		logProbability$var21 = 0.0;
+			logProbability$initialStateDistribution = Double.NaN;
+		logProbability$var21 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample33)
-			logProbability$var33 = 0.0;
+			logProbability$var33 = Double.NaN;
 		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
-			logProbability$var54[sample$var45] = 0.0;
+			logProbability$var54[sample$var45] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample57) {
 			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
-				logProbability$sample57[sample$var45] = 0.0;
+				logProbability$sample57[sample$var45] = Double.NaN;
 		}
 		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
 			for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-				logProbability$var73[sample$var45][(timeStep$var66 - 1)] = 0.0;
+				logProbability$var73[sample$var45][(timeStep$var66 - 1)] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample76) {
 			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
 				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-					logProbability$sample76[sample$var45][(timeStep$var66 - 1)] = 0.0;
+					logProbability$sample76[sample$var45][(timeStep$var66 - 1)] = Double.NaN;
 			}
 		}
-		logProbability$var108 = 0.0;
+		logProbability$var108 = Double.NaN;
 		logProbability$current_metric_mean = 0.0;
 		if(!fixedProbFlag$sample134)
-			logProbability$var130 = 0.0;
-		logProbability$var135 = 0.0;
+			logProbability$var130 = Double.NaN;
+		logProbability$var135 = Double.NaN;
 		logProbability$current_metric_var = 0.0;
 		if(!fixedProbFlag$sample162)
-			logProbability$var157 = 0.0;
-		logProbability$var162 = 0.0;
+			logProbability$var157 = Double.NaN;
+		logProbability$var162 = Double.NaN;
 		logProbability$current_metric_valid_bias = 0.0;
 		if(!fixedProbFlag$sample190)
-			logProbability$var184 = 0.0;
+			logProbability$var184 = Double.NaN;
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 			for(int server = 0; server < noServers; server += 1) {
 				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-					logProbability$var231[sample$var196][server][timeStep$var226] = 0.0;
+					logProbability$var231[sample$var196][server][timeStep$var226] = Double.NaN;
 			}
 		}
 		logProbability$metric_valid_inner = 0.0;
@@ -5622,14 +5622,14 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-						logProbability$sample241[sample$var196][server][timeStep$var226] = 0.0;
+						logProbability$sample241[sample$var196][server][timeStep$var226] = Double.NaN;
 				}
 			}
 		}
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 			for(int server = 0; server < noServers; server += 1) {
 				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-					logProbability$var244[sample$var196][server][timeStep$var226] = 0.0;
+					logProbability$var244[sample$var196][server][timeStep$var226] = Double.NaN;
 			}
 		}
 		logProbability$var245 = 0.0;
@@ -5638,7 +5638,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				for(int server = 0; server < noServers; server += 1) {
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-						logProbability$sample256[sample$var196][server][timeStep$var226] = 0.0;
+						logProbability$sample256[sample$var196][server][timeStep$var226] = Double.NaN;
 				}
 			}
 		}

@@ -697,31 +697,31 @@ class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var52 = 0.0;
 		logProbability$st = 0.0;
 		logProbability$st2 = 0.0;
 		if(!fixedProbFlag$sample54)
-			logProbability$var53 = 0.0;
+			logProbability$var53 = Double.NaN;
 		for(int i$var71 = 1; i$var71 < samples; i$var71 += 1)
-			logProbability$var77[(i$var71 - 1)] = 0.0;
+			logProbability$var77[(i$var71 - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample79) {
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1)
-				logProbability$sample79[(i$var71 - 1)] = 0.0;
+				logProbability$sample79[(i$var71 - 1)] = Double.NaN;
 		}
 		for(int j = 0; j < samples; j += 1)
-			logProbability$var117[j] = 0.0;
+			logProbability$var117[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample119) {
 			for(int j = 0; j < samples; j += 1)
-				logProbability$sample119[j] = 0.0;
+				logProbability$sample119[j] = Double.NaN;
 		}
 	}
 

@@ -181,6 +181,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedProbFlag$sample24) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var23 = 0; var23 < k; var23 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -208,6 +209,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				logProbability$sample24[((var23 - 0) / 1)] = cv$sampleProbability;
 				boolean cv$guard$phi = false;
@@ -234,9 +236,11 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var23 = 0; var23 < k; var23 += 1) {
 				double cv$sampleValue = logProbability$sample24[((var23 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				boolean cv$guard$phi = false;
 				{
 					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
@@ -365,6 +369,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void logProbabilityValue$sample74() {
 		if(!fixedProbFlag$sample74) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -398,6 +403,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var72[((i$var45 - 0) / 1)] = cv$sampleAccumulator;
@@ -409,10 +415,12 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample74[((i$var45 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var72[((i$var45 - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -679,25 +687,25 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var12 = 0.0;
+		logProbability$var12 = Double.NaN;
 		logProbability$weights = 0.0;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int var23 = 0; var23 < k; var23 += 1)
-				logProbability$sample24[((var23 - 0) / 1)] = 0.0;
+				logProbability$sample24[((var23 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample31)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$var34 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$tau = 0.0;
+			logProbability$tau = Double.NaN;
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-			logProbability$var72[((i$var45 - 0) / 1)] = 0.0;
+			logProbability$var72[((i$var45 - 0) / 1)] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample74) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-				logProbability$sample74[((i$var45 - 0) / 1)] = 0.0;
+				logProbability$sample74[((i$var45 - 0) / 1)] = Double.NaN;
 		}
 	}
 

@@ -189,6 +189,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityValue$sample149() {
 		if(!fixedProbFlag$sample149) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -216,6 +217,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var145[((t$var105 - 0) / 1)] = cv$sampleAccumulator;
@@ -227,10 +229,12 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			fixedProbFlag$sample149 = fixedFlag$sample26;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample149[((t$var105 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var145[((t$var105 - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -243,6 +247,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityValue$sample26() {
 		if(!fixedProbFlag$sample26) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -271,6 +276,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var25[((j$var20 - 1) / 1)] = cv$sampleAccumulator;
@@ -478,10 +484,12 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			fixedProbFlag$sample26 = fixedFlag$sample26;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample26[((j$var20 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var25[((j$var20 - 1) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$exped = false;
@@ -690,6 +698,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityValue$sample82() {
 		if(!fixedProbFlag$sample82) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -717,6 +726,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var80[((t$var78 - 0) / 1)] = cv$sampleAccumulator;
@@ -739,10 +749,12 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			fixedProbFlag$sample82 = true;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample82[((t$var78 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var80[((t$var78 - 0) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$Sales = false;
@@ -2227,7 +2239,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[((j$var20 - 1) / 1)] = 0.0;
+			logProbability$var25[((j$var20 - 1) / 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
@@ -2236,21 +2248,21 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[((j$var20 - 1) / 1)] = 0.0;
+				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
 		}
 		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			logProbability$var80[((t$var78 - 0) / 1)] = 0.0;
+			logProbability$var80[((t$var78 - 0) / 1)] = Double.NaN;
 		logProbability$sales_sum = 0.0;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample82) {
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-				logProbability$sample82[((t$var78 - 0) / 1)] = 0.0;
+				logProbability$sample82[((t$var78 - 0) / 1)] = Double.NaN;
 		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			logProbability$var145[((t$var105 - 0) / 1)] = 0.0;
+			logProbability$var145[((t$var105 - 0) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample149) {
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				logProbability$sample149[((t$var105 - 0) / 1)] = 0.0;
+				logProbability$sample149[((t$var105 - 0) / 1)] = Double.NaN;
 		}
 	}
 

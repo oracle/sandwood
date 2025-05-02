@@ -340,7 +340,13 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i$var22 = 1; i$var22 < coins; i$var22 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var22 = 1; i$var22 < coins; i$var22 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -357,10 +363,14 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[i$var22], 1.0, 1.0));
+			}
 			logProbability$beta = (logProbability$beta + cv$sampleAccumulator);
 			
-			// Store the random variable instance probability
-			logProbability$var23 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var23 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -425,10 +435,16 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			
 			// Substituted "j" with its value "0".
 			for(int var49 = 0; var49 < length$flipsMeasured[0]; var49 += 1) {
 				// Substituted "j" with its value "0".
 				double var38 = bias[0];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -445,15 +461,19 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Substituted "j" with its value "0".
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[0][var49]?var38:(1.0 - var38))));
 			}
-			logProbability$bernoulli1 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var50 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli1 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var50 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -485,7 +505,15 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli1 = logProbability$var50;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			
+			// Substituted "j" with its value "0".
+			if((0 < length$flipsMeasured[0]))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$bernoulli1 = logProbability$var50;
 			
 			// Update the variable probability
 			// 
@@ -511,9 +539,15 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int k = 1; k < coins; k += 1) {
 				for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
 					double var65 = bias[k];
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
@@ -533,15 +567,19 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[k][var76]?var65:(1.0 - var65))));
 				}
 			}
-			logProbability$bernoulli2 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var77 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli2 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var77 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -573,7 +611,15 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli2 = logProbability$var77;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int k = 1; k < coins; k += 1) {
+				if((0 < length$flipsMeasured[k]))
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
+			if(cv$sampleReached)
+				logProbability$bernoulli2 = logProbability$var77;
 			
 			// Update the variable probability
 			// 
@@ -862,16 +908,16 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$beta = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$var10 = 0.0;
+			logProbability$var10 = Double.NaN;
 		if(!fixedProbFlag$sample23)
-			logProbability$var23 = 0.0;
-		logProbability$bernoulli1 = 0.0;
+			logProbability$var23 = Double.NaN;
+		logProbability$bernoulli1 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$var50 = 0.0;
-		logProbability$bernoulli2 = 0.0;
+			logProbability$var50 = Double.NaN;
+		logProbability$bernoulli2 = Double.NaN;
 		if(!fixedProbFlag$sample78)
-			logProbability$var77 = 0.0;
+			logProbability$var77 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

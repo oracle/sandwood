@@ -268,6 +268,9 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -308,6 +311,9 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -315,10 +321,14 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var39 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var39 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var52 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var52 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -337,10 +347,17 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var39 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var39 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -475,7 +492,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$var35 = a[y];
 					}
-					int cv$temp$1$$var176;
+					int cv$temp$1$$var177;
 					{
 						// Allocate a local variable to hold the length of the array.
 						int lengthCV$a$37_10 = -1;
@@ -493,12 +510,12 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							if((1 == y))
 								lengthCV$a$37_10 = 3;
 						}
-						cv$temp$1$$var176 = lengthCV$a$37_10;
+						cv$temp$1$$var177 = lengthCV$a$37_10;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var176));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var177));
 					
 					// Processing random variable 39.
 					{
@@ -795,11 +812,11 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var36 = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$d = 0.0;
-		logProbability$var39 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var39 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample54)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

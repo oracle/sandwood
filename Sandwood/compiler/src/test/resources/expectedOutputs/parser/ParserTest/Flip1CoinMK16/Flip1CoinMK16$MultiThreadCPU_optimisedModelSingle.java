@@ -141,7 +141,13 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if(Double.isNaN(guard))
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(Double.isNaN(guard)) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -160,15 +166,20 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
-			logProbability$var11 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$bias = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var11 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$bias = cv$sampleAccumulator;
+			}
 			
 			// Add probability to model
 			// 
@@ -195,7 +206,13 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var11 = logProbability$bias;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(Double.isNaN(guard))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var11 = logProbability$bias;
 			
 			// Add probability to model
 			// 
@@ -219,7 +236,13 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if(Double.isNaN(guard))
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(Double.isNaN(guard)) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -238,15 +261,20 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = Math.log((flip?bias:(1.0 - bias)));
-			logProbability$bernoulli = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$flip = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$flip = cv$sampleAccumulator;
+			}
 			
 			// Add probability to model
 			// 
@@ -270,7 +298,13 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$flip;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(Double.isNaN(guard))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$bernoulli = logProbability$flip;
 			
 			// Add probability to model
 			// 
@@ -370,12 +404,12 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var11 = 0.0;
+		logProbability$var11 = Double.NaN;
 		if(!fixedProbFlag$sample14)
-			logProbability$bias = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$bias = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		if(!fixedProbFlag$sample16)
-			logProbability$flip = 0.0;
+			logProbability$flip = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

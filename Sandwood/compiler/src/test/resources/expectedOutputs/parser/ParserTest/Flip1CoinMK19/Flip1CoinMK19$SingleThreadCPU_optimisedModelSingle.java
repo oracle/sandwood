@@ -472,10 +472,16 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var46 = 0; var46 < samples; var46 += 1) {
 				double[] inner = bias[0];
 				inner[0] = q;
 				double var34 = inner[b];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -494,10 +500,14 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var46]?var34:(1.0 - var34))));
 			}
-			logProbability$bernoulli = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var47 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var47 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -529,7 +539,13 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$var47;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$bernoulli = logProbability$var47;
 			
 			// Update the variable probability
 			// 
@@ -717,14 +733,14 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$q = 0.0;
+			logProbability$q = Double.NaN;
 		logProbability$var15 = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$t = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$t = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample48)
-			logProbability$var47 = 0.0;
+			logProbability$var47 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

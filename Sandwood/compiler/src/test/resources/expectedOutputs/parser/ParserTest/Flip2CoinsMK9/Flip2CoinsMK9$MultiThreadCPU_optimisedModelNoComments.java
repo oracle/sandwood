@@ -255,15 +255,15 @@ class Flip2CoinsMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$beta = 0.0;
+		logProbability$beta = Double.NaN;
 		if(!fixedProbFlag$sample18)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		for(int j = 0; j < coins; j += 1)
-			logProbability$bernoulli[j] = 0.0;
+			logProbability$bernoulli[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample31) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample31[j] = 0.0;
+				logProbability$sample31[j] = Double.NaN;
 		}
 	}
 

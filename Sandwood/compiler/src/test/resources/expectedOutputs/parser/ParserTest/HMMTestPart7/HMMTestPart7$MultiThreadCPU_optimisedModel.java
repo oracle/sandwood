@@ -1566,9 +1566,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				if(((0 <= var27) && (var27 < 5))) {
 					// Substituted "i$var64" with its value "1".
 					// 
-					// cv$temp$3$$var832's comment
+					// cv$temp$3$$var834's comment
 					// 
-					// $var832's comment
+					// $var834's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var68's comment
@@ -1685,9 +1685,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$6$$var852's comment
+					// cv$temp$6$$var854's comment
 					// 
-					// $var852's comment
+					// $var854's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$5$var68's comment
@@ -1916,9 +1916,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var911's comment
+						// cv$temp$1$$var913's comment
 						// 
-						// $var911's comment
+						// $var913's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var68's comment
@@ -1997,9 +1997,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var912's comment
+							// cv$temp$3$$var914's comment
 							// 
-							// $var912's comment
+							// $var914's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var68's comment
@@ -2102,9 +2102,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var914's comment
+						// cv$temp$7$$var916's comment
 						// 
-						// $var914's comment
+						// $var916's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var68's comment
@@ -2256,9 +2256,9 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$13$$var963's comment
+					// cv$temp$13$$var965's comment
 					// 
-					// $var963's comment
+					// $var965's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$12$var68's comment
@@ -2794,30 +2794,30 @@ class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i$var64 = 1; i$var64 < samples; i$var64 += 1)
-			logProbability$var69[(i$var64 - 1)] = 0.0;
+			logProbability$var69[(i$var64 - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample71) {
 			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1)
-				logProbability$sample71[(i$var64 - 1)] = 0.0;
+				logProbability$sample71[(i$var64 - 1)] = Double.NaN;
 		}
 		for(int j = 0; j < samples; j += 1)
-			logProbability$var85[j] = 0.0;
+			logProbability$var85[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < samples; j += 1)
-				logProbability$sample87[j] = 0.0;
+				logProbability$sample87[j] = Double.NaN;
 		}
 	}
 

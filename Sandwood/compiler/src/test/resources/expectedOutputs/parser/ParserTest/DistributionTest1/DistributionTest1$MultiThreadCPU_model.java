@@ -899,14 +899,14 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var156;
+					int cv$temp$1$$var162;
 					{
-						cv$temp$1$$var156 = weightings.length;
+						cv$temp$1$$var162 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var156))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var162))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 10.
 					{
@@ -1115,14 +1115,14 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var176;
+					int cv$temp$1$$var182;
 					{
-						cv$temp$1$$var176 = weightings.length;
+						cv$temp$1$$var182 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var176))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var182))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 10.
 					{
@@ -1414,13 +1414,13 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var3 = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$v1 = 0.0;
+			logProbability$v1 = Double.NaN;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$v2 = 0.0;
+			logProbability$v2 = Double.NaN;
 		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$v = 0.0;
+			logProbability$v = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

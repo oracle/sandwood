@@ -443,27 +443,27 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$$evidence = 0.0;
 		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$priorSigma2 = 0.0;
+			logProbability$priorSigma2 = Double.NaN;
 		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
-			logProbability$mean1 = 0.0;
+			logProbability$mean1 = Double.NaN;
 		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$mean2 = 0.0;
+			logProbability$mean2 = Double.NaN;
 		for(int i = 0; i < n; i += 1)
-			logProbability$var34[i] = 0.0;
+			logProbability$var34[i] = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int i = 0; i < n; i += 1)
-				logProbability$sample35[i] = 0.0;
+				logProbability$sample35[i] = Double.NaN;
 		}
 		for(int i = 0; i < n; i += 1)
-			logProbability$var38[i] = 0.0;
+			logProbability$var38[i] = Double.NaN;
 		logProbability$var39 = 0.0;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39) {
 			for(int i = 0; i < n; i += 1)
-				logProbability$sample39[i] = 0.0;
+				logProbability$sample39[i] = Double.NaN;
 		}
 	}
 

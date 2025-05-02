@@ -302,11 +302,11 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$sample8 = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$sample8 = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$var47 = 0.0;
+			logProbability$var47 = Double.NaN;
 	}
 
 	@Override

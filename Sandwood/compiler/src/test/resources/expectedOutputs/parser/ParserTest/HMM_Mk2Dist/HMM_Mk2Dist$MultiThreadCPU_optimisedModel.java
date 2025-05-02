@@ -1611,9 +1611,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var1514's comment
+						// cv$temp$1$$var1516's comment
 						// 
-						// $var1514's comment
+						// $var1516's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var121's comment
@@ -1702,9 +1702,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var1515's comment
+							// cv$temp$3$$var1517's comment
 							// 
-							// $var1515's comment
+							// $var1517's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var121's comment
@@ -1817,9 +1817,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var1517's comment
+						// cv$temp$7$$var1519's comment
 						// 
-						// $var1517's comment
+						// $var1519's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var121's comment
@@ -1845,9 +1845,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						if(((0 <= var55) && (var55 < noStates))) {
 							// Substituted "i$var136" with its value "i$var104".
 							// 
-							// cv$temp$15$$var1549's comment
+							// cv$temp$15$$var1551's comment
 							// 
-							// $var1549's comment
+							// $var1551's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$14$var153's comment
@@ -1984,9 +1984,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$17$$var1587's comment
+					// cv$temp$17$$var1589's comment
 					// 
-					// $var1587's comment
+					// $var1589's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$16$var121's comment
@@ -2363,9 +2363,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$weights" with its value "weights".
 			// 
-			// cv$temp$1$$var1351's comment
+			// cv$temp$1$$var1353's comment
 			// 
-			// $var1351's comment
+			// $var1353's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -2387,9 +2387,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$3$$var1361's comment
+					// cv$temp$3$$var1363's comment
 					// 
-					// $var1361's comment
+					// $var1363's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var90's comment
@@ -2414,9 +2414,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$5$$var1372's comment
+					// cv$temp$5$$var1374's comment
 					// 
-					// $var1372's comment
+					// $var1374's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$4$var90's comment
@@ -2610,9 +2610,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					if(((0 <= var41) && (var41 < noStates))) {
 						// Substituted "i$var104" with its value "i$var87".
 						// 
-						// cv$temp$3$$var1404's comment
+						// cv$temp$3$$var1406's comment
 						// 
-						// $var1404's comment
+						// $var1406's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$2$var121's comment
@@ -2678,9 +2678,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// cv$temp$7$$var1428's comment
+						// cv$temp$7$$var1430's comment
 						// 
-						// $var1428's comment
+						// $var1430's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var121's comment
@@ -3463,46 +3463,46 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var30 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$var42 = 0.0;
-		logProbability$var44 = 0.0;
+			logProbability$var42 = Double.NaN;
+		logProbability$var44 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample57)
-			logProbability$var56 = 0.0;
+			logProbability$var56 = Double.NaN;
 		logProbability$var74 = 0.0;
 		if(!fixedProbFlag$sample78)
-			logProbability$weights = 0.0;
+			logProbability$weights = Double.NaN;
 		logProbability$var76 = 0.0;
 		if(!fixedProbFlag$sample80)
-			logProbability$initialState = 0.0;
+			logProbability$initialState = Double.NaN;
 		for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-			logProbability$var91[i$var87] = 0.0;
+			logProbability$var91[i$var87] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample95) {
 			for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-				logProbability$sample95[i$var87] = 0.0;
+				logProbability$sample95[i$var87] = Double.NaN;
 		}
 		for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 			for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-				logProbability$var122[i$var104][(j$var115 - 1)] = 0.0;
+				logProbability$var122[i$var104][(j$var115 - 1)] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample126) {
 			for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 				for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-					logProbability$sample126[i$var104][(j$var115 - 1)] = 0.0;
+					logProbability$sample126[i$var104][(j$var115 - 1)] = Double.NaN;
 			}
 		}
 		for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-				logProbability$var154[i$var136][(j$var149 - 1)] = 0.0;
+				logProbability$var154[i$var136][(j$var149 - 1)] = Double.NaN;
 		}
 		logProbability$events = 0.0;
 		if(!fixedProbFlag$sample159) {
 			for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 				for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-					logProbability$sample159[i$var136][(j$var149 - 1)] = 0.0;
+					logProbability$sample159[i$var136][(j$var149 - 1)] = Double.NaN;
 			}
 		}
 	}

@@ -1,0 +1,26 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+
+package org.sandwood.compiler.tests.parser;
+
+public model Conditional6(double observedValue, boolean observedGuard)  {
+		
+	//Construct a bernoulli
+	Bernoulli bernoulli = bernoulli(0.5);
+				
+	//Sample from it
+	boolean guard = bernoulli.sample();
+	Uniform u = uniform(0.0, 1.0);
+	double a = u.sample();
+	double b = u.sample();
+		
+	double value = guard?a:b;
+	
+	//Link the sampled value to the observed value
+	value.observe(observedValue);
+}

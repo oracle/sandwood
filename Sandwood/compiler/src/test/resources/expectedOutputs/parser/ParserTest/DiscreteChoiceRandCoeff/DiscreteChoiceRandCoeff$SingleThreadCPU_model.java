@@ -342,6 +342,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < noObs; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -383,6 +386,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -411,10 +417,16 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < noObs; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample103[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var101[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -440,6 +452,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var20 = 0; var20 < noProducts; var20 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -480,6 +495,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
@@ -583,9 +601,15 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var20 = 0; var20 < noProducts; var20 += 1) {
 				double cv$sampleValue = logProbability$sample21[((var20 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -878,6 +902,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var46 = 0; var46 < noObs; var46 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -915,6 +942,9 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
@@ -1018,9 +1048,15 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var46 = 0; var46 < noObs; var46 += 1) {
 				double cv$sampleValue = logProbability$sample47[((var46 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -2709,32 +2745,32 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
+		logProbability$var9 = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				logProbability$sample21[((var20 - 0) / 1)] = 0.0;
+				logProbability$sample21[((var20 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$var27 = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$b = 0.0;
+			logProbability$b = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample34)
-			logProbability$sigma = 0.0;
-		logProbability$var35 = 0.0;
+			logProbability$sigma = Double.NaN;
+		logProbability$var35 = Double.NaN;
 		logProbability$beta = 0.0;
 		if(!fixedProbFlag$sample47) {
 			for(int var46 = 0; var46 < noObs; var46 += 1)
-				logProbability$sample47[((var46 - 0) / 1)] = 0.0;
+				logProbability$sample47[((var46 - 0) / 1)] = Double.NaN;
 		}
 		for(int i = 0; i < noObs; i += 1)
-			logProbability$var101[((i - 0) / 1)] = 0.0;
+			logProbability$var101[((i - 0) / 1)] = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int i = 0; i < noObs; i += 1)
-				logProbability$sample103[((i - 0) / 1)] = 0.0;
+				logProbability$sample103[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 

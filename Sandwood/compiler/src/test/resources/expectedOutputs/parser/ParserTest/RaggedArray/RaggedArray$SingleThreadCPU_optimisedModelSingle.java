@@ -277,7 +277,13 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var84 = 0; var84 < length$obs_measured; var84 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -294,10 +300,15 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var84]?p:(1.0 - p))));
-			logProbability$var72 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var85 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var72 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var85 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -329,7 +340,13 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var72 = logProbability$var85;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$obs_measured))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var72 = logProbability$var85;
 			
 			// Update the variable probability
 			// 
@@ -643,11 +660,11 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var68 = 0.0;
 		if(!fixedProbFlag$sample73)
-			logProbability$i = 0.0;
-		logProbability$var72 = 0.0;
+			logProbability$i = Double.NaN;
+		logProbability$var72 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample89)
-			logProbability$var85 = 0.0;
+			logProbability$var85 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

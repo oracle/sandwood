@@ -536,9 +536,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$3$$var237's comment
+			// cv$temp$3$$var239's comment
 			// 
-			// $var237's comment
+			// $var239's comment
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
@@ -624,9 +624,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$3$$var237's comment
+		// cv$temp$3$$var239's comment
 		// 
-		// $var237's comment
+		// $var239's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Value of the variable at this index
@@ -842,9 +842,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// A reference local to the function for the sample variable.
 			// 
-			// cv$temp$1$$var257's comment
+			// cv$temp$1$$var259's comment
 			// 
-			// $var257's comment
+			// $var259's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_12);
 			
@@ -916,9 +916,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// A reference local to the function for the sample variable.
 		// 
-		// cv$temp$1$$var257's comment
+		// cv$temp$1$$var259's comment
 		// 
-		// $var257's comment
+		// $var259's comment
 		// Constructing a random variable input for use later.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_12);
 		
@@ -1160,14 +1160,14 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$d = 0.0;
-		logProbability$var50 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var50 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample65)
-			logProbability$var63 = 0.0;
+			logProbability$var63 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

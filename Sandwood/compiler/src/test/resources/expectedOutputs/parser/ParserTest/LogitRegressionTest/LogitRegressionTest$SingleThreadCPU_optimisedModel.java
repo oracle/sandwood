@@ -3104,42 +3104,42 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = 0.0;
+		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
 		logProbability$indicator = 0.0;
 		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			// Unrolled loop
-			logProbability$sample35[0] = 0.0;
-			logProbability$sample35[1] = 0.0;
-			logProbability$sample35[2] = 0.0;
+			logProbability$sample35[0] = Double.NaN;
+			logProbability$sample35[1] = Double.NaN;
+			logProbability$sample35[2] = Double.NaN;
 		}
 		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		for(int i = 0; i < n; i += 1) {
 			// Unrolled loop
 			// Substituted "j$var85" with its value "0".
-			logProbability$var92[i][0] = 0.0;
+			logProbability$var92[i][0] = Double.NaN;
 			
 			// Substituted "j$var85" with its value "1".
-			logProbability$var92[i][1] = 0.0;
+			logProbability$var92[i][1] = Double.NaN;
 			
 			// Substituted "j$var85" with its value "2".
-			logProbability$var92[i][2] = 0.0;
+			logProbability$var92[i][2] = Double.NaN;
 		}
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94) {
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				// Substituted "j$var85" with its value "0".
-				logProbability$sample94[i][0] = 0.0;
+				logProbability$sample94[i][0] = Double.NaN;
 				
 				// Substituted "j$var85" with its value "1".
-				logProbability$sample94[i][1] = 0.0;
+				logProbability$sample94[i][1] = Double.NaN;
 				
 				// Substituted "j$var85" with its value "2".
-				logProbability$sample94[i][2] = 0.0;
+				logProbability$sample94[i][2] = Double.NaN;
 			}
 		}
 	}

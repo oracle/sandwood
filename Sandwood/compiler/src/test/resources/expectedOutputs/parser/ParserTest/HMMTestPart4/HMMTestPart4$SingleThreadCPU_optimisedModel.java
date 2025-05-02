@@ -1565,36 +1565,36 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var80 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample84)
-			logProbability$var81 = 0.0;
+			logProbability$var81 = Double.NaN;
 		for(int i1 = 1; i1 < samples; i1 += 1) {
 			for(int j1 = 0; j1 < samples; j1 += 1) {
 				for(int k1 = 0; k1 < samples; k1 += 1)
-					logProbability$var120[(i1 - 1)][j1][k1] = 0.0;
+					logProbability$var120[(i1 - 1)][j1][k1] = Double.NaN;
 			}
 		}
 		if(!fixedProbFlag$sample124) {
 			for(int i1 = 1; i1 < samples; i1 += 1) {
 				for(int j1 = 0; j1 < samples; j1 += 1) {
 					for(int k1 = 0; k1 < samples; k1 += 1)
-						logProbability$sample124[(i1 - 1)][j1][k1] = 0.0;
+						logProbability$sample124[(i1 - 1)][j1][k1] = Double.NaN;
 				}
 			}
 		}
 		for(int l = 0; l < samples; l += 1) {
 			for(int p = 0; p < samples; p += 1) {
 				for(int n = 0; n < samples; n += 1)
-					logProbability$var185[l][p][n] = 0.0;
+					logProbability$var185[l][p][n] = Double.NaN;
 			}
 		}
 		logProbability$flips = 0.0;
@@ -1602,7 +1602,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
 					for(int n = 0; n < samples; n += 1)
-						logProbability$sample191[l][p][n] = 0.0;
+						logProbability$sample191[l][p][n] = Double.NaN;
 				}
 			}
 		}

@@ -206,6 +206,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -247,6 +250,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -256,8 +262,11 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			logProbability$beta = (logProbability$beta + cv$sampleAccumulator);
 			
-			// Store the random variable instance probability
-			logProbability$var22 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var22 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -280,6 +289,12 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var22;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -310,6 +325,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < 1; j += 1) {
 				for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
 					// An accumulator for log probabilities.
@@ -351,6 +369,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
 					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				}
@@ -359,10 +380,14 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bernoulli1 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$bernoulli1 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var49 = cv$accumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var49 = cv$accumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -381,10 +406,19 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int j = 0; j < 1; j += 1) {
+				for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1)
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
 			double cv$sampleValue = logProbability$var49;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$bernoulli1 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$bernoulli1 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -407,6 +441,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int k = 1; k < coins; k += 1) {
 				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
 					// An accumulator for log probabilities.
@@ -448,6 +485,9 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
 					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				}
@@ -456,10 +496,14 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bernoulli2 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$bernoulli2 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var76 = cv$accumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var76 = cv$accumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -478,10 +522,19 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int k = 1; k < coins; k += 1) {
+				for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1)
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
 			double cv$sampleValue = logProbability$var76;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$bernoulli2 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$bernoulli2 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -854,16 +907,16 @@ class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$beta = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$var9 = 0.0;
+			logProbability$var9 = Double.NaN;
 		if(!fixedProbFlag$sample22)
-			logProbability$var22 = 0.0;
-		logProbability$bernoulli1 = 0.0;
+			logProbability$var22 = Double.NaN;
+		logProbability$bernoulli1 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample49)
-			logProbability$var49 = 0.0;
-		logProbability$bernoulli2 = 0.0;
+			logProbability$var49 = Double.NaN;
+		logProbability$bernoulli2 = Double.NaN;
 		if(!fixedProbFlag$sample77)
-			logProbability$var76 = 0.0;
+			logProbability$var76 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
