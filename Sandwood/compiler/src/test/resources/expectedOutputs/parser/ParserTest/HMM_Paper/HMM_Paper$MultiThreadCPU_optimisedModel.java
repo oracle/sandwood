@@ -1053,9 +1053,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// 
 			// Substituted "cv$temp$0$initialCoin" with its value "initialCoin".
 			// 
-			// cv$temp$1$$var357's comment
+			// cv$temp$1$$var359's comment
 			// 
-			// $var357's comment
+			// $var359's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < nCoins)?Math.log(initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -1078,9 +1078,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// 
 				// Substituted "i" with its value "1".
 				// 
-				// cv$temp$3$$var366's comment
+				// cv$temp$3$$var368's comment
 				// 
-				// $var366's comment
+				// $var368's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1249,9 +1249,9 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var397's comment
+				// cv$temp$3$$var399's comment
 				// 
-				// $var397's comment
+				// $var399's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1713,33 +1713,33 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
+			logProbability$var28 = Double.NaN;
 		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample32)
-			logProbability$initialCoin = 0.0;
-		logProbability$var34 = 0.0;
+			logProbability$initialCoin = Double.NaN;
+		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$var46 = 0.0;
+			logProbability$var46 = Double.NaN;
 		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i = 1; i < nFlips; i += 1)
-			logProbability$var69[(i - 1)] = 0.0;
+			logProbability$var69[(i - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample71) {
 			for(int i = 1; i < nFlips; i += 1)
-				logProbability$sample71[(i - 1)] = 0.0;
+				logProbability$sample71[(i - 1)] = Double.NaN;
 		}
 		for(int j = 0; j < nFlips; j += 1)
-			logProbability$var85[j] = 0.0;
+			logProbability$var85[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < nFlips; j += 1)
-				logProbability$sample87[j] = 0.0;
+				logProbability$sample87[j] = Double.NaN;
 		}
 	}
 

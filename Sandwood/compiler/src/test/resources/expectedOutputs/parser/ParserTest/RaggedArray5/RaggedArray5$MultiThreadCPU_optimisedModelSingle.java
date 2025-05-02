@@ -263,8 +263,14 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
 				double var38 = d[y];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -283,10 +289,14 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var51]?var38:(1.0 - var38))));
 			}
-			logProbability$var39 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var52 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var39 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var52 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -318,7 +328,13 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var39 = logProbability$var52;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$obs_measured))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var39 = logProbability$var52;
 			
 			// Update the variable probability
 			// 
@@ -439,7 +455,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$var35" with its value "a[y]".
 			// 
-			// Substituted "cv$temp$1$$var176" with its value "lengthCV$a$37_10".
+			// Substituted "cv$temp$1$$var177" with its value "lengthCV$a$37_10".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
 			
 			// Processing random variable 39.
@@ -510,7 +526,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Substituted "cv$temp$0$var35" with its value "a[y]".
 		// 
-		// Substituted "cv$temp$1$$var176" with its value "lengthCV$a$37_10".
+		// Substituted "cv$temp$1$$var177" with its value "lengthCV$a$37_10".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
 		
 		// Processing random variable 39.
@@ -716,11 +732,11 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var36 = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$d = 0.0;
-		logProbability$var39 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var39 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample54)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

@@ -416,6 +416,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -456,6 +459,9 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -463,10 +469,14 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var50 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var50 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var63 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var63 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -485,10 +495,17 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var63;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var50 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var50 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -539,14 +556,14 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$b = b;
 					}
-					int cv$temp$1$$var235;
+					int cv$temp$1$$var237;
 					{
-						cv$temp$1$$var235 = 2;
+						cv$temp$1$$var237 = 2;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var235))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var237))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 47.
 					{
@@ -572,7 +589,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													double[] var46 = a[traceTempVariable$y$3_1];
 													cv$temp$2$var46 = var46;
 												}
-												int cv$temp$3$$var237;
+												int cv$temp$3$$var239;
 												{
 													// Allocate a local variable to hold the length of the array.
 													int lengthCV$a$48_10 = -1;
@@ -592,19 +609,19 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													}
 													
 													// Constructing a random variable input for use later.
-													int $var237 = lengthCV$a$48_10;
-													cv$temp$3$$var237 = $var237;
+													int $var239 = lengthCV$a$48_10;
+													cv$temp$3$$var239 = $var239;
 												}
 												
 												// Record the probability of sample task 50 generating output with current configuration.
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var239)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var239)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var239));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var239)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var239)));
 												}
 												
 												// Recorded the probability of reaching sample task 50 with the current configuration.
@@ -893,7 +910,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var46 = a[y];
 						cv$temp$0$var46 = var46;
 					}
-					int cv$temp$1$$var257;
+					int cv$temp$1$$var259;
 					{
 						// Allocate a local variable to hold the length of the array.
 						int lengthCV$a$48_12 = -1;
@@ -913,13 +930,13 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						}
 						
 						// Constructing a random variable input for use later.
-						int $var257 = lengthCV$a$48_12;
-						cv$temp$1$$var257 = $var257;
+						int $var259 = lengthCV$a$48_12;
+						cv$temp$1$$var259 = $var259;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var46, cv$temp$1$$var257));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var46, cv$temp$1$$var259));
 					
 					// Processing random variable 50.
 					{
@@ -1242,14 +1259,14 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$d = 0.0;
-		logProbability$var50 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var50 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample65)
-			logProbability$var63 = 0.0;
+			logProbability$var63 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

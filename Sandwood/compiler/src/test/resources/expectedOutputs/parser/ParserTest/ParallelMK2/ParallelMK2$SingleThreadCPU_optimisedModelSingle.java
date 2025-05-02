@@ -151,9 +151,15 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				// The sample value to calculate the probability of generating
 				double cv$sampleValue = sample[i];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -170,15 +176,19 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var25 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$sample = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var25 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$sample = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -213,7 +223,13 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var25 = logProbability$sample;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$observed))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var25 = logProbability$sample;
 			
 			// Update the variable probability
 			// 
@@ -242,8 +258,14 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				double var30 = indirection[i];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -262,15 +284,19 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var30)))) - (Math.log(var30) * 0.5));
 			}
-			logProbability$var31 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var32 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var31 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var32 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -302,7 +328,13 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var31 = logProbability$var32;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$observed))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var31 = logProbability$var32;
 			
 			// Update the variable probability
 			// 
@@ -646,14 +678,14 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var25 = 0.0;
+		logProbability$var25 = Double.NaN;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample26)
-			logProbability$sample = 0.0;
-		logProbability$var31 = 0.0;
+			logProbability$sample = Double.NaN;
+		logProbability$var31 = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample32)
-			logProbability$var32 = 0.0;
+			logProbability$var32 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

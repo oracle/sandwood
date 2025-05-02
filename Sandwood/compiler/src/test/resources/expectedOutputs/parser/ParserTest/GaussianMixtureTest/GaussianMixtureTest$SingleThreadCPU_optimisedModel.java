@@ -1222,28 +1222,28 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$phi = 0.0;
-		logProbability$var22 = 0.0;
+			logProbability$phi = Double.NaN;
+		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
-			logProbability$var34 = 0.0;
-		logProbability$var40 = 0.0;
+			logProbability$var34 = Double.NaN;
+		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var67[i$var66] = 0.0;
+			logProbability$var67[i$var66] = Double.NaN;
 		logProbability$z = 0.0;
 		if(!fixedProbFlag$sample68) {
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				logProbability$sample68[i$var66] = 0.0;
+				logProbability$sample68[i$var66] = Double.NaN;
 		}
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var71[i$var66] = 0.0;
+			logProbability$var71[i$var66] = Double.NaN;
 		logProbability$x = 0.0;
 		if(!fixedProbFlag$sample72) {
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				logProbability$sample72[i$var66] = 0.0;
+				logProbability$sample72[i$var66] = Double.NaN;
 		}
 	}
 

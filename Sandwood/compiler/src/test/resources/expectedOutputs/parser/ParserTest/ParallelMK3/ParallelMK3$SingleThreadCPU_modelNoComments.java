@@ -182,6 +182,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void logProbabilityValue$sample38() {
 		if(!fixedProbFlag$sample38) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -210,6 +211,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var37[((i - 0) / 1)] = cv$sampleAccumulator;
@@ -221,10 +223,12 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			fixedProbFlag$sample38 = fixedFlag$sample21;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample38[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var37[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -512,13 +516,13 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$var20 = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$sample = 0.0;
+			logProbability$sample = Double.NaN;
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var37[((i - 0) / 1)] = 0.0;
+			logProbability$var37[((i - 0) / 1)] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample38) {
 			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample38[((i - 0) / 1)] = 0.0;
+				logProbability$sample38[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 

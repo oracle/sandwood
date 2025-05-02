@@ -282,6 +282,9 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var84 = 0; var84 < length$obs_measured; var84 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -320,6 +323,9 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -349,6 +355,12 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var85;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -776,11 +788,11 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var68 = 0.0;
 		if(!fixedProbFlag$sample73)
-			logProbability$i = 0.0;
-		logProbability$var72 = 0.0;
+			logProbability$i = Double.NaN;
+		logProbability$var72 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample89)
-			logProbability$var85 = 0.0;
+			logProbability$var85 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

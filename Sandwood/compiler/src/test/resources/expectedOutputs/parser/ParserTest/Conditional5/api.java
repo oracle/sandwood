@@ -49,8 +49,8 @@ public class Conditional5 extends GeneratedAPIBuilder {
         value.setAlias("value");
         value.setLocation(location(21, 12, 21, 16));
 
-        guard.observe(observedGuard, location(24, 11, 24, 32));
-        value.observe(observedValue, location(26, 11, 26, 32));
+        guard.observe(observedGuard, location(23, 11, 23, 32));
+        value.observe(observedValue, location(25, 11, 25, 32));
 
         Variable<?>[] $variableNames = {observedValue, observedGuard, bernoulli, guard, a, b, value};
         String[] $constructorArgs = {"observedValue", "observedGuard"};
@@ -81,7 +81,6 @@ public class Conditional5 extends GeneratedAPIBuilder {
              + "        \n"
              + "    double value = guard?a:b;\n"
              + "    \n"
-             + "    //\n"
              + "    guard.observe(observedGuard);\n"
              + "    //Link the sampled value to the observed value\n"
              + "    value.observe(observedValue);\n"

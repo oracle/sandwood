@@ -1255,34 +1255,34 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$var42 = 0.0;
-		logProbability$var44 = 0.0;
+			logProbability$var42 = Double.NaN;
+		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
-			logProbability$var57 = 0.0;
+			logProbability$var57 = Double.NaN;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var87[i$var71][j] = 0.0;
+				logProbability$var87[i$var71][j] = Double.NaN;
 		}
 		logProbability$z = 0.0;
 		if(!fixedProbFlag$sample90) {
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					logProbability$sample90[i$var71][j] = 0.0;
+					logProbability$sample90[i$var71][j] = Double.NaN;
 			}
 		}
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var90[i$var71][j] = 0.0;
+				logProbability$var90[i$var71][j] = Double.NaN;
 		}
 		logProbability$w = 0.0;
 		if(!fixedProbFlag$sample93) {
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					logProbability$sample93[i$var71][j] = 0.0;
+					logProbability$sample93[i$var71][j] = Double.NaN;
 			}
 		}
 	}

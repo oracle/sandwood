@@ -3774,24 +3774,24 @@ class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$$evidence = 0.0;
 		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
-			logProbability$v1 = 0.0;
+			logProbability$v1 = Double.NaN;
 		logProbability$var10 = 0.0;
 		logProbability$v2 = 0.0;
 		logProbability$v3 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$var11 = 0.0;
+			logProbability$var11 = Double.NaN;
 		for(int i = 0; i < size; i += 1)
-			logProbability$var26[i] = 0.0;
+			logProbability$var26[i] = Double.NaN;
 		if(!fixedProbFlag$sample27) {
 			for(int i = 0; i < size; i += 1)
-				logProbability$sample27[i] = 0.0;
+				logProbability$sample27[i] = Double.NaN;
 		}
 		for(int j = 0; j < size; j += 1)
-			logProbability$var69[j] = 0.0;
+			logProbability$var69[j] = Double.NaN;
 		logProbability$v = 0.0;
 		if(!fixedProbFlag$sample70) {
 			for(int j = 0; j < size; j += 1)
-				logProbability$sample70[j] = 0.0;
+				logProbability$sample70[j] = Double.NaN;
 		}
 	}
 

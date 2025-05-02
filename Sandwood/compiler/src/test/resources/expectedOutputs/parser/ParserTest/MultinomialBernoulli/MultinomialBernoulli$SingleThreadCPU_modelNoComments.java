@@ -274,6 +274,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedProbFlag$sample48) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -300,6 +301,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -312,6 +314,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var47 = 0; i$var47 < length; i$var47 += 3)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var48;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -326,6 +331,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedProbFlag$sample60) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -352,6 +358,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -364,6 +371,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var59 = 1; i$var59 < length; i$var59 += 3)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var60;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -378,6 +388,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedProbFlag$sample72) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -404,6 +415,7 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -416,6 +428,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var71 = 2; i$var71 < length; i$var71 += 3)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var72;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -733,20 +748,20 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$p = 0.0;
+			logProbability$p = Double.NaN;
 		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample48)
-			logProbability$var48 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var48 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample60)
-			logProbability$var60 = 0.0;
-		logProbability$b3 = 0.0;
+			logProbability$var60 = Double.NaN;
+		logProbability$b3 = Double.NaN;
 		if(!fixedProbFlag$sample72)
-			logProbability$var72 = 0.0;
+			logProbability$var72 = Double.NaN;
 	}
 
 	@Override

@@ -280,10 +280,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 			double cv$denominator = x[i$var45][var23];
 			double reduceVar$var70$5 = 0.0;
-			for(int cv$reduction387Index = 0; cv$reduction387Index < var23; cv$reduction387Index += 1)
-				reduceVar$var70$5 = (reduceVar$var70$5 + phi[i$var45][cv$reduction387Index]);
-			for(int cv$reduction387Index = (var23 + 1); cv$reduction387Index < k; cv$reduction387Index += 1)
-				reduceVar$var70$5 = (reduceVar$var70$5 + phi[i$var45][cv$reduction387Index]);
+			for(int cv$reduction389Index = 0; cv$reduction389Index < var23; cv$reduction389Index += 1)
+				reduceVar$var70$5 = (reduceVar$var70$5 + phi[i$var45][cv$reduction389Index]);
+			for(int cv$reduction389Index = (var23 + 1); cv$reduction389Index < k; cv$reduction389Index += 1)
+				reduceVar$var70$5 = (reduceVar$var70$5 + phi[i$var45][cv$reduction389Index]);
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - (reduceVar$var70$5 + bias))));
 			if(cv$sigmaNotFound) {
@@ -478,25 +478,25 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var12 = 0.0;
+		logProbability$var12 = Double.NaN;
 		logProbability$weights = 0.0;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int var23 = 0; var23 < k; var23 += 1)
-				logProbability$sample24[var23] = 0.0;
+				logProbability$sample24[var23] = Double.NaN;
 		}
 		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample31)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$var34 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$tau = 0.0;
+			logProbability$tau = Double.NaN;
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-			logProbability$var72[i$var45] = 0.0;
+			logProbability$var72[i$var45] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample74) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-				logProbability$sample74[i$var45] = 0.0;
+				logProbability$sample74[i$var45] = Double.NaN;
 		}
 	}
 

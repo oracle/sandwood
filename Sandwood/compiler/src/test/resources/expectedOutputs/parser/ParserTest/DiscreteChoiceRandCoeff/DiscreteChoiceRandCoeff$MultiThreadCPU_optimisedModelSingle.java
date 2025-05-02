@@ -359,9 +359,15 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < noObs; i += 1) {
 				// The sample value to calculate the probability of generating
 				int cv$sampleValue = choices[i];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -378,15 +384,19 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts))?Math.log(prob[i][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var101 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var102 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var101 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var102 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -418,7 +428,13 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var101 = logProbability$var102;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noObs))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var101 = logProbability$var102;
 			
 			// Update the variable probability
 			// 
@@ -444,6 +460,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var20 = 0; var20 < noProducts; var20 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -470,6 +489,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var20] / 3.1622776601683795)) - 1.151292546497023);
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
@@ -485,7 +507,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
 				}
 			}
-			logProbability$var9 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var9 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -521,9 +544,15 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var20 = 0; var20 < noProducts; var20 += 1) {
 				double cv$sampleValue = logProbability$sample21[var20];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 < noObs)) {
@@ -534,7 +563,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					logProbability$prob = (logProbability$prob + cv$sampleValue);
 				}
 			}
-			logProbability$var9 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var9 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$ut = (logProbability$ut + cv$rvAccumulator);
@@ -750,6 +780,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var46 = 0; var46 < noObs; var46 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -776,6 +809,9 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((beta[var46] - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5));
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
@@ -796,7 +832,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
 				}
 			}
-			logProbability$var35 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var35 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -832,9 +869,15 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var46 = 0; var46 < noObs; var46 += 1) {
 				double cv$sampleValue = logProbability$sample47[var46];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 < noProducts)) {
@@ -850,7 +893,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 					logProbability$prob = (logProbability$prob + cv$sampleValue);
 				}
 			}
-			logProbability$var35 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var35 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$beta = (logProbability$beta + cv$rvAccumulator);
@@ -2215,30 +2259,30 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
+		logProbability$var9 = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				logProbability$sample21[var20] = 0.0;
+				logProbability$sample21[var20] = Double.NaN;
 		}
 		logProbability$var27 = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$b = 0.0;
+			logProbability$b = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample34)
-			logProbability$sigma = 0.0;
-		logProbability$var35 = 0.0;
+			logProbability$sigma = Double.NaN;
+		logProbability$var35 = Double.NaN;
 		logProbability$beta = 0.0;
 		if(!fixedProbFlag$sample47) {
 			for(int var46 = 0; var46 < noObs; var46 += 1)
-				logProbability$sample47[var46] = 0.0;
+				logProbability$sample47[var46] = Double.NaN;
 		}
-		logProbability$var101 = 0.0;
+		logProbability$var101 = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample103)
-			logProbability$var102 = 0.0;
+			logProbability$var102 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

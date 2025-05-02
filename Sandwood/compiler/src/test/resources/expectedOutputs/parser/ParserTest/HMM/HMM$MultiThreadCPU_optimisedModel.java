@@ -911,9 +911,9 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// 
 				// Substituted "i" with its value "1".
 				// 
-				// cv$temp$3$$var342's comment
+				// cv$temp$3$$var343's comment
 				// 
-				// $var342's comment
+				// $var343's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1082,9 +1082,9 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var373's comment
+				// cv$temp$3$$var374's comment
 				// 
-				// $var373's comment
+				// $var374's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1529,30 +1529,30 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i = 1; i < samples; i += 1)
-			logProbability$var69[(i - 1)] = 0.0;
+			logProbability$var69[(i - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample71) {
 			for(int i = 1; i < samples; i += 1)
-				logProbability$sample71[(i - 1)] = 0.0;
+				logProbability$sample71[(i - 1)] = Double.NaN;
 		}
 		for(int j = 0; j < samples; j += 1)
-			logProbability$var85[j] = 0.0;
+			logProbability$var85[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < samples; j += 1)
-				logProbability$sample87[j] = 0.0;
+				logProbability$sample87[j] = Double.NaN;
 		}
 	}
 

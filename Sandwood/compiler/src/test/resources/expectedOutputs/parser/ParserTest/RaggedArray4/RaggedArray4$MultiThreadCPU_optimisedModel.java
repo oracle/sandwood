@@ -544,9 +544,9 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$3$$var218's comment
+		// cv$temp$3$$var220's comment
 		// 
-		// $var218's comment
+		// $var220's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Processing random variable 47.
@@ -602,9 +602,9 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$3$$var218's comment
+		// cv$temp$3$$var220's comment
 		// 
-		// $var218's comment
+		// $var220's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Processing random variable 47.
@@ -925,14 +925,14 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$d = 0.0;
-		logProbability$var49 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var49 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample64)
-			logProbability$var62 = 0.0;
+			logProbability$var62 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

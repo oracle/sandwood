@@ -209,7 +209,13 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var21 = 0; var21 < samples1; var21 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var21 = 0; var21 < samples1; var21 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -226,10 +232,19 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips1[var21]?bias:(1.0 - bias))));
-			logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var22 = cv$sampleAccumulator;
+			// Check that the value is not still set to NaN.
+			if((Double.isNaN(logProbability$bernoulli) && cv$sampleReached))
+				logProbability$bernoulli = cv$sampleAccumulator;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
+			
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var22 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -261,7 +276,17 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = (logProbability$bernoulli + logProbability$var22);
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples1))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			
+			// Check that the value is not still set to NaN.
+			if((Double.isNaN(logProbability$bernoulli) && cv$sampleReached))
+				logProbability$bernoulli = logProbability$var22;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + logProbability$var22);
 			
 			// Update the variable probability
 			// 
@@ -287,7 +312,13 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var34 = 0; var34 < samples2; var34 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var34 = 0; var34 < samples2; var34 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -304,10 +335,19 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips2[var34]?bias:(1.0 - bias))));
-			logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var35 = cv$sampleAccumulator;
+			// Check that the value is not still set to NaN.
+			if((Double.isNaN(logProbability$bernoulli) && cv$sampleReached))
+				logProbability$bernoulli = cv$sampleAccumulator;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
+			
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var35 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -339,7 +379,17 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = (logProbability$bernoulli + logProbability$var35);
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples2))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			
+			// Check that the value is not still set to NaN.
+			if((Double.isNaN(logProbability$bernoulli) && cv$sampleReached))
+				logProbability$bernoulli = logProbability$var35;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + logProbability$var35);
 			
 			// Update the variable probability
 			// 
@@ -581,14 +631,14 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$bias = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$bias = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips1 = 0.0;
 		if(!fixedProbFlag$sample22)
-			logProbability$var22 = 0.0;
+			logProbability$var22 = Double.NaN;
 		logProbability$flips2 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$var35 = 0.0;
+			logProbability$var35 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

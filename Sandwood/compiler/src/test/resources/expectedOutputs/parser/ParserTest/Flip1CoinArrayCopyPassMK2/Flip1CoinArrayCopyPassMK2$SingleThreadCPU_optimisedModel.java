@@ -496,13 +496,13 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$var10 = 0.0;
+			logProbability$var10 = Double.NaN;
 		for(int i = 0; i < samples; i += 1)
-			logProbability$bernoulli[i] = 0.0;
+			logProbability$bernoulli[i] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample31) {
 			for(int i = 0; i < samples; i += 1)
-				logProbability$sample31[i] = 0.0;
+				logProbability$sample31[i] = Double.NaN;
 		}
 	}
 

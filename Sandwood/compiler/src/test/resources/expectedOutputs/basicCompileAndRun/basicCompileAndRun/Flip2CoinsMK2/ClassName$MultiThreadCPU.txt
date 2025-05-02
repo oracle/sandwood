@@ -528,19 +528,19 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
+		logProbability$var8 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$var20 = 0.0;
+			logProbability$var20 = Double.NaN;
 		for(int i = 0; i < samples; i += 1) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$bernoulli[i][j] = 0.0;
+				logProbability$bernoulli[i][j] = Double.NaN;
 		}
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample45) {
 			for(int i = 0; i < samples; i += 1) {
 				for(int j = 0; j < coins; j += 1)
-					logProbability$sample45[i][j] = 0.0;
+					logProbability$sample45[i][j] = Double.NaN;
 			}
 		}
 	}

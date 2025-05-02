@@ -439,7 +439,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$var35" with its value "a[y]".
 			// 
-			// Substituted "cv$temp$1$$var176" with its value "lengthCV$a$37_10".
+			// Substituted "cv$temp$1$$var177" with its value "lengthCV$a$37_10".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
 			
 			// Processing random variable 39.
@@ -510,7 +510,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Substituted "cv$temp$0$var35" with its value "a[y]".
 		// 
-		// Substituted "cv$temp$1$$var176" with its value "lengthCV$a$37_10".
+		// Substituted "cv$temp$1$$var177" with its value "lengthCV$a$37_10".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
 		
 		// Processing random variable 39.
@@ -716,11 +716,11 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var36 = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$d = 0.0;
-		logProbability$var39 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var39 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample54)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

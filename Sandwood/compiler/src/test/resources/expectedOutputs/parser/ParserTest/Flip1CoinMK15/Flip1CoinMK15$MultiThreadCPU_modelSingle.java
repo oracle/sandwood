@@ -177,6 +177,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var46 = 0; var46 < samples; var46 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -215,6 +218,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -222,10 +228,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bernoulli = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$bernoulli = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var47 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var47 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -244,10 +254,17 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var46 = 0; var46 < samples; var46 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var47;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$bernoulli = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$bernoulli = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -807,24 +824,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 											double reduceVar$var33$16 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction408Index = 0; cv$reduction408Index < 0; cv$reduction408Index += 1) {
+											for(int cv$reduction409Index = 0; cv$reduction409Index < 0; cv$reduction409Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$16;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction408Index];
+												double j = c[cv$reduction409Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var33$16 = (i$var30 + j);
 											}
-											for(int cv$reduction408Index = (0 + 1); cv$reduction408Index < 2; cv$reduction408Index += 1) {
+											for(int cv$reduction409Index = (0 + 1); cv$reduction409Index < 2; cv$reduction409Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$16;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction408Index];
+												double j = c[cv$reduction409Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -918,24 +935,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 											double reduceVar$var33$17 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction429Index = 0; cv$reduction429Index < 1; cv$reduction429Index += 1) {
+											for(int cv$reduction430Index = 0; cv$reduction430Index < 1; cv$reduction430Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$17;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction429Index];
+												double j = c[cv$reduction430Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var33$17 = (i$var30 + j);
 											}
-											for(int cv$reduction429Index = (1 + 1); cv$reduction429Index < 2; cv$reduction429Index += 1) {
+											for(int cv$reduction430Index = (1 + 1); cv$reduction430Index < 2; cv$reduction430Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$17;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction429Index];
+												double j = c[cv$reduction430Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1383,11 +1400,11 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$sample8 = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$sample8 = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$var47 = 0.0;
+			logProbability$var47 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

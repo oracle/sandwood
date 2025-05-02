@@ -1034,23 +1034,23 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = 0.0;
+		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = 0.0;
-		logProbability$var23 = 0.0;
+			logProbability$sample16 = Double.NaN;
+		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$sample28 = 0.0;
-		logProbability$var30 = 0.0;
+			logProbability$sample28 = Double.NaN;
+		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$sample35 = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$sample35 = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample52)
-			logProbability$var48 = 0.0;
+			logProbability$var48 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

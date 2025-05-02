@@ -65,6 +65,10 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample4 = (fixedFlag$sample4 && fixedProbFlag$sample4);
+		
+		// Should the probability of sample 21 be set to fixed. This will only every change
+		// the flag to false.
+		fixedProbFlag$sample21 = (fixedFlag$sample4 && fixedProbFlag$sample21);
 	}
 
 	// Getter for guard.
@@ -82,6 +86,9 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
+		
+		// Unset the fixed probability flag for sample 21 as it depends on guard.
+		fixedProbFlag$sample21 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -171,6 +178,9 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(!guard) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -214,6 +224,9 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
@@ -268,17 +281,23 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedFlag$sample4);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(!guard) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample21;
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var18 = cv$rvAccumulator;
 			}
@@ -757,13 +776,13 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var18 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var18 = Double.NaN;
 		logProbability$var19 = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$sample21 = 0.0;
+			logProbability$sample21 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

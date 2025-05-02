@@ -396,6 +396,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
+				
+				// A guard to check if the sample value is ever reached.
+				boolean cv$sampleReached = false;
 				for(int i = 0; i < size; i += 1) {
 					// Accumulator for sample probabilities for a specific instance of the random variable.
 					double cv$sampleAccumulator = 0.0;
@@ -440,6 +443,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
 					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					
@@ -475,10 +481,16 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < size; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample27[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var26[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -507,6 +519,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < size; j += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -3895,6 +3910,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -3923,10 +3941,16 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < size; j += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample49[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var48[((j - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -4147,6 +4171,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < size; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -4191,6 +4218,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -4223,10 +4253,16 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < size; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample27[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var26[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -4253,6 +4289,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < size; j += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -4296,6 +4335,9 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -4324,10 +4366,16 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < size; j += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample49[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var48[((j - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -4471,14 +4519,14 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var2743;
+					int cv$temp$1$$var2747;
 					{
-						cv$temp$1$$var2743 = weightings.length;
+						cv$temp$1$$var2747 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2743))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2747))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 48.
 					{
@@ -8367,14 +8415,14 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var3406;
+					int cv$temp$1$$var3410;
 					{
-						cv$temp$1$$var3406 = weightings.length;
+						cv$temp$1$$var3410 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var3406))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var3410))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 48.
 					{
@@ -12209,14 +12257,14 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var2456;
+					int cv$temp$1$$var2460;
 					{
-						cv$temp$1$$var2456 = weightings.length;
+						cv$temp$1$$var2460 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2456))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var2460))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 48.
 					{
@@ -14460,23 +14508,23 @@ class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
-			logProbability$v1 = 0.0;
+			logProbability$v1 = Double.NaN;
 		logProbability$var10 = 0.0;
 		logProbability$v2 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$var11 = 0.0;
+			logProbability$var11 = Double.NaN;
 		for(int i = 0; i < size; i += 1)
-			logProbability$var26[((i - 0) / 1)] = 0.0;
+			logProbability$var26[((i - 0) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample27) {
 			for(int i = 0; i < size; i += 1)
-				logProbability$sample27[((i - 0) / 1)] = 0.0;
+				logProbability$sample27[((i - 0) / 1)] = Double.NaN;
 		}
 		for(int j = 0; j < size; j += 1)
-			logProbability$var48[((j - 0) / 1)] = 0.0;
+			logProbability$var48[((j - 0) / 1)] = Double.NaN;
 		logProbability$v = 0.0;
 		if(!fixedProbFlag$sample49) {
 			for(int j = 0; j < size; j += 1)
-				logProbability$sample49[((j - 0) / 1)] = 0.0;
+				logProbability$sample49[((j - 0) / 1)] = Double.NaN;
 		}
 	}
 

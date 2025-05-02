@@ -211,6 +211,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var33 = 0; var33 < k; var33 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -252,11 +255,17 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
-				// Store the sample task probability
-				logProbability$sample35[((var33 - 0) / 1)] = cv$sampleProbability;
+				// Only update the sample if it was reached, otherwise the NaN will be
+				// erroneously over written.
+				if(cv$sampleReached)
+					// Store the sample task probability
+					logProbability$sample35[((var33 - 0) / 1)] = cv$sampleProbability;
 				
 				// Guard to ensure that indicator is only updated once for this probability.
 				boolean cv$guard$indicator = false;
@@ -365,7 +374,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var22 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var22 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$accumulator);
@@ -388,9 +398,15 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var33 = 0; var33 < k; var33 += 1) {
 				double cv$sampleValue = logProbability$sample35[((var33 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Guard to ensure that indicator is only updated once for this probability.
 				boolean cv$guard$indicator = false;
@@ -496,7 +512,8 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var22 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var22 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$accumulator);
@@ -620,6 +637,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < n; i += 1) {
 				for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
 					// An accumulator for log probabilities.
@@ -661,6 +681,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
 					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				}
@@ -669,10 +692,14 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var92 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var92 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var93 = cv$accumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var93 = cv$accumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -691,10 +718,19 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i = 0; i < n; i += 1) {
+				for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
 			double cv$sampleValue = logProbability$var93;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var92 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var92 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -1947,21 +1983,21 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = 0.0;
+		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
 		logProbability$indicator = 0.0;
 		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int var33 = 0; var33 < k; var33 += 1)
-				logProbability$sample35[((var33 - 0) / 1)] = 0.0;
+				logProbability$sample35[((var33 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$bias = 0.0;
-		logProbability$var92 = 0.0;
+			logProbability$bias = Double.NaN;
+		logProbability$var92 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94)
-			logProbability$var93 = 0.0;
+			logProbability$var93 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

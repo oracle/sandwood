@@ -280,8 +280,14 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				double var36 = indirection[i];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -300,15 +306,19 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36)))) - (Math.log(var36) * 0.5));
 			}
-			logProbability$var37 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var38 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var37 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var38 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -340,7 +350,13 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var37 = logProbability$var38;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$observed))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var37 = logProbability$var38;
 			
 			// Update the variable probability
 			// 
@@ -437,7 +453,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var246" with its value "10".
+			// Substituted "cv$temp$1$$var247" with its value "10".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 			for(int i = 0; i < length$observed; i += 1)
 				// Set the flags to false
@@ -550,7 +566,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var246" with its value "10".
+		// Substituted "cv$temp$1$$var247" with its value "10".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 		for(int i = 0; i < length$observed; i += 1)
 			// Set the flags to false
@@ -814,11 +830,11 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$var20 = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$sample = 0.0;
-		logProbability$var37 = 0.0;
+			logProbability$sample = Double.NaN;
+		logProbability$var37 = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample38)
-			logProbability$var38 = 0.0;
+			logProbability$var38 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
