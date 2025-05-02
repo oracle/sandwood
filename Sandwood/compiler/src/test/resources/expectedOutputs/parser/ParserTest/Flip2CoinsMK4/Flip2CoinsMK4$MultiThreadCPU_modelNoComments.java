@@ -132,6 +132,7 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void logProbabilityValue$sample17() {
 		if(!fixedProbFlag$sample17) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < coins; i += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -158,6 +159,7 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var16[((i - 0) / 1)] = cv$sampleAccumulator;
@@ -170,10 +172,12 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			fixedProbFlag$sample17 = fixedFlag$sample17;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < coins; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample17[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var16[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -187,6 +191,7 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void logProbabilityValue$sample44() {
 		if(!fixedProbFlag$sample44) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < coins; j += 1) {
 				double cv$sampleAccumulator = 0.0;
 				for(int var43 = 0; var43 < length$flipsMeasured[j]; var43 += 1) {
@@ -215,6 +220,7 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					else
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -227,8 +233,11 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			fixedProbFlag$sample44 = fixedFlag$sample17;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < coins; j += 1) {
 				double cv$rvAccumulator = 0.0;
+				for(int var43 = 0; var43 < length$flipsMeasured[j]; var43 += 1)
+					cv$sampleReached = true;
 				double cv$sampleValue = logProbability$sample44[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -382,18 +391,18 @@ class Flip2CoinsMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int i = 0; i < coins; i += 1)
-			logProbability$var16[((i - 0) / 1)] = 0.0;
+			logProbability$var16[((i - 0) / 1)] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17) {
 			for(int i = 0; i < coins; i += 1)
-				logProbability$sample17[((i - 0) / 1)] = 0.0;
+				logProbability$sample17[((i - 0) / 1)] = Double.NaN;
 		}
 		for(int j = 0; j < coins; j += 1)
-			logProbability$bernoulli[((j - 0) / 1)] = 0.0;
+			logProbability$bernoulli[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample44) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample44[((j - 0) / 1)] = 0.0;
+				logProbability$sample44[((j - 0) / 1)] = Double.NaN;
 		}
 	}
 

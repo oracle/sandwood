@@ -176,9 +176,15 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var18 = 0; var18 < samples; var18 += 1) {
 				// The sample value to calculate the probability of generating
 				double cv$sampleValue = decay[var18];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -189,10 +195,14 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$exponential = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var19 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$exponential = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var19 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -224,7 +234,13 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$exponential = logProbability$var19;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < samples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$exponential = logProbability$var19;
 			
 			// Update the variable probability
 			// 
@@ -439,11 +455,11 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$rate = 0.0;
-		logProbability$exponential = 0.0;
+			logProbability$rate = Double.NaN;
+		logProbability$exponential = Double.NaN;
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

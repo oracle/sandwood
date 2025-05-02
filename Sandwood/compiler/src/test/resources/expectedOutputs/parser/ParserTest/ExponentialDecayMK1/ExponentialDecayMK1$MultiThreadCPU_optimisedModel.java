@@ -439,11 +439,11 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$rate = 0.0;
-		logProbability$exponential = 0.0;
+			logProbability$rate = Double.NaN;
+		logProbability$exponential = Double.NaN;
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

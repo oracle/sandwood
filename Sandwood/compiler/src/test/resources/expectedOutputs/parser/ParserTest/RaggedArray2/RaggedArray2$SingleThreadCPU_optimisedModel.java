@@ -1076,14 +1076,14 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$var76 = 0.0;
 		if(!fixedProbFlag$sample81)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var79 = 0.0;
 		if(!fixedProbFlag$sample84)
-			logProbability$i = 0.0;
-		logProbability$var83 = 0.0;
+			logProbability$i = Double.NaN;
+		logProbability$var83 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample100)
-			logProbability$var96 = 0.0;
+			logProbability$var96 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

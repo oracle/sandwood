@@ -859,25 +859,25 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$beta = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$var10 = 0.0;
+			logProbability$var10 = Double.NaN;
 		if(!fixedProbFlag$sample23)
-			logProbability$var23 = 0.0;
+			logProbability$var23 = Double.NaN;
 		
 		// Unrolled loop
 		// 
 		// Substituted "j" with its value "0".
-		logProbability$bernoulli1[0] = 0.0;
+		logProbability$bernoulli1[0] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample50)
 			// Unrolled loop
 			// 
 			// Substituted "j" with its value "0".
-			logProbability$sample50[0] = 0.0;
+			logProbability$sample50[0] = Double.NaN;
 		for(int k = 1; k < coins; k += 1)
-			logProbability$bernoulli2[(k - 1)] = 0.0;
+			logProbability$bernoulli2[(k - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample78) {
 			for(int k = 1; k < coins; k += 1)
-				logProbability$sample78[(k - 1)] = 0.0;
+				logProbability$sample78[(k - 1)] = Double.NaN;
 		}
 	}
 

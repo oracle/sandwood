@@ -491,7 +491,13 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < n; i += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i = 0; i < n; i += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -508,15 +514,20 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2)))) - (Math.log(priorSigma2) * 0.5));
-			logProbability$var34 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var35 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var34 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var35 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -548,7 +559,13 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var34 = logProbability$var35;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < n))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var34 = logProbability$var35;
 			
 			// Update the variable probability
 			// 
@@ -574,7 +591,13 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < n; i += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i = 0; i < n; i += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -591,15 +614,20 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2)))) - (Math.log(priorSigma2) * 0.5));
-			logProbability$var38 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var39 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var38 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var39 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -631,7 +659,13 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var38 = logProbability$var39;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < n))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var38 = logProbability$var39;
 			
 			// Update the variable probability
 			// 
@@ -1122,21 +1156,21 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$$evidence = 0.0;
 		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$priorSigma2 = 0.0;
+			logProbability$priorSigma2 = Double.NaN;
 		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
-			logProbability$mean1 = 0.0;
+			logProbability$mean1 = Double.NaN;
 		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$mean2 = 0.0;
-		logProbability$var34 = 0.0;
+			logProbability$mean2 = Double.NaN;
+		logProbability$var34 = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$var35 = 0.0;
-		logProbability$var38 = 0.0;
+			logProbability$var35 = Double.NaN;
+		logProbability$var38 = Double.NaN;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$var39 = 0.0;
+			logProbability$var39 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

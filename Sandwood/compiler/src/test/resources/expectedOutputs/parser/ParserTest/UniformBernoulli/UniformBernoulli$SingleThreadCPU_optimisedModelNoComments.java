@@ -208,11 +208,11 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
-			logProbability$prior = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	@Override

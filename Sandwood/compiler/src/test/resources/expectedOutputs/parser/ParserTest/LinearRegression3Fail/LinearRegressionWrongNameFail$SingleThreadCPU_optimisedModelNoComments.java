@@ -361,19 +361,19 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 		logProbability$$evidence = 0.0;
 		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
-			logProbability$b0 = 0.0;
+			logProbability$b0 = Double.NaN;
 		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$b1 = 0.0;
+			logProbability$b1 = Double.NaN;
 		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
-			logProbability$variance = 0.0;
+			logProbability$variance = Double.NaN;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var30[i] = 0.0;
+			logProbability$var30[i] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample31) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample31[i] = 0.0;
+				logProbability$sample31[i] = Double.NaN;
 		}
 	}
 

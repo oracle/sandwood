@@ -436,25 +436,25 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var12 = 0.0;
+		logProbability$var12 = Double.NaN;
 		logProbability$weights = 0.0;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int var23 = 0; var23 < k; var23 += 1)
-				logProbability$sample24[var23] = 0.0;
+				logProbability$sample24[var23] = Double.NaN;
 		}
 		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample31)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$var34 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$tau = 0.0;
+			logProbability$tau = Double.NaN;
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-			logProbability$var72[i$var45] = 0.0;
+			logProbability$var72[i$var45] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample74) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-				logProbability$sample74[i$var45] = 0.0;
+				logProbability$sample74[i$var45] = Double.NaN;
 		}
 	}
 

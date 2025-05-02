@@ -67,6 +67,12 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Substituted "fixedFlag$sample4" with its value "cv$value".
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
+		
+		// Should the probability of sample 16 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample4" with its value "cv$value".
+		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 	}
 
 	// Getter for guard.
@@ -84,6 +90,9 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on guard.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -217,7 +226,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = fixedFlag$sample16;
+			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
 		}
 		// Using cached values.
 		else {
@@ -577,12 +586,12 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var13 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = 0.0;
+			logProbability$sample16 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

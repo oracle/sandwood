@@ -353,22 +353,22 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$$evidence = 0.0;
 		for(int i = 0; i < 10; i += 1) {
 			for(int j = 0; j < length$observed; j += 1)
-				logProbability$var58[i][j] = 0.0;
+				logProbability$var58[i][j] = Double.NaN;
 		}
 		logProbability$indirection1 = 0.0;
 		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
 			for(int i = 0; i < 10; i += 1) {
 				for(int j = 0; j < length$observed; j += 1)
-					logProbability$sample61[i][j] = 0.0;
+					logProbability$sample61[i][j] = Double.NaN;
 			}
 		}
 		for(int m = 0; m < length$observed; m += 1)
-			logProbability$var100[m] = 0.0;
+			logProbability$var100[m] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int m = 0; m < length$observed; m += 1)
-				logProbability$sample103[m] = 0.0;
+				logProbability$sample103[m] = Double.NaN;
 		}
 	}
 

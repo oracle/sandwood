@@ -63,6 +63,10 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample4 = (fixedFlag$sample4 && fixedProbFlag$sample4);
+		
+		// Should the probability of sample 16 be set to fixed. This will only every change
+		// the flag to false.
+		fixedProbFlag$sample16 = (fixedFlag$sample4 && fixedProbFlag$sample16);
 	}
 
 	// Getter for guard.
@@ -80,6 +84,9 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on guard.
+		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -159,6 +166,9 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(!guard) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -200,11 +210,17 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
-				// Store the sample task probability
-				logProbability$sample16 = cv$sampleProbability;
+				// Only update the sample if it was reached, otherwise the NaN will be
+				// erroneously over written.
+				if(cv$sampleReached)
+					// Store the sample task probability
+					logProbability$sample16 = cv$sampleProbability;
 				
 				// Guard to ensure that value is only updated once for this probability.
 				boolean cv$guard$value = false;
@@ -228,7 +244,8 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var13 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$var13 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
@@ -239,7 +256,7 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = fixedFlag$sample16;
+			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
 		}
 		// Using cached values.
 		else {
@@ -247,9 +264,15 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(!guard) {
 				double cv$sampleValue = logProbability$sample16;
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Guard to ensure that value is only updated once for this probability.
 				boolean cv$guard$value = false;
@@ -270,7 +293,8 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var13 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$var13 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
@@ -666,12 +690,12 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var13 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = 0.0;
+			logProbability$sample16 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

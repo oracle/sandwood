@@ -175,6 +175,9 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int var18 = 0; var18 < samples; var18 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -213,6 +216,9 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -220,10 +226,14 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$poisson = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$poisson = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var19 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var19 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$decay = (logProbability$decay + cv$accumulator);
@@ -242,10 +252,17 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var18 = 0; var18 < samples; var18 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var19;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$poisson = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$poisson = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$decay = (logProbability$decay + cv$accumulator);
@@ -464,11 +481,11 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$rate = 0.0;
-		logProbability$poisson = 0.0;
+			logProbability$rate = Double.NaN;
+		logProbability$poisson = Double.NaN;
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
