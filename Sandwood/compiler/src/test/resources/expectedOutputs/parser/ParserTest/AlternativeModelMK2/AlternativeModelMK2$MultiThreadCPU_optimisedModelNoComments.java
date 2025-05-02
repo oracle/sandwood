@@ -174,10 +174,10 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$positiveCount = 0.0;
+			logProbability$positiveCount = Double.NaN;
 	}
 
 	@Override

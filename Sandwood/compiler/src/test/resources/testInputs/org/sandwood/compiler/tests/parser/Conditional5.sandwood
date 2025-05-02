@@ -20,7 +20,6 @@ public model Conditional5(double observedValue, boolean observedGuard)  {
 		
 	double value = guard?a:b;
 	
-	//
 	guard.observe(observedGuard);
 	//Link the sampled value to the observed value
 	value.observe(observedValue);

@@ -438,6 +438,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -478,6 +481,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -485,10 +491,14 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$b1 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$b1 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var48 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var48 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -507,10 +517,17 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var47 = 0; i$var47 < length; i$var47 += 3)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var48;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$b1 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$b1 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -533,6 +550,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -573,6 +593,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -580,10 +603,14 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$b2 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$b2 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var60 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var60 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -602,10 +629,17 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var59 = 1; i$var59 < length; i$var59 += 3)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var60;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$b2 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$b2 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -628,6 +662,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -668,6 +705,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
@@ -675,10 +715,14 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$b3 = cv$sampleAccumulator;
+			if(cv$sampleReached)
+				logProbability$b3 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var72 = cv$sampleAccumulator;
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var72 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -697,10 +741,17 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var71 = 2; i$var71 < length; i$var71 += 3)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var72;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$b3 = cv$rvAccumulator;
+			if(cv$sampleReached)
+				logProbability$b3 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$output = (logProbability$output + cv$accumulator);
@@ -822,11 +873,11 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					{
 						cv$temp$0$p = p;
 					}
-					int cv$temp$1$$var210;
+					int cv$temp$1$$var212;
 					{
 						// Constructing a random variable input for use later.
-						int $var210 = 3;
-						cv$temp$1$$var210 = $var210;
+						int $var212 = 3;
+						cv$temp$1$$var212 = $var212;
 					}
 					int cv$temp$2$n;
 					{
@@ -835,7 +886,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$targetLocal, cv$temp$0$p, cv$temp$1$$var210, cv$temp$2$n));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$targetLocal, cv$temp$0$p, cv$temp$1$$var212, cv$temp$2$n));
 					
 					// Processing random variable 25.
 					{
@@ -1214,20 +1265,20 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$p = 0.0;
+			logProbability$p = Double.NaN;
 		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample48)
-			logProbability$var48 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var48 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample60)
-			logProbability$var60 = 0.0;
-		logProbability$b3 = 0.0;
+			logProbability$var60 = Double.NaN;
+		logProbability$b3 = Double.NaN;
 		if(!fixedProbFlag$sample72)
-			logProbability$var72 = 0.0;
+			logProbability$var72 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

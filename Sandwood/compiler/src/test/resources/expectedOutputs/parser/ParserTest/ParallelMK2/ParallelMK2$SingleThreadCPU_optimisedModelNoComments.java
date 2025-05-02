@@ -282,19 +282,19 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var25[i] = 0.0;
+			logProbability$var25[i] = Double.NaN;
 		logProbability$sample = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample26[i] = 0.0;
+				logProbability$sample26[i] = Double.NaN;
 		}
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var31[i] = 0.0;
+			logProbability$var31[i] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample32) {
 			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample32[i] = 0.0;
+				logProbability$sample32[i] = Double.NaN;
 		}
 	}
 

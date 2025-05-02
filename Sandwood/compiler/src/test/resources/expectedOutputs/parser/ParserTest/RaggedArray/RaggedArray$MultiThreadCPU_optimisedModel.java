@@ -399,7 +399,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$var67" with its value "a[y]".
 			// 
-			// Substituted "cv$temp$1$$var238" with its value "lengthCV$a$71_8".
+			// Substituted "cv$temp$1$$var239" with its value "lengthCV$a$71_8".
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_8)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 89 of consumer random variable null.
@@ -652,11 +652,11 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$$evidence = 0.0;
 		logProbability$var68 = 0.0;
 		if(!fixedProbFlag$sample73)
-			logProbability$i = 0.0;
-		logProbability$var72 = 0.0;
+			logProbability$i = Double.NaN;
+		logProbability$var72 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample89)
-			logProbability$var85 = 0.0;
+			logProbability$var85 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

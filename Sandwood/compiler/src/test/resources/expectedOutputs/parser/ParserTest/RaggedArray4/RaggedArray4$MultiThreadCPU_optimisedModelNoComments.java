@@ -363,14 +363,14 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$y = 0.0;
+			logProbability$y = Double.NaN;
 		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$d = 0.0;
-		logProbability$var49 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var49 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample64)
-			logProbability$var62 = 0.0;
+			logProbability$var62 = Double.NaN;
 	}
 
 	@Override

@@ -358,10 +358,10 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var9 = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;
 		if(!fixedProbFlag$sample12)
-			logProbability$positiveCount = 0.0;
+			logProbability$positiveCount = Double.NaN;
 	}
 
 	@Override

@@ -218,11 +218,11 @@ class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$rate = 0.0;
-		logProbability$poisson = 0.0;
+			logProbability$rate = Double.NaN;
+		logProbability$poisson = Double.NaN;
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	@Override

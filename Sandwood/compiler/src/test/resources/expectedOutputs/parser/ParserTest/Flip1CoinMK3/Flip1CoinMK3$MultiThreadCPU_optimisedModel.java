@@ -430,13 +430,13 @@ class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		for(int i$var21 = 0; i$var21 < samples; i$var21 += 1)
-			logProbability$bernoulli[i$var21] = 0.0;
+			logProbability$bernoulli[i$var21] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample23) {
 			for(int i$var21 = 0; i$var21 < samples; i$var21 += 1)
-				logProbability$sample23[i$var21] = 0.0;
+				logProbability$sample23[i$var21] = Double.NaN;
 		}
 	}
 

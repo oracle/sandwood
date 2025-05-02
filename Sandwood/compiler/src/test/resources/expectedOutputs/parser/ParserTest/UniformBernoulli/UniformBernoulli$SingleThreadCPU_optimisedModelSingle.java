@@ -154,7 +154,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -171,10 +177,15 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[var18]?prior:(1.0 - prior))));
-			logProbability$bernoulli = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var19 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$bernoulli = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var19 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -206,7 +217,13 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$var19;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$observed))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$bernoulli = logProbability$var19;
 			
 			// Update the variable probability
 			// 
@@ -500,11 +517,11 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
-			logProbability$prior = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

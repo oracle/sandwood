@@ -173,6 +173,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample54) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -199,6 +200,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -211,6 +213,9 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -275,7 +280,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$var35 = a[y];
 					}
-					int cv$temp$1$$var176;
+					int cv$temp$1$$var177;
 					{
 						int lengthCV$a$37_10 = -1;
 						{
@@ -286,9 +291,9 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							if((1 == y))
 								lengthCV$a$37_10 = 3;
 						}
-						cv$temp$1$$var176 = lengthCV$a$37_10;
+						cv$temp$1$$var177 = lengthCV$a$37_10;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var176));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var177));
 					{
 						{
 							{
@@ -475,11 +480,11 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var36 = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$d = 0.0;
-		logProbability$var39 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var39 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample54)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 	}
 
 	@Override

@@ -292,7 +292,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var29 = 0; var29 < noCats; var29 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var29 = 0; var29 < noCats; var29 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -309,10 +315,15 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var29], v, noStates));
-			logProbability$var18 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var30 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var18 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var30 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -347,7 +358,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var18 = logProbability$var30;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noCats))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var18 = logProbability$var30;
 			
 			// Update the variable probability
 			// 
@@ -376,7 +393,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var45 = 0; var45 < noFlips; var45 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var45 = 0; var45 < noFlips; var45 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -393,10 +416,15 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var45], 1.0, 1.0));
-			logProbability$var34 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var46 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var34 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var46 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -431,7 +459,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var34 = logProbability$var46;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noFlips))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var34 = logProbability$var46;
 			
 			// Update the variable probability
 			// 
@@ -460,9 +494,15 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
 				// The sample value to calculate the probability of generating
 				int cv$sampleValue = st[i$var58];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -479,15 +519,19 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[i$var58][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var60 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var61 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var60 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var61 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -522,7 +566,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var60 = logProbability$var61;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noCats))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var60 = logProbability$var61;
 			
 			// Update the variable probability
 			// 
@@ -551,6 +601,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Reduction of array st
 				// 
@@ -570,6 +623,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					reduceVar$var82$2 = (reduceVar$var82$2 + st[cv$reduction78Index]);
 				double var83 = bias[reduceVar$var82$2];
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -587,15 +643,19 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j$var73]?var83:(1.0 - var83))));
 			}
-			logProbability$var84 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var85 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var84 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var85 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -627,7 +687,13 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var84 = logProbability$var85;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noFlips))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var84 = logProbability$var85;
 			
 			// Update the variable probability
 			// 
@@ -1088,22 +1154,22 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
+		logProbability$var18 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample30)
-			logProbability$var30 = 0.0;
-		logProbability$var34 = 0.0;
+			logProbability$var30 = Double.NaN;
+		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
-			logProbability$var46 = 0.0;
-		logProbability$var60 = 0.0;
+			logProbability$var46 = Double.NaN;
+		logProbability$var60 = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample62)
-			logProbability$var61 = 0.0;
-		logProbability$var84 = 0.0;
+			logProbability$var61 = Double.NaN;
+		logProbability$var84 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87)
-			logProbability$var85 = 0.0;
+			logProbability$var85 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

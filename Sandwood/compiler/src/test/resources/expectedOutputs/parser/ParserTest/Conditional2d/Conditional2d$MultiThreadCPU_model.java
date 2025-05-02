@@ -693,13 +693,13 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
+			logProbability$guard = Double.NaN;
 		logProbability$var7 = 0.0;
 		logProbability$u = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$sample8 = 0.0;
+			logProbability$sample8 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

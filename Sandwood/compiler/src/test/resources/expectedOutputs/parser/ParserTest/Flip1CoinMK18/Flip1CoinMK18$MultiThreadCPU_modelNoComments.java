@@ -181,6 +181,7 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample103) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var96 = 0; var96 < samples; var96 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -207,6 +208,7 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -219,6 +221,9 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var96 = 0; var96 < samples; var96 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var97;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -1209,14 +1214,14 @@ class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$var10 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$q = 0.0;
+			logProbability$q = Double.NaN;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$t = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$t = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample103)
-			logProbability$var97 = 0.0;
+			logProbability$var97 = Double.NaN;
 	}
 
 	@Override

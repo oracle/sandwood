@@ -500,7 +500,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var158" with its value "2".
+			// Substituted "cv$temp$1$$var159" with its value "2".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 			
 			// Processing random variable 20.
@@ -588,7 +588,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var158" with its value "2".
+		// Substituted "cv$temp$1$$var159" with its value "2".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 		
 		// Processing random variable 20.
@@ -790,14 +790,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample38)
-			logProbability$var38 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var38 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample51)
-			logProbability$var51 = 0.0;
+			logProbability$var51 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

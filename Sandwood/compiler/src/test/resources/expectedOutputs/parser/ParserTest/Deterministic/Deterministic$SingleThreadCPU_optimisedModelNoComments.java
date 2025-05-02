@@ -406,24 +406,24 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = 0.0;
+		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
-			logProbability$var29 = 0.0;
+			logProbability$var29 = Double.NaN;
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-			logProbability$var53[(i$var46 - 1)] = 0.0;
+			logProbability$var53[(i$var46 - 1)] = Double.NaN;
 		logProbability$b = 0.0;
 		logProbability$a = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-				logProbability$sample55[(i$var46 - 1)] = 0.0;
+				logProbability$sample55[(i$var46 - 1)] = Double.NaN;
 		}
 		for(int j = 0; j < n; j += 1)
-			logProbability$var73[j] = 0.0;
+			logProbability$var73[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75) {
 			for(int j = 0; j < n; j += 1)
-				logProbability$sample75[j] = 0.0;
+				logProbability$sample75[j] = Double.NaN;
 		}
 	}
 

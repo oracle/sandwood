@@ -448,6 +448,9 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < noSamples; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -491,6 +494,9 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -519,10 +525,16 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample33[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var32[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -895,20 +907,20 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbability$$evidence = 0.0;
 		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
-			logProbability$b0 = 0.0;
+			logProbability$b0 = Double.NaN;
 		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$b1 = 0.0;
+			logProbability$b1 = Double.NaN;
 		logProbability$var15 = 0.0;
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$var16 = 0.0;
+			logProbability$var16 = Double.NaN;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var32[((i - 0) / 1)] = 0.0;
+			logProbability$var32[((i - 0) / 1)] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample33) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample33[((i - 0) / 1)] = 0.0;
+				logProbability$sample33[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 

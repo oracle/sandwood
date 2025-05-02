@@ -131,6 +131,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		if(!fixedProbFlag$sample19) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var18 = 0; var18 < samples; var18 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -156,6 +157,7 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -168,6 +170,9 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var18 = 0; var18 < samples; var18 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var19;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -301,11 +306,11 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		logProbability$$evidence = 0.0;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$rate = 0.0;
-		logProbability$poisson = 0.0;
+			logProbability$rate = Double.NaN;
+		logProbability$poisson = Double.NaN;
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 	}
 
 	@Override

@@ -762,7 +762,7 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[(j$var20 - 1)] = 0.0;
+			logProbability$var25[(j$var20 - 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
@@ -771,21 +771,21 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[(j$var20 - 1)] = 0.0;
+				logProbability$sample26[(j$var20 - 1)] = Double.NaN;
 		}
 		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			logProbability$var80[t$var78] = 0.0;
+			logProbability$var80[t$var78] = Double.NaN;
 		logProbability$sales_sum = 0.0;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample82) {
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-				logProbability$sample82[t$var78] = 0.0;
+				logProbability$sample82[t$var78] = Double.NaN;
 		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			logProbability$var145[t$var105] = 0.0;
+			logProbability$var145[t$var105] = Double.NaN;
 		if(!fixedProbFlag$sample149) {
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				logProbability$sample149[t$var105] = 0.0;
+				logProbability$sample149[t$var105] = Double.NaN;
 		}
 	}
 

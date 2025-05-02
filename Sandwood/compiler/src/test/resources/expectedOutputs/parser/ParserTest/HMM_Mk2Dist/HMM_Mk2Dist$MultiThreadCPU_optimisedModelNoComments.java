@@ -1473,46 +1473,46 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var30 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$var42 = 0.0;
-		logProbability$var44 = 0.0;
+			logProbability$var42 = Double.NaN;
+		logProbability$var44 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample57)
-			logProbability$var56 = 0.0;
+			logProbability$var56 = Double.NaN;
 		logProbability$var74 = 0.0;
 		if(!fixedProbFlag$sample78)
-			logProbability$weights = 0.0;
+			logProbability$weights = Double.NaN;
 		logProbability$var76 = 0.0;
 		if(!fixedProbFlag$sample80)
-			logProbability$initialState = 0.0;
+			logProbability$initialState = Double.NaN;
 		for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-			logProbability$var91[i$var87] = 0.0;
+			logProbability$var91[i$var87] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample95) {
 			for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-				logProbability$sample95[i$var87] = 0.0;
+				logProbability$sample95[i$var87] = Double.NaN;
 		}
 		for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 			for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-				logProbability$var122[i$var104][(j$var115 - 1)] = 0.0;
+				logProbability$var122[i$var104][(j$var115 - 1)] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample126) {
 			for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 				for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-					logProbability$sample126[i$var104][(j$var115 - 1)] = 0.0;
+					logProbability$sample126[i$var104][(j$var115 - 1)] = Double.NaN;
 			}
 		}
 		for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-				logProbability$var154[i$var136][(j$var149 - 1)] = 0.0;
+				logProbability$var154[i$var136][(j$var149 - 1)] = Double.NaN;
 		}
 		logProbability$events = 0.0;
 		if(!fixedProbFlag$sample159) {
 			for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 				for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-					logProbability$sample159[i$var136][(j$var149 - 1)] = 0.0;
+					logProbability$sample159[i$var136][(j$var149 - 1)] = Double.NaN;
 			}
 		}
 	}

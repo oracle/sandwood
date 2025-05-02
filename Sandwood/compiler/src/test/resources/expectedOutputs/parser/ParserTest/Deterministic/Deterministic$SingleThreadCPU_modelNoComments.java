@@ -160,6 +160,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(!fixedProbFlag$sample29) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var28 = 0; var28 < states; var28 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -185,6 +186,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -198,6 +200,9 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var28 = 0; var28 < states; var28 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var29;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -212,6 +217,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample55() {
 		if(!fixedProbFlag$sample55) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -239,6 +245,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var53[((i$var46 - 1) / 1)] = cv$sampleAccumulator;
@@ -262,10 +269,12 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedFlag$sample29);
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample55[((i$var46 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var53[((i$var46 - 1) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$b = false;
@@ -290,6 +299,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample75() {
 		if(!fixedProbFlag$sample75) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < n; j += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -317,6 +327,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var73[((j - 0) / 1)] = cv$sampleAccumulator;
@@ -328,10 +339,12 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			fixedProbFlag$sample75 = fixedFlag$sample55;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int j = 0; j < n; j += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample75[((j - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var73[((j - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -698,24 +711,24 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = 0.0;
+		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
-			logProbability$var29 = 0.0;
+			logProbability$var29 = Double.NaN;
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-			logProbability$var53[((i$var46 - 1) / 1)] = 0.0;
+			logProbability$var53[((i$var46 - 1) / 1)] = Double.NaN;
 		logProbability$b = 0.0;
 		logProbability$a = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-				logProbability$sample55[((i$var46 - 1) / 1)] = 0.0;
+				logProbability$sample55[((i$var46 - 1) / 1)] = Double.NaN;
 		}
 		for(int j = 0; j < n; j += 1)
-			logProbability$var73[((j - 0) / 1)] = 0.0;
+			logProbability$var73[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75) {
 			for(int j = 0; j < n; j += 1)
-				logProbability$sample75[((j - 0) / 1)] = 0.0;
+				logProbability$sample75[((j - 0) / 1)] = Double.NaN;
 		}
 	}
 

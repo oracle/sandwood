@@ -388,19 +388,19 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-			logProbability$var23[(i$var18 - 1)] = 0.0;
+			logProbability$var23[(i$var18 - 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-				logProbability$sample24[(i$var18 - 1)] = 0.0;
+				logProbability$sample24[(i$var18 - 1)] = Double.NaN;
 		}
-		logProbability$var65 = 0.0;
+		logProbability$var65 = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample78)
-			logProbability$var77 = 0.0;
+			logProbability$var77 = Double.NaN;
 	}
 
 	@Override

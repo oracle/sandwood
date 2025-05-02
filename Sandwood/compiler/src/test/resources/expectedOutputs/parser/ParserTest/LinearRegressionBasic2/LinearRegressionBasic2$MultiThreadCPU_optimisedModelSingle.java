@@ -473,7 +473,13 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int i = 0; i < noSamples; i += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i = 0; i < noSamples; i += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -490,15 +496,20 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance)))) - (Math.log(variance) * 0.5));
-			logProbability$var32 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var33 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var32 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var33 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -530,7 +541,13 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var32 = logProbability$var33;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noSamples))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var32 = logProbability$var33;
 			
 			// Update the variable probability
 			// 
@@ -891,18 +908,18 @@ class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.interna
 		logProbability$$evidence = 0.0;
 		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
-			logProbability$b0 = 0.0;
+			logProbability$b0 = Double.NaN;
 		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$b1 = 0.0;
+			logProbability$b1 = Double.NaN;
 		logProbability$var15 = 0.0;
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$var16 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var16 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample33)
-			logProbability$var33 = 0.0;
+			logProbability$var33 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

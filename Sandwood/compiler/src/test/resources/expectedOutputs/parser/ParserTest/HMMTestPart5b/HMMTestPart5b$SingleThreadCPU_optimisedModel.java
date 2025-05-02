@@ -1630,30 +1630,30 @@ class HMMTestPart5b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i$var67 = 4; i$var67 < (samples + 3); i$var67 += 1)
-			logProbability$var74[(i$var67 - 4)] = 0.0;
+			logProbability$var74[(i$var67 - 4)] = Double.NaN;
 		if(!fixedProbFlag$sample76) {
 			for(int i$var67 = 4; i$var67 < (samples + 3); i$var67 += 1)
-				logProbability$sample76[(i$var67 - 4)] = 0.0;
+				logProbability$sample76[(i$var67 - 4)] = Double.NaN;
 		}
 		for(int j = 5; j < (samples + 5); j += 1)
-			logProbability$var97[(j - 5)] = 0.0;
+			logProbability$var97[(j - 5)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample99) {
 			for(int j = 5; j < (samples + 5); j += 1)
-				logProbability$sample99[(j - 5)] = 0.0;
+				logProbability$sample99[(j - 5)] = Double.NaN;
 		}
 	}
 

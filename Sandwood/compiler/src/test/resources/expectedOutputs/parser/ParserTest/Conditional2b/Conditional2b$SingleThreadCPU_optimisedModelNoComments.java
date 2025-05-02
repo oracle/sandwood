@@ -253,12 +253,12 @@ class Conditional2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
+			logProbability$guard = Double.NaN;
 		logProbability$var9 = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$u = 0.0;
+			logProbability$u = Double.NaN;
 	}
 
 	@Override

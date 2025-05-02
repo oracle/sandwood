@@ -317,13 +317,13 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbability$var20 = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$sample = 0.0;
+			logProbability$sample = Double.NaN;
 		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var37[i] = 0.0;
+			logProbability$var37[i] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample38) {
 			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample38[i] = 0.0;
+				logProbability$sample38[i] = Double.NaN;
 		}
 	}
 

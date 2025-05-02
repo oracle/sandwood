@@ -526,16 +526,16 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample5)
-			logProbability$guard = 0.0;
+			logProbability$guard = Double.NaN;
 		logProbability$var8 = 0.0;
 		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$sample9 = 0.0;
+			logProbability$sample9 = Double.NaN;
 		logProbability$var12 = 0.0;
 		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample13)
-			logProbability$sample13 = 0.0;
+			logProbability$sample13 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
@@ -665,7 +665,6 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		     + "        \n"
 		     + "    double value = guard?a:b;\n"
 		     + "    \n"
-		     + "    //\n"
 		     + "    guard.observe(observedGuard);\n"
 		     + "    //Link the sampled value to the observed value\n"
 		     + "    value.observe(observedValue);\n"

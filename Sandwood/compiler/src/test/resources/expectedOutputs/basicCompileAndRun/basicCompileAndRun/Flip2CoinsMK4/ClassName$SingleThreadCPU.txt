@@ -460,18 +460,18 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int var15 = 0; var15 < coins; var15 += 1)
-			logProbability$var16[var15] = 0.0;
+			logProbability$var16[var15] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17) {
 			for(int var15 = 0; var15 < coins; var15 += 1)
-				logProbability$sample17[var15] = 0.0;
+				logProbability$sample17[var15] = Double.NaN;
 		}
 		for(int j = 0; j < coins; j += 1)
-			logProbability$bernoulli[j] = 0.0;
+			logProbability$bernoulli[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample44) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample44[j] = 0.0;
+				logProbability$sample44[j] = Double.NaN;
 		}
 	}
 

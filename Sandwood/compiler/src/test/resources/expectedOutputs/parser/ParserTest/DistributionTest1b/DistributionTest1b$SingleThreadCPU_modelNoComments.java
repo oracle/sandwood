@@ -1134,15 +1134,15 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = 0.0;
 		logProbability$var3 = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$v1 = 0.0;
+			logProbability$v1 = Double.NaN;
 		logProbability$c = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$v2 = 0.0;
+			logProbability$v2 = Double.NaN;
 		if(!fixedProbFlag$sample7)
-			logProbability$v3 = 0.0;
+			logProbability$v3 = Double.NaN;
 		logProbability$var12 = 0.0;
 		if(!fixedProbFlag$sample13)
-			logProbability$v = 0.0;
+			logProbability$v = Double.NaN;
 	}
 
 	@Override

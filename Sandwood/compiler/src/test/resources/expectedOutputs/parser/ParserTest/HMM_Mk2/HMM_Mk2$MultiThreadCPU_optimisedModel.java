@@ -1145,9 +1145,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// 
 				// Substituted "index$i$2_2" with its value "i$var104".
 				// 
-				// cv$temp$3$$var622's comment
+				// cv$temp$3$$var624's comment
 				// 
-				// $var622's comment
+				// $var624's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var121's comment
@@ -1179,9 +1179,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			// 
 			// Substituted "i$var136" with its value "i$var104".
 			// 
-			// cv$temp$5$$var632's comment
+			// cv$temp$5$$var634's comment
 			// 
-			// $var632's comment
+			// $var634's comment
 			// Constructing a random variable input for use later.
 			// 
 			// cv$temp$4$var153's comment
@@ -1397,9 +1397,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			// 
 			// Substituted "cv$temp$0$weights" with its value "weights".
 			// 
-			// cv$temp$1$$var555's comment
+			// cv$temp$1$$var557's comment
 			// 
-			// $var555's comment
+			// $var557's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -1420,9 +1420,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var564's comment
+				// cv$temp$3$$var566's comment
 				// 
-				// $var564's comment
+				// $var566's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var90's comment
@@ -1557,9 +1557,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// 
 				// Substituted "i$var104" with its value "i$var87".
 				// 
-				// cv$temp$3$$var588's comment
+				// cv$temp$3$$var590's comment
 				// 
-				// $var588's comment
+				// $var590's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var121's comment
@@ -2192,46 +2192,46 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var30 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$var42 = 0.0;
-		logProbability$var44 = 0.0;
+			logProbability$var42 = Double.NaN;
+		logProbability$var44 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample57)
-			logProbability$var56 = 0.0;
+			logProbability$var56 = Double.NaN;
 		logProbability$var74 = 0.0;
 		if(!fixedProbFlag$sample78)
-			logProbability$weights = 0.0;
+			logProbability$weights = Double.NaN;
 		logProbability$var76 = 0.0;
 		if(!fixedProbFlag$sample80)
-			logProbability$initialState = 0.0;
+			logProbability$initialState = Double.NaN;
 		for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-			logProbability$var91[i$var87] = 0.0;
+			logProbability$var91[i$var87] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample95) {
 			for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-				logProbability$sample95[i$var87] = 0.0;
+				logProbability$sample95[i$var87] = Double.NaN;
 		}
 		for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 			for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-				logProbability$var122[i$var104][(j$var115 - 1)] = 0.0;
+				logProbability$var122[i$var104][(j$var115 - 1)] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample126) {
 			for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
 				for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-					logProbability$sample126[i$var104][(j$var115 - 1)] = 0.0;
+					logProbability$sample126[i$var104][(j$var115 - 1)] = Double.NaN;
 			}
 		}
 		for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-				logProbability$var154[i$var136][(j$var149 - 1)] = 0.0;
+				logProbability$var154[i$var136][(j$var149 - 1)] = Double.NaN;
 		}
 		logProbability$events = 0.0;
 		if(!fixedProbFlag$sample159) {
 			for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
 				for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
-					logProbability$sample159[i$var136][(j$var149 - 1)] = 0.0;
+					logProbability$sample159[i$var136][(j$var149 - 1)] = Double.NaN;
 			}
 		}
 	}

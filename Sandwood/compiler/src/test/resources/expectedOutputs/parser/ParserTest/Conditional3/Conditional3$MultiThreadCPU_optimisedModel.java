@@ -84,6 +84,12 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Substituted "fixedFlag$sample4" with its value "cv$value".
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
 		
+		// Should the probability of sample 16 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample4" with its value "cv$value".
+		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
+		
 		// Should the probability of sample 20 be set to fixed. This will only every change
 		// the flag to false.
 		// 
@@ -106,6 +112,9 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
+		
+		// Unset the fixed probability flag for sample 16 as it depends on guard.
+		fixedProbFlag$sample16 = false;
 		
 		// Unset the fixed probability flag for sample 20 as it depends on guard.
 		fixedProbFlag$sample20 = false;
@@ -255,7 +264,7 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = fixedFlag$sample16;
+			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
 		}
 		// Using cached values.
 		else {
@@ -885,15 +894,15 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var13 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = 0.0;
+			logProbability$sample16 = Double.NaN;
 		logProbability$var17 = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$value = 0.0;
+			logProbability$value = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

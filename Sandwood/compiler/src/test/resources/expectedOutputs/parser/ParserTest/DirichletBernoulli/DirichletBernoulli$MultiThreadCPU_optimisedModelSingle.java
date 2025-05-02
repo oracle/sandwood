@@ -271,8 +271,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
 				double var19 = prior[0];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -291,10 +297,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var37]?var19:(1.0 - var19))));
 			}
-			logProbability$b1 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var38 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$b1 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var38 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -326,7 +336,13 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$b1 = logProbability$var38;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < (length / 2)))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$b1 = logProbability$var38;
 			
 			// Update the variable probability
 			// 
@@ -352,8 +368,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
 				double var22 = prior[1];
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -372,10 +394,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var50]?var22:(1.0 - var22))));
 			}
-			logProbability$b2 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var51 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$b2 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var51 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -407,7 +433,13 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$b2 = logProbability$var51;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(((length / 2) < length))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$b2 = logProbability$var51;
 			
 			// Update the variable probability
 			// 
@@ -500,7 +532,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var158" with its value "2".
+			// Substituted "cv$temp$1$$var159" with its value "2".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 			
 			// Processing random variable 20.
@@ -588,7 +620,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var158" with its value "2".
+		// Substituted "cv$temp$1$$var159" with its value "2".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 		
 		// Processing random variable 20.
@@ -790,14 +822,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample38)
-			logProbability$var38 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var38 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample51)
-			logProbability$var51 = 0.0;
+			logProbability$var51 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

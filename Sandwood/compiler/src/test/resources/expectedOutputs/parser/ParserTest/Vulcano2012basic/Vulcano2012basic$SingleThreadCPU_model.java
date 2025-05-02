@@ -231,6 +231,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -274,6 +277,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				
@@ -302,10 +308,16 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample157[((t$var112 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var152[((t$var112 - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -328,6 +340,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
@@ -371,6 +386,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
@@ -662,10 +680,16 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample26[((j$var20 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var25[((j$var20 - 1) / 1)] = cv$rvAccumulator;
 				
@@ -3055,7 +3079,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[((j$var20 - 1) / 1)] = 0.0;
+			logProbability$var25[((j$var20 - 1) / 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
@@ -3064,14 +3088,14 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[((j$var20 - 1) / 1)] = 0.0;
+				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
 		}
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			logProbability$var152[((t$var112 - 0) / 1)] = 0.0;
+			logProbability$var152[((t$var112 - 0) / 1)] = Double.NaN;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample157) {
 			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				logProbability$sample157[((t$var112 - 0) / 1)] = 0.0;
+				logProbability$sample157[((t$var112 - 0) / 1)] = Double.NaN;
 		}
 	}
 

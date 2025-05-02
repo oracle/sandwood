@@ -198,6 +198,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			if(guard1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -226,6 +227,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var13 = cv$sampleAccumulator;
@@ -247,10 +249,12 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			fixedProbFlag$sample16 = fixedFlag$sample16;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			if(guard1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample16;
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var13 = cv$rvAccumulator;
 				boolean cv$guard$bias = false;
@@ -273,6 +277,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample28() {
 		if(!fixedProbFlag$sample28) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			if(!guard1) {
 				if((guard2 <= 2)) {
 					double cv$sampleAccumulator = 0.0;
@@ -302,6 +307,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					else
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var23 = cv$sampleAccumulator;
@@ -326,11 +332,13 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			fixedProbFlag$sample28 = fixedFlag$sample28;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			if(!guard1) {
 				if((guard2 <= 2)) {
 					double cv$rvAccumulator = 0.0;
 					double cv$sampleValue = logProbability$sample28;
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var23 = cv$rvAccumulator;
 					boolean cv$guard$bias = false;
@@ -356,6 +364,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample35() {
 		if(!fixedProbFlag$sample35) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			if(!guard1) {
 				if(!(guard2 <= 2)) {
 					double cv$sampleAccumulator = 0.0;
@@ -385,6 +394,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					else
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var30 = cv$sampleAccumulator;
@@ -409,11 +419,13 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			fixedProbFlag$sample35 = fixedFlag$sample35;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			if(!guard1) {
 				if(!(guard2 <= 2)) {
 					double cv$rvAccumulator = 0.0;
 					double cv$sampleValue = logProbability$sample35;
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var30 = cv$rvAccumulator;
 					boolean cv$guard$bias = false;
@@ -440,6 +452,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(!fixedProbFlag$sample52) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var47 = 0; var47 < samples; var47 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -465,6 +478,7 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -477,6 +491,9 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var47 = 0; var47 < samples; var47 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var48;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -913,23 +930,23 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = 0.0;
+		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = 0.0;
-		logProbability$var23 = 0.0;
+			logProbability$sample16 = Double.NaN;
+		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$sample28 = 0.0;
-		logProbability$var30 = 0.0;
+			logProbability$sample28 = Double.NaN;
+		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$sample35 = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$sample35 = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample52)
-			logProbability$var48 = 0.0;
+			logProbability$var48 = Double.NaN;
 	}
 
 	@Override

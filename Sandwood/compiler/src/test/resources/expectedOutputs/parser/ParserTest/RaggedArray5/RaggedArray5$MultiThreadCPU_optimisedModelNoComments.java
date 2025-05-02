@@ -301,11 +301,11 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$var36 = 0.0;
 		if(!fixedProbFlag$sample39)
-			logProbability$d = 0.0;
-		logProbability$var39 = 0.0;
+			logProbability$d = Double.NaN;
+		logProbability$var39 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample54)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 	}
 
 	@Override

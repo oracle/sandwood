@@ -292,7 +292,13 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var41 = 0; var41 < noTopics; var41 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -309,10 +315,15 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var41], beta, vocabSize));
-			logProbability$var30 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var42 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var30 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var42 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -347,7 +358,13 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var30 = logProbability$var42;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < noTopics))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var30 = logProbability$var42;
 			
 			// Update the variable probability
 			// 
@@ -376,7 +393,13 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -393,10 +416,15 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var56], alpha, noTopics));
-			logProbability$var44 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			logProbability$var57 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var44 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var57 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -431,7 +459,13 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var44 = logProbability$var57;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length$documents.length))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var44 = logProbability$var57;
 			
 			// Update the variable probability
 			// 
@@ -460,10 +494,16 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1) {
 					// The sample value to calculate the probability of generating
 					int cv$sampleValue = z[i$var71][j];
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
@@ -481,15 +521,19 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics))?Math.log(theta[i$var71][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 			}
-			logProbability$var87 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$z = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var87 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$z = cv$sampleAccumulator;
+			}
 			
 			// Add probability to model
 			// 
@@ -516,7 +560,15 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var87 = logProbability$z;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+				if((0 < length$documents[i$var71]))
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
+			if(cv$sampleReached)
+				logProbability$var87 = logProbability$z;
 			
 			// Add probability to model
 			// 
@@ -540,10 +592,16 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1) {
 					// The sample value to calculate the probability of generating
 					int cv$sampleValue = w[i$var71][j];
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
@@ -561,15 +619,19 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize))?Math.log(phi[z[i$var71][j]][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 			}
-			logProbability$var90 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var91 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var90 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var91 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -601,7 +663,15 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var90 = logProbability$var91;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+				if((0 < length$documents[i$var71]))
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
+			if(cv$sampleReached)
+				logProbability$var90 = logProbability$var91;
 			
 			// Update the variable probability
 			// 
@@ -1004,21 +1074,21 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$var42 = 0.0;
-		logProbability$var44 = 0.0;
+			logProbability$var42 = Double.NaN;
+		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
-			logProbability$var57 = 0.0;
-		logProbability$var87 = 0.0;
+			logProbability$var57 = Double.NaN;
+		logProbability$var87 = Double.NaN;
 		if(!fixedProbFlag$sample90)
-			logProbability$z = 0.0;
-		logProbability$var90 = 0.0;
+			logProbability$z = Double.NaN;
+		logProbability$var90 = Double.NaN;
 		logProbability$w = 0.0;
 		if(!fixedProbFlag$sample93)
-			logProbability$var91 = 0.0;
+			logProbability$var91 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

@@ -204,6 +204,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		if(!fixedProbFlag$sample42) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var41 = 0; var41 < noTopics; var41 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -229,6 +230,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -242,6 +244,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var41 = 0; var41 < noTopics; var41 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var42;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -257,6 +262,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		if(!fixedProbFlag$sample58) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -282,6 +288,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -295,6 +302,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var57;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -309,6 +319,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private final void logProbabilityValue$sample90() {
 		if(!fixedProbFlag$sample90) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1) {
 					double cv$sampleAccumulator = 0.0;
@@ -337,6 +348,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					else
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
@@ -350,11 +362,13 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			fixedProbFlag$sample90 = (fixedFlag$sample90 && fixedFlag$sample58);
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1) {
 					double cv$rvAccumulator = 0.0;
 					double cv$sampleValue = logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$rvAccumulator;
 				}
@@ -369,6 +383,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private final void logProbabilityValue$sample93() {
 		if(!fixedProbFlag$sample93) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1) {
 					double cv$sampleAccumulator = 0.0;
@@ -397,6 +412,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 					else
 						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
@@ -409,11 +425,13 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			fixedProbFlag$sample93 = (fixedFlag$sample42 && fixedFlag$sample90);
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1) {
 					double cv$rvAccumulator = 0.0;
 					double cv$sampleValue = logProbability$sample93[((i$var71 - 0) / 1)][((j - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 					logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$rvAccumulator;
 				}
@@ -773,34 +791,34 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = 0.0;
+		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$var42 = 0.0;
-		logProbability$var44 = 0.0;
+			logProbability$var42 = Double.NaN;
+		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
-			logProbability$var57 = 0.0;
+			logProbability$var57 = Double.NaN;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = 0.0;
+				logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 		}
 		logProbability$z = 0.0;
 		if(!fixedProbFlag$sample90) {
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = 0.0;
+					logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 			}
 		}
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = 0.0;
+				logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 		}
 		logProbability$w = 0.0;
 		if(!fixedProbFlag$sample93) {
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					logProbability$sample93[((i$var71 - 0) / 1)][((j - 0) / 1)] = 0.0;
+					logProbability$sample93[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 			}
 		}
 	}

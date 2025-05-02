@@ -493,7 +493,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction408Index" with its value "1".
+				// Substituted "cv$reduction409Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -514,7 +514,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction408Index" with its value "1".
+				// Substituted "cv$reduction409Index" with its value "1".
 				double reduceVar$var33$16 = ((b / 2) + c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
@@ -631,7 +631,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction408Index" with its value "1".
+			// Substituted "cv$reduction409Index" with its value "1".
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -652,7 +652,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction408Index" with its value "1".
+			// Substituted "cv$reduction409Index" with its value "1".
 			double reduceVar$var33$16 = ((cv$proposedValue / 2) + c[1]);
 			
 			// Processing sample task 50 of consumer random variable bernoulli.
@@ -900,11 +900,11 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$sample8 = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$sample8 = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$var47 = 0.0;
+			logProbability$var47 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

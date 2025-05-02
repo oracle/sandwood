@@ -49,6 +49,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$fixedFlag$sample4(boolean cv$value) {
 		fixedFlag$sample4 = cv$value;
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
+		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
 	}
 
 	@Override
@@ -60,6 +61,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void set$guard(boolean cv$value) {
 		guard = cv$value;
 		fixedProbFlag$sample4 = false;
+		fixedProbFlag$sample21 = false;
 	}
 
 	@Override
@@ -137,7 +139,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$value2 = (logProbability$value2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedFlag$sample4);
 		} else {
 			double cv$accumulator = 0.0;
 			if(!guard) {
@@ -255,13 +257,13 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var18 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var18 = Double.NaN;
 		logProbability$var19 = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$sample21 = 0.0;
+			logProbability$sample21 = Double.NaN;
 	}
 
 	@Override

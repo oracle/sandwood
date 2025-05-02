@@ -226,7 +226,12 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips1[var21]?bias:(1.0 - bias))));
-			logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
+			
+			// Check that the value is not still set to NaN.
+			if(Double.isNaN(logProbability$bernoulli))
+				logProbability$bernoulli = cv$sampleAccumulator;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
 			
 			// Store the random variable instance probability
 			logProbability$var22 = cv$sampleAccumulator;
@@ -261,7 +266,11 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = (logProbability$bernoulli + logProbability$var22);
+			// Check that the value is not still set to NaN.
+			if(Double.isNaN(logProbability$bernoulli))
+				logProbability$bernoulli = logProbability$var22;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + logProbability$var22);
 			
 			// Update the variable probability
 			// 
@@ -304,7 +313,12 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips2[var34]?bias:(1.0 - bias))));
-			logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
+			
+			// Check that the value is not still set to NaN.
+			if(Double.isNaN(logProbability$bernoulli))
+				logProbability$bernoulli = cv$sampleAccumulator;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + cv$sampleAccumulator);
 			
 			// Store the random variable instance probability
 			logProbability$var35 = cv$sampleAccumulator;
@@ -339,7 +353,11 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = (logProbability$bernoulli + logProbability$var35);
+			// Check that the value is not still set to NaN.
+			if(Double.isNaN(logProbability$bernoulli))
+				logProbability$bernoulli = logProbability$var35;
+			else
+				logProbability$bernoulli = (logProbability$bernoulli + logProbability$var35);
 			
 			// Update the variable probability
 			// 
@@ -563,14 +581,14 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$bias = 0.0;
-		logProbability$bernoulli = 0.0;
+			logProbability$bias = Double.NaN;
+		logProbability$bernoulli = Double.NaN;
 		logProbability$flips1 = 0.0;
 		if(!fixedProbFlag$sample22)
-			logProbability$var22 = 0.0;
+			logProbability$var22 = Double.NaN;
 		logProbability$flips2 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$var35 = 0.0;
+			logProbability$var35 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

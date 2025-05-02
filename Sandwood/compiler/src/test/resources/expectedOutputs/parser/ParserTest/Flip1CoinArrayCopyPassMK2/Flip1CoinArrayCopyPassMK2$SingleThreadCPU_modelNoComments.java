@@ -166,6 +166,7 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	private final void logProbabilityValue$sample31() {
 		if(!fixedProbFlag$sample31) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < samples; i += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -193,6 +194,7 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli[((i - 0) / 1)] = cv$sampleAccumulator;
@@ -204,10 +206,12 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 			fixedProbFlag$sample31 = fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < samples; i += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample31[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$bernoulli[((i - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -356,13 +360,13 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
-			logProbability$var10 = 0.0;
+			logProbability$var10 = Double.NaN;
 		for(int i = 0; i < samples; i += 1)
-			logProbability$bernoulli[((i - 0) / 1)] = 0.0;
+			logProbability$bernoulli[((i - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample31) {
 			for(int i = 0; i < samples; i += 1)
-				logProbability$sample31[((i - 0) / 1)] = 0.0;
+				logProbability$sample31[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 

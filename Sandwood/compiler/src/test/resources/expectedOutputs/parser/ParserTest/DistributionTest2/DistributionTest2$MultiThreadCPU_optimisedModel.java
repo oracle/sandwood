@@ -2128,23 +2128,23 @@ class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
-			logProbability$v1 = 0.0;
+			logProbability$v1 = Double.NaN;
 		logProbability$var8 = 0.0;
 		logProbability$v2 = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$var9 = 0.0;
+			logProbability$var9 = Double.NaN;
 		for(int i = 1; i < size; i += 1)
-			logProbability$var22[(i - 1)] = 0.0;
+			logProbability$var22[(i - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample23) {
 			for(int i = 1; i < size; i += 1)
-				logProbability$sample23[(i - 1)] = 0.0;
+				logProbability$sample23[(i - 1)] = Double.NaN;
 		}
 		for(int j = 0; j < size; j += 1)
-			logProbability$var40[j] = 0.0;
+			logProbability$var40[j] = Double.NaN;
 		logProbability$v = 0.0;
 		if(!fixedProbFlag$sample41) {
 			for(int j = 0; j < size; j += 1)
-				logProbability$sample41[j] = 0.0;
+				logProbability$sample41[j] = Double.NaN;
 		}
 	}
 

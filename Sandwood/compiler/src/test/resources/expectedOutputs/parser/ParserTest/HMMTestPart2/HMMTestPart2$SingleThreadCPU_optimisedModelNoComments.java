@@ -460,27 +460,27 @@ class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		for(int i$var62 = 1; i$var62 < samples; i$var62 += 1)
-			logProbability$var67[(i$var62 - 1)] = 0.0;
+			logProbability$var67[(i$var62 - 1)] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample69) {
 			for(int i$var62 = 1; i$var62 < samples; i$var62 += 1)
-				logProbability$sample69[(i$var62 - 1)] = 0.0;
+				logProbability$sample69[(i$var62 - 1)] = Double.NaN;
 		}
 		for(int j = 1; j < samples; j += 1)
-			logProbability$var82[(j - 1)] = 0.0;
+			logProbability$var82[(j - 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample84) {
 			for(int j = 1; j < samples; j += 1)
-				logProbability$sample84[(j - 1)] = 0.0;
+				logProbability$sample84[(j - 1)] = Double.NaN;
 		}
 	}
 

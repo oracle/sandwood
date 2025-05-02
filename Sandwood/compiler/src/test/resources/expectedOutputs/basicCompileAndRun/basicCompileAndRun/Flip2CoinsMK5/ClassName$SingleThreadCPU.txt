@@ -293,7 +293,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$sampleAccumulator);
+				
+				// Check that the value is not still set to NaN.
+				if(Double.isNaN(logProbability$bernoulli[j]))
+					logProbability$bernoulli[j] = cv$sampleAccumulator;
+				else
+					logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$sampleAccumulator);
 				
 				// Store the random variable instance probability
 				logProbability$sample55[j] = cv$sampleAccumulator;
@@ -319,7 +324,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Variable declaration of cv$rvAccumulator moved.
 				double cv$rvAccumulator = logProbability$sample55[j];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$rvAccumulator);
+				
+				// Check that the value is not still set to NaN.
+				if(Double.isNaN(logProbability$bernoulli[j]))
+					logProbability$bernoulli[j] = cv$rvAccumulator;
+				else
+					logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$rvAccumulator);
 			}
 			
 			// Update the variable probability
@@ -367,7 +377,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$sampleAccumulator);
+				
+				// Check that the value is not still set to NaN.
+				if(Double.isNaN(logProbability$bernoulli[j]))
+					logProbability$bernoulli[j] = cv$sampleAccumulator;
+				else
+					logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$sampleAccumulator);
 				
 				// Store the random variable instance probability
 				logProbability$sample72[j] = cv$sampleAccumulator;
@@ -393,7 +408,12 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Variable declaration of cv$rvAccumulator moved.
 				double cv$rvAccumulator = logProbability$sample72[j];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$rvAccumulator);
+				
+				// Check that the value is not still set to NaN.
+				if(Double.isNaN(logProbability$bernoulli[j]))
+					logProbability$bernoulli[j] = cv$rvAccumulator;
+				else
+					logProbability$bernoulli[j] = (logProbability$bernoulli[j] + cv$rvAccumulator);
 			}
 			
 			// Update the variable probability
@@ -570,22 +590,22 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		for(int var15 = 0; var15 < coins; var15 += 1)
-			logProbability$var16[var15] = 0.0;
+			logProbability$var16[var15] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17) {
 			for(int var15 = 0; var15 < coins; var15 += 1)
-				logProbability$sample17[var15] = 0.0;
+				logProbability$sample17[var15] = Double.NaN;
 		}
 		for(int j = 0; j < coins; j += 1)
-			logProbability$bernoulli[j] = 0.0;
+			logProbability$bernoulli[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample55[j] = 0.0;
+				logProbability$sample55[j] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample72) {
 			for(int j = 0; j < coins; j += 1)
-				logProbability$sample72[j] = 0.0;
+				logProbability$sample72[j] = Double.NaN;
 		}
 	}
 

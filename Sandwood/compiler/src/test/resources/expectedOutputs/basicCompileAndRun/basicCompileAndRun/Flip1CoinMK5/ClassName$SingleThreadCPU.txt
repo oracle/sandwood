@@ -582,15 +582,15 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		logProbability$$evidence = 0.0;
 		logProbability$var7 = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$bias = 0.0;
-		logProbability$bernoulli1 = 0.0;
+			logProbability$bias = Double.NaN;
+		logProbability$bernoulli1 = Double.NaN;
 		logProbability$flips1 = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$var21 = 0.0;
-		logProbability$bernoulli2 = 0.0;
+			logProbability$var21 = Double.NaN;
+		logProbability$bernoulli2 = Double.NaN;
 		logProbability$flips2 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$var35 = 0.0;
+			logProbability$var35 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

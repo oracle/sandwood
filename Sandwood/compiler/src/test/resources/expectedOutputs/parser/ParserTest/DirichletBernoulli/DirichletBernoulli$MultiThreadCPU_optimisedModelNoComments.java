@@ -299,14 +299,14 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample38)
-			logProbability$var38 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var38 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample51)
-			logProbability$var51 = 0.0;
+			logProbability$var51 = Double.NaN;
 	}
 
 	@Override

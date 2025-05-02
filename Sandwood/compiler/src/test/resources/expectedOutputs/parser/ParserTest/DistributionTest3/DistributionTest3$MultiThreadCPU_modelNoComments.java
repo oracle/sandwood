@@ -570,11 +570,11 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var172;
+					int cv$temp$1$$var178;
 					{
-						cv$temp$1$$var172 = weightings.length;
+						cv$temp$1$$var178 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var172))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var178))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$v1$1_1 = cv$currentValue;
@@ -700,11 +700,11 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var192;
+					int cv$temp$1$$var198;
 					{
-						cv$temp$1$$var192 = weightings.length;
+						cv$temp$1$$var198 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var192))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var198))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$v2$1_1 = cv$currentValue;
@@ -913,13 +913,13 @@ class DistributionTest3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$$evidence = 0.0;
 		logProbability$var3 = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$v1 = 0.0;
+			logProbability$v1 = Double.NaN;
 		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$v2 = 0.0;
+			logProbability$v2 = Double.NaN;
 		logProbability$var11 = 0.0;
 		if(!fixedProbFlag$sample12)
-			logProbability$v = 0.0;
+			logProbability$v = Double.NaN;
 	}
 
 	@Override

@@ -408,20 +408,20 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$p = 0.0;
+			logProbability$p = Double.NaN;
 		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample48)
-			logProbability$var48 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var48 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample60)
-			logProbability$var60 = 0.0;
-		logProbability$b3 = 0.0;
+			logProbability$var60 = Double.NaN;
+		logProbability$b3 = Double.NaN;
 		if(!fixedProbFlag$sample72)
-			logProbability$var72 = 0.0;
+			logProbability$var72 = Double.NaN;
 	}
 
 	@Override

@@ -450,8 +450,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
 				double var24 = (double)(prior[0] / 10);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -470,10 +476,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var47]?var24:(1.0 - var24))));
 			}
-			logProbability$b1 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var48 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$b1 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var48 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -505,7 +515,13 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$b1 = logProbability$var48;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < length))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$b1 = logProbability$var48;
 			
 			// Update the variable probability
 			// 
@@ -531,8 +547,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
 				double var29 = (double)(prior[1] / 10);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -551,10 +573,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var59]?var29:(1.0 - var29))));
 			}
-			logProbability$b2 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var60 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$b2 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var60 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -586,7 +612,13 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$b2 = logProbability$var60;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((1 < length))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$b2 = logProbability$var60;
 			
 			// Update the variable probability
 			// 
@@ -612,8 +644,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
 				double var34 = (double)(prior[2] / 10);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -632,10 +670,14 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var71]?var34:(1.0 - var34))));
 			}
-			logProbability$b3 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			logProbability$var72 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$b3 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				logProbability$var72 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -667,7 +709,13 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$b3 = logProbability$var72;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((2 < length))
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$b3 = logProbability$var72;
 			
 			// Update the variable probability
 			// 
@@ -1093,20 +1141,20 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$p = 0.0;
+			logProbability$p = Double.NaN;
 		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
-			logProbability$prior = 0.0;
-		logProbability$b1 = 0.0;
+			logProbability$prior = Double.NaN;
+		logProbability$b1 = Double.NaN;
 		logProbability$output = 0.0;
 		if(!fixedProbFlag$sample48)
-			logProbability$var48 = 0.0;
-		logProbability$b2 = 0.0;
+			logProbability$var48 = Double.NaN;
+		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample60)
-			logProbability$var60 = 0.0;
-		logProbability$b3 = 0.0;
+			logProbability$var60 = Double.NaN;
+		logProbability$b3 = Double.NaN;
 		if(!fixedProbFlag$sample72)
-			logProbability$var72 = 0.0;
+			logProbability$var72 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

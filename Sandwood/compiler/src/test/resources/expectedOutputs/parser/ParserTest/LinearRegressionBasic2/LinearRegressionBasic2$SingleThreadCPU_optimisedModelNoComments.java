@@ -364,20 +364,20 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbability$$evidence = 0.0;
 		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
-			logProbability$b0 = 0.0;
+			logProbability$b0 = Double.NaN;
 		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
-			logProbability$b1 = 0.0;
+			logProbability$b1 = Double.NaN;
 		logProbability$var15 = 0.0;
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$var16 = 0.0;
+			logProbability$var16 = Double.NaN;
 		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var32[i] = 0.0;
+			logProbability$var32[i] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample33) {
 			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample33[i] = 0.0;
+				logProbability$sample33[i] = Double.NaN;
 		}
 	}
 

@@ -401,10 +401,10 @@ class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		logProbability$$evidence = 0.0;
 		logProbability$var3 = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$flip = 0.0;
+			logProbability$flip = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

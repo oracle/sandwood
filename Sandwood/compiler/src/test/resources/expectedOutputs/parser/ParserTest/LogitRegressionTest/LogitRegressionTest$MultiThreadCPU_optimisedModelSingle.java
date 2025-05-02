@@ -559,6 +559,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				{
@@ -603,6 +606,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Substituted "j$var85" with its value "2".
 				double var91 = (p[i][2] + bias);
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -618,15 +624,19 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Substituted "j$var85" with its value "2".
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((y[i][2]?var91:(1.0 - var91))));
 			}
-			logProbability$var92 = cv$sampleAccumulator;
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var93 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var92 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var93 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -658,7 +668,15 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var92 = logProbability$var93;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if((0 < n))
+				// Unrolled loop
+				// 
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var92 = logProbability$var93;
 			
 			// Update the variable probability
 			// 
@@ -3062,23 +3080,23 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = 0.0;
+		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
 		logProbability$indicator = 0.0;
 		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			// Unrolled loop
-			logProbability$sample35[0] = 0.0;
-			logProbability$sample35[1] = 0.0;
-			logProbability$sample35[2] = 0.0;
+			logProbability$sample35[0] = Double.NaN;
+			logProbability$sample35[1] = Double.NaN;
+			logProbability$sample35[2] = Double.NaN;
 		}
 		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
-			logProbability$bias = 0.0;
-		logProbability$var92 = 0.0;
+			logProbability$bias = Double.NaN;
+		logProbability$var92 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94)
-			logProbability$var93 = 0.0;
+			logProbability$var93 = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

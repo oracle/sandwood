@@ -265,6 +265,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample34) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var33 = 0; var33 < k; var33 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -292,6 +293,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -305,6 +307,9 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var33 = 0; var33 < k; var33 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var34;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -320,6 +325,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample52) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int var51 = 0; var51 < k; var51 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
@@ -347,6 +353,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
@@ -360,6 +367,9 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var51 = 0; var51 < k; var51 += 1)
+				cv$sampleReached = true;
 			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -374,6 +384,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample68() {
 		if(!fixedProbFlag$sample68) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -400,6 +411,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var67[((i$var66 - 0) / 1)] = cv$sampleAccumulator;
@@ -412,10 +424,12 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			fixedProbFlag$sample68 = (fixedFlag$sample68 && fixedFlag$sample17);
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample68[((i$var66 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var67[((i$var66 - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -429,6 +443,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample72() {
 		if(!fixedProbFlag$sample72) {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -457,6 +472,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				else
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$var71[((i$var66 - 0) / 1)] = cv$sampleAccumulator;
@@ -468,10 +484,12 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			fixedProbFlag$sample72 = ((fixedFlag$sample34 && fixedFlag$sample52) && fixedFlag$sample68);
 		} else {
 			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
 				double cv$rvAccumulator = 0.0;
 				double cv$sampleValue = logProbability$sample72[((i$var66 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				logProbability$var71[((i$var66 - 0) / 1)] = cv$rvAccumulator;
 			}
@@ -600,12 +618,12 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$phi = phi;
 					}
-					int cv$temp$1$$var343;
+					int cv$temp$1$$var344;
 					{
-						int $var343 = k;
-						cv$temp$1$$var343 = $var343;
+						int $var344 = k;
+						cv$temp$1$$var344 = $var344;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var343))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var344))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean guard$sample68gaussian71 = false;
@@ -963,28 +981,28 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = 0.0;
 		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
-			logProbability$phi = 0.0;
-		logProbability$var22 = 0.0;
+			logProbability$phi = Double.NaN;
+		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
-			logProbability$var34 = 0.0;
-		logProbability$var40 = 0.0;
+			logProbability$var34 = Double.NaN;
+		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
-			logProbability$var52 = 0.0;
+			logProbability$var52 = Double.NaN;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var67[((i$var66 - 0) / 1)] = 0.0;
+			logProbability$var67[((i$var66 - 0) / 1)] = Double.NaN;
 		logProbability$z = 0.0;
 		if(!fixedProbFlag$sample68) {
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				logProbability$sample68[((i$var66 - 0) / 1)] = 0.0;
+				logProbability$sample68[((i$var66 - 0) / 1)] = Double.NaN;
 		}
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var71[((i$var66 - 0) / 1)] = 0.0;
+			logProbability$var71[((i$var66 - 0) / 1)] = Double.NaN;
 		logProbability$x = 0.0;
 		if(!fixedProbFlag$sample72) {
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				logProbability$sample72[((i$var66 - 0) / 1)] = 0.0;
+				logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;
 		}
 	}
 

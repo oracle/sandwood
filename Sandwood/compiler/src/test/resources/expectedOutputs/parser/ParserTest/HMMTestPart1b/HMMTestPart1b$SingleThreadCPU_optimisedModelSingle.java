@@ -1054,20 +1054,20 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
+		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$var28 = 0.0;
-		logProbability$var32 = 0.0;
+			logProbability$var28 = Double.NaN;
+		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$var44 = 0.0;
+			logProbability$var44 = Double.NaN;
 		logProbability$var48 = 0.0;
 		if(!fixedProbFlag$sample50)
-			logProbability$st = 0.0;
+			logProbability$st = Double.NaN;
 		logProbability$var51 = 0.0;
 		if(!fixedProbFlag$sample53)
-			logProbability$flip = 0.0;
+			logProbability$flip = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values

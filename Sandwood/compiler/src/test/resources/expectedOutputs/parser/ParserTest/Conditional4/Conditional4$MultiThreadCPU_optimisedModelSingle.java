@@ -90,6 +90,12 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Substituted "fixedFlag$sample4" with its value "cv$value".
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
 		
+		// Should the probability of sample 21 be set to fixed. This will only every change
+		// the flag to false.
+		// 
+		// Substituted "fixedFlag$sample4" with its value "cv$value".
+		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
+		
 		// Should the probability of sample 27 be set to fixed. This will only every change
 		// the flag to false.
 		// 
@@ -112,6 +118,9 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
+		
+		// Unset the fixed probability flag for sample 21 as it depends on guard.
+		fixedProbFlag$sample21 = false;
 		
 		// Unset the fixed probability flag for sample 27 as it depends on guard.
 		fixedProbFlag$sample27 = false;
@@ -200,7 +209,13 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			if(!guard)
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(!guard) {
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -219,15 +234,20 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
-			logProbability$var18 = cv$sampleAccumulator;
+			}
 			
-			// Store the random variable instance probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var19 = cv$sampleAccumulator;
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(cv$sampleReached) {
+				logProbability$var18 = cv$sampleAccumulator;
+				
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var19 = cv$sampleAccumulator;
+			}
 			
 			// Update the variable probability
 			// 
@@ -256,13 +276,19 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedFlag$sample4);
 		}
 		// Using cached values.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var18 = logProbability$var19;
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			if(!guard)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			if(cv$sampleReached)
+				logProbability$var18 = logProbability$var19;
 			
 			// Update the variable probability
 			// 
@@ -936,14 +962,14 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
-			logProbability$guard = 0.0;
-		logProbability$var18 = 0.0;
+			logProbability$guard = Double.NaN;
+		logProbability$var18 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample21)
-			logProbability$var19 = 0.0;
+			logProbability$var19 = Double.NaN;
 		logProbability$var24 = 0.0;
 		if(!fixedProbFlag$sample27)
-			logProbability$value = 0.0;
+			logProbability$value = Double.NaN;
 	}
 
 	// Method to generate a new random state for the model excluding any fixed values
