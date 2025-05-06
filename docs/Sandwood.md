@@ -4,20 +4,20 @@ This page describes the Sandwood probabilistic programming language. As a runnin
 ```java
 package org.sandwood.examples.hmm;
  
-model HMM(int[] eventsMeasured, int numStates, int numEvents) {
+model HMM(int[] actionsMeasured, int nActions, int nStates) {
   //Construct a transistion matrix m.
-  double[] v = new double[numStates] <~ 0.1;
-  double[][] m = dirichlet(v).sample(numStates);
+  double[] v = new double[nStates] <~ 0.1;
+  double[][] m = dirichlet(v).sample(nStates);
  
   //Construct weighting for which state to start in.
   double[] initialState = new Dirichlet(v).sample();
       
   //Construct weighting for each event in each state.
-  double[] w = new double[numEvents] <~ 0.1;
-  double[][] bias = dirichlet(w).sample(numStates);
+  double[] w = new double[nActions] <~ 0.1;
+  double[][] bias = dirichlet(w).sample(nStates);
  
   //Allocate space to record the sequence of states.
-  int sequenceLength = eventsMeasured.length;
+  int sequenceLength = actionsMeasured.length;
   int[] st = new int[sequenceLength];
  
   //Calculate the movements between states.
@@ -26,12 +26,12 @@ model HMM(int[] eventsMeasured, int numStates, int numEvents) {
     st[i] = categorical(m[st[i - 1]]).sampleDistribution();
  
   //Emit the events for each state.
-  int[] events = new int[sequenceLength];
+  int[] actions = new int[sequenceLength];
   for (int j = 0; j < sequenceLength; j++)
-    events[j] = new Categorical(bias[st[j]]).sample();
+    actions[j] = new Categorical(bias[st[j]]).sample();
     
   //Assert that the events match the eventsMeasured data.
-  events.observe(eventsMeasured);
+  actions.observe(actionsMeasured);
 }
 ```
 
@@ -41,11 +41,11 @@ The model starts with an optional package declaration. This works in the same wa
 ## Model Signature
 The next element in the model is its signature. This takes the keyword `model`, followed by the name of the model, and then a tuple containing the type and name of any model inputs. Each model requires its own file as like with Java the model must be in a file of the same name. The types of the inputs can be primitive types or arrays of primitive types. Currently the only primitive types supported are `int`, `double`, and `boolean`. The order that the inputs appear is the same order that they will appear in the constructor for the resultant model. There will also be an empty constructor allowing input values to be set later, and a constructor where observed values only have a parameter describing their shape. This final one is used when the model is executed to generate values as if it was regular code. This can be used for inferring values from trained models such as linear regression models, or for generating synthetic data. For this example the compiled model will have the following constructors.
 
-`HMM(int[] eventsMeasured, int numStates, int numEvents)`
+`HMM(int[] actionsMeasured, int nActions, int nStates)`
 
 `HMM()`
 
-`HMM(int eventsMeasuredLength, int numStates, int numEvents)`
+`HMM(int actionsMeasuredLength, int nActions, int nStates)`
 
 ## Declaration of Variables
 All variables in Sandwood are single assignment. The enforcement of single assignment semantics is best effort, and models written that break this may fail in unpredictable ways. Like in Java their declaration takes the form:
@@ -67,6 +67,7 @@ Sandwood supports the following random variables:
 * Cauchy
 * Dirichlet
 * Exponential
+* Geometric
 * Gamma
 * Gaussian
 * Half Cauchy (HalfCauchy)
@@ -75,6 +76,7 @@ Sandwood supports the following random variables:
 * Negative Binomial (NegativeBinomial)
 * Poisson
 * Student-T (StudentT)
+* Truncated Gaussian (TruncatedGaussian)
 * Uniform
 
 There are two ways to construct these, either via an implicit factory method which takes the camel case variable name for example `inverseGamma`, or by calling `new` taking the variable name in as listed above. Examples of both these forms of construction can be seen in the HMM model. Semantically they are identical and are only included to suit different people's coding style preference. Typically the factory method is used as syntactic sugar when the construction of the random variable is in-lined and new is used when the random variable is placed in a named field. Both the constructor and the factory method take a list of arguments defining the parameters of the random variable.
