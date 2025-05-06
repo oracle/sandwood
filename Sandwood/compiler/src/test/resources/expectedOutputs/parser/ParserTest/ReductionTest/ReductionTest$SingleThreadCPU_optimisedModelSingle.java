@@ -1041,9 +1041,75 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample47) {
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noCats; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample47) {
+			for(int var45 = 0; var45 < noFlips; var45 += 1)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample62) {
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
+		}
+		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+			// Reduction of array st
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			int reduceVar$var82$4 = 0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j$var80's comment
+				// Set the right hand term to a value from the array st
+				reduceVar$var82$4 = (reduceVar$var82$4 + st[cv$reduction78Index]);
+			flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$4]);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample30) {
 			for(int var29 = 0; var29 < noCats; var29 += 1)
@@ -1064,9 +1130,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample30) {
 			for(int var29 = 0; var29 < noCats; var29 += 1)
@@ -1172,19 +1239,9 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var85 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1237,35 +1294,6 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbabilityValue$sample47();
 		logProbabilityValue$sample62();
 		logProbabilityValue$sample87();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample30) {
-			for(int var29 = 0; var29 < noCats; var29 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47) {
-			for(int var45 = 0; var45 < noFlips; var45 += 1)
-				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample62) {
-			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

@@ -896,7 +896,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample35)
 			parallelFor(RNG$, 0, 3, 1,
 				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -907,28 +907,63 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample35)
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-							int i = index$i;
-							int threadID$i = threadID$index$i;
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
-											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							);
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
-											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-								}
-							);
-						}
+			parallelFor(RNG$, 0, 3, 1,
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
+		if(!fixedFlag$sample42)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						boolean[] var89 = y[i];
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1) {
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$2, (p[i][j$var85] + bias));
+									}
+							}
+						);
+					}
+			}
+		);
 	}
 
 	@Override
@@ -965,6 +1000,40 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				}
 			);
 
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample35)
+			parallelFor(RNG$, 0, 3, 1,
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		if(!fixedFlag$sample42)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							}
+						);
+					}
+			}
+		);
 	}
 
 	@Override
@@ -1025,12 +1094,7 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample35)
 			logProbabilityValue$sample35();
@@ -1056,43 +1120,6 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample35)
-			parallelFor(RNG$, 0, 3, 1,
-				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
-							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample35)
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-							int i = index$i;
-							int threadID$i = threadID$index$i;
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
-											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							);
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
-											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-								}
-							);
-						}
-				}
-			);
-
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = y.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
@@ -1106,28 +1133,26 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample35)
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-							int i = index$i;
-							int threadID$i = threadID$index$i;
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
-											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							);
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
-											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-								}
-							);
-						}
-				}
-			);
-
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							}
+						);
+					}
+			}
+		);
 	}
 
 	@Override

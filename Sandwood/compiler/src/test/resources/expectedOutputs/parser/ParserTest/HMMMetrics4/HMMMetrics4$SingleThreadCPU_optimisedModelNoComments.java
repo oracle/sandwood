@@ -2174,7 +2174,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		if(!fixedFlag$sample33) {
@@ -2256,7 +2256,101 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample33) {
+			for(int var32 = 0; var32 < noStates; var32 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
+		}
+		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			if(!fixedFlag$sample57)
+				st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+			if(!fixedFlag$sample76) {
+				int[] var67 = st[sample$var45];
+				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+					var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+			}
+		}
+		if(!fixedFlag$sample134) {
+			for(int var119 = 0; var119 < noServers; var119 += 1) {
+				double[] var120 = current_metric_mean[var119];
+				for(int var129 = 0; var129 < noStates; var129 += 1)
+					var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
+			}
+		}
+		if(!fixedFlag$sample162) {
+			for(int var146 = 0; var146 < noServers; var146 += 1) {
+				double[] var147 = current_metric_var[var146];
+				for(int var156 = 0; var156 < noStates; var156 += 1)
+					var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+			}
+		}
+		if(!fixedFlag$sample190) {
+			for(int var173 = 0; var173 < noServers; var173 += 1) {
+				double[] var174 = current_metric_valid_bias[var173];
+				for(int var183 = 0; var183 < noStates; var183 += 1)
+					var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			}
+		}
+		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+			double[][] var211 = metric_g[sample$var196];
+			for(int server = 0; server < noServers; server += 1) {
+				boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+				double[] metric_inner = var211[server];
+				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+					metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+					if(metric_valid_inner[timeStep$var226]) {
+						var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
+						metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
+					}
+				}
+			}
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample33) {
+			for(int var32 = 0; var32 < noStates; var32 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
+		}
+		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			if(!fixedFlag$sample57)
+				st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+			if(!fixedFlag$sample76) {
+				int[] var67 = st[sample$var45];
+				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+					var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+			}
+		}
+		if(!fixedFlag$sample134) {
+			for(int var119 = 0; var119 < noServers; var119 += 1) {
+				double[] var120 = current_metric_mean[var119];
+				for(int var129 = 0; var129 < noStates; var129 += 1)
+					var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
+			}
+		}
+		if(!fixedFlag$sample162) {
+			for(int var146 = 0; var146 < noServers; var146 += 1) {
+				double[] var147 = current_metric_var[var146];
+				for(int var156 = 0; var156 < noStates; var156 += 1)
+					var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+			}
+		}
+		if(!fixedFlag$sample190) {
+			for(int var173 = 0; var173 < noServers; var173 += 1) {
+				double[] var174 = current_metric_valid_bias[var173];
+				for(int var183 = 0; var183 < noStates; var183 += 1)
+					var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		if(!fixedFlag$sample33) {
@@ -2449,12 +2543,7 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
@@ -2496,47 +2585,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample190();
 		logProbabilityValue$sample241();
 		logProbabilityValue$sample256();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
-		if(!fixedFlag$sample33) {
-			for(int var32 = 0; var32 < noStates; var32 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
-		}
-		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-			if(!fixedFlag$sample57)
-				st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
-			if(!fixedFlag$sample76) {
-				int[] var67 = st[sample$var45];
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-					var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
-			}
-		}
-		if(!fixedFlag$sample134) {
-			for(int var119 = 0; var119 < noServers; var119 += 1) {
-				double[] var120 = current_metric_mean[var119];
-				for(int var129 = 0; var129 < noStates; var129 += 1)
-					var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
-			}
-		}
-		if(!fixedFlag$sample162) {
-			for(int var146 = 0; var146 < noServers; var146 += 1) {
-				double[] var147 = current_metric_var[var146];
-				for(int var156 = 0; var156 < noStates; var156 += 1)
-					var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
-			}
-		}
-		if(!fixedFlag$sample190) {
-			for(int var173 = 0; var173 < noServers; var173 += 1) {
-				double[] var174 = current_metric_valid_bias[var173];
-				for(int var183 = 0; var183 < noStates; var183 += 1)
-					var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			}
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

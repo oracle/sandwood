@@ -18,5 +18,4 @@ interface PoissonDecayMK1$CoreInterface extends org.sandwood.runtime.internal.mo
 	public double get$rate();
 	public void set$rate(double cv$value);
 	public int get$samples();
-	public void logEvidenceGeneration();
 }

@@ -20,5 +20,4 @@ interface DiscreteChoiceAlt$CoreInterface extends org.sandwood.runtime.internal.
 	public double get$sum();
 	public double[] get$ut();
 	public void set$ut(double[] cv$value);
-	public void logEvidenceGeneration();
 }

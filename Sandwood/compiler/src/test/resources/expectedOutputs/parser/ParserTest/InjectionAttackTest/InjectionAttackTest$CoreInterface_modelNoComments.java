@@ -13,5 +13,4 @@ interface InjectionAttackTest$CoreInterface extends org.sandwood.runtime.interna
 	public int get$observedSampleCount();
 	public void set$observedSampleCount(int cv$value);
 	public int get$positiveCount();
-	public void logEvidenceGeneration();
 }

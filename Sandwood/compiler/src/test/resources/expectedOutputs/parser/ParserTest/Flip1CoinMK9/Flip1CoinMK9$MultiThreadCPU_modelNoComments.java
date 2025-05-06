@@ -254,13 +254,31 @@ class Flip1CoinMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample7)
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
+						flips[var19] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample7)
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
@@ -295,12 +313,7 @@ class Flip1CoinMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample7)
 			logProbabilityValue$sample7();
@@ -319,13 +332,6 @@ class Flip1CoinMK9$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample7();
 		logProbabilityValue$sample20();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample7)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -535,17 +535,39 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample9)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample9)
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int var21 = 0; var21 < samples1; var21 += 1)
+			flips1[var21] = DistributionSampling.sampleBernoulli(RNG$, bias);
+		for(int var34 = 0; var34 < samples2; var34 += 1)
+			flips2[var34] = DistributionSampling.sampleBernoulli(RNG$, bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample9)
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample9)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
@@ -591,19 +613,9 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var35 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -651,20 +663,6 @@ class Flip1CoinMK6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample9();
 		logProbabilityValue$sample22();
 		logProbabilityValue$sample35();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample9)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

@@ -619,7 +619,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		for(int var23 = 0; var23 < k; var23 += 1) {
 			if(!fixedFlag$sample24)
 				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
@@ -629,10 +629,31 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedFlag$sample35)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if(!fixedFlag$sample24)
-					phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
+				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int var23 = 0; var23 < k; var23 += 1) {
+			if(!fixedFlag$sample24)
+				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		if(!fixedFlag$sample31)
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		if(!fixedFlag$sample35)
+			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
+				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+			double reduceVar$var70$5 = 0.0;
+			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+				double i$var67 = reduceVar$var70$5;
+				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+				reduceVar$var70$5 = (i$var67 + j$var68);
 			}
+			y[i$var45] = ((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + (reduceVar$var70$5 + bias));
 		}
 	}
 
@@ -651,6 +672,22 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 				if(!fixedFlag$sample24)
 					phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
 			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		for(int var23 = 0; var23 < k; var23 += 1) {
+			if(!fixedFlag$sample24)
+				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		if(!fixedFlag$sample31)
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		if(!fixedFlag$sample35)
+			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
+				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
 		}
 	}
 
@@ -710,12 +747,7 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample24)
 			logProbabilityValue$sample24();
@@ -745,25 +777,6 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!fixedFlag$sample24)
-				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		if(!fixedFlag$sample31)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if(!fixedFlag$sample24)
-					phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		double[] cv$source1 = yMeasured;
 		double[] cv$target1 = y;
@@ -775,10 +788,8 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void setIntermediates() {
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if(fixedFlag$sample24)
-					phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
-			}
+			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
+				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
 		}
 	}
 

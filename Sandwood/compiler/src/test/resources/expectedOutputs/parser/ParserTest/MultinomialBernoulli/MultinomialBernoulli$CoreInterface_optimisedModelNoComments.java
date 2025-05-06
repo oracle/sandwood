@@ -23,5 +23,4 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public void set$p(double[] cv$value);
 	public int[] get$prior();
 	public void set$prior(int[] cv$value);
-	public void logEvidenceGeneration();
 }

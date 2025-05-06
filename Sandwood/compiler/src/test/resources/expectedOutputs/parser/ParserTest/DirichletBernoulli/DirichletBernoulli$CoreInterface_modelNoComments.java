@@ -16,5 +16,4 @@ interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal
 	public double[] get$prior();
 	public void set$prior(double[] cv$value);
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

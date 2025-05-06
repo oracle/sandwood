@@ -1030,9 +1030,36 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		for(int i$var47 = 0; i$var47 < length; i$var47 += 3)
+			output[i$var47] = DistributionSampling.sampleBernoulli(RNG$, (prior[0] / 10));
+		for(int i$var59 = 1; i$var59 < length; i$var59 += 3)
+			output[i$var59] = DistributionSampling.sampleBernoulli(RNG$, (prior[1] / 10));
+		for(int i$var71 = 2; i$var71 < length; i$var71 += 3)
+			output[i$var71] = DistributionSampling.sampleBernoulli(RNG$, (prior[2] / 10));
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
@@ -1040,9 +1067,10 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
@@ -1109,19 +1137,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			logProbability$var72 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1176,22 +1194,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		logProbabilityValue$sample48();
 		logProbabilityValue$sample60();
 		logProbabilityValue$sample72();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

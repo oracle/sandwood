@@ -15,5 +15,4 @@ interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.inte
 	public double get$logProbability$flips();
 	public int get$samples();
 	public void set$samples(int cv$value);
-	public void logEvidenceGeneration();
 }

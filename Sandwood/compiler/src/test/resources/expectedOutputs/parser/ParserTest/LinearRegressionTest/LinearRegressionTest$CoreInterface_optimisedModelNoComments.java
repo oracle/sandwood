@@ -24,5 +24,4 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	public double[] get$y();
 	public double[] get$yMeasured();
 	public void set$yMeasured(double[] cv$value);
-	public void logEvidenceGeneration();
 }

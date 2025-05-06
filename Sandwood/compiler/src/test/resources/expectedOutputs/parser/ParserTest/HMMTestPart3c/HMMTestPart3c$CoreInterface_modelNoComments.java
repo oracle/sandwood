@@ -27,5 +27,4 @@ interface HMMTestPart3c$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$st(int[] cv$value);
 	public int get$states();
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

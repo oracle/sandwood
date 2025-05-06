@@ -240,12 +240,21 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
-		if(!fixedFlag$sample26) {
-			for(int i = 0; i < length$observed; i += 1) {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int i = 0; i < length$observed; i += 1) {
+			if(!fixedFlag$sample26)
 				sample[i] = DistributionSampling.sampleUniform(RNG$);
-				indirection[(i + 1)] = sample[i];
-			}
+			indirection[(i + 1)] = sample[i];
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int i = 0; i < length$observed; i += 1) {
+			if(!fixedFlag$sample26)
+				sample[i] = DistributionSampling.sampleUniform(RNG$);
+			indirection[(i + 1)] = sample[i];
+			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
 		}
 	}
 
@@ -256,6 +265,15 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				sample[i] = DistributionSampling.sampleUniform(RNG$);
 				indirection[(i + 1)] = sample[i];
 			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		for(int i = 0; i < length$observed; i += 1) {
+			if(!fixedFlag$sample26)
+				sample[i] = DistributionSampling.sampleUniform(RNG$);
+			indirection[(i + 1)] = sample[i];
 		}
 	}
 
@@ -299,12 +317,7 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample26)
 			logProbabilityValue$sample26();
@@ -326,17 +339,6 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample26) {
-			for(int i = 0; i < length$observed; i += 1) {
-				sample[i] = DistributionSampling.sampleUniform(RNG$);
-				indirection[(i + 1)] = sample[i];
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
@@ -345,10 +347,8 @@ class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample26) {
-			for(int i = 0; i < length$observed; i += 1)
-				indirection[(i + 1)] = sample[i];
-		}
+		for(int i = 0; i < length$observed; i += 1)
+			indirection[(i + 1)] = sample[i];
 	}
 
 	@Override

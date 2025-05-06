@@ -15,5 +15,4 @@ interface ParallelMK3$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[] get$sample();
 	public void set$sample(double[] cv$value);
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

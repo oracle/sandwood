@@ -477,13 +477,37 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
+		parallelFor(RNG$, 0, (length / 2), 1,
+			(int forStart$i$var37, int forEnd$i$var37, int threadID$i$var37, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var37 = forStart$i$var37; i$var37 < forEnd$i$var37; i$var37 += 1)
+						output[i$var37] = DistributionSampling.sampleBernoulli(RNG$1, prior[0]);
+			}
+		);
+		parallelFor(RNG$, (length / 2), length, 1,
+			(int forStart$i$var50, int forEnd$i$var50, int threadID$i$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var50 = forStart$i$var50; i$var50 < forEnd$i$var50; i$var50 += 1)
+						output[i$var50] = DistributionSampling.sampleBernoulli(RNG$1, prior[1]);
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 	}
@@ -527,12 +551,7 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample17)
 			logProbabilityValue$sample17();
@@ -554,13 +573,6 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbabilityValue$sample17();
 		logProbabilityValue$sample38();
 		logProbabilityValue$sample51();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

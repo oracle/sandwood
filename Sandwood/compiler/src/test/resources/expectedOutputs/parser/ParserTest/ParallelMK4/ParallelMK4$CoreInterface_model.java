@@ -40,8 +40,4 @@ interface ParallelMK4$CoreInterface extends org.sandwood.runtime.internal.model.
 
 	// Setter for observed.
 	public void set$observed(int[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

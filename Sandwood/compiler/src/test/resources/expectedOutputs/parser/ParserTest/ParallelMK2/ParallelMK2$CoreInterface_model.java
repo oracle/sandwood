@@ -43,8 +43,4 @@ interface ParallelMK2$CoreInterface extends org.sandwood.runtime.internal.model.
 
 	// Setter for sample.
 	public void set$sample(double[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

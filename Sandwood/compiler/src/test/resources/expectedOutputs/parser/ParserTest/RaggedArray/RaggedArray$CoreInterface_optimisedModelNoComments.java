@@ -17,5 +17,4 @@ interface RaggedArray$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double get$p();
 	public int get$y();
 	public void set$y(int cv$value);
-	public void logEvidenceGeneration();
 }

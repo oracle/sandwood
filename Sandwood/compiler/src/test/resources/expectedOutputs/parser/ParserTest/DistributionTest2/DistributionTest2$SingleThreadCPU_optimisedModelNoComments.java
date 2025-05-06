@@ -774,7 +774,7 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample5) {
 			for(int index$var4 = 0; index$var4 < weightings.length; index$var4 += 1)
 				distribution$sample5[index$var4] = weightings[index$var4];
@@ -793,7 +793,33 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample5)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample9)
+			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample23) {
+			for(int i = 1; i < size; i += 1)
+				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		}
+		for(int j = 0; j < size; j += 1)
+			v[j] = DistributionSampling.sampleBernoulli(RNG$, ((double)v1 / v2[j]));
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample5)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample9)
+			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample23) {
+			for(int i = 1; i < size; i += 1)
+				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample5)
 			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 		if(!fixedFlag$sample9)
@@ -859,12 +885,7 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample41();
 	}
@@ -885,19 +906,6 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbabilityValue$sample9();
 		logProbabilityValue$sample23();
 		logProbabilityValue$sample41();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample5)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample9)
-			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample23) {
-			for(int i = 1; i < size; i += 1)
-				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

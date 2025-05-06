@@ -251,7 +251,33 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample39) {
+			int lengthCV$a$37_8 = -1;
+			if((0 == y))
+				lengthCV$a$37_8 = 2;
+			if((1 == y))
+				lengthCV$a$37_8 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_8, d);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample39) {
+			int lengthCV$a$37_5 = -1;
+			if((0 == y))
+				lengthCV$a$37_5 = 2;
+			if((1 == y))
+				lengthCV$a$37_5 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_5, d);
+		}
+		for(int var51 = 0; var51 < length$obs_measured; var51 += 1)
+			obs[var51] = DistributionSampling.sampleBernoulli(RNG$, d[y]);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample39) {
 			int lengthCV$a$37_6 = -1;
 			if((0 == y))
@@ -263,14 +289,14 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample39) {
-			int lengthCV$a$37_5 = -1;
+			int lengthCV$a$37_7 = -1;
 			if((0 == y))
-				lengthCV$a$37_5 = 2;
+				lengthCV$a$37_7 = 2;
 			if((1 == y))
-				lengthCV$a$37_5 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_5, d);
+				lengthCV$a$37_7 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_7, d);
 		}
 	}
 
@@ -305,12 +331,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample39)
 			logProbabilityValue$sample39();
@@ -329,19 +350,6 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample39();
 		logProbabilityValue$sample54();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample39) {
-			int lengthCV$a$37_7 = -1;
-			if((0 == y))
-				lengthCV$a$37_7 = 2;
-			if((1 == y))
-				lengthCV$a$37_7 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_7, d);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

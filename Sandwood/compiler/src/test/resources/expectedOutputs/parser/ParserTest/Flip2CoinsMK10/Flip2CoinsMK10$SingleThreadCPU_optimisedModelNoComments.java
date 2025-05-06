@@ -251,7 +251,7 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(!fixedFlag$sample23) {
@@ -261,7 +261,32 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample10)
+			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample23) {
+			for(int i = 1; i < coins; i += 1)
+				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		for(int j = 0; j < coins; j += 1) {
+			boolean[] var38 = flips[j];
+			for(int var47 = 0; var47 < shape[j]; var47 += 1)
+				var38[var47] = DistributionSampling.sampleBernoulli(RNG$, bias[j]);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample10)
+			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample23) {
+			for(int i = 1; i < coins; i += 1)
+				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(!fixedFlag$sample23) {
@@ -314,12 +339,7 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
@@ -342,17 +362,6 @@ class Flip2CoinsMK10$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbabilityValue$sample10();
 		logProbabilityValue$sample23();
 		logProbabilityValue$sample48();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample23) {
-			for(int i = 1; i < coins; i += 1)
-				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -521,12 +521,12 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 						double[] var86 = theta[i$var71];
 						cv$temp$0$var86 = var86;
 					}
-					int cv$temp$1$$var415;
+					int cv$temp$1$$var423;
 					{
-						int $var415 = noTopics;
-						cv$temp$1$$var415 = $var415;
+						int $var423 = noTopics;
+						cv$temp$1$$var423 = $var423;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var415))?Math.log(cv$temp$0$var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var423))?Math.log(cv$temp$0$var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							{
@@ -541,18 +541,18 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 													double[] var89 = phi[cv$currentValue];
 													cv$temp$2$var89 = var89;
 												}
-												int cv$temp$3$$var416;
+												int cv$temp$3$$var424;
 												{
-													int $var416 = vocabSize;
-													cv$temp$3$$var416 = $var416;
+													int $var424 = vocabSize;
+													cv$temp$3$$var424 = $var424;
 												}
-												if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var416))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var416))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var416))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var416))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var416))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -739,7 +739,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		parallelFor(RNG$, 0, noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
@@ -777,7 +777,85 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		parallelFor(RNG$, 0, noTopics, 1,
+			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
+						double[] var42 = phi[var41];
+						if(!fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
+						double[] var57 = theta[var56];
+						if(!fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
+						int i$var71 = index$i$var71;
+						int threadID$i$var71 = threadID$index$i$var71;
+						int[] t = w[i$var71];
+						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j = forStart$j; j < forEnd$j; j += 1) {
+										if(!fixedFlag$sample90)
+											z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+										t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]], vocabSize);
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		parallelFor(RNG$, 0, noTopics, 1,
+			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
+						double[] var42 = phi[var41];
+						if(!fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
+						double[] var57 = theta[var56];
+						if(!fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
+						int i$var71 = index$i$var71;
+						int threadID$i$var71 = threadID$index$i$var71;
+						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j = forStart$j; j < forEnd$j; j += 1) {
+										if(!fixedFlag$sample90)
+											z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		parallelFor(RNG$, 0, noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
@@ -938,12 +1016,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample42)
 			logProbabilityValue$sample42();
@@ -970,45 +1043,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		logProbabilityValue$sample58();
 		logProbabilityValue$sample90();
 		logProbabilityValue$sample93();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		parallelFor(RNG$, 0, noTopics, 1,
-			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						double[] var42 = phi[var41];
-						if(!fixedFlag$sample42)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
-					}
-			}
-		);
-		parallelFor(RNG$, 0, length$documents.length, 1,
-			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						double[] var57 = theta[var56];
-						if(!fixedFlag$sample58)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
-					}
-			}
-		);
-		parallelFor(RNG$, 0, length$documents.length, 1,
-			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
-						int i$var71 = index$i$var71;
-						int threadID$i$var71 = threadID$index$i$var71;
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
-							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
-								for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!fixedFlag$sample90)
-											z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
-									}
-							}
-						);
-					}
-			}
-		);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -272,10 +272,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedProbFlag$sample87) {
 			double cv$accumulator = 0.0;
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				int reduceVar$var82$6 = 0;
+				int reduceVar$var82$7 = 0;
 				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-					reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction78Index]);
-				double var83 = bias[reduceVar$var82$6];
+					reduceVar$var82$7 = (reduceVar$var82$7 + st[cv$reduction78Index]);
+				double var83 = bias[reduceVar$var82$7];
 				double cv$distributionAccumulator = Math.log((flips[j$var73]?var83:(1.0 - var83)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var84[j$var73] = cv$distributionAccumulator;
@@ -309,10 +309,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void sample47(int var45, int threadID$cv$var45, Rng RNG$) {
 		int cv$sum = 0;
 		int cv$count = 0;
-		int reduceVar$var82$4 = 0;
+		int reduceVar$var82$5 = 0;
 		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-			reduceVar$var82$4 = (reduceVar$var82$4 + st[cv$reduction78Index]);
-		if((var45 == reduceVar$var82$4)) {
+			reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction78Index]);
+		if((var45 == reduceVar$var82$5)) {
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				cv$count = (cv$count + 1);
 				if(flips[j$var73])
@@ -327,14 +327,14 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			st[i$var58] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
-			int reduceVar$var82$5 = 0;
+			int reduceVar$var82$6 = 0;
 			for(int cv$reduction407Index = 0; cv$reduction407Index < i$var58; cv$reduction407Index += 1)
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction407Index]);
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction407Index]);
 			for(int cv$reduction407Index = (i$var58 + 1); cv$reduction407Index < noCats; cv$reduction407Index += 1)
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction407Index]);
-			reduceVar$var82$5 = (cv$valuePos + reduceVar$var82$5);
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction407Index]);
+			reduceVar$var82$6 = (cv$valuePos + reduceVar$var82$6);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				double cv$temp$2$var83 = bias[reduceVar$var82$5];
+				double cv$temp$2$var83 = bias[reduceVar$var82$6];
 				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))) + cv$accumulatedProbabilities);
 			}
 			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
@@ -424,17 +424,17 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		parallelFor(RNG$, 0, noFlips, 1,
 			(int forStart$j$var73, int forEnd$j$var73, int threadID$j$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int j$var73 = forStart$j$var73; j$var73 < forEnd$j$var73; j$var73 += 1) {
-						int reduceVar$var82$7 = 0;
+						int reduceVar$var82$8 = 0;
 						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-							reduceVar$var82$7 = (reduceVar$var82$7 + st[cv$reduction78Index]);
-						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$7]);
+							reduceVar$var82$8 = (reduceVar$var82$8 + st[cv$reduction78Index]);
+						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$8]);
 					}
 			}
 		);
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample30)
 			parallelFor(RNG$, 0, noCats, 1,
 				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -462,7 +462,73 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample30)
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
+				}
+			);
+
+		if(!fixedFlag$sample47)
+			parallelFor(RNG$, 0, noFlips, 1,
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample62)
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$i$var58, int forEnd$i$var58, int threadID$i$var58, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var58 = forStart$i$var58; i$var58 < forEnd$i$var58; i$var58 += 1)
+							st[i$var58] = DistributionSampling.sampleCategorical(RNG$1, m[i$var58], noStates);
+				}
+			);
+
+		parallelFor(RNG$, 0, noFlips, 1,
+			(int forStart$j$var73, int forEnd$j$var73, int threadID$j$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int j$var73 = forStart$j$var73; j$var73 < forEnd$j$var73; j$var73 += 1) {
+						int reduceVar$var82$9 = 0;
+						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+							reduceVar$var82$9 = (reduceVar$var82$9 + st[cv$reduction78Index]);
+						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$9]);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample30)
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
+				}
+			);
+
+		if(!fixedFlag$sample47)
+			parallelFor(RNG$, 0, noFlips, 1,
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample62)
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$i$var58, int forEnd$i$var58, int threadID$i$var58, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var58 = forStart$i$var58; i$var58 < forEnd$i$var58; i$var58 += 1)
+							st[i$var58] = DistributionSampling.sampleCategorical(RNG$1, m[i$var58], noStates);
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample30)
 			parallelFor(RNG$, 0, noCats, 1,
 				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -577,12 +643,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample30)
 			logProbabilityValue$sample30();
@@ -609,35 +670,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample47();
 		logProbabilityValue$sample62();
 		logProbabilityValue$sample87();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample30)
-			parallelFor(RNG$, 0, noCats, 1,
-				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
-				}
-			);
-
-		if(!fixedFlag$sample47)
-			parallelFor(RNG$, 0, noFlips, 1,
-				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		if(!fixedFlag$sample62)
-			parallelFor(RNG$, 0, noCats, 1,
-				(int forStart$i$var58, int forEnd$i$var58, int threadID$i$var58, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int i$var58 = forStart$i$var58; i$var58 < forEnd$i$var58; i$var58 += 1)
-							st[i$var58] = DistributionSampling.sampleCategorical(RNG$1, m[i$var58], noStates);
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

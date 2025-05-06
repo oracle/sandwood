@@ -330,13 +330,27 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample5)
 			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample5)
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+		for(int var18 = 0; var18 < length$observed; var18 += 1)
+			output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample5)
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample5)
 			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
@@ -372,12 +386,7 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample5)
 			logProbabilityValue$sample5();
@@ -396,13 +405,6 @@ class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample5();
 		logProbabilityValue$sample19();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -431,9 +431,73 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample17)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, coins, 1,
+				(int forStart$var16, int forEnd$var16, int threadID$var16, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var16 = forStart$var16; var16 < forEnd$var16; var16 += 1)
+							bias[var16] = DistributionSampling.sampleBeta(RNG$1, a, b);
+				}
+			);
+
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample17)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, coins, 1,
+				(int forStart$var16, int forEnd$var16, int threadID$var16, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var16 = forStart$var16; var16 < forEnd$var16; var16 += 1)
+							bias[var16] = DistributionSampling.sampleBeta(RNG$1, a, b);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, coins, 1,
+			(int forStart$index$j, int forEnd$index$j, int threadID$index$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$j = forStart$index$j; index$j < forEnd$index$j; index$j += 1) {
+						int j = index$j;
+						int threadID$j = threadID$index$j;
+						boolean[] var34 = flips[j];
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, length$flipsMeasured[j], 1,
+							(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+										var34[var43] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
+							}
+						);
+					}
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample17)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -450,9 +514,10 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample17)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -533,19 +598,9 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -590,31 +645,6 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample17();
 		logProbabilityValue$sample44();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample17)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, coins, 1,
-				(int forStart$var16, int forEnd$var16, int threadID$var16, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var16 = forStart$var16; var16 < forEnd$var16; var16 += 1)
-							bias[var16] = DistributionSampling.sampleBeta(RNG$1, a, b);
-				}
-			);
-
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

@@ -403,7 +403,7 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -427,7 +427,61 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample28)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
+				}
+			);
+
+		if(!fixedFlag$sample45)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample69) {
+			for(int i$var62 = 1; i$var62 < samples; i$var62 += 1)
+				st[i$var62] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var62 - 1)]], 2);
+		}
+		parallelFor(RNG$, 1, samples, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, bias[st[j]]);
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample28)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
+				}
+			);
+
+		if(!fixedFlag$sample45)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample69) {
+			for(int i$var62 = 1; i$var62 < samples; i$var62 += 1)
+				st[i$var62] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var62 - 1)]], 2);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -538,12 +592,7 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample28)
 			logProbabilityValue$sample28();
@@ -570,31 +619,6 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample45();
 		logProbabilityValue$sample69();
 		logProbabilityValue$sample84();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample28)
-			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
-				}
-			);
-
-		if(!fixedFlag$sample45)
-			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
-							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		if(!fixedFlag$sample69) {
-			for(int i$var62 = 1; i$var62 < samples; i$var62 += 1)
-				st[i$var62] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var62 - 1)]], 2);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

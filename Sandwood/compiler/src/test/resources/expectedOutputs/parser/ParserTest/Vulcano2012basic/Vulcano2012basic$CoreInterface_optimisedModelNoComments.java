@@ -25,5 +25,4 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 	public double get$sum();
 	public double[] get$ut();
 	public void set$ut(double[] cv$value);
-	public void logEvidenceGeneration();
 }

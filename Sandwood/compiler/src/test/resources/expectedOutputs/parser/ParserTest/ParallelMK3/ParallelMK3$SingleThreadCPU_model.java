@@ -789,14 +789,25 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
+		for(int i = 0; i < length$observed; i += 1)
+			indirection[i] = sample[i];
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample21)
 			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
 		for(int i = 0; i < length$observed; i += 1) {
-			if(!fixedFlag$sample21)
-				indirection[i] = sample[i];
+			indirection[i] = sample[i];
+			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
 		}
 	}
 
@@ -810,6 +821,17 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if(!fixedFlag$sample21)
 				indirection[i] = sample[i];
 		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
+		for(int i = 0; i < length$observed; i += 1)
+			indirection[i] = sample[i];
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -861,19 +883,9 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -920,24 +932,6 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample38();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1) {
-			if(!fixedFlag$sample21)
-				indirection[i] = sample[i];
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -955,10 +949,8 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < length$observed; i += 1) {
-			if(fixedFlag$sample21)
-				indirection[i] = sample[i];
-		}
+		for(int i = 0; i < length$observed; i += 1)
+			indirection[i] = sample[i];
 	}
 
 	@Override
